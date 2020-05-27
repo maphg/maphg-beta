@@ -1411,6 +1411,33 @@ if (isset($_POST['action'])) {
 
     }
 
+    // Crud para Tareas Gemerales MC.
+    if($action == "eliminarMC"){
+        $idMC = $_POST['idMC'];
+
+        $query = "UPDATE t_mc SET activo=0 WHERE id=$idMC";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Proceso Completado";
+        } else {
+            echo "Proceso Fallido";
+        }
+    }
+
+
+    if($action == "editarMC"){
+        $idMC = $_POST['idMC'];
+        $tituloMC = $_POST['tituloMC'];
+
+        $query = "UPDATE t_mc SET actividad='$tituloMC' WHERE id=$idMC";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Tarea General, Eliminada";
+        } else {
+            echo "Error al Eliminar Tarea General";
+        }  
+    }    
+
 
     if ($action == "subirArchivoGeneral") {
         $tabla = $_POST['tabla'];

@@ -287,14 +287,14 @@ $tablaRanking .= "</div>";
     <?php echo $layout->styles(); ?>
     <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/style3.css">
-    <link rel="stylesheet" href="DataTables/datatables.css">
+    <!-- <link rel="stylesheet" href="DataTables/datatables.css"> -->
     <link rel="stylesheet" href="css/bulma.css">
     <link rel="stylesheet" href="css/clases.css">
     <link rel="stylesheet" href="css/hover.css">
     <link rel="stylesheet" href="css/modal-fx.min.css">
     <link rel="stylesheet" href="css/clasesproyectosypendientes.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/animate.css">
+	<link href="css/tailwind.css" rel="stylesheet">
 
 
 
@@ -660,7 +660,7 @@ $tablaRanking .= "</div>";
                             </span>
                             <!-- Cambia el estilo de las categorias en la barra -->
                             <div id="divNameSeccion" class="navbar-item bannerbit3">
-                                <p class="seccion-logo-desactivado bannerbit">ZIC</p>
+                                <p class="seccion-logo-desactivado">Seccion</p>
                             </div>
                             <span class="navbar-item">
 
@@ -6339,7 +6339,7 @@ $tablaRanking .= "</div>";
                 <div class="card-content">
                     <div class="content">
                         <div class="columns">
-                            <div class="column">
+                            <div class="column mb-0">
                                 <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es urgente!</button>
                                 <button class="button is-dark is-fullwidth mt-2" onclick="statusMC('material');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
                                 <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
@@ -6348,6 +6348,28 @@ $tablaRanking .= "</div>";
                                 <button class="button is-success is-fullwidth mt-2" onclick="statusMC('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
                             </div>
                         </div>
+                        <div class="columns my-0">
+                            <div class="column has-text-centered my-0">
+                                <div class="has-text-centered">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarMC();">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarMC('');">
+                                        <i class="far fa-trash-alt"></i>										
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+                                <div id="btnInputMC" class="has-text-centered hidden">
+                                    <input id="editarTituloMC" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" 
+                                    type="text" placeholder="Titulo Plan">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarMC('');">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
