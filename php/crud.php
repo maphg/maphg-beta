@@ -459,6 +459,32 @@ if (isset($_POST['action'])) {
     }
 
 
+    if($action == "eliminarProyecto"){
+        $idProyecto = $_POST['idProyecto'];
+        $query = "UPDATE t_proyectos SET activo=0 WHERE id=$idProyecto";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Proyecto Eliminado";
+        } else {
+            echo "Error de Proyecto";
+        }
+        
+    }
+    
+    if($action == "editarProyecto"){
+        $idProyecto = $_POST['idProyecto'];
+        $tituloProyecto = $_POST['tituloProyecto'];
+        $query = "UPDATE t_proyectos SET titulo='$tituloProyecto' WHERE id=$idProyecto";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Proyecto Actualizado";
+        } else {
+            echo "Error de Proyecto";
+        }
+        
+    }
+
+
 
     if ($action == "actualizarCostoProyecto") {
         $idProyecto = $_POST["idProyecto"];

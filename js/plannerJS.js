@@ -3872,6 +3872,73 @@ function nuevoProyecto() {
 }
 
 
+function btnEditarProyecto() {
+    $("#btnInputProyecto").toggleClass("hidden");
+}
+
+
+function eliminarProyecto() {
+    console.log(idProyecto);
+    var action = "eliminarProyecto";
+    Swal.fire({
+        title: '¿Desea Eliminar el Proyecto?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar Proyecto'
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                '',
+                'Proyecto Eliminado',
+                'success',
+                eliminarProyectoConfirm()
+            )
+        }
+    })
+    function eliminarProyectoConfirm(){
+        var idProyecto = $("#idProyectoStatus").val();
+        var action = "eliminarProyecto";
+        $.ajax({
+            type: "post",
+            url: "php/crud.php",
+            data: { action: action, idProyecto: idProyecto},
+
+            success: function (datos) {
+                refreshProyectos();
+                show_hide_modal('modal-Status','hide');
+                btnEditarProyecto();
+            }
+        })
+    }
+}
+
+
+function editarProyecto() {
+    var idProyecto = $("#idProyectoStatus").val();
+    var tituloProyecto = $("#editarTituloProyecto").val();
+    console.log(idProyecto, tituloProyecto);
+    var action = "editarProyecto";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: { action: action, idProyecto: idProyecto, tituloProyecto: tituloProyecto },
+
+        success: function (datos) {
+            refreshProyectos();
+            show_hide_modal('modal-Status', 'hide');
+            alertInformacionActualiza('Proyecto Actualizado');
+            $("#editarTituloProyecto").val('');
+            btnEditarProyecto();
+
+
+        }
+    })
+    
+}
+
 
 // Seccion para visualizar los modal de proyecto con los Datos
 function modalJustificacion(idProyecto, idJustificacion) {

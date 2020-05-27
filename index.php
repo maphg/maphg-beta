@@ -931,28 +931,22 @@ $tablaRanking .= "</div>";
                             }
                         }
 
-
-
-
-
-
-
                         $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
                         $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
 
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
+                            
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, " . $row_c_rel_seccion['id_subseccion'] . " ); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto' ); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
                     }
                     ?>
-
 
 
                     <?php
@@ -1021,10 +1015,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1173,10 +1167,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1247,10 +1241,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1323,10 +1317,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1398,10 +1392,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1473,10 +1467,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1547,10 +1541,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1622,10 +1616,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1696,10 +1690,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1770,10 +1764,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1849,10 +1843,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, " . $row_c_rel_seccion['id_subseccion'] . " ); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1927,10 +1921,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2082,10 +2076,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2156,10 +2150,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2232,10 +2226,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2307,10 +2301,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2382,10 +2376,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2456,10 +2450,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2531,10 +2525,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2605,10 +2599,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2679,10 +2673,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -6299,6 +6293,28 @@ $tablaRanking .= "</div>";
                                 <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
                                 <button class="button is-info is-fullwidth mt-2" onclick="statusProyecto('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
                                 <!--<button class="button is-success is-fullwidth mt-2" onclick="statusProyecto('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>-->
+                            </div>
+                        </div>
+                        <div class="columns my-0">
+                            <div class="column has-text-centered my-0">
+                                <div class="has-text-centered">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarProyecto();">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarProyecto('');">
+                                        <i class="far fa-trash-alt"></i>										
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+                                <div id="btnInputProyecto" class="has-text-centered hidden">
+                                    <input id="editarTituloProyecto" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" 
+                                    type="text" placeholder="Titulo Plan">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarProyecto('');">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button> 
+                                </div>
                             </div>
                         </div>
                     </div>
