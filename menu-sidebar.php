@@ -1,3 +1,12 @@
+<style>
+.CI{
+    width: 5px;
+}
+
+.CA{
+    width: calc(99% - 5px);
+}
+</style>
 <!-- INICIO MENU -->
 <dav id="sidemenu" class="animated fadeOutLeft menu-contenedor-1">
     <dav class="menu-contenedor-2">
@@ -8,159 +17,159 @@
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo1" data-toggle="hijo" href="">TR</o>
-                <i class="fal fa-angle-down"></i>
+                <o data-target="hijo1" data-toggle="hijo" href="" class="CA">TR</o>
+                <i class="fal fa-angle-down CI"></i>
             </dav>
         </dav>
         <dav id="hijo1" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3">TR Mantto.</a>
+                <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">TR Mantto.</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3">Bitácora diaria</a>
+                <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora diaria</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="lavanderia.php" target="_blanck" class="menu-hijo-3">Lavanderiá</a>
+                <a href="lavanderia.php" target="_blanck" class="menu-hijo-3 CA">Lavanderiá</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o data-target="nieto1" data-toggle="hijo" href="#" class="menu-hijo-3">Satisfacción</o>
+                <o data-target="nieto1" data-toggle="hijo" href="#" class="menu-hijo-3 CA">Satisfacción</o>
                 <i class="fal fa-angle-down menu-hijo-4"></i>
             </dav>
             <dav id="nieto1" class="menu-nieto-1 ocultalo">
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">Quejas ACS</o>
+                    <o href="#" class="menu-nieto-3 CA">Quejas ACS</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">Reportes de GIFT</o>
+                    <o href="#" class="menu-nieto-3 CA">Reportes de GIFT</o>
                 </dav>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo2" data-toggle="hijo" href="">MP/MC</o>
+                <o data-target="hijo2" data-toggle="hijo" href="" class="CA">MP/MC</o>
                 <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
         <dav id="hijo2" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="index.php" class="menu-hijo-3">Planner</a>
+                <a href="index.php" class="menu-hijo-3 CA">Planner</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3">GIFT</a>
+                <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3">Bitácora</a>
+                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora</a>
                 <i class="fal fa-angle-down menu-hijo-4"></i>
             </dav>
             <dav id="nieto2" class="menu-nieto-1 ocultalo">
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">Temp. restaurantes</o>
+                    <o href="#" class="menu-nieto-3 CA">Temp. restaurantes</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">Temp. piscinas</o>
+                    <o href="#" class="menu-nieto-3 CA">Temp. piscinas</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">Parametros del agua</o>
+                    <o href="#" class="menu-nieto-3 CA">Parametros del agua</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">GP</o>
+                    <o href="#" class="menu-nieto-3 CA">GP</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">TRS</o>
+                    <o href="#" class="menu-nieto-3 CA">TRS</o>
                 </dav>
                 <dav class="menu-nieto-2">
-                    <o href="#" class="menu-nieto-3">ZI</o>
+                    <o href="#" class="menu-nieto-3 CA">ZI</o>
                 </dav>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Procesos</o>
+                <o href="#" class="menu-hijo-3 CA">Procesos</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Agenda Personal</o>
+                <o href="#" class="menu-hijo-3 CA">Agenda Personal</o>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <a href="energeticos.php" target="_blank" >Energéticos</a>
+                <a href="energeticos.php" target="_blank" class="CA">Energéticos</a>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo3" data-toggle="hijo" href="#">Gestion Mat. y Serv.</o>
+                <o data-target="hijo3" data-toggle="hijo" href="#" class="CA">Gestion Mat. y Serv.</o>
                 <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
         <dav id="hijo3" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Sub almacenes</o>
+                <o href="#" class="menu-hijo-3 CA">Sub almacenes</o>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="stock-beta.php" target="_blanck" class="menu-hijo-3">Stock</a>
+                <a href="stock-beta.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3">Pedidos</a>
+                <a href="pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="gastos-beta.php" target="_blanck" class="menu-hijo-3">Gastos</a>
+                <a href="gastos-beta.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Empresas y proveedores</o>
+                <o href="#" class="menu-hijo-3 CA">Empresas y proveedores</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Cotizaciones</o>
+                <o href="#" class="menu-hijo-3 CA">Cotizaciones</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Activos</o>
+                <o href="#" class="menu-hijo-3 CA">Activos</o>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo4" data-toggle="hijo" href="#">Instalaciones</o>
+                <o data-target="hijo4" data-toggle="hijo" href="#" class="CA">Instalaciones</o>
             </dav>
         </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Proyectos</o>
+                <o href="#" class="menu-hijo-3 CA">Proyectos</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Entregas</o>
+                <o href="#" class="menu-hijo-3 CA">Entregas</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Planos</o>
+                <o href="#" class="menu-hijo-3 CA">Planos</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Normativas</o>
+                <o href="#" class="menu-hijo-3 CA">Normativas</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Auditorias</o>
+                <o href="#" class="menu-hijo-3 CA">Auditorias</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Seguridad</o>
+                <o href="#" class="menu-hijo-3 CA">Seguridad</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Certificaciones</o>
+                <o href="#" class="menu-hijo-3 CA">Certificaciones</o>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo5" data-toggle="hijo" href="#">Consultoria</o>
+                <o data-target="hijo5" data-toggle="hijo" href="#" class="CA">Consultoria</o>
             </dav>
         </dav>
         <dav id="hijo5" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">DEC</o>
+                <o href="#" class="menu-hijo-3 CA">DEC</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">ZIA</o>
+                <o href="#" class="menu-hijo-3 CA">ZIA</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">ZIC</o>
+                <o href="#" class="menu-hijo-3 CA">ZIC</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">ZHA</o>
+                <o href="#" class="menu-hijo-3 CA">ZHA</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">SOPORTE</o>
+                <o href="#" class="menu-hijo-3 CA">SOPORTE</o>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
@@ -170,26 +179,26 @@
         </dav>
         <dav id="hijo6" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Gestion</o>
+                <o href="#" class="menu-hijo-3 CA">Gestion</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Organigrama</o>
+                <o href="#" class="menu-hijo-3 CA">Organigrama</o>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo7" data-toggle="hijo" href="#">Aplicaciones</o>
+                <o data-target="hijo7" data-toggle="hijo" href="#" class="CA">Aplicaciones</o>
             </dav>
         </dav>
         <dav id="hijo7" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3">GIFT</a>
+                <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">2bend</o>
+                <o href="#" class="menu-hijo-3 CA">2bend</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3">Abril</o>
+                <o href="#" class="menu-hijo-3 CA">Abril</o>
             </dav>
         </dav>
     </dav>
