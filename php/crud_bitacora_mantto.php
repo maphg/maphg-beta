@@ -32,7 +32,7 @@ if (isset($_POST['action'])) {
         $fecha = $fecha->format('Y-m-d');
 
         if ($fecha !="") {
-            $fechaDia = date("$fecha 07:00:00");
+            $fechaDia = date("$fecha 06:00:00");
         }else{
             $fecha = date("Y-m-d"); 
             $fechaDia = date("Y-m-d H:m:s");
