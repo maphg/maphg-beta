@@ -1,5 +1,5 @@
 <?php
-
+session_set_cookie_params(60*60*24*364);
 session_start();
 
 $usuario = $_SESSION['usuario'];
@@ -125,8 +125,6 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                         }
 
                         ?>
-
-
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -1006,7 +1004,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
     <!-- CDN para Alertas -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <!-- CDN para DataPicker -->
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
     <script src="js/bitacora_manttoJS.js"></script>
     <script src="css/fontawesome/js/all.js"></script>
 

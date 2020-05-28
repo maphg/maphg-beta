@@ -1,5 +1,5 @@
 <?php
-
+session_set_cookie_params(60*60*24*364);
 session_start();
 include 'conexion.php';
 if (isset($_POST['action'])) {

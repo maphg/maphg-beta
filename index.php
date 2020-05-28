@@ -1,4 +1,5 @@
 <?php
+session_set_cookie_params(60*60*24*364);
 session_start();
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'en_US');
@@ -285,19 +286,16 @@ $tablaRanking .= "</div>";
 <head>
     <meta charset="UTF-8">
     <?php echo $layout->styles(); ?>
+	<link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bulma.css">
     <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/style3.css">
-    <!-- <link rel="stylesheet" href="DataTables/datatables.css"> -->
-    <link rel="stylesheet" href="css/bulma.css">
+    <link rel="stylesheet" href="DataTables/datatables.css">
     <link rel="stylesheet" href="css/clases.css">
     <link rel="stylesheet" href="css/hover.css">
     <link rel="stylesheet" href="css/modal-fx.min.css">
     <link rel="stylesheet" href="css/clasesproyectosypendientes.css" />
     <link rel="stylesheet" href="css/animate.css">
-	<link href="css/tailwind.css" rel="stylesheet">
-
-
-
 </head>
 
 <body>
@@ -6259,7 +6257,7 @@ $tablaRanking .= "</div>";
 								</div>
 								<div class="column has-text-centered">
 									<input id="editarTituloPlan" class="hidden bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" 
-									type="text" placeholder="Titulo Plan">
+									type="text" placeholder="Nuevo Titulo">
 									<button  id="btnTituloPlan" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="actualizarPlanAccion('');">
 										<i class="far fa-save"></i>
 										<span> Guardar</span>
@@ -6309,7 +6307,7 @@ $tablaRanking .= "</div>";
                                 </div>
                                 <div id="btnInputProyecto" class="has-text-centered hidden">
                                     <input id="editarTituloProyecto" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" 
-                                    type="text" placeholder="Titulo Plan">
+                                    type="text" placeholder="Nuevo Titulo">
                                     <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarProyecto('');">
                                         <i class="far fa-save"></i>
                                         <span> Guardar</span>
@@ -6362,7 +6360,7 @@ $tablaRanking .= "</div>";
                                 </div>
                                 <div id="btnInputMC" class="has-text-centered hidden">
                                     <input id="editarTituloMC" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" 
-                                    type="text" placeholder="Titulo Plan">
+                                    type="text" placeholder="Nuevo Titulo">
                                     <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarMC('');">
                                         <i class="far fa-save"></i>
                                         <span> Guardar</span>
