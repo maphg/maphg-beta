@@ -847,7 +847,7 @@ if (isset($_POST['action'])) {
                     <div class=\"px-3 flex justify-between my-2\">
                     <h1 class=\"\">$empresa</h1><!-- DESCRIPCION DE LA TAREA -->
                     <P class=\"mx-3\">/</P><!-- DIVISION -->
-                    <h1 class=\"\">$motivo<span><i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_empresas_externas', $id)\"></i></span></h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
+                    <h1 class=\"\">$motivo<span><i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_empresas_externas', $id,'modal-empresas')\"></i></span></h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
                     </div>
                 ";
             }
@@ -928,7 +928,7 @@ if (isset($_POST['action'])) {
                     <div class=\"px-3 flex justify-between my-2\">
                     <h1 class=\"\">$acontecimiento</h1><!-- DESCRIPCION DE LA TAREA -->
                     <P class=\"mx-3\">/</P><!-- DIVISION -->
-                    <h1 class=\"\">$descripcion<span><i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_acontecimiento', $id)\"></i></span></h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
+                    <h1 class=\"\">$descripcion<span><i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_acontecimiento', $id,'modal-acontecimientos')\"></i></span></h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
                     </div>
                 ";
 
