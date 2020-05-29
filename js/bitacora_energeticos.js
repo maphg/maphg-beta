@@ -82,152 +82,135 @@ function app() {
 }
 
 // Graficos para Bitacora Energeticos.
-var ctx = document.getElementById("gelectricidad");
-var gelectricidad = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [
-      "lunes",
-      "martes",
-      "miercoles",
-      "jueves",
-      "viernes",
-      "sabado",
-      "hoy",
-    ],
-    datasets: [
-      {
-        label: "Historico",
-        data: [12, 19, 3, 5, 2, 9, 3],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
+function graficaElectricidad(arraySemana, cantidadElectricidad) {
+  
+
+  var ctx = document.getElementById("gelectricidad");
+  var gelectricidad = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: arraySemana,
+      datasets: [
+        {
+          label: "Historico",
+          data: cantidadElectricidad,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+        position: "bottom",
+        align: "center",
       },
-    ],
-  },
-  options: {
-    legend: {
-      display: false,
-      position: "bottom",
-      align: "center",
-    },
 
-    tooltips: {
-      enabled: true,
-    },
-  },
-});
-
-var ctx = document.getElementById("gagua");
-var gagua = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [
-      "lunes",
-      "martes",
-      "miercoles",
-      "jueves",
-      "viernes",
-      "sabado",
-      "hoy",
-    ],
-    datasets: [
-      {
-        label: "Historico",
-        data: [12, 19, 3, 5, 2, 9, 3],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
+      tooltips: {
+        enabled: true,
       },
-    ],
-  },
-  options: {
-    legend: {
-      display: false,
-      position: "bottom",
-      align: "center",
     },
+  });
+}
 
-    tooltips: {
-      enabled: true,
+function graficaAgua(arraySemana, cantidadAgua) {
+
+  var ctx = document.getElementById("gagua");
+  var gagua = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: arraySemana,
+      datasets: [
+        {
+          label: "Historico",
+          data: cantidadAgua,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
     },
-  },
-});
-
-var ctx = document.getElementById("ggas");
-var ggas = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [
-      "lunes",
-      "martes",
-      "miercoles",
-      "jueves",
-      "viernes",
-      "sabado",
-      "hoy",
-    ],
-    datasets: [
-      {
-        label: "Historico",
-        data: [12, 19, 3, 5, 2, 9, 3],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
+    options: {
+      legend: {
+        display: false,
+        position: "bottom",
+        align: "center",
       },
-    ],
-  },
-  options: {
-    legend: {
-      display: false,
-      position: "bottom",
-      align: "center",
-    },
 
-    tooltips: {
-      enabled: true,
-    },
-  },
-});
-
-var ctx = document.getElementById("gdiesel");
-var gdiesel = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [
-      "lunes",
-      "martes",
-      "miercoles",
-      "jueves",
-      "viernes",
-      "sabado",
-      "hoy",
-    ],
-    datasets: [
-      {
-        label: "Historico",
-        data: [12, 19, 3, 5, 2, 9, 3],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
+      tooltips: {
+        enabled: true,
       },
-    ],
-  },
-  options: {
-    legend: {
-      display: false,
-      position: "bottom",
-      align: "center",
     },
+  });
+}
 
-    tooltips: {
-      enabled: true, 
+
+function graficaGas(arraySemana, cantidadGas) {
+  
+  var ctx = document.getElementById("ggas");
+  var ggas = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: arraySemana,
+      datasets: [
+        {
+          label: "Historico",
+          data: cantidadGas,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
     },
-  },
-});
+    options: {
+      legend: {
+        display: false,
+        position: "bottom",
+        align: "center",
+      },
+
+      tooltips: {
+        enabled: true,
+      },
+    },
+  });
+}
+
+
+function graficaDiesel(arraySemana, cantidadDiesel) {
+  
+
+  var ctx = document.getElementById("gdiesel");
+  var gdiesel = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: arraySemana,
+      datasets: [
+        {
+          label: "Historico",
+          data: cantidadDiesel,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      legend: {
+        display: false,
+        position: "bottom",
+        align: "center",
+      },
+
+      tooltips: {
+        enabled: true,
+      },
+    },
+  });
+}
 
 // Funciones para Consumo del Dia.
-
 function consumoDia(idDestino, opcion, fechaSeleccionada) {
   var action = "consumoDia";
   $.ajax({
@@ -241,7 +224,7 @@ function consumoDia(idDestino, opcion, fechaSeleccionada) {
     },
     dataType:'json',
     success: function (datos) {
-      console.log(datos);
+
       // Se envian los resultados al HTML.
       $("#dataElectricidad").html(datos.dataElectricidad);
       $("#iconElectricidad").html(datos.iconElectricidad);
@@ -293,12 +276,54 @@ function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
 }
 
 
+// funcion para consultar acontecimientos de una Semana.
+function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
+  var action = "consultaAcontecimientosSemana";
+  $.ajax({
+    type: "post",
+    url: "php/crud_bitacora_energeticos.php",
+    data: {
+      action: action,
+      idDestino: idDestino,
+      opcion: opcion,
+      fechaSeleccionada: fechaSeleccionada
+    },
+    dataType: 'json',
+    success: function (datos) {
+      // console.log(datos);
+      console.log('Inicio: ' + datos.semanaInicio);
+      console.log('Fin: ' + datos.semanaFin);
+      console.log('Fin--: ' + datos.graficaSemanaGeneral);
+      console.log('Fin--: ' + datos.graficaElectricidadCantidad);
+      // console.log(datos.dataAcontecimientosElectricidad);
+      $("#dataAcontecimientosElectricidadSemana").html(datos.dataAcontecimientosElectricidad);
+      $("#dataAcontecimientosAguaSemana").html(datos.dataAcontecimientosAgua);
+      $("#dataAcontecimientosGasSemana").html(datos.dataAcontecimientosGas);
+      $("#dataAcontecimientosDiselSemana").html(datos.dataAcontecimientosDiesel);
+
+      // Se convierten los datos en Arreglos para enviarlos a las Graficas.
+      // el Arreglo arraySemana se envia a todas las graficas porque es el mismo dato para todas y no cambia.
+      var arraySemana = datos.graficaSemanaGeneral.split(',');
+      var cantidadElectricidad = datos.graficaElectricidadCantidad.split(',');
+      var cantidadAgua = datos.graficaAgua.split(',');
+      var cantidadGas = datos.graficaGas.split(',');
+      var cantidadDiesel = datos.graficaDiesel.split(',');
+
+      // Llama a las funciones que Generan las Graficas.
+      graficaElectricidad(arraySemana, cantidadElectricidad);
+      graficaAgua(arraySemana, cantidadAgua);
+      graficaGas(arraySemana, cantidadGas);
+      graficaDiesel(arraySemana, cantidadDiesel);
+    },
+  });
+}
+
+
 // Funcion para obtener parametros iniciales al cargar la pagina y llamar a Funciones.
 function llamarFuncion(nombreFuncion) {
   var idDestino = $("#idDestino").val();
   var opcion = $("#opcion").val();
   var fechaSeleccionada = $("#dateGeneral").val();
-  console.log(idDestino, opcion, fechaSeleccionada);
 
   switch (nombreFuncion) {
 
@@ -311,6 +336,11 @@ function llamarFuncion(nombreFuncion) {
     case (nombreFuncion = "consultaAcontecimientos"):
       consultaAcontecimientos(idDestino, opcion, fechaSeleccionada);
       break;
+    
+    // Llama a la función Acontecimiento Semana.
+    case (nombreFuncion = "consultaAcontecimientosSemana"):
+      consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada);
+      break;
 
     default:
       break;
@@ -322,3 +352,4 @@ function llamarFuncion(nombreFuncion) {
 // Llamada de funciones iniciales.
 llamarFuncion('consumoDia');
 llamarFuncion('consultaAcontecimientos');
+llamarFuncion('consultaAcontecimientosSemana');

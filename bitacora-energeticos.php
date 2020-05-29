@@ -40,7 +40,7 @@ date_default_timezone_set('America/Cancun');
             </div>
             <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2"><!-- ESPACIO DEL WIDGET -->
                 <div class="inline-block w-auto relative">
-                    <select id="idDestino" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos');">
+                    <select id="idDestino" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
                         <?php
                         if ($idDestino != 10) {
                             echo "<option value=\"$idDestino\">$array_destino[$idDestino]</option>";
@@ -111,7 +111,7 @@ date_default_timezone_set('America/Cancun');
                                                     </div>
                                                 </template>
                                             </div>
-                                            <div class="flex flex-wrap -mx-1" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos');">
+                                            <div class="flex flex-wrap -mx-1" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
                                                 <template x-for=" blankday in blankdays">
                                                     <div style="width: 14.28%" class="text-center border p-1 border-transparent text-sm"></div>
                                                 </template>
@@ -128,7 +128,7 @@ date_default_timezone_set('America/Cancun');
                         </div>
                     </div>
                 </div>
-                <div class="block appearance-none bg-white border border-grey-light hover:border-grey px-3 pt--3 cursor pr-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos');">Buscar</div>
+                <div class="block appearance-none bg-white border border-grey-light hover:border-grey px-3 pt--3 cursor pr-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">Buscar</div>
             </div>
         </div>
 
@@ -286,18 +286,7 @@ date_default_timezone_set('America/Cancun');
                     <canvas id="gelectricidad" class="w-auto h-auto"></canvas>
                     <!-- acontecimientos de la semana -->
                     <p class="truncate font-bold text-gray-600 text-base text-center my-1">Acontecimientos de la semana</p>
-                    <div class="flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1">
-                        <h1 class="font-bold mr-2">16/12/2020</h1><!-- SECION -->
-                        <h1 class="font-bold">Fuga</h1><!-- SECION -->
-                        <P class="font-black mx-1">/</P><!-- DIVISION -->                      
-                        <h1 class="truncate font-medium">Descripcion de la tarea Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, perspiciatis?</h1><!-- DESCRIPCION DE LA TAREA -->
-                    </div>
-                    <div class="flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1">
-                        <h1 class="font-bold mr-2">16/12/2020</h1><!-- SECION -->
-                        <h1 class="font-bold">Fuga</h1><!-- SECION -->
-                        <P class="font-black mx-1">/</P><!-- DIVISION -->                      
-                        <h1 class="truncate font-medium">Descripcion de la tarea Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, perspiciatis?</h1><!-- DESCRIPCION DE LA TAREA -->
-                    </div>
+                    <div id="dataAcontecimientosElectricidadSemana"></div>
                 </div>
 
                 <div class="sm:w-5/6 md:w-1/4 mx-3 h-auto bg-white shadow-md rounded-md p-2">
@@ -307,12 +296,7 @@ date_default_timezone_set('America/Cancun');
                     <canvas id="gagua" class="w-auto h-auto"></canvas>
                     <!-- acontecimientos de la semana -->
                     <p class="truncate font-bold text-gray-600 text-base text-center my-1">Acontecimientos de la semana</p>
-                    <div class="flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1">
-                        <h1 class="font-bold mr-2">16/12/2020</h1><!-- SECION -->
-                        <h1 class="font-bold">Fuga</h1><!-- SECION -->
-                        <P class="font-black mx-1">/</P><!-- DIVISION -->                      
-                        <h1 class="truncate font-medium">Descripcion de la tarea Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, perspiciatis?</h1><!-- DESCRIPCION DE LA TAREA -->
-                    </div>
+                    <div id="dataAcontecimientosAguaSemana"></div>
                 </div>
 
                 <div class="sm:w-5/6 md:w-1/4 mx-3 h-auto bg-white shadow-md rounded-md p-2">
@@ -320,29 +304,20 @@ date_default_timezone_set('America/Cancun');
                         <h1 class=" font-semibold text-red-600 bg-red-200 py-1 px-3 my-2 rounded-full">Gas</h1>
                     </div>
                     <canvas id="ggas" class="w-auto h-auto"></canvas>
-                    <div class="flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1">
-                        <h1 class="font-bold mr-2">16/12/2020</h1><!-- SECION -->
-                        <h1 class="font-bold">Fuga</h1><!-- SECION -->
-                        <P class="font-black mx-1">/</P><!-- DIVISION -->                      
-                        <h1 class="truncate font-medium">Descripcion de la tarea Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, perspiciatis?</h1><!-- DESCRIPCION DE LA TAREA -->
-                    </div>
+                    <p class="truncate font-bold text-gray-600 text-base text-center my-1">Acontecimientos de la semana</p>
+                    <div id="dataAcontecimientosGasSemana"></div>
                 </div>
 
                 <div class="sm:w-5/6 md:w-1/4 mx-3 h-auto bg-white shadow-md rounded-md p-2">
                     <div class="flex flex-col items-center justify-center">
                         <h1 class=" font-semibold text-orange-400 bg-orange-200 py-1 px-3 my-2 rounded-full">Diesel</h1>
                     </div>
-                    <canvas id="gdiesel" class="w-auto h-auto"></canvas>
-                    
+                    <canvas id="gdiesel" class="w-auto h-auto"></canvas> 
+                    <p class="truncate font-bold text-gray-600 text-base text-center my-1">Acontecimientos de la semana</p>
+                    <div id="dataAcontecimientosDiselSemana"></div>         
                 </div>
             </div>
-
-            
-            
-
         </div>
-
-
     </div>        
 
         <!-- modal-acontecimientos -->

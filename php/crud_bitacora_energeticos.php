@@ -7,8 +7,6 @@ include 'conexion.php';
 
 
 if (isset($_POST['action'])) {
-
-
     // Asigna el valor de action.
     $action = $_POST['action'];
 
@@ -30,6 +28,44 @@ if (isset($_POST['action'])) {
     // Día antes.
     $fechaInicio_dia_antes = date("Y-m-d 00:00:01", strtotime($fechaInicio."-1 days"));
     $fechaFin_dia_antes = date("Y-m-d 23:59:00", strtotime($fechaFin."-1 days"));
+
+    // Inicio y Fin de Semana a partir del Día Seleccionado.
+    $fechaFinSemana = date("Y-m-d 00:00:01", strtotime($fechaFin."-6 days"));
+    $fechaInicioSemana = $fechaFin;
+
+
+    // Calcula semana apartir de la fecha seleccionada.
+    // Este segmento es el inicio del dia.
+    $fechaFinSemana_0 = date("Y-m-d 00:00:01", strtotime($fechaFin."-0 days"));
+    $fechaFinSemana_1 = date("Y-m-d 00:00:01", strtotime($fechaFin."-1 days"));
+    $fechaFinSemana_2 = date("Y-m-d 00:00:01", strtotime($fechaFin."-2 days"));
+    $fechaFinSemana_3 = date("Y-m-d 00:00:01", strtotime($fechaFin."-3 days"));
+    $fechaFinSemana_4 = date("Y-m-d 00:00:01", strtotime($fechaFin."-4 days"));
+    $fechaFinSemana_5 = date("Y-m-d 00:00:01", strtotime($fechaFin."-5 days"));
+    $fechaFinSemana_6 = date("Y-m-d 00:00:01", strtotime($fechaFin."-6 days"));
+
+    // Este segmento es el fin del día.
+    $fechaFinSemana_fin_0 = date("Y-m-d 23:59:59", strtotime($fechaFin."-0 days"));
+    $fechaFinSemana_fin_1 = date("Y-m-d 23:59:59", strtotime($fechaFin."-1 days"));
+    $fechaFinSemana_fin_2 = date("Y-m-d 23:59:59", strtotime($fechaFin."-2 days"));
+    $fechaFinSemana_fin_3 = date("Y-m-d 23:59:59", strtotime($fechaFin."-3 days"));
+    $fechaFinSemana_fin_4 = date("Y-m-d 23:59:59", strtotime($fechaFin."-4 days"));
+    $fechaFinSemana_fin_5 = date("Y-m-d 23:59:59", strtotime($fechaFin."-5 days"));
+    $fechaFinSemana_fin_6 = date("Y-m-d 23:59:59", strtotime($fechaFin."-6 days"));
+
+
+    // Calcula el Numero de Semana por la fecha.
+    $dia_0 = (new DateTime($fechaFinSemana_0))->format("w");
+    $dia_1 = (new DateTime($fechaFinSemana_1))->format("w");
+    $dia_2 = (new DateTime($fechaFinSemana_2))->format("w");
+    $dia_3 = (new DateTime($fechaFinSemana_3))->format("w");
+    $dia_4 = (new DateTime($fechaFinSemana_4))->format("w");
+    $dia_5 = (new DateTime($fechaFinSemana_5))->format("w");
+    $dia_6 = (new DateTime($fechaFinSemana_6))->format("w");
+
+    
+    // Array para Buscar el Día de la semana.
+    $arraySemana = array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 
 
 
@@ -230,7 +266,7 @@ if (isset($_POST['action'])) {
             $dataAcontecimientosElectricidad = 
             "
             <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
-            Sin Datos
+            Sin Acontecimientos.
             </div>
             ";
         }
@@ -239,7 +275,7 @@ if (isset($_POST['action'])) {
             $dataAcontecimientosElectricidadAgua = 
             "
             <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
-            Sin Datos
+            Sin Acontecimientos.
             </div>
             ";
         }
@@ -248,7 +284,7 @@ if (isset($_POST['action'])) {
             $dataAcontecimientosElectricidadGas = 
             "
             <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
-            Sin Datos
+            Sin Acontecimientos.
             </div>
             ";
         }
@@ -257,7 +293,7 @@ if (isset($_POST['action'])) {
             $dataAcontecimientosElectricidadDiesel = 
             "
             <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
-            Sin Datos
+            Sin Acontecimientos.
             </div>
             ";
         }
@@ -274,6 +310,280 @@ if (isset($_POST['action'])) {
 
 
         echo json_encode($arrayAcontecimientos);
+    }
+
+
+    if ($action == "consultaAcontecimientosSemana") {
+
+        $arrayAcontecimientosSemana = array();
+
+
+
+        // Variables Iniciales.
+        $dataAcontecimientosElectricidad = "";
+        $dataAcontecimientosAgua = "";
+        $dataAcontecimientosGas = "";
+        $dataAcontecimientosDiesel = "";
+
+        // Contadores para las graficas.
+        $electricidad_dia_0 = 0;
+        $electricidad_dia_1 = 0;
+        $electricidad_dia_2 = 0;
+        $electricidad_dia_3 = 0;
+        $electricidad_dia_4 = 0;
+        $electricidad_dia_5 = 0;
+        $electricidad_dia_6 = 0;
+
+        $agua_dia_0 = 0;
+        $agua_dia_1 = 0;
+        $agua_dia_2 = 0;
+        $agua_dia_3 = 0;
+        $agua_dia_4 = 0;
+        $agua_dia_5 = 0;
+        $agua_dia_6 = 0;
+
+        $gas_dia_0 = 0;
+        $gas_dia_1 = 0;
+        $gas_dia_2 = 0;
+        $gas_dia_3 = 0;
+        $gas_dia_4 = 0;
+        $gas_dia_5 = 0;
+        $gas_dia_6 = 0;
+
+        $diesel_dia_0 = 0;
+        $diesel_dia_1 = 0;
+        $diesel_dia_2 = 0;
+        $diesel_dia_3 = 0;
+        $diesel_dia_4 = 0;
+        $diesel_dia_5 = 0;
+        $diesel_dia_6 = 0;
+
+        $sinDato = 0;
+
+        $query = "SELECT* FROM bitacora_energeticos_acontecimientos WHERE id_destino = $idDestino AND fecha BETWEEN '$fechaFinSemana' AND '$fechaInicioSemana' AND activo=1 ORDER BY fecha DESC";
+        $result = mysqli_query($conn_2020, $query);
+
+        while ($row = mysqli_fetch_array($result)) {
+            $energetico = $row['energetico'];
+            $titulo = $row['titulo'];
+            $descripcion = $row['descripcion'];
+            $fecha_principal = new DateTime($row['fecha']);
+            $fecha = $fecha_principal->format('d/m/Y');
+            $fecha_contador = $fecha_principal->format('Y-m-d H:m:s');
+
+            if($energetico == "electricidad"){
+                $dataAcontecimientosElectricidad .=
+                "
+                <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1\">
+                    <h1 class=\"font-bold mr-2\">$fecha</h1>
+                    <h1 class=\"font-bold\">$titulo</h1>
+                    <P class=\"font-black mx-1\">/</P>
+                    <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $electricidad_dia_0++;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $electricidad_dia_1++;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $electricidad_dia_2++;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $electricidad_dia_3++;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4++;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4++;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $electricidad_dia_5++;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $electricidad_dia_6++;
+
+                else $sinDato=0;
+            }
+
+            if($energetico == "agua"){
+                $dataAcontecimientosAgua .=
+                "
+                <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1\">
+                    <h1 class=\"font-bold mr-2\">$fecha</h1>
+                    <h1 class=\"font-bold\">$titulo</h1>
+                    <P class=\"font-black mx-1\">/</P>
+                    <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $agua_0++;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $agua_dia_1++;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $agua_dia_2++;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $agua_dia_3++;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $agua_dia_4++;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5++;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $agua_dia_6++;
+
+                else $sinDato=0;
+            }
+
+            if($energetico == "gas"){
+                $dataAcontecimientosGas .=
+                "
+                <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1\">
+                    <h1 class=\"font-bold mr-2\">$fecha</h1>
+                    <h1 class=\"font-bold\">$titulo</h1>
+                    <P class=\"font-black mx-1\">/</P>
+                    <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $gas_dia_0++;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $gas_dia_1++;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $gas_dia_2++;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $gas_dia_3++;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $gas_dia_4++;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5++;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $gas_dia_6++;
+
+                else $sinDato=0;
+            }
+
+            if($energetico == "diesel"){
+                $dataAcontecimientosDiesel .=
+                "
+                <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1\">
+                    <h1 class=\"font-bold mr-2\">$fecha</h1>
+                    <h1 class=\"font-bold\">$titulo</h1>
+                    <P class=\"font-black mx-1\">/</P>
+                    <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $diesel_dia_0++;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $diesel_dia_1++;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $diesel_dia_2++;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $diesel_dia_3++;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $diesel_dia_4++;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $diesel_dia_5++;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $diesel_dia_6++;
+
+                else $sinDato=0;
+            }
+        }
+
+
+        // Comprueba si tiene información, de lo contrario le manda uns msj.
+        if($dataAcontecimientosElectricidad == ""){
+            $dataAcontecimientosElectricidad = 
+            "
+            <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
+            Sin Acontecimientos.
+            </div>
+            ";
+        }
+
+        if($dataAcontecimientosAgua == ""){
+            $dataAcontecimientosAgua = 
+            "
+            <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
+            Sin Acontecimientos.
+            </div>
+            ";
+        }
+
+        if($dataAcontecimientosGas == ""){
+            $dataAcontecimientosGas = 
+            "
+            <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
+            Sin Acontecimientos.
+            </div>
+            ";
+        }
+
+        if($dataAcontecimientosDiesel == ""){
+            $dataAcontecimientosADiesel = 
+            "
+            <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
+            Sin Acontecimientos.
+            </div>
+            ";
+        }
+
+
+
+
+        $arrayAcontecimientosSemana['dataAcontecimientosElectricidad'] = $dataAcontecimientosElectricidad;
+        
+        $arrayAcontecimientosSemana['dataAcontecimientosAgua'] = $dataAcontecimientosAgua;
+        
+        $arrayAcontecimientosSemana['dataAcontecimientosGas'] = $dataAcontecimientosGas;
+        
+        $arrayAcontecimientosSemana['dataAcontecimientosDiesel'] = $dataAcontecimientosDiesel;
+
+
+        $arrayAcontecimientosSemana['graficaSemanaGeneral'] =
+        $arraySemana[$dia_6].",".
+        $arraySemana[$dia_5].",".
+        $arraySemana[$dia_4].",".
+        $arraySemana[$dia_3].",".
+        $arraySemana[$dia_2].",".
+        $arraySemana[$dia_1].",".
+        $arraySemana[$dia_0];
+
+        // Se concatenan los valores obtenidos para crear el arreglo de la Grafica.
+        $arrayAcontecimientosSemana['graficaElectricidadCantidad'] = $electricidad_dia_6.",
+        ".$electricidad_dia_5.",
+        ".$electricidad_dia_4.",
+        ".$electricidad_dia_3.",
+        ".$electricidad_dia_2.",
+        ".$electricidad_dia_1.",
+        ".$electricidad_dia_0;
+
+        $arrayAcontecimientosSemana['graficaAgua'] = 
+        $agua_dia_6.",
+        ".$agua_dia_5.",
+        ".$agua_dia_4.",
+        ".$agua_dia_3.",
+        ".$agua_dia_2.",
+        ".$agua_dia_1.",
+        ".$agua_dia_0;
+
+        $arrayAcontecimientosSemana['graficaGas'] = 
+        $gas_dia_6.",
+        ".$gas_dia_5.",
+        ".$gas_dia_4.",
+        ".$gas_dia_3.",
+        ".$gas_dia_2.",
+        ".$gas_dia_1.",
+        ".$gas_dia_0;
+
+        $arrayAcontecimientosSemana['graficaDiesel'] = 
+        $diesel_dia_6.",
+        ".$diesel_dia_5.",
+        ".$diesel_dia_4.",
+        ".$diesel_dia_3.",
+        ".$diesel_dia_2.",
+        ".$diesel_dia_1.",
+        ".$diesel_dia_0;
+
+
+        echo json_encode($arrayAcontecimientosSemana);
+   
     }
 
 
