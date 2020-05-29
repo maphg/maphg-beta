@@ -1311,6 +1311,10 @@ function funcionNombre(nombreFuncion) {
     var zona = $("#zona").val();    
     var dateGeneral = $("#dateGeneral").val(); 
     var turnoSeleccionado = $("#turnoSeleccionado").val();
+
+    if (zona == "ENERGETICOS") {
+        location.href = "https://www.maphg.com/beta/bitacora-energeticos.php";
+    }
     
     switch (nombreFuncion) {
         case nombreFuncion="gremioCantidad":
