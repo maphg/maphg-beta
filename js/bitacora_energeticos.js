@@ -295,7 +295,7 @@ function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
       console.log('Inicio: ' + datos.semanaInicio);
       console.log('Fin: ' + datos.semanaFin);
       console.log('Fin--: ' + datos.graficaSemanaGeneral);
-      console.log('Fin--: ' + datos.graficaElectricidadCantidad);
+      console.log('Grafica Electricidad: ' + datos.graficaElectricidadCantidad);
       // console.log(datos.dataAcontecimientosElectricidad);
       $("#dataAcontecimientosElectricidadSemana").html(datos.dataAcontecimientosElectricidad);
       $("#dataAcontecimientosAguaSemana").html(datos.dataAcontecimientosAgua);

@@ -104,7 +104,7 @@ if (isset($_POST['action'])) {
             $gas = number_format($row['gas'], 2, '.', '');   
             $diesel = number_format($row['diesel'], 2, '.', '');
             $ocupacion = number_format($row['ocupacion'], 2, '.', '');
-            $pax = number_format($row['gas'], 0, '.', '');
+            $pax = number_format($row['pax'], 0, '.', '');
 
             $dataElectricidad = $electricidad; 
             $dataAgua = $agua; 
@@ -368,7 +368,6 @@ if (isset($_POST['action'])) {
             $descripcion = $row['descripcion'];
             $fecha_principal = new DateTime($row['fecha']);
             $fecha = $fecha_principal->format('d/m/Y');
-            $fecha_contador = $fecha_principal->format('Y-m-d H:m:s');
 
             if($energetico == "electricidad"){
                 $dataAcontecimientosElectricidad .=
@@ -380,24 +379,6 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
-
-                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $electricidad_dia_0++;
-
-                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $electricidad_dia_1++;
-
-                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $electricidad_dia_2++;
-
-                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $electricidad_dia_3++;
-
-                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4++;
-
-                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4++;
-
-                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $electricidad_dia_5++;
-
-                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $electricidad_dia_6++;
-
-                else $sinDato=0;
             }
 
             if($energetico == "agua"){
@@ -410,22 +391,6 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
-
-                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $agua_0++;
-
-                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $agua_dia_1++;
-
-                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $agua_dia_2++;
-
-                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $agua_dia_3++;
-
-                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $agua_dia_4++;
-
-                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5++;
-
-                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $agua_dia_6++;
-
-                else $sinDato=0;
             }
 
             if($energetico == "gas"){
@@ -438,22 +403,6 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
-
-                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $gas_dia_0++;
-
-                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $gas_dia_1++;
-
-                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $gas_dia_2++;
-
-                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $gas_dia_3++;
-
-                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $gas_dia_4++;
-
-                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5++;
-
-                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $gas_dia_6++;
-
-                else $sinDato=0;
             }
 
             if($energetico == "diesel"){
@@ -466,22 +415,6 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
-
-                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $diesel_dia_0++;
-
-                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $diesel_dia_1++;
-
-                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $diesel_dia_2++;
-
-                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $diesel_dia_3++;
-
-                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $diesel_dia_4++;
-
-                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $diesel_dia_5++;
-
-                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $diesel_dia_6++;
-
-                else $sinDato=0;
             }
         }
 
@@ -534,7 +467,103 @@ if (isset($_POST['action'])) {
         
         $arrayAcontecimientosSemana['dataAcontecimientosDiesel'] = $dataAcontecimientosDiesel;
 
+        $query_energeticos = "SELECT* FROM bitacora_energeticos_consumo_dia WHERE id_destino = $idDestino AND activo = 1 AND fecha BETWEEN '$fechaFinSemana' AND '$fechaInicioSemana' ORDER BY fecha DESC";
+        $result_energeticos = mysqli_query($conn_2020, $query_energeticos);
 
+        while ($row_energeticos = mysqli_fetch_array($result_energeticos)) {
+           
+            $electricidad = $row_energeticos['electricidad'];
+            $agua = $row_energeticos['agua'];
+            $gas = $row_energeticos['gas'];
+            $diesel = $row_energeticos['diesel'];
+            $fecha_contador = new DateTime($row_energeticos['fecha']);
+            $fecha_contador =$fecha_contador->format("Y-m-d H:m:s");
+            
+
+            if ($electricidad != "") {
+                
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $electricidad_dia_0 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $electricidad_dia_1++;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $electricidad_dia_2 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $electricidad_dia_3 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $electricidad_dia_4 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $electricidad_dia_5 = $electricidad;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $electricidad_dia_6 = $electricidad;
+
+                else $sinDato=0;
+            }
+
+
+            if ($agua != "") {    
+
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $agua_0 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $agua_dia_1 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $agua_dia_2 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $agua_dia_3 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $agua_dia_4 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5 = $agua;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $agua_dia_6 = $agua;
+
+                else $sinDato=0;
+            }
+
+
+            if ($gas != "") {
+            
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $gas_dia_0 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $gas_dia_1 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $gas_dia_2 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $gas_dia_3 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $gas_dia_4 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $agua_dia_5 = $gas;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $gas_dia_6 = $gas;
+
+                else $sinDato=0;
+            }
+
+
+            if ($diesel != "") {
+            
+                if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $diesel_dia_0 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $diesel_dia_1 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $diesel_dia_2 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_3 AND $fecha_contador <= $fechaFinSemana_fin_3) $diesel_dia_3 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_4 AND $fecha_contador <= $fechaFinSemana_fin_4) $diesel_dia_4 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_5 AND $fecha_contador <= $fechaFinSemana_fin_5) $diesel_dia_5 = $diesel;
+
+                elseif($fecha_contador >= $fechaFinSemana_6 AND $fecha_contador <= $fechaFinSemana_fin_6) $diesel_dia_6 = $diesel;
+
+                else $sinDato=0;
+            }
+            
+        }
+
+        // Datos para Generar las Graficas de Energeticos.
         $arrayAcontecimientosSemana['graficaSemanaGeneral'] =
         $arraySemana[$dia_6].",".
         $arraySemana[$dia_5].",".
@@ -545,7 +574,8 @@ if (isset($_POST['action'])) {
         $arraySemana[$dia_0];
 
         // Se concatenan los valores obtenidos para crear el arreglo de la Grafica.
-        $arrayAcontecimientosSemana['graficaElectricidadCantidad'] = $electricidad_dia_6.",
+        $arrayAcontecimientosSemana['graficaElectricidadCantidad'] = 
+        $electricidad_dia_6.",
         ".$electricidad_dia_5.",
         ".$electricidad_dia_4.",
         ".$electricidad_dia_3.",
