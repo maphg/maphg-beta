@@ -348,6 +348,11 @@ function llamarFuncion(nombreFuncion) {
 }
 
 
+function modalTailwind(modal, opcion) {
+  $("#" + modal).toggleClass('hidden');
+}
+
+
 
 // Llamada de funciones iniciales.
 llamarFuncion('consumoDia');

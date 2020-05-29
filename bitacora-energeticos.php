@@ -232,7 +232,7 @@ date_default_timezone_set('America/Cancun');
                 </div>
             </div>
 
-            <div class="cursor-pointer flex self-start my-3"><!-- CONTENEDOR DE TITULO -->
+            <div class="cursor-pointer flex self-start my-3" onclick="modalTailwind('modal-acontecimientos','toggle');"><!-- CONTENEDOR DE TITULO -->
                 <h1 class="text-gray-200 bg-gray-900 pl-4 pr-3 py-3 uppercase rounded-r-full font-semibold my-3"><span><i class="fad fa-circle text-sm text-red-400 mr-1"></i></span>Acontecimientos del dia</h1>
             </div>
             <!-- acontecimientos -->
@@ -321,71 +321,73 @@ date_default_timezone_set('America/Cancun');
     </div>        
 
         <!-- modal-acontecimientos -->
-    <div id="modal-acontecimientos" class="modal">
-        <div class="modal-window w-full md:w-2/5 rounded-lg flex flex-col items-center justify-center">
-            <!-- CONTENIDO MODAL -->
-            <div class="flex self-end mb-2">
-                <i class="fad fa-times-circle close" data-dismiss="modal"></i>
-            </div>
-            <form class="w-full">
-                <div class="text-center py-4 lg:px-4">
-                    <div class="p-2 bg-gray-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex">
-                      <span class="font-semibold mx-2 text-left flex-auto">Acontecimientos Energeticos</span>
-                    </div>
+    <div id="modal-acontecimientos" class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center hidden">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="modalTailwind('modal-acontecimientos','toggle');"></div>
+        
+            <div class="modal-window w-full md:w-2/5 rounded-lg flex flex-col items-center justify-center bg-white z-50">
+               
+                <!-- CONTENIDO MODAL -->
+                <div class="flex self-end mb-2" onclick="modalTailwind('modal-acontecimientos','toggle');">
+                    <i class="fad fa-times-circle close" data-dismiss="modal"></i>
                 </div>
-                <div class="flex flex-wrap -mx-3 mb-6">
-                    <div class="w-full md:w-1/3 px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                            Titulo
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Titulo">
-                    </div>
-                    <div class="w-full md:w-1/3 px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                            Descripcion
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Descripcion">
-                    </div>
-                    <div class="w-full md:w-1/3 px-3">
-                        <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700">
-                          <option>Electricidad</option>
-                          <option>Agua</option>
-                          <option>Gas</option>
-                          <option>Diesel</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                <form class="w-full">
+                    <div class="text-center py-4 lg:px-4">
+                        <div class="p-2 bg-gray-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex">
+                        <span class="font-semibold mx-2 text-left flex-auto">Acontecimientos Energeticos</span>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-wrap flex-col bg-gray-200 items-start justify-center m-10 p-2 font-bold ">
-                    <div class="px-3 flex justify-between my-2">
-                        <h1>Electricidad </h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Titulo del acontecimiento</h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full md:w-1/3 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                                Titulo
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Titulo">
+                        </div>
+                        <div class="w-full md:w-1/3 px-3">
+                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                                Descripcion
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Descripcion">
+                        </div>
+                        <div class="w-full md:w-1/3 px-3">
+                            <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700">
+                            <option>Electricidad</option>
+                            <option>Agua</option>
+                            <option>Gas</option>
+                            <option>Diesel</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
                     </div>
+                    <div class="flex flex-wrap flex-col bg-gray-200 items-start justify-center m-10 p-2 font-bold ">
+                        <div class="px-3 flex justify-between my-2">
+                            <h1>Electricidad </h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Titulo del acontecimiento</h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
+                        </div>
 
-                    <div class="px-3 flex justify-between my-2">
-                        <h1>Electricidad </h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Titulo del acontecimiento</h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
-                    </div>
+                        <div class="px-3 flex justify-between my-2">
+                            <h1>Electricidad </h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Titulo del acontecimiento</h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
+                        </div>
 
-                    <div class="px-3 flex justify-between my-2">
-                        <h1>Electricidad </h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Titulo del acontecimiento</h1>
-                        <h1 class="mx-3"> / </h1>
-                        <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
-                    </div>
-                </div> 
-              </form>
-
-            <!-- CONTENIDO MODAL -->
+                        <div class="px-3 flex justify-between my-2">
+                            <h1>Electricidad </h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Titulo del acontecimiento</h1>
+                            <h1 class="mx-3"> / </h1>
+                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
+                        </div>
+                    </div> 
+                </form>
+                <!-- CONTENIDO MODAL -->
         </div>
     </div>
     <!-- modal-acontecimientos -->
