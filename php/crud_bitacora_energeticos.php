@@ -72,7 +72,6 @@ if (isset($_POST['action'])) {
     if ($action == "consumoDia") {
         $arrayComsumoDia = array();
         
-
         // Variables para Array.
         $dataElectricidad = 0;
         $dataAgua = 0;
@@ -100,12 +99,12 @@ if (isset($_POST['action'])) {
         // Consulta de la fecha seleccionada.
         if ($row = mysqli_fetch_array($result)) {
 
-            $electricidad = $row['electricidad'];   
-            $agua = $row['agua'];   
-            $gas = $row['gas'];   
-            $diesel = $row['diesel'];
-            $ocupacion = $row['ocupacion'];
-            $pax = $row['pax'];
+            $electricidad =  number_format($row['electricidad'], 2, '.', '');   
+            $agua = number_format($row['agua'], 2, '.', '');  
+            $gas = number_format($row['gas'], 2, '.', '');   
+            $diesel = number_format($row['diesel'], 2, '.', '');
+            $ocupacion = number_format($row['ocupacion'], 2, '.', '');
+            $pax = number_format($row['gas'], 0, '.', '');
 
             $dataElectricidad = $electricidad; 
             $dataAgua = $agua; 
@@ -516,7 +515,7 @@ if (isset($_POST['action'])) {
         }
 
         if($dataAcontecimientosDiesel == ""){
-            $dataAcontecimientosADiesel = 
+            $dataAcontecimientosDiesel = 
             "
             <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1 font-bold\">
             Sin Acontecimientos.

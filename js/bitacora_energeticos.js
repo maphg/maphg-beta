@@ -1,3 +1,4 @@
+$("#opcion").val('ENERGETICOS');
 // Funcion para seleccionar fecha.
 const MONTH_NAMES = [
   "Enero",
@@ -324,6 +325,12 @@ function llamarFuncion(nombreFuncion) {
   var idDestino = $("#idDestino").val();
   var opcion = $("#opcion").val();
   var fechaSeleccionada = $("#dateGeneral").val();
+
+  var zona = opcion;
+
+  if (zona != "ENERGETICOS") {
+    location.href = "bitacora_mantto.php";
+  }
 
   switch (nombreFuncion) {
 

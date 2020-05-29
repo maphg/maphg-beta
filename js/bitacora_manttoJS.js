@@ -1313,7 +1313,7 @@ function funcionNombre(nombreFuncion) {
     var turnoSeleccionado = $("#turnoSeleccionado").val();
 
     if (zona == "ENERGETICOS") {
-        location.href = "https://www.maphg.com/beta/bitacora-energeticos.php";
+        location.href = "bitacora-energeticos.php";
     }
     
     switch (nombreFuncion) {
