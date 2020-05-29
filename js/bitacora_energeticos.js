@@ -251,6 +251,15 @@ function consumoDia(idDestino, opcion, fechaSeleccionada) {
 
 // funcion para consultar acontecimientos.
 function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
+  // Segmento de codigo para el Modal de Acontecimientos.
+  var energetico = $("#acontecimientosEnergetico").val().toLowerCase();
+  
+  // Se inicializa el contenido del Modal Acontecimientos.
+  $("#dataModalAcontecimientosElectricidad").html('');
+  $("#dataModalAcontecimientosAgua").html('');
+  $("#dataModalAcontecimientosGas").html('');
+  $("#dataModalAcontecimientosDiesel").html('');
+
   var action = "consultaAcontecimientos";
   $.ajax({
     type: "post",
@@ -263,6 +272,7 @@ function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
     },
     dataType: 'json',
     success: function (datos) {
+      // console.log(datos);
       
       // Se envian los resultados al HTML.
       $("#dataAcontecimientosElectricidad").html(datos.dataAcontecimientosElectricidad);
@@ -272,6 +282,20 @@ function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
       $("#dataAcontecimientosElectricidadGas").html(datos.dataAcontecimientosElectricidadGas);
     
       $("#dataAcontecimientosElectricidadDiesel").html(datos.dataAcontecimientosElectricidadDiesel);
+
+      // Comprueba la opción de Energético seleccionado.
+      if(energetico == "electricidad"){
+        $("#dataModalAcontecimientosElectricidad").html(datos.dataModalAcontecimientosElectricidad);
+      }
+      if(energetico == "agua"){
+        $("#dataModalAcontecimientosAgua").html(datos.dataModalAcontecimientosAgua);
+      }
+      if(energetico == "gas"){
+        $("#dataModalAcontecimientosGas").html(datos.dataModalAcontecimientosGas);
+      }
+      if(energetico == "diesel"){
+        $("#dataModalAcontecimientosDiesel").html(datos.dataModalAcontecimientosDiesel);
+      }
     },
   });
 }
@@ -292,10 +316,10 @@ function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
     dataType: 'json',
     success: function (datos) {
       // console.log(datos);
-      console.log('Inicio: ' + datos.semanaInicio);
-      console.log('Fin: ' + datos.semanaFin);
-      console.log('Fin--: ' + datos.graficaSemanaGeneral);
-      console.log('Grafica Electricidad: ' + datos.graficaElectricidadCantidad);
+      // console.log('Inicio: ' + datos.semanaInicio);
+      // console.log('Fin: ' + datos.semanaFin);
+      // console.log('Fin--: ' + datos.graficaSemanaGeneral);
+      // console.log('Grafica Electricidad: ' + datos.graficaElectricidadCantidad);
       // console.log(datos.dataAcontecimientosElectricidad);
       $("#dataAcontecimientosElectricidadSemana").html(datos.dataAcontecimientosElectricidad);
       $("#dataAcontecimientosAguaSemana").html(datos.dataAcontecimientosAgua);
@@ -317,6 +341,76 @@ function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
       graficaDiesel(arraySemana, cantidadDiesel);
     },
   });
+}
+
+
+function agregarAcontecimiento(idDestino, opcion, fechaSeleccionada) {
+  var action = "agregarAcontecimiento";
+  var titulo = $("#acontecimientosTitulo").val();  
+  var descripcion = $("#acontecimientosDescripcion").val();  
+  var energetico = $("#acontecimientosEnergetico").val();  
+
+   $.ajax({
+    type: "post",
+    url: "php/crud_bitacora_energeticos.php",
+    data: {
+      action: action,
+      idDestino: idDestino,
+      opcion: opcion,
+      fechaSeleccionada: fechaSeleccionada,
+      titulo: titulo,
+      descripcion: descripcion,
+      energetico: energetico
+    },
+    dataType: 'json',
+     success: function (datos) {
+       console.log(datos.respuestaAgregar);
+       $("#acontecimientosTitulo").val('');  
+       $("#acontecimientosDescripcion").val(''); 
+      alertInformacion('Acontecimiento Agregado.', 'success');
+      llamarFuncion('consultaAcontecimientos'); 
+      llamarFuncion('consultaAcontecimientosSemana'); 
+    },
+  });
+}
+
+function eliminarAcontecimiento(idAcontecimiento, contenido) {
+  Swal.fire({
+    title: '¿Eliminar Acontecimiento?',
+    text: contenido,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Eliminar'
+  }).then((result) => {
+    if (result.value) {
+      Swal.fire(
+        'Eliminado',
+        '',
+        'success',
+        eliminarAcontecimientoConfir(idAcontecimiento)
+      )
+    }
+  }) 
+
+  function eliminarAcontecimientoConfir(idAcontecimiento) {
+  var action = "eliminarAcontecimiento";
+  $.ajax({
+    type: "post",
+    url: "php/crud_bitacora_energeticos.php",
+    data: {
+      action: action,
+      idAcontecimiento: idAcontecimiento
+    },
+    dataType: 'json',
+    success: function (datos) {
+      llamarFuncion('consultaAcontecimientos'); 
+      llamarFuncion('consultaAcontecimientosSemana'); 
+    },
+  });
+
+  }
 }
 
 
@@ -347,6 +441,11 @@ function llamarFuncion(nombreFuncion) {
     // Llama a la función Acontecimiento Semana.
     case (nombreFuncion = "consultaAcontecimientosSemana"):
       consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada);
+      break;
+    
+    // Llama a la función agregarAcontecimiento.
+    case (nombreFuncion = "agregarAcontecimiento"):
+      agregarAcontecimiento(idDestino, opcion, fechaSeleccionada);
       break;
 
     default:

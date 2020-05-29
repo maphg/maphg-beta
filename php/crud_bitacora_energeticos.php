@@ -20,6 +20,7 @@ if (isset($_POST['action'])) {
     $opcion = $_POST['opcion'];
     $fechaSeleccionada = $_POST['fechaSeleccionada'];
     $fechaSeleccionada = new DateTime($fechaSeleccionada);
+    
 
     // Día Seleccionado.
     $fechaInicio = $fechaSeleccionada->format("Y-m-d 00:00:01");
@@ -206,21 +207,41 @@ if (isset($_POST['action'])) {
         $dataAcontecimientosElectricidadGas = "";
         $dataAcontecimientosElectricidadDiesel = "";
 
+        // Variables para enviar al modal de Acontecimientos.
+        $dataModalAcontecimientosElectricidad = "";
+        $dataModalAcontecimientosAgua = "";
+        $dataModalAcontecimientosGas = "";
+        $dataModalAcontecimientosDiesel = "";
+
         $query = "SELECT* FROM bitacora_energeticos_acontecimientos WHERE id_destino = $idDestino AND fecha BETWEEN '$fechaInicio' AND '$fechaFin' AND activo=1";
         $result = mysqli_query($conn_2020, $query);
 
         while ($row = mysqli_fetch_array($result)) {
+            $id = $row['id'];
             $energetico = $row['energetico'];
             $titulo = $row['titulo'];
             $descripcion = $row['descripcion'];
 
             if($energetico == "electricidad"){
+
                 $dataAcontecimientosElectricidad .=
                 "
                 <div class=\"flex justify-center items-center w-full bg-gray-200 rounded mb-2 text-gray-700 cursor-pointer py-2 text-xs px-1\">
                     <h1 class=\"font-bold\">$titulo</h1>
                     <P class=\"font-black mx-1\">/</P>
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                $dataModalAcontecimientosElectricidad .=
+                "
+                <div class=\"px-3 flex justify-between my-2\">
+                    <h1>$energetico</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$titulo</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$descripcion</h1>  
+                    <i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarAcontecimiento($id, '$energetico: $titulo / $descripcion');\"></i>
                 </div>
                 ";
             }
@@ -234,6 +255,18 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
+
+                $dataModalAcontecimientosAgua .=
+                "
+                <div class=\"px-3 flex justify-between my-2\">
+                    <h1>$energetico</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$titulo</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$descripcion</h1>  
+                    <i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarAcontecimiento($id, '$energetico: $titulo / $descripcion');\"></i>
+                </div>
+                ";
             }
 
             if($energetico == "gas"){
@@ -245,6 +278,18 @@ if (isset($_POST['action'])) {
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
                 </div>
                 ";
+
+                $dataModalAcontecimientosGas .=
+                "
+                <div class=\"px-3 flex justify-between my-2\">
+                    <h1>$energetico</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$titulo</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$descripcion</h1>  
+                    <i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarAcontecimiento($id, '$energetico: $titulo / $descripcion');\"></i>
+                </div>
+                ";
             }
 
             if($energetico == "diesel"){
@@ -254,6 +299,18 @@ if (isset($_POST['action'])) {
                     <h1 class=\"font-bold\">$titulo</h1>
                     <P class=\"font-black mx-1\">/</P>
                     <h1 class=\"truncate font-medium\">$descripcion</h1>
+                </div>
+                ";
+
+                $dataModalAcontecimientosDiesel .=
+                "
+                <div class=\"px-3 flex justify-between my-2\">
+                    <h1>$energetico</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$titulo</h1>
+                    <h1 class=\"mx-3\"> / </h1>
+                    <h1>$descripcion</h1>  
+                    <i class=\"ml-3 fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarAcontecimiento($id, '$energetico: $titulo / $descripcion');\"></i>
                 </div>
                 ";
             }
@@ -268,6 +325,10 @@ if (isset($_POST['action'])) {
             Sin Acontecimientos.
             </div>
             ";
+
+
+            $dataModalAcontecimientosElectricidad = $dataAcontecimientosElectricidad;
+           
         }
 
         if($dataAcontecimientosElectricidadAgua == ""){
@@ -277,6 +338,9 @@ if (isset($_POST['action'])) {
             Sin Acontecimientos.
             </div>
             ";
+            $dataModalAcontecimientosAgua = $dataAcontecimientosElectricidadAgua;
+
+            
         }
 
         if($dataAcontecimientosElectricidadGas == ""){
@@ -286,6 +350,7 @@ if (isset($_POST['action'])) {
             Sin Acontecimientos.
             </div>
             ";
+            $dataModalAcontecimientosGas = $dataAcontecimientosElectricidadGas;
         }
 
         if($dataAcontecimientosElectricidadDiesel == ""){
@@ -295,10 +360,11 @@ if (isset($_POST['action'])) {
             Sin Acontecimientos.
             </div>
             ";
+            $dataModalAcontecimientosDiesel = $dataAcontecimientosElectricidadDiesel;
         }
 
 
-
+        // Se envian los datos para el apartado de Acontecimientos del Día.
         $arrayAcontecimientos['dataAcontecimientosElectricidad'] = $dataAcontecimientosElectricidad;
 
         $arrayAcontecimientos['dataAcontecimientosElectricidadAgua'] = $dataAcontecimientosElectricidadAgua;
@@ -306,6 +372,15 @@ if (isset($_POST['action'])) {
         $arrayAcontecimientos['dataAcontecimientosElectricidadGas'] = $dataAcontecimientosElectricidadGas;
 
         $arrayAcontecimientos['dataAcontecimientosElectricidadDiesel'] = $dataAcontecimientosElectricidadDiesel;
+
+        // Se envian los datos para el apartado de Modal Acontecimientos.
+        $arrayAcontecimientos['dataModalAcontecimientosElectricidad'] = $dataModalAcontecimientosElectricidad;
+      
+        $arrayAcontecimientos['dataModalAcontecimientosAgua'] = $dataModalAcontecimientosAgua;
+     
+        $arrayAcontecimientos['dataModalAcontecimientosGas'] = $dataModalAcontecimientosGas;
+     
+        $arrayAcontecimientos['dataModalAcontecimientosDiesel'] = $dataModalAcontecimientosDiesel;
 
 
         echo json_encode($arrayAcontecimientos);
@@ -610,9 +685,53 @@ if (isset($_POST['action'])) {
         ".$diesel_dia_1.",
         ".$diesel_dia_0;
 
-
         echo json_encode($arrayAcontecimientosSemana);
-   
+    }
+
+
+    if ($action == "agregarAcontecimiento") {
+        $arrayAgregar = array();
+        $energetico = strtolower($_POST['energetico']);
+        $titulo = $_POST['titulo'];
+        $descripcion = $_POST['descripcion'];
+        $respuestaAgregar = "";
+
+        $query = "INSERT INTO bitacora_energeticos_acontecimientos(
+            id_usuario, id_destino, energetico, titulo, descripcion, fecha
+            ) 
+            VALUES(
+                $idUsuario,
+                $idDestino,
+                '$energetico',
+                '$titulo',
+                '$descripcion',
+                '$fechaInicio'
+            )";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($result) {
+            $respuestaAgregar = "Acontecimiento Agregado.";
+        } else {
+            $respuestaAgregar = "Error al Agregar Acontecimiento.";
+        }
+
+        $arrayAgregar['respuestaAgregar'] = $respuestaAgregar;
+
+        echo json_encode($arrayAgregar);
+    }
+
+
+    if ($action == "eliminarAcontecimiento") {
+        $idAcontacimiento = $_POST['idAcontecimiento'];
+        $query = "UPDATE bitacora_energeticos_acontecimientos SET activo = 0 WHERE id = $idAcontacimiento";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($result) {
+            echo "Acontecimiento Eliminado.";
+        } else {
+            echo "Error al Eliminar Acontecimiento.";
+        }
+        
     }
 
 

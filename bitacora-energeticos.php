@@ -333,31 +333,31 @@ date_default_timezone_set('America/Cancun');
                 <div class="flex self-end mb-2" onclick="modalTailwind('modal-acontecimientos','toggle');">
                     <i class="fad fa-times-circle close" data-dismiss="modal"></i>
                 </div>
-                <form class="w-full">
+                <form class="w-full" autocomplete="off">
                     <div class="text-center py-4 lg:px-4">
                         <div class="p-2 bg-gray-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex">
-                        <span class="font-semibold mx-2 text-left flex-auto">Acontecimientos Energeticos</span>
+                        <span class="font-semibold mx-2 text-left flex-auto">Acontecimientos Energéticos</span>
                         </div>
                     </div>
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full md:w-1/3 px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                                Titulo
+                                Título
                             </label>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Titulo">
+                            <input id="acontecimientosTitulo" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Título">
                         </div>
                         <div class="w-full md:w-1/3 px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                                Descripcion
+                                Descripción
                             </label>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Descripcion">
+                            <input id="acontecimientosDescripcion" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Descripción" onkeyup = "if(event.keyCode == 13) llamarFuncion('agregarAcontecimiento')">
                         </div>
-                        <div class="w-full md:w-1/3 px-3">
-                            <select class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700">
-                            <option>Electricidad</option>
-                            <option>Agua</option>
-                            <option>Gas</option>
-                            <option>Diesel</option>
+                        <div class="w-full md:w-1/3 px-3 pt-6">
+                            <select id="acontecimientosEnergetico" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" onclick="llamarFuncion('consultaAcontecimientos');">
+                            <option value"electricidad">Electricidad</option>
+                            <option value"agua">Agua</option>
+                            <option value"gas">Gas</option>
+                            <option value"diesel">Diesel</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -365,29 +365,10 @@ date_default_timezone_set('America/Cancun');
                         </div>
                     </div>
                     <div class="flex flex-wrap flex-col bg-gray-200 items-start justify-center m-10 p-2 font-bold ">
-                        <div class="px-3 flex justify-between my-2">
-                            <h1>Electricidad </h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Titulo del acontecimiento</h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
-                        </div>
-
-                        <div class="px-3 flex justify-between my-2">
-                            <h1>Electricidad </h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Titulo del acontecimiento</h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
-                        </div>
-
-                        <div class="px-3 flex justify-between my-2">
-                            <h1>Electricidad </h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Titulo del acontecimiento</h1>
-                            <h1 class="mx-3"> / </h1>
-                            <h1>Descripcion  <span><i class="ml-3 fad fa-times-circle text-red-400 text-xl"></i></span></h1>
-                        </div>
+                        <div id="dataModalAcontecimientosElectricidad"></div>
+                        <div id="dataModalAcontecimientosAgua"></div>
+                        <div id="dataModalAcontecimientosGas"></div>
+                        <div id="dataModalAcontecimientosDiesel"></div>
                     </div> 
                 </form>
                 <!-- CONTENIDO MODAL -->
@@ -398,6 +379,10 @@ date_default_timezone_set('America/Cancun');
     <!-- Librerias JS -->
     <script src="js/jquery-3.3.1.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
+    <!-- CDN de SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <!-- Libreria para llamar a las alerta prediseñadas con parametros -->
+    <script src="js/alertasSweet.js"></script>
     <script src="js/bitacora_energeticos.js"></script>
 </body>
 
