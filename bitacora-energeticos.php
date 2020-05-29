@@ -153,7 +153,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-yellow-500 text-3xl">
                             <i class="fad fa-plug"></i>
                         </div>
-                        <h1 id="dataElectricidad" class="text-gray-700 font-bold text-6xl ">20</h1>
+                        <h1 id="dataElectricidad" class="text-gray-700 font-bold text-2xl ">20</h1>
                         <h1 class="text-gray-600 font-medium text-base">kwh</h1>
                         <h1 class=" font-semibold text-yellow-600 bg-yellow-200 py-1 px-3 mt-3 rounded-full">Eléctricidad</h1>
                     </div>
@@ -168,7 +168,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-blue-500 text-3xl">
                             <i class="fad fa-tint"></i>
                         </div>
-                        <h1 id="dataAgua" class="text-gray-700 font-bold text-6xl ">55</h1>
+                        <h1 id="dataAgua" class="text-gray-700 font-bold text-2xl ">55</h1>
                         <h1 class="text-gray-600 font-medium text-base">metros³</h1>
                         <h1 class=" font-semibold text-blue-400 bg-blue-200 py-1 px-3 mt-3 rounded-full">Agua</h1>
                     </div>
@@ -183,7 +183,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-red-500 text-3xl">
                             <i class="fad fa-flame"></i>
                         </div>
-                        <h1 id="dataGas" class="text-gray-700 font-bold text-6xl ">66</h1>
+                        <h1 id="dataGas" class="text-gray-700 font-bold text-2xl ">66</h1>
                         <h1 class="text-gray-600 font-medium text-base">litros</h1>
                         <h1 class=" font-semibold text-red-400 bg-red-200 py-1 px-3 mt-3 rounded-full">Gas</h1>
                     </div>
@@ -198,7 +198,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-orange-500 text-3xl">
                             <i class="fad fa-gas-pump"></i>
                         </div>
-                        <h1 id="dataDiesel" class="text-gray-700 font-bold text-6xl ">66</h1>
+                        <h1 id="dataDiesel" class="text-gray-700 font-bold text-2xl ">66</h1>
                         <h1 class="text-gray-600 font-medium text-base">litros</h1>
                         <h1 class=" font-semibold text-orange-400 bg-orange-200 py-1 px-3 mt-3 rounded-full">Diesel</h1>
                     </div>
@@ -213,7 +213,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-gray-500 text-3xl">
                             <i class="fad fa-hotel"></i>
                         </div>
-                        <h1 id="dataOcupacion" class="text-gray-700 font-bold text-6xl ">66<span class="text-2xl text-gray-500">%</span></h1>
+                        <h1 id="dataOcupacion" class="text-gray-700 font-bold text-2xl ">66<span class="text-2xl text-gray-500">%</span></h1>
                         <h1 class="text-gray-600 font-medium text-base">Porcentaje</h1>
                         <h1 class=" font-semibold text-gray-600 bg-gray-200 py-1 px-3 mt-3 rounded-full">Ocupación</h1>
                     </div>
@@ -228,7 +228,7 @@ date_default_timezone_set('America/Cancun');
                         <div class="absolute top-0 mt-4 text-gray-500 text-3xl">
                             <i class="fad fa-users"></i>
                         </div>
-                        <h1 id="dataPax" class="text-gray-700 font-bold text-6xl ">66</h1>
+                        <h1 id="dataPax" class="text-gray-700 font-bold text-2xl ">66</h1>
                         <h1 class="text-gray-600 font-medium text-base">Huespedes</h1>
                         <h1 class=" font-semibold text-gray-600 bg-gray-200 py-1 px-3 mt-3 rounded-full">Pax</h1>
                     </div>
