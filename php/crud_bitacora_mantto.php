@@ -576,12 +576,12 @@ if (isset($_POST['action'])) {
 			
 			if($status_trabajare == ""){
                 $tag_status ="";
-                tag_status1 = "";
+                $tag_status1 = "";
 			}
 			
 			if($status_finalizado != "F"){
                 $tag_finalizado ="";
-                tag_status = "";
+                $tag_status2 = "";
 			}
 			
 			
