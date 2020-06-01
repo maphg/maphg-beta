@@ -1302,8 +1302,8 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
         <!-- CDN para Alertas -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-        <script src="js/bitacora_manttoJS.js"></script>
         <script src="css/fontawesome/js/all.js"></script>
+        <script src="js/bitacora_manttoJS.js"></script>
 
     </body>
 
