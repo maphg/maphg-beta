@@ -1307,10 +1307,6 @@ function modalStatus(idModal, status) {
 // Funcion para mostrar detalles consultaMPMCPROYECTOS.
 function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario, status1, status2) {
 
-    if (descripcion == "") {
-        comentario = "Sin Comentario";
-    }
-
     $("#seccionModalMCMPProyectos").val(seccion);
     $("#subseccionModalMCMPProyectos").val(subseccion);
     $("#descripcionModalMCMPProyectos").val(descripcion);
