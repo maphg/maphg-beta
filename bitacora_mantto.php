@@ -1263,27 +1263,24 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                 </div>
                 <div class="mb-4 w-full">
                     <p class="mt-3 font-black">SUB SECCION: <span id="subseccionModalMCMPProyectos"
-                            class="font-normal">Nombre de la subseccion</span></p>
+                            class="font-normal">Sin Información</span></p>
                 </div>
                 <div class="mb-4 w-full">
                     <p class="mt-3 font-black">DESCRIPCION: <span id="descripcionModalMCMPProyectos"
-                            class="font-normal">Titulo del plan de accion si es
-                            proyecto o descripcion de la tarea si es correctivo Lorem ipsum dolor, sit amet consectetur
-                            adipisicing elit. Obcaecati facere explicabo maiores fugit voluptate doloremque dicta nam,
-                            facilis, exercitationem, dolor odit labore voluptatibus deserunt praesentium hic quos dolore
-                            mollitia aut.</span></p>
+                            class="font-normal">Sin Información</span></p>
                 </div>
                 <div class="mb-4 w-full">
                     <p class="mt-3 font-black">ULTIMO COMENTARIO: <span id="comentarioModalMCMPProyectos"
-                            class="font-normal">Si tiene va el comentario y
-                            si no"Sin comentarios"</span></p>
+                            class="font-normal">Sin comentarios"</span></p>
                 </div>
                 <div class=" w-full">
                     <p class="mt-3 font-black">STATUS:
                         <span id="status1ModalMCMPProyectos"
-                            class="font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md">Finalizado</span>
+                            class="font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md">Sin
+                            Información</span>
                         <span id="status2ModalMCMPProyectos"
-                            class="font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md">Trabajando</span>
+                            class="font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md">Sin
+                            Información</span>
                     </p>
                 </div>
                 <div class="absolute top-0 right-0 mr-3 cursor-pointer text-gray-600 text-xl"
@@ -1302,7 +1299,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
         <!-- CDN para Alertas -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-        <script src="css/fontawesome/js/all.js"></script>
+        <script src="js/fontawesome/js/all.js"></script>
         <script src="js/bitacora_manttoJS.js"></script>
 
     </body>
