@@ -100,11 +100,11 @@ if (isset($_POST['action'])) {
         // Consulta de la fecha seleccionada.
         if ($row = mysqli_fetch_array($result)) {
 
-            $electricidad =  number_format($row['electricidad'], 2, '.', '');   
-            $agua = number_format($row['agua'], 2, '.', '');  
-            $gas = number_format($row['gas'], 2, '.', '');   
-            $diesel = number_format($row['diesel'], 2, '.', '');
-            $ocupacion = number_format($row['ocupacion'], 2, '.', '');
+            $electricidad =  number_format($row['electricidad'], 0, '.', '');   
+            $agua = number_format($row['agua'], 0, '.', '');  
+            $gas = number_format($row['gas'], 0, '.', '');   
+            $diesel = number_format($row['diesel'], 0, '.', '');
+            $ocupacion = number_format($row['ocupacion'], 0, '.', '');
             $pax = number_format($row['pax'], 0, '.', '');
 
             $dataElectricidad = $electricidad; 
@@ -547,10 +547,11 @@ if (isset($_POST['action'])) {
 
         while ($row_energeticos = mysqli_fetch_array($result_energeticos)) {
            
-            $electricidad = $row_energeticos['electricidad'];
-            $agua = $row_energeticos['agua'];
-            $gas = $row_energeticos['gas'];
-            $diesel = $row_energeticos['diesel'];
+            $electricidad = number_format($row_energeticos['electricidad'], 0, '.', '');
+            $gas = number_format($row_energeticos['gas'], 0, '.', '');
+            $agua = number_format($row_energeticos['agua'], 0, '.', '');
+            $diesel = number_format($row_energeticos['diesel'], 0, '.', '');
+
             $fecha_contador = new DateTime($row_energeticos['fecha']);
             $fecha_contador =$fecha_contador->format("Y-m-d H:m:s");
             
@@ -559,7 +560,7 @@ if (isset($_POST['action'])) {
                 
                 if($fecha_contador >= $fechaFinSemana_0 AND $fecha_contador <= $fechaFinSemana_fin_0) $electricidad_dia_0 = $electricidad;
 
-                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $electricidad_dia_1++;
+                elseif($fecha_contador >= $fechaFinSemana_1 AND $fecha_contador <= $fechaFinSemana_fin_1) $electricidad_dia_1 = $electricidad;
 
                 elseif($fecha_contador >= $fechaFinSemana_2 AND $fecha_contador <= $fechaFinSemana_fin_2) $electricidad_dia_2 = $electricidad;
 

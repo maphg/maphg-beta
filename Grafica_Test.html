@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Grafica.</title>
+    <link rel="icon" href="svg/logo6.png">
+    <link rel="stylesheet" href="css/tailwind.css">
+    <link rel="stylesheet" href="css/animate.css" <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+
+</head>
+
+<body>
+    <h1 class="title is-32x32 ">Grafica</h1>
+    <input id="va1" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 1">
+    <input id="va2" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 2">
+    <button id="btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="btnClic();">
+            Button
+        </button>
+
+    <canvas id="gelectricidad"></canvas>
+
+
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/Chart.js"></script>
+    <script>
+        let arraySemana = ['L', 'M'];
+        let cantidadElectricidad = ["100", "200"];
+        var ctx = document.getElementById("gelectricidad");
+        var gelectricidad = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: arraySemana,
+                datasets: [{
+                    label: "Historico",
+                    data: cantidadElectricidad,
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                }, ],
+            },
+            options: {
+                legend: {
+                    display: false,
+                    position: "bottom",
+                    align: "center",
+                },
+
+                tooltips: {
+                    enabled: true,
+                },
+            },
+        });
+        console.log(gelectricidad.data.labels)
+        console.log(gelectricidad.data.datasets[0].data)
+
+        async function removeData() {
+            await gelectricidad.data.datasets[0].data.forEach((dataset) => console.log('Here:::', dataset))
+            gelectricidad.data.datasets[0].data = [];
+            await gelectricidad.data.datasets[0].data.forEach((dataset) => console.log('Here:', dataset))
+
+            await gelectricidad.update();
+            console.log(gelectricidad.data.labels)
+            console.log(gelectricidad.data.datasets[0].data)
+        }
+
+
+        async function btnClic() {
+            await removeData()
+            let val1 = document.getElementById('va1').value;
+            let val2 = document.getElementById('va2').value;
+            console.log(val1, val2);
+            let data = [val1, val2];
+            let label = ['${val1}', '${$val2}'];
+
+            data1(data);
+
+
+            async function data1(data) {
+
+                await gelectricidad.data.datasets[0].data.push(80, 900, 700000);
+                await gelectricidad.update();
+                console.log('Data 1; ', data, 'fin data');
+                console.log('----------------------')
+                console.log('Label', gelectricidad.data.labels)
+                console.log('Data: ', gelectricidad.data.datasets[0].data)
+            }
+        }
+    </script>
+</body>
+
+</html>

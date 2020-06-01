@@ -554,18 +554,19 @@ if (isset($_POST['action'])) {
             $descripcion = $row_MC_trabajare['actividad'];
 			$status_finalizado = $row_MC_trabajare['status'];
 			$status_trabajare = $row_MC_trabajare['status_trabajare'];			
+            
+            $comentario_mc = "Sin Comentario";
             $query_comentario_mc = "SELECT comentario FROM t_mc_comentarios 
             WHERE id_mc=$id ORDER BY fecha DESC LIMIT 1";
             $result_comentario_mc = mysqli_query($conn_2020, $query_comentario_mc);
-            $row_comentario_mc = mysqli_fetch_array($result_comentario_mc);
+            
+            if($row_comentario_mc = mysqli_fetch_array($result_comentario_mc)){
+                $comentario_mc = $row_comentario_mc['comentario'];
+            }
 			
-            $comentario_mc = $row_comentario_mc['comentario'];
 			$tag_status ="<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
 			$tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
 			
-            if ($comentario_mc == "") {
-                $comentario_mc = "Sin Comentarios";
-            }
 			
 			if($status_trabajare == ""){
 				$tag_status ="";
@@ -576,16 +577,17 @@ if (isset($_POST['action'])) {
 			}
 			
 			
-            $bitacoraMC .="<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\">"
-                    . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
-                    . "<P class=\"font-black mx-1\">/</P>"
-                    . "<h1 class=\"\">$subseccion</h1>"
-                    . "<P class=\"font-black mx-1\">/</P>"
-                    . "<h1 class=\"truncate font-bold\">$descripcion</h1>"
-                    . "<P class=\"font-black mx-1\">/</P>"
-                    . "<h1 class=\"truncate\">$comentario_mc</h1>"
-                    . "</div>";			
-		}
+            $bitacoraMC .=
+            "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"consultaMPMCPROYECTOS($id, '$seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_finalizado', '$tag_status'); show_hide_modal('modalMCMPProyectos','show')\">"
+            . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
+            . "<P class=\"font-black mx-1\">/</P>"
+            . "<h1 class=\"\">$subseccion</h1>"
+            . "<P class=\"font-black mx-1\">/</P>"
+            . "<h1 class=\"truncate font-bold\">$descripcion</h1>"
+            . "<P class=\"font-black mx-1\">/</P>"
+            . "<h1 class=\"truncate\">$comentario_mc</h1>"
+            . "</div>";			
+        }
 		//$bitacoraMC = "";
 		
 		
@@ -731,7 +733,7 @@ if (isset($_POST['action'])) {
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"\">$subseccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
-            . "<h1 class=\"\">$proyecto</h1>"
+            . "<h1 class=\"truncate\">$proyecto</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"truncate font-bold\">$planaccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"

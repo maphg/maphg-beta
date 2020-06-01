@@ -1,8 +1,8 @@
 // Function para mostrar el formulario de Personal.
-document.addEventListener('click', function (e) {
+document.addEventListener('click', function(e) {
     e = e || window.event;
     var target = e.target || e.srcElement;
- 
+
     if (target.hasAttribute('data-toggle') && target.getAttribute('data-toggle') == 'modal') {
         if (target.hasAttribute('data-target')) {
             var m_ID = target.getAttribute('data-target');
@@ -84,12 +84,13 @@ function app() {
 
 /* PERSONAL DONA */
 var ctx = document.getElementById("tmat").getContext("2d");
+
 function graficaPlantilla(totalGlobal, totalGremio) {
     if (totalGlobal <= 0) {
         totalGlobal = 1;
     }
-    
-    if (totalGremio  <=0 ) {
+
+    if (totalGremio <= 0) {
         totalGlobal = 1;
     }
     var tmat = new Chart(ctx, {
@@ -133,8 +134,8 @@ function graficaPlantilla(totalGlobal, totalGremio) {
 
 
 /* PERSONAL BARRAS */
-function graficaGremio(nombre, cantidad) { 
-	
+function graficaGremio(nombre, cantidad) {
+
     var ctx = document.getElementById('personalbarras');
     var personalbarras = new Chart(ctx, {
         type: 'horizontalBar',
@@ -156,7 +157,7 @@ function graficaGremio(nombre, cantidad) {
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
-					'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
@@ -186,7 +187,7 @@ function graficaGremio(nombre, cantidad) {
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 56, 1)',
                     'rgba(75, 192, 192, 1)',
-					'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
@@ -239,7 +240,7 @@ function graficaGremio(nombre, cantidad) {
 
 /* HMC*/
 function graficaMC(diaSemana, MC) {
-  
+
     var ctx = document.getElementById('hmc');
 
     var hmc = new Chart(ctx, {
@@ -330,8 +331,8 @@ function graficaProyectos(dia, graficaP) {
                 enabled: true,
             }
         }
-        
-    }); 
+
+    });
 }
 
 
@@ -502,10 +503,10 @@ function graficaTop5Habitaciones(total_top1, total_top2, total_top3, total_top4,
 
 /* TOP 5 COCINAS */
 function graficaTop5Cocinas(tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5, total_top1, total_top2, total_top3, total_top4, total_top5) {
-    
-        
-        var ctx = document.getElementById('top5c');
-        var top5c = new Chart(ctx, {
+
+
+    var ctx = document.getElementById('top5c');
+    var top5c = new Chart(ctx, {
         type: 'horizontalBar',
         data: {
             labels: [tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5],
@@ -563,9 +564,9 @@ function graficaTop5Cocinas(tipificacion_top1, tipificacion_top2, tipificacion_t
 
 //Función para Mostrar el Turno Seleccionado en el modal Formulario de Personal por Turno 
 function turnoSeleccionado() {
-    var turno = { 1: "Primer Turno", 2: "Segundo Turno", 3: "Tercer Turno"};
-    var txtTurno =$("#turnoSeleccionado").val();
-    $("#tituloTurno").html(turno[txtTurno]);  
+    var turno = { 1: "Primer Turno", 2: "Segundo Turno", 3: "Tercer Turno" };
+    var txtTurno = $("#turnoSeleccionado").val();
+    $("#tituloTurno").html(turno[txtTurno]);
 }
 
 
@@ -616,14 +617,14 @@ function alertError(mensajeError) {
         showConfirmButton: false,
         timer: 3500,
         timerProgressBar: true,
-        showClass: { popup: 'sweetZIndex', contianer: 'sweetZIndex'},
-        customClass: { popup: 'sweetZIndex', contianer: 'sweetZIndex'},
+        showClass: { popup: 'sweetZIndex', contianer: 'sweetZIndex' },
+        customClass: { popup: 'sweetZIndex', contianer: 'sweetZIndex' },
         onOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
-    
+
     Toast.fire({
         icon: 'error',
         title: mensajeError
@@ -636,15 +637,15 @@ function alertError(mensajeError) {
 // Funcion para registrar gremio por turno
 function bitacoraPersonal() {
     var action = "bitacoraPersonal";
-    var dateGeneral=$("#dateGeneral").val();
+    var dateGeneral = $("#dateGeneral").val();
     var idDestino = $("#idDestino").val();
     var zona = $("#zona").val();
-    var turnoSeleccionado= $("#turnoSeleccionado").val();
-    var totalPlantillaPorTurno= $("#totalPlantillaPorTurno").val();
-    var gremio= $("#gremio").val();
-    var cantidadPorGremio= $("#cantidadPorGremio").val();
+    var turnoSeleccionado = $("#turnoSeleccionado").val();
+    var totalPlantillaPorTurno = $("#totalPlantillaPorTurno").val();
+    var gremio = $("#gremio").val();
+    var cantidadPorGremio = $("#cantidadPorGremio").val();
 
-    if (dateGeneral !="" && idDestino != 0 && zona != "" && turnoSeleccionado != 0 && totalPlantillaPorTurno >= 0 && gremio != "" && cantidadPorGremio != 0) {
+    if (dateGeneral != "" && idDestino != 0 && zona != "" && turnoSeleccionado != 0 && totalPlantillaPorTurno >= 0 && gremio != "" && cantidadPorGremio != 0) {
         $.ajax({
             type: "post",
             url: "php/crud_bitacora_mantto.php",
@@ -658,18 +659,18 @@ function bitacoraPersonal() {
                 gremio: gremio,
                 cantidadPorGremio: cantidadPorGremio
             },
-            success: function (datos) {
+            success: function(datos) {
                 alertSuccess('Captura Agregada!');
                 funcionNombre('gremioCantidad');
                 $("#gremio").val(1);
                 $("#cantidadPorGremio").val('');
                 modalStatus('modal-personal', 'close');
-                 setTimeout(function () { modalStatus('modal-personal', 'open');; }, 1000);
+                setTimeout(function() { modalStatus('modal-personal', 'open');; }, 1000);
                 // console.log(datos);
 
             }
         });
-        
+
     } else {
         alertInformacionVacia();
         modalStatus('modal-personal', 'close');
@@ -682,7 +683,7 @@ function bitacoraPersonal() {
 // 2.- El id a eliminar donde activo=0. (solo se cambia el activo para ocultar el registro).
 // QUERY: UPDATE TABLA SET ACTIVO=0 WHERE ID=ID.
 function eliminarItemPersonal(tabla, id, modal) {
-	modalStatus(modal, 'close');
+    modalStatus(modal, 'close');
     Swal.fire({
         title: 'Eliminar Registro?',
         text: "",
@@ -699,10 +700,10 @@ function eliminarItemPersonal(tabla, id, modal) {
                 '',
                 'success',
                 eliminarItemPersonalConfirmado(),
-				modalStatus(modal, 'open')
+                modalStatus(modal, 'open')
             )
         }
-		modalStatus(modal, 'open');
+        modalStatus(modal, 'open');
     })
 
     function eliminarItemPersonalConfirmado() {
@@ -716,7 +717,7 @@ function eliminarItemPersonal(tabla, id, modal) {
                 id: id
 
             },
-            success: function (datos) {
+            success: function(datos) {
                 // console.log(datos);
                 // alertSuccess('Datos Obtenidos!');
                 alertSuccess("Registro Eliminado!");
@@ -741,7 +742,7 @@ function gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado) {
             dateGeneral: dateGeneral,
             turnoSeleccionado: turnoSeleccionado
         },
-        success: function (datos) {
+        success: function(datos) {
             // console.log(datos);
             // alertSuccess('Datos Obtenidos!');
             $("#gremioCantidad").html(datos);
@@ -750,7 +751,7 @@ function gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado) {
 }
 
 
- 
+
 
 // Funcion para mostrar total de Colaboradores por turno en General.
 function cantidadTurno(idDestino, zona, dateGeneral) {
@@ -765,23 +766,23 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             $("#totalgremio1").html(data.total_turno_1_1);
             $("#totalColaboradores1").html(data.total_turno_1_2);
             $("#totalgremio2").html(data.total_turno_2_1);
             $("#totalColaboradores2").html(data.total_turno_2_2);
             $("#totalgremio3").html(data.total_turno_3_1);
             $("#totalColaboradores3").html(data.total_turno_3_2);
-			
-			var canvas = document.getElementById("personalbarras");
-			var contexto = canvas.getContext("2d");
-			contexto.clearRect(0, 0, canvas.width, canvas.height);
-			
-		
+
+            var canvas = document.getElementById("personalbarras");
+            var contexto = canvas.getContext("2d");
+            contexto.clearRect(0, 0, canvas.width, canvas.height);
+
+
             graficaPlantilla(data.totalPlantillaGlobal, data.totalPlantilla)
-            // console.log(data);
+                // console.log(data);
         }
-    });   
+    });
 }
 
 
@@ -798,13 +799,13 @@ function consultaGraficaGremio(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             var arrayGremio = data.labelNombre.split(',');
             var arrayData = data.labelData.split(',');
             // console.log(arrayGremio);
             $("#personalbarras").html();
             graficaGremio(arrayGremio, arrayData);
-			
+
             // console.log(data);
             // console.log(data.labelNombre);
         }
@@ -825,7 +826,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             // console.log(data.fecha);
             // console.log(data.dia);
             // console.log(data.diaSemana);
@@ -834,19 +835,19 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             // console.log(data.graficaP);
             // console.log(data.fecha);
             // console.log(data.bitacoraMC);
-            // console.log(data);
+            console.log('Here', data);
 
             $("#bitacoraMP").html(data.bitacoraMP);
             $("#totalMP").html(data.totalMP);
 
             $("#bitacoraMC").html(data.bitacoraMC);
             $("#totalmc").html(data.totalmc);
-            
-            if (data.bitacoraProyecto !="") {
+
+            if (data.bitacoraProyecto != "") {
                 $("#bitacoraProyecto").html(data.bitacoraProyecto);
                 $("#bitacoraProyectoTotal").html(data.totalProyecto);
             } else {
-                $ ("#bitacoraProyecto").html("");
+                $("#bitacoraProyecto").html("");
                 $("#bitacoraProyectoTotal").html("0");
             }
             graficaMC(data.diaSemana, data.graficaMC);
@@ -877,7 +878,7 @@ function empresasExternasCaptura(idDestino, zona, dateGeneral) {
                 motivo: motivo
             },
             // dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 alertSuccess('Empresa y Motivo Capturado!');
                 $("#bitacoraNombreEmpresaExterna").val('');
                 $("#bitacoraMotivoEmpresaExterna").val('');
@@ -906,7 +907,7 @@ function empresasExternasConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             $("#registrosBitacoraEmpresa").html(data.consultaEmpresasModal); //Modal
             $("#registroEmpresas").html(data.consultaEmpresas);
             $("#totalEmpresas").html(data.totalEmpresas);
@@ -938,13 +939,13 @@ function acontecimientoCaptura(idDestino, zona, dateGeneral) {
                 descripcion: descripcion
             },
             // dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 // console.log(data);
                 alertSuccess('Acontecimiento Y Descripción Capturado!');
                 $("#bitacoraAcontecimiento").val('');
                 $("#bitacoraAcontecimientoDescripcion").val('');
                 modalStatus('modal-acontecimientos', 'close');
-                
+
                 // graficaEmpresas(arrayGremio, arrayData);
 
             }
@@ -968,7 +969,7 @@ function acontecimientoConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             $("#bitacoraAcontecimientoConsulta").html(data.consultaAcontecimientoModal); //Modal
             $("#registroAcontecimiento").html(data.consultaAcontecimiento);
             $("#totalAcontecimiento").html(data.totalAcontecimiento);
@@ -982,46 +983,46 @@ function acontecimientoConsulta(idDestino, zona, dateGeneral) {
 function giftHabitacionesCaptura(idDestino, zona, dateGeneral) {
     var action = "giftHabitacionesCaptura";
     var pendientes = $("#giftHPendientes").val();
-    var solucionados= $("#giftHSolucionados").val();
-    var media_solucion_tiempo= $("#giftHMediaSolucion").val();
-    var media_asignacion_tiempo= $("#giftHMediaAsignacion").val();
-    var media_reparacion_tiempo= $("#giftHMediaReparacion").val();
-    var satisfaccion= $("#giftHSatisfaccion").val();
-    var no_alojado_origen= $("#giftHNoAlojadoOrigen").val();
-    var trabajador_origen= $("#giftHTrabajadorOrigen").val();
-    var husped_origen= $("#giftHHuspedOrigen").val();
-    var tipificacion_top1= $("#giftHTTop1").val();
-    var total_top1= $("#giftHTop1").val();
-    var tipificacion_top2= $("#giftHTTop2").val();
-    var total_top2= $("#giftHTop2").val();
-    var tipificacion_top3= $("#giftHTTop3").val();
-    var total_top3= $("#giftHTop3").val();
-    var tipificacion_top4= $("#giftHTTop4").val();
-    var total_top4= $("#giftHTop4").val();
-    var tipificacion_top5= $("#giftHTTop5").val();
+    var solucionados = $("#giftHSolucionados").val();
+    var media_solucion_tiempo = $("#giftHMediaSolucion").val();
+    var media_asignacion_tiempo = $("#giftHMediaAsignacion").val();
+    var media_reparacion_tiempo = $("#giftHMediaReparacion").val();
+    var satisfaccion = $("#giftHSatisfaccion").val();
+    var no_alojado_origen = $("#giftHNoAlojadoOrigen").val();
+    var trabajador_origen = $("#giftHTrabajadorOrigen").val();
+    var husped_origen = $("#giftHHuspedOrigen").val();
+    var tipificacion_top1 = $("#giftHTTop1").val();
+    var total_top1 = $("#giftHTop1").val();
+    var tipificacion_top2 = $("#giftHTTop2").val();
+    var total_top2 = $("#giftHTop2").val();
+    var tipificacion_top3 = $("#giftHTTop3").val();
+    var total_top3 = $("#giftHTop3").val();
+    var tipificacion_top4 = $("#giftHTTop4").val();
+    var total_top4 = $("#giftHTop4").val();
+    var tipificacion_top5 = $("#giftHTTop5").val();
     var total_top5 = $("#giftHTop5").val();
     var id = $("#idGiftHabitaciones").val();
-    
-    if (pendientes !="" &&
-    solucionados !="" &&
-    media_solucion_tiempo !="" &&
-    media_asignacion_tiempo !="" &&
-    media_reparacion_tiempo !="" &&
-    satisfaccion !="" &&
-    no_alojado_origen !="" &&
-    trabajador_origen !="" &&
-    husped_origen !="" &&
-    tipificacion_top1 !="" &&
-    total_top1 !="" &&
-    tipificacion_top2 !="" &&
-    total_top2 !="" &&
-    tipificacion_top3 !="" &&
-    total_top3 !="" &&
-    tipificacion_top4 !="" &&
-    total_top4 !="" &&
-    tipificacion_top5 !="" &&
-    total_top5 !="") {
-        
+
+    if (pendientes != "" &&
+        solucionados != "" &&
+        media_solucion_tiempo != "" &&
+        media_asignacion_tiempo != "" &&
+        media_reparacion_tiempo != "" &&
+        satisfaccion != "" &&
+        no_alojado_origen != "" &&
+        trabajador_origen != "" &&
+        husped_origen != "" &&
+        tipificacion_top1 != "" &&
+        total_top1 != "" &&
+        tipificacion_top2 != "" &&
+        total_top2 != "" &&
+        tipificacion_top3 != "" &&
+        total_top3 != "" &&
+        tipificacion_top4 != "" &&
+        total_top4 != "" &&
+        tipificacion_top5 != "" &&
+        total_top5 != "") {
+
         $.ajax({
             type: "post",
             url: "php/crud_bitacora_mantto.php",
@@ -1052,17 +1053,17 @@ function giftHabitacionesCaptura(idDestino, zona, dateGeneral) {
                 id: id
             },
             // dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 // console.log(data);
                 alertSuccess(data);
                 modalStatus('modal-gift', 'close');
-                
+
             }
         });
-    }else {
+    } else {
         alertInformacionVacia();
         modalStatus('modal-gift', 'close');
-        
+
     }
 }
 
@@ -1087,7 +1088,7 @@ function giftHabitacionesConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function (data) {
+        success: function(data) {
             console.log(data);
             $("#idGiftHabitaciones").val(data.idGiftHabitaciones);
             $("#giftHPendientes").val(data.pendientes);
@@ -1143,31 +1144,31 @@ function giftCocinasCaptura(idDestino, zona, dateGeneral) {
     var giftCocinasTop4 = $("#giftCocinasTop4").val();
     var giftCocinasAveriasTop5 = $("#giftCocinasAveriasTop5").val();
     var giftCocinasTop5 = $("#giftCocinasTop5").val();
-    
-    if (giftCocinasPendientes != "" &&
-    giftCocinasSolucionados !="" &&
-    giftCocinasMediaSolucion !="" &&
-    giftCocinasMediaAsignacion !="" &&
-    giftCocinasMediaReparacion !="" &&
-    giftCocinasAveriaTop1 !="" &&
-    giftCocinasTop1 !="" &&
-    giftCocinasAveriasTop2 !="" &&
-    giftCocinasTop2 !="" &&
-    giftCocinasAveriasTop3 !="" &&
-    giftCocinasTop3 !="" &&
-    giftCocinasAveriasTop4 !="" &&
-    giftCocinasTop4 !="" &&
-    giftCocinasAveriasTop5 !="" &&
-    giftCocinasTop5 !="") {
 
-        
+    if (giftCocinasPendientes != "" &&
+        giftCocinasSolucionados != "" &&
+        giftCocinasMediaSolucion != "" &&
+        giftCocinasMediaAsignacion != "" &&
+        giftCocinasMediaReparacion != "" &&
+        giftCocinasAveriaTop1 != "" &&
+        giftCocinasTop1 != "" &&
+        giftCocinasAveriasTop2 != "" &&
+        giftCocinasTop2 != "" &&
+        giftCocinasAveriasTop3 != "" &&
+        giftCocinasTop3 != "" &&
+        giftCocinasAveriasTop4 != "" &&
+        giftCocinasTop4 != "" &&
+        giftCocinasAveriasTop5 != "" &&
+        giftCocinasTop5 != "") {
+
+
         $.ajax({
 
             type: "post",
             url: "php/crud_bitacora_mantto.php",
             data: {
                 action: action,
-                id:id,
+                id: id,
                 idDestino: idDestino,
                 zona: zona,
                 dateGeneral: dateGeneral,
@@ -1186,21 +1187,21 @@ function giftCocinasCaptura(idDestino, zona, dateGeneral) {
                 giftCocinasTop4: giftCocinasTop4,
                 giftCocinasAveriasTop5: giftCocinasAveriasTop5,
                 giftCocinasTop5: giftCocinasTop5
-                
+
             },
             // dataType: 'json',
-            success: function (data) {
+            success: function(data) {
                 // console.log(data);
                 modalStatus('modal-cobare', 'close');
                 alertSuccess(data);
 
                 // graficaEmpresas(arrayGremio, arrayData);
-                
+
             }
         });
 
 
-        
+
     } else {
         modalStatus('modal-cobare', 'close');
         alertInformacionVacia();
@@ -1233,10 +1234,9 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
 
         },
         dataType: 'json',
-        success: function (data) {
-            console.log(data.pendientes);
+        success: function(data) {
+            // console.log(data);
 
-            
             // Envia los datos a su input correspondiente para actualizar.
             $("#idGiftCocinas").val(data.id);
             $("#giftCocinasPendientes").val(data.pendientes);
@@ -1255,26 +1255,26 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
             $("#giftCocinasAveriasTop5").val(data.tipificacion_top5);
             $("#giftCocinasTop5").val(data.total_top5);
             $("#btnGiftCocinas").html(data.btnGiftCocinas);
-            
+
             // Envio de datos a las estadisticas.
             $("#solucionadoGC").html(data.pendientes);
             $("#pendientesGC").html(data.solucionados);
             $("#mediaSolucionGC").html(data.media_solucion_tiempo);
             $("#mediaAsignacionGC").html(data.media_asignacion_tiempo);
             $("#mediaReparacionGC").html(data.media_reparacion_tiempo);
-            
+
             // Envia datos a la grafica.
             graficaTop5Cocinas(data.tipificacion_top1,
-                                data.tipificacion_top2,
-                                data.tipificacion_top3,
-                                data.tipificacion_top4,
-                                data.tipificacion_top5,
-                                data.total_top1,
-                                data.total_top2,
-                                data.total_top3,
-                                data.total_top4,
-                                data.total_top5
-                                );
+                data.tipificacion_top2,
+                data.tipificacion_top3,
+                data.tipificacion_top4,
+                data.tipificacion_top5,
+                data.total_top1,
+                data.total_top2,
+                data.total_top3,
+                data.total_top4,
+                data.total_top5
+            );
         }
     });
 }
@@ -1304,85 +1304,105 @@ function modalStatus(idModal, status) {
 }
 
 
+// Funcion para mostrar detalles consultaMPMCPROYECTOS.
+function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario, status1, status2) {
+
+    if (descripcion == "") {
+        comentario = "Sin Comentario";
+    }
+
+    $("#seccionModalMCMPProyectos").val(seccion);
+    $("#subseccionModalMCMPProyectos").val(subseccion);
+    $("#descripcionModalMCMPProyectos").val(descripcion);
+    $("#comentarioModalMCMPProyectos").val(comentario);
+    $("#status1ModalMCMPProyectos").val(status1);
+    $("#status2ModalMCMPProyectos").val(status2);
+}
+
+
+// funcion para cerrar modal con clase Modal.
+function toggleModal(idModal) {
+    $("#" + idModal).toggleClass('modal');
+}
+
 
 // Funcion que llama otra funciones para refrescar los datos donde enviar parametros Generales como: Fecha Seleccionada, Zona, Destino y Turno, depende de la funcion son los parametros que se le envia.
 function funcionNombre(nombreFuncion) {
-    var idDestino = $("#idDestino").val();    
-    var zona = $("#zona").val();    
-    var dateGeneral = $("#dateGeneral").val(); 
+    var idDestino = $("#idDestino").val();
+    var zona = $("#zona").val();
+    var dateGeneral = $("#dateGeneral").val();
     var turnoSeleccionado = $("#turnoSeleccionado").val();
 
     if (zona == "ENERGETICOS") {
         location.href = "bitacora-energeticos.php";
     }
-    
+
     switch (nombreFuncion) {
-        case nombreFuncion="gremioCantidad":
+        case nombreFuncion = "gremioCantidad":
             // Llama a la funcion que muestra la cantidad por gremio en el formulario de personal
             gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado);
             break;
-        
+
         case nombreFuncion = "cantidadTurno":
             // Llama a la funcion que muestra el total de plantilla por turno.
             cantidadTurno(idDestino, zona, dateGeneral);
             consultaGraficaGremio(idDestino, zona, dateGeneral);
             break;
-        
+
         case nombreFuncion = "MPMCPROYECTOS":
             MPMCPROYECTOS(idDestino, zona, dateGeneral);
             break;
-        
-        // Funcion para Caputras Bitacora de Empresas y Llama a la funcion para consultar los capturados.
+
+            // Funcion para Caputras Bitacora de Empresas y Llama a la funcion para consultar los capturados.
         case nombreFuncion = "empresasExternasCaptura":
             empresasExternasCaptura(idDestino, zona, dateGeneral);
             empresasExternasConsulta(idDestino, zona, dateGeneral);
             break;
-        
-        // Funcion para consultar las empresas caputuradas.
+
+            // Funcion para consultar las empresas caputuradas.
         case nombreFuncion = "empresasExternasConsulta":
             empresasExternasConsulta(idDestino, zona, dateGeneral);
-            break; 
+            break;
 
-        // Funcion para Bitacora de Aconteciminetos.
+            // Funcion para Bitacora de Aconteciminetos.
         case nombreFuncion = "acontecimientoCaptura":
             acontecimientoCaptura(idDestino, zona, dateGeneral);
             acontecimientoConsulta(idDestino, zona, dateGeneral);
             break;
 
-        // Funcion para Bitacora de Aconteciminetos.
+            // Funcion para Bitacora de Aconteciminetos.
         case nombreFuncion = "acontecimientoConsulta":
             acontecimientoConsulta(idDestino, zona, dateGeneral);
             break;
-        
-        // Captura Gift Habitaciones
+
+            // Captura Gift Habitaciones
         case nombreFuncion = "giftHabitacionesCaptura":
             giftHabitacionesCaptura(idDestino, zona, dateGeneral);
             giftHabitacionesConsulta(idDestino, zona, dateGeneral);
             break;
-        
-        // Consulta de Gift Habitaciones
+
+            // Consulta de Gift Habitaciones
         case nombreFuncion = "giftHabitacionesConsulta":
             giftHabitacionesConsulta(idDestino, zona, dateGeneral);
             break;
-        
-        // Captura de Gift Cocinas
+
+            // Captura de Gift Cocinas
         case nombreFuncion = "giftCocinasCaptura":
             giftCocinasCaptura(idDestino, zona, dateGeneral);
             giftCocinasConsulta(idDestino, zona, dateGeneral);
             break;
-        
-        // Consulta de Gift Cocinas
+
+            // Consulta de Gift Cocinas
         case nombreFuncion = "giftCocinasConsulta":
             giftCocinasConsulta(idDestino, zona, dateGeneral);
             break;
-            
+
         default:
-    }      
+    }
 }
 
 
-
-            // Llama a la funcion para mostrar total por turnos en personal.
+// Llama a la funcion para mostrar total por turnos en personal.
 funcionNombre('cantidadTurno');
 funcionNombre('MPMCPROYECTOS');
 funcionNombre('empresasExternasConsulta');

@@ -1,10 +1,18 @@
 <style>
-.CI{
+.CI {
     width: 5px;
 }
 
-.CA{
+.CA {
     width: calc(99% - 5px);
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: white;
 }
 </style>
 <!-- INICIO MENU -->
@@ -58,7 +66,8 @@
                 <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora</a>
+                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck"
+                    class="menu-hijo-3 CA">Bitácora</a>
                 <i class="fal fa-angle-down menu-hijo-4"></i>
             </dav>
             <dav id="nieto2" class="menu-nieto-1 ocultalo">
@@ -90,7 +99,7 @@
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <a href="energeticos.php" target="_blank" class="CA">Energéticos</a>
+                <a href="energeticos.php" target="_blank" class="CA hover:text-black">Energéticos</a>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
@@ -204,7 +213,8 @@
     </dav>
     <dav class="menu-contenedor-4 relative">
         <dav class="menu-contenedor-5">
-            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?=$nombreUsuario?>" alt="avatar" class="menu-contenedor-6">
+            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?=$nombreUsuario?>"
+                alt="avatar" class="menu-contenedor-6">
         </dav>
         <dav class="menu-contenedor-7">
             <h99 class="menu-contenedor-8"><?=$nombreUsuario?></h99>
@@ -217,16 +227,21 @@
 <!-- FIN MENU -->
 
 <!-- INICIO DESTINO -->
-<dav id="sidedestino" class="animated fadeOutRight d1"><!-- d1 -->
-        <dav class="d2"><!-- d2 -->
-            <dav class="d3"><!-- d3 -->
-                <dav class="d4"><!-- d4 -->
-                    <i class="fad fa-map-marker-alt"></i>       
-                </dav>
+<dav id="sidedestino" class="animated fadeOutRight d1">
+    <!-- d1 -->
+    <dav class="d2">
+        <!-- d2 -->
+        <dav class="d3">
+            <!-- d3 -->
+            <dav class="d4">
+                <!-- d4 -->
+                <i class="fad fa-map-marker-alt"></i>
             </dav>
-            <!-- Padre -->
-            <dav class=""><!-- d5 -->
-				<?php
+        </dav>
+        <!-- Padre -->
+        <dav class="">
+            <!-- d5 -->
+            <?php
 				
 				if($idDestino != 10){
 				
@@ -238,7 +253,7 @@
 							foreach ($resp as $dts) {
 								$idDest = $dts['id'];
 								$nombreDest = $dts['destino'];
-								echo "<a href=\"#\" onclick=\"cargarTareasDestino(0, $idDest);\" class=\"d6 m-0 p-2 mb-2\">$nombreDest</a>";
+								echo "<a href=\"#\" onclick=\"cargarTareasDestino(0, $idDest);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDest</a>";
 							}
 						}
 					} catch (Exception $ex) {
@@ -247,40 +262,41 @@
 				}
 				?>
 
-         
-            </dav>
+
         </dav>
     </dav>
-    <!-- FIN DESTINO -->
+</dav>
+<!-- FIN DESTINO -->
 
 <script>
-    function botonMenu() {
-        var element = document.getElementById("sidemenu");
-        if (element.classList.contains('fadeOutLeft')) {
-            element.classList.replace('fadeOutLeft', 'fadeInLeft');
-        } else {
-            element.classList.replace('fadeInLeft', 'fadeOutLeft');
-        }
-    };
-    function botonDestino() {
-        var element = document.getElementById("sidedestino");
-        if (element.classList.contains('fadeOutRight')) {
-            element.classList.replace('fadeOutRight', 'fadeInRight');
-        } else {
-            element.classList.replace('fadeInRight', 'fadeOutRight');
-        }
-    };
-    /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */
-    document.addEventListener('click', function (e) {
-        e = e || window.event;
-        var target = e.target || e.srcElement;
+function botonMenu() {
+    var element = document.getElementById("sidemenu");
+    if (element.classList.contains('fadeOutLeft')) {
+        element.classList.replace('fadeOutLeft', 'fadeInLeft');
+    } else {
+        element.classList.replace('fadeInLeft', 'fadeOutLeft');
+    }
+};
 
-        if (target.getAttribute('data-toggle') == 'hijo') {
-            if (target.hasAttribute('data-target')) {
-                var m_ID = target.getAttribute('data-target');
-                document.getElementById(m_ID).classList.toggle('ocultalo');
-                e.preventDefault();
-            }
+function botonDestino() {
+    var element = document.getElementById("sidedestino");
+    if (element.classList.contains('fadeOutRight')) {
+        element.classList.replace('fadeOutRight', 'fadeInRight');
+    } else {
+        element.classList.replace('fadeInRight', 'fadeOutRight');
+    }
+};
+/* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */
+document.addEventListener('click', function(e) {
+    e = e || window.event;
+    var target = e.target || e.srcElement;
+
+    if (target.getAttribute('data-toggle') == 'hijo') {
+        if (target.hasAttribute('data-target')) {
+            var m_ID = target.getAttribute('data-target');
+            document.getElementById(m_ID).classList.toggle('ocultalo');
+            e.preventDefault();
         }
-    });
+    }
+});
 </script>

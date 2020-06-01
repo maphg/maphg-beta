@@ -1,461 +1,452 @@
 $("#opcion").val('ENERGETICOS');
 // Funcion para seleccionar fecha.
 const MONTH_NAMES = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
 ];
 const DAYS = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
 function app() {
-  return {
-    showDatepicker: false,
-    datepickerValue: "",
+    return {
+        showDatepicker: false,
+        datepickerValue: "",
 
-    month: "",
-    year: "",
-    no_of_days: [],
-    blankdays: [],
-    days: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+        month: "",
+        year: "",
+        no_of_days: [],
+        blankdays: [],
+        days: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
 
-    initDate() {
-      let today = new Date();
-      this.month = today.getMonth();
-      this.year = today.getFullYear();
-      this.datepickerValue = new Date(
-        this.year,
-        this.month,
-        today.getDate()
-      ).toDateString();
-    },
+        initDate() {
+            let today = new Date();
+            this.month = today.getMonth();
+            this.year = today.getFullYear();
+            this.datepickerValue = new Date(
+                this.year,
+                this.month,
+                today.getDate()
+            ).toDateString();
+        },
 
-    isToday(date) {
-      const today = new Date();
-      const d = new Date(this.year, this.month, date);
+        isToday(date) {
+            const today = new Date();
+            const d = new Date(this.year, this.month, date);
 
-      return today.toDateString() === d.toDateString() ? true : false;
-    },
+            return today.toDateString() === d.toDateString() ? true : false;
+        },
 
-    getDateValue(date) {
-      let selectedDate = new Date(this.year, this.month, date);
-      this.datepickerValue = selectedDate.toDateString();
+        getDateValue(date) {
+            let selectedDate = new Date(this.year, this.month, date);
+            this.datepickerValue = selectedDate.toDateString();
 
-      this.$refs.date.value =
-        selectedDate.getFullYear() +
-        "-" +
-        ("0" + selectedDate.getMonth()).slice(-2) +
-        "-" +
-        ("0" + selectedDate.getDate()).slice(-2);
+            this.$refs.date.value =
+                selectedDate.getFullYear() +
+                "-" +
+                ("0" + selectedDate.getMonth()).slice(-2) +
+                "-" +
+                ("0" + selectedDate.getDate()).slice(-2);
 
-      // console.log(this.$refs.date.value);
+            // console.log(this.$refs.date.value);
 
-      this.showDatepicker = false;
-    },
+            this.showDatepicker = false;
+        },
 
-    getNoOfDays() {
-      let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+        getNoOfDays() {
+            let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
 
-      // find where to start calendar day of week
-      let dayOfWeek = new Date(this.year, this.month).getDay();
-      let blankdaysArray = [];
-      for (var i = 1; i <= dayOfWeek; i++) {
-        blankdaysArray.push(i);
-      }
+            // find where to start calendar day of week
+            let dayOfWeek = new Date(this.year, this.month).getDay();
+            let blankdaysArray = [];
+            for (var i = 1; i <= dayOfWeek; i++) {
+                blankdaysArray.push(i);
+            }
 
-      let daysArray = [];
-      for (var i = 1; i <= daysInMonth; i++) {
-        daysArray.push(i);
-      }
+            let daysArray = [];
+            for (var i = 1; i <= daysInMonth; i++) {
+                daysArray.push(i);
+            }
 
-      this.blankdays = blankdaysArray;
-      this.no_of_days = daysArray;
-    },
-  };
+            this.blankdays = blankdaysArray;
+            this.no_of_days = daysArray;
+        },
+    };
 }
 
 // Graficos para Bitacora Energeticos.
 function graficaElectricidad(arraySemana, cantidadElectricidad) {
-  
 
-  var ctx = document.getElementById("gelectricidad");
-  var gelectricidad = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: arraySemana,
-      datasets: [
-        {
-          label: "Historico",
-          data: cantidadElectricidad,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
+    var ctx = document.getElementById("gelectricidad");
+    var gelectricidad = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: arraySemana,
+            datasets: [{
+                label: "Historico",
+                data: cantidadElectricidad,
+                backgroundColor: "rgb(254, 252, 191)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+            }, ],
         },
-      ],
-    },
-    options: {
-      legend: {
-        display: false,
-        position: "bottom",
-        align: "center",
-      },
+        options: {
+            legend: {
+                display: false,
+                position: "bottom",
+                align: "center",
+            },
 
-      tooltips: {
-        enabled: true,
-      },
-    },
-  });
+            tooltips: {
+                enabled: true,
+            },
+        },
+    });
 }
 
 function graficaAgua(arraySemana, cantidadAgua) {
 
-  var ctx = document.getElementById("gagua");
-  var gagua = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: arraySemana,
-      datasets: [
-        {
-          label: "Historico",
-          data: cantidadAgua,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
+    var ctx = document.getElementById("gagua");
+    var gagua = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: arraySemana,
+            datasets: [{
+                label: "Historico",
+                data: cantidadAgua,
+                backgroundColor: "rgb(190, 227, 248)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+            }, ],
         },
-      ],
-    },
-    options: {
-      legend: {
-        display: false,
-        position: "bottom",
-        align: "center",
-      },
+        options: {
+            legend: {
+                display: false,
+                position: "bottom",
+                align: "center",
+            },
 
-      tooltips: {
-        enabled: true,
-      },
-    },
-  });
+            tooltips: {
+                enabled: true,
+            },
+        },
+    });
 }
 
 
 function graficaGas(arraySemana, cantidadGas) {
-  
-  var ctx = document.getElementById("ggas");
-  var ggas = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: arraySemana,
-      datasets: [
-        {
-          label: "Historico",
-          data: cantidadGas,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      legend: {
-        display: false,
-        position: "bottom",
-        align: "center",
-      },
 
-      tooltips: {
-        enabled: true,
-      },
-    },
-  });
+    var ctx = document.getElementById("ggas");
+    var ggas = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: arraySemana,
+            datasets: [{
+                label: "Historico",
+                data: cantidadGas,
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+            }, ],
+        },
+        options: {
+            legend: {
+                display: false,
+                position: "bottom",
+                align: "center",
+            },
+
+            tooltips: {
+                enabled: true,
+            },
+        },
+    });
 }
 
 
 function graficaDiesel(arraySemana, cantidadDiesel) {
-  
 
-  var ctx = document.getElementById("gdiesel");
-  var gdiesel = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: arraySemana,
-      datasets: [
-        {
-          label: "Historico",
-          data: cantidadDiesel,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
+
+    var ctx = document.getElementById("gdiesel");
+    var gdiesel = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: arraySemana,
+            datasets: [{
+                label: "Historico",
+                data: cantidadDiesel,
+                backgroundColor: "rgb(254, 235, 200)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+            }, ],
         },
-      ],
-    },
-    options: {
-      legend: {
-        display: false,
-        position: "bottom",
-        align: "center",
-      },
+        options: {
+            legend: {
+                display: false,
+                position: "bottom",
+                align: "center",
+            },
 
-      tooltips: {
-        enabled: true,
-      },
-    },
-  });
+            tooltips: {
+                enabled: true,
+            },
+        },
+    });
 }
 
 // Funciones para Consumo del Dia.
 function consumoDia(idDestino, opcion, fechaSeleccionada) {
-  var action = "consumoDia";
-  $.ajax({
-    type: "post",
-    url: "php/crud_bitacora_energeticos.php",
-    data: {
-      action: action,
-      idDestino: idDestino,
-      opcion: opcion,
-      fechaSeleccionada: fechaSeleccionada
-    },
-    dataType:'json',
-    success: function (datos) {
+    var action = "consumoDia";
+    $.ajax({
+        type: "post",
+        url: "php/crud_bitacora_energeticos.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            opcion: opcion,
+            fechaSeleccionada: fechaSeleccionada
+        },
+        dataType: 'json',
+        success: function(datos) {
 
-      // Se envian los resultados al HTML.
-      $("#dataElectricidad").html(datos.dataElectricidad);
-      $("#iconElectricidad").html(datos.iconElectricidad);
+            // Se envian los resultados al HTML.
+            $("#dataElectricidad").html(datos.dataElectricidad);
+            $("#iconElectricidad").html(datos.iconElectricidad);
 
-      $("#dataAgua").html(datos.dataAgua);
-      $("#iconAgua").html(datos.iconAgua);
+            $("#dataAgua").html(datos.dataAgua);
+            $("#iconAgua").html(datos.iconAgua);
 
-      $("#dataGas").html(datos.dataGas);
-      $("#iconGas").html(datos.iconGas);
+            $("#dataGas").html(datos.dataGas);
+            $("#iconGas").html(datos.iconGas);
 
-      $("#dataDiesel").html(datos.dataDiesel);
-      $("#iconDiesel").html(datos.iconDiesel);
+            $("#dataDiesel").html(datos.dataDiesel);
+            $("#iconDiesel").html(datos.iconDiesel);
 
-      $("#dataOcupacion").html(datos.dataOcupacion);
-      $("#iconOcupacion").html(datos.iconOcupacion);
+            $("#dataOcupacion").html(datos.dataOcupacion);
+            $("#iconOcupacion").html(datos.iconOcupacion);
 
-      $("#dataPax").html(datos.dataPax);
-      $("#iconPax").html(datos.iconPax);
-    },
-  });
+            $("#dataPax").html(datos.dataPax);
+            $("#iconPax").html(datos.iconPax);
+        },
+    });
 }
 
 
 // funcion para consultar acontecimientos.
 function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
-  // Segmento de codigo para el Modal de Acontecimientos.
-  var energetico = $("#acontecimientosEnergetico").val().toLowerCase();
-  
-  // Se inicializa el contenido del Modal Acontecimientos.
-  $("#dataModalAcontecimientosElectricidad").html('');
-  $("#dataModalAcontecimientosAgua").html('');
-  $("#dataModalAcontecimientosGas").html('');
-  $("#dataModalAcontecimientosDiesel").html('');
+    // Segmento de codigo para el Modal de Acontecimientos.
+    var energetico = $("#acontecimientosEnergetico").val().toLowerCase();
 
-  var action = "consultaAcontecimientos";
-  $.ajax({
-    type: "post",
-    url: "php/crud_bitacora_energeticos.php",
-    data: {
-      action: action,
-      idDestino: idDestino,
-      opcion: opcion,
-      fechaSeleccionada: fechaSeleccionada
-    },
-    dataType: 'json',
-    success: function (datos) {
-      // console.log(datos);
-      
-      // Se envian los resultados al HTML.
-      $("#dataAcontecimientosElectricidad").html(datos.dataAcontecimientosElectricidad);
-    
-      $("#dataAcontecimientosElectricidadAgua").html(datos.dataAcontecimientosElectricidadAgua);
-    
-      $("#dataAcontecimientosElectricidadGas").html(datos.dataAcontecimientosElectricidadGas);
-    
-      $("#dataAcontecimientosElectricidadDiesel").html(datos.dataAcontecimientosElectricidadDiesel);
+    // Se inicializa el contenido del Modal Acontecimientos.
+    $("#dataModalAcontecimientosElectricidad").html('');
+    $("#dataModalAcontecimientosAgua").html('');
+    $("#dataModalAcontecimientosGas").html('');
+    $("#dataModalAcontecimientosDiesel").html('');
 
-      // Comprueba la opción de Energético seleccionado.
-      if(energetico == "electricidad"){
-        $("#dataModalAcontecimientosElectricidad").html(datos.dataModalAcontecimientosElectricidad);
-      }
-      if(energetico == "agua"){
-        $("#dataModalAcontecimientosAgua").html(datos.dataModalAcontecimientosAgua);
-      }
-      if(energetico == "gas"){
-        $("#dataModalAcontecimientosGas").html(datos.dataModalAcontecimientosGas);
-      }
-      if(energetico == "diesel"){
-        $("#dataModalAcontecimientosDiesel").html(datos.dataModalAcontecimientosDiesel);
-      }
-    },
-  });
+    var action = "consultaAcontecimientos";
+    $.ajax({
+        type: "post",
+        url: "php/crud_bitacora_energeticos.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            opcion: opcion,
+            fechaSeleccionada: fechaSeleccionada
+        },
+        dataType: 'json',
+        success: function(datos) {
+            // console.log(datos);
+
+            // Se envian los resultados al HTML.
+            $("#dataAcontecimientosElectricidad").html(datos.dataAcontecimientosElectricidad);
+
+            $("#dataAcontecimientosElectricidadAgua").html(datos.dataAcontecimientosElectricidadAgua);
+
+            $("#dataAcontecimientosElectricidadGas").html(datos.dataAcontecimientosElectricidadGas);
+
+            $("#dataAcontecimientosElectricidadDiesel").html(datos.dataAcontecimientosElectricidadDiesel);
+
+            // Comprueba la opción de Energético seleccionado.
+            if (energetico == "electricidad") {
+                $("#dataModalAcontecimientosElectricidad").html(datos.dataModalAcontecimientosElectricidad);
+            }
+            if (energetico == "agua") {
+                $("#dataModalAcontecimientosAgua").html(datos.dataModalAcontecimientosAgua);
+            }
+            if (energetico == "gas") {
+                $("#dataModalAcontecimientosGas").html(datos.dataModalAcontecimientosGas);
+            }
+            if (energetico == "diesel") {
+                $("#dataModalAcontecimientosDiesel").html(datos.dataModalAcontecimientosDiesel);
+            }
+        },
+    });
 }
 
 
 // funcion para consultar acontecimientos de una Semana.
 function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
-  var action = "consultaAcontecimientosSemana";
-  $.ajax({
-    type: "post",
-    url: "php/crud_bitacora_energeticos.php",
-    data: {
-      action: action,
-      idDestino: idDestino,
-      opcion: opcion,
-      fechaSeleccionada: fechaSeleccionada
-    },
-    dataType: 'json',
-    success: function (datos) {
-      // console.log(datos);
-      // console.log('Inicio: ' + datos.semanaInicio);
-      // console.log('Fin: ' + datos.semanaFin);
-      // console.log('Fin--: ' + datos.graficaSemanaGeneral);
-      // console.log('Grafica Electricidad: ' + datos.graficaElectricidadCantidad);
-      // console.log(datos.dataAcontecimientosElectricidad);
-      $("#dataAcontecimientosElectricidadSemana").html(datos.dataAcontecimientosElectricidad);
-      $("#dataAcontecimientosAguaSemana").html(datos.dataAcontecimientosAgua);
-      $("#dataAcontecimientosGasSemana").html(datos.dataAcontecimientosGas);
-      $("#dataAcontecimientosDiselSemana").html(datos.dataAcontecimientosDiesel);
+    var action = "consultaAcontecimientosSemana";
+    $.ajax({
+        type: "post",
+        url: "php/crud_bitacora_energeticos.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            opcion: opcion,
+            fechaSeleccionada: fechaSeleccionada
+        },
+        dataType: 'json',
+        success: function(datos) {
+            // console.log(datos);
+            // console.log('Inicio: ' + datos.semanaInicio);
+            // console.log('Fin: ' + datos.semanaFin);
+            // console.log('Fin--: ' + datos.graficaSemanaGeneral);
+            // console.log('Grafica Electricidad: ' + datos.graficaElectricidadCantidad);
+            // console.log(datos.dataAcontecimientosElectricidad);
+            $("#dataAcontecimientosElectricidadSemana").html(datos.dataAcontecimientosElectricidad);
+            $("#dataAcontecimientosAguaSemana").html(datos.dataAcontecimientosAgua);
+            $("#dataAcontecimientosGasSemana").html(datos.dataAcontecimientosGas);
+            $("#dataAcontecimientosDiselSemana").html(datos.dataAcontecimientosDiesel);
 
-      // Se convierten los datos en Arreglos para enviarlos a las Graficas.
-      // el Arreglo arraySemana se envia a todas las graficas porque es el mismo dato para todas y no cambia.
-      var arraySemana = datos.graficaSemanaGeneral.split(',');
-      var cantidadElectricidad = datos.graficaElectricidadCantidad.split(',');
-      var cantidadAgua = datos.graficaAgua.split(',');
-      var cantidadGas = datos.graficaGas.split(',');
-      var cantidadDiesel = datos.graficaDiesel.split(',');
+            // Se convierten los datos en Arreglos para enviarlos a las Graficas.
+            // el Arreglo arraySemana se envia a todas las graficas porque es el mismo dato para todas y no cambia.
+            var arraySemana = datos.graficaSemanaGeneral.split(',');
+            var cantidadElectricidad = datos.graficaElectricidadCantidad.split(',');
+            var cantidadAgua = datos.graficaAgua.split(',');
+            var cantidadGas = datos.graficaGas.split(',');
+            var cantidadDiesel = datos.graficaDiesel.split(',');
 
-      // Llama a las funciones que Generan las Graficas.
-      graficaElectricidad(arraySemana, cantidadElectricidad);
-      graficaAgua(arraySemana, cantidadAgua);
-      graficaGas(arraySemana, cantidadGas);
-      graficaDiesel(arraySemana, cantidadDiesel);
-    },
-  });
+            // Llama a las funciones que Generan las Graficas.
+            graficaElectricidad(arraySemana, cantidadElectricidad);
+            graficaAgua(arraySemana, cantidadAgua);
+            graficaGas(arraySemana, cantidadGas);
+            graficaDiesel(arraySemana, cantidadDiesel);
+        },
+    });
 }
 
 
 function agregarAcontecimiento(idDestino, opcion, fechaSeleccionada) {
-  var action = "agregarAcontecimiento";
-  var titulo = $("#acontecimientosTitulo").val();  
-  var descripcion = $("#acontecimientosDescripcion").val();  
-  var energetico = $("#acontecimientosEnergetico").val();  
+    var action = "agregarAcontecimiento";
+    var titulo = $("#acontecimientosTitulo").val();
+    var descripcion = $("#acontecimientosDescripcion").val();
+    var energetico = $("#acontecimientosEnergetico").val();
 
-   $.ajax({
-    type: "post",
-    url: "php/crud_bitacora_energeticos.php",
-    data: {
-      action: action,
-      idDestino: idDestino,
-      opcion: opcion,
-      fechaSeleccionada: fechaSeleccionada,
-      titulo: titulo,
-      descripcion: descripcion,
-      energetico: energetico
-    },
-    dataType: 'json',
-     success: function (datos) {
-       console.log(datos.respuestaAgregar);
-       $("#acontecimientosTitulo").val('');  
-       $("#acontecimientosDescripcion").val(''); 
-      alertInformacion('Acontecimiento Agregado.', 'success');
-      llamarFuncion('consultaAcontecimientos'); 
-      llamarFuncion('consultaAcontecimientosSemana'); 
-    },
-  });
+    $.ajax({
+        type: "post",
+        url: "php/crud_bitacora_energeticos.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            opcion: opcion,
+            fechaSeleccionada: fechaSeleccionada,
+            titulo: titulo,
+            descripcion: descripcion,
+            energetico: energetico
+        },
+        dataType: 'json',
+        success: function(datos) {
+            console.log(datos.respuestaAgregar);
+            $("#acontecimientosTitulo").val('');
+            $("#acontecimientosDescripcion").val('');
+            alertInformacion('Acontecimiento Agregado.', 'success');
+            llamarFuncion('consultaAcontecimientos');
+            llamarFuncion('consultaAcontecimientosSemana');
+        },
+    });
 }
 
 function eliminarAcontecimiento(idAcontecimiento, contenido) {
-  Swal.fire({
-    title: '¿Eliminar Acontecimiento?',
-    text: contenido,
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Eliminar'
-  }).then((result) => {
-    if (result.value) {
-      Swal.fire(
-        'Eliminado',
-        '',
-        'success',
-        eliminarAcontecimientoConfir(idAcontecimiento)
-      )
+    Swal.fire({
+        title: '¿Eliminar Acontecimiento?',
+        text: contenido,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar'
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Eliminado',
+                '',
+                'success',
+                eliminarAcontecimientoConfir(idAcontecimiento)
+            )
+        }
+    })
+
+    function eliminarAcontecimientoConfir(idAcontecimiento) {
+        var action = "eliminarAcontecimiento";
+        $.ajax({
+            type: "post",
+            url: "php/crud_bitacora_energeticos.php",
+            data: {
+                action: action,
+                idAcontecimiento: idAcontecimiento
+            },
+            dataType: 'json',
+            success: function(datos) {
+                llamarFuncion('consultaAcontecimientos');
+                llamarFuncion('consultaAcontecimientosSemana');
+            },
+        });
+
     }
-  }) 
-
-  function eliminarAcontecimientoConfir(idAcontecimiento) {
-  var action = "eliminarAcontecimiento";
-  $.ajax({
-    type: "post",
-    url: "php/crud_bitacora_energeticos.php",
-    data: {
-      action: action,
-      idAcontecimiento: idAcontecimiento
-    },
-    dataType: 'json',
-    success: function (datos) {
-      llamarFuncion('consultaAcontecimientos'); 
-      llamarFuncion('consultaAcontecimientosSemana'); 
-    },
-  });
-
-  }
 }
 
 
 // Funcion para obtener parametros iniciales al cargar la pagina y llamar a Funciones.
 function llamarFuncion(nombreFuncion) {
-  var idDestino = $("#idDestino").val();
-  var opcion = $("#opcion").val();
-  var fechaSeleccionada = $("#dateGeneral").val();
+    var idDestino = $("#idDestino").val();
+    var opcion = $("#opcion").val();
+    var fechaSeleccionada = $("#dateGeneral").val();
 
-  var zona = opcion;
+    var zona = opcion;
 
-  if (zona != "ENERGETICOS") {
-    location.href = "bitacora_mantto.php";
-  }
+    if (zona != "ENERGETICOS") {
+        location.href = "bitacora_mantto.php";
+    }
 
-  switch (nombreFuncion) {
+    switch (nombreFuncion) {
 
-    //Llama a la función Consumo del Día.
-    case (nombreFuncion = "consumoDia"):
-      consumoDia(idDestino, opcion, fechaSeleccionada);
-      break;
-    
-    // Llama a la función Acontecimiento del Día.
-    case (nombreFuncion = "consultaAcontecimientos"):
-      consultaAcontecimientos(idDestino, opcion, fechaSeleccionada);
-      break;
-    
-    // Llama a la función Acontecimiento Semana.
-    case (nombreFuncion = "consultaAcontecimientosSemana"):
-      consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada);
-      break;
-    
-    // Llama a la función agregarAcontecimiento.
-    case (nombreFuncion = "agregarAcontecimiento"):
-      agregarAcontecimiento(idDestino, opcion, fechaSeleccionada);
-      break;
+        //Llama a la función Consumo del Día.
+        case (nombreFuncion = "consumoDia"):
+            consumoDia(idDestino, opcion, fechaSeleccionada);
+            break;
 
-    default:
-      break;
-  }
+            // Llama a la función Acontecimiento del Día.
+        case (nombreFuncion = "consultaAcontecimientos"):
+            consultaAcontecimientos(idDestino, opcion, fechaSeleccionada);
+            break;
+
+            // Llama a la función Acontecimiento Semana.
+        case (nombreFuncion = "consultaAcontecimientosSemana"):
+            consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada);
+            break;
+
+            // Llama a la función agregarAcontecimiento.
+        case (nombreFuncion = "agregarAcontecimiento"):
+            agregarAcontecimiento(idDestino, opcion, fechaSeleccionada);
+            break;
+
+        default:
+            break;
+    }
 }
 
 
 function modalTailwind(modal, opcion) {
-  $("#" + modal).toggleClass('hidden');
+    $("#" + modal).toggleClass('hidden');
 }
 
 
