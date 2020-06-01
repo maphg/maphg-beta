@@ -808,7 +808,7 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
             $("#totalgremio3").html(data.total_turno_3_1);
             $("#totalColaboradores3").html(' / ' + data.total_turno_3_2);
 
-            console.log(data);
+            // console.log(data);
             async function graficaPlantilla() {
 
                 let total1 = parseInt(data.total_turno_1_2) + parseInt(data.total_turno_2_2) + parseInt(data.total_turno_3_2);
