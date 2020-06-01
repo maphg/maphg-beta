@@ -15,6 +15,8 @@
     <h1 class="title is-32x32 ">Grafica</h1>
     <input id="va1" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 1">
     <input id="va2" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 2">
+    <input id="va3" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 3">
+    <input id="va4" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" placeholder="Valor 4">
     <button id="btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="btnClic();">
             Button
         </button>
@@ -26,7 +28,7 @@
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/Chart.js"></script>
     <script>
-        let arraySemana = ['L', 'M'];
+        let arraySemana = ['L', 'M', 'M', 'J'];
         let cantidadElectricidad = ["100", "200"];
         var ctx = document.getElementById("gelectricidad");
         var gelectricidad = new Chart(ctx, {
@@ -56,37 +58,25 @@
         console.log(gelectricidad.data.labels)
         console.log(gelectricidad.data.datasets[0].data)
 
-        async function removeData() {
-            await gelectricidad.data.datasets[0].data.forEach((dataset) => console.log('Here:::', dataset))
-            gelectricidad.data.datasets[0].data = [];
-            await gelectricidad.data.datasets[0].data.forEach((dataset) => console.log('Here:', dataset))
-
-            await gelectricidad.update();
-            console.log(gelectricidad.data.labels)
-            console.log(gelectricidad.data.datasets[0].data)
-        }
-
-
         async function btnClic() {
-            await removeData()
             let val1 = document.getElementById('va1').value;
             let val2 = document.getElementById('va2').value;
-            console.log(val1, val2);
-            let data = [val1, val2];
-            let label = ['${val1}', '${$val2}'];
+            let val3 = document.getElementById('va3').value;
+            let val4 = document.getElementById('va4').value;
 
-            data1(data);
+            gelectricidad.data.datasets[0].data = [];
+            gelectricidad.data.labels = [];
+            let array1 = [val1, val2, val3, val4];
 
+            array1.forEach(element => gelectricidad.data.datasets[0].data.push(element));
+            array1.forEach(element => gelectricidad.data.labels.push(element));
 
-            async function data1(data) {
+            await gelectricidad.data.datasets[0].data.forEach((dataset) => console.log('Here:', dataset))
 
-                await gelectricidad.data.datasets[0].data.push(80, 900, 700000);
-                await gelectricidad.update();
-                console.log('Data 1; ', data, 'fin data');
-                console.log('----------------------')
-                console.log('Label', gelectricidad.data.labels)
-                console.log('Data: ', gelectricidad.data.datasets[0].data)
-            }
+            // Función para Actualizar datos de la Grafica.
+            await gelectricidad.update();
+            console.log('update 1', gelectricidad.data.labels)
+            console.log('update2', gelectricidad.data.datasets[0].data)
         }
     </script>
 </body>

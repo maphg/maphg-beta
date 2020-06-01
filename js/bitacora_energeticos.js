@@ -83,124 +83,113 @@ function app() {
 }
 
 // Graficos para Bitacora Energeticos.
-function graficaElectricidad(arraySemana, cantidadElectricidad) {
 
-    var ctx = document.getElementById("gelectricidad");
-    var gelectricidad = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: arraySemana,
-            datasets: [{
-                label: "Historico",
-                data: cantidadElectricidad,
-                backgroundColor: "rgb(254, 252, 191)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-            }, ],
+var ctx = document.getElementById("gelectricidad");
+var gelectricidad = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Historico",
+            data: [],
+            backgroundColor: "rgb(254, 252, 191)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+        }, ],
+    },
+    options: {
+        legend: {
+            display: false,
+            position: "bottom",
+            align: "center",
         },
-        options: {
-            legend: {
-                display: false,
-                position: "bottom",
-                align: "center",
-            },
 
-            tooltips: {
-                enabled: true,
-            },
+        tooltips: {
+            enabled: true,
         },
-    });
-}
+    },
+});
 
-function graficaAgua(arraySemana, cantidadAgua) {
 
-    var ctx = document.getElementById("gagua");
-    var gagua = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: arraySemana,
-            datasets: [{
-                label: "Historico",
-                data: cantidadAgua,
-                backgroundColor: "rgb(190, 227, 248)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-            }, ],
+var ctx = document.getElementById("gagua");
+var gagua = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Historico",
+            data: [],
+            backgroundColor: "rgb(190, 227, 248)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+        }, ],
+    },
+    options: {
+        legend: {
+            display: false,
+            position: "bottom",
+            align: "center",
         },
-        options: {
-            legend: {
-                display: false,
-                position: "bottom",
-                align: "center",
-            },
 
-            tooltips: {
-                enabled: true,
-            },
+        tooltips: {
+            enabled: true,
         },
-    });
-}
+    },
+});
 
 
-function graficaGas(arraySemana, cantidadGas) {
-
-    var ctx = document.getElementById("ggas");
-    var ggas = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: arraySemana,
-            datasets: [{
-                label: "Historico",
-                data: cantidadGas,
-                backgroundColor: "rgba(255, 99, 132, 0.2)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-            }, ],
+var ctx = document.getElementById("ggas");
+var ggas = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Historico",
+            data: [],
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+        }, ],
+    },
+    options: {
+        legend: {
+            display: false,
+            position: "bottom",
+            align: "center",
         },
-        options: {
-            legend: {
-                display: false,
-                position: "bottom",
-                align: "center",
-            },
 
-            tooltips: {
-                enabled: true,
-            },
+        tooltips: {
+            enabled: true,
         },
-    });
-}
+    },
+});
 
 
-function graficaDiesel(arraySemana, cantidadDiesel) {
-
-
-    var ctx = document.getElementById("gdiesel");
-    var gdiesel = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: arraySemana,
-            datasets: [{
-                label: "Historico",
-                data: cantidadDiesel,
-                backgroundColor: "rgb(254, 235, 200)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-            }, ],
+var ctx = document.getElementById("gdiesel");
+var gdiesel = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Historico",
+            data: [],
+            backgroundColor: "rgb(254, 235, 200)",
+            borderColor: "rgba(255, 99, 132, 1)",
+            borderWidth: 1,
+        }, ],
+    },
+    options: {
+        legend: {
+            display: false,
+            position: "bottom",
+            align: "center",
         },
-        options: {
-            legend: {
-                display: false,
-                position: "bottom",
-                align: "center",
-            },
 
-            tooltips: {
-                enabled: true,
-            },
+        tooltips: {
+            enabled: true,
         },
-    });
-}
+    },
+});
 
 // Funciones para Consumo del Dia.
 function consumoDia(idDestino, opcion, fechaSeleccionada) {
@@ -326,10 +315,60 @@ function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
             var cantidadDiesel = datos.graficaDiesel.split(',');
 
             // Llama a las funciones que Generan las Graficas.
-            graficaElectricidad(arraySemana, cantidadElectricidad);
-            graficaAgua(arraySemana, cantidadAgua);
-            graficaGas(arraySemana, cantidadGas);
-            graficaDiesel(arraySemana, cantidadDiesel);
+
+
+            async function graficaElectricidad() {
+
+                gelectricidad.data.datasets[0].data = [];
+                gelectricidad.data.labels = [];
+
+                arraySemana.forEach(element => gelectricidad.data.labels.push(element));
+                cantidadElectricidad.forEach(element => gelectricidad.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await gelectricidad.update();
+            }
+
+            async function graficaAgua() {
+
+                gagua.data.datasets[0].data = [];
+                gagua.data.labels = [];
+
+                arraySemana.forEach(element => gagua.data.labels.push(element));
+                cantidadAgua.forEach(element => gagua.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await gagua.update();
+            }
+
+            async function graficaGas() {
+
+                ggas.data.datasets[0].data = [];
+                ggas.data.labels = [];
+
+                arraySemana.forEach(element => ggas.data.labels.push(element));
+                cantidadGas.forEach(element => ggas.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await ggas.update();
+            }
+
+            async function graficaDiesel() {
+
+                gdiesel.data.datasets[0].data = [];
+                gdiesel.data.labels = [];
+
+                arraySemana.forEach(element => gdiesel.data.labels.push(element));
+                cantidadDiesel.forEach(element => gdiesel.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await gdiesel.update();
+            }
+
+            graficaElectricidad();
+            graficaAgua();
+            graficaGas();
+            graficaDiesel();
         },
     });
 }

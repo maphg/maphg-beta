@@ -83,9 +83,9 @@ function app() {
 
 
 /* PERSONAL DONA */
-var ctx = document.getElementById("tmat").getContext("2d");
 
 function graficaPlantilla(totalGlobal, totalGremio) {
+    var ctx = document.getElementById("tmat").getContext("2d");
     if (totalGlobal <= 0) {
         totalGlobal = 1;
     }
@@ -134,430 +134,466 @@ function graficaPlantilla(totalGlobal, totalGremio) {
 
 
 /* PERSONAL BARRAS */
-function graficaGremio(nombre, cantidad) {
-
-    var ctx = document.getElementById('personalbarras');
-    var personalbarras = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: {
-            labels: nombre,
-            datasets: [{
-                label: 'Colaboradores',
-                data: cantidad,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 56, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 08, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 56, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)'
-                ],
-                borderWidth: 1
+var ctx = document.getElementById('personalbarras');
+var personalbarras = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Colaboradores',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 56, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 08, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 56, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 56, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 08, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 56, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
             }]
         },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            aspectRatio: 2,
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            tooltips: {
-                enabled: true,
+        aspectRatio: 2,
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }
+        },
+        tooltips: {
+            enabled: true,
         }
+    }
 
-    });
-}
+});
 
 
 /* HMC*/
-function graficaMC(diaSemana, MC) {
 
-    var ctx = document.getElementById('hmc');
+var ctx = document.getElementById('hmc');
+var hmc = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Historico',
+            data: [],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
 
-    var hmc = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: diaSemana,
-            datasets: [{
-                label: 'Historico',
-                data: MC,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
 
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-
-            tooltips: {
-                enabled: true,
-            }
+        tooltips: {
+            enabled: true,
         }
+    }
 
-    });
-}
+});
 
 
 /* HMP*/
-function graficaMP(diaSemana, MP) {
-    var ctx = document.getElementById('hmp');
-    var hmp = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: diaSemana,
-            datasets: [{
-                label: 'Historico',
-                data: MP,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
+var ctx = document.getElementById('hmp');
+var hmp = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Historico',
+            data: [],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
 
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-
-            tooltips: {
-                enabled: true,
-            }
+        tooltips: {
+            enabled: true,
         }
+    }
 
-    });
-}
+});
+
 
 /* PY*/
-function graficaProyectos(dia, graficaP) {
-    // console.log(graficaData);
-    var ctx = document.getElementById('py');
-    var py = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dia,
-            datasets: [{
-                label: 'Historico',
-                data: graficaP,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
+var ctx = document.getElementById('py');
+var py = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Historico',
+            data: [],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
 
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-
-            tooltips: {
-                enabled: true,
-            }
+        tooltips: {
+            enabled: true,
         }
+    }
 
-    });
-}
+});
 
 
 /* empresas*/
-function graficaEmpresas(dia, graficaEmpresas) {
-    var ctx = document.getElementById('empresas');
-    var empresas = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dia,
-            datasets: [{
-                label: 'Historico',
-                data: graficaEmpresas,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
+var ctx = document.getElementById('empresas');
+var empresas = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Historico',
+            data: [],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
 
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-
-            tooltips: {
-                enabled: true,
-            }
+        tooltips: {
+            enabled: true,
         }
+    }
 
-    });
-}
+});
 
 
 /* acontecimiento */
-function graficaAcontecimiento(diaSemana, graficaAcontecimiento) {
-    var ctx = document.getElementById('acontecimiento');
-    var acontecimiento = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: diaSemana,
-            datasets: [{
-                label: 'Historico',
-                data: graficaAcontecimiento,
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 1
-            }]
+var ctx = document.getElementById('acontecimiento');
+var acontecimiento = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Historico',
+            data: [],
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
 
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
+        tooltips: {
+            enabled: true,
+        }
+    }
 
-            tooltips: {
-                enabled: true,
+});
+
+
+var ctx = document.getElementById("origen").getContext("2d");
+var origen = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+        labels: ['No alojado', 'Habitacion', 'Trabajador'],
+        datasets: [{
+            label: 'Origen',
+            data: [],
+            borderWidth: 1,
+
+            borderColor: ['rgba(255, 99, 132, 1)', '#68d391', 'rgba(246, 224, 94)'],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(104, 211, 145, 0.2)',
+                'rgba(246, 224, 94, 0.2)'
+            ]
+        }]
+    },
+    options: {
+        aspectRatio: 1,
+        legend: {
+            display: true,
+            position: 'bottom',
+            align: 'center',
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }
+        },
+        tooltips: {
+            enabled: true,
         }
 
-    });
-}
-
-
-function graficaOrigenGH(no_alojado_origen, trabajador_origen, husped_origen) {
-    var ctx = document.getElementById("origen").getContext("2d");
-    var origen = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ['No alojado', 'Habitacion', 'Trabajador'],
-            datasets: [{
-                label: 'Origen',
-                data: [no_alojado_origen, trabajador_origen, husped_origen],
-                borderWidth: 1,
-
-                borderColor: ['rgba(255, 99, 132, 1)', '#68d391', 'rgba(246, 224, 94)'],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(104, 211, 145, 0.2)',
-                    'rgba(246, 224, 94, 0.2)'
-                ]
-            }]
-        },
-        options: {
-            aspectRatio: 1,
-            legend: {
-                display: true,
-                position: 'bottom',
-                align: 'center',
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            tooltips: {
-                enabled: true,
-            }
-
-        }
-    });
-}
+    }
+});
 
 
 
 /* TOP 5 HABITACIONES */
-function graficaTop5Habitaciones(total_top1, total_top2, total_top3, total_top4, total_top5, tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5) {
-    var ctx = document.getElementById('top5');
-    var top5 = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: {
-            labels: [tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5],
-            datasets: [{
-                label: 'Colaboradores',
-                data: [total_top1, total_top2, total_top3, total_top4, total_top5],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                ],
-                borderWidth: 1
+var ctx = document.getElementById('top5');
+var top5 = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Colaboradores',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
             }]
         },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            aspectRatio: 2,
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            tooltips: {
-                enabled: true,
+        aspectRatio: 2,
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }
+        },
+        tooltips: {
+            enabled: true,
         }
-    });
-}
+    }
+});
 
 
 /* TOP 5 COCINAS */
-function graficaTop5Cocinas(tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5, total_top1, total_top2, total_top3, total_top4, total_top5) {
 
-
-    var ctx = document.getElementById('top5c');
-    var top5c = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: {
-            labels: [tipificacion_top1, tipificacion_top2, tipificacion_top3, tipificacion_top4, tipificacion_top5],
-            datasets: [{
-                label: 'Colaboradores',
-                data: [total_top1, total_top2, total_top3, total_top4, total_top5],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                ],
-                borderWidth: 1
+var ctx = document.getElementById('top5c');
+var top5c = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: ['Top 1', 'Top 2', 'Top 3', 'Top 4', 'Top 5'],
+        datasets: [{
+            label: 'Colaboradores',
+            data: [],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
             }]
         },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            aspectRatio: 2,
-            legend: {
-                display: false,
-                position: 'bottom',
-                align: 'center',
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            tooltips: {
-                enabled: true,
+        aspectRatio: 2,
+        legend: {
+            display: false,
+            position: 'bottom',
+            align: 'center',
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }
+        },
+        tooltips: {
+            enabled: true,
         }
-    });
-}
+    }
+});
+
 
 // Fin Aréa Graficas ************************************************+
 
@@ -774,11 +810,6 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
             $("#totalgremio3").html(data.total_turno_3_1);
             $("#totalColaboradores3").html(data.total_turno_3_2);
 
-            var canvas = document.getElementById("personalbarras");
-            var contexto = canvas.getContext("2d");
-            contexto.clearRect(0, 0, canvas.width, canvas.height);
-
-
             graficaPlantilla(data.totalPlantillaGlobal, data.totalPlantilla)
                 // console.log(data);
         }
@@ -804,7 +835,19 @@ function consultaGraficaGremio(idDestino, zona, dateGeneral) {
             var arrayData = data.labelData.split(',');
             // console.log(arrayGremio);
             $("#personalbarras").html();
-            graficaGremio(arrayGremio, arrayData);
+            graficaGremio();
+
+            async function graficaGremio() {
+                personalbarras.data.datasets[0].data = [];
+                personalbarras.data.labels = [];
+
+                arrayGremio.forEach(element => personalbarras.data.labels.push(element));
+                arrayData.forEach(element => personalbarras.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await personalbarras.update();
+            }
+            graficaGremio();
 
             // console.log(data);
             // console.log(data.labelNombre);
@@ -835,7 +878,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             // console.log(data.graficaP);
             // console.log(data.fecha);
             // console.log(data.bitacoraMC);
-            console.log('Here', data);
+            // console.log('Here', data);
 
             $("#bitacoraMP").html(data.bitacoraMP);
             $("#totalMP").html(data.totalMP);
@@ -850,9 +893,44 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
                 $("#bitacoraProyecto").html("");
                 $("#bitacoraProyectoTotal").html("0");
             }
-            graficaMC(data.diaSemana, data.graficaMC);
-            graficaMP(data.diaSemana, data.graficaMP);
-            graficaProyectos(data.diaSemana, data.graficaP);
+
+
+            // Funciones para actualizar Datos de las graficas.
+            async function graficaMC() {
+                hmc.data.datasets[0].data = [];
+                hmc.data.labels = [];
+                // console.log(data.diaSemana, data.graficaMC);
+                data.diaSemana.forEach(element => hmc.data.labels.push(element));
+                data.graficaMC.forEach(element => hmc.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await hmc.update();
+            }
+            graficaMC();
+
+            async function graficaMP() {
+                hmp.data.datasets[0].data = [];
+                hmp.data.labels = [];
+                // console.log(data.diaSemana, data.graficaMP);
+                data.diaSemana.forEach(element => hmp.data.labels.push(element));
+                data.graficaMP.forEach(element => hmp.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await hmp.update();
+            }
+            graficaMP();
+
+            async function graficaProyectos() {
+                py.data.datasets[0].data = [];
+                py.data.labels = [];
+                // console.log(data.diaSemana, data.graficaP);
+                data.diaSemana.forEach(element => py.data.labels.push(element));
+                data.graficaP.forEach(element => py.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await py.update();
+            }
+            graficaProyectos();
         }
     });
 }
@@ -911,7 +989,18 @@ function empresasExternasConsulta(idDestino, zona, dateGeneral) {
             $("#registrosBitacoraEmpresa").html(data.consultaEmpresasModal); //Modal
             $("#registroEmpresas").html(data.consultaEmpresas);
             $("#totalEmpresas").html(data.totalEmpresas);
-            graficaEmpresas(data.diaSemana, data.graficaEmpresas);
+
+            async function graficaEmpresas() {
+                empresas.data.datasets[0].data = [];
+                empresas.data.labels = [];
+                // console.log(data.diaSemana, data.graficaP);
+                data.diaSemana.forEach(element => empresas.data.labels.push(element));
+                data.graficaEmpresas.forEach(element => empresas.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await empresas.update();
+            }
+            graficaEmpresas();
 
         }
     });
@@ -945,9 +1034,6 @@ function acontecimientoCaptura(idDestino, zona, dateGeneral) {
                 $("#bitacoraAcontecimiento").val('');
                 $("#bitacoraAcontecimientoDescripcion").val('');
                 modalStatus('modal-acontecimientos', 'close');
-
-                // graficaEmpresas(arrayGremio, arrayData);
-
             }
         });
     } else {
@@ -973,7 +1059,18 @@ function acontecimientoConsulta(idDestino, zona, dateGeneral) {
             $("#bitacoraAcontecimientoConsulta").html(data.consultaAcontecimientoModal); //Modal
             $("#registroAcontecimiento").html(data.consultaAcontecimiento);
             $("#totalAcontecimiento").html(data.totalAcontecimiento);
-            graficaAcontecimiento(data.diaSemana, data.graficaAcontecimiento);
+
+            async function graficaAcontecimiento() {
+                acontecimiento.data.datasets[0].data = [];
+                acontecimiento.data.labels = [];
+                // console.log(data.diaSemana, data.graficaP);
+                data.diaSemana.forEach(element => acontecimiento.data.labels.push(element));
+                data.graficaAcontecimiento.forEach(element => acontecimiento.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await acontecimiento.update();
+            }
+            graficaAcontecimiento();
 
         }
     });
@@ -1077,7 +1174,7 @@ function giftHabitacionesConsulta(idDestino, zona, dateGeneral) {
     $("#MRGH").html('0d 0h 0m');
     $("#solucionadoGH").html('0');
     $("#pendienteGH").html('0');
-    graficaOrigenGH();
+
     $.ajax({
         type: "post",
         url: "php/crud_bitacora_mantto.php",
@@ -1119,8 +1216,37 @@ function giftHabitacionesConsulta(idDestino, zona, dateGeneral) {
             $("#MRGH").html(data.media_reparacion_tiempo);
             $("#solucionadoGH").html(data.pendientes);
             $("#pendienteGH").html(data.solucionados);
-            graficaOrigenGH(data.no_alojado_origen, data.trabajador_origen, data.husped_origen);
-            graficaTop5Habitaciones(data.total_top1, data.total_top2, data.total_top3, data.total_top4, data.total_top5, data.tipificacion_top1, data.tipificacion_top2, data.tipificacion_top3, data.tipificacion_top4, data.tipificacion_top5);
+
+
+            async function graficaOrigenGH() {
+                origen.data.datasets[0].data = [];
+                dataOrigen = [data.no_alojado_origen, data.trabajador_origen, data.husped_origen];
+                dataOrigen.forEach(element => origen.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await origen.update();
+            }
+            graficaOrigenGH();
+
+            async function graficaTop5Habitaciones() {
+                top5.data.datasets[0].data = [];
+                top5.data.labels = [];
+
+                dataTop5 = [
+                    data.total_top1, data.total_top2, data.total_top3, data.total_top4, data.total_top5
+                ];
+
+                dataTop5Tipificacion = [data.tipificacion_top1, data.tipificacion_top2, data.tipificacion_top3, data.tipificacion_top4, data.tipificacion_top5];
+
+
+                dataTop5Tipificacion.forEach(element => top5.data.labels.push(element));
+
+                dataTop5.forEach(element => top5.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await top5.update();
+            }
+            graficaTop5Habitaciones();
         }
     });
 }
@@ -1194,9 +1320,6 @@ function giftCocinasCaptura(idDestino, zona, dateGeneral) {
                 // console.log(data);
                 modalStatus('modal-cobare', 'close');
                 alertSuccess(data);
-
-                // graficaEmpresas(arrayGremio, arrayData);
-
             }
         });
 
@@ -1220,7 +1343,6 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
     $("#mediaAsignacionGC").html('0d 0h 0m');
     $("#mediaReparacionGC").html('0d 0h 0m');
     // Envia datos a la grafica.
-    graficaTop5Cocinas();
 
     $.ajax({
 
@@ -1264,17 +1386,35 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
             $("#mediaReparacionGC").html(data.media_reparacion_tiempo);
 
             // Envia datos a la grafica.
-            graficaTop5Cocinas(data.tipificacion_top1,
-                data.tipificacion_top2,
-                data.tipificacion_top3,
-                data.tipificacion_top4,
-                data.tipificacion_top5,
-                data.total_top1,
-                data.total_top2,
-                data.total_top3,
-                data.total_top4,
-                data.total_top5
-            );
+
+            async function graficaTop5Cocinas() {
+                top5c.data.datasets[0].data = [];
+                top5c.data.labels = [];
+
+                dataTop5c = [
+                    data.total_top1,
+                    data.total_top2,
+                    data.total_top3,
+                    data.total_top4,
+                    data.total_top5
+                ];
+
+                dataTop5Tipificacionc = [data.tipificacion_top1,
+                    data.tipificacion_top2,
+                    data.tipificacion_top3,
+                    data.tipificacion_top4,
+                    data.tipificacion_top5
+                ];
+
+
+                dataTop5Tipificacionc.forEach(element => top5c.data.labels.push(element));
+
+                dataTop5c.forEach(element => top5c.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await top5c.update();
+            }
+            graficaTop5Cocinas();
         }
     });
 }
@@ -1313,7 +1453,7 @@ function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario,
     $("#comentarioModalMCMPProyectos").html(comentario);
     $("#status1ModalMCMPProyectos").html(status1);
     $("#status2ModalMCMPProyectos").html(status2);
-    console.log(id, seccion, subseccion, descripcion, comentario, status1, status2);
+    // console.log(id, seccion, subseccion, descripcion, comentario, status1, status2);
 }
 
 

@@ -760,7 +760,7 @@ if (isset($_POST['action'])) {
         
         // SE RECORRE EL ARREGLO PARA OBTENER EL RANGO DE FECHAS 6 DÍAS ANTES DE LA FECHA SELECCIONADA.
         foreach ($arrayTotal as $key => $value) {
-
+            
             // MC
             $query_MC = "SELECT* FROM t_mc WHERE 
             fecha_realizado BETWEEN '$value' AND '$key'
@@ -871,10 +871,14 @@ if (isset($_POST['action'])) {
         foreach ($arrayTotal as $key => $value) {
 
             // Empresas
-            $query_Empresas = "SELECT* FROM bitacora_empresas_externas WHERE 
+            if ($idDestino != 10) {
+                $query_Empresas = "SELECT* FROM bitacora_empresas_externas WHERE fecha BETWEEN '$value' AND '$key' AND zona='$zona' AND id_destino=$idDestino AND activo=1 ";
+            }else{
+                $query_Empresas = "SELECT* FROM bitacora_empresas_externas WHERE 
             fecha BETWEEN '$value' AND '$key'
-            AND zona='$zona'
+            AND zona='$zona' AND activo=1
             ";
+            } 
             $result_Empresas = mysqli_query($conn_2020, $query_Empresas);
             $total_Empresas = "0";
             $total_Empresas = mysqli_num_rows($result_Empresas);
@@ -952,7 +956,7 @@ if (isset($_POST['action'])) {
 
         foreach ($arrayTotal as $key => $value) {
 
-            // Empresas
+            // Acontecimientos.
             if ($idDestino != 10) {
                 $query_Empresas = "SELECT* FROM bitacora_acontecimiento WHERE 
                 fecha BETWEEN '$value' AND '$key'
@@ -964,6 +968,7 @@ if (isset($_POST['action'])) {
                 AND zona='$zona' AND activo=1
                 ";
             } 
+
             $result_Empresas = mysqli_query($conn_2020, $query_Empresas);
             $total_Acontecimiento = "0";
             $total_Acontecimiento = mysqli_num_rows($result_Empresas);
