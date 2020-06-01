@@ -568,21 +568,25 @@ if (isset($_POST['action'])) {
                 $comentario_mc = $row_comentario_mc['comentario'];
             }
 			
-			$tag_status ="<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
-			$tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
+            $tag_status ="<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
+            $tag_status1 = "Trabajando";
+            $tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
+            $tag_status2 = "Finalizado";
 			
 			
 			if($status_trabajare == ""){
-				$tag_status ="";
+                $tag_status ="";
+                tag_status1 = "";
 			}
 			
 			if($status_finalizado != "F"){
-				$tag_finalizado ="";
+                $tag_finalizado ="";
+                tag_status = "";
 			}
 			
 			
             $bitacoraMC .=
-            "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\">"
+            "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
             . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"\">$subseccion</h1>"
@@ -628,6 +632,7 @@ if (isset($_POST['action'])) {
         $totalMP = mysqli_num_rows($result_t_mp);
 
         while ($row_t_mp = mysqli_fetch_array($result_t_mp)) {
+            $id = $row_t_mp['id'];
             $seccion = $row_t_mp['seccion'];
             $subseccion = $row_t_mp['grupo'];
             $equipo = $row_t_mp['equipo'];
@@ -646,7 +651,7 @@ if (isset($_POST['action'])) {
             }
 
             $bitacoraMP .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\">
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$equipo (Folio OT: $folio)', '$comentario_mp', '', '');\">
                 <h1 class=\"\">$seccion</h1><!-- SECION -->
                 <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
                 <h1 class=\"\">$subseccion</h1><!-- SUBSECCION -->
@@ -702,7 +707,7 @@ if (isset($_POST['action'])) {
         
         
         while($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)){
-			
+			$id = $row_t_proyectos['id'];
             $seccion = $row_t_proyectos['seccion'];
             $subseccion = $row_t_proyectos['grupo'];
             $proyecto = $row_t_proyectos['titulo'];
@@ -710,8 +715,10 @@ if (isset($_POST['action'])) {
             $id_planaccion = $row_t_proyectos['id_planaccion'];
 			$status = $row_t_proyectos['status'];
 			
-			$tag_status ="<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
-			$tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
+            $tag_status ="<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
+            $tag_status1 = "Trabajando";
+            $tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
+            $tag_status2 = "Solucionado";
             
             $query_comentario = "SELECT comentario FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $id_planaccion ORDER BY fecha DESC";
             $result_comentario = mysqli_query($conn_2020, $query_comentario);
@@ -725,14 +732,16 @@ if (isset($_POST['action'])) {
 			
             if ($status != "status_trabajare") {
                 $tag_status = "";
+                $tag_status1 = "";
             }
 			
 			if ($status != "status_solucionado") {
-				$tag_finalizado = "";
+                $tag_finalizado = "";
+                $tag_status2 = "";
 			}
                
             
-            $bitacoraProyecto .= "<div class=\"flex justify-left items-center w-full bg-yellow-200 rounded mb-2 text-yellow-700 cursor-pointer py-2 text-xs px-1\">"
+            $bitacoraProyecto .= "<div class=\"flex justify-left items-center w-full bg-yellow-200 rounded mb-2 text-yellow-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$proyecto -> $planaccion', '$comentario', '$tag_status1', '$tag_status2');\">"
             . "$tag_finalizado $tag_status <h1 class=\"\">$seccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"\">$subseccion</h1>"
