@@ -599,8 +599,9 @@ if (isset($_POST['action'])) {
 		//$bitacoraMC = "";
 		
 		
-		
-        $MPMCPROYECTOS['bitacoraMC'] = $bitacoraMC;
+		// Se obtiene el resultado total de los solucionados y Trabajando MC.
+        $MPMCPROYECTOS['bitacoraMC'] = $bitacoraMC + mysqli_num_rows($result_MC_trabajare);
+
         $MPMCPROYECTOS['totalmc'] = $totalmc + mysqli_num_rows($result_MC_trabajare);
 
 
