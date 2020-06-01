@@ -825,7 +825,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             zona: zona,
             dateGeneral: dateGeneral
         },
-        // dataType: 'json',
+        dataType: 'json',
         success: function(data) {
             // console.log(data.fecha);
             // console.log(data.dia);
