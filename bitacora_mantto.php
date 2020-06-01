@@ -1276,10 +1276,11 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                 <div class=" w-full">
                     <p class="mt-3 font-black">STATUS:
                         <span id="status1ModalMCMPProyectos"
-                            class="font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md">Sin
-                            Información</span>
-                        <span id="status2ModalMCMPProyectos"
                             class="font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md">Sin
+                            Información</span>
+
+                        <span id="status2ModalMCMPProyectos"
+                            class="font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md">Sin
                             Información</span>
                     </p>
                 </div>
