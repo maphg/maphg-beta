@@ -1313,6 +1313,7 @@ function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario,
     $("#comentarioModalMCMPProyectos").html(comentario);
     $("#status1ModalMCMPProyectos").html(status1);
     $("#status2ModalMCMPProyectos").html(status2);
+    console.log(id, seccion, subseccion, descripcion, comentario, status1, status2);
 }
 
 
