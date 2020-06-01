@@ -519,7 +519,7 @@ if (isset($_POST['action'])) {
 			}
 			
 			
-            $bitacoraMC .="<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id, '$seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_finalizado', '$tag_status');\">"
+            $bitacoraMC .="<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id, $seccion, $subseccion, $descripcion, $comentario_mc, $tag_finalizado, $tag_status);\">"
                     . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
                     . "<P class=\"font-black mx-1\">/</P>"
                     . "<h1 class=\"\">$subseccion</h1>"

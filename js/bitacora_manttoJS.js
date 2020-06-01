@@ -1307,12 +1307,12 @@ function modalStatus(idModal, status) {
 // Funcion para mostrar detalles consultaMPMCPROYECTOS.
 function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario, status1, status2) {
 
-    $("#seccionModalMCMPProyectos").val(seccion);
-    $("#subseccionModalMCMPProyectos").val(subseccion);
-    $("#descripcionModalMCMPProyectos").val(descripcion);
-    $("#comentarioModalMCMPProyectos").val(comentario);
-    $("#status1ModalMCMPProyectos").val(status1);
-    $("#status2ModalMCMPProyectos").val(status2);
+    $("#seccionModalMCMPProyectos").html(seccion);
+    $("#subseccionModalMCMPProyectos").html(subseccion);
+    $("#descripcionModalMCMPProyectos").html(descripcion);
+    $("#comentarioModalMCMPProyectos").html(comentario);
+    $("#status1ModalMCMPProyectos").html(status1);
+    $("#status2ModalMCMPProyectos").html(status2);
 }
 
 
