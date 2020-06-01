@@ -252,15 +252,15 @@ if (isset($_POST['action'])) {
 
             if($cantidadTurno > 0 && $cantidadTotal > 0) {
                 $cantidadTurno_array['total_turno_1_1'] = $cantidadTurno;
-                $cantidadTurno_array['total_turno_1_2'] = "/". $cantidadTotal;
+                $cantidadTurno_array['total_turno_1_2'] = "". $cantidadTotal;
             }else{
                 $cantidadTurno_array['total_turno_1_1'] = "0 ";
-                $cantidadTurno_array['total_turno_1_2'] = " / 0$cantidadTotal";
+                $cantidadTurno_array['total_turno_1_2'] = "  0$cantidadTotal";
             }
             
         }else{
             $cantidadTurno_array['total_turno_1_1'] = "0 ";            
-            $cantidadTurno_array['total_turno_1_2'] = " / 0";            
+            $cantidadTurno_array['total_turno_1_2'] = "  0";            
         }
 
         $query_2 = "SELECT 
@@ -287,15 +287,15 @@ if (isset($_POST['action'])) {
 
             if($cantidadTurno > 0 && $cantidadTotal > 0) {
                 $cantidadTurno_array['total_turno_2_1'] = $cantidadTurno;
-                $cantidadTurno_array['total_turno_2_2'] = "/". $cantidadTotal;
+                $cantidadTurno_array['total_turno_2_2'] = "". $cantidadTotal;
             }else{
                 $cantidadTurno_array['total_turno_2_1'] = "0 ";
-                $cantidadTurno_array['total_turno_2_2'] = " / 0$cantidadTotal";
+                $cantidadTurno_array['total_turno_2_2'] = "  0$cantidadTotal";
             }
             
         }else{
             $cantidadTurno_array['total_turno_2_1'] = "0 ";            
-            $cantidadTurno_array['total_turno_2_2'] = " / 0";            
+            $cantidadTurno_array['total_turno_2_2'] = "  0";            
         }
 
         $query_3 = "SELECT 
@@ -322,19 +322,27 @@ if (isset($_POST['action'])) {
 
             if($cantidadTurno > 0 && $cantidadTotal > 0) {
                 $cantidadTurno_array['total_turno_3_1'] = $cantidadTurno;
-                $cantidadTurno_array['total_turno_3_2'] = "/". $cantidadTotal;
+                $cantidadTurno_array['total_turno_3_2'] = "". $cantidadTotal;
             }else{
                 $cantidadTurno_array['total_turno_3_1'] = "0$cantidadTotal";
-                $cantidadTurno_array['total_turno_3_2'] = "/ 0$cantidadTotal";
+                $cantidadTurno_array['total_turno_3_2'] = " 0$cantidadTotal";
             }
             
         }else{
             $cantidadTurno_array['total_turno_3_1'] = "0 ";            
-            $cantidadTurno_array['total_turno_3_2'] = "/ 0";            
+            $cantidadTurno_array['total_turno_3_2'] = " 0";            
         }
 
-        $cantidadTurno_array['totalPlantillaGlobal'] = $cantidadPlantillaGlobal_1 + $cantidadPlantillaGlobal_2 + $cantidadPlantillaGlobal_3;
-        $cantidadTurno_array['totalPlantilla'] = $cantidadPlantilla_1 + $cantidadPlantilla_2 + $cantidadPlantilla_3;
+        // Se comento este proceso porque ahora desde el JS se suman en la función (cantidadTurno).
+        // $cantidadTurno_array['totalPlantillaGlobal'] = 
+        // ($cantidadPlantillaGlobal_1) + 
+        // ($cantidadPlantillaGlobal_2) + 
+        // ($cantidadPlantillaGlobal_3);
+        
+        // $cantidadTurno_array['totalPlantilla'] = 
+        // ($cantidadPlantilla_1) + 
+        // ($cantidadPlantilla_2) + 
+        // ($cantidadPlantilla_3);
 
 
 

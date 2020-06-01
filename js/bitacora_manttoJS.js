@@ -84,53 +84,45 @@ function app() {
 
 /* PERSONAL DONA */
 
-function graficaPlantilla(totalGlobal, totalGremio) {
-    var ctx = document.getElementById("tmat").getContext("2d");
-    if (totalGlobal <= 0) {
-        totalGlobal = 1;
-    }
 
-    if (totalGremio <= 0) {
-        totalGlobal = 1;
-    }
-    var tmat = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ['Plantilla total', 'Plantilla Hoy'],
-            datasets: [{
-                label: 'Num datos',
-                data: [totalGlobal, totalGremio],
-                borderWidth: 1,
+var ctx = document.getElementById("tmat").getContext("2d");
+var tmat = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+        labels: ['Plantilla total', 'Plantilla Hoy'],
+        datasets: [{
+            label: 'Num datos',
+            data: [],
+            borderWidth: 1,
 
-                borderColor: ['#edf2f7', '#63b3ed'],
-                backgroundColor: [
-                    '#edf2f7',
-                    'rgba(54, 162, 235, 0.2)'
-                ]
-            }]
+            borderColor: ['#edf2f7', '#63b3ed'],
+            backgroundColor: [
+                '#edf2f7',
+                'rgba(54, 162, 235, 0.2)'
+            ]
+        }]
+    },
+    options: {
+        aspectRatio: 1,
+        legend: {
+            display: true,
+            position: 'bottom',
+            align: 'center',
         },
-        options: {
-            aspectRatio: 1,
-            legend: {
-                display: true,
-                position: 'bottom',
-                align: 'center',
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                }
-            },
-            tooltips: {
-                enabled: true,
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }
-
+        },
+        tooltips: {
+            enabled: true,
         }
-    });
-}
+
+    }
+});
 
 
 /* PERSONAL BARRAS */
@@ -759,6 +751,12 @@ function eliminarItemPersonal(tabla, id, modal) {
                 alertSuccess("Registro Eliminado!");
                 funcionNombre('gremioCantidad');
                 funcionNombre('acontecimientoConsulta');
+                funcionNombre('cantidadTurno');
+                funcionNombre('MPMCPROYECTOS');
+                funcionNombre('empresasExternasConsulta');
+                funcionNombre('acontecimientoConsulta');
+                funcionNombre('giftHabitacionesConsulta');
+                funcionNombre('giftCocinasConsulta');
             }
         });
     }
@@ -804,14 +802,28 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
         dataType: 'json',
         success: function(data) {
             $("#totalgremio1").html(data.total_turno_1_1);
-            $("#totalColaboradores1").html(data.total_turno_1_2);
+            $("#totalColaboradores1").html(' / ' + data.total_turno_1_2);
             $("#totalgremio2").html(data.total_turno_2_1);
-            $("#totalColaboradores2").html(data.total_turno_2_2);
+            $("#totalColaboradores2").html(' / ' + data.total_turno_2_2);
             $("#totalgremio3").html(data.total_turno_3_1);
-            $("#totalColaboradores3").html(data.total_turno_3_2);
+            $("#totalColaboradores3").html(' / ' + data.total_turno_3_2);
 
-            graficaPlantilla(data.totalPlantillaGlobal, data.totalPlantilla)
-                // console.log(data);
+            console.log(data);
+            async function graficaPlantilla() {
+
+                let total1 = parseInt(data.total_turno_1_2) + parseInt(data.total_turno_2_2) + parseInt(data.total_turno_3_2);
+
+                let total2 = parseInt(data.total_turno_1_1) + parseInt(data.total_turno_2_1) + parseInt(data.total_turno_3_1);
+
+                tmat.data.datasets[0].data = [];
+                dataPlantilla = [total1, total2];
+
+                dataPlantilla.forEach(element => tmat.data.datasets[0].data.push(element));
+
+                // Función para Actualizar datos de la Grafica.
+                await tmat.update();
+            }
+            graficaPlantilla();
         }
     });
 }
