@@ -9,6 +9,7 @@ include 'conexion.php';
 if (isset($_POST['action'])) {
 
     $action = $_POST['action'];
+    
 
     // Variables Generales.
     $array_destino = array(1 => "RM", 2 => "PVR", 3 => "SDQ", 4 => "SSA", 5 => "PUJ", 6 => "MBJ", 7 => "CMU", 10 => "AME", 11 => "CAP");
@@ -2374,6 +2375,316 @@ if (isset($_POST['action'])) {
         }
         echo $data;
     }
+
+
+    if ($action == "agregarTitoloMPNP") {
+        $titulo = $_POST['titulo'];
+        $idUsuario = $_SESSION['usuario'];
+        $idDestino = $_SESSION['idDestino'];
+        $idEquipo = $_POST['idEquipo'];
+        $fecha = date('Y-m-d H:m:s');
+        $tipo = "MPNP";
+        
+        $query = "SELECT MAX(id) AS id FROM t_mp_np";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            if ($idNuevo = mysqli_fetch_array($result)) {
+                
+                $idNuevo = $idNuevo['id'] + 1;
+
+                $query_titulo = "INSERT INTO 
+                t_mp_np(id, id_equipo, id_usuario, id_destino, tipo, titulo, status, activo) 
+                VALUES($idNuevo, $idEquipo, $idUsuario, $idDestino, '$tipo', '$titulo', 'P' ,1)";
+                $result_titulo = mysqli_query($conn_2020, $query_titulo);
+                if ($result_titulo) {
+                    echo $idNuevo;
+                } else {
+                    echo "Error";
+                }
+            }else{
+                echo   "Error";
+            }
+        }
+    }
+
+
+    if ($action == "agregarResponsableMPNP") {
+        $idResponsable = $_POST['idResponsable'];
+        $idMPNP = $_POST['idMPNP'];
+        $data = "";
+        $responsable = "";
+        
+        $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            if ($row = mysqli_fetch_array($result)) {
+                
+                $agregarResponsable = $row['responsable'] . ", $idResponsable";
+                
+                $query_titulo = "UPDATE t_mp_np SET responsable = '$agregarResponsable' WHERE id = $idMPNP";
+                $result_titulo = mysqli_query($conn_2020, $query_titulo);
+                if ($result_titulo) {
+                    $responsable = explode(",", $agregarResponsable);
+                    if($responsable != ""){ 
+                        foreach ($responsable as $key => $value) {
+                            if($value >= 1){ 
+                                $queryData = "SELECT
+                                t_colaboradores.nombre,  
+                                t_colaboradores.apellido  
+                                FROM t_users 
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE t_users.id = $value";
+
+                                $resultData = mysqli_query($conn_2020, $queryData);
+                                if($rowData = mysqli_fetch_array($resultData)){
+                                    $nombre = $rowData['nombre'];
+                                    $apellido = $rowData['apellido'];
+                                    
+                                    $data .="
+                                        <div class=\"field is-grouped is-grouped-multiline\">
+                                            <div class=\"control\">
+                                                <div class=\"tags has-addons\">
+                                                    <p class=\"tag is-primary\">
+                                                        <span class=\"mr-2\">
+                                                            <i class=\"fa fa-user\"></i>
+                                                        </span>
+                                                        $nombre $apellido
+                                                    </p>
+                                                    <p class=\"tag is-delete\" onclick=\"eliminarResponsableMPNP($key, $value, $idMPNP)\"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
+                            }    
+                        }
+                        echo $data;
+                    }else{
+                            echo "sin datos";
+                        }
+                    } else {
+                        echo "Error";
+                    }
+            }else{
+                echo   "Error";
+            }
+        }
+    }
+
+
+    if ($action == "eliminarResponsableMPNP") {
+        $key = $_POST['key'];
+        $value = $_POST['value'];
+        $idMPNP = $_POST['idMPNP'];
+        $responsable = "";
+        $responsableActualizado = "";
+        $data = "";
+
+        $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
+        $result = mysqli_query($conn_2020, $query);
+        if($row_responsable = mysqli_fetch_array($result)){
+            $responsable = explode(",",$row_responsable['responsable']);
+            unset($responsable[$key]);
+            
+            foreach ($responsable as $key_1 => $value_1) {
+                if ($value >=1) {
+                    $responsableActualizado .= "$value_1, ";
+                }
+            }
+            $actualizar = "UPDATE t_mp_np SET responsable = '$responsableActualizado' WHERE id = $idMPNP";
+            $result = mysqli_query($conn_2020, $actualizar);
+            if($result){
+                
+                $responsableActualizado = explode(",",$responsableActualizado);
+                foreach ($responsable as $key => $value) {
+                    if($value >= 1){ 
+                        $queryData = "SELECT
+                        t_colaboradores.nombre,  
+                        t_colaboradores.apellido  
+                        FROM t_users 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        WHERE t_users.id = $value";
+
+                        $resultData = mysqli_query($conn_2020, $queryData);
+                        if($rowData = mysqli_fetch_array($resultData)){
+                            $nombre = $rowData['nombre'];
+                            $apellido = $rowData['apellido'];
+                            
+                            $data .="
+                                <div class=\"field is-grouped is-grouped-multiline\">
+                                    <div class=\"control\">
+                                        <div class=\"tags has-addons\">
+                                            <p class=\"tag is-primary\">
+                                                <span class=\"mr-2\">
+                                                    <i class=\"fa fa-user\"></i>
+                                                </span>
+                                                $nombre $apellido
+                                            </p>
+                                            <p class=\"tag is-delete\" onclick=\"eliminarResponsableMPNP($key, $value, $idMPNP)\"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }    
+                }
+                echo $data;
+            }else{
+                echo "Error al Actualizar";
+            }
+        }else{
+            echo "Error";
+        }
+    }
+
+
+    if ($action == "agregarActividadMPNP") {
+        $arrayActividad = array();
+        $idMPNP = $_POST['idMPNP'];
+        $idUsuario = $_SESSION['usuario'];
+        $actividadMPNP = $_POST['actividadMPNP'];
+        $fecha = date('Y-m-d H:m:s');
+        
+        $query = "INSERT INTO actividad_mp_np
+        (id_mp_np, actividad, creado_por, fecha) 
+        VALUES($idMPNP, '$actividadMPNP', $idUsuario, '$fecha')";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($result) {
+            $arrayActividad['btnGuardarMPNP'] = 1;
+            $arrayActividad['msj'] = "Actividad Agregada.";
+            $arrayActividad['icon'] = "success";
+        } else {
+            $arrayActividad['btnGuardarMPNP'] = 1;
+            $arrayActividad['msj'] = "Actividad NO Agregada.";
+            $arrayActividad['icon'] = "error";
+        }
+        echo json_encode($arrayActividad);
+    }
+
+
+    if($action == "consultaActividadMPNP"){
+        $arrayConsultaActividad = array();
+        $data = "";
+        $idMPNP = $_POST['idMPNP'];
+        $query = "SELECT actividad, id FROM actividad_mp_np WHERE id_mp_np = $idMPNP AND activo = 1";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
+                $actividad = $row['actividad'];
+                $id = $row['id'];
+                $data .=
+                "
+                <div class=\"tags has-addons is-rounded\">
+                <p class=\"tag is-medium is-info\">
+                <i class=\"fad fa-angle-right\"></i>
+                <span class=\"mx-2\">
+                $actividad
+                </span>
+                </p>
+                <p class=\"tag is-medium is-delete\" onclick=\"eliminarActividadMPNP($id);\"></p>
+                </div>          
+                ";
+            }
+            $arrayConsultaActividad['result'] = $data;
+            $arrayConsultaActividad['total'] = mysqli_num_rows($result);
+        } else {
+            $arrayConsultaActividad['total'] = 0;
+        }
+        echo json_encode($arrayConsultaActividad);
+    }
+
+    if ($action == "eliminarActividadMPNP") {
+        $id = $_POST['id'];
+
+        $query = "UPDATE actividad_mp_np SET activo = 0 WHERE id = $id";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($result) {
+            echo "Actividad Eliminada";    
+        } else {
+            echo "Actividad NO Eliminada";    
+        }
+    }
+
+
+    if ($action == "btnConfirmarMPNP") {
+        $titulo = $_POST['titulo'];
+        $idMPNP = $_POST['idMPNP'];
+        $idEquipo = $_POST['idEquipo'];
+        $fecha = $_POST['fecha'];
+        $fecha = new DateTime($fecha);
+        $fecha = $fecha->format('Y-m-d H:m:s');
+        $tipo = "MPNP";
+        
+        $query = "UPDATE t_mp_np 
+        SET titulo = '$titulo', fecha = '$fecha', status= 'F'  
+        
+        WHERE id = $idMPNP AND id_equipo = $idEquipo";
+        $result = mysqli_query($conn_2020, $query);
+        
+        if ($result) {
+            echo "MP NO PLANEADO, Finalizado.";
+        } else {
+            echo "Error al Capturar MP NO PLANEADO.";
+        }
+    }
+
+
+    if ($action == "consultaMPNP") {
+        $data = "";
+        $idEquipo = $_POST['idEquipo'];
+        $query = "SELECT titulo, fecha, id_usuario, responsable FROM t_mp_np WHERE id_equipo = $idEquipo";
+        $result = mysqli_query($conn_2020, $query);
+
+        while ($row = mysqli_fetch_array($result)) {
+            $titulo = $row['titulo'];
+            $fecha = new DateTime($row['fecha']);
+            $fecha = $fecha->format('Y-m-d');
+            $creadoPor = $row['id_usuario'];
+            $responsable = $row['responsable'];
+
+            $data .= "
+                <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+                    <div class=\"column is-half\">
+                        <div class=\"columns\">
+                            <div class=\"column\">
+                                <div class=\"message is-small is-danger\">
+                                    <p class=\"message-body\"><strong>$titulo</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=\"column\">
+                        <div class=\"columns is-gapless\">
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-arrow-up\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-user-slash\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\">$fecha</i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-solucionado\">SOLUCIONADO</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            ";
+        }
+        echo $data;
+    }
+
+
 
 //Cierre de IF para action.
 }

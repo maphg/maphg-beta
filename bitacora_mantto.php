@@ -1188,11 +1188,9 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                     </div>
                     <div id="registrosBitacoraEmpresa"
                         class="flex flex-wrap flex-col bg-gray-200 items-start justify-center m-10 p-2 font-bold">
-
                     </div>
+                </form>
             </div>
-            </form>
-
             <!-- CONTENIDO MODAL -->
         </div>
         </div>
@@ -1243,7 +1241,6 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                         </div>
                     </div>
                 </form>
-
                 <!-- CONTENIDO MODAL -->
             </div>
         </div>

@@ -534,7 +534,7 @@ if (isset($_POST['action'])) {
             $bitacoraMC .="<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
                     . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
                     . "<P class=\"font-black mx-1\">/</P>"
-                    . "<h1 class=\"\">$subseccion</h1>"
+                    . "<h1 class=\"truncate\">$subseccion</h1>"
                     . "<P class=\"font-black mx-1\">/</P>"
                     . "<h1 class=\"truncate font-bold\">$descripcion</h1>"
                     . "<P class=\"font-black mx-1\">/</P>"
@@ -597,7 +597,7 @@ if (isset($_POST['action'])) {
             "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
             . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
-            . "<h1 class=\"\">$subseccion</h1>"
+            . "<h1 class=\"truncate\">$subseccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"truncate font-bold\">$descripcion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
@@ -660,11 +660,11 @@ if (isset($_POST['action'])) {
 
             $bitacoraMP .= "
                 <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$equipo (Folio OT: $folio)', '$comentario_mp', '', '');\">
-                <h1 class=\"\">$seccion</h1><!-- SECION -->
+                <h1 class=\" \">$seccion</h1><!-- SECION -->
+                <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
+                <h1 class=\"truncate\">$subseccion</h1><!-- SUBSECCION -->
                 <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
-                <h1 class=\"\">$subseccion</h1><!-- SUBSECCION -->
-                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
-                <h1 class=\"\">$equipo</h1><!-- NOMBRE EQUIPO o TAREA GENERAL-->
+                <h1 class=\"truncate\">$equipo</h1><!-- NOMBRE EQUIPO o TAREA GENERAL-->
                 <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
                 <h1 class=\"font-bold\">Folio OT: $folio</h1><!-- DESCRIPCION DE LA TAREA -->
                 <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
@@ -752,7 +752,7 @@ if (isset($_POST['action'])) {
             $bitacoraProyecto .= "<div class=\"flex justify-left items-center w-full bg-yellow-200 rounded mb-2 text-yellow-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id_planaccion, '$seccion', '$subseccion', '$proyecto -> $planaccion', '$comentario', '$tag_status1', '$tag_status2');\">"
             . "$tag_finalizado $tag_status <h1 class=\"\">$seccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
-            . "<h1 class=\"\">$subseccion</h1>"
+            . "<h1 class=\"truncate\">$subseccion</h1>"
             . "<P class=\"font-black mx-1\">/</P>"
             . "<h1 class=\"truncate\">$proyecto</h1>"
             . "<P class=\"font-black mx-1\">/</P>"

@@ -1613,6 +1613,7 @@ class Planner
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Finalizados\">MC-S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Pendientes\">MP-P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Pendientes\">MP-NP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Finalizados\">MP-S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Test: Realizados\">TEST</p></div>"
@@ -1655,6 +1656,7 @@ class Planner
         }
 
         $listaEquipo->listaEquipos .= "<div class=\"column\"></div>"
+            . "<div class=\"column\"></div>"
             . "<div class=\"column\"></div>"
             . "<div class=\"column\"></div>"
             . "<div class=\"column\"></div>"
@@ -2282,6 +2284,14 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpPlanificado</p></div>";
                             }
 
+                            // Inicio semento para la nueva columna MP-NP
+                            if ($mpPlanificado > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendientes\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo);\">MP-NP</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo);\">MP-NP</p></div>";
+                            }
+                            // Fin Segmento. 
+
                             if ($mpRealizado > 0) {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
                             } else {
@@ -2496,6 +2506,7 @@ class Planner
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Pendientes\">MC-P</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Finalizados\">MC-S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Pendientes\">MP-P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Pendientes\">MP-NP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Realizado\">MP-R</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
@@ -2537,7 +2548,7 @@ class Planner
             $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mc'); obtCorrectivosG($idGrupo, $idDestino, 6, $idSubcategoria, $idRelCatSubcat, 'F');\">$solCategoria</p></div>";
         }
 
-
+        // Bloque de codigo para acompletar las columnas de tareas generales.
         $listaEquipo->listaEquipos .= "<div class=\"column\"></div>"
             . "<div class=\"column\"></div>"
             . "<div class=\"column\"></div>"
@@ -3193,12 +3204,18 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mc'); obtCorrectivos($idEquipo, 'F')\">$totalSolEquipo</p></div>";
                             }
 
-
                             if ($mpPlanificado > 0) {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendientes\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpPlanificado</p></div>";
                             } else {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpPlanificado</p></div>";
                             }
+                            // Segmento para agregar la nueva columna MP-NP
+                            if ($mpPlanificado > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendientes\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo);\">MP-NP</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo);\">MP-NP</p></div>";
+                            }
+                            // Fin de Segmento.
 
                             if ($mpProceso > 0) {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-proceso\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpProceso</p></div>";
