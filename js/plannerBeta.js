@@ -6,7 +6,6 @@
 
 // Función para agregar el titulo de los MP No Planeados, a partir de ello se crea el registro para guardar la información.
 function obtMPNP(idEquipo) {
-    console.log(idEquipo);
     $("#idEquipoMPNP").val(idEquipo);
     var action = "consultaMPNP";
     $.ajax({
@@ -195,10 +194,17 @@ function btnConfirmarMPNP() {
                 $("#formMPNP").addClass('hidden');
                 $("#dataResponsablesMPNP").html('');
                 $("#dataActividadesMPNP").html('');
+                refreshModalMPNP();
 
             },
         });
     } else {
         alertInformacion('Información NO Valida.', 'error');
     }
+}
+
+
+function refreshModalMPNP() {
+    var idEquipo = $("#idEquipoMPNP").val();
+    obtMPNP(idEquipo);
 }

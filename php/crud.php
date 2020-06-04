@@ -2567,25 +2567,30 @@ if (isset($_POST['action'])) {
         $arrayConsultaActividad = array();
         $data = "";
         $idMPNP = $_POST['idMPNP'];
-        $query = "SELECT actividad, id FROM actividad_mp_np WHERE id_mp_np = $idMPNP AND activo = 1";
+        $query = "SELECT actividad, id FROM actividad_mp_np WHERE id_mp_np = $idMPNP AND activo = 1 ORDER BY id DESC";
         $result = mysqli_query($conn_2020, $query);
         if ($result) {
             while ($row = mysqli_fetch_array($result)) {
                 $actividad = $row['actividad'];
                 $id = $row['id'];
-                $data .=
-                "
-                <div class=\"tags has-addons is-rounded\">
-                <p class=\"tag is-medium is-info\">
-                <i class=\"fad fa-angle-right\"></i>
-                <span class=\"mx-2\">
-                $actividad
-                </span>
-                </p>
-                <p class=\"tag is-medium is-delete\" onclick=\"eliminarActividadMPNP($id);\"></p>
-                </div>          
+                $data .= "
+                    <div class=\"columns mb-1\">
+                        <div class=\"column is-12\">
+                            <div class=\"field has-text-left title is-5\">
+                                <input class=\"is-checkradio is-success is-circle is-small\" type=\"checkbox\" name=\"listchkbPMOT_310\" id=\"chkbPMOT_310\" checked onclick=\"javascript: return false;\">
+                                    <label for=\"chkbPMOT_310\" class=\"is-size-6 is-success ml-2 is-size-6\">
+                                        $actividad
+                                        <span class=\"is-success ml-2 is-size-7\" onclick=\"eliminarActividadMPNP($id);\">
+                                        <a class=\"delete\"></a>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 ";
             }
+
             $arrayConsultaActividad['result'] = $data;
             $arrayConsultaActividad['total'] = mysqli_num_rows($result);
         } else {
@@ -2634,46 +2639,89 @@ if (isset($_POST['action'])) {
     if ($action == "consultaMPNP") {
         $data = "";
         $idEquipo = $_POST['idEquipo'];
-        $query = "SELECT titulo, fecha, id_usuario, responsable FROM t_mp_np WHERE id_equipo = $idEquipo";
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha, t_mp_np.id_usuario, t_mp_np.responsable
+        FROM t_mp_np
+        WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo=1 AND t_mp_np.status='F' ORDER BY t_mp_np.id DESC";
         $result = mysqli_query($conn_2020, $query);
 
         while ($row = mysqli_fetch_array($result)) {
+            // Variables iniciales.
+            $id = $row['id'];
             $titulo = $row['titulo'];
+            $actividades = 0;
             $fecha = new DateTime($row['fecha']);
-            $fecha = $fecha->format('Y-m-d');
+            $fecha = $fecha->format('Y - m - d');
             $creadoPor = $row['id_usuario'];
             $responsable = $row['responsable'];
+
+
+            // Querys Complementarios.
+            $query_actividades = "SELECT id, actividad FROM actividad_mp_np WHERE id_mp_np = $id";
+            $result_actividades = mysqli_query($conn_2020, $query_actividades);
+            $actividades = mysqli_num_rows($result_actividades);
+
+            $query_responsable = "SELECT t_users.nombre, t_users.apellido";
+
+            if ($titulo != "") {
+                # code...
+            } else {
+                # code...
+            }
+
+            if ($actividades >= 1) {
+                $actividades = "<p class=\"t-normal\">$actividades</p>";
+            } else {
+                $actividades = "<p class=\"t-icono-rojo\">0</p>";
+            }
+
+            if ($fecha != "") {
+                $fecha = "<p class=\"t-normal\">$fecha</p>";
+            } else {
+                $fecha = "<p class=\"t-icono-rojo\"><i class=\"fad fa-calendar-alt\"></i></p>";
+            }
+
+            if ($creadoPor != "") {
+                # code...
+            } else {
+                # code...
+            }
+
+            if ($responsable != "") {
+                # code...
+            } else {
+                # code...
+            }
+            
 
             $data .= "
                 <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
                     <div class=\"column is-half\">
                         <div class=\"columns\">
                             <div class=\"column\">
-                                <div class=\"message is-small is-danger\">
-                                    <p class=\"message-body\"><strong>$titulo</strong>
-                                    </p>
+                                <div class=\"message is-small is-success\">
+                                    <p class=\"message-body\"><strong>$titulo</strong></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class=\"column\">
                         <div class=\"columns is-gapless\">
-                            <div class=\"column\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-arrow-up\"></i></p>
+                            <div class=\"column t-small t-normal\">
+                                $actividades
                             </div>
-                            <div class=\"column\">
+                            <div class=\"column t-small t-normal\">
                                 <p class=\"t-icono-rojo\"><i class=\"fad fa-user-slash\"></i></p>
                             </div>
-                            <div class=\"column\">
-                                <p class=\"t-icono-rojo\">$fecha</i></p>
+                            <div class=\"column t-small t-normal\">
+                                $fecha
                             </div>
-                            <div class=\"column\">
+                            <div class=\"column t-small t-normal\">
                                 <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
                             </div>
-                            <div class=\"column\">
+                            <div class=\"column t-small t-normal\">
                                 <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
                             </div>
-                            <div class=\"column\">
+                            <div class=\"column t-small t-normal\">
                                 <p class=\"t-solucionado\">SOLUCIONADO</p>
                             </div>
                         </div>

@@ -4568,10 +4568,12 @@ $tablaRanking .= "</div>";
                                                     <strong>Adjuntos</strong></p>
                                             </div>
                                             <div class="column">
-                                                <p class="t-titulos">Comentarios</p>
+                                                <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                    <strong>Comentario</strong></p>
                                             </div>
                                             <div class="column">
-                                                <p class="t-titulos">Status</p>
+                                                <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                    <strong>Status</strong></p>
                                             </div>
                                         </div>
                                     </div>
@@ -4583,7 +4585,7 @@ $tablaRanking .= "</div>";
                                             <div class="columns">
                                                 <div class="column">
                                                     <div class="message is-small is-danger">
-                                                        <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong>
+                                                        <p class="message-body"><strong>Sin MP</strong>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -4591,62 +4593,11 @@ $tablaRanking .= "</div>";
                                         </div>
                                         <div class="column">
                                             <div class="columns is-gapless">
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-arrow-up"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-user-slash"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-calendar-times"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-file-minus"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-comment-alt-times"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-solucionado">SOLUCIONADO</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                        <div class="column is-half">
-                                            <div class="columns">
-                                                <div class="column">
-                                                    <div class="message is-small is-danger">
-                                                        <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="column">
-                                            <div class="columns is-gapless">
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-user-slash"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-calendar-times"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-file-minus"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-icono-rojo"><i class="fad fa-comment-alt-times"></i></p>
-                                                </div>
-                                                <div class="column">
-                                                    <p class="t-solucionado">SOLUCIONADO</p>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
-
                         </div>
                     </div>
                 </section>
