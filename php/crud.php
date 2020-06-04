@@ -2648,27 +2648,50 @@ if (isset($_POST['action'])) {
 
         while ($row = mysqli_fetch_array($result)) {
             // Variables iniciales.
-            $id = $row['id'];
+            $id = $row['id']; //Id del MP NP.
             $titulo = $row['titulo'];
             $actividades = 0;
             $fecha = new DateTime($row['fecha']);
             $fecha = $fecha->format('Y - m - d');
             $creadoPor = $row['nombre']." ".$row['apellido'];
-            $responsable = $row['responsable'];
+            $responsable = explode(",", $row['responsable']);
 
 
             // Querys Complementarios.
+
+            // Busca las actividades relacionadas a un MP.
             $query_actividades = "SELECT id, actividad FROM actividad_mp_np WHERE id_mp_np = $id";
             $result_actividades = mysqli_query($conn_2020, $query_actividades);
             $actividades = mysqli_num_rows($result_actividades);
 
-            $query_responsable = "SELECT t_users.nombre, t_users.apellido";
+            // Busca los responsables asignados a un MP.
+            $totalResponsables = 0;
+            $responsable_nombre = "";
+            foreach ($responsable as $key => $value) {
+                if($value >=1){
+                    $totalResponsables++;
 
-            if ($titulo != "") {
-                # code...
-            } else {
-                # code...
+                    $query_responsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $value" ;
+                    $result_responsable = mysqli_query($conn_2020, $query_responsable);
+                    if($row_responsable = mysqli_fetch_array($result_responsable)){
+                        $responsable_nombre .= $row_responsable['nombre'] ." ". $row_responsable['apellido']; 
+                    }
+                }
             }
+
+
+            // Se obtiene el total de los Adjuntos.
+            $query_adjuntos = "SELECT id FROM adjuntos_mp_np WHERE id_mp_np = $id AND activo = 1";
+            $result_adjuntos = mysqli_query($conn_2020, $query_adjuntos);
+            $total_adjuntos = mysqli_num_rows($result_adjuntos);
+           
+            // Se obtiene el total de los comentarios.
+            $query_comentarios = "SELECT id FROM comentarios_mp_np WHERE id_mp_np = $id AND activo = 1";
+            $result_comentarios = mysqli_query($conn_2020, $query_comentarios);
+            $total_comentarios = mysqli_num_rows($result_comentarios);
 
             if ($actividades >= 1) {
                 $actividades = "<p class=\"t-normal\">$actividades</p>";
@@ -2682,16 +2705,22 @@ if (isset($_POST['action'])) {
                 $fecha = "<p class=\"t-icono-rojo\"><i class=\"fad fa-calendar-alt\"></i></p>";
             }
 
-            if ($creadoPor != "") {
-                # code...
+            if ($totalResponsables > 1) {
+                $responsable_nombre = "<p class=\"t-normal\">$totalResponsables</p>";
             } else {
-                # code...
+                $responsable_nombre = "<p class=\"t-normal\">$responsable_nombre</p>";
+            }
+            
+            if ($total_comentarios >= 1) {
+                $total_comentarios = "<p class=\"t-normal\">$total_comentarios</p>";
+            } else {
+                $total_comentarios = "<p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>";
             }
 
-            if ($responsable != "") {
-                # code...
+            if ($total_adjuntos >= 1) {
+                $total_adjuntos = "<p class=\"t-normal\">$total_adjuntos</p>";
             } else {
-                # code...
+                $total_adjuntos = "<p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p> ";
             }
             
 
@@ -2717,19 +2746,16 @@ if (isset($_POST['action'])) {
                                 $actividades
                             </div>
                             <div class=\"column t-small t-normal\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-user-slash\"></i></p>
+                                $responsable_nombre
                             </div>
                             <div class=\"column t-small t-normal\">
                                 $fecha
                             </div>
-                            <div class=\"column t-small t-normal\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+                            <div class=\"column t-small t-normal\" onclick=\"showModal('modal-equipo-pictures');\">
+                                $total_adjuntos
                             </div>
-                            <div class=\"column t-small t-normal\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
-                            </div>
-                            <div class=\"column t-small t-normal\">
-                                <p class=\"t-solucionado\">SOLUCIONADO</p>
+                            <div class=\"column t-small t-normal\" onclick=\"showModal('modal-equipo-comentarios'); comentariosMPNP($id, 'colComentariosEquipoMCMP')\">
+                                $total_comentarios
                             </div>
                         </div>
                     </div>
@@ -2738,6 +2764,116 @@ if (isset($_POST['action'])) {
         }
         echo $data;
     }
+
+
+    if($action == "comentariosMPNP"){
+        $idMPNP = $_POST['idMPNP'];
+        $dataComentarios = "";
+        $query = "SELECT 
+        comentarios_mp_np.id, comentarios_mp_np.id_usuario, comentarios_mp_np.comentario, comentarios_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM comentarios_mp_np 
+        INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE comentarios_mp_np.id_mp_np = $idMPNP AND comentarios_mp_np.activo = 1 
+        ORDER BY comentarios_mp_np.id DESC";
+        $result = mysqli_query($conn_2020, $query);
+        
+        // Cabecera para el diseño del modal.    
+        $dataComentarios .= "
+            <div class=\"timeline is-left\">
+                <h4 class=\"subtitle is-4 has-text-centered\">Comentarios Generales</h4>
+                <div class=\"columns is-centered\">
+                    <div class=\"column is-8\">
+                        <div class=\"field\">
+                            <p class=\"control has-icons-right\">
+                                <input id=\"inputComentarioMPNP\" class=\"input\" type=\"text\" placeholder=\"Añadir comentario\" onkeyup=\"if(event.keyCode == 13) agregarComentarioMPNP($idMPNP);\" autocomplete=\"off\" maxlength=\"150\">
+
+                                <span class=\"icon is-small is-right\">
+                                    <i class=\"fad fa-comment-alt-medical\"></i>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+        ";
+
+        if($result){                                               
+            while ($row = mysqli_fetch_array($result)) {
+            // Variables para los comentarios.
+                $idComentario = $row['id'];
+                $usuario = $row['nombre']." ".$row['apellido'];
+                $fecha = new DateTime($row['fecha']);
+                $fecha = $fecha->format('Y-m-d H:m:s');
+                $comentario = $row['comentario'];
+
+                // Data de los comentarios
+                $dataComentarios .= 
+                "
+                    <div class=\"timeline-item mb-0\">
+                        <div class=\"timeline-marker\"></div>
+                        <div class=\"timeline-content\">
+                            <p class=\"heading \">
+                                <strong>$usuario</strong>
+                                <a class=\"delete has-text-success\" onclick=\"eliminarComentarioMPNP($idComentario, $idMPNP);\"></a>
+                            </p>
+                            <p class=\"heading has-text-info\">$fecha</p>
+                            <p class=\"has-text-justified\">
+                                $comentario
+                            </p>
+                        </div>
+                    </div>           
+                ";
+            }
+        }
+
+        // Footer de los Comentarios
+        $dataComentarios .="
+                <div class=\"timeline-item \">
+                    <div class=\"timeline-marker\"></div>
+                </div>
+
+                <div class=\"timeline-item\">
+                    <div class=\"timeline-marker is-icon\">
+                        <i class=\"fad fa-genderless\"></i>
+                    </div>
+                </div>
+            </div> 
+        ";
+        echo $dataComentarios; 
+    }
+
+
+    if ($action == "agregarComentarioMPNP") {
+        $idMPNP = $_POST['idMPNP'];
+        $idUsuario = $_SESSION['usuario'];
+        $comentario = $_POST['comentario'];
+        $fecha = date('Y-m-d H:m:s');
+
+        $query = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha)
+        VALUES($idMPNP, $idUsuario, '$comentario', '$fecha')";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo $result;
+        } else {
+            echo $result;
+        }  
+    }
+
+
+    if($action == "eliminarComentarioMPNP"){
+        $idComentario = $_POST['idComentario'];
+        
+        $query ="UPDATE comentarios_mp_np SET activo = 0 WHERE id = $idComentario";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($result) {
+            echo "Comentario Eliminado.";
+        } else {
+            echo "Error al Eliminar Comentario";
+        }
+    }
+
+
 
 
 

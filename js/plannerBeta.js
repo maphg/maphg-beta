@@ -208,3 +208,71 @@ function refreshModalMPNP() {
     var idEquipo = $("#idEquipoMPNP").val();
     obtMPNP(idEquipo);
 }
+
+
+function comentariosMPNP(idMPNP, divOcultar) {
+    $("#" + divOcultar).addClass("modal");
+    $("#" + divOcultar).html("");
+    $("#colComentariosEquipo").html("");
+    var action = "comentariosMPNP";
+    console.log(idMPNP);
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idMPNP: idMPNP
+        },
+        // dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $("#colComentariosEquipo").html(data);
+        },
+    });
+}
+
+
+function agregarComentarioMPNP(idMPNP) {
+    var action = "agregarComentarioMPNP";
+    var comentario = $("#inputComentarioMPNP").val();
+
+    if (comentario != "") {
+        $.ajax({
+            type: "post",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idMPNP: idMPNP,
+                comentario: comentario
+            },
+            // dataType: "dataType",
+            success: function(data) {
+                alertInformacion('Comentario Agregado', 'success');
+                comentariosMPNP(idMPNP, '');
+                refreshModalMPNP();
+                Console.log(data);
+            }
+        });
+    } else {
+        alertInformacion('Comentario NO Valido.', 'info');
+    }
+}
+
+
+function eliminarComentarioMPNP(idComentario, idMPNP) {
+    var action = "eliminarComentarioMPNP";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idComentario: idComentario
+        },
+        // dataType: "dataType",
+        success: function(data) {
+            alertInformacion('Comentario Eliminado.', 'success');
+            comentariosMPNP(idMPNP, '');
+            refreshModalMPNP();
+        }
+    });
+}

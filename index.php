@@ -4515,7 +4515,7 @@ $tablaRanking .= "</div>";
                                             </button>
                                         </div>
                                         <div class="navbar-start has-text-centered">
-                                            <div class="navbar-item zia-background">
+                                            <div id="divNameSeccionMPNP" class="navbar-item zia-background">
                                                 <p class="seccion-logo">ZIA</p>
                                             </div>
                                             <a class="navbar-item">Subseccion / Equipo / Preventivo No Planificado</a>
@@ -4571,14 +4571,9 @@ $tablaRanking .= "</div>";
                                                 <p class="t-titulos" data-tooltip="Feedback/Comentarios">
                                                     <strong>Comentario</strong></p>
                                             </div>
-                                            <div class="column">
-                                                <p class="t-titulos" data-tooltip="Feedback/Comentarios">
-                                                    <strong>Status</strong></p>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div id="dataMPNP">
                                     <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
                                         <div class="column is-half">
@@ -5826,11 +5821,6 @@ $tablaRanking .= "</div>";
         <div id="modal-equipo-comentarios" class="modal">
             <div class="modal-background"></div>
             <div class="modal-card modal-md">
-
-                <!--                <header class="modal-card-head">
-                                    <p class="modal-card-title">Modal title</p>
-                                    <button class="delete" aria-label="close"></button>
-                                </header>-->
                 <section class="modal-card-body">
                     <div class="columns">
                         <div id="divHeaderComentarios" class="column">
@@ -5854,18 +5844,6 @@ $tablaRanking .= "</div>";
                                                 </span>
                                             </p>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="timeline-item">
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                        <p class="heading ">14/11/1989 20:30</p>
-                                        <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur
-                                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n
-                                        </p>
                                     </div>
                                 </div>
 
@@ -5916,24 +5894,6 @@ $tablaRanking .= "</div>";
                                     </div>
                                 </div>
 
-                                <div class="timeline-item">
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                        <p class="heading ">14/11/1989 20:30</p>
-                                        <div class="control">
-                                            <div class="tags has-addons">
-                                                <span class="tag is-dark">MC</span>
-                                                <span class="tag is-info">NOMBRE DE LA TAREA</span>
-                                            </div>
-                                        </div>
-                                        <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur
-                                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n
-                                        </p>
-                                    </div>
-                                </div>
-
                                 <div class="timeline-item ">
                                     <div class="timeline-marker"></div>
                                 </div>
@@ -5948,10 +5908,6 @@ $tablaRanking .= "</div>";
                         </div>
                     </div>
                 </section>
-                <!--                <footer class="modal-card-foot">
-                                    <button class="button is-success">Save changes</button>
-                                    <button class="button">Cancel</button>
-                                </footer>-->
             </div>
         </div>
 
