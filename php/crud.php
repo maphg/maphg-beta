@@ -2639,8 +2639,10 @@ if (isset($_POST['action'])) {
     if ($action == "consultaMPNP") {
         $data = "";
         $idEquipo = $_POST['idEquipo'];
-        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha, t_mp_np.id_usuario, t_mp_np.responsable
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha, t_mp_np.id_usuario, t_mp_np.responsable, t_colaboradores.nombre, t_colaboradores.apellido
         FROM t_mp_np
+        INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo=1 AND t_mp_np.status='F' ORDER BY t_mp_np.id DESC";
         $result = mysqli_query($conn_2020, $query);
 
@@ -2651,7 +2653,7 @@ if (isset($_POST['action'])) {
             $actividades = 0;
             $fecha = new DateTime($row['fecha']);
             $fecha = $fecha->format('Y - m - d');
-            $creadoPor = $row['id_usuario'];
+            $creadoPor = $row['nombre']." ".$row['apellido'];
             $responsable = $row['responsable'];
 
 
@@ -2699,7 +2701,12 @@ if (isset($_POST['action'])) {
                         <div class=\"columns\">
                             <div class=\"column\">
                                 <div class=\"message is-small is-success\">
-                                    <p class=\"message-body\"><strong>$titulo</strong></p>
+                                    <p class=\"message-body\"><strong>$titulo</strong>
+                                        <span class=\"\">
+                                            <i class=\"fad fa-user-circle mx-2 fa-lg\"></i>
+                                            $creadoPor
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                         </div>

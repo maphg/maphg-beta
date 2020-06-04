@@ -4628,6 +4628,7 @@ $tablaRanking .= "</div>";
                     <div id="formMPNP" class="hidden">
                         <div class="columns">
                             <div class="column is-6">
+                                Responsable:
                                 <div class="field">
                                     <p class="control has-icons-left">
                                         <span class="select">
@@ -4673,6 +4674,7 @@ $tablaRanking .= "</div>";
                             </div>
 
                             <div class="column is-5">
+                                Fecha Realizado:
                                 <div class="control">
                                     <input id="dateMPNP" class="input is-primary" type="date" placeholder=""
                                         value="<?= date('Y-m-d');?>">
