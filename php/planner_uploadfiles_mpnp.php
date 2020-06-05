@@ -5,11 +5,12 @@ include 'conexion.php';
 $conn = new Conexion();
 $conn->conectar();
 $ds = DIRECTORY_SEPARATOR; //1 
-$storeFolder = '../img/equipos/'; //2
-$idEquipo = $_POST['idEquipo'];
+$storeFolder = '../img/equipos/mpnp/'; //2
+$idMPNP = $_POST['idMPNP'];
 $usuario = $_SESSION['usuario'];
 date_default_timezone_set('America/Cancun');
 $fecha = date("Y-m-d H:i:s");
+$resp ="";
 
 if (!empty($_FILES)) {
     foreach ($_FILES as $key) {
@@ -18,22 +19,22 @@ if (!empty($_FILES)) {
         $file = pathinfo($realFileName);
         $fileExtension = $file['extension'];
         $targetPath = $storeFolder;
-        $fileName = $idEquipo . "_$realFileName";
+        $fileName = "idMPNP_".$idMPNP."_".rand().".".$fileExtension;
         $targetFile = $targetPath . $fileName;
+        $nuevoNombre = "";
+        $texto = preg_replace('([^A-Za-z0-9 .])', '', $fileName);
 
 
         if (file_exists($targetFile)) {
-            
+            echo "El archivo ya Existe.";
         } else {
             if (move_uploaded_file($tempFile, $targetFile)) {
-                //q$query = "INSERT INTO t_equipos_img(id_equipo, url_image) VALUES($idEquipo, '$fileName')";
-                $query = "INSERT INTO t_equipos_adjuntos (id_equipo, url_archivo, fecha_subida, subido_por) "
-                        . "VALUES ($idEquipo, '$fileName', '$fecha', $usuario)";
+                $query = "INSERT INTO adjuntos_mp_np (id_usuario, id_mp_np, url, fecha)VALUES ($usuario, $idMPNP, '$fileName', '$fecha')";
                 try {
                     $resp = $conn->consulta($query);
                     if ($resp == 1) {
-                        
-                    } else {
+                        $resp = "Adjunto Cargado";
+                    } else { 
                         $resp = "-1";
                     }
                 } catch (Exception $ex) {

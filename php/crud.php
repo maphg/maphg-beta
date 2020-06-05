@@ -2407,6 +2407,51 @@ if (isset($_POST['action'])) {
         }
     }
 
+    if($action == "consultaResponsableMPNP"){
+        $idMPNP = $_POST['idMPNP'];
+        $data = "";
+
+        $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
+        $result = mysqli_query($conn_2020, $query);
+        if ($row = mysqli_fetch_array($result)) {
+            $responsable = $row['responsable'];
+            $responsable = explode(",", $responsable);        
+            foreach ($responsable as $key => $value) {
+                if($value >= 1){ 
+                    $queryData = "SELECT
+                    t_colaboradores.nombre,  
+                    t_colaboradores.apellido  
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $value";
+
+                    $resultData = mysqli_query($conn_2020, $queryData);
+                    if($rowData = mysqli_fetch_array($resultData)){
+                        $nombre = $rowData['nombre'];
+                        $apellido = $rowData['apellido'];
+                        
+                        $data .="
+                            <div class=\"field is-grouped is-grouped-multiline\">
+                                <div class=\"control\">
+                                    <div class=\"tags has-addons\">
+                                        <p class=\"tag is-primary\">
+                                            <span class=\"mr-2\">
+                                                <i class=\"fa fa-user\"></i>
+                                            </span>
+                                            $nombre $apellido
+                                        </p>
+                                        <p class=\"tag is-delete\" onclick=\"eliminarResponsableMPNP($key, $value, $idMPNP)\"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        ";
+                    }
+                }    
+            }
+            echo $data;
+        }
+    }
+
 
     if ($action == "agregarResponsableMPNP") {
         $idResponsable = $_POST['idResponsable'];
@@ -2660,7 +2705,7 @@ if (isset($_POST['action'])) {
             // Querys Complementarios.
 
             // Busca las actividades relacionadas a un MP.
-            $query_actividades = "SELECT id, actividad FROM actividad_mp_np WHERE id_mp_np = $id";
+            $query_actividades = "SELECT id, actividad FROM actividad_mp_np WHERE id_mp_np = $id AND activo = 1 ORDER BY id DESC";
             $result_actividades = mysqli_query($conn_2020, $query_actividades);
             $actividades = mysqli_num_rows($result_actividades);
 
@@ -2742,7 +2787,7 @@ if (isset($_POST['action'])) {
                     </div>
                     <div class=\"column\">
                         <div class=\"columns is-gapless\">
-                            <div class=\"column t-small t-normal\">
+                            <div class=\"column t-small t-normal\" onclick=\"detalleMPNP($id);\">
                                 $actividades
                             </div>
                             <div class=\"column t-small t-normal\">
@@ -2751,7 +2796,7 @@ if (isset($_POST['action'])) {
                             <div class=\"column t-small t-normal\">
                                 $fecha
                             </div>
-                            <div class=\"column t-small t-normal\" onclick=\"showModal('modal-equipo-pictures');\">
+                            <div class=\"column t-small t-normal\" onclick=\"adjuntosMPNP($id); showModal('modal-equipo-pictures');\">
                                 $total_adjuntos
                             </div>
                             <div class=\"column t-small t-normal\" onclick=\"showModal('modal-equipo-comentarios'); comentariosMPNP($id, 'colComentariosEquipoMCMP')\">
@@ -2870,6 +2915,94 @@ if (isset($_POST['action'])) {
             echo "Comentario Eliminado.";
         } else {
             echo "Error al Eliminar Comentario";
+        }
+    }
+
+
+    if ($action == "adjuntosMPNP") {
+        $idMPNP = $_POST['idMPNP'];
+        $dataAdjuntos = "";
+
+        $query = "SELECT 
+        adjuntos_mp_np.id_usuario, adjuntos_mp_np.fecha, adjuntos_mp_np.url, adjuntos_mp_np.id, t_colaboradores.nombre, t_colaboradores.apellido 
+        FROM adjuntos_mp_np
+        INNER JOIN t_users ON adjuntos_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE adjuntos_mp_np.id_mp_np = $idMPNP AND adjuntos_mp_np.activo = 1";
+        $result = mysqli_query($conn_2020, $query);
+
+        // Header.
+        $dataAdjuntos .= 
+        "
+            <div class=\"timeline is-left\">
+                <h4 class=\"title is-4 has-text-centered\">Adjuntos MP</h4>
+                <div class=\"columns is-centered\">
+                    <div class=\"column is-8 has-text-centered\">
+                        <a class=\"button is-success\">
+                            <input class=\"file-input\" type=\"file\"
+                                name=\"resume\" id=\"inputAdjuntoMPNP\" multiple=\"\" onchange=\"cargarAdjuntoMPNP($idMPNP);\">
+                            <span class=\"icon\">
+                                <i class=\"fad fa-file-archive\"></i>
+                            </span>
+                            <span>Añadir Adjuntos</span>
+                        </a>
+                    </div>
+                </div>
+        ";    
+
+        if($result){
+            while ($row = mysqli_fetch_array($result)) {
+                $usuario = $row['nombre']." ".$row['apellido'];
+                $fecha = new DateTime($row['fecha']);
+                $fecha = $fecha->format('Y-m-d H:m:s');
+                $idImg = $row['id'];
+                $url = $row['url'];
+                $rutaImg = "img/equipos/mpnp/";
+
+                // Body
+                $dataAdjuntos .=
+                "
+                    <div class=\"timeline-item\">
+                        <div class=\"timeline-marker\"></div>
+                        <div class=\"timeline-content\">
+                            <p class=\"heading \">
+                                <strong>$usuario</strong>
+                                <a class=\"delete\" onclick=\"eliminarAdjuntoMPNP($idImg, $idMPNP);\"></a>
+                            </p>
+                            <p class=\"heading has-text-info\">$fecha</p>
+                            <a href=\"$rutaImg$url\" target=\"_blank\">
+                                <img src=\"$rutaImg$url\" alt=\"$rutaImg.$url\" width=\"130px\">
+                            </a>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+
+        // Footer
+        $dataAdjuntos .=
+        " 
+                <div class=\"timeline-item flex\">
+                    <div class=\"timeline-marker\"></div>
+                </div>
+                <div class=\"timeline-item\">
+                    <div class=\"timeline-marker is-icon\">
+                        <i class=\"fad fa-genderless\"></i>
+                    </div>
+                </div>
+            </div>  
+        ";
+        echo $dataAdjuntos;      
+    }
+
+
+    if($action == "eliminarAdjuntoMPNP"){
+        $idImg = $_POST['idImg'];
+        $query = "UPDATE adjuntos_mp_np SET activo = 0 WHERE id = $idImg";
+        if($result = mysqli_query($conn_2020, $query)){
+            echo "Adjunto Eliminado.";
+        }else{
+            echo "Adjunto NO Eliminado.";
         }
     }
 

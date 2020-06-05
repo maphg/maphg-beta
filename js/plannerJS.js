@@ -109,6 +109,8 @@ function obtenerEquipos(
     seccion,
     subseccion
 ) {
+    // Envia a modal-MPNP
+    $("#subseccionMPNP").html(subseccion);
     //$("#hddIdEquipo").val(idEquipo);
     $("#hddIdDestino").val(idDestino);
     $("#hddIdSubseccion").val(idGrupo);

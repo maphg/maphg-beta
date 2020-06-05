@@ -4518,7 +4518,9 @@ $tablaRanking .= "</div>";
                                             <div id="divNameSeccionMPNP" class="navbar-item zia-background">
                                                 <p class="seccion-logo">ZIA</p>
                                             </div>
-                                            <a class="navbar-item">Subseccion / Equipo / Preventivo No Planificado</a>
+                                            <a class="navbar-item"> <span id="subseccionMPNP"> </span> / <span
+                                                    id="equipoMPNP"> </span> /
+                                                Preventivo No Planificado</a>
                                         </div>
                                     </nav>
                                 </div>
@@ -4529,7 +4531,7 @@ $tablaRanking .= "</div>";
                                         <div class="field has-addons">
                                             <div class="control is-expanded">
                                                 <button class="button is-success is-rounded"
-                                                    onclick="showModal('modal-agregar-MPNP');">
+                                                    onclick="showModal('modal-agregar-MPNP'); modalInicialMPNP();">
                                                     Agregar MP No Planificado</button>
                                             </div>
                                         </div>
@@ -5915,11 +5917,6 @@ $tablaRanking .= "</div>";
         <div id="modal-equipo-pictures" class="modal">
             <div class="modal-background"></div>
             <div class="modal-card modal-md">
-
-                <!--                <header class="modal-card-head">
-                                    <p class="modal-card-title">Modal title</p>
-                                    <button class="delete" aria-label="close"></button>
-                                </header>-->
                 <section class="modal-card-body">
                     <div class="columns">
                         <div id="divHeaderFotos" class="column has-text-right">
@@ -5946,15 +5943,6 @@ $tablaRanking .= "</div>";
                                     </div>
                                 </div>
 
-
-                                <div class="timeline-item">
-                                    <div class="timeline-marker"></div>
-                                    <div class="timeline-content">
-                                        <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                        <p class="heading ">14/11/1989 20:30</p>
-
-                                    </div>
-                                </div>
 
                                 <div class="timeline-item">
                                     <div class="timeline-marker"></div>
