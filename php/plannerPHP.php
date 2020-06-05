@@ -3145,7 +3145,7 @@ class Planner
                             } catch (Exception $ex) {
                                 $equipo = $ex;
                                 exit($ex);
-                            }
+                            } 
 
                             $numeroFotos = $fotosEquipo + $fotosMC + $fotosMP;
 

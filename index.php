@@ -75,7 +75,7 @@ if (!isset($_SESSION['usuario'])) {
                     echo $ex;
                 }
 
-                //Obtener datos del colaborador
+                //Obtener datos del colaborador.
                 $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
                 try {
                     $resp = $conn->obtDatos($query);
