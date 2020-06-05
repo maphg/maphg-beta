@@ -16,7 +16,6 @@ imagenes/
 img/
 planner/
 repositorio/
-sa/
 sass/
 segoe/
 settings/
@@ -31,3 +30,18 @@ files/
 nbproject/
 svg/
 sa/libs/conexion.php
+sa/libs/*.css
+sa/js/*.map
+sa/js/i18n/datepicker*
+sa/js/bootstrap*
+sa/js/jquery*
+sa/js/datepicker*
+sa/js/acceso.js
+sa/js/Icon
+sa/js/moment.js
+sa/js/bulma*
+sa/js/translation.json
+sa/js/rSlider.min.js
+
+
+
