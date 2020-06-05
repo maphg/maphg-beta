@@ -198,6 +198,7 @@ Class Empleado {
     public $idNivel;
     public $foto;
     public $idDestino;
+    public $super_admin;
     public $idSeccion;
     public $idFase;
     public $idUsuario;
@@ -230,10 +231,12 @@ Class Usuarios {
                     $idPermiso = $dts['id_permiso'];
                     $idDestino = $dts['id_destino'];
                     $pass = $dts['password'];
+                    $super_admin = $dts['super_admin'];
                 }
                 if ($password == $pass) {
                     $_SESSION['usuario'] = $idUsuario;
                     $_SESSION['idDestino'] = $idDestino;
+                    $_SESSION['super_admin'] = $super_admin;
                     $resp = "1";
                     date_default_timezone_set('America/Cancun');
                     $hoy = getdate();

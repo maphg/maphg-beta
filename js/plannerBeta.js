@@ -94,11 +94,13 @@ function agregarResponsableMPNP() {
                 idResponsable: idResponsable,
                 idMPNP: idMPNP
             },
+            dataType: 'json',
             success: function(data) {
-                // console.log(data);
+                console.log(data);
                 $("#responsableMPNP").val(0);
-                alertInformacion('Responsable Agregado.', 'success');
+                alertInformacion(data.msj, data.icon);
                 $("#dataResponsablesMPNP").html(data);
+                consultaResponsableMPNP(idMPNP);
             },
         });
     }
@@ -223,6 +225,7 @@ function btnConfirmarMPNP() {
                 $("#dataResponsablesMPNP").html('');
                 $("#dataActividadesMPNP").html('');
                 refreshModalMPNP();
+                $("#modal-agregar-MPNP").removeClass('is-active');
 
             },
         });
@@ -380,13 +383,26 @@ function eliminarAdjuntoMPNP(idImg, idMPNP) {
 
 
 function detalleMPNP(idMPNP) {
-    if (idMPNP == "desibled") {
 
-        $("#idMPNP").val(idMPNP);
-        showModal('modal-agregar-MPNP');
-        $('#formMPNP').removeClass('hidden');
-        consultaActividadMPNP(idMPNP);
-        consultaResponsableMPNP(idMPNP)
-        $("#btnGuardarMPNP").html('Actualizar');
-    }
+    $("#idMPNP").val(idMPNP);
+    showModal('modal-agregar-MPNP');
+    $('#formMPNP').removeClass('hidden');
+    consultaActividadMPNP(idMPNP);
+    consultaResponsableMPNP(idMPNP)
+    $("#btnGuardarMPNP").html('Actualizar');
+
+    var action = "consultaTituloMPNP";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idMPNP: idMPNP
+        },
+        // dataType: "dataType",
+        success: function(data) {
+            $("#tituloMPNP").val(data);
+        }
+    });
+
 }

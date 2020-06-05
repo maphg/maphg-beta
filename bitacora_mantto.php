@@ -45,6 +45,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
         <link rel="stylesheet" href="css/fontawesome/css/all.css">
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/app.css">
+        <link rel="icon" href="svg/logo6.png">
     </head>
     <style>
     .modal {

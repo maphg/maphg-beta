@@ -2454,66 +2454,41 @@ if (isset($_POST['action'])) {
 
 
     if ($action == "agregarResponsableMPNP") {
+        $arrayResponsable = array();
         $idResponsable = $_POST['idResponsable'];
         $idMPNP = $_POST['idMPNP'];
-        $data = "";
-        $responsable = "";
-        
+
         $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
         $result = mysqli_query($conn_2020, $query);
+        
         if ($result) {
             if ($row = mysqli_fetch_array($result)) {
+                $resultResponsables = $row['responsable'];
+                $resultResponsables = explode(",", $resultResponsables);
                 
-                $agregarResponsable = $row['responsable'] . ", $idResponsable";
-                
-                $query_titulo = "UPDATE t_mp_np SET responsable = '$agregarResponsable' WHERE id = $idMPNP";
-                $result_titulo = mysqli_query($conn_2020, $query_titulo);
-                if ($result_titulo) {
-                    $responsable = explode(",", $agregarResponsable);
-                    if($responsable != ""){ 
-                        foreach ($responsable as $key => $value) {
-                            if($value >= 1){ 
-                                $queryData = "SELECT
-                                t_colaboradores.nombre,  
-                                t_colaboradores.apellido  
-                                FROM t_users 
-                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                                WHERE t_users.id = $value";
+                $buscarResponsable = array_search($idResponsable, $resultResponsables, false);
 
-                                $resultData = mysqli_query($conn_2020, $queryData);
-                                if($rowData = mysqli_fetch_array($resultData)){
-                                    $nombre = $rowData['nombre'];
-                                    $apellido = $rowData['apellido'];
-                                    
-                                    $data .="
-                                        <div class=\"field is-grouped is-grouped-multiline\">
-                                            <div class=\"control\">
-                                                <div class=\"tags has-addons\">
-                                                    <p class=\"tag is-primary\">
-                                                        <span class=\"mr-2\">
-                                                            <i class=\"fa fa-user\"></i>
-                                                        </span>
-                                                        $nombre $apellido
-                                                    </p>
-                                                    <p class=\"tag is-delete\" onclick=\"eliminarResponsableMPNP($key, $value, $idMPNP)\"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ";
-                                }
-                            }    
-                        }
-                        echo $data;
+                if($buscarResponsable == ""){
+                    $agregarResponsable = $row['responsable'] . ", $idResponsable";
+                    $responsable = explode(",", $agregarResponsable);                    
+                
+                    $query_titulo = "UPDATE t_mp_np SET responsable = '$agregarResponsable' WHERE id = $idMPNP";
+                    
+                    if($result_titulo = mysqli_query($conn_2020, $query_titulo) ){
+                        $arrayResponsable['msj'] = "Se Agrego Responsable";
+                        $arrayResponsable['icon'] = "success";
                     }else{
-                            echo "sin datos";
-                        }
-                    } else {
-                        echo "Error";
-                    }
-            }else{
-                echo   "Error";
+                        $arrayResponsable['msj'] = "Error al Agregar Responsable";
+                        $arrayResponsable['icon'] = "error";
+                    }   
+
+                }else{
+                    $arrayResponsable['msj'] = "El Usuario ya Existe";
+                    $arrayResponsable['icon'] = "question";
+                }        
             }
         }
+        echo json_encode($arrayResponsable);
     }
 
 
@@ -2771,7 +2746,7 @@ if (isset($_POST['action'])) {
 
             $data .= "
                 <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
-                    <div class=\"column is-half\">
+                    <div class=\"column is-half\" onclick=\"detalleMPNP($id);\">
                         <div class=\"columns\">
                             <div class=\"column\">
                                 <div class=\"message is-small is-success\">
@@ -2790,7 +2765,7 @@ if (isset($_POST['action'])) {
                             <div class=\"column t-small t-normal\" onclick=\"detalleMPNP($id);\">
                                 $actividades
                             </div>
-                            <div class=\"column t-small t-normal\">
+                            <div class=\"column t-small t-normal\" onclick=\"detalleMPNP($id);\">
                                 $responsable_nombre
                             </div>
                             <div class=\"column t-small t-normal\">
@@ -3007,6 +2982,19 @@ if (isset($_POST['action'])) {
     }
 
 
+    if ($action == "consultaTituloMPNP") {
+        $idMPNP = $_POST['idMPNP'];
+
+        $query = "SELECT titulo FROM t_mp_np WHERE id = $idMPNP";
+        $result = mysqli_query($conn_2020, $query);
+
+        if ($row = mysqli_fetch_array($result)) {
+            $titulo = $row['titulo'];
+            echo $titulo;
+        } else {
+            echo "Error al Cargar Datos";
+        }
+    }
 
 
 
