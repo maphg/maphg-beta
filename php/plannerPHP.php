@@ -2299,7 +2299,7 @@ class Planner
 
                             // Inicio semento para la nueva columna MP-NP
                             if ($mpnPlanificado > 0) {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendientes\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo,'$equipo');\">$mpnPlanificado</p></div>";
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-test\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo,'$equipo');\">$mpnPlanificado</p></div>";
                             } else {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
                             }
@@ -3240,7 +3240,7 @@ class Planner
                             }
                             // Segmento para agregar la nueva columna MP-NP
                             if ($mpnPlanificado > 0) {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendientes\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-test\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
                             } else {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
                             }

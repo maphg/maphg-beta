@@ -4616,7 +4616,8 @@ $tablaRanking .= "</div>";
                             <div class="field">
                                 Título:
                                 <div class="control">
-                                    <input id="tituloMPNP" class="input is-primary" type="text" placeholder="título MP"
+                                    <input id="tituloMPNP" class="input is-primary" type="text"
+                                        placeholder="título MP (5 Caracteres Mínimo)"
                                         onkeyup="if(event.keyCode == 13) tituloMPNP('');">
                                 </div>
                             </div>
