@@ -48,6 +48,8 @@
             </div>
         </div>
         <script src="js/jquery-3.3.1.js"></script>
+        <script src="js/sweetalert2@9.js"></script>
+        <script src="js/alertasSweet.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="js/usuariosJS.js"></script>
     </body>

@@ -1,6 +1,5 @@
-
-$(document).ready(function () {
-    $("#needs-validation").keypress(function (e) {
+$(document).ready(function() {
+    $("#needs-validation").keypress(function(e) {
         if (e.keyCode == 13) {
             $("#btnLogin").click();
         }
@@ -19,20 +18,20 @@ function cargarTareasDestinoPlanner(pagina, idDestino) {
         var destino = idDestino;
     }
 
-//    for (i = 0; i <= destino.length; i++) {
-//        if (destino[i].checked) {
-//            var idDestino = destino[i].value;
-//            break;
-//        }
-//    }
+    //    for (i = 0; i <= destino.length; i++) {
+    //        if (destino[i].checked) {
+    //            var idDestino = destino[i].value;
+    //            break;
+    //        }
+    //    }
     $.ajax({
         type: 'post',
         url: url,
         data: 'action=34&idDestino=' + destino,
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             location.reload();
 
@@ -51,52 +50,21 @@ function validarUsuario() {
                 url: 'php/usuariosPHP.php',
                 data: 'action=' + 1 + '&txtUsername=' + username + '&txtPassword=' + password,
 
-                success: function (data) {
+                success: function(data) {
                     if (data == 1) {
+                        alertaImg('Bienvenido a MAPHG', 'has-text-success', 'success', 4000);
                         location.href = "index.php";
 
                     } else if (data == 2) {
-                        toastr.error('Usuario/contraseña incorrecto', 'Advertencia', {
-                            "closeButton": true,
-                            "newestOnTop": true,
-                            "positionClass": "toast-top-center",
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": "5000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut"
-                        });
+                        alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
+
                     } else if (data == 3) {
-                        toastr.error('No existe el usuario', 'Advertencia', {
-                            "closeButton": true,
-                            "newestOnTop": true,
-                            "positionClass": "toast-top-center",
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": "5000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut"
-                        });
+                        alertaImg('No existe el usuario', 'has-text-danger', 'error', 3000);
                     } else {
-                        toastr.warning(data, 'Advertencia', {
-                            "closeButton": true,
-                            "newestOnTop": true,
-                            "positionClass": "toast-top-center",
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": "5000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut"
-                        });
+                        // toastr.warning(data, 'Advertencia', {
+                        alertaImg(data, 'has-text-warning', 'warning', 3000);
+
+
                     }
                 }
             });
@@ -117,19 +85,7 @@ function validarUsuario() {
         }
 
     } else {
-        toastr.error('Ingrese usuario y contraseña', 'Advertencia', {
-            "closeButton": true,
-            "newestOnTop": true,
-            "positionClass": "toast-top-center",
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        });
+        alertaImg('Ingrese usuario y contraseña', 'has-text-info', 'question', 3000);
     }
 
 }
@@ -139,10 +95,10 @@ function logout() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=2',
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.href = "login.php";
@@ -160,10 +116,10 @@ function logout2() {
         type: 'post',
         url: '../php/usuariosPHP.php',
         data: 'action=2',
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.href = "../login.php";
@@ -181,7 +137,7 @@ function obtDatosEmpleado(idEmpleado) {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=3&idPersonal=' + idEmpleado,
-        success: function (data) {
+        success: function(data) {
             try {
                 var empleado = JSON.parse(data);
                 $("#idEmpleadoHdn").val(empleado.id);
@@ -200,10 +156,10 @@ function obtDatosEmpleado(idEmpleado) {
                 $("#txtPasswordEdit").val(empleado.password);
                 $("#cbPermisoEdit").val(empleado.idPermiso);
                 $("#txtCodigoSAEdit").val(empleado.codigoSA);
-//            $("#dtFechaPropCol").val(empleado.fechaPropIngreso);
-//            $("#dtFechaRealCol").val(empleado.fechaRealIngreso);
-//            $("#trabajando").val(empleado.trabajando);
-//            $("#txtSD").val(empleado.sueldoDiario);
+                //            $("#dtFechaPropCol").val(empleado.fechaPropIngreso);
+                //            $("#dtFechaRealCol").val(empleado.fechaRealIngreso);
+                //            $("#trabajando").val(empleado.trabajando);
+                //            $("#txtSD").val(empleado.sueldoDiario);
                 $("#acciones").html("");
                 $("#acciones").html(empleado.acciones);
                 $("#accesoSA").html("");
@@ -253,10 +209,10 @@ function actualizar(idUsuario) {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=4&idUsuario=' + idUsuario + '&email=' + email + '&telefono=' + telefono,
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.reload();
@@ -285,10 +241,10 @@ function actualizarFoto(idUsuario) {
         contentType: false, // The content type used when sending data to the server.
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             alert(data);
             location.reload();
@@ -304,7 +260,7 @@ function cargarPuestos() {
         url: 'php/usuariosPHP.php',
         data: 'action=6&idDepto=' + depto,
 
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             document.getElementById("cbCargo").innerHTML = data;
         }
@@ -325,11 +281,11 @@ function crearUsuario() {
         var destino = document.getElementById("cbDest").value;
         var fase = document.getElementById("cbFase").value;
         var seccion = document.getElementById("cbSeccion").value;
-//        var chkbPropInt = document.getElementById("chkbPropInt");
-//        var dtFechaProp = document.getElementById("dtFechaProp").value;
-//        var dtFechaReal = document.getElementById("dtFechaReal").value;
-//        var chkbContratado = document.getElementById("chkbContratado");
-//        var chkbTrabajando = document.getElementById("chkbTrabajando");
+        //        var chkbPropInt = document.getElementById("chkbPropInt");
+        //        var dtFechaProp = document.getElementById("dtFechaProp").value;
+        //        var dtFechaReal = document.getElementById("dtFechaReal").value;
+        //        var chkbContratado = document.getElementById("chkbContratado");
+        //        var chkbTrabajando = document.getElementById("chkbTrabajando");
 
         var chkbUsuario = $("#chkbUsuario");
         if (chkbUsuario[0].checked) {
@@ -344,23 +300,23 @@ function crearUsuario() {
             var permiso = "";
         }
 
-//        if (chkbPropInt.checked) {
-//            var propInt = "SI";
-//        } else {
-//            var propInt = "NO";
-//        }
-//
-//        if (chkbContratado.checked) {
+        //        if (chkbPropInt.checked) {
+        //            var propInt = "SI";
+        //        } else {
+        //            var propInt = "NO";
+        //        }
+        //
+        //        if (chkbContratado.checked) {
         var contratado = "SI";
-//        } else {
-//            var contratado = "NO";
-//        }
-//
-//        if (chkbTrabajando.checked) {
+        //        } else {
+        //            var contratado = "NO";
+        //        }
+        //
+        //        if (chkbTrabajando.checked) {
         var trabajando = "SI";
-//        } else {
-//            var trabajando = "NO";
-//        }
+        //        } else {
+        //            var trabajando = "NO";
+        //        }
 
         if (nombre != "" && apellido != "" && depto != "" && cargo != "" && destino != 0 && fase != "" && seccion != "") {
 
@@ -368,11 +324,11 @@ function crearUsuario() {
                 type: 'post',
                 url: 'php/usuariosPHP.php',
                 data: 'action=7&nombre=' + nombre + '&apellido=' + apellido +
-                        '&telefono=' + telefono + '&email=' + email + '&depto=' + depto +
-                        '&cargo=' + cargo + '&nivel=' + nivel + '&username=' + username + '&password=' + password +
-                        '&permiso=' + permiso + '&destino=' + destino + '&fase=' + fase + '&seccion=' + seccion + '&contratado=' + contratado +
-                        '&trabajando=' + trabajando + '&usuario=' + chkbUsuario,
-                success: function (data) {
+                    '&telefono=' + telefono + '&email=' + email + '&depto=' + depto +
+                    '&cargo=' + cargo + '&nivel=' + nivel + '&username=' + username + '&password=' + password +
+                    '&permiso=' + permiso + '&destino=' + destino + '&fase=' + fase + '&seccion=' + seccion + '&contratado=' + contratado +
+                    '&trabajando=' + trabajando + '&usuario=' + chkbUsuario,
+                success: function(data) {
                     if (data == 1) {
                         obtListaTrabajadores();
                         closeModal('modal-agregar-trabajador');
@@ -410,24 +366,24 @@ function crearUsuario() {
             return false;
 
         } else {
-//            $("#cbDest").removeClass("border-0");
-//            $("#txtNombre").removeClass("border-0");
-//            $("#txtApellido").removeClass("border-0");
-//            $("#cbDepto").removeClass("border-0");
-//            $("#cbCargo").removeClass("border-0");
-//            $("#cbNivel").removeClass("border-0");
-//            $("#cbFase").removeClass("border-0");
-//            $("#cbSeccion").removeClass("border-0");
+            //            $("#cbDest").removeClass("border-0");
+            //            $("#txtNombre").removeClass("border-0");
+            //            $("#txtApellido").removeClass("border-0");
+            //            $("#cbDepto").removeClass("border-0");
+            //            $("#cbCargo").removeClass("border-0");
+            //            $("#cbNivel").removeClass("border-0");
+            //            $("#cbFase").removeClass("border-0");
+            //            $("#cbSeccion").removeClass("border-0");
 
             $("#cbDest").addClass("is-danger");
             $("#txtNombre").addClass("is-danger");
             $("#txtApellido").addClass("is-danger");
             //$("form .select").addClass("is-danger");
-//            $("#cbDepto").addClass("is-danger");
-//            $("#cbCargo").addClass("is-danger");
-//            $("#cbNivel").addClass("is-danger");
-//            $("#cbFase").addClass("is-danger");
-//            $("#cbSeccion").addClass("is-danger");
+            //            $("#cbDepto").addClass("is-danger");
+            //            $("#cbCargo").addClass("is-danger");
+            //            $("#cbNivel").addClass("is-danger");
+            //            $("#cbFase").addClass("is-danger");
+            //            $("#cbSeccion").addClass("is-danger");
         }
     } catch (ex) {
         toastr.error(ex, "Error!", {
@@ -458,18 +414,18 @@ function actualizarEmpleado() {
         var nivel = document.getElementById("cbNivelEdit").value;
         var fase = document.getElementById("cbFaseEdit").value;
         var seccion = document.getElementById("cbSeccionEdit").value;
-//        var fechaPropIngreso = document.getElementById("dtFechaPropCol").value;
-//        var fechaRealIngreso = document.getElementById("dtFechaRealCol").value;
-//        var trabajando = document.getElementById("trabajando").value;
+        //        var fechaPropIngreso = document.getElementById("dtFechaPropCol").value;
+        //        var fechaRealIngreso = document.getElementById("dtFechaRealCol").value;
+        //        var trabajando = document.getElementById("trabajando").value;
 
 
         $.ajax({
             type: 'post',
             url: 'php/usuariosPHP.php',
-            data: 'action=8&idEmpleado=' + idEmpleado + '&nombre=' + nombre + '&apellido=' + apellido
-                    + '&telefono=' + telefono + '&email=' + email + '&destino=' + destino + '&cargo=' + cargo
-                    + '&nivel=' + nivel + '&fase=' + fase + '&seccion=' + seccion,
-            success: function (data) {
+            data: 'action=8&idEmpleado=' + idEmpleado + '&nombre=' + nombre + '&apellido=' + apellido +
+                '&telefono=' + telefono + '&email=' + email + '&destino=' + destino + '&cargo=' + cargo +
+                '&nivel=' + nivel + '&fase=' + fase + '&seccion=' + seccion,
+            success: function(data) {
                 $(".loader").fadeOut('slow');
                 if (data == 1) {
                     obtListaTrabajadores();
@@ -553,9 +509,9 @@ function actualizarUsuario() {
         $.ajax({
             type: 'post',
             url: 'php/usuariosPHP.php',
-            data: 'action=9&idEmpleado=' + idEmpleado + '&idUsuario=' + idUsuario + '&username=' + username + '&password=' + password
-                    + '&permiso=' + permiso + '&codigoSA=' + codigoSA + '&acciones=' + acciones + '&subalmacenes=' + subalmacenes,
-            success: function (data) {
+            data: 'action=9&idEmpleado=' + idEmpleado + '&idUsuario=' + idUsuario + '&username=' + username + '&password=' + password +
+                '&permiso=' + permiso + '&codigoSA=' + codigoSA + '&acciones=' + acciones + '&subalmacenes=' + subalmacenes,
+            success: function(data) {
                 if (data == 1) {
                     toastr.success("Se han guardado los cambios", "Correcto!", {
                         "closeButton": true,
@@ -612,10 +568,10 @@ function actualizarSueldo() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=12&idEmpleado=' + idEmpleado + '&sueldoD=' + sueldoD,
-        beforeSend: function () {
+        beforeSend: function() {
             $(".loader").show();
         },
-        success: function (data) {
+        success: function(data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 alert("Datos actualizados");
@@ -643,21 +599,21 @@ function eliminarCol() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=10&idEmpleado=' + idColaborador,
-        success: function (data) {
+        success: function(data) {
             if (data == 1) {
                 closeModal('modal-eliminar-trabajador');
                 obtListaTrabajadores();
-//                $("#cbDest").removeClass("border-0");
+                //                $("#cbDest").removeClass("border-0");
                 $("#idEmpleadoHdn").val("");
                 $("#nombreEmp").val("");
                 $("#apellidoEmp").val("");
                 $("#telefonoEmp").val("");
                 $("#emailEmp").val("");
-//                $("#cbDepto").removeClass("border-0");
-//                $("#cbCargo").removeClass("border-0");
-//                $("#cbNivel").removeClass("border-0");
-//                $("#cbFase").removeClass("border-0");
-//                $("#cbSeccion").removeClass("border-0");
+                //                $("#cbDepto").removeClass("border-0");
+                //                $("#cbCargo").removeClass("border-0");
+                //                $("#cbNivel").removeClass("border-0");
+                //                $("#cbFase").removeClass("border-0");
+                //                $("#cbSeccion").removeClass("border-0");
                 toastr.success("Registro eliminado!", "Correcto!", {
                     "closeButton": true,
                     "newestOnTop": true,
@@ -696,7 +652,8 @@ function eliminarUser() {
     $.ajax({
         type: 'post',
         url: 'php/usuariosPHP.php',
-        data: 'action=11&idUser=' + idUser, success: function (data) {
+        data: 'action=11&idUser=' + idUser,
+        success: function(data) {
             if (data == 1) {
                 closeModal('modal-eliminar-usuario');
                 toastr.success("Usuario eliminado!", "Correcto!", {
@@ -736,7 +693,7 @@ function obtListaTrabajadores() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=13',
-        success: function (data) {
+        success: function(data) {
             try {
                 $("#divListaUsuarios .mCSB_container").html(data);
             } catch (ex) {
@@ -764,7 +721,7 @@ function buscarTrabajador() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=14&word=' + trabajador,
-        success: function (data) {
+        success: function(data) {
             try {
                 $("#divListaUsuarios .mCSB_container").html(data);
             } catch (ex) {
