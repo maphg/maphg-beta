@@ -45,8 +45,9 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
         <link rel="stylesheet" href="css/fontawesome/css/all.css">
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/app.css">
-        <link rel="icon" href="svg/logo6.png">
+
     </head>
+    <link rel="icon" href="svg/logo6.png">
     <style>
     .modal {
         position: fixed;
@@ -141,6 +142,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                         </div>
                     </div>
                 </div>
+
                 <div class="flex flex-row justify-center items-center w-auto mt-2 mx-2">
 
                     <div class="inline-block w-auto relative">
@@ -150,7 +152,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                             <option value="ZI">ZI</option>
                             <option value="GP">GP</option>
                             <option value="TRS">TRS</option>
-                            <option value="ENERGETICOS">ENERGETICOS</option>
+                            <option value="ENERGETICOS">ENERGÉTICOS</option>
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -160,7 +162,8 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-row justify-center items-center w-auto mt-6 mx-2">
+
+                <div class="flex flex-row justify-center items-center w-auto mt-6 mx-2 hidden">
                     <!-- ESPACIO DEL WIDGET -->
                     <div class="inline-block w-auto relative">
                         <div class="antialiased sans-serif">
@@ -169,7 +172,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                                     <div class="mb-5 w-64">
                                         <div class="relative">
                                             <input type="hidden" name="date" x-ref="date">
-                                            <input id="dateGeneral" type="text" readonly x-model="datepickerValue"
+                                            <input id="dateGenerald" type="text" readonly x-model="datepickerValue"
                                                 @click="showDatepicker = !showDatepicker"
                                                 @keydown.escape="showDatepicker = false"
                                                 class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
@@ -253,6 +256,23 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                     <div class="block appearance-none bg-white border border-grey-light hover:border-grey px-3 pt--3 cursor pr-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer"
                         onclick="funcionNombre('MPMCPROYECTOS'); funcionNombre('cantidadTurno'); funcionNombre('empresasExternasConsulta'); funcionNombre('acontecimientoConsulta');">
                         Buscar</div>
+                </div>
+
+                <!-- Input para Seleccionar la Fecha. -->
+                <div class="flex flex-row justify-center items-center w-auto mt-2 mx-2">
+                    <div class="sans-serif inline-block w-auto relative">
+                        <input id="dateGeneral"
+                            class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-5 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700"
+                            type="date" placeholder="" value="<?=date('Y-m-d')?>" min="2020-01-01" max="2030-12-31">
+                    </div>
+                </div>
+
+                <!-- Button para Cargar los Filtros Destino - Energetico - Fecha -->
+                <div class="flex flex-row justify-center items-center w-auto mt-2 mx-2">
+                    <div class="block appearance-none bg-white border border-grey-light hover:border-grey cursor px-5 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer"
+                        onclick="funcionNombre('MPMCPROYECTOS'); funcionNombre('cantidadTurno'); funcionNombre('empresasExternasConsulta'); funcionNombre('acontecimientoConsulta');">
+                        Buscar
+                    </div>
                 </div>
             </div>
             <!-- Codigo para rango de Horario según el día -->

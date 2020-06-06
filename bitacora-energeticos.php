@@ -70,9 +70,9 @@ date_default_timezone_set('America/Cancun');
                         </div>
                     </div>
                 </div>
+
                 <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
                     <!-- ESPACIO DEL WIDGET -->
-
                     <div class="inline-block w-auto relative">
                         <select id="opcion"
                             class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700"
@@ -89,9 +89,9 @@ date_default_timezone_set('America/Cancun');
                             </svg>
                         </div>
                     </div>
-
                 </div>
-                <div class="flex flex-row justify-center items-center w-auto mt-6 mx-2">
+
+                <div class="flex flex-row justify-center items-center w-auto mt-6 mx-2 hidden">
                     <!-- ESPACIO DEL WIDGET -->
                     <div class="inline-block w-auto relative">
                         <div class="antialiased sans-serif">
@@ -100,7 +100,7 @@ date_default_timezone_set('America/Cancun');
                                     <div class="mb-5 w-64">
                                         <div class="relative">
                                             <input type="hidden" name="date" x-ref="date">
-                                            <input id="dateGeneral" type="text" readonly x-model="datepickerValue"
+                                            <input type="text" readonly x-model="datepickerValue"
                                                 @click="showDatepicker = !showDatepicker"
                                                 @keydown.escape="showDatepicker = false"
                                                 class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
@@ -184,7 +184,26 @@ date_default_timezone_set('America/Cancun');
                     </div>
                     <div class="block appearance-none bg-white border border-grey-light hover:border-grey px-3 pt--3 cursor pr-3 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer"
                         onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
-                        Buscar</div>
+                        Buscar
+                    </div>
+                </div>
+
+                <!-- Input para Seleccionar la Fecha. -->
+                <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
+                    <div class="sans-serif inline-block w-auto relative"
+                        onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
+                        <input id="dateGeneral"
+                            class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700"
+                            type="date" placeholder="" value="<?=date('Y-m-d')?>" min="2020-01-01" max="2030-12-31">
+                    </div>
+                </div>
+
+                <!-- Button para Cargar los Filtros Destino - Energetico - Fecha -->
+                <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
+                    <div class="block appearance-none bg-white border border-grey-light hover:border-grey cursor px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer"
+                        onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
+                        Buscar
+                    </div>
                 </div>
             </div>
 
