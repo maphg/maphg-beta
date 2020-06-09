@@ -417,65 +417,65 @@ if (isset($_POST['action'])) {
         }
         
         if ($zona == "ZI") {
-            //En ZI admite solo: DEC - AUTO - ZIA - ZIC - ZIE - ZIL.
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 23, 19, 5, 6, 7, 12)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 23, 19, 5, 6, 7, 12)";
-            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
+            //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) -ZHP(12).
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
         }else{
             //$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(0)";
             //$zonaFiltroMC = "AND t_mc.id_seccion IN(0)";
             //$zonaFiltroMP = "AND c_secciones.id IN(0)";
-			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(0)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(0)";
-            $zonaFiltroMP = "AND c_secciones.id NIN(0)";
-			// $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            // $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            // $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
+			// $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(0)";
+            // $zonaFiltroMC = "AND t_mc.id_seccion IN(0)";
+            // $zonaFiltroMP = "AND c_secciones.id NIN(0)";
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
         }
 		
-		// if($zona == "GP" and $idDestino == 2){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-		// }
+		if($zona == "GP" and $idDestino == 2){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+		}
 		
-		// if($zona == "GP" and $idDestino == 3){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-		// }
+		if($zona == "GP" and $idDestino == 3){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+		}
 		
-		// if($zona == "GP" and $idDestino == 4){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-		// }
+		if($zona == "GP" and $idDestino == 4){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+		}
 		
-		// if($zona == "GP" and $idDestino == 6){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-		// }
+		if($zona == "GP" and $idDestino == 6){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+		}
 		
-		// if($zona == "TRS" and $idDestino == 11){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-		// }
-        // // Fin de bloque para Validar Destino y Seccion.
+		if($zona == "TRS" and $idDestino == 11){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+		}
+        // Fin de bloque para Validar Destino y Seccion.
 		
-		// //Bloque GP TRS RM provisional
-		// if($zona == "TRS" and $idDestino == 1){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-        // }
+		//Bloque GP TRS RM provisional
+		if($zona == "TRS" and $idDestino == 1){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        }
 
-		// if($zona == "GP" and $idDestino == 1){
-		// 	$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7,12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7,12)";
-        // }
+		if($zona == "GP" and $idDestino == 1){
+			$zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        }
 
 
         // Query MC
@@ -615,7 +615,7 @@ if (isset($_POST['action'])) {
         $MPMCPROYECTOS['totalmc'] = $totalmc + mysqli_num_rows($result_MC_trabajare);
 
 
-        //QUERY MP
+        //QUERY MP Planificado.
         $query_t_mp = "SELECT
 		 	t_ordenes_trabajo.id,
             t_ordenes_trabajo.folio,
@@ -675,6 +675,26 @@ if (isset($_POST['action'])) {
                 </div>
                 ";
             }
+
+
+            // MP NO Planificado.            
+            $query_t_mp_np = "SELECT
+            
+            
+
+            FROM t_mp_np
+            INNER JOIN t_equipos ON t_ordenes_trabajo.id_equipo = t_equipos.id
+            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
+            WHERE 
+            t_ordenes_trabajo.status='F' AND activo = 1
+            $destinoMP
+            $zonaFiltroMP
+            AND t_ordenes_trabajo.fecha_realizado BETWEEN '$fecha_final_12' AND '$fecha_inicial_12'
+            ORDER BY t_ordenes_trabajo.fecha_realizado DESC
+            ";
+
+            // Json 
             $MPMCPROYECTOS['totalMP'] = $totalMP;
             $MPMCPROYECTOS['bitacoraMP'] = $bitacoraMP;         
 

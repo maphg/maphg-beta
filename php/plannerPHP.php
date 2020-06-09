@@ -1614,7 +1614,7 @@ class Planner
             // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Planificado\">MP-P</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: NO Planificado\">MP-NP</p></div>"
-            // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Finalizados\">MP-S</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Finalizados\">MP-S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Test: Realizados\">TEST</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Test realizado\">U.TEST</p></div>"
@@ -2303,11 +2303,11 @@ class Planner
                             }
                             // Fin Segmento. 
 
-                            // if ($mpRealizado > 0) {
-                            //     $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
-                            // } else {
-                            //     $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
-                            // }
+                            if ($mpRealizado > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
+                            }
 
                             if ($fechaMPR != "NA") {
                                 $fechaMPR = new DateTime($fechaMPR);
@@ -2519,7 +2519,7 @@ class Planner
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Planificado\">MP-P</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: NO Planificado\">MP-NP</p></div>"
             // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
-            // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Realizado\">MP-R</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Realizado\">MP-R</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Test: Realizados\">TEST</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Test realizado\">U.TEST</p></div>"
@@ -3250,11 +3250,11 @@ class Planner
                             //     $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpProceso</p></div>";
                             // }
 
-                            // if ($mpRealizado > 0) {
-                            //     $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
-                            // } else {
-                            //     $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
-                            // }
+                            if ($mpRealizado > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
+                            }
 
                             if ($fechaMPR != "NA") {
                                 $fechaMPR = new DateTime($fechaMPR);
