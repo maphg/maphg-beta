@@ -5815,7 +5815,7 @@ function zonaMC(idMC, zona, idEquipo, statusMC, idSubseccion) {
                 zona: zona
             },
             success: function (datos) {
-                obtCorrectivos(idEquipo, statusMC);
+                // obtCorrectivos(idEquipo, statusMC);
                 // recargarMC();
                 alertInformacionActualiza(datos);
             },
