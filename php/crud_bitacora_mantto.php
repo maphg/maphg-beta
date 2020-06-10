@@ -428,7 +428,7 @@ if (isset($_POST['action'])) {
         if ($zona == "ZI") {
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) -ZHP(12).
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
         } else {
