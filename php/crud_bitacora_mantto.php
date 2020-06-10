@@ -432,10 +432,10 @@ if (isset($_POST['action'])) {
             $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
         } else {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1, 6)";
+            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1, 6)";
+            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1, 6)";
+            $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1, 6)";
         }
 
         if ($zona == "GP" and $idDestino == 2) {
@@ -731,7 +731,7 @@ if (isset($_POST['action'])) {
             }
 
             $bitacoraMP .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$equipo', '$comentario_mp_np', '', '');\">
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
                 <h1 class=\" \">$seccion</h1><!-- SECION -->
                 <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
                 <h1 class=\"truncate\">$subseccion</h1><!-- SUBSECCION -->
