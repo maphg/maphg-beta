@@ -2996,6 +2996,18 @@ if (isset($_POST['action'])) {
         }
     }
 
+    if ($action == "zonaMC") {
+        $idMC = $_POST['idMC'];
+        $zona = $_POST['zona'];
+
+        $query = "UPDATE t_mc SET zona = '$zona' WHERE id = $idMC";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo "Zona Seleccionada";
+        } else {
+            echo "ERROR, Zona Seleccionada";
+        }
+    }
 
 
 //Cierre de IF para action.

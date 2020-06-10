@@ -9,7 +9,7 @@ function cargarTareasDestino(pagina, destino) {
         type: "post",
         url: url,
         data: "action=1&idDestino=" + destino,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 location.reload();
             } else {
@@ -43,7 +43,7 @@ function cargarTiposProyectos(pagina) {
         url: url,
         data: "action=34&tipoProyecto=" + tipoProyecto,
 
-        success: function(data) {
+        success: function (data) {
             location.reload();
         },
     });
@@ -61,7 +61,7 @@ function cargarSeccionSession(pagina) {
         url: url,
         data: "action=35&idSeccion=" + idSeccion,
 
-        success: function(data) {
+        success: function (data) {
             location.reload();
         },
     });
@@ -88,7 +88,7 @@ function mostrarColumnasSeccion(idPermiso, idUsuario) {
             "&tipo=" +
             tipo,
 
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut("slow");
             document.getElementById("dFilas").innerHTML = "";
             document.getElementById("dFilas").innerHTML = data;
@@ -148,13 +148,13 @@ function obtenerEquipos(
             idRelCatSubcat +
             "&pagina=" +
             pagina,
-        beforeSend: function() {
+        beforeSend: function () {
             var pageloader = document.getElementById("loader");
             if (pageloader) {
                 pageloader.classList.toggle("is-active");
             }
         },
-        success: function(data) {
+        success: function (data) {
             var pageloader = document.getElementById("loader");
             pageloader.classList.toggle("is-active");
             try {
@@ -268,7 +268,7 @@ function obtenerEquiposxPagina(
             idRelCatSubcat +
             "&pagina=" +
             pagina,
-        success: function(data) {
+        success: function (data) {
             var datos = JSON.parse(data);
             $("#divNameSubseccion").attr("data-content", datos.nombreSubseccion);
             $("#divNombreSubseccion").attr("data-content", datos.nombreSubseccion);
@@ -307,13 +307,13 @@ function obtenerEquiposxPalabra(
             pagina +
             "&palabra=" +
             palabra,
-        beforeSend: function() {
+        beforeSend: function () {
             var pageloader = document.getElementById("loader");
             if (pageloader) {
                 pageloader.classList.toggle("is-active");
             }
         },
-        success: function(data) {
+        success: function (data) {
             var pageloader = document.getElementById("loader");
             pageloader.classList.toggle("is-active");
             try {
@@ -369,7 +369,7 @@ function obtenerEquiposxPaginaxPalabra(
             pagina +
             "&palabra=" +
             palabra,
-        success: function(data) {
+        success: function (data) {
             var datos = JSON.parse(data);
             $("#divNameSubseccion").attr("data-content", datos.nombreSubseccion);
             $("#divNombreSubseccion").attr("data-content", datos.nombreSubseccion);
@@ -400,7 +400,7 @@ function buscarEquipo(
             idCategoria +
             "&idSubcategoria=" +
             idSubcategoria,
-        success: function(data) {
+        success: function (data) {
             $("#divListaEquipos").html(data);
         },
     });
@@ -411,7 +411,7 @@ function obtenerComentariosEquipo(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerComentarios&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#colComentariosEquipo").show();
@@ -447,7 +447,7 @@ function agregarComentarioEquipo(idEquipo) {
             idEquipo +
             "&comentario=" +
             comentario,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerComentariosEquipo(idEquipo);
             } else {
@@ -474,7 +474,7 @@ function obtenerFotosEquipo(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerFotos&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
 
@@ -525,7 +525,7 @@ function cargarFotosEquipo(idEquipo) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerFotosEquipo(idEquipo);
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
@@ -565,7 +565,7 @@ function obtenerCotizacionesEquipo(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerCotizaciones&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#divHeaderCot").html(datos.header);
@@ -608,7 +608,7 @@ function cargarCotizacionesEquipo(idEquipo) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerCotizacionesEquipo(idEquipo);
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
@@ -648,7 +648,7 @@ function obtenerInfoEquipo(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerInfo&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#rowInfoEquipo").show();
@@ -699,7 +699,7 @@ function actualizarInfoEquipo(idEquipo) {
             serie +
             "&estado=" +
             estado,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerInfoEquipo(idEquipo);
                 toastr.success("Informacion actualizada", "Correcto!", {
@@ -757,7 +757,7 @@ function obtDetalleSubcategoria(
             idSubcategoria +
             "&idRelSubcategoria=" +
             idRelSubcategoria,
-        success: function(data) {
+        success: function (data) {
             try {
                 var detalleEquipo = JSON.parse(data);
                 $("#divListaTareas").html("");
@@ -852,7 +852,7 @@ function obtCorrectivosG(
             idRelSubcategoria +
             "&status=" +
             status,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#colMC").html("");
@@ -886,7 +886,7 @@ function obtDetalleTarea(idTarea) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=6&idTarea=" + idTarea,
-        success: function(data) {
+        success: function (data) {
             var datos = JSON.parse(data);
             $("#hddIDTarea").val(idTarea);
             $("#tituloTarea").html(datos.actividad);
@@ -928,7 +928,7 @@ function actualizarTarea(idTarea) {
             type: "post",
             url: "php/plannerPHP.php",
             data: "action=eliminarTarea&idTarea=" + idTarea + "&titulo=" + titulo,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     var idDestino = $("#hddIdDestino").val();
                     var idGrupo = $("#hddIdSubseccion").val();
@@ -960,7 +960,7 @@ function actualizarTarea(idTarea) {
             type: "post",
             url: "php/plannerPHP.php",
             data: "action=actualizarTarea&idTarea=" + idTarea + "&titulo=" + titulo,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     obtDetalleTarea(idTarea);
                     closeModal("modal-editar-tarea");
@@ -1020,7 +1020,7 @@ function verPenSubcategorias(
             idSubcategoria +
             "&status=" +
             status,
-        success: function(data) {
+        success: function (data) {
             $("#divListaTareas").html(data);
         },
     });
@@ -1035,7 +1035,7 @@ function insertarComentario(idTarea, element) {
                 url: "php/plannerPHP.php",
                 data: "action=7&idTarea=" + idTarea + "&comentario=" + comentario,
 
-                success: function(data) {
+                success: function (data) {
                     if (data == 1) {
                         $("#" + element.id + "").val("");
                         actualizarTimeLine(idTarea);
@@ -1079,7 +1079,7 @@ function actualizarTimeLine(idTarea) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=8&idTarea=" + idTarea,
-        success: function(data) {
+        success: function (data) {
             $("#timeLine").html(data);
             $("#timeLineMC").html(data);
         },
@@ -1112,7 +1112,7 @@ function cargar_archivos_mc(idTarea) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -1167,7 +1167,7 @@ function actualizarRangoFechas(idTarea, fd) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=9&idTarea=" + idTarea + "&fechas=" + fd,
-        success: function(data) {},
+        success: function (data) { },
     });
 }
 
@@ -1177,7 +1177,7 @@ function buscarUsuario(element, idDestino) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=10&idDestino=" + idDestino + "&palabra=" + palabra,
-        success: function(data) {
+        success: function (data) {
             $("#divListaUsuarios").html(data);
         },
     });
@@ -1195,7 +1195,7 @@ function agregarResponsable(idUsuario) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=11&idUsuario=" + idUsuario + "&idActividad=" + idActividad,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 if (idEquipo != 0) {
                     //recargarListaTareasMC(idEquipo);
@@ -1256,7 +1256,7 @@ function recargarListaTareas(idGrupo, idDestino, idCategoria, idSubcategoria) {
             idSubcategoria +
             "&status=" +
             status,
-        success: function(data) {
+        success: function (data) {
             $("#divListaTareas").html(data);
         },
     });
@@ -1305,7 +1305,7 @@ function finalizarTarea(idActividad, chkb, idUsuario) {
             idActividad +
             "&status=F&completo=" +
             idUsuario,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 if (idEquipo != 0) {
                     //recargarListaTareasMC(idEquipo)
@@ -1370,7 +1370,7 @@ function agregarTarea(idEquipo) {
                 idCategoria +
                 "&idSubcategoria=" +
                 idSubcategoria,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     if (idEquipo != 0) {
                         obtCorrectivos(idEquipo, "N");
@@ -1437,7 +1437,7 @@ function obtDetalleEquipo(
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=14&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var detalleEquipo = JSON.parse(data);
                 $("#btnPendientesMC").attr(
@@ -1510,7 +1510,7 @@ function obtCorrectivos(idEquipo, status) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtMC&idEquipo=" + idEquipo + "&status=" + status,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#colMC").html("");
@@ -1540,7 +1540,7 @@ function obtComentariosMC(idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerComentariosMC&idMC=" + idMC,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#divHeaderComentarios").html(datos.header);
@@ -1572,7 +1572,7 @@ function agregarComentarioMC(idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=insertarComentarioMC&idMC=" + idMC + "&comentario=" + comentario,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtComentariosMC(idMC);
             } else {
@@ -1599,7 +1599,7 @@ function borrarComentariosMC(idComentario, idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=borrarComentario&idComentario=" + idComentario,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtComentariosMC(idMC);
             } else {
@@ -1627,7 +1627,7 @@ function obtenerFotosMC(idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtenerFotosMC&idMC=" + idMC,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#divHeaderFotos").html(datos.header);
@@ -1673,7 +1673,7 @@ function cargarFotosMC(idMC) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerFotosMC(idMC);
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
@@ -1713,7 +1713,7 @@ function borrarFotosMC(idAdjunto, idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=borrarFotoMC&idAdjunto=" + idAdjunto,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerFotosMC(idMC);
             } else {
@@ -1742,7 +1742,7 @@ function obtenerFechasMC(idMC) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtFechasMC&idMC=" + idMC,
-        success: function(data) {
+        success: function (data) {
             var datos = JSON.parse(data);
             var config = {
                 language: "es",
@@ -1774,7 +1774,7 @@ function obtPreventivos(
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtMP&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#colMP").html("");
@@ -1808,7 +1808,7 @@ function obtTest(idEquipo, idGrupo, idDestino, idCategoria, idSubcategoria) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=obtTEST&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#colMP").html("");
@@ -1852,7 +1852,7 @@ function obtDetalleTareaMC(idTarea) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=6&idTarea=" + idTarea,
-        success: function(data) {
+        success: function (data) {
             var datos = JSON.parse(data);
             $("#hddIDTarea").val(idTarea);
             $("#tituloTareaMC").html(datos.actividad);
@@ -1894,7 +1894,7 @@ function actualizarTareaMC(idTarea) {
             type: "post",
             url: "php/plannerPHP.php",
             data: "action=eliminarTarea&idTarea=" + idTarea + "&titulo=" + titulo,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     var idEquipo = $("#hddIdEquipo").val();
                     recargarListaTareasMC(idEquipo);
@@ -1923,7 +1923,7 @@ function actualizarTareaMC(idTarea) {
             type: "post",
             url: "php/plannerPHP.php",
             data: "action=actualizarTarea&idTarea=" + idTarea + "&titulo=" + titulo,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     obtDetalleTareaMC(idTarea);
                     closeModal("modal-editar-tarea");
@@ -1972,7 +1972,7 @@ function cargar_archivos_mc_eq(idTarea) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -2028,7 +2028,7 @@ function recargarListaTareasMC(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=15&idEquipo=" + idEquipo + "&status=" + status,
-        success: function(data) {
+        success: function (data) {
             $("#columnaCorrectivos").html(data);
         },
     });
@@ -2055,7 +2055,7 @@ function verPenSolMC(element, idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=15&idEquipo=" + idEquipo + "&status=" + status,
-        success: function(data) {
+        success: function (data) {
             $("#columnaCorrectivos").html(data);
         },
     });
@@ -2067,7 +2067,7 @@ function verDetalleMP(idPlan, semana, nombreplan, idPlaneacion, tipoplan) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=16&idPlan=" + idPlan,
-        success: function(data) {
+        success: function (data) {
             $("#titulomp").html("" + nombreplan + ", " + semana);
             $("#btnGenerarOT").attr(
                 "onclick",
@@ -2108,7 +2108,7 @@ function generarOrdenTrabajo(idPlanMP, idPlaneacionMP, modal, tipoplan) {
         idPlaneacionMP
     );
 
-    setTimeout(function() {
+    setTimeout(function () {
         $("#inicioMP").hide();
         if (tipoplan == "TEST") {
             obtTest(idEquipo, 0, 0, 0, 0);
@@ -2131,7 +2131,7 @@ function mostrarDetalleOT(idPlaneacion, idEquipo, tipoplan) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=17&idEquipo=" + idEquipo + "&idPlaneacion=" + idPlaneacion,
-        success: function(data) {
+        success: function (data) {
             try {
                 var datos = JSON.parse(data);
                 $("#btnImprimirOT").attr(
@@ -2205,7 +2205,7 @@ function insertarComentarioOT(element, idOT) {
                 url: "php/plannerPHP.php",
                 data: "action=18&idOT=" + idOT + "&comentario=" + comentario,
 
-                success: function(data) {
+                success: function (data) {
                     if (data == 1) {
                         $("#" + element.id + "").val("");
                         actualizarTimeLineOT(idOT);
@@ -2249,7 +2249,7 @@ function actualizarTimeLineOT(idOT) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=19&idOT=" + idOT,
-        success: function(data) {
+        success: function (data) {
             $("#timeLineOT").html(data);
         },
     });
@@ -2281,7 +2281,7 @@ function cargar_archivos_ot(idOT) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data != -1) {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -2327,7 +2327,7 @@ function imprimirOT(idEquipo, idOT) {
 
 function cerrarOT(idModal) {
     var listaActividades = [];
-    $("input:checkbox:checked").each(function() {
+    $("input:checkbox:checked").each(function () {
         try {
             if ($(this).attr("name")) {
                 var chkb = $(this).attr("name");
@@ -2372,7 +2372,7 @@ function cerrarOT(idModal) {
 
 function marcarOTRealizada(idOT, tipoplan) {
     var listaActividades = [];
-    $("input:checkbox:checked").each(function() {
+    $("input:checkbox:checked").each(function () {
         try {
             if ($(this).attr("name")) {
                 var chkb = $(this).attr("name");
@@ -2414,7 +2414,7 @@ function marcarOTRealizada(idOT, tipoplan) {
             contentType: false, // The content type used when sending data to the server.
             cache: false, // To unable request pages to be cached
             processData: false, // To send DOMDocument or non processed data file it is set to false
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     if (tipoplan == "TEST") {
                         obtTest(idEquipo, 0, 0, 0, 0);
@@ -2464,7 +2464,7 @@ function recargarGraficaMP() {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=14&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var detalleEquipo = JSON.parse(data);
 
@@ -2509,7 +2509,7 @@ function cargar_archivos_eq() {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -2550,7 +2550,7 @@ function actualizarAdjuntos(idEquipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=14&idEquipo=" + idEquipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 var detalleEquipo = JSON.parse(data);
                 $("#adjuntosEquipo").html(detalleEquipo.adjuntos);
@@ -2633,7 +2633,7 @@ function agregarProyecto(idDestino, idPermiso, idUsuario) {
                     contentType: false, // The content type used when sending data to the server.
                     cache: false, // To unable request pages to be cached
                     processData: false, // To send DOMDocument or non processed data file it is set to false
-                    success: function(data) {
+                    success: function (data) {
                         if (data == 1) {
                             toastr.success("Proyecto creado", "Correcto", {
                                 closeButton: true,
@@ -2692,7 +2692,7 @@ function agregarProyecto(idDestino, idPermiso, idUsuario) {
                 contentType: false, // The content type used when sending data to the server.
                 cache: false, // To unable request pages to be cached
                 processData: false, // To send DOMDocument or non processed data file it is set to false
-                success: function(data) {
+                success: function (data) {
                     if (data == 1) {
                         toastr.success("Proyecto creado", "Correcto", {
                             closeButton: true,
@@ -2765,7 +2765,7 @@ function obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion) {
                 idSeccion +
                 "&idSubseccion=" +
                 idSubseccion,
-            success: function(data) {
+            success: function (data) {
                 try {
                     var detalleProyecto = JSON.parse(data);
                     $("#btnPendientesPAProyecto").attr(
@@ -2916,7 +2916,7 @@ function obtDetalleProyecto2(idProyecto, idDestino, idSeccion, idSubseccion) {
                 idSeccion +
                 "&idSubseccion=" +
                 idSubseccion,
-            success: function(data) {
+            success: function (data) {
                 try {
                     var detalleProyecto = JSON.parse(data);
                     $("#btnPendientesPAProyecto").attr(
@@ -3059,7 +3059,7 @@ function agregarActividadMCProyecto(
                 type: "post",
                 url: "php/plannerPHP.php",
                 data: "action=23&idProyecto=" + idProyecto + "&actividad=" + actividad,
-                success: function(data) {
+                success: function (data) {
                     if (data == 1) {
                         obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion);
                         $("#txtActividadPA").val("");
@@ -3113,7 +3113,7 @@ function agregarComentariosProy(
                 url: url,
                 data: "action=24&idProyecto=" + idProyecto + "&comentario=" + comentario,
 
-                success: function(data) {
+                success: function (data) {
                     try {
                         document.getElementById("txtComentarioProyecto").value = "";
                         obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion);
@@ -3158,7 +3158,7 @@ function verComentariosActividad(idActividad, element) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=33&idActividad=" + idActividad,
-        success: function(data) {
+        success: function (data) {
             try {
                 $(".titulo-actividad").removeClass(
                     "has-text-danger has-text-weight-bold"
@@ -3203,7 +3203,7 @@ function agregarComentariosActividad(idActividad, element) {
                 url: url,
                 data: "action=24&idActividad=" + idActividad + "&comentario=" + comentario,
 
-                success: function(data) {
+                success: function (data) {
                     try {
                         document.getElementById("txtComentarioProyecto").value = "";
                         verComentariosActividad(idActividad, element);
@@ -3261,7 +3261,7 @@ function upload_cots_proyecto(idProyecto, idDestino, idSeccion, idSubseccion) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             try {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -3315,7 +3315,7 @@ function upload_just_proyecto(idProyecto, idDestino, idSeccion, idSubseccion) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             try {
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
                     closeButton: true,
@@ -3364,7 +3364,7 @@ function cambiarTipo(idProyecto) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=25&idProyecto=" + idProyecto + "&tipo=" + tipo,
-        success: function(data) {
+        success: function (data) {
             try {
                 if (data == 1) {
                     toastr.success("", "Correcto", {
@@ -3434,7 +3434,7 @@ function actualizarDatosProyecto(idProyecto) {
                 año +
                 "&coste=" +
                 coste,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     toastr.success("", "Correcto", {
                         closeButton: true,
@@ -3480,7 +3480,7 @@ function agregarResponsableProyecto(idUsuario) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=27&idUsuario=" + idUsuario + "&idActividad=" + idActividad,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion);
                 closeModal("modalAgregarResponsableProyecto");
@@ -3513,7 +3513,7 @@ function buscarUsuarioProy(element, idDestino) {
             "&palabra=" +
             palabra +
             "&proyecto=SI",
-        success: function(data) {
+        success: function (data) {
             $("#divListaUsuariosProy").html(data);
         },
     });
@@ -3540,7 +3540,7 @@ function verPendSolProyecto(element, idProyecto) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=28&idProyecto=" + idProyecto + "&status=" + status,
-        success: function(data) {
+        success: function (data) {
             $("#columnaPAProyectos").html(data);
         },
     });
@@ -3595,7 +3595,7 @@ function finalizarTareaProy(idActividad, chkb, idUsuario) {
             status +
             "&completo=" +
             idUsuario,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion);
                 closeModal("modalConfirmacionTareaProy");
@@ -3663,7 +3663,7 @@ function finalizarProyecto(idProyecto, chkb) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=30&idProyecto=" + idProyecto + "&status=" + status,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtDetalleProyecto(idProyecto, idDestino, idSeccion, idSubseccion);
                 closeModal("modalFinalizarProyecto");
@@ -3703,7 +3703,7 @@ function eliminarTareaProy(idActividad) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=31&idActividad=" + idActividad,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 toastr.success("Actividad eliminada", "Correcto", {
                     closeButton: true,
@@ -3756,7 +3756,7 @@ function eliminarAdjuntoProy(idAdjunto, tipo) {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=32&idAdjunto=" + idAdjunto + "&tipo=" + tipo,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 toastr.success("Archivo eliminado", "Correcto", {
                     closeButton: true,
@@ -3823,15 +3823,15 @@ function buscarMC() {
                 fechaF +
                 "&estado=" +
                 estado,
-            beforeSend: function() {
+            beforeSend: function () {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
                     pageloader.classList.toggle("is-active");
                 }
             },
-            success: function(data) {
+            success: function (data) {
                 var pageloader = document.getElementById("loader");
-                var pageloaderTimeout = setTimeout(function() {
+                var pageloaderTimeout = setTimeout(function () {
                     pageloader.classList.toggle("is-active");
                     clearTimeout(pageloaderTimeout);
                 }, 3000);
@@ -3861,15 +3861,15 @@ function buscarMC() {
                         extend: "excel",
                         title: "Reporte de pendientes de Usuarios",
                         className: "button is-primary is-small",
-                    }, ],
-                    initComplete: function() {
+                    },],
+                    initComplete: function () {
                         this.api()
                             .columns()
-                            .every(function() {
+                            .every(function () {
                                 var column = this;
                                 var select = $('<select><option value=""></option></select>')
                                     .appendTo($(column.footer()).empty())
-                                    .on("change", function() {
+                                    .on("change", function () {
                                         var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                         column
                                             .search(val ? "^" + val + "$" : "", true, false)
@@ -3879,7 +3879,7 @@ function buscarMC() {
                                     .data()
                                     .unique()
                                     .sort()
-                                    .each(function(d, j) {
+                                    .each(function (d, j) {
                                         select.append(
                                             '<option value="' + d + '">' + d + "</option>"
                                         );
@@ -3888,14 +3888,14 @@ function buscarMC() {
                     },
                 });
 
-                tablaMC.on("select", function(e, dt, type, indexes) {
+                tablaMC.on("select", function (e, dt, type, indexes) {
                     var rowData = tablaMC.rows(indexes).data().toArray();
                     $("#hddIdRegistro").val(rowData[0][0]);
                     $.ajax({
                         type: "post",
                         url: "../php/stockPHP.php",
                         data: "action=6&idRegistro=" + rowData[0][0],
-                        success: function(data) {
+                        success: function (data) {
                             var registro = JSON.parse(data);
 
                             $("#cbDestinoRegEdit").val(registro.idDestino);
@@ -3962,7 +3962,7 @@ function buscarEquipos() {
         type: "post",
         url: "php/plannerPHP.php",
         data: "action=37&idSeccion=" + idSeccion + "&idSubseccion=" + idSubseccion,
-        success: function(data) {
+        success: function (data) {
             try {
                 $("#cbEquipos").html(data);
             } catch (ex) {
@@ -4010,7 +4010,7 @@ function buscarMP() {
                 fechaF +
                 "&estatus=" +
                 estado,
-            success: function(data) {
+            success: function (data) {
                 $("#tablaMP").dataTable().fnDestroy();
                 $("#tbodyTabla").html(data);
                 var tResultadoOTS = $("#tablaMP").DataTable({
@@ -4036,15 +4036,15 @@ function buscarMP() {
                         extend: "excel",
                         title: "Reporte de pendientes de Usuarios",
                         className: "button is-primary is-small",
-                    }, ],
-                    initComplete: function() {
+                    },],
+                    initComplete: function () {
                         this.api()
                             .columns()
-                            .every(function() {
+                            .every(function () {
                                 var column = this;
                                 var select = $('<select><option value=""></option></select>')
                                     .appendTo($(column.footer()).empty())
-                                    .on("change", function() {
+                                    .on("change", function () {
                                         var val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                                         column
@@ -4056,7 +4056,7 @@ function buscarMP() {
                                     .data()
                                     .unique()
                                     .sort()
-                                    .each(function(d, j) {
+                                    .each(function (d, j) {
                                         select.append(
                                             '<option value="' + d + '">' + d + "</option>"
                                         );
@@ -4115,15 +4115,15 @@ function buscarMisPendientes(idResponsable) {
                 estado +
                 "&idResponsable=" +
                 idResponsable,
-            beforeSend: function() {
+            beforeSend: function () {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
                     pageloader.classList.toggle("is-active");
                 }
             },
-            success: function(data) {
+            success: function (data) {
                 var pageloader = document.getElementById("loader");
-                var pageloaderTimeout = setTimeout(function() {
+                var pageloaderTimeout = setTimeout(function () {
                     pageloader.classList.toggle("is-active");
                     clearTimeout(pageloaderTimeout);
                 }, 3000);
@@ -4153,15 +4153,15 @@ function buscarMisPendientes(idResponsable) {
                         extend: "excel",
                         title: "Reporte de pendientes de Usuarios",
                         className: "button is-primary is-small",
-                    }, ],
-                    initComplete: function() {
+                    },],
+                    initComplete: function () {
                         this.api()
                             .columns()
-                            .every(function() {
+                            .every(function () {
                                 var column = this;
                                 var select = $('<select><option value=""></option></select>')
                                     .appendTo($(column.footer()).empty())
-                                    .on("change", function() {
+                                    .on("change", function () {
                                         var val = $.fn.dataTable.util.escapeRegex($(this).val());
                                         column
                                             .search(val ? "^" + val + "$" : "", true, false)
@@ -4171,7 +4171,7 @@ function buscarMisPendientes(idResponsable) {
                                     .data()
                                     .unique()
                                     .sort()
-                                    .each(function(d, j) {
+                                    .each(function (d, j) {
                                         select.append(
                                             '<option value="' + d + '">' + d + "</option>"
                                         );
@@ -4180,14 +4180,14 @@ function buscarMisPendientes(idResponsable) {
                     },
                 });
 
-                tablaMC.on("select", function(e, dt, type, indexes) {
+                tablaMC.on("select", function (e, dt, type, indexes) {
                     var rowData = tablaMC.rows(indexes).data().toArray();
                     $("#hddIdRegistro").val(rowData[0][0]);
                     $.ajax({
                         type: "post",
                         url: "../php/stockPHP.php",
                         data: "action=6&idRegistro=" + rowData[0][0],
-                        success: function(data) {
+                        success: function (data) {
                             var registro = JSON.parse(data);
 
                             $("#cbDestinoRegEdit").val(registro.idDestino);
@@ -4324,7 +4324,7 @@ function proyectosFinalizados() {
         url: "php/crud.php",
         data: { action: action, id_Destino: id_Destino, id_Seccion: id_Seccion },
 
-        success: function(datos) {
+        success: function (datos) {
             // Asignar valor a las variables de proyecto.
             $("#data-proyectos-finalizados").html(datos);
         },
@@ -4345,7 +4345,7 @@ function mostrarJustificacion(idProyecto) {
         type: "POST",
         data: "action=41&idProyecto=" + idProyecto,
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             $("#id_articulo").val(id);
             $("#cantidad_articulo").val(data);
         },
@@ -4367,7 +4367,7 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion) {
             idUsuario: idUsuario,
         },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#titulo_proyectos").html(datos);
 
             // Asignar valor a las variables de proyecto.
@@ -4402,7 +4402,7 @@ function nuevoProyecto() {
                 idSubseccionProyecto: idSubseccionProyecto,
             },
 
-            success: function(datos) {
+            success: function (datos) {
                 $("#tituloProyectoNuevo").val("");
                 refreshProyectos();
                 alertInformacionActualiza("Proyecto Agregado");
@@ -4442,7 +4442,7 @@ function eliminarProyecto() {
             url: "php/crud.php",
             data: { action: action, idProyecto: idProyecto },
 
-            success: function(datos) {
+            success: function (datos) {
                 refreshProyectos();
                 show_hide_modal("modal-Status", "hide");
                 btnEditarProyecto();
@@ -4465,7 +4465,7 @@ function editarProyecto() {
             tituloProyecto: tituloProyecto,
         },
 
-        success: function(datos) {
+        success: function (datos) {
             refreshProyectos();
             show_hide_modal("modal-Status", "hide");
             alertInformacionActualiza("Proyecto Actualizado");
@@ -4491,7 +4491,7 @@ function modalJustificacion(idProyecto, idJustificacion) {
             idJustificacion: idJustificacion,
         },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#dataJustificacion").val(datos);
             $("#idProyectoJustificacion").val(idProyecto);
             refreshProyectos();
@@ -4539,7 +4539,7 @@ function actualizarCostoProyecto() {
         url: "php/crud.php",
         data: { action: action, idProyecto: idProyecto, costo: costo },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#modal-Costo").removeClass("modal-fx-superScaled is-active");
             refreshProyectos();
             alertInformacionActualiza("Costo Actualizado");
@@ -4561,7 +4561,7 @@ function actualizarJustificacionProyecto() {
             justificacion: justificacion,
         },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#modal-Justificacion").removeClass("modal-fx-superScaled is-active");
             refreshProyectos();
             alertInformacionActualiza("Justificion Actualizada");
@@ -4579,7 +4579,7 @@ function actualizarTipoProyecto() {
         url: "php/crud.php",
         data: { action: action, idProyecto: idProyecto, tipo: tipo },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#modal-Tipo").removeClass("modal-fx-superScaled is-active");
             refreshProyectos();
             alertInformacionActualiza("Tipo de Proyecto Actualizado");
@@ -4598,7 +4598,7 @@ function asignarResponsableProyecto(idUsuario) {
         url: "php/crud.php",
         data: { action: action, idProyecto: idProyecto, idUsuario: idUsuario },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#modal-Tipo").removeClass("modal-fx-superScaled is-active");
             cerrarModalResponsableProyecto();
             refreshProyectos();
@@ -4621,7 +4621,7 @@ function modalAgregarComentarioProyectos(idProyecto, idUsuario) {
             idProyecto: idProyecto,
         },
 
-        success: function(datos) {
+        success: function (datos) {
             $("#comentarioProyecto").html(datos);
             refreshProyectos();
         },
@@ -4645,7 +4645,7 @@ function agregarComentarioProyectos() {
                 comentario: comentario,
             },
 
-            success: function(datos) {
+            success: function (datos) {
                 modalAgregarComentarioProyectos(idProyecto, idUsuario);
                 $("#textComentarioProyecto").val("");
                 refreshProyectos();
@@ -4692,7 +4692,7 @@ function statusProyecto(statusProyecto) {
                 idUsuario: idUsuario,
                 statusProyecto: statusProyecto,
             },
-            success: function(datos) {
+            success: function (datos) {
                 refreshProyectos();
                 $("#modal-Status").removeClass();
                 $("#modal-Status").addClass("modal");
@@ -4712,7 +4712,7 @@ function finalizarProyecto(idProyecto) {
             action: action,
             idProyecto: idProyecto,
         },
-        success: function(datos) {
+        success: function (datos) {
             refreshProyectos();
             $("#modal-Status").removeClass();
             $("#modal-Status").addClass("modal");
@@ -4768,13 +4768,14 @@ function statusMC(statusMC) {
                 idUsuarioMC: idUsuarioMC,
                 statusMC: statusMC,
             },
-            success: function(datos) {
+            success: function (datos) {
                 alertInformacionActualiza("Status Actualizado");
                 recargarMC();
                 $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
             },
         });
     }
+
 }
 
 function finalizarMC(idMC) {
@@ -4788,7 +4789,7 @@ function finalizarMC(idMC) {
             idMC: idMC,
             statusMC: statusMC,
         },
-        success: function(datos) {
+        success: function (datos) {
             alertInformacionActualiza("Mantenimiento Correctivo Finalizado!");
             recargarMC();
             $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
@@ -4856,7 +4857,7 @@ function restaurarMC(idMC, idUsuario) {
                 idMC: idMC,
                 idUsuario: idUsuario,
             },
-            success: function(datos) {
+            success: function (datos) {
                 alertInformacionActualiza("Mantenimiento Correctivo Restaurado!");
                 recargarMC();
                 $("#modalRestaurarMC").removeClass(" modal-fx-superScaled is-active");
@@ -4881,7 +4882,7 @@ function modalSubirArchivo(tabla, id) {
             tabla: tabla,
             id: id,
         },
-        success: function(datos) {
+        success: function (datos) {
             alertInformacionActualiza("Datos Obtenidos!");
             $("#archivos").html(datos);
         },
@@ -4903,7 +4904,7 @@ function subirArchivoProceso() {
             idGeneral: idGeneral,
             fileName: fileName,
         },
-        success: function(datos) {
+        success: function (datos) {
             alertInformacionActualiza(datos);
             modalSubirArchivo(tabla, idGeneral);
             if (tabla == "t_proyectos_planaccion_adjuntos") {
@@ -4915,7 +4916,7 @@ function subirArchivoProceso() {
 
 function subirArchivo() {
     let form = document.getElementById("form_subir");
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", function (event) {
         event.preventDefault();
         subir_archivo(this);
     });
@@ -4992,7 +4993,7 @@ function eliminarArchivo(idArchivo, tabla, idProyecto) {
                 idArchivo: idArchivo,
                 tabla: tabla,
             },
-            success: function(datos) {
+            success: function (datos) {
                 if (tabla == "t_proyectos_planaccion_adjuntos") {
                     var idGeneral = $("#idPlanAccion").val();
                     adjuntosPlanAccion(idGeneral);
@@ -5049,7 +5050,7 @@ function guardarStatus(idProyecto, statusProyecto) {
             statusProyecto: statusProyecto,
             tablaTG: tablaTG,
         },
-        success: function(datos) {
+        success: function (datos) {
             alertInformacionActualiza(datos);
         },
     });
@@ -5090,7 +5091,7 @@ function modalPlanAccion(idProyecto) {
             action: action,
             idProyecto: idProyecto,
         },
-        success: function(datos) {
+        success: function (datos) {
             $("#planAccion" + idProyecto).html(datos);
 
             // refreshProyectos(); Error de Recar para ver plan de acción, se recargan los proyecto al hacer clic de desaparece todo.
@@ -5118,7 +5119,7 @@ function comentariosPlanAccion(idPlanAccion, idProyecto) {
             action: action,
             idPlanAccion: idPlanAccion,
         },
-        success: function(datos) {
+        success: function (datos) {
             $("#comentarioPlanAccion" + idProyecto).html(datos);
             // refreshProyectos();
         },
@@ -5138,7 +5139,7 @@ function agregarPlanAccion(idProyecto) {
                 idProyecto: idProyecto,
                 actividad: actividad,
             },
-            success: function(datos) {
+            success: function (datos) {
                 $("#inputPlanAccion" + idProyecto).val("");
                 modalPlanAccion(idProyecto);
                 comentariosPlanAccion(idPlanAccion, idProyecto);
@@ -5188,7 +5189,7 @@ function eliminarPlanAccion() {
                 action: action,
                 idPlan: idPlan,
             },
-            success: function(datos) {
+            success: function (datos) {
                 refreshProyectos();
                 alertInformacionActualiza("Eliminado");
             },
@@ -5209,7 +5210,7 @@ function actualizarPlanAccion() {
             tituloPlan: tituloPlan,
             idPlan: idPlan,
         },
-        success: function(datos) {
+        success: function (datos) {
             $("#editarTituloPlan").val("");
             refreshProyectos();
             alertInformacionActualiza("Plan Acción, Actualizado");
@@ -5232,7 +5233,7 @@ function agregarComentarioPlanAccion(idProyecto) {
                 idPlanAccion: idPlanAccion,
                 comentario: comentario,
             },
-            success: function(datos) {
+            success: function (datos) {
                 $("#inputComentarioPlanAccion" + idProyecto).val("");
                 comentariosPlanAccion(idPlanAccion, idProyecto);
                 // refreshProyectos();
@@ -5259,7 +5260,7 @@ function adjuntosPlanAccion(idPlanAccion) {
             id: id,
             tabla: tabla,
         },
-        success: function(datos) {
+        success: function (datos) {
             $("#adjuntosPlanAccion" + idProyecto).html(datos);
             // refreshProyectos();
         },
@@ -5370,7 +5371,7 @@ function aplicarStatus(statusProyecto) {
                 tabla: tabla,
                 statusProyecto: statusProyecto,
             },
-            success: function(datos) {
+            success: function (datos) {
                 $("#modalStatusPlanAccion").removeClass();
                 $("#modalStatusPlanAccion").addClass("modal");
                 refreshProyectos();
@@ -5446,7 +5447,7 @@ function finalizarProyectoPlanAccion(idPlanAccion) {
             action: action,
             idPlanAccion: idPlanAccion,
         },
-        success: function(datos) {
+        success: function (datos) {
             console.log(datos);
             $("#modalStatusPlanAccion").removeClass();
             $("#modalStatusPlanAccion").addClass("modal");
@@ -5500,7 +5501,7 @@ function reporteStatusDEP(
             idSeccion: idSeccion,
         },
         // dataType:'json',
-        success: function(datos) {
+        success: function (datos) {
             console.log(datos);
             // refreshProyectos();
             $("#reporteStatusDEPData").html(datos);
@@ -5530,7 +5531,7 @@ function aplicarStatusMC(departamento) {
             departamento: departamento,
         },
         // dataType:'json',
-        success: function(datos) {
+        success: function (datos) {
             console.log(datos);
             alertInformacionActualiza(datos);
             show_hide_modal("modalDepartamentoMC", "hide");
@@ -5555,7 +5556,7 @@ function consultaEDMC(statusConsulta) {
             statusConsulta: statusConsulta,
         },
         // dataType:'json',
-        success: function(datos) {
+        success: function (datos) {
             console.log(datos);
             recargarMC();
             if ((statusConsulta = "energetico")) {
@@ -5583,7 +5584,7 @@ function eliminarED(tabla, columna, idMC) {
             columna: columna,
         },
         // dataType:'json',
-        success: function(datos) {
+        success: function (datos) {
             console.log(datos);
             recargarMC();
             alertInformacionActualiza(datos);
@@ -5612,7 +5613,7 @@ function cargarFotosEquipo1(idEquipo) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerFotosEquipo(idEquipo);
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
@@ -5666,7 +5667,7 @@ function cargarEquipoAdjuntos(idEquipo) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 obtenerFotosEquipo(idEquipo);
                 toastr.success("Se ha cargado el archivo!", "Correcto", {
@@ -5724,7 +5725,7 @@ function consultaDEP(idUsuario, idDestino, idSeccion, idSubseccion) {
             idSubseccion: idSubseccion,
         },
         // dataType:'json',
-        success: function(datos) {
+        success: function (datos) {
             // console.log(datos);
             $("#data-proyectos-TG").html(datos);
         },
@@ -5766,7 +5767,7 @@ function eliminarMC() {
                 action: action,
                 idMC: idMC,
             },
-            success: function(datos) {
+            success: function (datos) {
                 recargarMC();
                 btnEditarMC();
                 show_hide_modal("modalStatusMC", "hide");
@@ -5788,7 +5789,7 @@ function editarMC() {
             idMC: idMC,
             tituloMC: tituloMC,
         },
-        success: function(datos) {
+        success: function (datos) {
             recargarMC();
             btnEditarMC();
             show_hide_modal("modalStatusMC", "hide");
@@ -5796,4 +5797,31 @@ function editarMC() {
             alertInformacionActualiza(datos);
         },
     });
+}
+
+
+// Función para seleccionar GP - TRS - ZI en los mantenimientos preventivos, para las subsecciones no clasificadas.
+function zonaMC(idMC, zona, idEquipo, statusMC, idSubseccion) {
+    console.log(idMC, zona, idEquipo, statusMC, idSubseccion);
+    if (idMC !="" && zona != "") {
+        
+        const action = "zonaMC";
+        $.ajax({
+            type: "post",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idMC: idMC,
+                zona: zona
+            },
+            success: function (datos) {
+                obtCorrectivos(idEquipo, statusMC);
+                // recargarMC();
+                alertInformacionActualiza(datos);
+            },
+        });
+    }else{
+        alertInformacionVacia();
+    }
+
 }

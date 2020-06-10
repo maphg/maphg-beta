@@ -1,25 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="css/tailwind.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/tailwind.css">
+</head>
 
-    <body>
+<body>
 
 
-        <div class="control antialiased sans-serif w-2/12">
-            <input id="sortpicture" name="sortpic"
-                class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                type="file" onfocusout="">
-            <button onclick="myFunction()">Ok</button>
-        </div>
-    </body>
-    <script src="js/jquery-3.3.1.js"></script>
-    <script>
+    <div class="control antialiased sans-serif w-2/12">
+        <input id="sortpicture" name="sortpic" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" type="file" onfocusout="">
+        <button onclick="myFunction()">Ok</button>
+    </div>
+
+    <?php
+    //Con valor strict a false
+    $array = array("15", "5", "78", "17", "5");
+    var_export($array);
+    $indice = array_search(5, $array, false);
+    echo "El número 5 está en el indice: " . $indice;
+
+    //Con valor strict a TRUE
+    $array = array("45", "78", "17", "5");
+    var_export($array);
+    $indice = array_search(5, $array, true);
+    echo "El número 5 está en el indice: " . $indice;
+    ?>
+
+</body>
+<script src="js/jquery-3.3.1.js"></script>
+<script>
     function myFunction() {
         var file_data = $('#sortpicture').prop('files')[0];
         var form_data = new FormData();
@@ -37,6 +50,6 @@
             }
         });
     }
-    </script>
+</script>
 
 </html>
