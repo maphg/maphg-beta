@@ -432,10 +432,10 @@ if (isset($_POST['action'])) {
             $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
         } else {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1, 6)";
-            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1, 6)";
-            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1, 6)";
-            $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1, 6)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
+            $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
         }
 
         if ($zona == "GP" and $idDestino == 2) {
