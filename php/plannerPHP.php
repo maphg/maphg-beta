@@ -8973,7 +8973,7 @@ class Planner
                                 </label>
                                 <label class=\"radio is-size-7\">
                                 <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
-                                ZI $search
+                                ZI
                                 </label>
                             ";
                     } else {
