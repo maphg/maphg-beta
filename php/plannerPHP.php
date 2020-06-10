@@ -3143,7 +3143,7 @@ class Planner
                             } catch (Exception $ex) {
                                 $equipo = $ex;
                                 exit($ex);
-                            } 
+                            }
 
                             $numeroFotos = $fotosEquipo + $fotosMC + $fotosMP;
 
@@ -3947,11 +3947,11 @@ class Planner
 
     public function obtenerComentarios($idEquipo, $idDestino)
     {
-                    //if($idDestino != 10){
-           // $destino = "AND t_equipos.id_destino = $idDestino";
-           // }else{
-                $destino ="";
-           // }
+        //if($idDestino != 10){
+        // $destino = "AND t_equipos.id_destino = $idDestino";
+        // }else{
+        $destino = "";
+        // }
 
         $conn = new Conexion();
         $conn->conectar();
@@ -4503,13 +4503,13 @@ class Planner
             . "<h4 class=\"subtitle is-4 has-text-centered\">Comentarios Relacionados (MP/MC)</h4>";
 
         //Comentarios en MP
-		$idDestino = $_SESSION['idDestino'];
-		
-		if($idDestino != 10){
-			$destino = "AND t_users.id_destino = $idDestino";
-		}else{
-			$destino = "";
-		}
+        $idDestino = $_SESSION['idDestino'];
+
+        if ($idDestino != 10) {
+            $destino = "AND t_users.id_destino = $idDestino";
+        } else {
+            $destino = "";
+        }
         $query = "SELECT * FROM t_ordenes_trabajo WHERE id_equipo = $idEquipo";
         try {
             $result = $conn->obtDatos($query);
@@ -4529,8 +4529,8 @@ class Planner
                         . "INNER JOIN t_users ON t_users.id = t_mp_adjuntos.subido_por "
                         . "INNER JOIN t_colaboradores ON t_colaboradores.id = t_users.id_colaborador "
                         . "INNER JOIN t_ordenes_trabajo ON t_ordenes_trabajo.id = t_mp_adjuntos.id_ot "
-						
-						//Se agrego el filtro para filtrar por Destino.
+
+                        //Se agrego el filtro para filtrar por Destino.
                         . "WHERE t_mp_adjuntos.id_ot = $idOT $destino  ORDER BY t_mp_adjuntos.fecha";
                     try {
                         $result = $conn->obtDatos($query);
@@ -4564,10 +4564,10 @@ class Planner
                                         . "<span class=\"tag is-info\">OT $folioOT</span>"
                                         . "</div>"
                                         . "</div>"
-										. "<a href=\"$urlFotoMP\" target=\"_BLANCK\"><img class=\"ximg\" src=\"$urlFotoMP\" alt=\"\"></a>"
+                                        . "<a href=\"$urlFotoMP\" target=\"_BLANCK\"><img class=\"ximg\" src=\"$urlFotoMP\" alt=\"\"></a>"
                                         . "</div>"
                                         . "</div>";
-                                }else{
+                                } else {
                                     $equipo->fotosMCMPM .= "<div class=\"timeline-item\">"
                                         . "<div class=\"timeline-marker\"></div>"
                                         . "<div class=\"timeline-content\">"
@@ -4582,7 +4582,6 @@ class Planner
                                         . "<a href=\"planner/mp/$fotosMP\" target=\"_BLANCK\"><img class=\"ximg\" src=\"svg/formatos/$tipoMP.svg\" alt=\"\"></a>"
                                         . "</div>"
                                         . "</div>";
-
                                 }
                             }
                         }
@@ -4654,7 +4653,7 @@ class Planner
                                         . "</div>"
                                         . "</div>";
                                 } else {
-									
+
 
                                     $equipo->fotosMCMPM .= "<div class=\"timeline-item\">"
                                         . "<div class=\"timeline-marker\"></div>"
@@ -6065,8 +6064,8 @@ class Planner
             }
         }
         try {
-			            // Agregar a Plesk
-            if($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 || $idSubseccion == 213 || $idSubseccion == 214){
+            // Agregar a Plesk
+            if ($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 || $idSubseccion == 213 || $idSubseccion == 214) {
                 $arrayDEPNombre = array(62 => "RRHH", 211 => "Finanzas", 212 => "Dirección", 213 => "Compras Almacén", 214 => "Calidad");
 
                 $equipo->correctivos .= "

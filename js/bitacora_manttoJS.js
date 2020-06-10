@@ -1,5 +1,5 @@
 // Function para mostrar el formulario de Personal.
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     e = e || window.event;
     var target = e.target || e.srcElement;
 
@@ -687,13 +687,13 @@ function bitacoraPersonal() {
                 gremio: gremio,
                 cantidadPorGremio: cantidadPorGremio
             },
-            success: function(datos) {
+            success: function (datos) {
                 alertSuccess('Captura Agregada!');
                 funcionNombre('gremioCantidad');
                 $("#gremio").val(1);
                 $("#cantidadPorGremio").val('');
                 modalStatus('modal-personal', 'close');
-                setTimeout(function() { modalStatus('modal-personal', 'open');; }, 1000);
+                setTimeout(function () { modalStatus('modal-personal', 'open');; }, 1000);
                 // console.log(datos);
 
             }
@@ -745,7 +745,7 @@ function eliminarItemPersonal(tabla, id, modal) {
                 id: id
 
             },
-            success: function(datos) {
+            success: function (datos) {
                 // console.log(datos);
                 // alertSuccess('Datos Obtenidos!');
                 alertSuccess("Registro Eliminado!");
@@ -776,7 +776,7 @@ function gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado) {
             dateGeneral: dateGeneral,
             turnoSeleccionado: turnoSeleccionado
         },
-        success: function(datos) {
+        success: function (datos) {
             // console.log(datos);
             // alertSuccess('Datos Obtenidos!');
             $("#gremioCantidad").html(datos);
@@ -800,7 +800,7 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             $("#totalgremio1").html(data.total_turno_1_1);
             $("#totalColaboradores1").html(' / ' + data.total_turno_1_2);
             $("#totalgremio2").html(data.total_turno_2_1);
@@ -842,7 +842,7 @@ function consultaGraficaGremio(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             var arrayGremio = data.labelNombre.split(',');
             var arrayData = data.labelData.split(',');
             // console.log(arrayGremio);
@@ -868,7 +868,6 @@ function consultaGraficaGremio(idDestino, zona, dateGeneral) {
 }
 
 
-
 function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
     var action = "MPMCPROYECTOS";
     $.ajax({
@@ -881,7 +880,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             // console.log(data.fecha);
             // console.log(data.dia);
             // console.log(data.diaSemana);
@@ -968,7 +967,7 @@ function empresasExternasCaptura(idDestino, zona, dateGeneral) {
                 motivo: motivo
             },
             // dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 alertSuccess('Empresa y Motivo Capturado!');
                 $("#bitacoraNombreEmpresaExterna").val('');
                 $("#bitacoraMotivoEmpresaExterna").val('');
@@ -997,7 +996,7 @@ function empresasExternasConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             $("#registrosBitacoraEmpresa").html(data.consultaEmpresasModal); //Modal
             $("#registroEmpresas").html(data.consultaEmpresas);
             $("#totalEmpresas").html(data.totalEmpresas);
@@ -1040,7 +1039,7 @@ function acontecimientoCaptura(idDestino, zona, dateGeneral) {
                 descripcion: descripcion
             },
             // dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 // console.log(data);
                 alertSuccess('Acontecimiento Y Descripción Capturado!');
                 $("#bitacoraAcontecimiento").val('');
@@ -1067,7 +1066,7 @@ function acontecimientoConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             $("#bitacoraAcontecimientoConsulta").html(data.consultaAcontecimientoModal); //Modal
             $("#registroAcontecimiento").html(data.consultaAcontecimiento);
             $("#totalAcontecimiento").html(data.totalAcontecimiento);
@@ -1162,7 +1161,7 @@ function giftHabitacionesCaptura(idDestino, zona, dateGeneral) {
                 id: id
             },
             // dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 // console.log(data);
                 alertSuccess(data);
                 modalStatus('modal-gift', 'close');
@@ -1197,7 +1196,7 @@ function giftHabitacionesConsulta(idDestino, zona, dateGeneral) {
             dateGeneral: dateGeneral
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             // console.log(data);
             $("#idGiftHabitaciones").val(data.idGiftHabitaciones);
             $("#giftHPendientes").val(data.pendientes);
@@ -1328,7 +1327,7 @@ function giftCocinasCaptura(idDestino, zona, dateGeneral) {
 
             },
             // dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 // console.log(data);
                 modalStatus('modal-cobare', 'close');
                 alertSuccess(data);
@@ -1368,7 +1367,7 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
 
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             // console.log(data);
 
             // Envia los datos a su input correspondiente para actualizar.
@@ -1412,10 +1411,10 @@ function giftCocinasConsulta(idDestino, zona, dateGeneral) {
                 ];
 
                 dataTop5Tipificacionc = [data.tipificacion_top1,
-                    data.tipificacion_top2,
-                    data.tipificacion_top3,
-                    data.tipificacion_top4,
-                    data.tipificacion_top5
+                data.tipificacion_top2,
+                data.tipificacion_top3,
+                data.tipificacion_top4,
+                data.tipificacion_top5
                 ];
 
 
@@ -1502,46 +1501,46 @@ function funcionNombre(nombreFuncion) {
             MPMCPROYECTOS(idDestino, zona, dateGeneral);
             break;
 
-            // Funcion para Caputras Bitacora de Empresas y Llama a la funcion para consultar los capturados.
+        // Funcion para Caputras Bitacora de Empresas y Llama a la funcion para consultar los capturados.
         case nombreFuncion = "empresasExternasCaptura":
             empresasExternasCaptura(idDestino, zona, dateGeneral);
             empresasExternasConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Funcion para consultar las empresas caputuradas.
+        // Funcion para consultar las empresas caputuradas.
         case nombreFuncion = "empresasExternasConsulta":
             empresasExternasConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Funcion para Bitacora de Aconteciminetos.
+        // Funcion para Bitacora de Aconteciminetos.
         case nombreFuncion = "acontecimientoCaptura":
             acontecimientoCaptura(idDestino, zona, dateGeneral);
             acontecimientoConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Funcion para Bitacora de Aconteciminetos.
+        // Funcion para Bitacora de Aconteciminetos.
         case nombreFuncion = "acontecimientoConsulta":
             acontecimientoConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Captura Gift Habitaciones
+        // Captura Gift Habitaciones
         case nombreFuncion = "giftHabitacionesCaptura":
             giftHabitacionesCaptura(idDestino, zona, dateGeneral);
             giftHabitacionesConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Consulta de Gift Habitaciones
+        // Consulta de Gift Habitaciones
         case nombreFuncion = "giftHabitacionesConsulta":
             giftHabitacionesConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Captura de Gift Cocinas
+        // Captura de Gift Cocinas
         case nombreFuncion = "giftCocinasCaptura":
             giftCocinasCaptura(idDestino, zona, dateGeneral);
             giftCocinasConsulta(idDestino, zona, dateGeneral);
             break;
 
-            // Consulta de Gift Cocinas
+        // Consulta de Gift Cocinas
         case nombreFuncion = "giftCocinasConsulta":
             giftCocinasConsulta(idDestino, zona, dateGeneral);
             break;
