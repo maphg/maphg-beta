@@ -411,83 +411,282 @@ if (isset($_POST['action'])) {
         $bitacoraMC = "";
         $bitacoraMP = "";
         $totalmc = "";
+        $ZI = "";
+        $GP = "";
+        $TRS = "";
+        $comentario_mc = "";
+
+
+        $query_ZI = "
+            SELECT c_rel_seccion_subseccion.fase, c_rel_seccion_subseccion.id_subseccion
+            FROM c_rel_destino_seccion
+            INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
+            INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+            INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%ZI%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+        ";
+        $result_ZI = mysqli_query($conn_2020, $query_ZI);
+
+        while ($row_ZI = mysqli_fetch_array($result_ZI)) {
+            $fase = $row_ZI['fase'];
+            $idSubseccion = $row_ZI['id_subseccion'] . ", ";
+
+            $ZI .= $idSubseccion;
+        }
+
+        $query_GP = "
+            SELECT c_rel_seccion_subseccion.fase, c_rel_seccion_subseccion.id_subseccion
+            FROM c_rel_destino_seccion
+            INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
+            INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+            INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%GP%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+        ";
+        $result_GP = mysqli_query($conn_2020, $query_GP);
+
+        while ($row_GP = mysqli_fetch_array($result_GP)) {
+            $idSubseccion = $row_GP['id_subseccion'] . ", ";
+
+            $GP .= $idSubseccion;
+        }
+
+        $query_TRS = "
+            SELECT c_rel_seccion_subseccion.fase, c_rel_seccion_subseccion.id_subseccion
+            FROM c_rel_destino_seccion
+            INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
+            INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+            INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%TRS%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+        ";
+        $result_TRS = mysqli_query($conn_2020, $query_TRS);
+
+        while ($row_TRS = mysqli_fetch_array($result_TRS)) {
+            $idSubseccion = $row_TRS['id_subseccion'] . ", ";
+
+            $TRS .= $idSubseccion;
+        }
+
+        $ZI .= $ZI . "0";
+        $GP .= $GP . "0";
+        $TRS .= $TRS . "0";
 
         // Validaciones para saber Destinos a seleccionar y las secciones.
         if ($idDestino != 10) {
-            $destino = "AND reporte_status_proyecto.id_destino=$idDestino";
             $destinoMC = "AND t_mc.id_destino=$idDestino";
             $destinoMP = "AND t_ordenes_trabajo.id_destino=$idDestino";
             $destinoMPNP = "AND t_mp_np.id_destino=$idDestino";
+            $destino = "AND reporte_status_proyecto.id_destino=$idDestino";
         } else {
-            $destino = "";
             $destinoMC = "";
             $destinoMP = "";
             $destinoMPNP = "";
+            $destino = "";
         }
 
-        if ($zona == "ZI") {
-            //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) -ZHP(12).
+        // RM
+        if ($idDestino == 1 and $zona == "ZI") {
+            
+
+            //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
+            // La función LIKE solo funciona para correctivos. 
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+        } elseif ($idDestino == 1 and $zona == "TRS") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+        } elseif ($idDestino == 1 and $zona == "GP") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
+
+            // PVR
+        } elseif ($idDestino == 2 and $zona == "ZI") {
+
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+        } elseif ($idDestino == 2 and $zona == "GP") {
+
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+
+            // SDQ
+        } elseif ($idDestino == 3 and $zona == "ZI") {
+
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
-        } else {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
-            $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
-        }
+        } elseif ($idDestino == 3 and $zona == "GP") {
 
-        if ($zona == "GP" and $idDestino == 2) {
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
 
-        if ($zona == "GP" and $idDestino == 3) {
+            // SSA
+        } elseif ($idDestino == 4 and $zona == "ZI") {
+
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
+        } elseif ($idDestino == 4 and $zona == "GP") {
+
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
 
-        if ($zona == "GP" and $idDestino == 4) {
+            // MBJ
+        } elseif ($idDestino == 6 and $zona == "ZI") {
+
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
+        } elseif ($idDestino == 6 and $zona == "GP") {
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
 
-        if ($zona == "GP" and $idDestino == 6) {
+            // CAP
+        } elseif ($idDestino == 11 and $zona == "ZI") {
+
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
+        } elseif ($idDestino == 11 and $zona == "TRS") {
+
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        
+            //CMU 
+        } elseif ($idDestino == 7 and $zona == "ZI") {
+
+            //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
+            // La función LIKE solo funciona para correctivos. 
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+        } elseif ($idDestino == 7 and $zona == "TRS") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+        } elseif ($idDestino == 7 and $zona == "GP") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
+            
+            // PUJ
+        } elseif ($idDestino == 5 and $zona == "ZI") {
+
+            //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
+            // La función LIKE solo funciona para correctivos. 
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+        } elseif ($idDestino == 5 and $zona == "TRS") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+        } elseif ($idDestino == 5 and $zona == "GP") {
+
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
+            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
+            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
+            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
         }
 
-        if ($zona == "TRS" and $idDestino == 11) {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
-        // Fin de bloque para Validar Destino y Seccion.
 
-        //Bloque GP TRS RM provisional
-        if ($zona == "TRS" and $idDestino == 1) {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
+        // if ($zona == "ZI") {
+        //     //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) -ZHP(12).
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
+        // } else {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
+        //     $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
+        // }
 
-        if ($zona == "GP" and $idDestino == 1) {
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-            $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        }
+        // if ($zona == "GP" and $idDestino == 2) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+
+        // if ($zona == "GP" and $idDestino == 3) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+
+        // if ($zona == "GP" and $idDestino == 4) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+
+        // if ($zona == "GP" and $idDestino == 6) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+
+        // if ($zona == "TRS" and $idDestino == 11) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+        // // Fin de bloque para Validar Destino y Seccion.
+
+        // //Bloque GP TRS RM provisional
+        // if ($zona == "TRS" and $idDestino == 1) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
+
+        // if ($zona == "GP" and $idDestino == 1) {
+        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
+        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
+        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
+        // }
 
 
         // Query MC
@@ -523,9 +722,10 @@ if (isset($_POST['action'])) {
             $query_comentario_mc = "SELECT comentario FROM t_mc_comentarios 
             WHERE id_mc=$id ORDER BY fecha DESC LIMIT 1";
             $result_comentario_mc = mysqli_query($conn_2020, $query_comentario_mc);
-            $row_comentario_mc = mysqli_fetch_array($result_comentario_mc);
+            if ($row_comentario_mc = mysqli_fetch_array($result_comentario_mc)) {
+                $comentario_mc = $row_comentario_mc['comentario'];
+            }
 
-            $comentario_mc = $row_comentario_mc['comentario'];
             $tag_status = "<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
             $tag_status1 = "Trabajando";
             $tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
