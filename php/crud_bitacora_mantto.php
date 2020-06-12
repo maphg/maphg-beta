@@ -424,7 +424,7 @@ if (isset($_POST['action'])) {
             INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
             INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
-            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%ZI%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%ZI%'
         ";
         $result_ZI = mysqli_query($conn_2020, $query_ZI);
 
@@ -442,7 +442,7 @@ if (isset($_POST['action'])) {
             INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
             INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
-            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%GP%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%GP%'
         ";
         $result_GP = mysqli_query($conn_2020, $query_GP);
 
@@ -459,7 +459,7 @@ if (isset($_POST['action'])) {
             INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
             INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
-            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%TRS%' AND c_rel_seccion_subseccion.id_subseccion != '200'
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%TRS%'
         ";
         $result_TRS = mysqli_query($conn_2020, $query_TRS);
 
@@ -488,7 +488,7 @@ if (isset($_POST['action'])) {
 
         // RM
         if ($idDestino == 1 and $zona == "ZI") {
-            
+
 
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
