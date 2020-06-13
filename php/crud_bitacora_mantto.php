@@ -461,9 +461,9 @@ if (isset($_POST['action'])) {
         $GP .= $GP . "0";
         $TRS .= $TRS . "0";
 
-        $bitacoraMC .="-ZI $ZI -ZI";
-        $bitacoraMP .="-GP $GP -GP";
-        $bitacoraProyecto .="-TRS $TRS -TRS";
+        // $bitacoraMC .="-ZI $ZI -ZI";
+        // $bitacoraMP .="-GP $GP -GP";
+        // $bitacoraProyecto .="-TRS $TRS -TRS";
 
         // Validaciones para saber Destinos a seleccionar y las secciones.
         if ($idDestino != 10) {
