@@ -342,19 +342,6 @@ if (isset($_POST['action'])) {
             $cantidadTurno_array['total_turno_3_2'] = " 0";
         }
 
-        // Se comento este proceso porque ahora desde el JS se suman en la función (cantidadTurno).
-        // $cantidadTurno_array['totalPlantillaGlobal'] = 
-        // ($cantidadPlantillaGlobal_1) + 
-        // ($cantidadPlantillaGlobal_2) + 
-        // ($cantidadPlantillaGlobal_3);
-
-        // $cantidadTurno_array['totalPlantilla'] = 
-        // ($cantidadPlantilla_1) + 
-        // ($cantidadPlantilla_2) + 
-        // ($cantidadPlantilla_3);
-
-
-
         // Guarda toda la informacion obtenida para imprimir por id de elementos.
         echo json_encode($cantidadTurno_array);
     }
@@ -410,7 +397,8 @@ if (isset($_POST['action'])) {
         $bitacoraProyecto = "";
         $bitacoraMC = "";
         $bitacoraMP = "";
-        $totalmc = "";
+        $totalmc = 0;
+        $totalmc_2 = 0;
         $ZI = "";
         $GP = "";
         $TRS = "";
@@ -430,9 +418,9 @@ if (isset($_POST['action'])) {
 
         while ($row_ZI = mysqli_fetch_array($result_ZI)) {
             $fase = $row_ZI['fase'];
-            $idSubseccion = $row_ZI['id_subseccion'] . ", ";
+            $idSubseccionZI = $row_ZI['id_subseccion'] . ", ";
 
-            $ZI .= $idSubseccion;
+            $ZI .= $idSubseccionZI;
         }
 
         $query_GP = "
@@ -447,9 +435,9 @@ if (isset($_POST['action'])) {
         $result_GP = mysqli_query($conn_2020, $query_GP);
 
         while ($row_GP = mysqli_fetch_array($result_GP)) {
-            $idSubseccion = $row_GP['id_subseccion'] . ", ";
+            $idSubseccionGP = $row_GP['id_subseccion'] . ", ";
 
-            $GP .= $idSubseccion;
+            $GP .= $idSubseccionGP;
         }
 
         $query_TRS = "
@@ -464,14 +452,18 @@ if (isset($_POST['action'])) {
         $result_TRS = mysqli_query($conn_2020, $query_TRS);
 
         while ($row_TRS = mysqli_fetch_array($result_TRS)) {
-            $idSubseccion = $row_TRS['id_subseccion'] . ", ";
+            $idSubseccionTRS = $row_TRS['id_subseccion'] . ", ";
 
-            $TRS .= $idSubseccion;
+            $TRS .= $idSubseccionTRS;
         }
 
         $ZI .= $ZI . "0";
         $GP .= $GP . "0";
         $TRS .= $TRS . "0";
+
+        $bitacoraMC .="-ZI $ZI -ZI";
+        $bitacoraMP .="-GP $GP -GP";
+        $bitacoraProyecto .="-TRS $TRS -TRS";
 
         // Validaciones para saber Destinos a seleccionar y las secciones.
         if ($idDestino != 10) {
@@ -488,26 +480,24 @@ if (isset($_POST['action'])) {
 
         // RM
         if ($idDestino == 1 and $zona == "ZI") {
-
-
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($ZI)) OR (t_proyectos.fase LIKE '%ZI%'))";
         } elseif ($idDestino == 1 and $zona == "TRS") {
 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($TRS)) OR (t_proyectos.fase LIKE '%TRS%'))";
         } elseif ($idDestino == 1 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($GP)) OR (t_proyectos.fase LIKE '%GP%'))";
 
             // PVR
         } elseif ($idDestino == 2 and $zona == "ZI") {
@@ -583,22 +573,22 @@ if (isset($_POST['action'])) {
 
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%ZI%') OR (reporte_status_proyecto.id_subseccion IN($ZI)))";
         } elseif ($idDestino == 7 and $zona == "TRS") {
 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%TRS%') OR(reporte_status_proyecto.id_subseccion IN($TRS)))";
         } elseif ($idDestino == 7 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%GP%') OR (reporte_status_proyecto.id_subseccion IN($GP)) )";
             
             // PUJ
         } elseif ($idDestino == 5 and $zona == "ZI") {
@@ -623,72 +613,6 @@ if (isset($_POST['action'])) {
             $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
         }
 
-
-        // if ($zona == "ZI") {
-        //     //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) -ZHP(12).
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(11, 24, 8, 9, 10, 1, 12)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1, 12)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(11, 24, 8, 9, 10, 1)";
-        // } else {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion NO IN(11, 24, 8, 9, 10, 1)";
-        //     $zonaFiltroMP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id NO IN(11, 24, 8, 9, 10, 1)";
-        // }
-
-        // if ($zona == "GP" and $idDestino == 2) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-        // if ($zona == "GP" and $idDestino == 3) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-        // if ($zona == "GP" and $idDestino == 4) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-        // if ($zona == "GP" and $idDestino == 6) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-        // if ($zona == "TRS" and $idDestino == 11) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-        // // Fin de bloque para Validar Destino y Seccion.
-
-        // //Bloque GP TRS RM provisional
-        // if ($zona == "TRS" and $idDestino == 1) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-        // if ($zona == "GP" and $idDestino == 1) {
-        //     $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
-        //     $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
-        //     $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        // }
-
-
         // Query MC
         $query_t_mc = "SELECT
         t_mc.id,
@@ -710,7 +634,9 @@ if (isset($_POST['action'])) {
         ";
         // Sentencia SQL donde se almacena la información.
         $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-        $totalmc = mysqli_num_rows($result_t_mc);
+        if($totalmc = mysqli_num_rows($result_t_mc)){
+            $totalmc = $totalmc;
+        }
 
         while ($row_t_mc = mysqli_fetch_array($result_t_mc)) {
             $id = $row_t_mc['id'];
@@ -719,6 +645,8 @@ if (isset($_POST['action'])) {
             $descripcion = $row_t_mc['actividad'];
             $status_finalizado = $row_t_mc['status'];
             $status_trabajare = $row_t_mc['status_trabajare'];
+            $comentario_mc = "Sin Comentarios";
+
             $query_comentario_mc = "SELECT comentario FROM t_mc_comentarios 
             WHERE id_mc=$id ORDER BY fecha DESC LIMIT 1";
             $result_comentario_mc = mysqli_query($conn_2020, $query_comentario_mc);
@@ -730,10 +658,6 @@ if (isset($_POST['action'])) {
             $tag_status1 = "Trabajando";
             $tag_finalizado = "<h1 class=\"font-black text-lg text-green-600 mx-1 bg-green-300 px-2 rounded-md\">F</h1>";
             $tag_status2 = "Finalizado";
-
-            if ($comentario_mc == "") {
-                $comentario_mc = "Sin Comentarios";
-            }
 
             if ($status_trabajare == "") {
                 $tag_status = "";
@@ -771,9 +695,14 @@ if (isset($_POST['action'])) {
         INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
         WHERE t_mc.status_trabajare != ''  AND t_mc.activo = 1 AND t_mc.status != 'F'
         $destinoMC
-        $zonaFiltroMC";
+        $zonaFiltroMC
+        ";
 
         $result_MC_trabajare = mysqli_query($conn_2020, $query_MC_trabajare);
+        if ($totalmc_2 = mysqli_num_rows($result_MC_trabajare)){
+            $total = $totalmc_2;
+        }
+        
         while ($row_MC_trabajare = mysqli_fetch_array($result_MC_trabajare)) {
             $id = $row_MC_trabajare['id'];
             $seccion = $row_MC_trabajare['seccion'];
@@ -824,7 +753,7 @@ if (isset($_POST['action'])) {
 
         // Se obtiene el resultado total de los solucionados y Trabajando MC.
         $MPMCPROYECTOS['bitacoraMC'] = $bitacoraMC;
-        $MPMCPROYECTOS['totalmc'] = $totalmc + mysqli_num_rows($result_MC_trabajare);
+        $MPMCPROYECTOS['totalmc'] = $totalmc;
 
 
         //QUERY MP Planificado.
@@ -859,7 +788,8 @@ if (isset($_POST['action'])) {
             $seccion = $row_t_mp['seccion'];
             $subseccion = $row_t_mp['grupo'];
             $equipo = $row_t_mp['equipo'];
-            $folio = $row_t_mp['id'];
+            $folio = $row_t_mp['folio'];
+            $comentario_mp = "Sin Comentario";
 
 
             $query_comentario_mp = "SELECT t_mp_comentarios.comentarios
@@ -867,10 +797,8 @@ if (isset($_POST['action'])) {
             ORDER BY fecha DESC LIMIT 1
                         ";
             $result_comentario_mp = mysqli_query($conn_2020, $query_comentario_mp);
-            $row_comentario_mp = mysqli_fetch_array($result_comentario_mp);
-            $comentario_mp = $row_comentario_mp['comentarios'];
-            if ($comentario_mp == "") {
-                $comentario_mp = "Sin Comentario";
+            if($row_comentario_mp = mysqli_fetch_array($result_comentario_mp)){
+                $comentario_mp = $row_comentario_mp['comentarios'];
             }
 
             $bitacoraMP .= "
@@ -959,6 +887,7 @@ if (isset($_POST['action'])) {
         //	$trabahareFiltro ="";
         //}
         $query_t_proyectos = " SELECT 
+        reporte_status_proyecto.id,
             reporte_status_proyecto.fecha_inicio,
             reporte_status_proyecto.id_seccion,
             reporte_status_proyecto.id_subseccion,
@@ -996,6 +925,7 @@ if (isset($_POST['action'])) {
             $planaccion = $row_t_proyectos['actividad'];
             $id_planaccion = $row_t_proyectos['id_planaccion'];
             $status = $row_t_proyectos['status'];
+            $comentario = "Sin Comentarios";
 
             $tag_status = "<h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\">T</h1>";
             $tag_status1 = "Trabajando";
@@ -1004,13 +934,11 @@ if (isset($_POST['action'])) {
 
             $query_comentario = "SELECT comentario FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $id_planaccion ORDER BY fecha DESC";
             $result_comentario = mysqli_query($conn_2020, $query_comentario);
-            $row_comentario = mysqli_fetch_array($result_comentario);
-            $comentario = $row_comentario['comentario'];
-
-
-            if ($comentario == "") {
-                $comentario = "Sin Comentarios";
+           if( $row_comentario = mysqli_fetch_array($result_comentario)){
+               $comentario = $row_comentario['comentario'];
             }
+
+
 
             if ($status != "status_trabajare") {
                 $tag_status = "";
@@ -1090,13 +1018,26 @@ if (isset($_POST['action'])) {
 
 
             // Proyectos
-            $query_p = "SELECT* FROM reporte_status_proyecto WHERE 
-            fecha_inicio BETWEEN '$value' AND '$key'
-            $destino $zonaFiltro
+            $query_p = "SELECT
+            reporte_status_proyecto.id
+
+            FROM reporte_status_proyecto
+            INNER JOIN c_secciones ON reporte_status_proyecto.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON reporte_status_proyecto.id_subseccion = c_subsecciones.id
+            INNER JOIN t_proyectos ON reporte_status_proyecto.id_proyecto = t_proyectos.id 
+            INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id 
+
+            WHERE
+            ((reporte_status_proyecto.status = 'status_solucionado') OR (reporte_status_proyecto.status = 'status_trabajare'))
+            $destino
+            $zonaFiltro
+
+            AND reporte_status_proyecto.fecha_inicio BETWEEN '$value' AND '$key'
             ";
             $result_p = mysqli_query($conn_2020, $query_p);
             $total_p = 0;
             $total_p = mysqli_num_rows($result_p);
+           
 
             $graficaProyectos[] = $total_p;
             $graficaFecha = $key . $value;

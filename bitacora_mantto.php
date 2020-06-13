@@ -39,7 +39,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script src="js/Chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
@@ -1310,9 +1310,8 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
     <!-- Libreria Scripts -->
     <script src="js/jquery-3.3.1.js"></script>
     <!-- CDN para DataPicker -->
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"></script>
     <!-- CDN para Alertas -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="js/alertasSweet.js"></script>
     <script src="js/bitacora_manttoJS.js"></script>
 </body>
 

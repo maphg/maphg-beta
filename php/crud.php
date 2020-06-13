@@ -9,7 +9,7 @@ include 'conexion.php';
 if (isset($_POST['action'])) {
 
     $action = $_POST['action'];
-    
+
 
     // Variables Generales.
     $array_destino = array(1 => "RM", 2 => "PVR", 3 => "SDQ", 4 => "SSA", 5 => "PUJ", 6 => "MBJ", 7 => "CMU", 10 => "AME", 11 => "CAP");
@@ -23,10 +23,10 @@ if (isset($_POST['action'])) {
         $id_Seccion = $_POST["id_Seccion"];
         $idSubseccion = $_POST["idSubseccion"];
         $idUsuarioP = $_POST["idUsuario"];
-		
-		if($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 || $idSubseccion == 213 || $idSubseccion == 214){
-			$subseccion = "AND id_subseccion=$idSubseccion";
-			$subseccionDEP = "<div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\"  onclick=\" show_hide_modal('modal-proyectos','hide'); reporteStatusDEP($idSubseccion, $id_Destino , 23, 0, 0, 0, ' $array_destino[$id_Destino]', '$arrayDEPNombre[$idSubseccion]',''); \">
+
+        if ($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 || $idSubseccion == 213 || $idSubseccion == 214) {
+            $subseccion = "AND id_subseccion=$idSubseccion";
+            $subseccionDEP = "<div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\"  onclick=\" show_hide_modal('modal-proyectos','hide'); reporteStatusDEP($idSubseccion, $id_Destino , 23, 0, 0, 0, ' $array_destino[$id_Destino]', '$arrayDEPNombre[$idSubseccion]',''); \">
                 <div class=\"column\">
                 <div class=\"columns\">
                 <div class=\"column\">
@@ -40,9 +40,9 @@ if (isset($_POST['action'])) {
                 </div>
                 </div>
                 ";
-		}else{
-			$subseccion = "AND id_subseccion=200";
-			$subseccionDEP = "<div class=\" modal columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\"  onclick=\" show_hide_modal('modal-proyectos','hide'); reporteStatusDEP($idSubseccion, $id_Destino , 23, 0, 0, 0, ' $array_destino[$id_Destino]', '$arrayDEPNombre[$idSubseccion]',''); \">
+        } else {
+            $subseccion = "AND id_subseccion=200";
+            $subseccionDEP = "<div class=\" modal columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\"  onclick=\" show_hide_modal('modal-proyectos','hide'); reporteStatusDEP($idSubseccion, $id_Destino , 23, 0, 0, 0, ' $array_destino[$id_Destino]', '$arrayDEPNombre[$idSubseccion]',''); \">
                 <div class=\"column\">
                 <div class=\"columns\">
                 <div class=\"column\">
@@ -56,7 +56,7 @@ if (isset($_POST['action'])) {
                 </div>
                 </div>
                 ";
-		}
+        }
 
         if ($id_Destino != 10) {
             $query = "SELECT* FROM t_proyectos WHERE id_destino=$id_Destino AND id_seccion=$id_Seccion AND status='N' AND activo=1 $subseccion ORDER BY id DESC";
@@ -76,7 +76,7 @@ if (isset($_POST['action'])) {
 
             // Variables.
             $idProyecto = $row_proyectos['id'];
-            
+
 
             // $query_status_urgente = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status='status_urgente'";
             // $result_status_urgente = mysqli_query($conn_2020, $query_status_urgente);
@@ -91,9 +91,6 @@ if (isset($_POST['action'])) {
             } else {
                 $urgente_icono = "";
             }
-
-
-
 
             echo " 
                 <div class=\"columns is-gapless my-1 cursor mx-4\" >
@@ -200,60 +197,59 @@ if (isset($_POST['action'])) {
                 echo '<p class="filatarea" onclick="modalCosto(' . $row_proyectos['id'] . ',' . $row_proyectos['coste'] . ')"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
             }
             echo ' </div>
-                            <div class="column overflow" onclick="modalStatus(' . $row_proyectos['id'] . ')">
+                            <div class="column overflow" onclick="modalStatus(' . $row_proyectos['id'] . '); consultaFaseProyectoDEP(' . $row_proyectos['id'] . ');">
                             <p class="filatarea modal-button" onclick="modalStatus(' . $row_proyectos['id'] . ')" data-target="modal-id">';
-			
-			//Horario para ocultar status 'T'
-			$fecha_inicio = date('Y-m-d 16:01:00');	
-			$fecha_fin = date("Y-m-d 16:01:00 ",strtotime($fecha_inicio."- 1 days"));
 
-                $query_status = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status !='' and status != 'status_urgente' and status != 'status_solucionado'";
-                $result_status = mysqli_query($conn_2020, $query_status);
-                if (mysqli_num_rows($result_status) <= 0) {
-                    echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
+            //Horario para ocultar status 'T'
+            $fecha_inicio = date('Y-m-d 16:01:00');
+            $fecha_fin = date("Y-m-d 16:01:00 ", strtotime($fecha_inicio . "- 1 days"));
+
+            $query_status = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status !='' and status != 'status_urgente' and status != 'status_solucionado'";
+            $result_status = mysqli_query($conn_2020, $query_status);
+            if (mysqli_num_rows($result_status) <= 0) {
+                echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
+            } else {
+
+                $query_status_trabajare = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status='status_trabajare' and fecha_inicio >= '$fecha_fin' and fecha_inicio <= '$fecha_inicio'";
+                $result_status_trabajare = mysqli_query($conn_2020, $query_status_trabajare);
+                if (mysqli_num_rows($result_status_trabajare) > 0) {
+                    $T = "<strong class=\"mr-1 fa-lg has-text-info\">T</strong>";
                 } else {
+                    $T = "";
+                }
 
-                    $query_status_trabajare = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status='status_trabajare' and fecha_inicio >= '$fecha_fin' and fecha_inicio <= '$fecha_inicio'";
-                    $result_status_trabajare = mysqli_query($conn_2020, $query_status_trabajare);
-                    if (mysqli_num_rows($result_status_trabajare) > 0) {
-                        $T = "<strong class=\"mr-1 fa-lg has-text-info\">T</strong>";
-                    }else{
-						$T = "";
-					}
-					
-					$query_status_material = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status='status_material'";
-                    $result_status_material = mysqli_query($conn_2020, $query_status_material);
-                    if (mysqli_num_rows($result_status_material) > 0) {
-                        $M = "<strong class=\"mr-1 fa-lg\">M</strong>";  
-                    }else{
-						$M = "";
-					}
+                $query_status_material = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and status='status_material'";
+                $result_status_material = mysqli_query($conn_2020, $query_status_material);
+                if (mysqli_num_rows($result_status_material) > 0) {
+                    $M = "<strong class=\"mr-1 fa-lg\">M</strong>";
+                } else {
+                    $M = "";
+                }
 
-                    $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND  status LIKE '%status_departamento%'";
-                    $result_status_departamento = mysqli_query($conn_2020, $query_status_departamento);
-                    if (mysqli_num_rows($result_status_departamento) > 0) {
-                       $D = "<strong class=\"mr-1 fa-lg has-text-primary\">D</strong>";
-                    }else{
-						$D = "";
-					}
+                $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND  status LIKE '%status_departamento%'";
+                $result_status_departamento = mysqli_query($conn_2020, $query_status_departamento);
+                if (mysqli_num_rows($result_status_departamento) > 0) {
+                    $D = "<strong class=\"mr-1 fa-lg has-text-primary\">D</strong>";
+                } else {
+                    $D = "";
+                }
 
-                    $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND status LIKE '%status_energetico%' ";
-                    $result_status_energeticos = mysqli_query($conn_2020, $query_status_energeticos);
-                    if (mysqli_num_rows($result_status_energeticos) > 0) {
-                        $E = "<strong class=\"mr- fa-lg has-text-warning\">E</strong>";
-                    }else{
-						$E = "";
-					}
-					
-					if($T !="" || $M !="" || $D !="" || $E !=""){
-						echo $T;
-						echo $M;
-						echo $D;
-						echo $E;
-					}else{
-						 echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
-					}
-                
+                $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND status LIKE '%status_energetico%' ";
+                $result_status_energeticos = mysqli_query($conn_2020, $query_status_energeticos);
+                if (mysqli_num_rows($result_status_energeticos) > 0) {
+                    $E = "<strong class=\"mr- fa-lg has-text-warning\">E</strong>";
+                } else {
+                    $E = "";
+                }
+
+                if ($T != "" || $M != "" || $D != "" || $E != "") {
+                    echo $T;
+                    echo $M;
+                    echo $D;
+                    echo $E;
+                } else {
+                    echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
+                }
             }
             echo '</p>
                             </div>
@@ -314,24 +310,125 @@ if (isset($_POST['action'])) {
     }
 
 
+    if ($action == "consultaFaseProyectoDEP") {
+        $idProyecto = $_POST['idProyecto'];
 
+        $query = "SELECT fase, id_seccion, id_subseccion FROM t_proyectos WHERE id = $idProyecto";
+        $result = mysqli_query($conn_2020, $query);
+        if ($row = mysqli_fetch_array($result)) {
+            $idSeccion = $row['id_seccion'];
+            $idSubseccion = $row['id_subseccion'];
+            $fase = $row['fase'];
+
+            if ($fase != "") {
+                $fase = explode(",", $fase);
+
+                if ($idSeccion == 23 and $idSubseccion == 200) {
+
+                    if ($fase[0] == "0") {
+                        $ZI = "";
+                    } else {
+                        $ZI = "checked";
+                    }
+
+                    if ($fase[1] == "0") {
+                        $GP = "";
+                    } else {
+                        $GP = "checked";
+                    }
+
+                    if ($fase[2] == "0") {
+                        $TRS = "";
+                    } else {
+                        $TRS = "checked";
+                    }
+
+                    echo " 
+                        <label class=\"checkbox px-2 has-text-weight-bold\">
+                        <input type=\"checkbox\" $ZI onclick=\"agregarFaseProyectoDEP('ZI')\">
+                        ZI
+                        </label>
+                        
+                        <label class=\"checkbox px-2 has-text-weight-bold\">
+                        <input type=\"checkbox\" $GP onclick=\"agregarFaseProyectoDEP('GP')\">
+                        GP
+                        </label>
+
+                        <label class=\"checkbox px-2 has-text-weight-bold\">
+                        <input type=\"checkbox\" $TRS onclick=\"agregarFaseProyectoDEP('TRS')\">
+                        TRS 
+                        </label>
+                    ";
+                }
+            } else {
+                echo "";
+            }
+        }
+    }
+
+
+    if ($action == "agregarFaseProyectoDEP") {
+        $fase = $_POST['fase'];
+        $idProyecto = $_POST['idProyecto'];
+        $faseArray_aux = "";
+
+        $query = "SELECT* FROM t_proyectos WHERE id = $idProyecto";
+        $result = mysqli_query($conn_2020, $query);
+        if ($row = mysqli_fetch_array($result)) {
+            $faseArray = $row['fase'];
+            $faseArray = explode(",", $faseArray);
+
+            if ($fase == "ZI") {
+                if ($faseArray[0] == "ZI") {
+                    $faseArray[0] = "0";
+                } else {
+                    $faseArray[0] = "ZI";
+                }
+            }
+
+            if ($fase == "GP") {
+                if ($faseArray[1] == "GP") {
+                    $faseArray[1] = "0";
+                } else {
+                    $faseArray[1] = "GP";
+                }
+            }
+
+            if ($fase == "TRS") {
+                if ($faseArray[2] == "TRS") {
+                    $faseArray[2] = "0";
+                } else {
+                    $faseArray[2] = "TRS";
+                }
+            }
+            $data = $faseArray[0] . "," . $faseArray[1] . "," . $faseArray[2];
+
+            $query = "UPDATE t_proyectos SET fase = '$data' WHERE id = $idProyecto";
+            $result = mysqli_query($conn_2020, $query);
+            if ($result) {
+                echo "Fase Actualizada";
+            } else {
+                echo "Error al Actualizar la Fase";
+            }
+        }
+    }
 
 
     // Lista de Proyectos
-    if($action == "proyectosFinalizados") {
+    if ($action == "proyectosFinalizados") {
 
         $id_Destino = $_POST["id_Destino"];
         $id_Seccion = $_POST["id_Seccion"];
 
-        if($id_Destino != 10){
+        if ($id_Destino != 10) {
             $query = "SELECT* FROM t_proyectos WHERE id_destino=$id_Destino AND id_seccion=$id_Seccion AND id_subseccion=200 AND status='F' AND activo=1";
-        }else{
+        } else {
             $query = "SELECT* FROM t_proyectos WHERE id_seccion=$id_Seccion AND id_subseccion=200 AND status='F' AND activo=1";
         }
 
 
         $result = mysqli_query($conn_2020, $query);
-        while($row_proyectos = mysqli_fetch_array($result)){
+        while ($row_proyectos = mysqli_fetch_array($result)) {
 
 
 
@@ -343,23 +440,23 @@ if (isset($_POST['action'])) {
                                 <div class="tarea is-small is-danger overflow">
                 ';
 
-                $query_t_users = "SELECT* FROM t_users WHERE id =".$row_proyectos['creado_por']."";
-                $result_t_users = mysqli_query($conn_2020, $query_t_users);
-                if ($row_t_users = mysqli_fetch_array($result_t_users)) {
+            $query_t_users = "SELECT* FROM t_users WHERE id =" . $row_proyectos['creado_por'] . "";
+            $result_t_users = mysqli_query($conn_2020, $query_t_users);
+            if ($row_t_users = mysqli_fetch_array($result_t_users)) {
 
-                    $query_Colaborador ="SELECT* FROM t_colaboradores WHERE id =".$row_t_users['id_colaborador']."";
-                    $result_Colaborador = mysqli_query($conn_2020, $query_Colaborador);
-                    if ($row_Colaborador = mysqli_fetch_array($result_Colaborador)) {
-                        if ($row_Colaborador['id']==7) {
-                            echo '<p class="tarea-body">' . $row_proyectos['status_urgente'] . '<strong>'.$row_proyectos['titulo'].'</strong> <span><i class="fad fa-user mx-2 has-text-danger fa-lg"></i><i class="fas fa-star mx-2 has-text-danger fa-lg"></i>'.$row_Colaborador['nombre'].' '.$row_Colaborador['apellido'].'</span></p>';
-                        }else{
-                            echo '<p class="tarea-body">'.$row_proyectos['status_urgente'].' <strong>'.$row_proyectos['titulo'].'</strong> <span><i class="fad fa-user mx-2 has-text-danger fa-lg"></i>'.$row_Colaborador['nombre'].' '.$row_Colaborador['apellido'].'</span></p>';
-                        }
+                $query_Colaborador = "SELECT* FROM t_colaboradores WHERE id =" . $row_t_users['id_colaborador'] . "";
+                $result_Colaborador = mysqli_query($conn_2020, $query_Colaborador);
+                if ($row_Colaborador = mysqli_fetch_array($result_Colaborador)) {
+                    if ($row_Colaborador['id'] == 7) {
+                        echo '<p class="tarea-body">' . $row_proyectos['status_urgente'] . '<strong>' . $row_proyectos['titulo'] . '</strong> <span><i class="fad fa-user mx-2 has-text-danger fa-lg"></i><i class="fas fa-star mx-2 has-text-danger fa-lg"></i>' . $row_Colaborador['nombre'] . ' ' . $row_Colaborador['apellido'] . '</span></p>';
+                    } else {
+                        echo '<p class="tarea-body">' . $row_proyectos['status_urgente'] . ' <strong>' . $row_proyectos['titulo'] . '</strong> <span><i class="fad fa-user mx-2 has-text-danger fa-lg"></i>' . $row_Colaborador['nombre'] . ' ' . $row_Colaborador['apellido'] . '</span></p>';
                     }
                 }
+            }
 
 
-                echo '          </div>
+            echo '          </div>
                             </div>
                         </div>
                     </div>
@@ -367,66 +464,64 @@ if (isset($_POST['action'])) {
                         <div class="columns is-gapless">
                             <div class="column overflow">';
 
-                            $query_t_tareas_asignaciones = "SELECT id_usuario FROM t_tareas_asignaciones WHERE id_tarea =".$row_proyectos['id']."";
-                            $result_t_tareas_asignaciones = mysqli_query($conn_2020, $query_t_tareas_asignaciones);
+            $query_t_tareas_asignaciones = "SELECT id_usuario FROM t_tareas_asignaciones WHERE id_tarea =" . $row_proyectos['id'] . "";
+            $result_t_tareas_asignaciones = mysqli_query($conn_2020, $query_t_tareas_asignaciones);
 
-                            if(mysqli_num_rows($result_t_tareas_asignaciones)>0){
-                                $idUsuario = mysqli_fetch_array($result_t_tareas_asignaciones);
+            if (mysqli_num_rows($result_t_tareas_asignaciones) > 0) {
+                $idUsuario = mysqli_fetch_array($result_t_tareas_asignaciones);
 
-                                $query_2 = "SELECT* FROM t_users WHERE id=".$idUsuario['id_usuario']."";
-                                $result_2 = mysqli_query($conn_2020, $query_2);
+                $query_2 = "SELECT* FROM t_users WHERE id=" . $idUsuario['id_usuario'] . "";
+                $result_2 = mysqli_query($conn_2020, $query_2);
 
-                                $idColaborador = mysqli_fetch_array($result_2);
-                                $query_3 = "SELECT* FROM t_colaboradores WHERE id=".$idColaborador['id_colaborador']."";
-                                $result_3 = mysqli_query($conn_2020, $query_3);
-                                $row_3 = mysqli_fetch_array($result_3);
+                $idColaborador = mysqli_fetch_array($result_2);
+                $query_3 = "SELECT* FROM t_colaboradores WHERE id=" . $idColaborador['id_colaborador'] . "";
+                $result_3 = mysqli_query($conn_2020, $query_3);
+                $row_3 = mysqli_fetch_array($result_3);
 
-                                echo '<p class="filatarea">'. $row_3['nombre'] . ' ' . $row_3['apellido'] . '</p>';
+                echo '<p class="filatarea">' . $row_3['nombre'] . ' ' . $row_3['apellido'] . '</p>';
+            } else {
+                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
+            }
 
-                            }else{
-                                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
-                            }
-
-                            echo '</div>
+            echo '</div>
                             <div class="column overflow">';
-                            $fecha =date_create ($row_proyectos['fecha_creacion']);
-                            echo '    <p class="filatarea">'. date_format($fecha, 'M-y').'</i></p>
+            $fecha = date_create($row_proyectos['fecha_creacion']);
+            echo '    <p class="filatarea">' . date_format($fecha, 'M-y') . '</i></p>
                             </div>
                             <div class="column overflow">
                                 <p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>
                             </div>
                             <div class="column overflow">';
-                                echo "<p class=\"filatarea\">comentario</p>";
-                            echo '</div>
+            echo "<p class=\"filatarea\">comentario</p>";
+            echo '</div>
                             <div class="column overflow">
                                 <p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>
                             </div>
                             <div class="column overflow">';
 
-                            if ($row_proyectos['tipo'] != "") {
-                                echo '<p class="filatarea")">' . $row_proyectos['tipo'] . '</p>';
-                            } else {
-                                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
-                            }
+            if ($row_proyectos['tipo'] != "") {
+                echo '<p class="filatarea")">' . $row_proyectos['tipo'] . '</p>';
+            } else {
+                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
+            }
 
-                            echo '</div>
+            echo '</div>
                             <div class="column overflow">';
 
-                            if ($row_proyectos['justificacion'] != "") {
-                                echo '<p class="filatarea"><i class="fas fa-check has-text-success fa-lg"></i></p>';
-                            } else {
-                                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
-                            }
-                            echo '</div>
-                            <div class="column overflow"> '
-                            ;
+            if ($row_proyectos['justificacion'] != "") {
+                echo '<p class="filatarea"><i class="fas fa-check has-text-success fa-lg"></i></p>';
+            } else {
+                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
+            }
+            echo '</div>
+                            <div class="column overflow"> ';
 
-                            if ($row_proyectos['coste'] != 0) {
-                                echo '<p class="filatarea" > $'.$row_proyectos['coste'].'</p>';
-                            }else{
-                                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
-                            }
-                            echo ' </div>
+            if ($row_proyectos['coste'] != 0) {
+                echo '<p class="filatarea" > $' . $row_proyectos['coste'] . '</p>';
+            } else {
+                echo '<p class="filatarea"><i class="fad fa-minus has-text-danger fa-2x"></i></p>';
+            }
+            echo ' </div>
                             <div class="column overflow">
                             <p class="filatarea modal-button" data-target="modal-id">
                                   <span class="has-text-success"><i class="fas fa-check mr-2"></i></span>
@@ -435,7 +530,7 @@ if (isset($_POST['action'])) {
                         </div>
                     </div>
                 </div>
-            ' ;
+            ';
         }
         echo "<br>";
     }
@@ -460,7 +555,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "eliminarProyecto"){
+    if ($action == "eliminarProyecto") {
         $idProyecto = $_POST['idProyecto'];
         $query = "UPDATE t_proyectos SET activo=0 WHERE id=$idProyecto";
         $result = mysqli_query($conn_2020, $query);
@@ -469,10 +564,9 @@ if (isset($_POST['action'])) {
         } else {
             echo "Error de Proyecto";
         }
-        
     }
-    
-    if($action == "editarProyecto"){
+
+    if ($action == "editarProyecto") {
         $idProyecto = $_POST['idProyecto'];
         $tituloProyecto = $_POST['tituloProyecto'];
         $query = "UPDATE t_proyectos SET titulo='$tituloProyecto' WHERE id=$idProyecto";
@@ -482,7 +576,6 @@ if (isset($_POST['action'])) {
         } else {
             echo "Error de Proyecto";
         }
-        
     }
 
 
@@ -508,7 +601,7 @@ if (isset($_POST['action'])) {
         $query_justificacion = "UPDATE t_proyectos SET justificacion = '$justificacion' WHERE id = $idProyecto";
         $result_justificacion = mysqli_query($conn_2020, $query_justificacion);
 
-        if($result_justificacion) {
+        if ($result_justificacion) {
             echo "Justificacion Actualizada";
         }
     }
@@ -535,9 +628,8 @@ if (isset($_POST['action'])) {
         $query_tipo = "UPDATE t_proyectos SET tipo='$tipo' WHERE id=$idProyecto";
         $result_tipo = mysqli_query($conn_2020, $query_tipo);
 
-        if($result_tipo)
-        echo "Tipo Actualizado";
-
+        if ($result_tipo)
+            echo "Tipo Actualizado";
     }
 
     if ($action == "asignarResponsableProyecto") {
@@ -548,45 +640,42 @@ if (isset($_POST['action'])) {
         $query = "SELECT* FROM t_tareas_asignaciones WHERE id_tarea=$idProyecto";
         $result = mysqli_query($conn_2020, $query);
 
-        if(mysqli_num_rows($result) > 0){
+        if (mysqli_num_rows($result) > 0) {
             $query_u = "UPDATE t_tareas_asignaciones SET id_usuario=$idUsuario WHERE id_tarea=$idProyecto";
             $result_u = mysqli_query($conn_2020, $query_u);
             echo "actualizado";
-
-        }else{
+        } else {
 
             $query_t_tareas_asignadas = "INSERT INTO t_tareas_asignaciones (id_tarea, id_usuario) VALUES ($idProyecto, $idUsuario)";
             $result_t_tareas_asignadas = mysqli_query($conn_2020, $query_t_tareas_asignadas);
             echo "insert";
-
         }
     }
 
 
 
-    if($action == "agregarComentarioProyecto"){
+    if ($action == "agregarComentarioProyecto") {
         $idUsuario = $_POST['idUsuario'];
         $idProyecto = $_POST['idProyecto'];
         $comentario = $_POST['comentario'];
 
         $query = "INSERT INTO t_proyectos_comentarios(id_proyecto, comentario, usuario) VALUES($idProyecto, '$comentario', $idUsuario)";
         $result = mysqli_query($conn_2020, $query);
-        if($result){
+        if ($result) {
             echo "ok";
-        }else{
+        } else {
             echo "Error";
         }
-
     }
 
 
-    if($action == "consultaComentariosProyecto"){
+    if ($action == "consultaComentariosProyecto") {
 
         $idProyecto = $_POST['idProyecto'];
 
         $query = "SELECT* FROM t_proyectos_comentarios WHERE id_proyecto=$idProyecto";
         $result = mysqli_query($conn_2020, $query);
-        while($row = mysqli_fetch_array($result)){
+        while ($row = mysqli_fetch_array($result)) {
             echo '
                 <div class="timeline-item">
                 <div class="timeline-marker"></div>
@@ -594,32 +683,32 @@ if (isset($_POST['action'])) {
                 <p class="has-text-justified">' . $row['comentario'] . '</p>
                 </div>
                 </div>';
-            }
         }
+    }
 
 
 
-    if($action == "agregarStatusProyecto"){
+    if ($action == "agregarStatusProyecto") {
         $idProyecto = $_POST['idProyecto'];
         $statusProyecto = $_POST['statusProyecto'];
 
-        switch ($statusProyecto){
+        switch ($statusProyecto) {
 
 
             case "urgente":
-                $status_aux= "status_urgente";
+                $status_aux = "status_urgente";
                 $status = '<i class="fad fa-siren-on fa-lg animated infinite flash mr-3"></i>';
-            break;
+                break;
 
             case "trabajare":
                 $status_aux = "status_trabajare";
                 $status = '<span class="tag is-info fa-lg mr-2"">T</span>';
-            break;
+                break;
 
             case "material":
                 $status_aux = "status_material";
                 $status = '<span class="tag is-dark fa-lg"">M</span>';
-            break;
+                break;
         }
 
 
@@ -630,27 +719,26 @@ if (isset($_POST['action'])) {
 
         echo $row_status[$status_aux];
 
-        if($row_status[$status_aux] == "$status"){
+        if ($row_status[$status_aux] == "$status") {
             $query = "UPDATE t_proyectos SET status_default='', status_$statusProyecto='' WHERE id=$idProyecto";
             $result = mysqli_query($conn_2020, $query);
-            if($result){
+            if ($result) {
                 echo "Ok!";
             }
-        }else{
+        } else {
             $query = "UPDATE t_proyectos SET status_default='', status_$statusProyecto='$status' WHERE id=$idProyecto";
             $result = mysqli_query($conn_2020, $query);
-            if($result){
+            if ($result) {
                 echo "Ok!";
             }
-
         }
     }
 
 
-    if($action == "finalizarProyecto"){
+    if ($action == "finalizarProyecto") {
         $idProyecto = $_POST['idProyecto'];
-		$usuario = $_SESSION['usuario'];
-		$fecha_finalizado = date('Y-m-d H:m:s');
+        $usuario = $_SESSION['usuario'];
+        $fecha_finalizado = date('Y-m-d H:m:s');
 
         $query = "UPDATE t_proyectos SET status='F', finalizado_por = $usuario, fecha_finalizado='$fecha_finalizado' WHERE id=$idProyecto";
         $result = mysqli_query($conn_2020, $query);
@@ -664,7 +752,7 @@ if (isset($_POST['action'])) {
 
 
 
-    if($action == "staff"){
+    if ($action == "staff") {
 
         $id_Destino = $_POST['idDestino'];
         $cantidadStaff = $_POST['cantidadStaff'];
@@ -679,26 +767,21 @@ if (isset($_POST['action'])) {
                 $result = mysqli_query($conn_2020, $query);
                 if ($result) {
                     echo "Actualizar";
-                }else{
+                } else {
                     echo "Error";
                 }
-
-
-            }else{
+            } else {
                 echo "Error";
             }
-        }else {
+        } else {
             $query_staff = "INSERT INTO covid_19_staff (id_destino, id_fase, staff) VALUES($id_Destino, $idFase, $cantidadStaff)";
             $result_staff = mysqli_query($conn_2020, $query_staff);
             if ($result_staff) {
-                echo $id_Destino." ".$cantidadStaff." ".$idFase;
-            }else{
+                echo $id_Destino . " " . $cantidadStaff . " " . $idFase;
+            } else {
                 echo "error";
             }
         }
-
-
-
     }
 
 
@@ -717,13 +800,13 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
         if ($result) {
             echo "Comentario Creado";
-        }else {
+        } else {
             echo "Error Comentario";
         }
     }
 
 
-    if($action == "consulaComentario"){
+    if ($action == "consulaComentario") {
 
         $idFase = $_POST['idFase'];
         $idDestino = $_POST['idDestino'];
@@ -734,19 +817,18 @@ if (isset($_POST['action'])) {
 
         if ($result_c) {
 
-            while($row_c = mysqli_fetch_array($result_c)){
+            while ($row_c = mysqli_fetch_array($result_c)) {
                 echo '
                 <div class="timeline-item">
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
-                <p class="has-text-justified">'.$row_c['comentario'].'</p>
+                <p class="has-text-justified">' . $row_c['comentario'] . '</p>
                 </div>
                 </div>';
             }
-        }else {
-            echo "Sin Datos".$idFase." ".$idDestino." ".$idSubseccion;
+        } else {
+            echo "Sin Datos" . $idFase . " " . $idDestino . " " . $idSubseccion;
         }
-
     }
 
 
@@ -771,21 +853,21 @@ if (isset($_POST['action'])) {
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Fecha Actualizada 1";
-            }else {
+            } else {
                 echo "fecha error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO covid_check_list_form (id_usuario, id_destino, id_seccion, id_subseccion, fecha) VALUES($idUsuario, $idDestino, $idSeccion1, $idSubseccion1, \"$fecha\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Fecha Agregada 3 ";
-            }else {
+            } else {
                 echo "Error al Agregar 4";
             }
         }
     }
 
-    if ($action =="agregarStatus") {
+    if ($action == "agregarStatus") {
 
         $idUsuario = $_POST['idUsuario'];
         $idDestino = $_POST['idDestino'];
@@ -801,22 +883,22 @@ if (isset($_POST['action'])) {
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Status Actualizada 1";
-            }else {
+            } else {
                 echo "Status error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO covid_check_list_form (id_usuario, id_destino, id_seccion, id_subseccion, opcion) VALUES($idUsuario, $idDestino, $idSeccion1, $idSubseccion1, \"$status\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Status Agregada 3 ";
-            }else {
+            } else {
                 echo "Error al Status 4";
             }
         }
     }
 
 
-    if($action == "consultaComentarios1"){
+    if ($action == "consultaComentarios1") {
         $idUsuario = $_POST['idUsuario'];
         $idDestino = $_POST['idDestino'];
         $idSeccion1 = $_POST['idSeccion1'];
@@ -830,7 +912,7 @@ if (isset($_POST['action'])) {
             <div class="timeline-item">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
-            <p class="has-text-justified">'.$row['comentario'].'</p>
+            <p class="has-text-justified">' . $row['comentario'] . '</p>
             </div>
             </div>';
         }
@@ -847,7 +929,7 @@ if (isset($_POST['action'])) {
         $query = "INSERT INTO covid_check_list_comentario (id_usuario, id_destino, id_seccion, id_subseccion, comentario) VALUES($idUsuario, $idDestino, $idSeccion1, $idSubseccion1, '$comentario')";
         $result = mysqli_query($conn_2020, $query);
 
-        if($result){
+        if ($result) {
             $query = "SELECT* FROM covid_check_list_comentario WHERE id_destino=$idDestino and id_seccion=$idSeccion1 and id_subseccion=$idSubseccion1";
             $result = mysqli_query($conn_2020, $query);
 
@@ -856,12 +938,11 @@ if (isset($_POST['action'])) {
                 <div class="timeline-item">
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
-                <p class="has-text-justified">'.$row['comentario'].'</p>
+                <p class="has-text-justified">' . $row['comentario'] . '</p>
                 </div>
                 </div>';
             }
-
-        }else{
+        } else {
             echo "Error Comentario" . $idUsuario . $idDestino . $idSeccion1 . $idSubseccion1 . "$comentario";
         }
     }
@@ -877,15 +958,15 @@ if (isset($_POST['action'])) {
         $idList = $_POST['idList'];
         $idList2 = $_POST['idList2'];
         $idList3 = $_POST['idList3'];
-		$query_secciones = "SELECT* FROM covid_check_list_secciones WHERE id=".$idList." or id=$idList2 or id=$idList3";
-		$result_secciones = mysqli_query($conn_2020, $query_secciones);
-		while ($row_secciones = mysqli_fetch_array($result_secciones)) {
+        $query_secciones = "SELECT* FROM covid_check_list_secciones WHERE id=" . $idList . " or id=$idList2 or id=$idList3";
+        $result_secciones = mysqli_query($conn_2020, $query_secciones);
+        while ($row_secciones = mysqli_fetch_array($result_secciones)) {
 
-			echo "	<div class='columns is-gapless mx-4 rounded mb-3 has-text-white'>
+            echo "	<div class='columns is-gapless mx-4 rounded mb-3 has-text-white'>
 						<div class='column is-half'>
 							<div class='columns'>
 								<div class='column'>
-									<p class='barratitulos has-background-link' data-tooltip='Responsable'>".$row_secciones['seccion']."</p>
+									<p class='barratitulos has-background-link' data-tooltip='Responsable'>" . $row_secciones['seccion'] . "</p>
 								</div>
 							</div>
 						</div>
@@ -910,27 +991,27 @@ if (isset($_POST['action'])) {
 				";
 
 
-                $query_subsecciones = "SELECT* FROM covid_check_list WHERE id_seccion =".$row_secciones['id']."";
-                $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
+            $query_subsecciones = "SELECT* FROM covid_check_list WHERE id_seccion =" . $row_secciones['id'] . "";
+            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
 
-                while ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-				$query_comentario = "SELECT* FROM covid_check_list_comentario WHERE id_destino=$idDestinoT and id_seccion=".$row_secciones['id']." and id_subseccion=".$row_subsecciones['id']."";
-				$query_form = "SELECT* FROM check_habitaciones_form WHERE id_destino=$idDestinoT and id_zona=$idZona and id_check =".$row_subsecciones['id']. "";
-				$result_comentario = mysqli_query($conn_2020,  $query_form);
-				$result_form_responsable = mysqli_query($conn_2020, $query_form);
-				$result_form_fecha = mysqli_query($conn_2020, $query_form);
-				$result_form_status = mysqli_query($conn_2020, $query_form);
+            while ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
 
 
-				echo "
+                $query_comentario = "SELECT* FROM covid_check_list_comentario WHERE id_destino=$idDestinoT and id_seccion=" . $row_secciones['id'] . " and id_subseccion=" . $row_subsecciones['id'] . "";
+                $query_form = "SELECT* FROM check_habitaciones_form WHERE id_destino=$idDestinoT and id_zona=$idZona and id_check =" . $row_subsecciones['id'] . "";
+                $result_comentario = mysqli_query($conn_2020,  $query_form);
+                $result_form_responsable = mysqli_query($conn_2020, $query_form);
+                $result_form_fecha = mysqli_query($conn_2020, $query_form);
+                $result_form_status = mysqli_query($conn_2020, $query_form);
+
+
+                echo "
 					<div class='columns is-gapless my-1 cursor mx-4'>
 						<div class='column is-half'>
 							<div class='columns'>
 								<div class='column'>
 									<div class='tarea is-small is-link overflow'>
-										<h4 class='tarea-body'><strong>".$row_subsecciones['subseccion']."</strong></h4>
+										<h4 class='tarea-body'><strong>" . $row_subsecciones['subseccion'] . "</strong></h4>
 									</div>
 								</div>
 							</div>
@@ -940,65 +1021,66 @@ if (isset($_POST['action'])) {
 								<div class='column overflow'>
 
 									<div class='control filatarea'>";
-										if ($row_form_status = mysqli_fetch_array($result_form_status)) {
+                if ($row_form_status = mysqli_fetch_array($result_form_status)) {
 
-                                            if ($row_form_status['opcion'] == "SI"):
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"SI\");' checked>SI</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"NO\");'>NO</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"N/A\");'>N/A</label>";
+                    if ($row_form_status['opcion'] == "SI") :
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"SI\");' checked>SI</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"NO\");'>NO</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"N/A\");'>N/A</label>";
 
-                                                elseif ($row_form_status['opcion'] == "NO"): // Tenga en cuenta la combinación de las palabras.
+                    elseif ($row_form_status['opcion'] == "NO") : // Tenga en cuenta la combinación de las palabras.
 
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"SI\");'>SI</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"NO\");' checked>NO</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"N/A\");'>N/A</label>";
-                                            else:
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"SI\");'>SI</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"NO\");'>NO</label>";
-                                                echo "<label class='radio'><input type='radio' name='".$row_subsecciones['id']."' onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"N/A\");' checked>N/A</label>";
-                                            endif;
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"SI\");'>SI</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"NO\");' checked>NO</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"N/A\");'>N/A</label>";
+                    else :
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"SI\");'>SI</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"NO\");'>NO</label>";
+                        echo "<label class='radio'><input type='radio' name='" . $row_subsecciones['id'] . "' onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"N/A\");' checked>N/A</label>";
+                    endif;
+                } else {
+                    echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"SI\");'>SI</label>";
+                    echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"NO\");'>NO</label>";
+                    echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ",\"N/A\");'>N/A</label>";
+                }
 
-                                        }else{
-											echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"SI\");'>SI</label>";
-											echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"NO\");'>NO</label>";
-											echo "<label class='radio'><input type='radio'  onclick='agregarStatusH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].",\"N/A\");'>N/A</label>";
-                                        }
-
-									echo "</div>
+                echo "</div>
 								</div>
-								<div class='column overflow' onClick='modalFechaH(".$row_subsecciones['id'].");'>";
-								if($row_form_fecha = mysqli_fetch_array($result_form_fecha)){ echo "<p class='filatarea'>".$row_form_fecha['fecha']."</p>";}
-								else{ echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";}
+								<div class='column overflow' onClick='modalFechaH(" . $row_subsecciones['id'] . ");'>";
+                if ($row_form_fecha = mysqli_fetch_array($result_form_fecha)) {
+                    echo "<p class='filatarea'>" . $row_form_fecha['fecha'] . "</p>";
+                } else {
+                    echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";
+                }
 
 
-								echo "</div>
-								<div class='column overflow' onClick='modalResponsableH(".$row_subsecciones['id'].");'>";
+                echo "</div>
+								<div class='column overflow' onClick='modalResponsableH(" . $row_subsecciones['id'] . ");'>";
 
-                                    if ($row_form_responsable = mysqli_fetch_array($result_form_responsable)) {
-                                        echo "<p class='filatarea'>".$row_form_responsable['responsable']."</p>";
-                                    }else{
-                                        echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";
-                                    }
-								echo "
+                if ($row_form_responsable = mysqli_fetch_array($result_form_responsable)) {
+                    echo "<p class='filatarea'>" . $row_form_responsable['responsable'] . "</p>";
+                } else {
+                    echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";
+                }
+                echo "
 								</div>
-								<div class='column overflow' onClick='modalComentarioH(".$idDestinoT.",".$idZona.",".$row_subsecciones['id'].");'>";
-								if ($row_comentario = mysqli_fetch_array($result_comentario)) {
-									echo "<p class='filatarea'>".$row_comentario['comentario']."</p>";
-								}else{
-									echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";
-								}
-								echo "</div>
+								<div class='column overflow' onClick='modalComentarioH(" . $idDestinoT . "," . $idZona . "," . $row_subsecciones['id'] . ");'>";
+                if ($row_comentario = mysqli_fetch_array($result_comentario)) {
+                    echo "<p class='filatarea'>" . $row_comentario['comentario'] . "</p>";
+                } else {
+                    echo "<p class='filatarea'><i class='fad fa-minus has-text-danger fa-2x'></i></p>";
+                }
+                echo "</div>
 							</div>
 						</div>
 					</div>
 
 					";
-
-			}
-		}
+            }
+        }
     }
 
-    if($action == "agregarSubseccion"){
+    if ($action == "agregarSubseccion") {
 
         $idUsuario = $_POST['idUsuario'];
         $idDestino = $_POST['idDestino'];
@@ -1008,13 +1090,11 @@ if (isset($_POST['action'])) {
 
         $query = "INSERT INTO check_habitaciones (id_usuario, id_destino, seccion, subseccion, id_list)  VALUES ($idUsuario, $idDestino, '$seccion', '$subseccion', $idList)";
         $result = mysqli_query($conn_2020, $query);
-        if($result){
+        if ($result) {
             echo "Agregado";
-
-        }else {
+        } else {
             echo "Error";
         }
-
     }
 
 
@@ -1034,22 +1114,21 @@ if (isset($_POST['action'])) {
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Responsable Actualizado 1";
-            }else {
+            } else {
                 echo "Responsable error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO check_habitaciones_form (id_usuario, id_destino, id_zona, id_check, responsable) VALUES($idUsuario, $idDestino, $idZona, $idCheck, \"$responsable\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Agregado 3 ";
-            }else {
-                echo "Error al Agregar 4 -". $idDestino.$idUsuario.$idSubseccion.$responsable;
-
+            } else {
+                echo "Error al Agregar 4 -" . $idDestino . $idUsuario . $idSubseccion . $responsable;
             }
         }
     }
 
-    if($action == "agregarFechaH"){
+    if ($action == "agregarFechaH") {
 
         $idUsuario = $_POST['idUsuario'];
         $idDestino = $_POST['idDestino'];
@@ -1065,22 +1144,22 @@ if (isset($_POST['action'])) {
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Status Actualizada:";
-            }else {
+            } else {
                 echo "fecha error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO check_habitaciones_form (id_usuario, id_destino, id_zona, id_check, fecha) VALUES($idUsuario, $idDestino, $idZona, $idCheck, \"$fecha\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Fecha Agregada 3 ";
-            }else {
+            } else {
                 echo "Error al Agregar 4 " . $row_cnt;
             }
         }
     }
 
 
-    if($action == "agregarStatusH"){
+    if ($action == "agregarStatusH") {
 
         $idDestino = $_POST['idDestino'];
         $idZona = $_POST['idZona'];
@@ -1095,22 +1174,21 @@ if (isset($_POST['action'])) {
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Status Actualizada: ";
-            }else {
+            } else {
                 echo "Status error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO check_habitaciones_form (id_destino, id_zona, id_check, opcion) VALUES($idDestino, $idZona, $idCheck, \"$status\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 echo "Status Agregada 3 ";
-            }else {
+            } else {
                 echo "Error al Status 4";
             }
         }
+    }
 
-	}
-
-    if($action == "consultaComentariosH"){
+    if ($action == "consultaComentariosH") {
         $idDestino = $_POST['idDestino'];
         $idZona = $_POST['idZona'];
         $idCheck = $_POST['idCheck'];
@@ -1123,7 +1201,7 @@ if (isset($_POST['action'])) {
             <div class="timeline-item">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
-            <p class="has-text-justified">'.$row['comentario'].'</p>
+            <p class="has-text-justified">' . $row['comentario'] . '</p>
             </div>
             </div>';
         }
@@ -1151,13 +1229,13 @@ if (isset($_POST['action'])) {
                 $result = mysqli_query($conn_2020, $query);
                 if ($result) {
                     echo "Comentario Creado";
-                }else {
+                } else {
                     echo "Error Comentario";
                 }
-            }else {
+            } else {
                 echo "fecha error 2";
             }
-        }else{
+        } else {
             $query = "INSERT INTO check_habitaciones_form (id_usuario, id_destino, id_zona, id_check, comentario) VALUES($idUsuario, $idDestino, $idZona, $idCheck, \"$comentario_S\")";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
@@ -1166,10 +1244,10 @@ if (isset($_POST['action'])) {
                 $result = mysqli_query($conn_2020, $query);
                 if ($result) {
                     echo "Comentario Creado";
-                }else {
+                } else {
                     echo "Error Comentario";
                 }
-            }else {
+            } else {
                 echo "Error al Agregar 4 " . $row_cnt;
             }
         }
@@ -1186,72 +1264,71 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
         if ($result) {
             echo "ok";
-        }else {
+        } else {
             echo "Error";
         }
-
     }
 
 
     // Crud Modulo Paradas de Equipos: Secciones -> Subsecciones -> Equipos -> Comentarios.
 
-    if($action == "consultaEquipos"){
+    if ($action == "consultaEquipos") {
 
         $idDestino = $_POST['idDestino'];
-        $query_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino=".$idDestino."";
+        $query_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino=" . $idDestino . "";
         $result_seccion = mysqli_query($conn_2020, $query_seccion);
 
-        while($row_seccion = mysqli_fetch_array($result_seccion)){
+        while ($row_seccion = mysqli_fetch_array($result_seccion)) {
 
-            $query_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=".$row_seccion['id']."";
+            $query_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_seccion['id'] . "";
             $result_subseccion = mysqli_query($conn_2020, $query_subseccion);
 
             $query_s = "SELECT* FROM c_secciones WHERE id =" . $row_seccion['id_seccion'] . " and status='A'";
             $row_s = mysqli_query($conn_2020, $query_s);
 
-            if($row_s = mysqli_fetch_array($row_s)){
+            if ($row_s = mysqli_fetch_array($row_s)) {
                 echo "<div class=\"column is-one-third has-text-centered\">";
-                echo  '<img class="img" src="svg/secciones/'.strtolower($row_s['seccion']).'.svg" width="55"<br>';
+                echo  '<img class="img" src="svg/secciones/' . strtolower($row_s['seccion']) . '.svg" width="55"<br>';
             }
 
-            $query_subsecciones = "SELECT* FROM c_rel_seccion_subseccion  WHERE id_rel_seccion=".$row_s['id']."";
+            $query_subsecciones = "SELECT* FROM c_rel_seccion_subseccion  WHERE id_rel_seccion=" . $row_s['id'] . "";
             $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
 
-            if($row_subsecciones = mysqli_fetch_array($result_subsecciones)){
-                $query_subsecciones_nombre = "SELECT* FROM c_subsecciones WHERE id_seccion=".$row_subsecciones['id_rel_seccion']." ORDER BY grupo DESC";
+            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+                $query_subsecciones_nombre = "SELECT* FROM c_subsecciones WHERE id_seccion=" . $row_subsecciones['id_rel_seccion'] . " ORDER BY grupo DESC";
                 $result_subsecciones_nombre = mysqli_query($conn_2020, $query_subsecciones_nombre);
 
-                while($row_subsecciones_nombre = mysqli_fetch_array($result_subsecciones_nombre)){
+                while ($row_subsecciones_nombre = mysqli_fetch_array($result_subsecciones_nombre)) {
                     echo '<a class="btn-subsecciones" href="#">
                                 <div class="columns is-gapless my-1 is-mobile">
                                     <div class="column is-9">
-                                        <p class="t-normal has-text-left px-4">'.$row_subsecciones_nombre['grupo']. '</p>
+                                        <p class="t-normal has-text-left px-4">' . $row_subsecciones_nombre['grupo'] . '</p>
                                     </div>';
 
-                    echo "                <div class=\"column is-1\" onclick=\"toggleEquipos(".$row_subsecciones_nombre['id'].");\">";
+                    echo "                <div class=\"column is-1\" onclick=\"toggleEquipos(" . $row_subsecciones_nombre['id'] . ");\">";
                     echo '            <p id="toggle" class="t-normal has-text-left px-4"><span class="icon has-text-success"><i class="fas fa-2x fa-angle-down"></i></span</i></p>
                                     </div >
                                 </div>
                             </a>';
 
-                            echo "
+                    echo "
                             <div class=\"field is-grouped\">
 					            <p class=\"control is-one-quarter\">
-						            <input id=\"".$row_subsecciones_nombre['id']."\" class=\"input\" type=\"text\" placeholder=\"Nombre del Equipo\">
-						            <p class=\"control has-text-centered\" onclick=\"agregarEquipo(".$idDestino.",".$row_s['id'].",".$row_subsecciones_nombre['id']."); toggleEquipos(".$row_subsecciones_nombre['id'].");\"><a class=\"button is-success\"><i class=\"fas fa-plus\"></i></a></p>
+						            <input id=\"" . $row_subsecciones_nombre['id'] . "\" class=\"input\" type=\"text\" placeholder=\"Nombre del Equipo\">
+						            <p class=\"control has-text-centered\" onclick=\"agregarEquipo(" . $idDestino . "," . $row_s['id'] . "," . $row_subsecciones_nombre['id'] . "); toggleEquipos(" . $row_subsecciones_nombre['id'] . ");\"><a class=\"button is-success\"><i class=\"fas fa-plus\"></i></a></p>
 					            </p>
 				            </div>";
 
-                            $query_equipos = "SELECT* FROM equipos_covid WHERE id_destino=$idDestino and id_seccion=".$row_subsecciones['id_rel_seccion']." and id_subseccion=". $row_subsecciones_nombre['id']."";
-                            $result_equipos = mysqli_query($conn_2020, $query_equipos);
-                            echo "<div class='listaEquipos ".$row_subsecciones_nombre['id']." listaEquiposHide'>";
+                    $query_equipos = "SELECT* FROM equipos_covid WHERE id_destino=$idDestino and id_seccion=" . $row_subsecciones['id_rel_seccion'] . " and id_subseccion=" . $row_subsecciones_nombre['id'] . "";
+                    $result_equipos = mysqli_query($conn_2020, $query_equipos);
+                    echo "<div class='listaEquipos " . $row_subsecciones_nombre['id'] . " listaEquiposHide'>";
 
-                            while($row_equipos = mysqli_fetch_array($result_equipos)){
+                    while ($row_equipos = mysqli_fetch_array($result_equipos)) {
 
-                                echo  "<p class=\"column is-6 t-equipo ".$row_subsecciones_nombre['id']. "\" onclick=\"comentarioEquipo(".$idDestino.",".$row_subsecciones["id_rel_seccion"].",".$row_subsecciones_nombre["id"].",".$row_equipos["id"].",'".$row_equipos['equipo'] . "');\"> ".$row_equipos['equipo']. " <span><i class='fas ".$row_equipos['comentario_status']."'></i></span></p>";
-                            }
-                            echo "</div>";
-                            echo "<br>";
+                        echo  "<p class=\"column is-6 t-equipo " . $row_subsecciones_nombre['id'] . "\" onclick=\"comentarioEquipo(" . $idDestino . "," . $row_subsecciones["id_rel_seccion"] . "," . $row_subsecciones_nombre["id"] . "," . $row_equipos["id"] . ",'" . $row_equipos['equipo'] . "');\"> " . $row_equipos['equipo'] . " <span><i class='fas " . $row_equipos['comentario_status'] . "'></i></span></p>";
+                    }
+                    echo "</div>";
+                    echo "<br>";
                 }
                 echo "</div>";
             }
@@ -1260,71 +1337,70 @@ if (isset($_POST['action'])) {
 
 
 
-	if($action == "agregarEquipo"){
-		$idDestino = $_POST['idDestino'];
-		$idSeccion = $_POST['idSeccion'];
-		$idSubseccion = $_POST['idSubseccion'];
-		$nombreEquipo = $_POST['nombreEquipo'];
+    if ($action == "agregarEquipo") {
+        $idDestino = $_POST['idDestino'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $nombreEquipo = $_POST['nombreEquipo'];
 
-		$query= "INSERT INTO equipos_covid (id_destino, id_seccion, id_subseccion, equipo) VALUES($idDestino, $idSeccion, $idSubseccion, '$nombreEquipo')";
-		$result = mysqli_query($conn_2020, $query);
-
-
-		if($result){
-			echo $nombreEquipo;
-		}else{
-			echo "Error";
-		}
-	}
+        $query = "INSERT INTO equipos_covid (id_destino, id_seccion, id_subseccion, equipo) VALUES($idDestino, $idSeccion, $idSubseccion, '$nombreEquipo')";
+        $result = mysqli_query($conn_2020, $query);
 
 
+        if ($result) {
+            echo $nombreEquipo;
+        } else {
+            echo "Error";
+        }
+    }
 
-	if($action == "comentarioEquipoCovid"){
-		$idDestino = $_POST['idDestino'];
-		$idSeccion = $_POST['idSeccion'];
-		$idSubseccion = $_POST['idSubseccion'];
-		$idEquipo = $_POST['idEquipo'];
 
 
-		$query= "SELECT* FROM comentario_equipo_covid WHERE id_destino=$idDestino and id_seccion=$idSeccion and id_subseccion=$idSubseccion and id_equipo=$idEquipo";
-		$result = mysqli_query($conn_2020, $query);
+    if ($action == "comentarioEquipoCovid") {
+        $idDestino = $_POST['idDestino'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $idEquipo = $_POST['idEquipo'];
 
-		while($row = mysqli_fetch_array($result)){
-				echo '
+
+        $query = "SELECT* FROM comentario_equipo_covid WHERE id_destino=$idDestino and id_seccion=$idSeccion and id_subseccion=$idSubseccion and id_equipo=$idEquipo";
+        $result = mysqli_query($conn_2020, $query);
+
+        while ($row = mysqli_fetch_array($result)) {
+            echo '
 				<div class="timeline-item">
 				<div class="timeline-marker"></div>
 				<div class="timeline-content">
 				<p class="has-text-justified">' . $row['comentario'] . '</p>
 				</div>
 				</div>';
-		}
-	}
+        }
+    }
 
-	if($action == "agregarComentarioEquipo1"){
-		$idDestino = $_POST['idDestino'];
-		$idSeccion = $_POST['idSeccion'];
-		$idSubseccion = $_POST['idSubseccion'];
-		$idEquipo = $_POST['idEquipo'];
-		$comentario = $_POST['comentario'];
+    if ($action == "agregarComentarioEquipo1") {
+        $idDestino = $_POST['idDestino'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $idEquipo = $_POST['idEquipo'];
+        $comentario = $_POST['comentario'];
 
-		$query ="INSERT INTO comentario_equipo_covid (id_destino, id_seccion, id_subseccion, id_equipo, comentario) VALUES ($idDestino, $idSeccion, $idSubseccion, $idEquipo, '$comentario')";
-        $result= mysqli_query($conn_2020, $query);
+        $query = "INSERT INTO comentario_equipo_covid (id_destino, id_seccion, id_subseccion, id_equipo, comentario) VALUES ($idDestino, $idSeccion, $idSubseccion, $idEquipo, '$comentario')";
+        $result = mysqli_query($conn_2020, $query);
 
 
-		if($result){
+        if ($result) {
             $query_comentario_status = "UPDATE equipos_covid SET comentario_status='fas fa-comment' WHERE id=$idEquipo";
             $result_comentario_status = mysqli_query($conn_2020, $query_comentario_status);
-            if($result_comentario_status){
+            if ($result_comentario_status) {
                 echo "status comentario actualizado!";
-            }else{
+            } else {
                 echo "status comentario NO actualizado!";
             }
-			echo "Comentario Agregado!";
-
-		}else{
-			echo "Comentario Error";
-		}
-	}
+            echo "Comentario Agregado!";
+        } else {
+            echo "Comentario Error";
+        }
+    }
 
 
     // Crud para Status MC.
@@ -1332,7 +1408,7 @@ if (isset($_POST['action'])) {
         $idMC = $_POST['idMC'];
         $idUsuarioMC = $_POST['idUsuarioMC'];
         $statusMC = $_POST['statusMC'];
-        $fecha_captura = date('Y-m-d G:m:s'); 
+        $fecha_captura = date('Y-m-d G:m:s');
 
         switch ($statusMC) {
 
@@ -1383,37 +1459,35 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "finalizarMC"){
+    if ($action == "finalizarMC") {
 
         $idMC = $_POST['idMC'];
-		$fecha_finalizado = date('Y-m-d H:m:s');
+        $fecha_finalizado = date('Y-m-d H:m:s');
 
         $query = "UPDATE t_mc set status='F', fecha_realizado='$fecha_finalizado' WHERE id=$idMC";
         $result = mysqli_query($conn_2020, $query);
-        if($result){
+        if ($result) {
             echo "Mantenimiento Correctivo Finalizado";
-        }{
+        } {
             echo "Error al Finalizar Mantinimiento Correctivo";
         }
-
     }
 
-    if($action == "restaurarMC"){
+    if ($action == "restaurarMC") {
 
         $idMC = $_POST['idMC'];
 
         $query = "UPDATE t_mc set status='N' WHERE id=$idMC";
         $result = mysqli_query($conn_2020, $query);
-        if($result){
+        if ($result) {
             echo "Mantenimiento Correctivo Finalizado";
-        }{
+        } {
             echo "Error al Finalizar Mantinimiento Correctivo";
         }
-
     }
 
     // Crud para Tareas Gemerales MC.
-    if($action == "eliminarMC"){
+    if ($action == "eliminarMC") {
         $idMC = $_POST['idMC'];
 
         $query = "UPDATE t_mc SET activo=0 WHERE id=$idMC";
@@ -1426,7 +1500,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "editarMC"){
+    if ($action == "editarMC") {
         $idMC = $_POST['idMC'];
         $tituloMC = $_POST['tituloMC'];
 
@@ -1436,8 +1510,8 @@ if (isset($_POST['action'])) {
             echo "Tarea General, Eliminada";
         } else {
             echo "Error al Eliminar Tarea General";
-        }  
-    }    
+        }
+    }
 
 
     if ($action == "subirArchivoGeneral") {
@@ -1527,37 +1601,36 @@ if (isset($_POST['action'])) {
                     ";
                 }
             }
-			echo "<br>";
+            echo "<br>";
         }
-		
     }
 
 
-    if($action =="eliminarArchivo"){
+    if ($action == "eliminarArchivo") {
         $tabla = $_POST['tabla'];
         $idArchivo = $_POST['idArchivo'];
         $query = "UPDATE $tabla SET status=0 WHERE id=$idArchivo";
         $result = mysqli_query($conn_2020, $query);
-        if($result){
+        if ($result) {
             echo "ok";
-        }else{
+        } else {
             echo "Error Eliminar Archivo";
         }
     }
 
 
-    if($action == "consultaPlanAccion"){
+    if ($action == "consultaPlanAccion") {
         $idProyecto = $_POST['idProyecto'];
 
         $query = "SELECT* FROM t_proyectos_planaccion WHERE id_proyecto=$idProyecto and actividad !='' and activo=1 ORDER BY fecha_creacion DESC";
         $result = mysqli_query($conn_2020, $query);
-        
-        if($result){
-			$contadorPF = 0;
-			$contadorPAF = 0;
-            while($row = mysqli_fetch_array($result)){
 
-                $id= $row['id'];
+        if ($result) {
+            $contadorPF = 0;
+            $contadorPAF = 0;
+            while ($row = mysqli_fetch_array($result)) {
+
+                $id = $row['id'];
                 $actividad = $row['actividad'];
                 $fecha = $row['fecha_creacion'];
                 $id_usuario = $row['creado_por'];
@@ -1569,28 +1642,27 @@ if (isset($_POST['action'])) {
                 WHERE t_users.id=$id_usuario";
                 $result_usuario_comentario = mysqli_query($conn_2020, $query_usuario_comentario);
                 $row_usuario_comentario = mysqli_fetch_array($result_usuario_comentario);
-                $usuario=$row_usuario_comentario['nombre'] ." ". $row_usuario_comentario['apellido'];
+                $usuario = $row_usuario_comentario['nombre'] . " " . $row_usuario_comentario['apellido'];
 
                 $query_t_proyectos = "SELECT* FROM t_proyectos WHERE id=$idProyecto";
                 $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-                if($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)){
+                if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
                     $idUsuario = $row_t_proyectos['creado_por'];
                     $idDestino = $row_t_proyectos['id_destino'];
                     $idSeccion = $row_t_proyectos['id_seccion'];
                     $idSubseccion = $row_t_proyectos['id_subseccion'];
                 }
-				
-                if($row['status'] =='N'){
+
+                if ($row['status'] == 'N') {
                     $background_status = "has-background-warning";
-					$contadorPF++;
-					$verPlan = "timeline-item";
-					
-                }else{
+                    $contadorPF++;
+                    $verPlan = "timeline-item";
+                } else {
                     $background_status = "has-background-success";
-					$contadorPAF++;
-					$verPlan = "verPlan".$idProyecto. " modal";
+                    $contadorPAF++;
+                    $verPlan = "verPlan" . $idProyecto . " modal";
                 }
-					
+
 
                 echo "
                 <div class=\"$verPlan  my-0 py-0\">
@@ -1604,60 +1676,60 @@ if (isset($_POST['action'])) {
                             </div>
                             <div class=\"control ml-3\" data-tooltip=\"Agregar Status\" onclick=\"show_hide_modal('modalStatusPlanAccion','show'); datosStatusProyecto($idDestino, $idSeccion, $idSubseccion, $idProyecto, $id, 'reporte_status_proyecto');\">";
 
-                            $query_status = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id";
-                            $result_status = mysqli_query($conn_2020, $query_status);
-                            if(mysqli_num_rows($result_status)<1) {
-                                echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
-                            }else{
+                $query_status = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id";
+                $result_status = mysqli_query($conn_2020, $query_status);
+                if (mysqli_num_rows($result_status) < 1) {
+                    echo " <i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
+                } else {
 
-                                $query_status_material = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_material'";
-                                $result_status_material = mysqli_query($conn_2020, $query_status_material);
-                                if (mysqli_num_rows($result_status_material) > 0) {
-                                    echo "<strong class=\"mr-1 fa-lg\">M</strong>";
-                                }
+                    $query_status_material = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_material'";
+                    $result_status_material = mysqli_query($conn_2020, $query_status_material);
+                    if (mysqli_num_rows($result_status_material) > 0) {
+                        echo "<strong class=\"mr-1 fa-lg\">M</strong>";
+                    }
 
-                                $query_status_trabajare = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_trabajare'";
-                                $result_status_trabajare = mysqli_query($conn_2020, $query_status_trabajare);
-                                if (mysqli_num_rows($result_status_trabajare) > 0) {
-                                    echo "<strong class=\"mr-1 fa-lg has-text-info\">T</strong>";
-                                }
+                    $query_status_trabajare = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_trabajare'";
+                    $result_status_trabajare = mysqli_query($conn_2020, $query_status_trabajare);
+                    if (mysqli_num_rows($result_status_trabajare) > 0) {
+                        echo "<strong class=\"mr-1 fa-lg has-text-info\">T</strong>";
+                    }
 
-                                $query_status_urgente = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_urgente'";
-                                $result_status_urgente = mysqli_query($conn_2020, $query_status_urgente);
-                                if (mysqli_num_rows($result_status_urgente) > 0) {
-                                    echo "<i class=\"has-text-danger fad fa-siren-on mr-1 fa-lg animated infinite flash\"></i>";
-                                }
+                    $query_status_urgente = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto and id_planaccion=$id and status='status_urgente'";
+                    $result_status_urgente = mysqli_query($conn_2020, $query_status_urgente);
+                    if (mysqli_num_rows($result_status_urgente) > 0) {
+                        echo "<i class=\"has-text-danger fad fa-siren-on mr-1 fa-lg animated infinite flash\"></i>";
+                    }
 
-                                $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id AND  
+                    $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id AND  
                                 status LIKE '%status_departamento%'";
-                                $result_status_departamento = mysqli_query($conn_2020, $query_status_departamento);
-                                if (mysqli_num_rows($result_status_departamento) > 0) {
-                                    echo "<strong class=\"mr-1 fa-lg has-text-primary\">D</strong>";
-                                }
+                    $result_status_departamento = mysqli_query($conn_2020, $query_status_departamento);
+                    if (mysqli_num_rows($result_status_departamento) > 0) {
+                        echo "<strong class=\"mr-1 fa-lg has-text-primary\">D</strong>";
+                    }
 
 
-                                $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND id_planaccion=$id AND 
+                    $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND id_planaccion=$id AND 
                                 status LIKE '%status_energetico%' ";
-                                $result_status_energeticos = mysqli_query($conn_2020, $query_status_energeticos);
-                                if (mysqli_num_rows($result_status_energeticos) > 0) {
-                                    echo "<strong class=\"mr-1 fa-lg has-text-warning\">E</strong>";
-                                }
-                            }
-                            echo"</div>
+                    $result_status_energeticos = mysqli_query($conn_2020, $query_status_energeticos);
+                    if (mysqli_num_rows($result_status_energeticos) > 0) {
+                        echo "<strong class=\"mr-1 fa-lg has-text-warning\">E</strong>";
+                    }
+                }
+                echo "</div>
                         </div>
                     </div>
                 </div>";
             }
-			echo "
+            echo "
 			<div class=\"timeline-item\">
             	<div class=\"timeline-marker is-icon\">
                 	<i class=\"fad fa-genderless\"></i>
                 </div>
         	</div>
 			";
-			
-			if($contadorPF <= 0){
-				echo "
+
+            if ($contadorPF <= 0) {
+                echo "
 				<div class=\"column\">
 					<button class=\"mt-4 mx-5 has-text-centered button is-primary\" onclick=\"finalizarProyecto($idProyecto);\">
 						<span class=\"icon is-small\">
@@ -1667,10 +1739,10 @@ if (isset($_POST['action'])) {
 					</button>	
 				</div>
 				";
-			}
+            }
 
-			if($contadorPAF > 0){
-				echo "			
+            if ($contadorPAF > 0) {
+                echo "			
 				<div class=\"column\">
 					<button class=\"mt-4 mx-5 has-text-centered button is-primary\" onclick=\"verPlan($idProyecto);\">
     					<span class=\"icon is-small\">
@@ -1680,25 +1752,24 @@ if (isset($_POST['action'])) {
 					</button>
 				</div>
 				";
-			}
-
-        }else{
+            }
+        } else {
             echo mysqli_error($result);
         }
     }
 
 
-    if($action == "comentarioPlanAccion"){
+    if ($action == "comentarioPlanAccion") {
 
-        $idPlanAccion = $_POST['idPlanAccion']; 
-        $query= "SELECT* FROM t_proyectos_planaccion_comentarios WHERE id_actividad=$idPlanAccion ORDER BY fecha DESC";
+        $idPlanAccion = $_POST['idPlanAccion'];
+        $query = "SELECT* FROM t_proyectos_planaccion_comentarios WHERE id_actividad=$idPlanAccion ORDER BY fecha DESC";
         $result = mysqli_query($conn_2020, $query);
 
-        if($result){
+        if ($result) {
             // Inicio de timeline
             echo "<div class=\"timeline is-centered\">";
 
-            while($row = mysqli_fetch_array($result)){
+            while ($row = mysqli_fetch_array($result)) {
 
                 $comentario = $row['comentario'];
                 $fecha = $row['fecha'];
@@ -1711,11 +1782,11 @@ if (isset($_POST['action'])) {
                 WHERE t_users.id=$id_usuario";
                 $result_usuario_comentario = mysqli_query($conn_2020, $query_usuario_comentario);
                 $row_usuario_comentario = mysqli_fetch_array($result_usuario_comentario);
-                $usuario = $row_usuario_comentario['nombre'] ." ". $row_usuario_comentario['apellido'];
+                $usuario = $row_usuario_comentario['nombre'] . " " . $row_usuario_comentario['apellido'];
 
                 // Body de timeline
-                echo 
-                "<div class=\"timeline-item\">
+                echo
+                    "<div class=\"timeline-item\">
                     <div class=\"timeline-marker\"></div>
                     <div class=\"timeline-content\">
                         <p class=\"heading \"><strong>$usuario</strong></p>
@@ -1735,13 +1806,13 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     </div>";
-        }else{
+        } else {
             echo "Error";
         }
     }
 
 
-    if($action == "agregarPlanAccion"){
+    if ($action == "agregarPlanAccion") {
         $idProyecto = $_POST['idProyecto'];
         $actividad = $_POST['actividad'];
         $usuario = $_SESSION['usuario'];
@@ -1749,15 +1820,15 @@ if (isset($_POST['action'])) {
 
         $query = "INSERT INTO t_proyectos_planaccion (id_proyecto, actividad, status, creado_por, fecha_creacion, activo) VALUES ($idProyecto, '$actividad', 'N', $usuario, '$fechaActual', 1 )";
         $result = mysqli_query($conn_2020, $query);
-        
+
         if ($result) {
             echo "ok";
-        }else{
+        } else {
             echo "Error";
         }
     }
 
-    if($action == "agregarComentarioPlanAccion"){
+    if ($action == "agregarComentarioPlanAccion") {
         $idPlanAccion = $_POST['idPlanAccion'];
         $comentario = $_POST['comentario'];
         $usuario = $_SESSION['usuario'];
@@ -1768,43 +1839,42 @@ if (isset($_POST['action'])) {
 
         if ($result) {
             echo "Ok!";
-        }else{
+        } else {
             echo mysqli_errno($result);
         }
     }
-	
 
-	if($action == "eliminarPlanAccion"){
-		$idPlan = $_POST['idPlan'];
-		
-		$query = "UPDATE t_proyectos_planaccion SET activo=0 WHERE id=$idPlan";
-		$result = mysqli_query($conn_2020, $query);
-		if($result){
-			echo "Plan de Acción, Eliminado!";
-		}else{
-			echo "Error al Eliminar!";
-		}
-	}
 
-	if($action == "actualizarPlanAccion"){
-		$idPlan = $_POST['idPlan'];
-		$tituloPlan = $_POST['tituloPlan'];
-		
-		$query = "UPDATE t_proyectos_planaccion SET actividad='$tituloPlan' WHERE id=$idPlan";
-		$result = mysqli_query($conn_2020, $query);
-		if($result){
-			echo "Plan de Acción, Actualizado!";
-		}else{
-			echo "Error al Actualizar!";
-		}
+    if ($action == "eliminarPlanAccion") {
+        $idPlan = $_POST['idPlan'];
 
-	}
+        $query = "UPDATE t_proyectos_planaccion SET activo=0 WHERE id=$idPlan";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Plan de Acción, Eliminado!";
+        } else {
+            echo "Error al Eliminar!";
+        }
+    }
 
+    if ($action == "actualizarPlanAccion") {
+        $idPlan = $_POST['idPlan'];
+        $tituloPlan = $_POST['tituloPlan'];
+
+        $query = "UPDATE t_proyectos_planaccion SET actividad='$tituloPlan' WHERE id=$idPlan";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
+            echo "Plan de Acción, Actualizado!";
+        } else {
+            echo "Error al Actualizar!";
+        }
+    }
 
 
 
-// Agregar
-    if($action == "agregarStatusProyectoPlanAccion"){
+
+    // Agregar
+    if ($action == "agregarStatusProyectoPlanAccion") {
         $usuario = $_SESSION['usuario'];
         $idDestino = $_POST['idDestino'];
         $idSeccion = $_POST['idSeccion'];
@@ -1812,35 +1882,35 @@ if (isset($_POST['action'])) {
         $idTabla = $_POST['idTabla'];
         $idPlanAccion = $_POST['idPlanAccion'];
         $tabla = $_POST['tabla'];
-        $statusProyecto = "status_".$_POST['statusProyecto'];
+        $statusProyecto = "status_" . $_POST['statusProyecto'];
         $idCampoTabla = "id_proyecto";
         $fechaActual = date('Y-m-d H:i:s');
 
 
-        $query="INSERT INTO $tabla(id_usuario, id_destino, id_seccion, id_subseccion, id_proyecto, id_planaccion, status) VALUES($usuario, $idDestino, $idSeccion, $idSubseccion, $idTabla, $idPlanAccion, '$statusProyecto')";
-        $result= mysqli_query($conn_2020, $query);
-        if($result){
+        $query = "INSERT INTO $tabla(id_usuario, id_destino, id_seccion, id_subseccion, id_proyecto, id_planaccion, status) VALUES($usuario, $idDestino, $idSeccion, $idSubseccion, $idTabla, $idPlanAccion, '$statusProyecto')";
+        $result = mysqli_query($conn_2020, $query);
+        if ($result) {
             echo "ok!";
         }
     }
 
-// Agregar 
- if($action =="finalizarPlanAccion"){
+    // Agregar 
+    if ($action == "finalizarPlanAccion") {
         $usuario = $_SESSION['usuario'];
-     $idPlanAccion = $_POST['idPlanAccion'];
-     $query = "UPDATE t_proyectos_planaccion set status='F' WHERE id =$idPlanAccion";
-     $result = mysqli_query($conn_2020, $query);
+        $idPlanAccion = $_POST['idPlanAccion'];
+        $query = "UPDATE t_proyectos_planaccion set status='F' WHERE id =$idPlanAccion";
+        $result = mysqli_query($conn_2020, $query);
 
-     if($result){
-         echo "ok!";
-     }else{
-         echo "Error";
-     }
- }
-	
+        if ($result) {
+            echo "ok!";
+        } else {
+            echo "Error";
+        }
+    }
 
-//Proceso para Status de los Departamentos.
-     if ($action == "reporteStatusDEP") {
+
+    //Proceso para Status de los Departamentos.
+    if ($action == "reporteStatusDEP") {
         $idDestino = $_POST['idDestino'];
         $idSubseccion = $_POST['idGrupo'];
         $idSeccion = $_POST['idSeccion'];
@@ -1848,31 +1918,31 @@ if (isset($_POST['action'])) {
 
 
         if ($idSubseccion == 213) {
-            $status= "AND t_mc.status_material != ''";
+            $status = "AND t_mc.status_material != ''";
             $status_P = "AND reporte_status_proyecto.status = 'status_material'";
         }
         if ($idSubseccion == 62) {
-            $status= "AND t_mc.departamento_rrhh != ''";
+            $status = "AND t_mc.departamento_rrhh != ''";
             $status_P = "AND reporte_status_proyecto.status = 'status_departamento_rrhh'";
         }
         if ($idSubseccion == 211) {
-            $status= "AND t_mc.departamento_finanzas != ''";
+            $status = "AND t_mc.departamento_finanzas != ''";
             $status_P = "AND reporte_status_proyecto.status = 'status_departamento_finanzas'";
         }
         if ($idSubseccion == 212) {
-            $status= "AND t_mc.departamento_direccion != ''";
+            $status = "AND t_mc.departamento_direccion != ''";
             $status_P = "AND reporte_status_proyecto.status = 'status_departamento_direccion'";
         }
         if ($idSubseccion == 214) {
-            $status= "AND t_mc.departamento_calidad != ''";
+            $status = "AND t_mc.departamento_calidad != ''";
             $status_P = "AND reporte_status_proyecto.status = 'status_departamento_calidad'";
         }
-        
+
 
         if ($idDestino != 10) {
             $destino = "AND t_mc.id_destino = $idDestino";
             $destino_P = "AND reporte_status_proyecto.id_destino = $idDestino";
-        }else{
+        } else {
             $destino = "";
             $destino_P = "";
         }
@@ -1885,7 +1955,7 @@ if (isset($_POST['action'])) {
         WHERE t_mc.status='N' AND t_mc.activo=1 $status $destino";
 
         $result = mysqli_query($conn_2020, $query);
-        
+
         while ($row = mysqli_fetch_array($result)) {
             $actividad = $row['actividad'];
             $responsable = $row['responsable'];
@@ -1908,30 +1978,29 @@ if (isset($_POST['action'])) {
             FROM t_users
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_users.id=$responsable";
-            
-            $result_responsable = mysqli_query($conn_2020, $query_responsable);
-            if($row_responsable = mysqli_fetch_array($result_responsable)){
-                
-                $responsableN  = $row_responsable['nombre'] ." ". $row_responsable['apellido'];
 
-            }else{
+            $result_responsable = mysqli_query($conn_2020, $query_responsable);
+            if ($row_responsable = mysqli_fetch_array($result_responsable)) {
+
+                $responsableN  = $row_responsable['nombre'] . " " . $row_responsable['apellido'];
+            } else {
                 $responsableN = "-";
             }
             // Comprube si tiene información las variables, sino, le asigna uno por defecto.
 
             if ($fechaCreacionDEP == "") {
-                  $fechaCreacionDEP =" <p class=\"t-icono-rojo\"><i class=\"fad fa-calendar-times\"></i></p>";
+                $fechaCreacionDEP = " <p class=\"t-icono-rojo\"><i class=\"fad fa-calendar-times\"></i></p>";
             }
-            if ($responsableN =="") {
-                $responsableN ="<p class=\"t-normal\">-</p>";
+            if ($responsableN == "") {
+                $responsableN = "<p class=\"t-normal\">-</p>";
             }
 
-            if($status_finanzas !="" || $status_rrhh !="" || $status_direccion !="" || $status_calidad !=''){
+            if ($status_finanzas != "" || $status_rrhh != "" || $status_direccion != "" || $status_calidad != '') {
                 $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
-            }else{
-                $departamento ="";
+            } else {
+                $departamento = "";
             }
-                    
+
             echo "
             <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
                 <div class=\"column is-half\">
@@ -1966,7 +2035,7 @@ if (isset($_POST['action'])) {
                 </div>
             </div>
             ";
-            $responsableN ="";
+            $responsableN = "";
         }
 
 
@@ -1990,15 +2059,15 @@ if (isset($_POST['action'])) {
 
         WHERE reporte_status_proyecto.fecha_inicio !='' $status_P $destino_P";
         $result = mysqli_query($conn_2020, $query_P);
-        if($result){
-           
+        if ($result) {
+
             while ($row_P = mysqli_fetch_array($result)) {
                 $proyecto =  $row_P['titulo'];
                 $planaccion =  $row_P['actividad'];
                 $creado_por  = $row_P['nombre'] . " " . $row_P['apellido'];
                 $responsable = $row_P['responsable'];
                 $status = $row_P['status'];
-                
+
                 $fecha_creacion = $row_P['fecha_creacion'];
                 $fecha_creacion = new DateTime($fecha_creacion);
                 $fecha_creacion = $fecha_creacion->format("d-m-Y");
@@ -2014,28 +2083,28 @@ if (isset($_POST['action'])) {
 
                 // Comprobación de Resultados, si tiene información le asigna segun el resultado, sino, le agrega uno por defecto.
                 $result_responsable = mysqli_query($conn_2020, $query_responsable);
-                
-                if($row_responsable = mysqli_fetch_array($result_responsable)){
-                    $responsablePlanaccion = $row_responsable['nombre']." ".$row_responsable['apellido'];
-                }else{
-                     $responsablePlanaccion = "-";
+
+                if ($row_responsable = mysqli_fetch_array($result_responsable)) {
+                    $responsablePlanaccion = $row_responsable['nombre'] . " " . $row_responsable['apellido'];
+                } else {
+                    $responsablePlanaccion = "-";
                 }
 
                 if ($status == "status_departamento_finanzas" || $status == "status_departamento_rrhh" || $status == "status_departamento_direccion" || $status == "status_departamento_calidad") {
                     $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
-                }else{                
+                } else {
                     $departamento = "";
                 }
 
-                if($status == "status_material"){
-                    $status_material ="<span class=\"tag is-dark fa-lg\">M</span>"; 
-                }else{                
-                    $status_material = ""; 
+                if ($status == "status_material") {
+                    $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
+                } else {
+                    $status_material = "";
                 }
 
-                if($status == "status_trabajare"){
-                    $status_trabajare = "<span class=\"tag is-primary fa-lg\">T</span>"; 
-                }else{                
+                if ($status == "status_trabajare") {
+                    $status_trabajare = "<span class=\"tag is-primary fa-lg\">T</span>";
+                } else {
                     $status_trabajare = "";
                 }
 
@@ -2083,31 +2152,28 @@ if (isset($_POST['action'])) {
     if ($action == "aplicarDepartamentoMC") {
         $idMC = $_POST['idMC'];
         $departamento = $_POST['departamento'];
-        $departamentoHtml ="<span class=\"mr-4 fa-lg\"><strong class=\"has-text-primary\">D</strong></span>";
+        $departamentoHtml = "<span class=\"mr-4 fa-lg\"><strong class=\"has-text-primary\">D</strong></span>";
         $energeticoHtml = "<span class=\"mr-4 fa-lg\"><strong class=\"has-text-warning\">E</strong></span>";
 
-        if($departamento == "departamento_calidad" || $departamento == "departamento_compras" || $departamento == "departamento_direccion" || $departamento == "departamento_finanzas" || $departamento == "departamento_rrhh" ){
+        if ($departamento == "departamento_calidad" || $departamento == "departamento_compras" || $departamento == "departamento_direccion" || $departamento == "departamento_finanzas" || $departamento == "departamento_rrhh") {
             $query = "UPDATE t_mc SET $departamento = '$departamentoHtml' WHERE id=$idMC";
             $result = mysqli_query($conn_2020, $query);
-            if($result){
+            if ($result) {
                 echo "Status Aplicado!";
-            }else{
+            } else {
                 echo "Error de Status!";
             }
-            
-        }elseif($departamento == "energetico_electricidad" || $departamento == "energetico_agua" || $departamento == "energetico_diesel" || $departamento == "energetico_gas"){
+        } elseif ($departamento == "energetico_electricidad" || $departamento == "energetico_agua" || $departamento == "energetico_diesel" || $departamento == "energetico_gas") {
             $query = "UPDATE t_mc SET $departamento = '$energeticoHtml' WHERE id=$idMC";
             $result = mysqli_query($conn_2020, $query);
-            if($result){
+            if ($result) {
                 echo "Status Aplicado!";
-            }else{
+            } else {
                 echo "Error de Status!";
             }
-
-        }else{
+        } else {
             echo "Error de Status!";
         }
-
     }
 
     if ($action == "consultaEDMC") {
@@ -2117,14 +2183,14 @@ if (isset($_POST['action'])) {
         $query = "SELECT* FROM t_mc WHERE id=$idMC";
         $result = mysqli_query($conn_2020, $query);
 
-        if($statusConsulta == "energetico"){
+        if ($statusConsulta == "energetico") {
             while ($row = mysqli_fetch_array($result)) {
                 $agua = $row['energetico_agua'];
                 $gas = $row['energetico_gas'];
                 $electricidad = $row['energetico_electricidad'];
                 $diesel = $row['energetico_diesel'];
 
-                if ($agua !="") {
+                if ($agua != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
@@ -2135,7 +2201,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($gas !="") {
+                if ($gas != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
@@ -2146,7 +2212,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($electricidad !="") {
+                if ($electricidad != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
@@ -2157,7 +2223,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($diesel !="") {
+                if ($diesel != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
@@ -2167,20 +2233,19 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-
             }
         }
-        
-        if($statusConsulta == "departamento"){
+
+        if ($statusConsulta == "departamento") {
 
             while ($row = mysqli_fetch_array($result)) {
                 $departamento_calidad = $row['departamento_calidad'];
-                $departamento_finanzas= $row['departamento_finanzas'];
-                $departamento_compras= $row['departamento_compras'];
+                $departamento_finanzas = $row['departamento_finanzas'];
+                $departamento_compras = $row['departamento_compras'];
                 $departamento_rrhh = $row['departamento_rrhh'];
                 $departamento_direccion = $row['departamento_direccion'];
 
-                if ($departamento_calidad !="") {
+                if ($departamento_calidad != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
@@ -2191,7 +2256,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($departamento_finanzas !="") {
+                if ($departamento_finanzas != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
@@ -2202,7 +2267,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($departamento_compras !="") {
+                if ($departamento_compras != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
@@ -2213,7 +2278,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($departamento_rrhh !="") {
+                if ($departamento_rrhh != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
@@ -2224,7 +2289,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                if ($departamento_direccion !="") {
+                if ($departamento_direccion != "") {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
@@ -2234,9 +2299,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-
             }
-
         }
     }
 
@@ -2246,18 +2309,17 @@ if (isset($_POST['action'])) {
         $tabla = $_POST['tabla'];
         $columna = $_POST['columna'];
 
-        if($idMC !=""){
+        if ($idMC != "") {
             $query = "UPDATE $tabla SET $columna='' WHERE id=$idMC";
             $result = mysqli_query($conn_2020, $query);
-            if($result){
+            if ($result) {
                 echo "Status Eliminado!";
-            }else{
+            } else {
                 echo "Error al Eliminar!";
             }
-        }else{
-            $query ="Error al Eliminar...";
+        } else {
+            $query = "Error al Eliminar...";
         }
-
     }
 
 
@@ -2384,12 +2446,12 @@ if (isset($_POST['action'])) {
         $idEquipo = $_POST['idEquipo'];
         $fecha = date('Y-m-d H:m:s');
         $tipo = "MPNP";
-        
+
         $query = "SELECT MAX(id) AS id FROM t_mp_np";
         $result = mysqli_query($conn_2020, $query);
         if ($result) {
             if ($idNuevo = mysqli_fetch_array($result)) {
-                
+
                 $idNuevo = $idNuevo['id'] + 1;
 
                 $query_titulo = "INSERT INTO 
@@ -2401,13 +2463,13 @@ if (isset($_POST['action'])) {
                 } else {
                     echo "Error";
                 }
-            }else{
+            } else {
                 echo   "Error";
             }
         }
     }
 
-    if($action == "consultaResponsableMPNP"){
+    if ($action == "consultaResponsableMPNP") {
         $idMPNP = $_POST['idMPNP'];
         $data = "";
 
@@ -2415,9 +2477,9 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
         if ($row = mysqli_fetch_array($result)) {
             $responsable = $row['responsable'];
-            $responsable = explode(",", $responsable);        
+            $responsable = explode(",", $responsable);
             foreach ($responsable as $key => $value) {
-                if($value >= 1){ 
+                if ($value >= 1) {
                     $queryData = "SELECT
                     t_colaboradores.nombre,  
                     t_colaboradores.apellido  
@@ -2426,11 +2488,11 @@ if (isset($_POST['action'])) {
                     WHERE t_users.id = $value";
 
                     $resultData = mysqli_query($conn_2020, $queryData);
-                    if($rowData = mysqli_fetch_array($resultData)){
+                    if ($rowData = mysqli_fetch_array($resultData)) {
                         $nombre = $rowData['nombre'];
                         $apellido = $rowData['apellido'];
-                        
-                        $data .="
+
+                        $data .= "
                             <div class=\"field is-grouped is-grouped-multiline\">
                                 <div class=\"control\">
                                     <div class=\"tags has-addons\">
@@ -2446,7 +2508,7 @@ if (isset($_POST['action'])) {
                             </div>
                         ";
                     }
-                }    
+                }
             }
             echo $data;
         }
@@ -2460,32 +2522,31 @@ if (isset($_POST['action'])) {
 
         $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
         $result = mysqli_query($conn_2020, $query);
-        
+
         if ($result) {
             if ($row = mysqli_fetch_array($result)) {
                 $resultResponsables = $row['responsable'];
                 $resultResponsables = explode(",", $resultResponsables);
-                
+
                 $buscarResponsable = array_search($idResponsable, $resultResponsables, false);
 
-                if($buscarResponsable == ""){
+                if ($buscarResponsable == "") {
                     $agregarResponsable = $row['responsable'] . ", $idResponsable";
-                    $responsable = explode(",", $agregarResponsable);                    
-                
+                    $responsable = explode(",", $agregarResponsable);
+
                     $query_titulo = "UPDATE t_mp_np SET responsable = '$agregarResponsable' WHERE id = $idMPNP";
-                    
-                    if($result_titulo = mysqli_query($conn_2020, $query_titulo) ){
+
+                    if ($result_titulo = mysqli_query($conn_2020, $query_titulo)) {
                         $arrayResponsable['msj'] = "Se Agrego Responsable";
                         $arrayResponsable['icon'] = "success";
-                    }else{
+                    } else {
                         $arrayResponsable['msj'] = "Error al Agregar Responsable";
                         $arrayResponsable['icon'] = "error";
-                    }   
-
-                }else{
+                    }
+                } else {
                     $arrayResponsable['msj'] = "El Usuario ya Existe";
                     $arrayResponsable['icon'] = "question";
-                }        
+                }
             }
         }
         echo json_encode($arrayResponsable);
@@ -2502,22 +2563,22 @@ if (isset($_POST['action'])) {
 
         $query = "SELECT responsable FROM t_mp_np WHERE id = $idMPNP";
         $result = mysqli_query($conn_2020, $query);
-        if($row_responsable = mysqli_fetch_array($result)){
-            $responsable = explode(",",$row_responsable['responsable']);
+        if ($row_responsable = mysqli_fetch_array($result)) {
+            $responsable = explode(",", $row_responsable['responsable']);
             unset($responsable[$key]);
-            
+
             foreach ($responsable as $key_1 => $value_1) {
-                if ($value >=1) {
+                if ($value >= 1) {
                     $responsableActualizado .= "$value_1, ";
                 }
             }
             $actualizar = "UPDATE t_mp_np SET responsable = '$responsableActualizado' WHERE id = $idMPNP";
             $result = mysqli_query($conn_2020, $actualizar);
-            if($result){
-                
-                $responsableActualizado = explode(",",$responsableActualizado);
+            if ($result) {
+
+                $responsableActualizado = explode(",", $responsableActualizado);
                 foreach ($responsable as $key => $value) {
-                    if($value >= 1){ 
+                    if ($value >= 1) {
                         $queryData = "SELECT
                         t_colaboradores.nombre,  
                         t_colaboradores.apellido  
@@ -2526,11 +2587,11 @@ if (isset($_POST['action'])) {
                         WHERE t_users.id = $value";
 
                         $resultData = mysqli_query($conn_2020, $queryData);
-                        if($rowData = mysqli_fetch_array($resultData)){
+                        if ($rowData = mysqli_fetch_array($resultData)) {
                             $nombre = $rowData['nombre'];
                             $apellido = $rowData['apellido'];
-                            
-                            $data .="
+
+                            $data .= "
                                 <div class=\"field is-grouped is-grouped-multiline\">
                                     <div class=\"control\">
                                         <div class=\"tags has-addons\">
@@ -2546,13 +2607,13 @@ if (isset($_POST['action'])) {
                                 </div>
                             ";
                         }
-                    }    
+                    }
                 }
                 echo $data;
-            }else{
+            } else {
                 echo "Error al Actualizar";
             }
-        }else{
+        } else {
             echo "Error";
         }
     }
@@ -2564,7 +2625,7 @@ if (isset($_POST['action'])) {
         $idUsuario = $_SESSION['usuario'];
         $actividadMPNP = $_POST['actividadMPNP'];
         $fecha = date('Y-m-d H:m:s');
-        
+
         $query = "INSERT INTO actividad_mp_np
         (id_mp_np, actividad, creado_por, fecha) 
         VALUES($idMPNP, '$actividadMPNP', $idUsuario, '$fecha')";
@@ -2583,7 +2644,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "consultaActividadMPNP"){
+    if ($action == "consultaActividadMPNP") {
         $arrayConsultaActividad = array();
         $data = "";
         $idMPNP = $_POST['idMPNP'];
@@ -2626,9 +2687,9 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
 
         if ($result) {
-            echo "Actividad Eliminada";    
+            echo "Actividad Eliminada";
         } else {
-            echo "Actividad NO Eliminada";    
+            echo "Actividad NO Eliminada";
         }
     }
 
@@ -2641,13 +2702,13 @@ if (isset($_POST['action'])) {
         $fecha = new DateTime($fecha);
         $fecha = $fecha->format('Y-m-d H:m:s');
         $tipo = "MPNP";
-        
+
         $query = "UPDATE t_mp_np 
         SET titulo = '$titulo', fecha = '$fecha', status= 'F'  
         
         WHERE id = $idMPNP AND id_equipo = $idEquipo";
         $result = mysqli_query($conn_2020, $query);
-        
+
         if ($result) {
             echo "MP NO PLANEADO, Finalizado.";
         } else {
@@ -2673,7 +2734,7 @@ if (isset($_POST['action'])) {
             $actividades = 0;
             $fecha = new DateTime($row['fecha']);
             $fecha = $fecha->format('Y - m - d');
-            $creadoPor = $row['nombre']." ".$row['apellido'];
+            $creadoPor = $row['nombre'] . " " . $row['apellido'];
             $responsable = explode(",", $row['responsable']);
 
 
@@ -2688,16 +2749,16 @@ if (isset($_POST['action'])) {
             $totalResponsables = 0;
             $responsable_nombre = "";
             foreach ($responsable as $key => $value) {
-                if($value >=1){
+                if ($value >= 1) {
                     $totalResponsables++;
 
                     $query_responsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                     FROM t_users 
                     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                    WHERE t_users.id = $value" ;
+                    WHERE t_users.id = $value";
                     $result_responsable = mysqli_query($conn_2020, $query_responsable);
-                    if($row_responsable = mysqli_fetch_array($result_responsable)){
-                        $responsable_nombre .= $row_responsable['nombre'] ." ". $row_responsable['apellido']; 
+                    if ($row_responsable = mysqli_fetch_array($result_responsable)) {
+                        $responsable_nombre .= $row_responsable['nombre'] . " " . $row_responsable['apellido'];
                     }
                 }
             }
@@ -2707,7 +2768,7 @@ if (isset($_POST['action'])) {
             $query_adjuntos = "SELECT id FROM adjuntos_mp_np WHERE id_mp_np = $id AND activo = 1";
             $result_adjuntos = mysqli_query($conn_2020, $query_adjuntos);
             $total_adjuntos = mysqli_num_rows($result_adjuntos);
-           
+
             // Se obtiene el total de los comentarios.
             $query_comentarios = "SELECT id FROM comentarios_mp_np WHERE id_mp_np = $id AND activo = 1";
             $result_comentarios = mysqli_query($conn_2020, $query_comentarios);
@@ -2730,7 +2791,7 @@ if (isset($_POST['action'])) {
             } else {
                 $responsable_nombre = "<p class=\"t-normal\">$responsable_nombre</p>";
             }
-            
+
             if ($total_comentarios >= 1) {
                 $total_comentarios = "<p class=\"t-normal\">$total_comentarios</p>";
             } else {
@@ -2742,7 +2803,7 @@ if (isset($_POST['action'])) {
             } else {
                 $total_adjuntos = "<p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p> ";
             }
-            
+
 
             $data .= "
                 <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
@@ -2786,7 +2847,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "comentariosMPNP"){
+    if ($action == "comentariosMPNP") {
         $idMPNP = $_POST['idMPNP'];
         $dataComentarios = "";
         $query = "SELECT 
@@ -2797,7 +2858,7 @@ if (isset($_POST['action'])) {
         WHERE comentarios_mp_np.id_mp_np = $idMPNP AND comentarios_mp_np.activo = 1 
         ORDER BY comentarios_mp_np.id DESC";
         $result = mysqli_query($conn_2020, $query);
-        
+
         // Cabecera para el diseño del modal.    
         $dataComentarios .= "
             <div class=\"timeline is-left\">
@@ -2817,18 +2878,18 @@ if (isset($_POST['action'])) {
                 </div>
         ";
 
-        if($result){                                               
+        if ($result) {
             while ($row = mysqli_fetch_array($result)) {
-            // Variables para los comentarios.
+                // Variables para los comentarios.
                 $idComentario = $row['id'];
-                $usuario = $row['nombre']." ".$row['apellido'];
+                $usuario = $row['nombre'] . " " . $row['apellido'];
                 $fecha = new DateTime($row['fecha']);
                 $fecha = $fecha->format('Y-m-d H:m:s');
                 $comentario = $row['comentario'];
 
                 // Data de los comentarios
-                $dataComentarios .= 
-                "
+                $dataComentarios .=
+                    "
                     <div class=\"timeline-item mb-0\">
                         <div class=\"timeline-marker\"></div>
                         <div class=\"timeline-content\">
@@ -2847,7 +2908,7 @@ if (isset($_POST['action'])) {
         }
 
         // Footer de los Comentarios
-        $dataComentarios .="
+        $dataComentarios .= "
                 <div class=\"timeline-item \">
                     <div class=\"timeline-marker\"></div>
                 </div>
@@ -2859,7 +2920,7 @@ if (isset($_POST['action'])) {
                 </div>
             </div> 
         ";
-        echo $dataComentarios; 
+        echo $dataComentarios;
     }
 
 
@@ -2876,14 +2937,14 @@ if (isset($_POST['action'])) {
             echo $result;
         } else {
             echo $result;
-        }  
+        }
     }
 
 
-    if($action == "eliminarComentarioMPNP"){
+    if ($action == "eliminarComentarioMPNP") {
         $idComentario = $_POST['idComentario'];
-        
-        $query ="UPDATE comentarios_mp_np SET activo = 0 WHERE id = $idComentario";
+
+        $query = "UPDATE comentarios_mp_np SET activo = 0 WHERE id = $idComentario";
         $result = mysqli_query($conn_2020, $query);
 
         if ($result) {
@@ -2907,8 +2968,8 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
 
         // Header.
-        $dataAdjuntos .= 
-        "
+        $dataAdjuntos .=
+            "
             <div class=\"timeline is-left\">
                 <h4 class=\"title is-4 has-text-centered\">Adjuntos MP</h4>
                 <div class=\"columns is-centered\">
@@ -2923,11 +2984,11 @@ if (isset($_POST['action'])) {
                         </a>
                     </div>
                 </div>
-        ";    
+        ";
 
-        if($result){
+        if ($result) {
             while ($row = mysqli_fetch_array($result)) {
-                $usuario = $row['nombre']." ".$row['apellido'];
+                $usuario = $row['nombre'] . " " . $row['apellido'];
                 $fecha = new DateTime($row['fecha']);
                 $fecha = $fecha->format('Y-m-d H:m:s');
                 $idImg = $row['id'];
@@ -2936,7 +2997,7 @@ if (isset($_POST['action'])) {
 
                 // Body
                 $dataAdjuntos .=
-                "
+                    "
                     <div class=\"timeline-item\">
                         <div class=\"timeline-marker\"></div>
                         <div class=\"timeline-content\">
@@ -2956,7 +3017,7 @@ if (isset($_POST['action'])) {
 
         // Footer
         $dataAdjuntos .=
-        " 
+            " 
                 <div class=\"timeline-item flex\">
                     <div class=\"timeline-marker\"></div>
                 </div>
@@ -2967,16 +3028,16 @@ if (isset($_POST['action'])) {
                 </div>
             </div>  
         ";
-        echo $dataAdjuntos;      
+        echo $dataAdjuntos;
     }
 
 
-    if($action == "eliminarAdjuntoMPNP"){
+    if ($action == "eliminarAdjuntoMPNP") {
         $idImg = $_POST['idImg'];
         $query = "UPDATE adjuntos_mp_np SET activo = 0 WHERE id = $idImg";
-        if($result = mysqli_query($conn_2020, $query)){
+        if ($result = mysqli_query($conn_2020, $query)) {
             echo "Adjunto Eliminado.";
-        }else{
+        } else {
             echo "Adjunto NO Eliminado.";
         }
     }
@@ -3010,7 +3071,7 @@ if (isset($_POST['action'])) {
     }
 
 
-//Cierre de IF para action.
+    //Cierre de IF para action.
 }
 
 
@@ -3018,8 +3079,8 @@ if (isset($_POST['action'])) {
 // Codigo para Subir Archivos.
 if (!empty($_FILES)) {
     $nombre_temporal = $_FILES['archivo']['tmp_name'];
-    $nombre=$_FILES['archivo']['name'];
+    $nombre = $_FILES['archivo']['name'];
     $texto = preg_replace('([^A-Za-z0-9 .])', '', $nombre);
     $idGeneral = $_POST['idGeneral'];
-    move_uploaded_file($nombre_temporal, '../planner/proyectos/'.$idGeneral.'_'.$texto);
+    move_uploaded_file($nombre_temporal, '../planner/proyectos/' . $idGeneral . '_' . $texto);
 }

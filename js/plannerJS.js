@@ -5823,5 +5823,47 @@ function zonaMC(idMC, zona, idEquipo, statusMC, idSubseccion) {
     }else{
         alertInformacionVacia();
     }
+}
 
+
+function consultaFaseProyectoDEP(idProyecto) {
+    $("#dataOptionDEP").html('');
+    const action = "consultaFaseProyectoDEP";
+    console.log('NA', idProyecto);
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idProyecto: idProyecto,
+        },
+        success: function (datos) {
+            if (datos != "") {
+                alertInformacionActualiza('Registro Actualizado', datos);
+                $("#dataOptionDEP").html(datos);
+            }
+        },
+    });
+}
+
+
+function agregarFaseProyectoDEP(fase) {
+    const action = "agregarFaseProyectoDEP";
+    const idProyecto = $("#idProyectoStatus").val();
+    console.log(fase, idProyecto);
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idProyecto: idProyecto,
+            fase: fase
+        },
+        success: function (datos) {
+            if(datos != ""){
+                alertInformacionActualiza(datos);
+                consultaFaseProyectoDEP(idProyecto);
+            }
+        },
+    });
 }
