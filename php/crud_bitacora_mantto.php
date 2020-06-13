@@ -567,7 +567,7 @@ if (isset($_POST['action'])) {
             $zonaFiltroMC = "AND t_mc.id_seccion IN(23,19,5,6,7)";
             $zonaFiltroMP = "AND c_secciones.id IN(23,19,5,6,7)";
             $zonaFiltroMPNP = "AND c_secciones.id IN(23,19,5,6,7)";
-        
+
             //CMU 
         } elseif ($idDestino == 7 and $zona == "ZI") {
 
@@ -589,28 +589,28 @@ if (isset($_POST['action'])) {
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltro = "AND ((t_proyectos.fase LIKE '%GP%') OR (reporte_status_proyecto.id_subseccion IN($GP)) )";
-            
+
             // PUJ
         } elseif ($idDestino == 5 and $zona == "ZI") {
 
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI) OR t_mc.zona LIKE '%ZI%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($ZI.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($ZI.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($ZI)) OR (t_proyectos.fase LIKE '%ZI%'))";
         } elseif ($idDestino == 5 and $zona == "TRS") {
 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS.0) OR t_mc.zona LIKE '%TRS%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($TRS.0)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($TRS.0)";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($TRS)) OR (t_proyectos.fase LIKE '%TRS%'))";
         } elseif ($idDestino == 5 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
-            $zonaFiltroMP = "AND c_secciones.id IN($GP)";
-            $zonaFiltroMPNP = "AND c_secciones.id IN($GP)";
-            $zonaFiltro = "AND reporte_status_proyecto.id_seccion IN($GP)";
+            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($GP)) OR (t_proyectos.fase LIKE '%GP%'))";
         }
 
         // Query MC
@@ -634,7 +634,7 @@ if (isset($_POST['action'])) {
         ";
         // Sentencia SQL donde se almacena la información.
         $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-        if($totalmc = mysqli_num_rows($result_t_mc)){
+        if ($totalmc = mysqli_num_rows($result_t_mc)) {
             $totalmc = $totalmc;
         }
 
@@ -699,10 +699,10 @@ if (isset($_POST['action'])) {
         ";
 
         $result_MC_trabajare = mysqli_query($conn_2020, $query_MC_trabajare);
-        if ($totalmc_2 = mysqli_num_rows($result_MC_trabajare)){
+        if ($totalmc_2 = mysqli_num_rows($result_MC_trabajare)) {
             $total = $totalmc_2;
         }
-        
+
         while ($row_MC_trabajare = mysqli_fetch_array($result_MC_trabajare)) {
             $id = $row_MC_trabajare['id'];
             $seccion = $row_MC_trabajare['seccion'];
@@ -797,7 +797,7 @@ if (isset($_POST['action'])) {
             ORDER BY fecha DESC LIMIT 1
                         ";
             $result_comentario_mp = mysqli_query($conn_2020, $query_comentario_mp);
-            if($row_comentario_mp = mysqli_fetch_array($result_comentario_mp)){
+            if ($row_comentario_mp = mysqli_fetch_array($result_comentario_mp)) {
                 $comentario_mp = $row_comentario_mp['comentarios'];
             }
 
@@ -906,7 +906,7 @@ if (isset($_POST['action'])) {
             INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id 
 
             WHERE
-            (reporte_status_proyecto.status = 'status_solucionado' OR reporte_status_proyecto.status = 'status_trabajare')
+            ((reporte_status_proyecto.status = 'status_solucionado') OR (reporte_status_proyecto.status = 'status_trabajare'))
             $destino
             $zonaFiltro
             AND reporte_status_proyecto.fecha_inicio >= '$fecha_final_12' 
@@ -934,8 +934,8 @@ if (isset($_POST['action'])) {
 
             $query_comentario = "SELECT comentario FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $id_planaccion ORDER BY fecha DESC";
             $result_comentario = mysqli_query($conn_2020, $query_comentario);
-           if( $row_comentario = mysqli_fetch_array($result_comentario)){
-               $comentario = $row_comentario['comentario'];
+            if ($row_comentario = mysqli_fetch_array($result_comentario)) {
+                $comentario = $row_comentario['comentario'];
             }
 
 
@@ -1018,8 +1018,7 @@ if (isset($_POST['action'])) {
 
 
             // Proyectos
-            $query_p = "SELECT
-            reporte_status_proyecto.id
+            $query_p = "SELECT*
 
             FROM reporte_status_proyecto
             INNER JOIN c_secciones ON reporte_status_proyecto.id_seccion = c_secciones.id
@@ -1032,12 +1031,18 @@ if (isset($_POST['action'])) {
             $destino
             $zonaFiltro
 
-            AND reporte_status_proyecto.fecha_inicio BETWEEN '$value' AND '$key'
+            -- AND reporte_status_proyecto.fecha_inicio BETWEEN '$value' AND '$key'
+            AND reporte_status_proyecto.fecha_inicio >= '$value' 
+            AND reporte_status_proyecto.fecha_inicio <= '$key'
             ";
             $result_p = mysqli_query($conn_2020, $query_p);
-            $total_p = 0;
-            $total_p = mysqli_num_rows($result_p);
-           
+
+            if ($total_p = mysqli_num_rows($result_p)) {
+                $total_p = $total_p;
+            } else {
+                $total_p = 0;
+            }
+
 
             $graficaProyectos[] = $total_p;
             $graficaFecha = $key . $value;
