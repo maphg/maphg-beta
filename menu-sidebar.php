@@ -110,16 +110,16 @@ a:hover {
         </dav>
         <dav id="hijo3" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="sa/index.php" target="_blanck" class="menu-hijo-3 CA">Sub almacenes</a>
+                <a href="../sa/index.php" target="_blanck" class="menu-hijo-3 CA">Sub almacenes</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="stock-beta.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
+                <a href="../stock/stock-beta.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
+                <a href="../pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="gastos-beta.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
+                <a href="../gastos/gastos-beta.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Empresas y proveedores</o>
@@ -197,6 +197,7 @@ a:hover {
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
                 <o data-target="hijo7" data-toggle="hijo" href="#" class="CA">Aplicaciones</o>
+                <i class="fal fa-angle-down CI"></i>
             </dav>
         </dav>
         <dav id="hijo7" class="menu-hijo-1 ocultalo">
@@ -213,12 +214,12 @@ a:hover {
     </dav>
     <dav class="menu-contenedor-4 relative">
         <dav class="menu-contenedor-5">
-            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?=$nombreUsuario?>"
+            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?= $nombreUsuario ?>"
                 alt="avatar" class="menu-contenedor-6">
         </dav>
         <dav class="menu-contenedor-7">
-            <h99 class="menu-contenedor-8"><?=$nombreUsuario?></h99>
-            <pe class="menu-contenedor-10"><?= $cargo;?></pe>
+            <h99 class="menu-contenedor-8"><?= $nombreUsuario ?></h99>
+            <pe class="menu-contenedor-10"><?= $cargo; ?></pe>
             <o class="menu-contenedor-9" href="" onclick="logout();"><i class="fas fa-cog "></i></o>
         </dav>
     </dav>
@@ -242,25 +243,24 @@ a:hover {
         <dav class="">
             <!-- d5 -->
             <?php
-				
-				if($idDestino != 10){
-				
-				}else{							
-					$query = "SELECT * FROM c_destinos ORDER BY destino";
-					try {
-						$resp = $conn->obtDatos($query);
-						if ($conn->filasConsultadas > 0) {
-							foreach ($resp as $dts) {
-								$idDest = $dts['id'];
-								$nombreDest = $dts['destino'];
-								echo "<a href=\"#\" onclick=\"cargarTareasDestino(0, $idDest);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDest</a>";
-							}
-						}
-					} catch (Exception $ex) {
-						exit($ex);
-					}
-				}
-				?>
+
+            if ($idDestino != 10) {
+            } else {
+                $query = "SELECT * FROM c_destinos ORDER BY destino";
+                try {
+                    $resp = $conn->obtDatos($query);
+                    if ($conn->filasConsultadas > 0) {
+                        foreach ($resp as $dts) {
+                            $idDest = $dts['id'];
+                            $nombreDest = $dts['destino'];
+                            echo "<a href=\"#\" onclick=\"cargarTareasDestino(0, $idDest);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDest</a>";
+                        }
+                    }
+                } catch (Exception $ex) {
+                    exit($ex);
+                }
+            }
+            ?>
 
 
         </dav>

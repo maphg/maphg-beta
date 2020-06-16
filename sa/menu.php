@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario'])) {
 } else {
     $conn->conectar();
     $idUsuario = $_SESSION['usuario'];
-//Obtener datos del usuario
+    //Obtener datos del usuario
     $query = "SELECT * FROM t_users WHERE id = $idUsuario";
     try {
         $resp = $conn->obtDatos($query);
@@ -107,86 +107,85 @@ if (!isset($_SESSION['usuario'])) {
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>MAPHG</title>
-        <link rel="icon" href="svg/logo6.png">
-        <link rel="stylesheet" href="css/bulma.css">
-        <link rel="stylesheet" href="css/clases.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-        <style>
-        .container-scroll {
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
-        }
-        </style>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MAPHG</title>
+    <link rel="icon" href="svg/logo6.png">
+    <link rel="stylesheet" href="css/bulma.css">
+    <link rel="stylesheet" href="../css/tailwind.css">
+    <link rel="stylesheet" href="css/clases.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+    .container-scroll {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    </style>
+</head>
 
-    <body>
+<body>
 
-        <?php
-        if (!isset($_SESSION['usuario'])) {
-            
-        } else {
-            ?>
-        <div class="columns mt-5 mx-5">
-            <div class="column">
-                <a href="index.php" class="button is-primary">Lista de Bodegas</a>
-            </div>
+    <?php
+    if (!isset($_SESSION['usuario'])) {
+    } else {
+    ?>
+    <div class="columns mt-5 mx-5">
+        <div class="column">
+            <a href="index.php" class="button is-primary">Lista de Bodegas</a>
         </div>
-        <?php
-        }
-        ?>
+    </div>
+    <?php
+    }
+    ?>
 
-        <section class="hero">
-            <div class="hero-body">
-                <div class="container">
-                    <div class="columns is-centered">
-                        <div class="column has-text-centered">
-                            <img src="svg/logon.svg" width="190px" alt="">
-                        </div>
-                    </div>
-                    <div class="columns is-centered">
-                        <?php
-                        if (!isset($_SESSION['usuario'])) {
-                            
-                        } else {
-                            ?>
-                        <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
-                            <a class="button is-large is-primary is-fullwidth"
-                                href="acceso_entradas.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
-                                    class="icon is-medium"><i
-                                        class="fas fa-sign-in-alt"></i></span><span>ENTRADAS</span></a>
-                        </div>
-                        <?php
-                        }
-                        ?>
-
-                        <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
-                            <a class="button is-large is-warning is-fullwidth"
-                                href="acceso_salidas.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
-                                    class="icon is-medium"><i
-                                        class="fas fa-sign-out-alt"></i></span><span>SALIDAS</span></a>
-                        </div>
-
-                        <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
-                            <a class="button is-large is-info is-fullwidth"
-                                href="existencias.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
-                                    class="icon is-medium"><i class="fas fa-eye"></i></span><span>EXISTENCIAS</span></a>
-                        </div>
-
-
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+                        <img src="svg/logon.svg" width="190px" alt="">
                     </div>
                 </div>
+                <div class="columns is-centered">
+                    <?php
+                    if (!isset($_SESSION['usuario'])) {
+                    } else {
+                    ?>
+                    <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
+                        <a class="button is-large is-primary is-fullwidth"
+                            href="acceso_entradas.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
+                                class="icon is-medium"><i
+                                    class="fas fa-sign-in-alt"></i></span><span>ENTRADAS</span></a>
+                    </div>
+                    <?php
+                    }
+                    ?>
+
+                    <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
+                        <a class="button is-large is-warning is-fullwidth"
+                            href="acceso_salidas.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
+                                class="icon is-medium"><i
+                                    class="fas fa-sign-out-alt"></i></span><span>SALIDAS</span></a>
+                    </div>
+
+                    <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
+                        <a class="button is-large is-info is-fullwidth"
+                            href="existencias.php?idSubalmacen=<?php echo $idSubalmacen; ?>"><span
+                                class="icon is-medium"><i class="fas fa-eye"></i></span><span>EXISTENCIAS</span></a>
+                    </div>
+
+
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
 
-    </body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="js/bulmajs.js"></script>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="js/bulmajs.js"></script>
 
 </html>

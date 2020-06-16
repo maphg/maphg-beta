@@ -5850,7 +5850,6 @@ function consultaFaseProyectoDEP(idProyecto) {
 function agregarFaseProyectoDEP(fase) {
     const action = "agregarFaseProyectoDEP";
     const idProyecto = $("#idProyectoStatus").val();
-    console.log(fase, idProyecto);
     $.ajax({
         type: "post",
         url: "php/crud.php",
@@ -5860,9 +5859,10 @@ function agregarFaseProyectoDEP(fase) {
             fase: fase
         },
         success: function (datos) {
+            console.log(datos);
             if(datos != ""){
                 alertInformacionActualiza(datos);
-                consultaFaseProyectoDEP(idProyecto);
+                // consultaFaseProyectoDEP(idProyecto);
             }
         },
     });

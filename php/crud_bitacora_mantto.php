@@ -412,7 +412,7 @@ if (isset($_POST['action'])) {
             INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
             INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
-            WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_rel_seccion_subseccion.fase LIKE '%ZI%'
+            WHERE c_rel_destino_seccion.id_destino = $idDestino AND (c_rel_seccion_subseccion.fase LIKE '%ZI%' OR c_secciones.id = 12)
         ";
         $result_ZI = mysqli_query($conn_2020, $query_ZI);
 
@@ -482,22 +482,22 @@ if (isset($_POST['action'])) {
         if ($idDestino == 1 and $zona == "ZI") {
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI, 12))";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($ZI)) OR (t_proyectos.fase LIKE '%ZI%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
         } elseif ($idDestino == 1 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($TRS)) OR (t_proyectos.fase LIKE '%TRS%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
         } elseif ($idDestino == 1 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($GP)) OR (t_proyectos.fase LIKE '%GP%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
 
             // PVR
         } elseif ($idDestino == 2 and $zona == "ZI") {
@@ -576,19 +576,19 @@ if (isset($_POST['action'])) {
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%ZI%') OR (reporte_status_proyecto.id_subseccion IN($ZI)))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
         } elseif ($idDestino == 7 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%TRS%') OR(reporte_status_proyecto.id_subseccion IN($TRS)))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
         } elseif ($idDestino == 7 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND ((t_proyectos.fase LIKE '%GP%') OR (reporte_status_proyecto.id_subseccion IN($GP)) )";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
 
             // PUJ
         } elseif ($idDestino == 5 and $zona == "ZI") {
@@ -598,19 +598,19 @@ if (isset($_POST['action'])) {
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($ZI)) OR (t_proyectos.fase LIKE '%ZI%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
         } elseif ($idDestino == 5 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($TRS)) OR (t_proyectos.fase LIKE '%TRS%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
         } elseif ($idDestino == 5 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND ((reporte_status_proyecto.id_subseccion IN($GP)) OR (t_proyectos.fase LIKE '%GP%'))";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
         }
 
         // Query MC
@@ -793,7 +793,7 @@ if (isset($_POST['action'])) {
 
 
             $query_comentario_mp = "SELECT t_mp_comentarios.comentarios
-            FROM t_mp_comentarios WHERE id_ot=$folio
+            FROM t_mp_comentarios WHERE id_ot=$id
             ORDER BY fecha DESC LIMIT 1
                         ";
             $result_comentario_mp = mysqli_query($conn_2020, $query_comentario_mp);

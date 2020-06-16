@@ -13,11 +13,13 @@ Class subalmacenesItemsAD {
         if ($idDestino == 10) {
             $query = "SELECT * FROM t_subalmacenes "
                     . "WHERE fase = '$fase' "
+                    ."AND activo = '1'"
                     . "ORDER BY nombre";
         } else {
             $query = "SELECT * FROM t_subalmacenes "
                     . "WHERE fase = '$fase' "
                     . "AND id_destino = $idDestino "
+                    ."AND activo = '1'"
                     . "ORDER BY nombre";
         }
 
@@ -535,5 +537,3 @@ Class subalmacenesItemsAD {
     }
 
 }
-?>
-

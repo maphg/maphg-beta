@@ -372,6 +372,7 @@ if (isset($_POST['action'])) {
         $idProyecto = $_POST['idProyecto'];
         $faseArray_aux = "";
 
+
         $query = "SELECT* FROM t_proyectos WHERE id = $idProyecto";
         $result = mysqli_query($conn_2020, $query);
         if ($row = mysqli_fetch_array($result)) {
@@ -406,7 +407,13 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos SET fase = '$data' WHERE id = $idProyecto";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
-                echo "Fase Actualizada";
+                $query_1 = "UPDATE reporte_status_proyecto SET fase = '$data' WHERE id_proyecto = $idProyecto";
+                $result_1 = mysqli_query($conn_2020, $query_1);
+                if ($result_1) {               
+                    echo "Fase Actualizada $result_1 . $result . $idProyecto. $data";
+                }else{
+                    echo "Error al Actualizar la Fase";
+                }
             } else {
                 echo "Error al Actualizar la Fase";
             }
