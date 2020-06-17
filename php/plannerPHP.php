@@ -4762,12 +4762,13 @@ class Planner
             . "</a>"
             . "</div>"
             . "</div>";
-        $query = "SELECT * FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo";
+        $query = "SELECT * FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo AND activo = 1";
         try {
             $resp = $conn->obtDatos($query);
             if ($conn->filasConsultadas > 0) {
                 foreach ($resp as $dts) {
                     $idUsuario = $dts['subido_por'];
+                    $idCot = $dts['id'];
 
                     if ($idUsuario != "") {
                         $query = "SELECT * FROM t_users WHERE id = $idUsuario";
@@ -4807,7 +4808,9 @@ class Planner
                     $equipo->cotizaciones .= "<div class=\"timeline-item\">"
                         . "<div class=\"timeline-marker\"></div>"
                         . "<div class=\"timeline-content\">"
-                        . "<p class=\"heading\"><strong>$nombre $apellido</strong></p>"
+                        . "<p class=\"heading\"><strong>$nombre $apellido </strong>"
+                        . "<a class=\"delete\" onclick=\"eliminarCotEquipo($idEquipo, $idCot, '$archivo');\"></a>"
+                        . "</p>"
                         . "<p class=\"heading\">$fecha</p>"
                         . "<a href=\"img/equipos/cotizaciones/$archivo\" target=\"_blank\">"
                         . "<img class=\"ximg\" src=\"svg/cot.svg\" alt=\"\">"
@@ -8923,39 +8926,37 @@ class Planner
 
                     $equipo->correctivos .= "</div>"
                         . "<div class=\"column t-normal\">";
-
-                    if($idDestino == 1){ 
-                        $araySubseccionRM = array(0, 308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
+                    $search = 0;
+                    if ($idDestino == 1) {
+                        $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
                         // var_export($araySubseccionRM);
-                        $search = array_search($idSubseccion, $araySubseccionRM, false);
-                    }elseif($idDestino == 2){ 
-                        $araySubseccionPUJ = array(0, 200, 344, 313, 301, 200, 297, 296, 300, 293, 311, 35, 38, 310, 200, 34, 15, 37, 354, 306, 14, 39, 308, 13, 320, 341, 340, 200);
+                        $search = array_search($idSubseccion, $araySubseccion, false);
+                    } elseif ($idDestino == 2) {
+                        $araySubseccion = array(0, 200, 344, 313, 301, 200, 297, 296, 300, 293, 311, 35, 38, 310, 200, 34, 15, 37, 354, 306, 14, 39, 308, 13, 320, 341, 340, 200);
                         // var_export($araySubseccionPUJ);
-                        $search = array_search($idSubseccion, $araySubseccionPUJ, false);
-                    }elseif($idDestino == 7){
-                        $araySubseccionCMU = array(0, 214, 213, 212, 211, 200, 62, 200, 344, 293, 291, 314, 301, 25, 298, 292, 305, 297, 200, 296, 299, 300, 354, 39, 320, 15, 37, 35, 34, 306, 308, 200, 14, 311, 13, 38);
+                        $search = array_search($idSubseccion, $araySubseccion, false);
+                    } elseif ($idDestino == 7) {
+                        $araySubseccion = array(0, 214, 213, 212, 211, 200, 62, 200, 344, 293, 291, 314, 301, 25, 298, 292, 305, 297, 200, 296, 299, 300, 354, 39, 320, 15, 37, 35, 34, 306, 308, 200, 14, 311, 13, 38);
                         // var_export($araySubseccionCMU);
-                        $search = array_search($idSubseccion, $araySubseccionCMU, false);
-                    }else{
-                        $search =0;
+                        $search = array_search($idSubseccion, $araySubseccion, false);
                     }
 
 
-                    if ($search > 0) { //Opción para Seleccionar la ZONA.
+                    if ($araySubseccion[$search] == $idSubseccion) { //Opción para Seleccionar la ZONA.
 
-                        if($zona == "GP"){
+                        if ($zona == "GP") {
                             $checkedGP = "checked";
                             $checkedTRS = "";
-                            $checkedZI = "";                            
-                        }elseif($zona == "TRS"){
+                            $checkedZI = "";
+                        } elseif ($zona == "TRS") {
                             $checkedTRS = "checked";
                             $checkedGP = "";
-                            $checkedZI = "";                            
-                        }elseif($zona == "ZI"){
+                            $checkedZI = "";
+                        } elseif ($zona == "ZI") {
                             $checkedZI = "checked";
                             $checkedGP = "";
                             $checkedTRS = "";
-                        }else{
+                        } else {
                             $checkedGP = "";
                             $checkedTRS = "";
                             $checkedZI = "";

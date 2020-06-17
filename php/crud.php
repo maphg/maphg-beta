@@ -409,9 +409,9 @@ if (isset($_POST['action'])) {
             if ($result) {
                 $query_1 = "UPDATE reporte_status_proyecto SET fase = '$data' WHERE id_proyecto = $idProyecto";
                 $result_1 = mysqli_query($conn_2020, $query_1);
-                if ($result_1) {               
+                if ($result_1) {
                     echo "Fase Actualizada $result_1 . $result . $idProyecto. $data";
-                }else{
+                } else {
                     echo "Error al Actualizar la Fase";
                 }
             } else {
@@ -3076,6 +3076,20 @@ if (isset($_POST['action'])) {
             echo "ERROR, Zona Seleccionada";
         }
     }
+
+
+    // Elimina la cotización agregada a un Equipo en Planner.
+    if ($action == "eliminarCotEquipo") {
+        $idCot = $_POST['idCot'];
+        $nombreCot = $_POST['nombreCot'];
+        $query = "UPDATE t_equipos_cotizaciones SET activo = 0";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo "Cotización Eliminada ($nombreCot)";
+        } else {
+            echo "Error al Eliminar Cotización ($nombreCot)";
+        }
+    }
+
 
 
     //Cierre de IF para action.

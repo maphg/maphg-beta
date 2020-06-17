@@ -482,22 +482,22 @@ if (isset($_POST['action'])) {
         if ($idDestino == 1 and $zona == "ZI") {
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI, 12))";
-            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
+            $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11, 12) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltroMPNP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_seccion IN(1, 24, 8, 9, 10, 11) OR reporte_status_proyecto.fase LIKE '%ZI%')";
         } elseif ($idDestino == 1 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR reporte_status_proyecto.fase LIKE '%TRS%')";
         } elseif ($idDestino == 1 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR reporte_status_proyecto.fase LIKE '%GP%')";
 
             // PVR
         } elseif ($idDestino == 2 and $zona == "ZI") {
@@ -573,44 +573,44 @@ if (isset($_POST['action'])) {
 
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
-            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
+            $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11, 12) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltroMPNP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_seccion IN(1, 24, 8, 9, 10, 11) OR reporte_status_proyecto.fase LIKE '%ZI%')";
         } elseif ($idDestino == 7 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR reporte_status_proyecto.fase LIKE '%TRS%')";
         } elseif ($idDestino == 7 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR reporte_status_proyecto.fase LIKE '%GP%')";
 
             // PUJ
         } elseif ($idDestino == 5 and $zona == "ZI") {
 
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($ZI,12))";
-            $zonaFiltroMP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($ZI)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($ZI) OR t_proyectos.fase LIKE '%ZI%')";
+            $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11, 12) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltroMPNP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11)";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_seccion IN(1, 24, 8, 9, 10, 11) OR reporte_status_proyecto.fase LIKE '%ZI%')";
         } elseif ($idDestino == 5 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR reporte_status_proyecto.fase LIKE '%TRS%')";
         } elseif ($idDestino == 5 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
+            $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR reporte_status_proyecto.fase LIKE '%ZI%')";
         }
 
         // Query MC
