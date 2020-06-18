@@ -8137,7 +8137,7 @@ class Planner
                     }
 
                     //Obtener grafica de planeacion mp
-                    $equipo->planeacionMP .= "<div class=\"columns mx-2 manita is-centered mb-0 pb-0\">"
+                    $equipo->planeacionMP .= "<div class=\"columns mx-2 my-3 manita is-centered mb-0 pb-0\">"
                         . "<div class=\"column is-2\">"
                         . "</div>"
                         . "<div class=\"columns mt-4\">";
@@ -8165,7 +8165,7 @@ class Planner
                                     exit($ex);
                                 }
 
-                                $equipo->planeacionMP .= "<div class=\"columns mx-2 manita is-centered\">"
+                                $equipo->planeacionMP .= "<div class=\"columns mx-2 my-3 manita is-centered\">"
                                     . "<div class=\"column is-2\">"
                                     . "<h6 class=\"title is-6 has-text-right \">$planMantto</h6>"
                                     . "</div>"
@@ -9526,7 +9526,7 @@ class Planner
             . "</div>"
             . "</section>";
         //Obtener grafica de planeacion mp
-        $equipo->preventivos .= "<div class=\"columns mx-2 manita is-centered mb-0 pb-0\">"
+        $equipo->preventivos .= "<div class=\"columns mx-2 my-3 manita is-centered mb-0 pb-0\">"
             . "<div class=\"column is-2\">"
             . "</div>"
             . "<div class=\"columns mt-4\">";
@@ -9559,7 +9559,7 @@ class Planner
                         exit($ex);
                     }
 
-                    $equipo->preventivos .= "<div class=\"columns mx-2 manita is-centered\">"
+                    $equipo->preventivos .= "<div class=\"columns mx-2 my-3 manita is-centered\">"
                         . "<div class=\"column is-2\">"
                         . "<h6 class=\"title is-6 has-text-right \">$planMantto</h6>"
                         . "</div>"
@@ -9904,7 +9904,7 @@ class Planner
             . "</div>"
             . "</section>";
         //Obtener grafica de planeacion mp
-        $equipo->preventivos .= "<div class=\"columns mx-2 manita is-centered mb-0 pb-0\">"
+        $equipo->preventivos .= "<div class=\"columns mx-2 my-3 manita is-centered mb-0 pb-0\">"
             . "<div class=\"column is-2\">"
             . "</div>"
             . "<div class=\"columns mt-4\">";
@@ -9937,7 +9937,7 @@ class Planner
                         exit($ex);
                     }
 
-                    $equipo->preventivos .= "<div class=\"columns mx-2 manita is-centered\">"
+                    $equipo->preventivos .= "<div class=\"columns mx-2 my-3 manita is-centered\">"
                         . "<div class=\"column is-2\">"
                         . "<h6 class=\"title is-6 has-text-right \">$planMantto</h6>"
                         . "</div>"
