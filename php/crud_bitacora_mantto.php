@@ -8,7 +8,7 @@ include 'conexion.php';
 if (isset($_POST['action'])) {
     $action = $_POST['action'];
 
-    $arrayDestino = array(1 => "RM", 7 => "CMU", 2 => "PVR", 6 => "MBJ", 5 => "PUJ", 11 => "CAP", 3 => "SDQ", 4 => "SSA", 10 => "AME");
+    $arrayDestino = array(0 => "NA", 1 => "RM", 7 => "CMU", 2 => "PVR", 6 => "MBJ", 5 => "PUJ", 11 => "CAP", 3 => "SDQ", 4 => "SSA", 10 => "AME");
 
     // Variables Globales de la Sessión del Usuario al iniciar.
     $idUsuario = $_SESSION["usuario"];
@@ -650,6 +650,7 @@ if (isset($_POST['action'])) {
         while ($row_t_mc = mysqli_fetch_array($result_t_mc)) {
             $id = $row_t_mc['id'];
             $id_destino = $row_t_mc['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
             $seccion = $row_t_mc['seccion'];
             $subseccion = $row_t_mc['grupo'];
             $descripcion = $row_t_mc['actividad'];
@@ -680,8 +681,8 @@ if (isset($_POST['action'])) {
             }
 
 
-            $bitacoraMC .= "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
-                . "<h1 class=\"font-bold\">$arrayDestino[$id_destino]</h1>"
+            $bitacoraMC .= "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id, '$nombreDestino', ' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
+                . "<h1 class=\"font-bold\">$nombreDestino</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"
                 . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"
@@ -719,6 +720,7 @@ if (isset($_POST['action'])) {
         while ($row_MC_trabajare = mysqli_fetch_array($result_MC_trabajare)) {
             $id = $row_MC_trabajare['id'];
             $id_destino = $row_MC_trabajare['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
             $seccion = $row_MC_trabajare['seccion'];
             $subseccion = $row_MC_trabajare['grupo'];
             $descripcion = $row_MC_trabajare['actividad'];
@@ -752,8 +754,8 @@ if (isset($_POST['action'])) {
 
 
             $bitacoraMC .=
-                "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
-                . "<h1 class=\"font-bold\">$arrayDestino[$id_destino]</h1>"
+                "<div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-red-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id, '$nombreDestino', '$seccion', '$subseccion', '$descripcion', '$comentario_mc', '$tag_status1', '$tag_status2');\">"
+                . "<h1 class=\"font-bold\">$nombreDestino</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"
                 . " $tag_finalizado $tag_status <h1 class=\"\">  $seccion</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"
@@ -803,6 +805,7 @@ if (isset($_POST['action'])) {
         while ($row_t_mp = mysqli_fetch_array($result_t_mp)) {
             $id = $row_t_mp['id'];
             $id_destino = $row_t_mp['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
             $seccion = $row_t_mp['seccion'];
             $subseccion = $row_t_mp['grupo'];
             $equipo = $row_t_mp['equipo'];
@@ -820,8 +823,8 @@ if (isset($_POST['action'])) {
             }
 
             $bitacoraMP .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', '$equipo (Folio OT: $folio)', '$comentario_mp', '', '');\">
-                <h1 class=\"font-bold\">$arrayDestino[$id_destino]</h1>
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', '$equipo (Folio OT: $folio)', '$comentario_mp', '', '');\">
+                <h1 class=\"font-bold\">$nombreDestino</h1>
                 <P class=\"font-black mx-1\">/</P>
                 <h1 class=\" \">$seccion</h1><!-- SECION -->
                 <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
@@ -865,6 +868,7 @@ if (isset($_POST['action'])) {
         while ($row_t_mp_np = mysqli_fetch_array($result_t_mp_np)) {
             $id = $row_t_mp_np['id'];
             $id_destino = $row_t_mp_np['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
             $seccion = $row_t_mp_np['seccion'];
             $subseccion = $row_t_mp_np['grupo'];
             $equipo = $row_t_mp_np['equipo'];
@@ -886,8 +890,8 @@ if (isset($_POST['action'])) {
             }
 
             $bitacoraMP .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,' $seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
-                <h1 class=\"font-bold\">$arrayDestino[$id_destino]</h1>
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
+                <h1 class=\"font-bold\">$nombreDestino</h1>
                 <P class=\"font-black mx-1\">/</P>
                 <h1 class=\" \">$seccion</h1><!-- SECION -->
                 <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
@@ -950,6 +954,7 @@ if (isset($_POST['action'])) {
         while ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
             $id = $row_t_proyectos['id'];
             $id_destino = $row_t_proyectos['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
             $seccion = $row_t_proyectos['seccion'];
             $subseccion = $row_t_proyectos['grupo'];
             $proyecto = $row_t_proyectos['titulo'];
@@ -982,8 +987,8 @@ if (isset($_POST['action'])) {
             }
 
 
-            $bitacoraProyecto .= "<div class=\"flex justify-left items-center w-full bg-yellow-200 rounded mb-2 text-yellow-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id_planaccion, '$seccion', '$subseccion', '$proyecto -> $planaccion', '$comentario', '$tag_status1', '$tag_status2');\">"
-                . "<h1 class=\"font-bold\">$arrayDestino[$id_destino]</h1>"
+            $bitacoraProyecto .= "<div class=\"flex justify-left items-center w-full bg-yellow-200 rounded mb-2 text-yellow-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id_planaccion,'$nombreDestino', '$seccion', '$subseccion', '$proyecto -> $planaccion', '$comentario', '$tag_status1', '$tag_status2');\">"
+                . "<h1 class=\"font-bold\">$nombreDestino</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"
                 . "$tag_finalizado $tag_status <h1 class=\"\">$seccion</h1>"
                 . "<P class=\"font-black mx-1\">/</P>"

@@ -1456,8 +1456,9 @@ function modalStatus(idModal, status) {
 
 
 // Funcion para mostrar detalles consultaMPMCPROYECTOS.
-function consultaMPMCPROYECTOS(id, seccion, subseccion, descripcion, comentario, status1, status2) {
+function consultaMPMCPROYECTOS(id, destino, seccion, subseccion, descripcion, comentario, status1, status2) {
 
+    $("#destinoModalMCMPProyectos").html(destino);
     $("#seccionModalMCMPProyectos").html(seccion);
     $("#subseccionModalMCMPProyectos").html(subseccion);
     $("#descripcionModalMCMPProyectos").html(descripcion);

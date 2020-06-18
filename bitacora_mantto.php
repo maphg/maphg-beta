@@ -1049,22 +1049,33 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
         <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" onclick="toggleModal('modalMCMPProyectos');">
         </div>
         <div class="flex flex-col items-start justify-center sm:w-full md:w-4/12 h-auto p-4 rounded-lg shadow-sm bg-white divide-y divide-gray-400 relative">
+
+            <div class="mb-4 w-full">
+                <p class="font-black">DESTINO:
+                    <span id="destinoModalMCMPProyectos" class="font-normal">nombre de la seccion</span>
+                </p>
+            </div>
+
             <div class="mb-4 w-full">
                 <p class="font-black">SECCIÓN:
                     <span id="seccionModalMCMPProyectos" class="font-normal">nombre de la seccion</span>
                 </p>
             </div>
+
             <div class="mb-4 w-full">
                 <p class="mt-3 font-black">SUBSECCIÓN: <span id="subseccionModalMCMPProyectos" class="font-normal">Sin
                         Información</span></p>
             </div>
+
             <div class="mb-4 w-full">
                 <p class="mt-3 font-black">DESCRIPCIÓN: <span id="descripcionModalMCMPProyectos" class="font-normal">Sin
                         Información</span></p>
             </div>
+
             <div class="mb-4 w-full">
                 <p class="mt-3 font-black">ULTIMO COMENTARIO: <span id="comentarioModalMCMPProyectos" class="font-normal">Sin comentarios"</span></p>
             </div>
+
             <div class=" w-full">
                 <p class="mt-3 font-black">STATUS:
                     <span id="status1ModalMCMPProyectos" class="font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md">Sin
@@ -1074,9 +1085,11 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                         Información</span>
                 </p>
             </div>
+
             <div class="absolute top-0 right-0 mr-3 cursor-pointer text-gray-600 text-xl" onclick="toggleModal('modalMCMPProyectos');">
                 <i class="fas fa-times"></i>
             </div>
+
         </div>
     </div>
 
