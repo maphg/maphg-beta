@@ -1519,7 +1519,7 @@ class Planner
         return $salida;
     }
 
-    //Obtener la lista de los equipos
+    //Obtener la lista de los equipos - Carga Principal
     public function obtenerEquipos($idGrupo, $idDestino, $idCategoria, $idSubcategoria, $idRelCatSubcat, $pagina)
     {
         $listaEquipo = new ListaEquipo();
@@ -1627,7 +1627,7 @@ class Planner
             . "</div>"
             . "</div>";
 
-        //Fila donde de las tareas generales del area
+        //Fila donde de las tareas generales del area - Carga Princiapal
         $listaEquipo->listaEquipos .= "<div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita\">"
             . "<div class=\"column is-two-fifths\">"
             . "<div class=\"columns\">"
@@ -5846,6 +5846,7 @@ class Planner
         return $equipo;
     }
 
+    // Se obtienen todas los correctivos generales.
     public function obtCorrectivosG($idSubseccion, $idDestino, $idCategoria, $idSubcategoria, $idRelSubcategoria, $status)
     {
         $conn = new Conexion();
@@ -5897,9 +5898,6 @@ class Planner
         $equipo->correctivos .= "</button>"
             . "</div>"
             . "<div class=\"navbar-item\">"
-            // . "<button type=\"button\" class=\"button is-warning\" name=\"button\" onclick=\"closeModal('modal-mc');\">"
-            // . "<i class=\"fas fa-times\"></i>"
-            // . "</button>"
             . "</div>"
             . "</div>"
             . "</nav>"
@@ -5945,7 +5943,10 @@ class Planner
             . "<p class=\"t-titulos\" data-tooltip=\"Comentarios\"><strong>Comentarios</strong></p>"
             . "</div>"
             . "<div class=\"column\">"
-            . " <p class=\"t-titulos\" data-tooltip=\"status\"><strong>Status Tarea</strong></p>"
+            . " <p class=\"t-titulos\" data-tooltip=\"Status seleccionado\"><strong>Status Tarea</strong></p>"
+            . "</div>"
+            . "<div class=\"column\">"
+            . " <p class=\"t-titulos\" data-tooltip=\"Fase Seleccionada\"><strong>Opción</strong></p>"
             . "</div>"
             . "</div>"
             . "</div>"
@@ -5980,6 +5981,7 @@ class Planner
                 . "t_mc.energetico_gas 'ENERGETICO_GAS', "
                 . "t_mc.energetico_electricidad 'ENERGETICO_ELECTRICIDAD', "
                 . "t_mc.energetico_diesel 'ENERGETICO_DIESEL', "
+                . "t_mc.zona 'FASE', "
                 . "c_destinos.destino 'DESTINO' "
                 . "FROM t_mc "
                 . "INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id "
@@ -6018,6 +6020,7 @@ class Planner
                     . "t_mc.energetico_gas 'ENERGETICO_GAS', "
                     . "t_mc.energetico_electricidad 'ENERGETICO_ELECTRICIDAD', "
                     . "t_mc.energetico_diesel 'ENERGETICO_DIESEL', "
+                    . "t_mc.zona 'ZONA', "
                     . "c_destinos.destino 'DESTINO' "
                     . "FROM t_mc "
                     . "INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id "
@@ -6055,6 +6058,7 @@ class Planner
                     . "t_mc.energetico_gas 'ENERGETICO_GAS', "
                     . "t_mc.energetico_electricidad 'ENERGETICO_ELECTRICIDAD', "
                     . "t_mc.energetico_diesel 'ENERGETICO_DIESEL', "
+                    . "t_mc.zona 'ZONA', "
                     . "c_destinos.destino 'DESTINO' "
                     . "FROM t_mc "
                     . "INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id "
@@ -6067,7 +6071,7 @@ class Planner
             }
         }
         try {
-            // Agregar a Plesk
+            // Agrega la fila unicamente para DEP, donde muestra los regstros marcados como departamentos.
             if ($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 || $idSubseccion == 213 || $idSubseccion == 214) {
                 $arrayDEPNombre = array(62 => "RRHH", 211 => "Finanzas", 212 => "Dirección", 213 => "Compras Almacén", 214 => "Calidad");
 
@@ -6088,6 +6092,22 @@ class Planner
                 ";
             }
             // Fin
+
+            // Bloque de Código para Mostrar la opción de Fase, siempre y cuando se este clasificado.
+            $search = 0;
+            $checkedGP = "";
+            $checkedTRS = "";
+            $checkedZI = "";
+            if ($idDestino == 1) {
+                $arraySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
+                $search = array_search($idSubseccion, $arraySubseccion, false);
+            } elseif ($idDestino == 2) {
+                $arraySubseccion = array(0, 200, 344, 313, 301, 200, 297, 296, 300, 293, 311, 35, 38, 310, 200, 34, 15, 37, 354, 306, 14, 39, 308, 13, 320, 341, 340, 200);
+                $search = array_search($idSubseccion, $arraySubseccion, false);
+            } elseif ($idDestino == 7) {
+                $arraySubseccion = array(0, 214, 213, 212, 211, 200, 62, 200, 344, 293, 291, 314, 301, 25, 298, 292, 305, 297, 200, 296, 299, 300, 354, 39, 320, 15, 37, 35, 34, 306, 308, 200, 14, 311, 13, 38);
+                $search = array_search($idSubseccion, $arraySubseccion, false);
+            }
 
             $resp = $conn->obtDatos($query);
             if ($conn->filasConsultadas > 0) {
@@ -6120,6 +6140,7 @@ class Planner
                     $energetico_electricidad = $dts['ENERGETICO_ELECTRICIDAD'];
                     $energetico_diesel = $dts['ENERGETICO_DIESEL'];
                     $des = $dts['DESTINO'];
+                    $zona = $dts['ZONA'];
 
                     //Obtener el nombre del responsable
                     $query = "SELECT t_users.id_colaborador 'IDCOL', "
@@ -6255,15 +6276,47 @@ class Planner
 
                         if ($status_material != "" || $status_trabajare != "" || $departamento != "" || $energetico != "") {
 
-                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ")\"> $status_material $status_trabajare $departamento $energetico</p>";
+                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ", 'MCG')\"> $status_material $status_trabajare $departamento $energetico</p>";
                         } else {
-                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ")\"><i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i></p>";
+                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ", 'MCG')\"><i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i></p>";
                         }
                     } else {
-                        $equipo->correctivos .= "<p class=\"t-solucionado\" onclick=\"restaurarMC($idMC, " . $_SESSION["usuario"] . ")\">Restaurar</p>";
+                        $equipo->correctivos .= "<p class=\"t-solucionado\" onclick=\"restaurarMC($idMC, " . $_SESSION["usuario"] . ", 'MCG')\">Restaurar</p>";
                     }
+                    $equipo->correctivos .= "</div>";
+
+
+
+                    if ($arraySubseccion[$search] == $idSubseccion) { //Opción para Seleccionar la ZONA.
+
+                        if ($zona == "GP") {
+                            $checkedGP = "checked";
+                        } elseif ($zona == "TRS") {
+                            $checkedTRS = "checked";
+                        } elseif ($zona == "ZI") {
+                            $checkedZI = "checked";
+                        }
+
+                        $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal m-0 p-0\">
+                        <label class=\"radio is-size-7 p-2\">
+                        <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', 0, 'F', 0);\">
+                        GP
+                        </label>
+                        <label class=\"radio is-size-7\">
+                        <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', 0, 'F', 0);\">
+                        TRS
+                        </label>
+                        <label class=\"radio is-size-7\">
+                        <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', 0, 'F', 0);\">
+                        ZI
+                        </label>
+                        </p></div>";
+                    } else {
+                        $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p></div>";
+                    }
+
+                    // Cierre de maquetación de la fila.
                     $equipo->correctivos .= "</div>"
-                        . "</div>"
                         . "</div>"
                         . "</div>";
                 }
@@ -8916,16 +8969,15 @@ class Planner
                         }
 
                         if ($status_material != "" || $status_trabajare != "" || $departamento != "" || $energetico != "") {
-                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ")\">$status_material $status_trabajare $departamento $energetico</p>";
+                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ", 'MC')\">$status_material $status_trabajare $departamento $energetico</p>";
                         } else {
-                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ")\"><i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i></p>";
+                            $equipo->correctivos .= "<p class=\"t-normal\" onclick=\"modalStatusMC($idMC, " . $_SESSION["usuario"] . ", 'MC')\"><i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i></p>";
                         }
                     } else {
-                        $equipo->correctivos .= "<p class=\"t-solucionado\" onclick=\"restaurarMC($idMC, " . $_SESSION["usuario"] . ")\">Restaurar</p>";
+                        $equipo->correctivos .= "<p class=\"t-solucionado\" onclick=\"restaurarMC($idMC, " . $_SESSION["usuario"] . ", 'MC')\">Restaurar</p>";
                     }
 
-                    $equipo->correctivos .= "</div>"
-                        . "<div class=\"column t-normal\">";
+                    $equipo->correctivos .= "</div>";;
                     $search = 0;
                     if ($idDestino == 1) {
                         $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
@@ -8964,22 +9016,22 @@ class Planner
 
                         $equipo->correctivos .=
                             "
-                                <label class=\"radio is-size-7 p-2\">
-                                <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
-                                GP
-                                </label>
-                                <label class=\"radio is-size-7\">
-                                <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
-                                TRS
-                                </label>
-                                <label class=\"radio is-size-7\">
-                                <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
-                                ZI
-                                </label>
+                            <div class=\"column t-normal\">
+                            <label class=\"radio is-size-7 p-2\">
+                            <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
+                            GP
+                            </label>
+                            <label class=\"radio is-size-7\">
+                            <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
+                            TRS
+                            </label>
+                            <label class=\"radio is-size-7\">
+                            <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
+                            ZI
+                            </label>
                             ";
                     } else {
-                        // $equipo->correctivos .= "$search - $idDestino - $idSubseccion";
-                        $equipo->correctivos .= "";
+                        $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p>";
                     }
 
                     $equipo->correctivos .= "</div>"

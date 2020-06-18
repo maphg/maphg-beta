@@ -4752,17 +4752,20 @@ function cerrarModalResponsableProyecto() {
 }
 
 // Codigo para MC
-function modalStatusMC(idMC, idUsuario) {
+function modalStatusMC(idMC, idUsuario, tipoMCMCG) {
     $("#idMC").val(idMC);
     $("#idUsuarioMC").val(idUsuario);
     $("#modalStatusMC").addClass("modal-fx-superScaled is-active");
+    $("#tipoMCMCG").val(tipoMCMCG);
 }
 
 function statusMC(statusMC) {
     var action = "agregarStatusMC";
     var idMC = $("#idMC").val();
     var idUsuarioMC = $("#idUsuarioMC").val();
+    var tipoMCMCG = $("#tipoMCMCG").val();
     var statusMC = statusMC;
+    var idEquipo = $("#hddIdEquipo").val();
 
     if (statusMC == "solucionado") {
         Swal.fire({
@@ -4790,7 +4793,11 @@ function statusMC(statusMC) {
             },
             success: function (datos) {
                 alertInformacionActualiza("Status Actualizado");
-                recargarMC();
+                if (tipoMCMCG == "MCG") {
+                    recargarMC();
+                } else {
+                    obtCorrectivos(idEquipo, 'N');
+                }
                 $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
             },
         });
@@ -4801,6 +4808,7 @@ function statusMC(statusMC) {
 function finalizarMC(idMC) {
     var action = "finalizarMC";
     var idEquipo = $("#hddIdEquipo").val();
+    var tipoMCMCG = $("#tipoMCMCG").val();
     $.ajax({
         type: "post",
         url: "php/crud.php",
@@ -4812,7 +4820,12 @@ function finalizarMC(idMC) {
         success: function (datos) {
             alertInformacionActualiza("Mantenimiento Correctivo Finalizado!");
             $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
-            obtCorrectivos(idEquipo, 'N');
+            if (tipoMCMCG == "MCG") {
+                recargarMC();
+            } else {
+                obtCorrectivos(idEquipo, 'N');
+            }
+            console.log(datos);
         },
     });
 }
@@ -4844,7 +4857,7 @@ function modalRestaurarMC(idMC, idUsuario) {
     $("#modalRestaurarMC").addClass("modal-fx-superScaled is-active");
 }
 
-function restaurarMC(idMC, idUsuario) {
+function restaurarMC(idMC, idUsuario, tipoMCMCG) {
     var action = "restaurarMC";
     var idMC = idMC;
     var idUsuario = idUsuario;
@@ -4863,12 +4876,12 @@ function restaurarMC(idMC, idUsuario) {
                 "",
                 "Restaurado!",
                 "success",
-                restaurar(action, idMC, idUsuario)
+                restaurar(action, idMC, idUsuario, tipoMCMCG)
             );
         }
     });
 
-    function restaurar(action, idMC, idUsuario) {
+    function restaurar(action, idMC, idUsuario, tipoMCMCG) {
         var idEquipo = $("#hddIdEquipo").val();
         $.ajax({
             type: "post",
@@ -4880,7 +4893,11 @@ function restaurarMC(idMC, idUsuario) {
             },
             success: function (datos) {
                 alertInformacionActualiza("Mantenimiento Correctivo Restaurado!");
-                obtCorrectivos(idEquipo, 'N');
+                if (tipoMCMCG == "MC") {
+                    obtCorrectivos(idEquipo, 'N');
+                } else {
+                    recargarMC();
+                }
                 $("#modalRestaurarMC").removeClass(" modal-fx-superScaled is-active");
             },
         });
@@ -5823,7 +5840,6 @@ function editarMC() {
 
 // Función para seleccionar GP - TRS - ZI en los mantenimientos preventivos, para las subsecciones no clasificadas.
 function zonaMC(idMC, zona, idEquipo, statusMC, idSubseccion) {
-    console.log(idMC, zona, idEquipo, statusMC, idSubseccion);
     if (idMC != "" && zona != "") {
 
         const action = "zonaMC";

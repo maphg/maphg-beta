@@ -362,6 +362,7 @@ $tablaRanking .= "</div>";
         <input type="hidden" id="idSeccionProyectos">
         <input type="hidden" id="idUsuarioProyectos">
         <input type="hidden" id="idSubseccionProyectos">
+        <input type="hidden" id="tipoMCMCG">
 
         <!-- Fin de hidden para Tareas Generales -->
 
