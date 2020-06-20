@@ -3423,19 +3423,26 @@ $tablaRanking .= "</div>";
                         </div>
                         <p class="mb-2">Actividades a realizar</p>
                         <ul id="ulActividades2" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
 
                         </ul>
@@ -4969,19 +4976,26 @@ $tablaRanking .= "</div>";
                         </div>
                         <p class="mb-2">Actividades a realizar</p>
                         <ul id="ulActividades" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
                                 lectus mollis, quis dictum mi aliquet.</li>
 
                         </ul>

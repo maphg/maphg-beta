@@ -110,6 +110,19 @@ if(isset($_POST['action'])) {
         }
         echo json_encode($salida);
     }
-}
 
-?>
+
+    // Nuevas funciones para la version Beta_2020.
+
+    if ($action == "eliminarSubalmacen") {
+        $idSubalmacen = $_POST['idSubalmacen'];
+        $query = "";
+        if (mysqli_query($conn_2020, $query)) {
+            echo "Subalmacén Eliminado";
+        }else{
+            echo "Error al Eliminar Subalmacén";
+        }
+    }
+
+
+}//Fin $action.

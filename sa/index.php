@@ -10,97 +10,97 @@ include 'libs/subalmacenesItemsPD.php';
 $conn = new Conexion();
 $conn->conectar();
 if (!isset($_SESSION['usuario'])) {
-   header('Location: ../login.php');
+    header('Location: ../login.php');
 } else {
-   $conn->conectar();
-   $idUsuario = $_SESSION['usuario'];
-   //Obtener datos del usuario
-   $query = "SELECT * FROM t_users WHERE id = $idUsuario";
-   try {
-      $resp = $conn->obtDatos($query);
-      if ($conn->filasConsultadas > 0) {
-         foreach ($resp as $dts) {
-            $idColaborador = $dts['id_colaborador'];
-            $idPermiso = $dts['id_permiso'];
-            $idDestino = $dts['id_destino'];
-            $idFase = $dts['fase'];
+    $conn->conectar();
+    $idUsuario = $_SESSION['usuario'];
+    //Obtener datos del usuario
+    $query = "SELECT * FROM t_users WHERE id = $idUsuario";
+    try {
+        $resp = $conn->obtDatos($query);
+        if ($conn->filasConsultadas > 0) {
+            foreach ($resp as $dts) {
+                $idColaborador = $dts['id_colaborador'];
+                $idPermiso = $dts['id_permiso'];
+                $idDestino = $dts['id_destino'];
+                $idFase = $dts['fase'];
 
-            $query = "SELECT * FROM c_permisos WHERE id = $idPermiso";
-            try {
-               $resp = $conn->obtDatos($query);
-               if ($conn->filasConsultadas > 0) {
-                  foreach ($resp as $dts) {
-                     $permiso = $dts['permiso'];
-                  }
-               }
-            } catch (Exception $ex) {
-               echo $ex;
-            }
-            $accesoSA = "";
-            $query = "SELECT * FROM c_acciones_usuarios WHERE id_usuario = $idUsuario";
-            try {
-               $resp = $conn->obtDatos($query);
-               if ($conn->filasConsultadas > 0) {
-                  foreach ($resp as $dts) {
-                     $accesoSA = $dts['acceso_sa'];
-                  }
-               }
-            } catch (Exception $ex) {
-               echo $ex;
-            }
+                $query = "SELECT * FROM c_permisos WHERE id = $idPermiso";
+                try {
+                    $resp = $conn->obtDatos($query);
+                    if ($conn->filasConsultadas > 0) {
+                        foreach ($resp as $dts) {
+                            $permiso = $dts['permiso'];
+                        }
+                    }
+                } catch (Exception $ex) {
+                    echo $ex;
+                }
+                $accesoSA = "";
+                $query = "SELECT * FROM c_acciones_usuarios WHERE id_usuario = $idUsuario";
+                try {
+                    $resp = $conn->obtDatos($query);
+                    if ($conn->filasConsultadas > 0) {
+                        foreach ($resp as $dts) {
+                            $accesoSA = $dts['acceso_sa'];
+                        }
+                    }
+                } catch (Exception $ex) {
+                    echo $ex;
+                }
 
-            if ($accesoSA != "") {
-               $subalmacenes = explode(",", $accesoSA);
-            } else {
-               $subalmacenes = [];
-            }
+                if ($accesoSA != "") {
+                    $subalmacenes = explode(",", $accesoSA);
+                } else {
+                    $subalmacenes = [];
+                }
 
-            //Obtener datos del colaborador
-            $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
-            try {
-               $resp = $conn->obtDatos($query);
-               if ($conn->filasConsultadas > 0) {
-                  foreach ($resp as $dts) {
-                     $nombre = $dts['nombre'];
-                     $apellido = $dts['apellido'];
-                     $telefono = $dts['telefono'];
-                     $email = $dts['email'];
-                     $idCargo = $dts['id_cargo'];
-                     $idSeccion = $dts['id_seccion'];
-                  }
-               }
-            } catch (Exception $ex) {
-               echo $ex;
+                //Obtener datos del colaborador
+                $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
+                try {
+                    $resp = $conn->obtDatos($query);
+                    if ($conn->filasConsultadas > 0) {
+                        foreach ($resp as $dts) {
+                            $nombre = $dts['nombre'];
+                            $apellido = $dts['apellido'];
+                            $telefono = $dts['telefono'];
+                            $email = $dts['email'];
+                            $idCargo = $dts['id_cargo'];
+                            $idSeccion = $dts['id_seccion'];
+                        }
+                    }
+                } catch (Exception $ex) {
+                    echo $ex;
+                }
             }
-         }
-      }
-   } catch (Exception $ex) {
-      echo $ex;
-   }
+        }
+    } catch (Exception $ex) {
+        echo $ex;
+    }
 }
 if ($idDestino == 10) {
-   if (isset($_SESSION['idDestino'])) {
-      $idDestinoT = $_SESSION['idDestino'];
-   } else {
-      $idDestinoT = $idDestino;
-   }
+    if (isset($_SESSION['idDestino'])) {
+        $idDestinoT = $_SESSION['idDestino'];
+    } else {
+        $idDestinoT = $idDestino;
+    }
 } else {
-   $idDestinoT = $idDestino;
+    $idDestinoT = $idDestino;
 }
 
 $query = "SELECT * FROM c_destinos WHERE id = $idDestinoT";
 try {
-   $resp = $conn->obtDatos($query);
-   if ($conn->filasConsultadas > 0) {
-      foreach ($resp as $dts) {
-         $bandera = $dts['bandera'];
-         $destino = $dts['destino'];
-         $gp = $dts['gp'];
-         $trs = $dts['trs'];
-      }
-   }
+    $resp = $conn->obtDatos($query);
+    if ($conn->filasConsultadas > 0) {
+        foreach ($resp as $dts) {
+            $bandera = $dts['bandera'];
+            $destino = $dts['destino'];
+            $gp = $dts['gp'];
+            $trs = $dts['trs'];
+        }
+    }
 } catch (Exception $ex) {
-   echo $ex;
+    echo $ex;
 }
 ?>
 <!DOCTYPE html>
@@ -150,8 +150,8 @@ try {
                 </div>
                 <br>
                 <?php
-            if ($superAdmin == 1) {
-               $data = "                 
+                if ($superAdmin == 1) {
+                    $data = "                 
                             <div class=\"columns\">
                                 <div class=\"column btn-opciones\">
                                     <div class=\"field is-grouped is-grouped-centered\">
@@ -174,9 +174,9 @@ try {
                                 </div>
                             </div>
                         ";
-               echo $data;
-            } else {
-               $data = "                 
+                    echo $data;
+                } else {
+                    $data = "                 
                             <div class=\"columns\">
                                 <div class=\"column is-right is-12 has-text-right\">
                                     <a class=\"icon is-large\" onclick=\"paginaInicio();\">
@@ -185,9 +185,9 @@ try {
                                 </div>
                             </div>
                         ";
-               echo $data;
-            }
-            ?>
+                    echo $data;
+                }
+                ?>
 
                 <br>
                 <div class="columns mx-5 is-centered">
@@ -198,45 +198,45 @@ try {
                             </div>
                         </div>
                         <?php
-                  $fase = "GP";
-                  if ($idDestinoT == 10) {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND activo = '1'"
-                        . "ORDER BY nombre";
-                  } else {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND id_destino = $idDestinoT "
-                        . "AND activo = '1'"
-                        . "ORDER BY nombre";
-                  }
-
-                  if ($fase == "GP") {
-                     $bgButton = "is-gp";
-                  } else if ($fase == "TRS") {
-                     $bgButton = "is-trs";
-                  } else {
-                     $bgButton = "is-zi";
-                  }
-                  try {
-                     $resp = $conn->obtDatos($query);
-                     if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                           $idSubalmacen = $dts['id'];
-                           $nombreSA = $dts['nombre'];
-                           echo "<div class=\"columns\">"
-                              . "<div class = \"column has-text-centered\">"
-                              . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
-                              . "</div>"
-                              . "</div>";
+                        $fase = "GP";
+                        if ($idDestinoT == 10) {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND activo = '1'"
+                                . "ORDER BY nombre";
+                        } else {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND id_destino = $idDestinoT "
+                                . "AND activo = '1'"
+                                . "ORDER BY nombre";
                         }
-                     }
-                  } catch (Exception $ex) {
-                     echo $ex;
-                     exit($ex);
-                  }
-                  ?>
+
+                        if ($fase == "GP") {
+                            $bgButton = "is-gp";
+                        } else if ($fase == "TRS") {
+                            $bgButton = "is-trs";
+                        } else {
+                            $bgButton = "is-zi";
+                        }
+                        try {
+                            $resp = $conn->obtDatos($query);
+                            if ($conn->filasConsultadas > 0) {
+                                foreach ($resp as $dts) {
+                                    $idSubalmacen = $dts['id'];
+                                    $nombreSA = $dts['nombre'];
+                                    echo "<div class=\"columns\">"
+                                        . "<div class = \"column has-text-centered\">"
+                                        . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
+                                        . "</div>"
+                                        . "</div>";
+                                }
+                            }
+                        } catch (Exception $ex) {
+                            echo $ex;
+                            exit($ex);
+                        }
+                        ?>
                     </div>
                     <div class="column">
                         <div class="columns">
@@ -245,45 +245,45 @@ try {
                             </div>
                         </div>
                         <?php
-                  $fase = "TRS";
-                  if ($idDestinoT == 10) {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND activo = '1'"
-                        . "ORDER BY nombre";
-                  } else {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND activo = '1'"
-                        . "AND id_destino = $idDestinoT "
-                        . "ORDER BY nombre";
-                  }
-
-                  if ($fase == "GP") {
-                     $bgButton = "is-gp";
-                  } else if ($fase == "TRS") {
-                     $bgButton = "is-trs";
-                  } else {
-                     $bgButton = "is-zi";
-                  }
-                  try {
-                     $resp = $conn->obtDatos($query);
-                     if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                           $idSubalmacen = $dts['id'];
-                           $nombreSA = $dts['nombre'];
-                           echo "<div class=\"columns\">"
-                              . "<div class = \"column has-text-centered\">"
-                              . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
-                              . "</div>"
-                              . "</div>";
+                        $fase = "TRS";
+                        if ($idDestinoT == 10) {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND activo = '1'"
+                                . "ORDER BY nombre";
+                        } else {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND activo = '1'"
+                                . "AND id_destino = $idDestinoT "
+                                . "ORDER BY nombre";
                         }
-                     }
-                  } catch (Exception $ex) {
-                     echo $ex;
-                     exit($ex);
-                  }
-                  ?>
+
+                        if ($fase == "GP") {
+                            $bgButton = "is-gp";
+                        } else if ($fase == "TRS") {
+                            $bgButton = "is-trs";
+                        } else {
+                            $bgButton = "is-zi";
+                        }
+                        try {
+                            $resp = $conn->obtDatos($query);
+                            if ($conn->filasConsultadas > 0) {
+                                foreach ($resp as $dts) {
+                                    $idSubalmacen = $dts['id'];
+                                    $nombreSA = $dts['nombre'];
+                                    echo "<div class=\"columns\">"
+                                        . "<div class = \"column has-text-centered\">"
+                                        . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
+                                        . "</div>"
+                                        . "</div>";
+                                }
+                            }
+                        } catch (Exception $ex) {
+                            echo $ex;
+                            exit($ex);
+                        }
+                        ?>
                     </div>
                     <div class="column">
                         <div class="columns">
@@ -292,45 +292,45 @@ try {
                             </div>
                         </div>
                         <?php
-                  $fase = "ZI";
-                  if ($idDestinoT == 10) {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND activo = '1'"
-                        . "ORDER BY nombre";
-                  } else {
-                     $query = "SELECT * FROM t_subalmacenes "
-                        . "WHERE fase = '$fase' "
-                        . "AND activo = '1'"
-                        . "AND id_destino = $idDestinoT "
-                        . "ORDER BY nombre";
-                  }
-
-                  if ($fase == "GP") {
-                     $bgButton = "is-gp";
-                  } else if ($fase == "TRS") {
-                     $bgButton = "is-trs";
-                  } else {
-                     $bgButton = "is-zi";
-                  }
-                  try {
-                     $resp = $conn->obtDatos($query);
-                     if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                           $idSubalmacen = $dts['id'];
-                           $nombreSA = $dts['nombre'];
-                           echo "<div class=\"columns\">"
-                              . "<div class = \"column has-text-centered\">"
-                              . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
-                              . "</div>"
-                              . "</div>";
+                        $fase = "ZI";
+                        if ($idDestinoT == 10) {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND activo = '1'"
+                                . "ORDER BY nombre";
+                        } else {
+                            $query = "SELECT * FROM t_subalmacenes "
+                                . "WHERE fase = '$fase' "
+                                . "AND activo = '1'"
+                                . "AND id_destino = $idDestinoT "
+                                . "ORDER BY nombre";
                         }
-                     }
-                  } catch (Exception $ex) {
-                     echo $ex;
-                     exit($ex);
-                  }
-                  ?>
+
+                        if ($fase == "GP") {
+                            $bgButton = "is-gp";
+                        } else if ($fase == "TRS") {
+                            $bgButton = "is-trs";
+                        } else {
+                            $bgButton = "is-zi";
+                        }
+                        try {
+                            $resp = $conn->obtDatos($query);
+                            if ($conn->filasConsultadas > 0) {
+                                foreach ($resp as $dts) {
+                                    $idSubalmacen = $dts['id'];
+                                    $nombreSA = $dts['nombre'];
+                                    echo "<div class=\"columns\">"
+                                        . "<div class = \"column has-text-centered\">"
+                                        . "<a class = \"button is-large $bgButton is-fullwidth\" href = \"menu.php?idSubalmacen=$idSubalmacen\"><span class = \"icon is-medium\"><i class = \"fas fa-sign-in-alt\"></i></span><span>$nombreSA</span></a>"
+                                        . "</div>"
+                                        . "</div>";
+                                }
+                            }
+                        } catch (Exception $ex) {
+                            echo $ex;
+                            exit($ex);
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
@@ -352,16 +352,16 @@ try {
                             <select id="optionId" onclick="obtenerSubalmacen();" name="" id="">
                                 <option value="">Seleccione el Subalmacén</option>
                                 <?php
-                        if ($idDestinoT == 10) {
-                           $query = "SELECT* FROM t_subalmacenes  WHERE activo = '1'  ORDER BY nombre";
-                        } else {
-                           $query = "SELECT* FROM t_subalmacenes WHERE id_destino=$idDestinoT AND activo = '1' ORDER BY nombre";
-                        }
-                        $result = mysqli_query($conn_2020, $query);
-                        while ($row = mysqli_fetch_array($result)) {
-                           echo "<option value=\"" . $row['id'] . "\">" . $row['nombre'] . "</option>";
-                        }
-                        ?>
+                                if ($idDestinoT == 10) {
+                                    $query = "SELECT* FROM t_subalmacenes  WHERE activo = '1'  ORDER BY nombre";
+                                } else {
+                                    $query = "SELECT* FROM t_subalmacenes WHERE id_destino=$idDestinoT AND activo = '1' ORDER BY nombre";
+                                }
+                                $result = mysqli_query($conn_2020, $query);
+                                while ($row = mysqli_fetch_array($result)) {
+                                    echo "<option value=\"" . $row['id'] . "\">" . $row['nombre'] . "</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -467,7 +467,7 @@ function obtenerSubalmacen() {
     $.ajax({
 
         type: "post",
-        url: "libs/crud.php",
+        url: "libs/crud_subalmacen.php",
         data: {
             action: action,
             idSubalmacen: idSubalmacen
@@ -511,7 +511,7 @@ function subalmacen(eliminarSubalmacen) {
 
             $.ajax({
                 type: "post",
-                url: "libs/crud.php",
+                url: "libs/crud_subalmacen.php",
                 data: {
                     action: action,
                     idDestino: idDestino,
@@ -539,7 +539,7 @@ function subalmacen(eliminarSubalmacen) {
             $.ajax({
 
                 type: "post",
-                url: "libs/crud.php",
+                url: "libs/crud_subalmacen.php",
                 data: {
                     action: action,
                     idDestino: idDestino,
@@ -581,7 +581,7 @@ function subalmacen(eliminarSubalmacen) {
             $.ajax({
 
                 type: "post",
-                url: "libs/crud.php",
+                url: "libs/crud_subalmacen.php",
                 data: {
                     action: action,
                     idDestino: idDestino,
