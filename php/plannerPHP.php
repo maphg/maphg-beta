@@ -6099,7 +6099,7 @@ class Planner
             $checkedTRS = "";
             $checkedZI = "";
             if ($idDestino == 1) {
-                $arraySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
+                $arraySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306, 339, 337, 336, 341, 335, 340, 334, 338);
                 $search = array_search($idSubseccion, $arraySubseccion, false);
             } elseif ($idDestino == 2) {
                 $arraySubseccion = array(0, 200, 344, 313, 301, 200, 297, 296, 300, 293, 311, 35, 38, 310, 200, 34, 15, 37, 354, 306, 14, 39, 308, 13, 320, 341, 340, 200);
@@ -8844,7 +8844,7 @@ class Planner
                     $checkedTRS = "";
                     $checkedZI = "";
                     if ($idDestino == 1) {
-                        $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306);
+                        $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306,339, 337, 336, 341, 335, 340, 334, 338);
                         // var_export($araySubseccionRM);
                         $search = array_search($idSubseccion, $araySubseccion, false);
                     } elseif ($idDestino == 2) {
