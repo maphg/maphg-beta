@@ -116,24 +116,24 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.min.css">
     <style>
-    .container-scroll {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-    }
+        .container-scroll {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
 
-    .btn-opciones {
-        text-align: center;
-        background: #f5f5f5;
-        cursor: pointer;
-    }
+        .btn-opciones {
+            text-align: center;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
 
-    #subalmacen-opcion {
-        text-align: center;
-        margin-bottom: 40px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+        #subalmacen-opcion {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 
@@ -397,17 +397,14 @@ try {
                 </div>
                 <div class="field">
                     <div class="control">
-                        <input id="inputSubalmacen" class="input is-info" type="text"
-                            placeholder="Nombre del Subalmacén">
+                        <input id="inputSubalmacen" class="input is-info" type="text" placeholder="Nombre del Subalmacén">
                     </div>
                 </div>
             </section>
             <footer class="modal-card has-background-white">
                 <div class="control column has-text-centered">
-                    <button id="btn-operacion" class="mx-2 button is-success is-medium"
-                        onclick="subalmacen('');"></button>
-                    <button id="btn-eliminar" class="mx-2 button is-danger is-medium"
-                        onclick="subalmacen('eliminarSubalmacen');">Eliminar</button>
+                    <button id="btn-operacion" class="mx-2 button is-success is-medium" onclick="subalmacen('');"></button>
+                    <button id="btn-eliminar" class="mx-2 button is-danger is-medium" onclick="subalmacen('eliminarSubalmacen');">Eliminar</button>
                     <button class="mx-2 button is-warning is-medium cerrar-modal">Cancelar</button>
                 </div>
             </footer>
@@ -423,203 +420,203 @@ try {
 <script src="../js/alertasSweet.js"></script>
 
 <script>
-function recargarPagina() {
-    location.href = 'index.php';
-}
-
-function paginaInicio() {
-    location.href = '../index.php';
-}
-
-
-$(".cerrar-modal").click(function() {
-    $("#modal-subalmacen").removeClass(" is-active");
-    $("#titulo-modal").html("");
-});
-
-
-
-function agregarSubalmacen() {
-    $("#modal-subalmacen").addClass(" is-active");
-    $("#btn-operacion").val("Agregar");
-    $("#btn-operacion").html("Agregar");
-    $("#titulo-modal").html("Nuevo Subalmacén");
-    $("#subalmacen-opcion").css("display", "none");
-    $("#btn-eliminar").addClass("modal");
-}
-
-
-
-function modificarSubalmacen() {
-    $("#modal-subalmacen").addClass(" is-active");
-    $("#btn-operacion").val("Actualizar");
-    $("#btn-operacion").html("Actualizar");
-    $("#titulo-modal").html("Modificar Subalmacén");
-    $("#subalmacen-opcion").css("display", "flex");
-    $("#btn-eliminar").removeClass("modal");
-}
-
-
-function obtenerSubalmacen() {
-    var action = "consultaSubalmacen";
-    var idSubalmacen = $("#optionId").val();
-
-    $.ajax({
-
-        type: "post",
-        url: "libs/crud_subalmacen.php",
-        data: {
-            action: action,
-            idSubalmacen: idSubalmacen
-        },
-        dataType: 'json',
-
-        success: function(data) {
-            $("#selectFase").val(data.fase);
-            $("#inputSubalmacen").val(data.nombreSubalmacen);
-
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 1000,
-                timerProgressBar: true,
-                onOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: 'success',
-                title: 'Datos Obtenidos '
-            })
-        }
-    });
-}
-
-
-function subalmacen(eliminarSubalmacen) {
-    var action = $("#btn-operacion").val();
-    var idDestino = $("#inputDestino").val();
-    var idFase = $("#selectFase").val();
-    var subalmacen = $("#inputSubalmacen").val();
-
-    if (idFase != '' && subalmacen != '' && idDestino > 0) {
-
-        if (action == "Agregar") {
-
-            $.ajax({
-                type: "post",
-                url: "libs/crud_subalmacen.php",
-                data: {
-                    action: action,
-                    idDestino: idDestino,
-                    idFase: idFase,
-                    subalmacen: subalmacen
-                },
-
-                success: function(datos) {
-                    if (datos = 1) {
-                        alertaImg('Se agrego un Almacén', 'has-text-success', 'success', 3000);
-                    } else {
-                        alertaImg(datos, 'has-text-danger', 'error', 3000);
-                    }
-                    setTimeout(function() {
-                        recargarPagina();
-                    }, 1200);
-                }
-            });
-        }
-
-        if (action == "Actualizar") {
-            var idSubalmacen = $("#optionId").val();
-            console.log(idSubalmacen);
-
-            $.ajax({
-
-                type: "post",
-                url: "libs/crud_subalmacen.php",
-                data: {
-                    action: action,
-                    idDestino: idDestino,
-                    idFase: idFase,
-                    subalmacen: subalmacen,
-                    idSubalmacen: idSubalmacen
-                },
-
-                success: function(datos) {
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        onOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Subalmacén Actualizado! '
-                    })
-
-                    setTimeout(function() {
-                        recargarPagina();
-                    }, 1200);
-                }
-            });
-        }
-
-        if (eliminarSubalmacen == "eliminarSubalmacen") {
-            var idSubalmacen = $("#optionId").val();
-            var action = "eliminarSubalmacen";
-
-            $.ajax({
-
-                type: "post",
-                url: "libs/crud_subalmacen.php",
-                data: {
-                    action: action,
-                    idDestino: idDestino,
-                    idFase: idFase,
-                    subalmacen: subalmacen,
-                    idSubalmacen: idSubalmacen
-                },
-
-                success: function(datos) {
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        onOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Subalmacén Eliminado! '
-                    })
-
-                    setTimeout(function() {
-                        recargarPagina();
-                    }, 1200);
-                }
-            });
-        }
-    } else {
-        alertaImg('Algunos Campos Vacios', 'has-text-info', 'question', 3000);
+    function recargarPagina() {
+        location.href = 'index.php';
     }
 
-}
+    function paginaInicio() {
+        location.href = '../index.php';
+    }
+
+
+    $(".cerrar-modal").click(function() {
+        $("#modal-subalmacen").removeClass(" is-active");
+        $("#titulo-modal").html("");
+    });
+
+
+
+    function agregarSubalmacen() {
+        $("#modal-subalmacen").addClass(" is-active");
+        $("#btn-operacion").val("Agregar");
+        $("#btn-operacion").html("Agregar");
+        $("#titulo-modal").html("Nuevo Subalmacén");
+        $("#subalmacen-opcion").css("display", "none");
+        $("#btn-eliminar").addClass("modal");
+    }
+
+
+
+    function modificarSubalmacen() {
+        $("#modal-subalmacen").addClass(" is-active");
+        $("#btn-operacion").val("Actualizar");
+        $("#btn-operacion").html("Actualizar");
+        $("#titulo-modal").html("Modificar Subalmacén");
+        $("#subalmacen-opcion").css("display", "flex");
+        $("#btn-eliminar").removeClass("modal");
+    }
+
+
+    function obtenerSubalmacen() {
+        var action = "consultaSubalmacen";
+        var idSubalmacen = $("#optionId").val();
+
+        $.ajax({
+
+            type: "post",
+            url: "libs/crud_subalmacen.php",
+            data: {
+                action: action,
+                idSubalmacen: idSubalmacen
+            },
+            dataType: 'json',
+
+            success: function(data) {
+                $("#selectFase").val(data.fase);
+                $("#inputSubalmacen").val(data.nombreSubalmacen);
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    onOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Datos Obtenidos '
+                })
+            }
+        });
+    }
+
+
+    function subalmacen(eliminarSubalmacen) {
+        var action = $("#btn-operacion").val();
+        var idDestino = $("#inputDestino").val();
+        var idFase = $("#selectFase").val();
+        var subalmacen = $("#inputSubalmacen").val();
+
+        if (idFase != '' && subalmacen != '' && idDestino > 0) {
+
+            if (action == "Agregar") {
+
+                $.ajax({
+                    type: "post",
+                    url: "libs/crud_subalmacen.php",
+                    data: {
+                        action: action,
+                        idDestino: idDestino,
+                        idFase: idFase,
+                        subalmacen: subalmacen
+                    },
+
+                    success: function(datos) {
+                        if (datos = 1) {
+                            alertaImg('Se agrego un Almacén', 'has-text-success', 'success', 3000);
+                        } else {
+                            alertaImg(datos, 'has-text-danger', 'error', 3000);
+                        }
+                        setTimeout(function() {
+                            recargarPagina();
+                        }, 1200);
+                    }
+                });
+            }
+
+            if (action == "Actualizar") {
+                var idSubalmacen = $("#optionId").val();
+                console.log(idSubalmacen);
+
+                $.ajax({
+
+                    type: "post",
+                    url: "libs/crud_subalmacen.php",
+                    data: {
+                        action: action,
+                        idDestino: idDestino,
+                        idFase: idFase,
+                        subalmacen: subalmacen,
+                        idSubalmacen: idSubalmacen
+                    },
+
+                    success: function(datos) {
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            onOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Subalmacén Actualizado! '
+                        })
+
+                        setTimeout(function() {
+                            recargarPagina();
+                        }, 1200);
+                    }
+                });
+            }
+
+            if (eliminarSubalmacen == "eliminarSubalmacen") {
+                var idSubalmacen = $("#optionId").val();
+                var action = "eliminarSubalmacen";
+
+                $.ajax({
+
+                    type: "post",
+                    url: "libs/crud_subalmacen.php",
+                    data: {
+                        action: action,
+                        idDestino: idDestino,
+                        idFase: idFase,
+                        subalmacen: subalmacen,
+                        idSubalmacen: idSubalmacen
+                    },
+
+                    success: function(datos) {
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            onOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Subalmacén Eliminado! '
+                        })
+
+                        setTimeout(function() {
+                            recargarPagina();
+                        }, 1200);
+                    }
+                });
+            }
+        } else {
+            alertaImg('Algunos Campos Vacios', 'has-text-info', 'question', 3000);
+        }
+
+    }
 </script>
 
 </html>

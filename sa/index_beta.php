@@ -177,13 +177,20 @@ try {
     <link rel="stylesheet" href="../css/fontawesome/css/all.min.css">
     <title>MAPHG</title>
 </head>
+<style>
+* {
+    border: solid, red 1px;
+}
+</style>
 
 <body class="bg-gray-300" style="font-family: 'Manrope', sans-serif;">
+    <!-- Inputs ocultos para almacenar datos temporales. -->
+    <input type="hidden" id="inputFaseSubalmacen">
 
     <!-- Archivos para el Sidebar y Menu -->
     <?php
-    // include 'navbartop.php';
-    // include 'menu-sidebar.php';
+    include 'navbartop.php';
+    include 'menu-sidebar.php';
     ?>
     <!-- Archivos para el Sidebar y Menu -->
 
@@ -198,79 +205,37 @@ try {
     <div class="flex mb-4 p-6">
         <div class="w-1/3 bg-gray-200 h-12">
             <p class="text-3xl text-center">GP
-                <span class="text-2xl text-center text-green-600" onclick="toggleModal('modalAgregarSubalmacen');"><i
+                <span class="hover:text-green-800 text-2xl text-center text-green-600"
+                    onclick="toggleModal('modalAgregarSubalmacen'); agregarSubalmacenFase('GP');"><i
                         class="fad fa-plus-circle"></i></span>
             </p>
 
-            <div id="subalmacenGP" class="text-center p-5">
-                <div class="inline-flex bg-blue-400">
-                    <button class="hover:bg-blue-500 text-gray-700 font-bold py-2 px-4 rounded-l">
-                        Prevedew ewdewdew asdsadsdasddasdsa
-                    </button>
-                    <span class="font-bold py-2 px-4 rounded-r">
-                        <i class="fas fa-edit hover:text-white" onclick="toggleModal('modalAgregarSubalmacen');">
-                        </i>
-
-                        <i class="fas fa-trash hover:text-white" onclick="eliminarSubalmacen('idAlmacen');">
-                        </i>
-                    </span>
-                </div>
-
-            </div>
+            <div id="subalmacenGP" class="text-left p-5"></div>
 
         </div>
 
         <div class="w-1/3 bg-gray-400 h-12">
             <p class="text-3xl text-center">TRS
-                <span class="text-2xl text-center text-green-600" onclick="toggleModal('modalAgregarSubalmacen');">
+                <span class="hover:text-green-800 text-2xl text-center text-green-600"
+                    onclick="toggleModal('modalAgregarSubalmacen'); agregarSubalmacenFase('TRS');">
                     <i class="fad fa-plus-circle"></i>
                 </span>
             </p>
 
-            <div id="subalmacenTRS" class="text-center">
-                <button class="bg-blue-300 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full w-full m-2">
-                    Button
-                </button>
-                <button class="bg-blue-300 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full w-full m-2">
-                    Button
-                </button>
-            </div>
-
+            <div id="subalmacenTRS" class="text-left p-5"></div>
         </div>
 
         <div class="w-1/3 bg-gray-200 h-12 content-center text-center items-center">
             <p class="text-3xl text-center">ZI
-                <span class="text-2xl text-center text-green-600" onclick="toggleModal('modalAgregarSubalmacen');">
+                <span class="hover:text-green-800 text-2xl text-center text-green-600"
+                    onclick="toggleModal('modalAgregarSubalmacen'); agregarSubalmacenFase('ZI');">
                     <i class="fad fa-plus-circle"></i>
                 </span>
             </p>
-
-            <div id="subalmacenZI" class="text-center p-3 content-center text-center items-center">
-                <div class="py-3 text-center">
-                    <button class="w-auto bg-blue-300 hover:bg-grey py-2 px-4 rounded-l">
-                        a
-                    </button>
-                    <div
-                        class="subalmacenOpciones w-1/6 bg-blue-400 hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded-r">
-                        <i class="fas fa-edit"></i>
-                        <i class="fas fa-trash"></i>
-                    </div>
-                </div>
-
-                <div class="py-3 text-center">
-                    <button class="w-auto bg-blue-300 hover:bg-grey py-2 px-4 rounded-l">
-                        a
-                    </button>
-                    <div
-                        class="subalmacenOpciones w-1/6 bg-blue-400 hover:bg-grey text-grey-darkest font-bold py-2 px-4 rounded-r">
-                        <i class="fas fa-edit" onclick="toggleModal('modalAgregarSubalmacen');"></i>
-                        <i class="fas fa-trash"></i>
-                    </div>
-                </div>
-            </div>
-
+            <div id="subalmacenZI" class="text-left p-5"></div>
         </div>
     </div>
+
 
     <!--Modal para Agregar Subalmacén-->
     <div id="modalAgregarSubalmacen"
@@ -285,7 +250,7 @@ try {
                 <!--Title-->
                 <div class="flex justify-between items-center pb-3">
                     <p class="text-2xl font-bold text-center w-full">Agregar Subalmacén
-                        <span id="faseSubalmacen">GP</span>
+                        <span id="faseSubalmacen"></span>
                     </p>
                     <p class="text-right text-2xl m-0 p-0" onclick="toggleModal('modalAgregarSubalmacen');">
                         <i class="far fa-times-circle"></i>
@@ -301,12 +266,15 @@ try {
                     </label>
                     <input
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="grid-last-name" type="text" placeholder="Título Subalmacén">
+                        id="inputTituloSubalmacen" type="text" placeholder="Título Subalmacén"
+                        onkeyup="if(event.keyCode == 13) agregarSubalmacen();" autocomplet="off">
+
                 </div>
 
                 <!--Footer-->
                 <div class="flex justify-center pt-2 text-center">
-                    <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">
+                    <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+                        onclick="agregarSubalmacen();">
                         Agregar <i class="far fa-plus-circle"></i>
                     </button>
                 </div>
