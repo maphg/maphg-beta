@@ -83,8 +83,6 @@ function app() {
 
 
 /* PERSONAL DONA */
-
-
 var ctx = document.getElementById("tmat").getContext("2d");
 var tmat = new Chart(ctx, {
     type: "doughnut",
@@ -284,7 +282,6 @@ var personalbarras = new Chart(ctx, {
 
 
 /* HMC*/
-
 var ctx = document.getElementById('hmc');
 var hmc = new Chart(ctx, {
     type: 'line',
@@ -308,9 +305,16 @@ var hmc = new Chart(ctx, {
 
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
-
 });
 
 
@@ -338,9 +342,16 @@ var hmp = new Chart(ctx, {
 
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
-
 });
 
 
@@ -359,7 +370,6 @@ var py = new Chart(ctx, {
         }]
     },
     options: {
-
         legend: {
             display: false,
             position: 'bottom',
@@ -368,9 +378,16 @@ var py = new Chart(ctx, {
 
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
-
 });
 
 
@@ -398,9 +415,16 @@ var empresas = new Chart(ctx, {
 
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
-
 });
 
 
@@ -419,7 +443,6 @@ var acontecimiento = new Chart(ctx, {
         }]
     },
     options: {
-
         legend: {
             display: false,
             position: 'bottom',
@@ -428,9 +451,16 @@ var acontecimiento = new Chart(ctx, {
 
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
-
 });
 
 
@@ -470,7 +500,6 @@ var origen = new Chart(ctx, {
         tooltips: {
             enabled: true,
         }
-
     }
 });
 
@@ -503,13 +532,6 @@ var top5 = new Chart(ctx, {
         }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
         aspectRatio: 2,
         legend: {
             display: false,
@@ -526,6 +548,14 @@ var top5 = new Chart(ctx, {
         },
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
 });
@@ -559,13 +589,6 @@ var top5c = new Chart(ctx, {
         }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        },
         aspectRatio: 2,
         legend: {
             display: false,
@@ -582,6 +605,14 @@ var top5c = new Chart(ctx, {
         },
         tooltips: {
             enabled: true,
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    stepSize: 1,
+                    beginAtZero: true,
+                },
+            }],
         }
     }
 });
@@ -889,7 +920,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             // console.log(data.graficaP);
             // console.log(data.fecha);
             // console.log(data.bitacoraMC);
-            console.log('Here', data);
+            // console.log('Here', data);
 
             $("#bitacoraMP").html(data.bitacoraMP);
             $("#totalMP").html(data.totalMP);
