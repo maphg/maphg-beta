@@ -26,7 +26,7 @@ function obtMPNP(idEquipo, equipo) {
             action: action,
             idEquipo: idEquipo
         },
-        success: function(data) {
+        success: function (data) {
             $("#dataMPNP").html(data);
             $("#equipoMPNP").html(equipo);
         },
@@ -51,7 +51,7 @@ function tituloMPNP() {
                 titulo: titulo,
                 idEquipo: idEquipo
             },
-            success: function(idMPNP) {
+            success: function (idMPNP) {
                 $("#idMPNP").val(idMPNP);
                 // console.log(idMPNP);
                 alertaMSJ('MP NO PLANEADO', 'Debe contener al menos una Actividad, para ser Valido.', 'info');
@@ -73,7 +73,7 @@ function consultaResponsableMPNP(idMPNP) {
             action: action,
             idMPNP: idMPNP
         },
-        success: function(data) {
+        success: function (data) {
             $("#responsableMPNP").val(0);
             $("#dataResponsablesMPNP").html(data);
         },
@@ -95,7 +95,7 @@ function agregarResponsableMPNP() {
                 idMPNP: idMPNP
             },
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
                 $("#responsableMPNP").val(0);
                 alertInformacion(data.msj, data.icon);
@@ -117,7 +117,7 @@ function eliminarResponsableMPNP(key, value, idMPNP) {
             value: value,
             idMPNP: idMPNP
         },
-        success: function(data) {
+        success: function (data) {
             // console.log(data);
             alertInformacion('Responsable Eliminado.', 'success');
             $("#dataResponsablesMPNP").html(data);
@@ -141,7 +141,7 @@ function agregarActividadMPNP() {
                 actividadMPNP: actividadMPNP
             },
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 $("#actividadMPNP").val('');
                 // console.log(data);
                 alertInformacion(data.msj, data.icon);
@@ -165,7 +165,7 @@ function eliminarActividadMPNP(id) {
             id: id
         },
         // dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             alertInformacion('Actividad Eliminada', 'success');
             consultaActividadMPNP(idMPNP);
             refreshModalMPNP();
@@ -184,7 +184,7 @@ function consultaActividadMPNP(idMPNP) {
             idMPNP: idMPNP
         },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             // console.log(data);
             if (data.total >= 1) {
                 $("#btnGuardarMPNP").prop("disabled", false);
@@ -217,7 +217,7 @@ function btnConfirmarMPNP() {
                 fecha: fecha
             },
             // dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 alertInformacion('MP NO PLANEADO, Finalizado.', 'success');
                 $("#btnGuardarMPNP").prop("disabled", true);
                 $("#tituloMPNP").val('');
@@ -254,7 +254,7 @@ function comentariosMPNP(idMPNP, divOcultar) {
             idMPNP: idMPNP
         },
         // dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             // console.log(data);
             $("#colComentariosEquipo").html(data);
         },
@@ -276,7 +276,7 @@ function agregarComentarioMPNP(idMPNP) {
                 comentario: comentario
             },
             // dataType: "dataType",
-            success: function(data) {
+            success: function (data) {
                 alertInformacion('Comentario Agregado', 'success');
                 comentariosMPNP(idMPNP, '');
                 refreshModalMPNP();
@@ -298,7 +298,7 @@ function eliminarComentarioMPNP(idComentario, idMPNP) {
             idComentario: idComentario
         },
         // dataType: "dataType",
-        success: function(data) {
+        success: function (data) {
             alertInformacion('Comentario Eliminado.', 'success');
             comentariosMPNP(idMPNP, '');
             refreshModalMPNP();
@@ -320,7 +320,7 @@ function adjuntosMPNP(idMPNP) {
             idMPNP: idMPNP
         },
         // dataType: "dataType",
-        success: function(data) {
+        success: function (data) {
             refreshModalMPNP();
             $("#colFotosEquipo").html(data);
         }
@@ -348,7 +348,7 @@ function cargarAdjuntoMPNP(idMPNP) {
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 // console.log(data);
                 alertInformacion('Adjunto Cargado.', 'success');
@@ -373,7 +373,7 @@ function eliminarAdjuntoMPNP(idImg, idMPNP) {
             idImg: idImg
         },
         // dataType: "dataType",
-        success: function(data) {
+        success: function (data) {
             refreshModalMPNP();
             adjuntosMPNP(idMPNP);
             alertInformacion(data, 'success');
@@ -400,9 +400,8 @@ function detalleMPNP(idMPNP) {
             idMPNP: idMPNP
         },
         // dataType: "dataType",
-        success: function(data) {
+        success: function (data) {
             $("#tituloMPNP").val(data);
         }
     });
-
 }

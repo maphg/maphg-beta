@@ -133,6 +133,9 @@
                 </div>
             </div>
 
+            <!-- Inicio Columna -->
+            <div id="columnasSecciones"></div>
+
             <div id="coldep" class="hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4">
                 <div
                     class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh">
@@ -193,104 +196,12 @@
                     </div>
                 </div>
             </div>
-
-
-            <div id="colzia" class="hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4">
-                <div
-                    class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh">
-                    <div
-                        class="zia-icon flex justify-center items-center absolute top-20 shadow-md rounded-lg w-12 h-12">
-                        <h1 class="font-medium text-md">ZIA</h1>
-                    </div>
-                    <div
-                        class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
-                        <i data-target="modal-zia" data-toggle="modal" class="fad fa-expand-arrows"></i>
-                    </div>
-                    <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
-                        <!-- subsecciones -->
-                        <div
-                            class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
-                            <div
-                                class="p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                <h1 class="truncate mr-2">FILTROS - SUAVIZADORES - OSMOSIS</h1>
-                                <div
-                                    class=" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                    <h1>22</h1>
-                                </div>
-                            </div>
-                            <div
-                                class="p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                <h1 class="truncate mr-2">FILTROS - SUAVIZADORES - OSMOSIS</h1>
-                                <div
-                                    class=" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                    <h1>22</h1>
-                                </div>
-                            </div>
-                            <div
-                                class="p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                <h1 class="truncate mr-2">FILTROS - SUAVIZADORES - OSMOSIS</h1>
-                                <div
-                                    class=" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                    <h1>22</h1>
-                                </div>
-                            </div>
-                            <div
-                                class="p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                <h1 class="truncate mr-2">FILTROS - SUAVIZADORES - OSMOSIS</h1>
-                                <div
-                                    class=" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                    <h1>22</h1>
-                                </div>
-                            </div>
-                            <div
-                                class="p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                <h1 class="truncate mr-2">FILTROS - SUAVIZADORES - OSMOSIS</h1>
-                                <div
-                                    class=" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                    <h1>22</h1>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="colzie"
-                class="flex flex-row justify-center items-center bg-gray-900 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zie</h1>
-            </div>
-            <div id="coldec"
-                class="flex flex-row justify-center items-center bg-gray-800 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">dec</h1>
-            </div>
-            <div id="colzhp"
-                class="flex flex-row justify-center items-center bg-gray-700 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zhp</h1>
-            </div>
-            <div id="colzic"
-                class="flex flex-row justify-center items-center bg-gray-600 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zic</h1>
-            </div>
-            <div id="colzhc"
-                class="flex flex-row justify-center items-center bg-gray-500 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zhc</h1>
-            </div>
-            <div id="colzha"
-                class="flex flex-row justify-center items-center bg-gray-400 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zha</h1>
-            </div>
-            <div id="colzil"
-                class="flex flex-row justify-center items-center bg-blue-900 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">zil</h1>
-            </div>
-            <div id="colauto"
-                class="flex flex-row justify-center items-center bg-red-900 w-64 h-64 hidden mx-3 rounded-full">
-                <h1 class="text-white">uto</h1>
-            </div>
+            <!-- Fin de Columna -->
         </div>
     </div>
-    <!-- Modales -->
+
+
+    <!-- Inicio de Modales Modales -->
 
     <!-- MODAL EQUIPOS Y LOCALES -->
     <div id="modal-subseccion" class="modal ">
@@ -2447,65 +2358,14 @@
     <!-- Modales -->
 
 
-    <script src="../maphg-beta/js/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script> -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
     <script src="js/calendarioBotones.js"></script>
-    <script src="js/plannerBeta.js"></script>
-
-    <script>
-    function expandir(id) {
-        idtoggle = id + 'toggle';
-        var toggle = document.getElementById(idtoggle);
-        toggle.classList.toggle("hidden");
-    }
-
-    function expandirpapa(idpapa) {
-        var expandeapapa = document.getElementById(idpapa);
-        expandeapapa.classList.toggle("h-40");
-    }
-
-
-
-    /* document.getElementById("abremodal").click();
-    expandir("equipo123"); */
-    </script>
-
-
-    <script type="text/javascript">
-    $(function() {
-
-        $('input[name="datefilter"]').daterangepicker({
-            autoUpdateInput: false,
-            showWeekNumbers: true,
-            locale: {
-                cancelLabel: 'Cancelar',
-                applyLabel: "Aplicar",
-                fromLabel: "De",
-                toLabel: "A",
-                customRangeLabel: "Personalizado",
-                weekLabel: "S",
-                daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-                monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-                    "Septiembre", "Octubre", "Noviembre", "Diciembre"
-                ],
-            }
-        });
-
-        $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YY') + ' - ' + picker.endDate.format(
-                'DD/MM/YY'));
-        });
-
-        $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
-
-    });
-    </script>
+    <script src="js/plannerColumnas.js"></script>
 </body>
 
 </html>
