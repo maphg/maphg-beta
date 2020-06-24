@@ -250,8 +250,7 @@ a:hover {
             <?php
 
             if ($idDestino != 10) {
-
-                echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\">Destino</a>";
+                echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\" onclick=\" idDestinoSeleccionado($idDestino);consultaSubalmacen();botonDestino();\">$arrayDestino[$idDestino]</a>";
             } else {
                 $query = "SELECT * FROM c_destinos ORDER BY destino";
                 $result = mysqli_query($conn_2020, $query);
