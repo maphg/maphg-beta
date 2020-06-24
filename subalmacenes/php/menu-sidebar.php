@@ -249,15 +249,15 @@ a:hover {
             <!-- d5 -->
             <?php
 
-            if ($idDestino != 10) {
-                echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\" onclick=\" idDestinoSeleccionado($idDestino);consultaSubalmacen();botonDestino();\">$arrayDestino[$idDestino]</a>";
+            if ($destinoT != 10) {
+                echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\" onclick=\" idDestinoSeleccionado($destinoT); consultaSubalmacen(); botonDestino();\">$arrayDestino[$destinoT]</a>";
             } else {
                 $query = "SELECT * FROM c_destinos ORDER BY destino";
                 $result = mysqli_query($conn_2020, $query);
                 while ($row = mysqli_fetch_array($result)) {
                     $idDestino = $row['id'];
                     $nombreDest = $row['destino'];
-                    echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\" onclick=\" idDestinoSeleccionado($idDestino);consultaSubalmacen();botonDestino();\">$nombreDest</a>";
+                    echo "<a href=\"#\" class=\"hover:text-white d6 m-0 p-2 mb-2\" onclick=\" idDestinoSeleccionado($idDestino); consultaSubalmacen(); botonDestino();\">$nombreDest</a>";
                 }
             }
             ?>
