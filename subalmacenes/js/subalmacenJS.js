@@ -6,6 +6,10 @@ const arrayDestino = { 1: "RM", 7: "CMU", 2: "PVR", 6: "MBJ", 5: "PUJ", 11: "CAP
 
 function toggleModalTailwind(idModal) {
     $("#" + idModal).toggleClass('open');
+
+    if (idModal == "modalCarritoSalidas") {
+        $("#modalSalidasSubalmacen").addClass('open');
+    }
 }
 
 
@@ -13,13 +17,11 @@ function toggleModalTailwind(idModal) {
 (function () {
     let idDestinoDefault = $("#inputIdDestinoSeleccionado").val();
     $("#destinoSeleccionado").html(arrayDestino[idDestinoDefault]);
-    console.log(idDestinoDefault);
 }());
 
 function idDestinoSeleccionado(idDestinoSeleccionado) {
     $("#inputIdDestinoSeleccionado").val(idDestinoSeleccionado);
     $("#destinoSeleccionado").html(arrayDestino[idDestinoSeleccionado]);
-    console.log(idDestinoSeleccionado);
 }
 // Fin de Funciones principales para seleccionar el menu.
 
@@ -40,7 +42,6 @@ function consultaSubalmacen() {
             $("#subalmacenGP").html(data.dataGP);
             $("#subalmacenTRS").html(data.dataTRS);
             $("#subalmacenZI").html(data.dataZI);
-            console.log('Here', data);
         }
     });
 }
@@ -163,8 +164,10 @@ function busquedaExisenciaSubalmacen() {
 
     if (palabraBuscar != "") {
         consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar);
+        recuperarCarrito();
     } else {
         consultaExistenciasSubalmacen(idSubalmacen, '');
+        recuperarCarrito();
     }
 }
 
@@ -183,16 +186,370 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
         },
         dataType: "json",
         success: function (data) {
-            // alertaImg(response, 'text-green-700', 'success', 3000);
             $("#dataExistenciasSubalmacen").html(data.dataExistenciaSubalmacen);
-            console.log(data);
-            console.log(data.dataExistenciaSubalmacen);
             alertaImg(' Resultados Obtenidos: ' + data.totalResultados, 'text-orange-300', 'success', 3000);
-
+            $("#nombreSubalmacen").html(data.nombreSubalmacen);
+            $("#faseSubalmacen").html(data.faseSubalmacen);
         }
     });
 }
 
+
+// Función para buscar un Item de Subalmacén Salidas.
+function inputBusquedaExisenciaSubalmacen() {
+    let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+    let palabraBuscar = $("#inputPalabraBuscarSubalmacenSalida").val();
+
+    if (palabraBuscar != "") {
+        salidasSubalmacen(idSubalmacen, palabraBuscar);
+    } else {
+        salidasSubalmacen(idSubalmacen, '');
+    }
+}
+
+// Función para Preparar Carrito.
+function salidasSubalmacen(idSubalmacen, palabraBuscar) {
+    let idDestino = $("#inputIdDestinoSeleccionado").val();
+    $("#modalSalidasSubalmacen").addClass('open');
+    $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
+    const action = "consultaSalidaSubalmacen";
+    $.ajax({
+        type: "POST",
+        url: "php/crud_subalmacen.php",
+        data: {
+            action: action,
+            idSubalmacen: idSubalmacen,
+            palabraBuscar: palabraBuscar
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#dataSalidasSubalmacen").html(data.dataSalidaSubalmacen);
+            alertaImg(' Resultados Obtenidos: ' + data.totalResultados, 'text-orange-300', 'success', 3000);
+            $("#nombreSalidaSubalmacen").html(data.nombreSubalmacen);
+            $("#faseSalidaSubalmacen").html(data.faseSubalmacen);
+            consultaCarritoSalida(idDestino, idSubalmacen);
+        }
+    });
+}
+
+
+function validarCantidaSalidaSubalmacen(idItem, Item, cantidadActual, idSubalmacen) {
+    // idItem se refiera a idMaterial.
+    var cantidad = $('#' + idItem).val();
+    var cantidadValida = parseInt(cantidadActual) - parseInt(cantidad);
+    if (cantidadValida >= 0) {
+        const action = "validarCantidaSalidaSubalmacen";
+        let idDestino = $("#inputIdDestinoSeleccionado").val();
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idItem: idItem,
+                cantidadActual: cantidadActual,
+                cantidad: cantidad,
+                idSubalmacen: idSubalmacen
+            },
+            // dataType: "json",
+            success: function (data) {
+                consultaCarritoSalida(idDestino, idSubalmacen);
+                alertaImg(data + ' ' + Item, 'text-orange-300', 'success', 3000);
+            }
+        });
+    } else {
+        alertaImg(' Cantidad No Valida' + Item, 'text-orange-300', 'question', 3000);
+        $('#' + idItem).val('');
+    }
+}
+
+
+function consultaCarritoSalida(idDestino, idSubalmacen) {
+    console.log(idDestino, idSubalmacen);
+    const action = "consultaCarritoSalida";
+    $.ajax({
+        type: "POST",
+        url: "php/crud_subalmacen.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idSubalmacen: idSubalmacen
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#dataCarritoSalidas").html(data.dataCarritoSalidas);
+            console.log('Array-', data.cantidadCarrito);
+
+            var cantidad = data.cantidadCarrito.split(',');
+            var idItemCarrito = data.idItemCarrito.split(',');
+            console.log(cantidad[0]);
+            let numCallbackRuns = -1;
+            cantidad.forEach((element) => {
+                console.log(element)
+                if (element > 0) {
+                    numCallbackRuns++;
+                    console.log('Elemento Mayor' + element);
+                    $('#' + idItemCarrito[numCallbackRuns]).val(element);
+                }
+            });
+        }
+    });
+}
+
+
+function recuperarCarrito() {
+    let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+    let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+    consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
+}
+
+
+function carritoSalidaMotivo(paso) {
+    let opcionSeleccionada = $("#carritoSalidaMotivo").val();
+    let idDestino = $("#inputIdDestinoSeleccionado").val();
+
+
+    if (paso == 'paso1') {
+        $("#opcionSalidaOtro").addClass('hidden');
+        $("#opcionSalidaGift").addClass('hidden');
+        $("#carritoSalidaSeccion").html('');
+        $("#carritoSalidaSubseccion").html('');
+        $("#carritoSalidaEquipo").html('');
+        $("#carritoSalidaPendiente").html('');
+
+        if (opcionSeleccionada == "MP") {
+            opcionSeccion(idDestino);
+        } else if (opcionSeleccionada == "MCE") {
+            opcionSeccion(idDestino);
+        } else if (opcionSeleccionada == "MCTG") {
+            opcionSeccion(idDestino);
+        } else if (opcionSeleccionada == "GIFT") {
+            $("#opcionSalidaGift").removeClass('hidden');
+        } else if (opcionSeleccionada == "OTRO") {
+            $("#opcionSalidaOtro").removeClass('hidden');
+        }
+    } else if (paso == 'paso2') {
+
+        let idSeccion = $("#opcionSeccion").val();
+        opcionSubseccion(idSeccion);
+    } else if (paso == 'paso3') {
+        if (opcionSeleccionada == "MCE") {
+            opcionEquipo();
+        } else if (opcionSeleccionada == "MP") {
+            opcionEquipo();
+        } else if (opcionSeleccionada == "MCTG") {
+            $("#carritoSalidaEquipo").html('');
+            opcionTG();
+        }
+
+    } else if (paso == 'paso4') {
+        if (opcionSeleccionada == "MCE") {
+            opcionPendienteMCE();
+        } else if (opcionSeleccionada == "MP") {
+            opcionPendienteOT();
+        }
+    }
+
+
+    function opcionSeccion(idDestino) {
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaSeccion").html(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function opcionSubseccion(idSeccion) {
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idSeccion: idSeccion,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaSubseccion").html(data);
+                console.log(data,);
+            }
+        });
+    }
+
+    function opcionEquipo() {
+        let idSubseccion = $("#opcionSubseccion").val();
+        let idSeccion = $("#opcionSeccion").val();
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idSeccion: idSeccion,
+                idSubseccion: idSubseccion,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaEquipo").html(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function opcionPendienteMCE() {
+        let paso = "MCE";
+        let idEquipo = $("#opcionEquipo").val();
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idEquipo: idEquipo,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaPendiente").html(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function opcionPendiente() {
+        let paso = "MP";
+        let idEquipo = $("#opcionEquipo").val();
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idEquipo: idEquipo,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaPendiente").html(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function opcionPendienteOT() {
+        let paso = "MP";
+        let idEquipo = $("#opcionEquipo").val();
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idEquipo: idEquipo,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaPendiente").html(data);
+                console.log(data);
+            }
+        });
+    }
+
+    function opcionTG() {
+        let paso = "pasoTG";
+        let idSubseccion = $("#opcionSubseccion").val();
+        let idSeccion = $("#opcionSeccion").val();
+        const action = "consultaSeccion";
+        $.ajax({
+            type: "POST",
+            url: "php/crud_subalmacen.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idSubseccion: idSubseccion,
+                idSeccion: idSeccion,
+                paso: paso
+            },
+            // dataType: "json",
+            success: function (data) {
+                $("#carritoSalidaPendiente").html(data);
+            }
+        });
+    }
+
+}
+
+
+function confirmarSalidaCarrito() {
+    let idDestino = $("#inputIdDestinoSeleccionado").val();
+    let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+
+    var action = "consultaCarritoSalida";
+    $.ajax({
+        type: "POST",
+        url: "php/crud_subalmacen.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idSubalmacen: idSubalmacen
+        },
+        dataType: "json",
+        success: function (data) {
+            var registro = data.idRegistro.split(',');
+            registro.forEach((idSalidaItem) => {
+                if (idSalidaItem > 0) {
+                    $("#spinnerConfirmarSalida").removeClass('invisible');
+                    $("#confirmarSalidaCarrito").prop("disabled", true);
+                    confirmarCapturaSalida(idSalidaItem);
+
+
+                }
+            });
+            // Función para Finalizar Carrito.
+            function confirmarCapturaSalida(idSalidaItem) {
+                const action = "cerrarSalidaCarrito";
+                $.ajax({
+                    type: "POST",
+                    url: "php/crud_subalmacen.php",
+                    data: {
+                        action: action,
+                        idSalidaItem: idSalidaItem
+                    },
+                    // dataType: "json",
+                    success: function (data) {
+                        alertaImg(data, 'text-orange-300', 'success', 3000);
+                        $("#confirmarSalidaCarrito").prop("disabled", false);
+                        $("#spinnerConfirmarSalida").removeClass('visible');
+                        $("#spinnerConfirmarSalida").addClass('invisible');
+                        recuperarCarrito();
+                        busquedaExisenciaSubalmacen();
+                    }
+                });
+            }
+        }
+    });
+
+
+    let opcion = $("#carritoSalidaMotivo").val();
+}
 
 // Función por Default, para mostrar subalmacén según la session.
 consultaSubalmacen();
