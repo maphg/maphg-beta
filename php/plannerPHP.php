@@ -6290,11 +6290,11 @@ class Planner
                     if ($arraySubseccion[$search] == $idSubseccion) { //Opción para Seleccionar la ZONA.
 
                         if ($zona == "GP") {
-                            $checkedGP = "checked name=\"$idMC\"";
+                            $checkedGP = "checked";
                         } elseif ($zona == "TRS") {
-                            $checkedTRS = "checked name=\"$idMC\"";
+                            $checkedTRS = "checked";
                         } elseif ($zona == "ZI") {
-                            $checkedZI = "checked name=\"$idMC\"";
+                            $checkedZI = "checked";
                         }else{
                             $checkedGP = "";
                             $checkedTRS = ""; 
@@ -6303,18 +6303,21 @@ class Planner
 
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal m-0 p-0\">
                         <label class=\"radio is-size-7 p-2\">
-                        <input type=\"radio\" $checkedGP onclick=\"zonaMC($idMC, 'GP', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', 0, 'F', 0);\">
                         GP
                         </label>
                         <label class=\"radio is-size-7\">
-                        <input type=\"radio\" $checkedTRS  onclick=\"zonaMC($idMC, 'TRS', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedTRS name=\"$idMC\"  onclick=\"zonaMC($idMC, 'TRS', 0, 'F', 0);\">
                         TRS
                         </label>
                         <label class=\"radio is-size-7\">
-                        <input type=\"radio\" $checkedZI onclick=\"zonaMC($idMC, 'ZI', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', 0, 'F', 0);\">
                         ZI
                         </label>
                         </p></div>";
+                            $checkedGP = "";
+                            $checkedTRS = ""; 
+                            $checkedZI = "";
                     } else {
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p></div>";
                     }
@@ -9005,11 +9008,11 @@ class Planner
                     if ($araySubseccion[$search] == $idSubseccion) { //Opción para Seleccionar la ZONA.
 
                         if ($zona == "GP") {
-                            $checkedGP = "checked name=\"$idMC.GP\"";
+                            $checkedGP = "checked";
                         } elseif ($zona == "TRS") {
-                            $checkedTRS = "checked name=\"$idMC.GP\"";
+                            $checkedTRS = "checked";
                         } elseif ($zona == "ZI") {
-                            $checkedZI = "checked name=\"$idMC.GP\"";
+                            $checkedZI = "checked";
                         }else{
                             $checkedGP = "";
                             $checkedTRS = ""; 
@@ -9020,18 +9023,21 @@ class Planner
                             "
                             <div class=\"column t-normal\">
                             <label class=\"radio is-size-7 p-2\">
-                            <input type=\"radio\" $checkedGP onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
                             GP
                             </label>
                             <label class=\"radio is-size-7\">
-                            <input type=\"radio\" $checkedTRS onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
                             TRS
                             </label>
                             <label class=\"radio is-size-7\">
-                            <input type=\"radio\" $checkedZI onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
                             ZI
                             </label>
                             ";
+                            $checkedGP = "";
+                            $checkedTRS = ""; 
+                            $checkedZI = "";
                     } else {
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p>";
                     }
