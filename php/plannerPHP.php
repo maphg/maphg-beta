@@ -6299,15 +6299,15 @@ class Planner
 
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal m-0 p-0\">
                         <label class=\"radio is-size-7 p-2\">
-                        <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedGP name=\"$idMC.GP\" onclick=\"zonaMC($idMC, 'GP', 0, 'F', 0);\">
                         GP
                         </label>
                         <label class=\"radio is-size-7\">
-                        <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedTRS name=\"$idMC.TRS\" onclick=\"zonaMC($idMC, 'TRS', 0, 'F', 0);\">
                         TRS
                         </label>
                         <label class=\"radio is-size-7\">
-                        <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', 0, 'F', 0);\">
+                        <input type=\"radio\" $checkedZI name=\"$idMC.ZI\" onclick=\"zonaMC($idMC, 'ZI', 0, 'F', 0);\">
                         ZI
                         </label>
                         </p></div>";
@@ -8844,7 +8844,7 @@ class Planner
                     $checkedTRS = "";
                     $checkedZI = "";
                     if ($idDestino == 1) {
-                        $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306,339, 337, 336, 341, 335, 340, 334, 338);
+                        $araySubseccion = array(308, 14, 300, 293, 320, 313, 297, 200, 38, 13, 35, 14, 15, 200, 1001, 301, 37, 200, 39, 340, 288, 314, 291, 332, 302, 34, 331, 296, 298, 306, 339, 337, 336, 341, 335, 340, 334, 338);
                         // var_export($araySubseccionRM);
                         $search = array_search($idSubseccion, $araySubseccion, false);
                     } elseif ($idDestino == 2) {
@@ -9012,15 +9012,15 @@ class Planner
                             "
                             <div class=\"column t-normal\">
                             <label class=\"radio is-size-7 p-2\">
-                            <input type=\"radio\" $checkedGP name=\"$idMC\" onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedGP name=\"$idMC.GP\" onclick=\"zonaMC($idMC, 'GP', $idEquipo, 'F', $idSubseccion);\">
                             GP
                             </label>
                             <label class=\"radio is-size-7\">
-                            <input type=\"radio\" $checkedTRS name=\"$idMC\" onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedTRS name=\"$idMC.TRS\" onclick=\"zonaMC($idMC, 'TRS', $idEquipo, 'F', $idSubseccion);\">
                             TRS
                             </label>
                             <label class=\"radio is-size-7\">
-                            <input type=\"radio\" $checkedZI name=\"$idMC\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
+                            <input type=\"radio\" $checkedZI name=\"$idMC.ZI\" onclick=\"zonaMC($idMC, 'ZI', $idEquipo, 'F', $idSubseccion);\">
                             ZI
                             </label>
                             ";
