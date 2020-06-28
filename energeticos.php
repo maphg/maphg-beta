@@ -10,10 +10,10 @@ $conn->conectar();
 if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
 } else {
-	//Variables Generales.
-	$nombreUsuario = "No Identificado.";
-	$avatar = "??";
-	$cargo = " - - ";
+    //Variables Generales.
+    $nombreUsuario = "No Identificado.";
+    $avatar = "??";
+    $cargo = " - - ";
     $conn->conectar();
     $idUsuario = $_SESSION['usuario'];
     //Obtener datos del usuario
@@ -88,12 +88,11 @@ if (!isset($_SESSION['usuario'])) {
                             $idSeccion = $dts['id_seccion'];
                             if ($dts['foto'] != "") {
                                 $foto = $dts['foto'];
-								
                             } else {
                                 $foto = "";
                             }
                         }
-						$nombreUsuario = $nombre ." ". $apellido;
+                        $nombreUsuario = $nombre . " " . $apellido;
                     }
                 } catch (Exception $ex) {
                     echo $ex;
@@ -171,154 +170,190 @@ try {
 <!DOCTYPE html>
 <html>
 
-    <head>
-		<meta charset="UTF-8">
-		<title>MAPHG</title>
-		<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.csws" rel="stylesheet">
-    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-		<link rel="stylesheet" href="css/fontawesome/css/all.css">
-		<link rel="stylesheet" href="css/bulma.min.css">
-		<link rel="icon" href="svg/logo6.png">
-		
+<head>
+    <meta charset="UTF-8">
+    <title>MAPHG</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.csws" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/bulma.min.css">
+    <link rel="icon" href="svg/logo6.png">
 
 
-        <style>
-            .shadow-navbar{
-                -webkit-box-shadow: 0px 4px 22px -22px rgba(0,0,0,0.98);
-                -moz-box-shadow: 0px 4px 22px -22px rgba(0,0,0,0.98);
-                box-shadow: 0px 4px 22px -22px rgba(0,0,0,0.98);
-            }
-			.my-iframe{
-				height: 700px !important;
-			}
 
-			.my-iframe-all{
-				height: 300px !important;
-			}
-        </style>
-    </head>
+    <style>
+    .shadow-navbar {
+        -webkit-box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
+        -moz-box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
+        box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
+    }
 
-    <body>
-		
-		<?php include 'navbartop.php' ?>
-		<?php include 'menu-sidebar.php' ?>
-        <br><div class="wrapper">
-            <div id="content">
-                <!--MENU-->
-                <section class="mt-2">
-                    <div class="columns">
-                        <div class="column">
-                            <?php
-                            switch ($destinoT):
-                                case 'AME':
-                                    ?>
-                                    <div class="columns is-multiline">
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMTViYjllNTUtZDRhZC00ZWUwLTg3ZDUtM2M5MjMxMGM0ZDBkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMjgwNTYyNWItYWIzZi00OTFlLTg5ZTQtNzY1Y2RhY2JiN2U5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiZWU4YjcxMTktZGE5NS00ODU0LTkxYmUtMTUyMTlkYzIwYjZkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiZDYyMDBhZTUtZjhjYS00MTM4LWJhODktOTBhNmY5ZjdjNzM1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMjM1ZGQ5ZWItMmQ2Yy00OTAzLTkyMGMtZWUzYWI0YzllYzQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiM2RmY2ZhOGYtYmRkZi00YjQ5LTk1ODQtZDBkMTU4ZjUwNmIyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiY2VkYmVmYmUtNDJmNC00MGZmLTg2NGUtNzQ0NjEyNmU1MzE3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>
-                                        <div class="column is-4">
-                                            <iframe class="my-iframe-all" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiN2UzODRmZTgtNWQ3MS00OTMwLThhYWQtZTJlMjAzZmZkY2ZhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                        </div>                                        
-                                    </div>
-                                    <?php
-                                    break;
-                                case 'CAP':
-                                    ?>                                    
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMTViYjllNTUtZDRhZC00ZWUwLTg3ZDUtM2M5MjMxMGM0ZDBkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'RM':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMjgwNTYyNWItYWIzZi00OTFlLTg5ZTQtNzY1Y2RhY2JiN2U5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'CMU':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiZWU4YjcxMTktZGE5NS00ODU0LTkxYmUtMTUyMTlkYzIwYjZkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'PVR':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiZDYyMDBhZTUtZjhjYS00MTM4LWJhODktOTBhNmY5ZjdjNzM1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'MBJ':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMjM1ZGQ5ZWItMmQ2Yy00OTAzLTkyMGMtZWUzYWI0YzllYzQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'PUJ':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiM2RmY2ZhOGYtYmRkZi00YjQ5LTk1ODQtZDBkMTU4ZjUwNmIyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'SSA':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiY2VkYmVmYmUtNDJmNC00MGZmLTg2NGUtNzQ0NjEyNmU1MzE3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                                case 'SDQ':
-                                    ?>
-                                    <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiN2UzODRmZTgtNWQ3MS00OTMwLThhYWQtZTJlMjAzZmZkY2ZhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    <?php
-                                    break;
-                            endswitch;
-                            ?>
+    .my-iframe {
+        height: 700px !important;
+    }
+
+    .my-iframe-all {
+        height: 300px !important;
+    }
+    </style>
+</head>
+
+<body>
+
+    <?php include 'navbartop.php' ?>
+    <?php include 'menu-sidebar.php' ?>
+    <br>
+    <div class="wrapper">
+        <div id="content" class="container">
+            <!--MENU-->
+            <section class="mt-2">
+                <div class="columns">
+                    <div class="column">
+                        <?php
+                        switch ($destinoT):
+                            case 'AME':
+                        ?>
+                        <div class="columns is-multiline">
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiMTViYjllNTUtZDRhZC00ZWUwLTg3ZDUtM2M5MjMxMGM0ZDBkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiMjgwNTYyNWItYWIzZi00OTFlLTg5ZTQtNzY1Y2RhY2JiN2U5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiZWU4YjcxMTktZGE5NS00ODU0LTkxYmUtMTUyMTlkYzIwYjZkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiZDYyMDBhZTUtZjhjYS00MTM4LWJhODktOTBhNmY5ZjdjNzM1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiMjM1ZGQ5ZWItMmQ2Yy00OTAzLTkyMGMtZWUzYWI0YzllYzQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiM2RmY2ZhOGYtYmRkZi00YjQ5LTk1ODQtZDBkMTU4ZjUwNmIyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiY2VkYmVmYmUtNDJmNC00MGZmLTg2NGUtNzQ0NjEyNmU1MzE3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
+                            <div class="column is-4">
+                                <iframe class="my-iframe-all" width="90%" height="700"
+                                    src="https://app.powerbi.com/view?r=eyJrIjoiN2UzODRmZTgtNWQ3MS00OTMwLThhYWQtZTJlMjAzZmZkY2ZhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                                    frameborder="0" allowFullScreen="true"></iframe>
+                            </div>
                         </div>
+                        <?php
+                                break;
+                            case 'CAP':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiMTViYjllNTUtZDRhZC00ZWUwLTg3ZDUtM2M5MjMxMGM0ZDBkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'RM':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiMjgwNTYyNWItYWIzZi00OTFlLTg5ZTQtNzY1Y2RhY2JiN2U5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'CMU':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiZWU4YjcxMTktZGE5NS00ODU0LTkxYmUtMTUyMTlkYzIwYjZkIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'PVR':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiZDYyMDBhZTUtZjhjYS00MTM4LWJhODktOTBhNmY5ZjdjNzM1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'MBJ':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiMjM1ZGQ5ZWItMmQ2Yy00OTAzLTkyMGMtZWUzYWI0YzllYzQwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'PUJ':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiM2RmY2ZhOGYtYmRkZi00YjQ5LTk1ODQtZDBkMTU4ZjUwNmIyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'SSA':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiY2VkYmVmYmUtNDJmNC00MGZmLTg2NGUtNzQ0NjEyNmU1MzE3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                            case 'SDQ':
+                            ?>
+                        <iframe class="my-iframe" width="100%" height="700"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiN2UzODRmZTgtNWQ3MS00OTMwLThhYWQtZTJlMjAzZmZkY2ZhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+                            frameborder="0" allowFullScreen="true"></iframe>
+                        <?php
+                                break;
+                        endswitch;
+                        ?>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </div>
-    </body>
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script defer="" src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>    
-	<script src="js/plannerJS.js"></script>
-	<script src="js/usuariosJS.js"></script>
-    <script>
-        $(document).ready(function () {
-            var pageloader = document.getElementById("loader");
-            if (pageloader) {
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script defer="" src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="js/plannerJS.js"></script>
+<script src="js/usuariosJS.js"></script>
+<script>
+$(document).ready(function() {
+    var pageloader = document.getElementById("loader");
+    if (pageloader) {
 
-                var pageloaderTimeout = setTimeout(function () {
-                    pageloader.classList.toggle('is-active');
-                    clearTimeout(pageloaderTimeout);
-                }, 3000);
-            }
+        var pageloaderTimeout = setTimeout(function() {
+            pageloader.classList.toggle('is-active');
+            clearTimeout(pageloaderTimeout);
+        }, 3000);
+    }
 
-            $(window).scroll(function () {
-                var position = $(this).scrollTop();
-                if (position >= 200) {
-                    $('#btnAncla').fadeIn('slow');
-                } else {
-                    $('#btnAncla').fadeOut('slow');
-                }
-            });
-            $(function () {
-                $("#btnAncla").on('click', function () {
-                    $("html, body").animate({
-                        scrollTop: 0
-                    }, 1000);
-                    return false;
-                });
-            });
+    $(window).scroll(function() {
+        var position = $(this).scrollTop();
+        if (position >= 200) {
+            $('#btnAncla').fadeIn('slow');
+        } else {
+            $('#btnAncla').fadeOut('slow');
+        }
+    });
+    $(function() {
+        $("#btnAncla").on('click', function() {
+            $("html, body").animate({
+                scrollTop: 0
+            }, 1000);
+            return false;
         });
-    </script>
+    });
+});
+</script>
+
 </html>

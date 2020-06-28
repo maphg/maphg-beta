@@ -174,7 +174,7 @@ function busquedaExisenciaSubalmacen() {
 
 function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
     $("#modalExistenciasSubalmacen").addClass('open');
-    $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
+    // $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
     const action = "consultaExistenciasSubalmacen";
     $.ajax({
         type: "POST",
@@ -194,6 +194,8 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
     });
 }
 
+
+// ****** Funciones para Salidas Subalmacénes y Carrito de Salidas. ******
 
 // Función para buscar un Item de Subalmacén Salidas.
 function inputBusquedaExisenciaSubalmacen() {
@@ -235,37 +237,48 @@ function salidasSubalmacen(idSubalmacen, palabraBuscar) {
 
 function validarCantidaSalidaSubalmacen(idItem, Item, cantidadActual, idSubalmacen) {
     // idItem se refiera a idMaterial.
-    var cantidad = $('#' + idItem).val();
-    var cantidadValida = parseInt(cantidadActual) - parseInt(cantidad);
-    if (cantidadValida >= 0) {
-        const action = "validarCantidaSalidaSubalmacen";
-        let idDestino = $("#inputIdDestinoSeleccionado").val();
-        $.ajax({
-            type: "POST",
-            url: "php/crud_subalmacen.php",
-            data: {
-                action: action,
-                idDestino: idDestino,
-                idItem: idItem,
-                cantidadActual: cantidadActual,
-                cantidad: cantidad,
-                idSubalmacen: idSubalmacen
-            },
-            // dataType: "json",
-            success: function (data) {
-                consultaCarritoSalida(idDestino, idSubalmacen);
-                alertaImg(data + ' ' + Item, 'text-orange-300', 'success', 3000);
-            }
-        });
+    var cantidad_tmp = $('#' + idItem).val();
+    var cantidad = parseFloat(cantidad_tmp);
+
+    console.log('Float 1: ', cantidad_tmp);
+    console.log('idItem : ', idItem);
+    var cantidadActual = parseFloat(cantidadActual);
+    console.log('Float 2: ', cantidad);
+    console.log('cantidadActual: ', cantidadActual);
+    if (cantidad > 0.000000000000001) {
+        var cantidadValida = cantidadActual - cantidad;
+        console.log(cantidadValida);
+        if (parseFloat(cantidadValida) >= 0.00) {
+            const action = "validarCantidaSalidaSubalmacen";
+            let idDestino = $("#inputIdDestinoSeleccionado").val();
+            $.ajax({
+                type: "POST",
+                url: "php/crud_subalmacen.php",
+                data: {
+                    action: action,
+                    idDestino: idDestino,
+                    idItem: idItem,
+                    cantidadActual: cantidadActual,
+                    cantidad: cantidad,
+                    idSubalmacen: idSubalmacen
+                },
+                // dataType: "json",
+                success: function (data) {
+                    consultaCarritoSalida(idDestino, idSubalmacen);
+                    alertaImg(data + ' ' + Item, 'text-orange-300', 'success', 3000);
+                }
+            });
+        } else {
+            alertaImg(' Cantidad No Suficiente 1 ' + Item, 'text-orange-300', 'question', 3000);
+            $('#' + idItem).val(0.0);
+        }
     } else {
-        alertaImg(' Cantidad No Valida' + Item, 'text-orange-300', 'question', 3000);
-        $('#' + idItem).val('');
+        alertaImg(' Cantidad No Suficiente 2: ' + Item, 'text-orange-300', 'question', 3000);
     }
 }
 
 
 function consultaCarritoSalida(idDestino, idSubalmacen) {
-    console.log(idDestino, idSubalmacen);
     const action = "consultaCarritoSalida";
     $.ajax({
         type: "POST",
@@ -278,18 +291,17 @@ function consultaCarritoSalida(idDestino, idSubalmacen) {
         dataType: "json",
         success: function (data) {
             $("#dataCarritoSalidas").html(data.dataCarritoSalidas);
-            console.log('Array-', data.cantidadCarrito);
-
             var cantidad = data.cantidadCarrito.split(',');
             var idItemCarrito = data.idItemCarrito.split(',');
-            console.log(cantidad[0]);
             let numCallbackRuns = -1;
             cantidad.forEach((element) => {
-                console.log(element)
                 if (element > 0) {
                     numCallbackRuns++;
-                    console.log('Elemento Mayor' + element);
-                    $('#' + idItemCarrito[numCallbackRuns]).val(element);
+                    if (element > 0) {
+                        $('#' + idItemCarrito[numCallbackRuns]).val(element);
+                    } else {
+                        $('#' + idItemCarrito[numCallbackRuns]).val(0.0);
+                    }
                 }
             });
         }
@@ -303,13 +315,53 @@ function recuperarCarrito() {
     consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
 }
 
+// FUNCIÓN PARA RESTABLECER CARRITO.
+function restablecerCarritoSalidasConfirmar() {
+    let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+    let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+    Swal.fire({
+        toast: true,
+        title: '¿Desea Eliminar los items del Carrito?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar'
+    }).then((result) => {
+        if (result.value) {
+            restablecerCarritoSalidas(idDestinoSeleccionado, idSubalmacen)
+        }
+    })
+}
+
+function restablecerCarritoSalidas(idDestinoSeleccionado, idSubalmacen) {
+    const action = "restablecerCarritoSalidas";
+    $.ajax({
+        type: "POST",
+        url: "php/crud_subalmacen.php",
+        data: {
+            action: action,
+            idDestinoSeleccionado: idDestinoSeleccionado,
+            idSubalmacen: idSubalmacen
+        },
+        // dataType: "dataType",
+        success: function (data) {
+            alertaImg(data, '', 'success', 3000);
+            $("#dataSalidasSubalmacen").html('');
+            $("#modalSalidasSubalmacen").removeClass('open');
+
+        }
+    });
+}
+// FIN DE FUNCIONES PARA RESTABLECER CARRITO.
+
 
 function carritoSalidaMotivo(paso) {
     let opcionSeleccionada = $("#carritoSalidaMotivo").val();
     let idDestino = $("#inputIdDestinoSeleccionado").val();
 
 
-    if (paso == 'paso1') {
+    if (paso == 'opcionSeccion') {
         $("#opcionSalidaOtro").addClass('hidden');
         $("#opcionSalidaGift").addClass('hidden');
         $("#carritoSalidaSeccion").html('');
@@ -328,31 +380,33 @@ function carritoSalidaMotivo(paso) {
         } else if (opcionSeleccionada == "OTRO") {
             $("#opcionSalidaOtro").removeClass('hidden');
         }
-    } else if (paso == 'paso2') {
+    } else if (paso == 'opcionSubseccion') {
 
         let idSeccion = $("#opcionSeccion").val();
         opcionSubseccion(idSeccion);
-    } else if (paso == 'paso3') {
+    } else if (paso == 'opcionEquipo') {
         if (opcionSeleccionada == "MCE") {
             opcionEquipo();
         } else if (opcionSeleccionada == "MP") {
             opcionEquipo();
         } else if (opcionSeleccionada == "MCTG") {
             $("#carritoSalidaEquipo").html('');
-            opcionTG();
+            opcionPendientesTG();
         }
 
-    } else if (paso == 'paso4') {
+    } else if (paso == 'opcionPendiente') {
         if (opcionSeleccionada == "MCE") {
             opcionPendienteMCE();
         } else if (opcionSeleccionada == "MP") {
             opcionPendienteOT();
         }
+    } else if (paso == 'opcionFinal') {
+        alertaImg('Fin de Opciones', '', 'success', 3000);
     }
 
 
     function opcionSeccion(idDestino) {
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -364,13 +418,14 @@ function carritoSalidaMotivo(paso) {
             // dataType: "json",
             success: function (data) {
                 $("#carritoSalidaSeccion").html(data);
-                console.log(data);
+                // console.log(data);
             }
         });
     }
 
     function opcionSubseccion(idSeccion) {
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
+
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -383,7 +438,7 @@ function carritoSalidaMotivo(paso) {
             // dataType: "json",
             success: function (data) {
                 $("#carritoSalidaSubseccion").html(data);
-                console.log(data,);
+                // console.log(data);
             }
         });
     }
@@ -391,7 +446,7 @@ function carritoSalidaMotivo(paso) {
     function opcionEquipo() {
         let idSubseccion = $("#opcionSubseccion").val();
         let idSeccion = $("#opcionSeccion").val();
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -405,7 +460,7 @@ function carritoSalidaMotivo(paso) {
             // dataType: "json",
             success: function (data) {
                 $("#carritoSalidaEquipo").html(data);
-                console.log(data);
+                // console.log(data);
             }
         });
     }
@@ -413,7 +468,7 @@ function carritoSalidaMotivo(paso) {
     function opcionPendienteMCE() {
         let paso = "MCE";
         let idEquipo = $("#opcionEquipo").val();
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -426,36 +481,16 @@ function carritoSalidaMotivo(paso) {
             // dataType: "json",
             success: function (data) {
                 $("#carritoSalidaPendiente").html(data);
-                console.log(data);
+                // console.log(data);
             }
         });
     }
 
-    function opcionPendiente() {
-        let paso = "MP";
-        let idEquipo = $("#opcionEquipo").val();
-        const action = "consultaSeccion";
-        $.ajax({
-            type: "POST",
-            url: "php/crud_subalmacen.php",
-            data: {
-                action: action,
-                idDestino: idDestino,
-                idEquipo: idEquipo,
-                paso: paso
-            },
-            // dataType: "json",
-            success: function (data) {
-                $("#carritoSalidaPendiente").html(data);
-                console.log(data);
-            }
-        });
-    }
 
     function opcionPendienteOT() {
         let paso = "MP";
         let idEquipo = $("#opcionEquipo").val();
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -468,16 +503,16 @@ function carritoSalidaMotivo(paso) {
             // dataType: "json",
             success: function (data) {
                 $("#carritoSalidaPendiente").html(data);
-                console.log(data);
+                // console.log(data);
             }
         });
     }
 
-    function opcionTG() {
-        let paso = "pasoTG";
+    function opcionPendientesTG() {
+        let paso = "MCTG";
         let idSubseccion = $("#opcionSubseccion").val();
         let idSeccion = $("#opcionSeccion").val();
-        const action = "consultaSeccion";
+        const action = "consultaOpcion";
         $.ajax({
             type: "POST",
             url: "php/crud_subalmacen.php",
@@ -494,7 +529,6 @@ function carritoSalidaMotivo(paso) {
             }
         });
     }
-
 }
 
 
@@ -513,43 +547,134 @@ function confirmarSalidaCarrito() {
         },
         dataType: "json",
         success: function (data) {
+            let contadorLogintud = 1;
             var registro = data.idRegistro.split(',');
-            registro.forEach((idSalidaItem) => {
-                if (idSalidaItem > 0) {
-                    $("#spinnerConfirmarSalida").removeClass('invisible');
-                    $("#confirmarSalidaCarrito").prop("disabled", true);
-                    confirmarCapturaSalida(idSalidaItem);
-
-
-                }
-            });
-            // Función para Finalizar Carrito.
-            function confirmarCapturaSalida(idSalidaItem) {
-                const action = "cerrarSalidaCarrito";
-                $.ajax({
-                    type: "POST",
-                    url: "php/crud_subalmacen.php",
-                    data: {
-                        action: action,
-                        idSalidaItem: idSalidaItem
-                    },
-                    // dataType: "json",
-                    success: function (data) {
-                        alertaImg(data, 'text-orange-300', 'success', 3000);
-                        $("#confirmarSalidaCarrito").prop("disabled", false);
-                        $("#spinnerConfirmarSalida").removeClass('visible');
-                        $("#spinnerConfirmarSalida").addClass('invisible');
-                        recuperarCarrito();
-                        busquedaExisenciaSubalmacen();
+            let longitudCarrito = registro.length;
+            if (longitudCarrito > 0) {
+                registro.forEach((idSalidaItem) => {
+                    if (idSalidaItem > 0) {
+                        confirmarCapturaSalida(idSalidaItem);
+                        contadorLogintud++;
+                        console.log('Contador: ', contadorLogintud, ' Longitud: ', longitudCarrito);
                     }
                 });
+            } else {
+                alertaImg('Carrito Vacio', '', 'question', 3000);
+            }
+            // Función para Finalizar Carrito.
+            function confirmarCapturaSalida(idSalidaItem) {
+                let opcionEquipo = "0";
+                let opcionMCE = "0";
+                let opcionMP = "0";
+                let opcionMCTG = "0";
+                let opcionSalidaOtro = "NA";
+                let opcionSalidaGift = "0";
+
+                let carritoSalidaMotivo = $("#carritoSalidaMotivo").val();
+                if (carritoSalidaMotivo == "GIFT") {
+                    opcionSalidaGift = $("#giftSalida").val();
+                    if (opcionSalidaGift > 0) {
+                        confirmarSalidaFinal();
+                    } else {
+                        justifiqueSalida();
+                    }
+                } else if (carritoSalidaMotivo == "OTRO") {
+                    opcionSalidaOtro = $("#inputJustificacionOtro").val();
+                    if (opcionSalidaOtro != "") {
+                        confirmarSalidaFinal();
+                    } else {
+                        justifiqueSalida();
+                    }
+                } else if (carritoSalidaMotivo == "MP") {
+                    opcionEquipo = $("#opcionEquipo").val();
+                    opcionMP = $("#opcionMP").val();
+                    if (opcionEquipo > 0 && opcionMP > 0) {
+                        confirmarSalidaFinal();
+                    } else {
+                        justifiqueSalida();
+                    }
+                } else if (carritoSalidaMotivo == "MCE") {
+                    opcionEquipo = $("#opcionEquipo").val();
+                    opcionMCE = $("#opcionMCE").val();
+                    if (opcionEquipo > 0 && opcionMCE > 0) {
+                        confirmarSalidaFinal();
+                    } else {
+                        justifiqueSalida();
+                    }
+                } else if (carritoSalidaMotivo == "MCTG") {
+                    opcionMCTG = $("#opcionMCTG").val();
+                    if (opcionMCTG > 0) {
+                        confirmarSalidaFinal();
+                    } else {
+                        justifiqueSalida();
+                    }
+                } else {
+                    justifiqueSalida();
+                }
+
+                function justifiqueSalida() {
+                    alertaImg('Justifique la Salida', '', 'question', 3000);
+                }
+
+                function confirmarSalidaFinal() {
+                    $("#spinnerConfirmarSalida").removeClass('invisible');
+                    $("#confirmarSalidaCarrito").prop("disabled", true);
+                    $("#justifiacionSalidaCarrito").addClass('invisible');
+                    const action = "cerrarSalidaCarrito";
+                    $.ajax({
+                        type: "POST",
+                        url: "php/crud_subalmacen.php",
+                        data: {
+                            action: action,
+                            idSalidaItem: idSalidaItem,
+                            carritoSalidaMotivo: carritoSalidaMotivo,
+                            opcionEquipo: opcionEquipo,
+                            opcionMCE: opcionMCE,
+                            opcionMP: opcionMP,
+                            opcionMCTG: opcionMCTG,
+                            opcionSalidaOtro: opcionSalidaOtro,
+                            opcionSalidaGift: opcionSalidaGift
+                        },
+                        // dataType: "json",
+                        success: function (data) {
+                            alertaImg(data, 'text-orange-300', 'success', 3000);
+                            $("#confirmarSalidaCarrito").prop("disabled", false);
+                            $("#spinnerConfirmarSalida").removeClass('visible');
+                            $("#spinnerConfirmarSalida").addClass('invisible');
+                            $("#justifiacionSalidaCarrito").removeClass('invisible');
+                            recuperarCarrito();
+                        }
+                    });
+                }
             }
         }
     });
-
-
-    let opcion = $("#carritoSalidaMotivo").val();
 }
+
+
+
+// ****** Funciones para Entradas Subalmacénes. *******
+function entradasSubalmacen(idSubalmacen, pablabraBuscar) {
+    $("#modalEntradasSubalmacen").addClass('open');
+}
+
+
+
+// Funciones de Prueba.
+// function obtnerValor(id) {
+//     console.log($("#" + id).html());
+// }
+// function opciones() {
+//     console.log('carritoSalidaMotivo' + $("#carritoSalidaMotivo").val());
+//     console.log('opcionSeccion' + $("#opcionSeccion").val());
+//     console.log('opcionSubseccion' + $("#opcionSubseccion").val());
+//     console.log('opcionEquipo' + $("#opcionEquipo").val());
+//     console.log('opcionMCE' + $("#opcionMCE").val());
+//     console.log('opcionMP' + $("#opcionMP").val());
+//     console.log('opcionMCTG' + $("#opcionMCTG").val());
+// }
+
+
 
 // Función por Default, para mostrar subalmacén según la session.
 consultaSubalmacen();
