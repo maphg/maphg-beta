@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Cancun');
+setlocale(LC_MONETARY, 'es_ES');
 include "conexion.php";
 session_start();
 
@@ -9,10 +11,28 @@ if (isset($_POST['action'])) {
   $superAdmin = $_SESSION['super_admin'];
   $fechaActual = date('Y-m-d H:m:s');
 
+  // Permisos Generales.
+  $queryPermisos = "SELECT* FROM c_acciones_usuarios WHERE id_usuario = $idUsuario LIMIT 1";
+  if ($resultPermisos = mysqli_query($conn_2020, $queryPermisos)) {
+    if ($rowPermisos = mysqli_fetch_array($resultPermisos)) {
+      $entradasPermiso = $rowPermisos['entradas_sa'];
+      $salidasPermiso = $rowPermisos['salidas_sa'];
+      // Importar se consideta como Movimiento de Stock entre Subalmacenes.
+      $movientosPermiso = $rowPermisos['importar_gastos'];
+      $subalmacenesAcceso = $rowPermisos['acceso_sa'];
+
+      // Comprueba si tiene información.
+      if ($subalmacenesAcceso != "") {
+        $subalmacenesAcceso = $subalmacenesAcceso;
+      } else {
+        $subalmacenesAcceso = 0;
+      }
+    }
+  }
+
   $action = $_POST['action'];
 
   if ($action == "Agregar") {
-    $idDestino = $_POST['idDestino'];
     $idFase = $_POST['idFase'];
     $subalmacen = $_POST['subalmacen'];
 
@@ -110,9 +130,9 @@ if (isset($_POST['action'])) {
     $dataZI = "";
 
     if ($idDestinoSeleccionado == 10) {
-      $filtroDestino = "";
+      $filtroDestino = " AND id IN($subalmacenesAcceso)";
     } else {
-      $filtroDestino = "AND id_destino = $idDestinoSeleccionado";
+      $filtroDestino = "AND id_destino = $idDestinoSeleccionado AND id IN($subalmacenesAcceso)";
     }
 
     $query = "SELECT 
@@ -133,21 +153,33 @@ if (isset($_POST['action'])) {
           $dataGP .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\"
-                    onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
+            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+          ";
+
+          if ($entradasPermiso == 1) {
+            $dataGP .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\"
+            onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+            </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+            $dataGP .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+            </div>";
+          }
+
+          $dataGP .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
                 </div>
             </div>
             <!-- SUBALMACEN -->              
@@ -156,21 +188,34 @@ if (isset($_POST['action'])) {
           $dataGP .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
-                </div>
+            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+          ";
+
+          if ($entradasPermiso == 1) {
+            $dataGP .= "
+              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+              </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+            $dataGP .= "
+             <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+              <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+              </div>
+            ";
+          }
+
+          $dataGP .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
+            </div>
             </div>
             <!-- BODEGA -->            
           ";
@@ -180,21 +225,35 @@ if (isset($_POST['action'])) {
           $dataTRS .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
-                </div>
+            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+          ";
+
+          if ($entradasPermiso == 1) {
+            $dataTRS .= "  
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+            </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+
+            $dataTRS .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+            </div>
+            ";
+          }
+
+          $dataTRS .= " 
+          <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
+            </div>
             </div>
             <!-- SUBALMACEN -->              
           ";
@@ -202,21 +261,34 @@ if (isset($_POST['action'])) {
           $dataTRS .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
-                </div>
+            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+            ";
+
+          if ($entradasPermiso == 1) {
+            $dataTRS .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+            </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+            $dataTRS .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+            </div>
+            ";
+          }
+
+          $dataTRS .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
+            </div>
             </div>
             <!-- BODEGA -->            
           ";
@@ -226,21 +298,34 @@ if (isset($_POST['action'])) {
           $dataZI .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
-                </div>
+            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+          ";
+
+          if ($entradasPermiso == 1) {
+            $dataZI .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+            </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+            $dataZI .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+            </div>
+            ";
+          }
+
+          $dataZI .= "
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
+            </div>
             </div>
             <!-- SUBALMACEN -->              
           ";
@@ -248,21 +333,34 @@ if (isset($_POST['action'])) {
           $dataZI .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
-                class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
-                <div>
-                    <h1 class=\"truncate\">$nombre</h1>
-                </div>
-                <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-                        <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
-                    </div>
-                    <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
-                        <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
-                    </div>
-                </div>
+            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            <div>
+            <h1 class=\"truncate\">$nombre</h1>
+            </div>
+            <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
+          ";
+
+          if ($entradasPermiso == 1) {
+            $dataZI .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+            </div>
+            ";
+          }
+
+          if ($salidasPermiso == 1) {
+            $dataZI .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
+            </div>
+            ";
+          }
+
+          $dataZI .= "
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
+            </div>
+            </div>
             </div>
             <!-- BODEGA -->            
           ";
@@ -382,14 +480,16 @@ if (isset($_POST['action'])) {
         $descripcion = $row['descripcion'];
         $caracteristicas = $row['caracteristicas'];
         $marca = $row['marca'];
-        $cantidadTeorico = $row['stock_teorico'];
         $cantidadActual = $row['stock_actual'];
+        $cantidadTeorico = $row['stock_teorico'];
         $unidad = $row['unidad'];
-        $colorstilo = "text-bluegray-500 bg-bluegray-50";
 
-        if ($cantidadActual <= $cantidadTeorico) {
+
+        if ($cantidadActual < 1) {
           $colorstilo = "text-red-500 bg-red-200";
         } elseif ($cantidadActual >= $cantidadTeorico) {
+          $colorstilo = "text-yellow-700 bg-yellow-200";
+        } else {
           $colorstilo = "text-bluegray-500 bg-bluegray-50";
         }
 
@@ -1155,7 +1255,7 @@ if (isset($_POST['action'])) {
     AND t_subalmacenes_items_stock.stock_actual > 0.0000000000000000001
     ";
 
-    if ($result = mysqli_query($conn_2020, $query)) {
+    if ($result = mysqli_query($conn_2020, $query) and $movientosPermiso == 1) {
       while ($row = mysqli_fetch_array($result)) {
         $idSubalmacenItemsStock = $row['t_subalmacenes_items_stock.id'];
         $idSubalmacenItemsGlobales = $row['t_subalmacenes_items_globales.id'];
@@ -1207,8 +1307,10 @@ if (isset($_POST['action'])) {
           </div>        
         ";
       }
+      $arraySubalmacenMovimientos['dataSubalmacenMovimientos'] = $dataSubalmacenMovimientos;
+    } else {
+      $arraySubalmacenMovimientos['dataSubalmacenMovimientos'] = "accesoDenegado";
     }
-    $arraySubalmacenMovimientos['dataSubalmacenMovimientos'] = $dataSubalmacenMovimientos;
     echo json_encode($arraySubalmacenMovimientos);
   }
 
@@ -1368,9 +1470,9 @@ if (isset($_POST['action'])) {
             $stockActual_envia = $row_envia['stock_actual'];
             $stockTeorico_envia = $row_envia['stock_teorico'];
 
-            // Nuevo stock_actual para el Subalmacen que Recibe.
+            // Nuevo stock_actual para el Subalmacen que Envia.
             $nuevoStockActual_envia = $stockActual_envia - $stockSalida_envia;
-            $queryUpdate_envia = "UPDATE t_subalmacenes_items_stock SET stock_actual = $nuevoStockActual_envia, stock_anterior = $stockActual_envia, fecha_movimiento = '$fechaActual' WHERE id_destino = $idDestinoSeleccionado AND id = $idEnvia";
+            $queryUpdate_envia = "UPDATE t_subalmacenes_items_stock SET stock_actual = $nuevoStockActual_envia, stock_anterior = $stockActual_envia, fecha_movimiento = '$fechaActual' WHERE id_destino = $idDestinoSeleccionado AND id = $idEnvia AND id_subalmacen = $idSubalmacen_envia";
             if ($resultUpdate_envia = mysqli_query($conn_2020, $queryUpdate_envia)) {
               $query_recibe = "SELECT* FROM t_subalmacenes_items_stock WHERE id_subalmacen = $idOpcionSubalmacen AND id_destino = $idDestinoSeleccionado AND id_item_global = $idItemGlobal LIMIT 1";
               if ($result_recibe = mysqli_query($conn_2020, $query_recibe)) {
@@ -1378,7 +1480,7 @@ if (isset($_POST['action'])) {
                   // Si tiene el Item Global Vinculado Actualiza el Stock.
                   if ($row_recibe = mysqli_fetch_array($result_recibe)) {
                     $idRecibe = $row_recibe['id'];
-                    $stockActual_recibe = $row_recibe['id'];
+                    $stockActual_recibe = $row_recibe['stock_actual'];
                     $nuevoStock_recibe = $stockActual_recibe + $stockSalida_envia;
                     $queryUpdate_recibe = "UPDATE t_subalmacenes_items_stock SET stock_actual= $nuevoStock_recibe, stock_anterior = $stockActual_recibe, fecha_movimiento = '$fechaActual' WHERE id_destino = $idDestinoSeleccionado AND id = $idRecibe";
                     if ($resultUpdate_recibe = mysqli_query($conn_2020, $queryUpdate_recibe)) {
@@ -1413,5 +1515,103 @@ if (isset($_POST['action'])) {
   }
 
   if ($action == "consultaTodosItems") {
+    $arrayItemGeneral = array();
+    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+    $palabraBuscar = $_POST['palabraBuscar'];
+    $dataTodo = "";
+    $ItemsResultado = "";
+
+    if ($palabraBuscar != "") {
+      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
+      OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
+      OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
+      OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
+      OR bitacora_gremio.nombre_gremio LIKE '%$palabraBuscar%' 
+      OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
+    } else {
+      $palabraBuscar = "";
+    }
+
+
+    $query = "SELECT
+    t_subalmacenes_items_globales.categoria,
+    t_subalmacenes_items_globales.cod2bend,
+    t_subalmacenes_items_globales.descripcion,
+    t_subalmacenes_items_globales.caracteristicas,
+    t_subalmacenes_items_globales.marca,
+    t_subalmacenes_items_globales.unidad,
+    t_subalmacenes_items_stock.id 'idItemsResultado',
+    t_subalmacenes_items_stock.stock_teorico,
+    t_subalmacenes_items_stock.stock_actual,
+    bitacora_gremio.nombre_gremio,
+    t_subalmacenes.nombre 'ubicacion'
+    FROM t_subalmacenes_items_stock
+    INNER JOIN t_subalmacenes ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes.id
+    INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
+    INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
+    WHERE t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado $palabraBuscar";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      while ($row = mysqli_fetch_array($result)) {
+        $idItemsResultado = $row['idItemsResultado'];
+        $categoria = $row['categoria'];
+        $cod2bend = $row['cod2bend'];
+        $gremio = $row['nombre_gremio'];
+        $descripcion = $row['descripcion'];
+        $caracteristicas = $row['caracteristicas'];
+        $marca = $row['marca'];
+        $stockTeorico = $row['stock_teorico'];
+        $stockActual = $row['stock_actual'];
+        $unidad = $row['unidad'];
+        $ubicacion = $row['ubicacion'];
+
+        $ItemsResultado .= $idItemsResultado . ";";
+
+        if ($stockActual < 1) {
+          $colorstilo = "text-red-500 bg-red-200";
+        } elseif ($stockActual >= $stockTeorico) {
+          $colorstilo = "text-yellow-700 bg-yellow-200";
+        } else {
+          $colorstilo = "text-bluegray-500 bg-bluegray-50";
+        }
+
+        $dataTodo .= "
+          <div class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 rounded hover:bg-indigo-100 cursor-pointer text-center $colorstilo\">
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$categoria</h1>
+              </div>
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$cod2bend</h1>
+              </div>
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$gremio</h1>
+              </div>
+              <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                  <h1>$descripcion</h1>
+              </div>
+              <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                  <h1>$caracteristicas</h1>
+              </div>
+              <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                  <h1>$marca</h1>
+              </div>
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$stockTeorico</h1>
+              </div>
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$stockActual</h1>
+              </div>
+              <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                  <h1>$unidad</h1>
+              </div>
+              <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                  <h1>$ubicacion</h1>
+              </div>
+          </div>         
+            ";
+      }
+      $arrayItemGeneral['dataTodo'] = $dataTodo;
+      $arrayItemGeneral['ItemsResultado'] = $ItemsResultado;
+    }
+    echo json_encode($arrayItemGeneral);
   }
 }//Fin $action.

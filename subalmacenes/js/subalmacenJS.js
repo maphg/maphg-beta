@@ -660,6 +660,7 @@ function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
   // Limpia los resultados obtenidos para no repetir el ID de los Inputs
   $("#dataSalidasSubalmacen").html('');
   $("#dataSubalmacenEntradas").html('');
+  $("#dataMovimientos").html('');
 
   $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
   $("#subalmacenEntradasFase").val(fase);
@@ -702,7 +703,7 @@ function entradasSubalmacen() {
 
 function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
-  let cantidadEntrada = $("#" + idStock).val();
+  let cantidadEntrada = $("#" + idItemGlobal).val();
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   cantidadEntrada = parseFloat(cantidadEntrada);
 
@@ -825,6 +826,7 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
 
 // Funciones para Movimientos Entre Bodegas.
 function movimientoExistenciasItems() {
+  $("#dataMovimientosCarrito").html('');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
   let palabraBuscar = $("#inputBuscarMovimientos").val();
@@ -840,24 +842,36 @@ function movimientoExistenciasItems() {
     },
     dataType: "json",
     success: function (data) {
-      $("#dataMovimientos").html(data.dataSubalmacenMovimientos);
-      if (data.dataSubalmacenMovimientos != "") {
-        consultaMovimientoCarrito();
+      if (data.dataSubalmacenMovimientos == "accesoDenegado") {
+        $("#modalMoverItems").toggleClass('open');
+        alertaImg('Acceso Denegado', '', 'danger', 5000);
+        Swal.fire(
+          'Acceso Denegado',
+          '',
+          'warning'
+        )
+
       } else {
-        $("#dataMovimientos").html('');
-        alertaImg('Intente de Nuevo', '', 'warning', 3000);
+        $("#dataMovimientos").html(data.dataSubalmacenMovimientos);
+        consultaMovimientoCarrito();
       }
+      //  else {
+      //   $("#dataMovimientos").html('');
+      //   alertaImg('Intente de Nuevo', '', 'warning', 3000);
+      // }
     }
   });
 }
 
 function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
-  let cantidadEntrada = $("#" + idStock).val();
+  var cantidadEntrada = $("#" + idItemGlobal).val();
+  console.log('S;' + cantidadEntrada);
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   cantidadEntrada = parseFloat(cantidadEntrada);
+  console.log('C;' + cantidadEntrada);
 
-  if (cantidadEntrada > 0.0) {
+  if (cantidadEntrada >= 0.0) {
     if (cantidadEntrada <= stockActual) {
       capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual);
     } else {
@@ -1023,19 +1037,7 @@ function activarBtnFinalizarMovimiento() {
 }
 
 
-// Funciones de Prueba.
-// function obtnerValor(id) {
-// console.log($("#" + id).html());
-// }
-// function opciones() {
-//     console.log('carritoSalidaMotivo' + $("#carritoSalidaMotivo").val());
-//     console.log('opcionSeccion' + $("#opcionSeccion").val());
-//     console.log('opcionSubseccion' + $("#opcionSubseccion").val());
-//     console.log('opcionEquipo' + $("#opcionEquipo").val());
-//     console.log('opcionMCE' + $("#opcionMCE").val());
-//     console.log('opcionMP' + $("#opcionMP").val());
-//     console.log('opcionMCTG' + $("#opcionMCTG").val());
-// }
+// Funciones para mostrar todo los Items.
 
 function obtenerTodosItemsGlobales() {
   let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
@@ -1049,17 +1051,52 @@ function obtenerTodosItemsGlobales() {
       action: action,
       idDestinoSeleccionado: idDestinoSeleccionado,
       palabraBuscar: palabraBuscar
-
     },
-    // dataType: "json",
+    dataType: "json",
     success: function (data) {
-      $("#dataTodosItems").html(data.itemsTotal);
-      console.log(data);
-
+      $("#dataTodosItems").html(data.dataTodo);
       // console.log(data);
+      $("#inputResultadosXLS").val(data.ItemsResultado);
     }
   });
 }
 
+
+function generarXLSItems(tipoXLS) {
+  // event.preventDefault();
+
+  // Aquí se almacena el ID de los Items con Busqueda.
+  // let idItems = $("#inputResultadosXLS").val();
+  // let idInput = idItems.split(';');
+  // idInput.pop();
+
+  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idSubalmacenSeleccionado = $("#inputIdSubalmacenSeleccionado").val();
+  let page = "";
+
+  if (tipoXLS == "generalPorDestino") {
+    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado;
+    window.location = page;
+  } else if (tipoXLS == "generarStock0") {
+    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&stock=0';
+    window.location = page;
+  } else if (tipoXLS == "generalPorSubalmacen") {
+    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&idSubalmacen=' + idSubalmacenSeleccionado;
+    window.location = page;
+  } else if (tipoXLS == "generalPorSubalmacenStock0") {
+    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&idSubalmacen=' + idSubalmacenSeleccionado + '&stock=0';
+    window.location = page;
+  }
+}
+
 // Función por Default, para mostrar subalmacén según la session.
 consultaSubalmacen();
+
+
+// Funciones de Prueba.
+function obtnerValorHTML(id) {
+  console.log($("#" + id).html());
+}
+function obtnerValorINPUT(id) {
+  console.log($("#" + id).html());
+}
