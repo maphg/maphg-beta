@@ -214,9 +214,10 @@ function inputBusquedaExisenciaSubalmacen() {
 
 // Función para Preparar Carrito.
 function salidasSubalmacen(idSubalmacen, palabraBuscar) {
-  let idDestino = $("#inputIdDestinoSeleccionado").val();
+  console.log('Here niggas');
   $("#modalSalidasSubalmacen").addClass('open');
-  $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
+  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+
   const action = "consultaSalidaSubalmacen";
   $.ajax({
     type: "POST",
@@ -224,15 +225,16 @@ function salidasSubalmacen(idSubalmacen, palabraBuscar) {
     data: {
       action: action,
       idSubalmacen: idSubalmacen,
+      idDestinoSeleccionado: idDestinoSeleccionado,
       palabraBuscar: palabraBuscar
     },
     dataType: "json",
     success: function (data) {
       $("#dataSalidasSubalmacen").html(data.dataSalidaSubalmacen);
-      alertaImg(' Resultados Obtenidos: ' + data.totalResultados, 'text-orange-300', 'success', 3000);
+      alertaImg(' Resultados Obtenidos: ' + data.totalResultados, '', 'success', 3000);
       $("#nombreSalidaSubalmacen").html(data.nombreSubalmacen);
       $("#faseSalidaSubalmacen").html(data.faseSubalmacen);
-      consultaCarritoSalida(idDestino, idSubalmacen);
+      consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
     }
   });
 }
@@ -240,26 +242,20 @@ function salidasSubalmacen(idSubalmacen, palabraBuscar) {
 
 function validarCantidaSalidaSubalmacen(idItem, Item, cantidadActual, idSubalmacen) {
   // idItem se refiera a idMaterial.
-  var cantidad_tmp = $('#' + idItem).val();
-  var cantidad = parseFloat(cantidad_tmp);
+  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let cantidad_tmp = $('#' + idItem).val();
+  let cantidad = parseFloat(cantidad_tmp);
 
-  // console.log('Float 1: ', cantidad_tmp);
-  // console.log('idItem : ', idItem);
-  var cantidadActual = parseFloat(cantidadActual);
-  // console.log('Float 2: ', cantidad);
-  // console.log('cantidadActual: ', cantidadActual);
-  if (cantidad > 0.000000000000001) {
-    var cantidadValida = cantidadActual - cantidad;
-    // console.log(cantidadValida);
-    if (parseFloat(cantidadValida) >= 0.00) {
+  if (cantidad >= 0.0) {
+    // var cantidadValida = cantidadActual - cantidad;
+    if (cantidadActual >= cantidad) {
       const action = "validarCantidaSalidaSubalmacen";
-      let idDestino = $("#inputIdDestinoSeleccionado").val();
       $.ajax({
         type: "POST",
         url: "php/crud_subalmacen.php",
         data: {
           action: action,
-          idDestino: idDestino,
+          idDestinoSeleccionado: idDestinoSeleccionado,
           idItem: idItem,
           cantidadActual: cantidadActual,
           cantidad: cantidad,
@@ -267,28 +263,28 @@ function validarCantidaSalidaSubalmacen(idItem, Item, cantidadActual, idSubalmac
         },
         // dataType: "json",
         success: function (data) {
-          consultaCarritoSalida(idDestino, idSubalmacen);
-          alertaImg(data + ' ' + Item, 'text-orange-300', 'success', 3000);
+          consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
+          alertaImg(data + ' ' + Item, '', 'success', 3000);
         }
       });
     } else {
-      alertaImg(' Cantidad No Suficiente 1 ' + Item, 'text-orange-300', 'question', 3000);
-      $('#' + idItem).val(0.0);
+      alertaImg(' Cantidad No Suficiente ' + Item, '', 'question', 3000);
+      // $('#' + idItem).val(0.0);
     }
   } else {
-    alertaImg(' Cantidad No Suficiente 2: ' + Item, 'text-orange-300', 'question', 3000);
+    alertaImg(' Cantidad NO Valida: ' + Item, '', 'question', 3000);
   }
 }
 
 
-function consultaCarritoSalida(idDestino, idSubalmacen) {
+function consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen) {
   const action = "consultaCarritoSalida";
   $.ajax({
     type: "POST",
     url: "php/crud_subalmacen.php",
     data: {
       action: action,
-      idDestino: idDestino,
+      idDestinoSeleccionado: idDestinoSeleccionado,
       idSubalmacen: idSubalmacen
     },
     dataType: "json",
@@ -537,7 +533,7 @@ function carritoSalidaMotivo(paso) {
 
 
 function confirmarSalidaCarrito() {
-  let idDestino = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
 
   var action = "consultaCarritoSalida";
@@ -546,7 +542,7 @@ function confirmarSalidaCarrito() {
     url: "php/crud_subalmacen.php",
     data: {
       action: action,
-      idDestino: idDestino,
+      idDestinoSeleccionado: idDestinoSeleccionado,
       idSubalmacen: idSubalmacen
     },
     dataType: "json",
@@ -555,18 +551,17 @@ function confirmarSalidaCarrito() {
       var registro = data.idRegistro.split(',');
       let longitudCarrito = registro.length;
       if (longitudCarrito > 0) {
-        registro.forEach((idSalidaItem) => {
-          if (idSalidaItem > 0) {
-            confirmarCapturaSalida(idSalidaItem);
+        registro.forEach((idRegistroSalida) => {
+          if (idRegistroSalida > 0) {
+            confirmarCapturaSalida(idRegistroSalida);
             contadorLogintud++;
-            // console.log('Contador: ', contadorLogintud, ' Longitud: ', longitudCarrito);
           }
         });
       } else {
         alertaImg('Carrito Vacio', '', 'question', 3000);
       }
       // Función para Finalizar Carrito.
-      function confirmarCapturaSalida(idSalidaItem) {
+      function confirmarCapturaSalida(idRegistroSalida) {
         let opcionEquipo = "0";
         let opcionMCE = "0";
         let opcionMP = "0";
@@ -630,14 +625,15 @@ function confirmarSalidaCarrito() {
             url: "php/crud_subalmacen.php",
             data: {
               action: action,
-              idSalidaItem: idSalidaItem,
+              idRegistroSalida: idRegistroSalida,
               carritoSalidaMotivo: carritoSalidaMotivo,
               opcionEquipo: opcionEquipo,
               opcionMCE: opcionMCE,
               opcionMP: opcionMP,
               opcionMCTG: opcionMCTG,
               opcionSalidaOtro: opcionSalidaOtro,
-              opcionSalidaGift: opcionSalidaGift
+              opcionSalidaGift: opcionSalidaGift,
+              idDestinoSeleccionado: idDestinoSeleccionado
             },
             // dataType: "json",
             success: function (data) {
