@@ -310,6 +310,44 @@ $tablaRanking .= "</div>";
         <?php include 'navbartop.php'; ?>
         <?php include 'menu-sidebar.php'; ?>
 
+        <!-- Select para Versión Movil -->
+        <div id="opcionMovil"
+            class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 text-center pt-3 hidden">
+            <div class="inline-block relative">
+                <!-- <select id="mostrarSeccionMovil"
+                    class="block appearance-none w-full border border-gray-400 bg-gray-200 hover:border-gray-500 px-4 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline p-2">
+                    <option>Secciones</option>
+                    <option value="11" onclick="mostrarSeccion();">ZIL</option>
+                    <option value="10" onclick="mostrarSeccion();">ZIE</option>
+                    <option value="24" onclick="mostrarSeccion();">AUTO</option>
+                    <option value="1">DEC</option>
+                    <option value="23">DEP</option>
+                    <option value="19">OMA</option>
+                    <option value="5">ZHA</option>
+                    <option value="6">ZHC</option>
+                    <option value="7">ZHH</option>
+                    <option value="12">ZHP</option>
+                    <option value="8">ZIA</option>
+                    <option value="9">ZIC</option>
+                </select> -->
+                <div class="buttons has-addons">
+                    <button onclick="mostrarSeccion('id-11');" class="button btn-id-11">ZIL</button>
+                    <button onclick="mostrarSeccion('id-10');" class="button btn-id-10">ZIE</button>
+                    <button onclick="mostrarSeccion('id-24');" class="button btn-id-24">AUTO</button>
+                    <button onclick="mostrarSeccion('id-1');" class="button btn-id-1">DEC</button>
+                    <button onclick="mostrarSeccion('id-23');" class="button btn-id-23">DEP</button>
+                    <button onclick="mostrarSeccion('id-19');" class="button btn-id-19">OMA</button>
+                    <button onclick="mostrarSeccion('id-5');" class="button btn-id-5">ZHA</button>
+                    <button onclick="mostrarSeccion('id-6');" class="button btn-id-6">ZHC</button>
+                    <button onclick="mostrarSeccion('id-7');" class="button btn-id-7">ZHH</button>
+                    <button onclick="mostrarSeccion('id-12');" class="button btn-id-12">ZHP</button>
+                    <button onclick="mostrarSeccion('id-8');" class="button btn-id-8">ZIA</button>
+                    <button onclick="mostrarSeccion('id-9');" class="button btn-id-9">ZIC</button>
+                </div>
+            </div>
+        </div>
+        <!-- Select para Versión Movil -->
+
         <nav id="nav-menu" class="navbar is-fixed-top modal">
 
             <div id="navMenuPpal" class="navbar-menu modal">
@@ -789,10 +827,9 @@ $tablaRanking .= "</div>";
         </section>
 
 
-
         <!-- ******************************** Codigo para la comnas de subsecciones ********************************************************************* -->
-        <br>
-        <section id="seccion-bar" class="hero is-light is-small">
+        <!-- <br> -->
+        <section id="seccion-bar" class="hero is-light is-small mt-5">
             <!-- Hero head: will stick at the top -->
             <div class="hero-head">
                 <div class="navbar-menu">
@@ -878,7 +915,7 @@ $tablaRanking .= "</div>";
                 </div>
             </div>
         </section>
-        <br>
+        <!-- <br> -->
 
         <!-- ******************* CONSULTAS PARA LA COLUMNA DE SECCIONES********************************** -->
         <section id="seccionColumnas" class="mt-2 container is-fluid">
@@ -7485,26 +7522,31 @@ switch (fecha.getDay()) {
     case 1:
         $('.hide-seccion-is-3').hide();
         $('.id-12, .id-23, .id-8').show();
+        $('.btn-id-12, .btn-id-23, .btn-id-8').addClass('is-success');
         $(".btn-8, .btn-3, .btn-9").addClass("bannersec")
         break;
     case 2:
         $('.hide-seccion-is-3').hide();
         $('.id-9, .id-23').show();
+        $('.id-9, .btn-id-23').addClass('is-success');
         $(".btn-10, .btn-3").addClass("bannersec")
         break;
     case 3:
         $('.hide-seccion-is-3').hide();
         $('.id-1, .id-23, .id-10').show();
+        $('.btn-id-1, .btn-id-23, .btn-id-10').addClass('is-success');
         $(".btn-2, .btn-3, .btn-11").addClass("bannersec")
         break;
     case 4:
         $('.hide-seccion-is-3').hide();
         $('.id-5, .id-23, .id-6').show();
+        $('.btn-id-5, .btn-id-23, .btn-id-6').addClass('is-success');
         $(".btn-5, .btn-3, .btn-6").addClass("bannersec")
         break;
     case 5:
         $('.hide-seccion-is-3').hide();
         $('.id-24, .id-23, .id-11').show();
+        $('.btn-id-24, .btn-id-23, .btn-id-11').addClass('is-success');
         $('.btn-1, .btn-3, .btn-12').addClass("bannersec");
         break;
     default:
@@ -7624,6 +7666,38 @@ fileInput.onchange = () => {
         const fileName = document.querySelector('.fileName .file-name');
         fileName.textContent = fileInput.files[0].name;
     }
+}
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    $("#opcionMovil").removeClass('hidden');
+    $("#seccion-bar").removeClass('mt-5');
+    // $(".hide-seccion-is-3").addClass('hide');
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+    Toast.fire({
+        icon: 'success',
+        title: 'Versión Móvil'
+    })
+} else {
+    $("#opcionMovil").addClass('hidden');
+    $("#seccion-bar").addClass('mt-5');
+}
+
+function mostrarSeccion(idSeccion) {
+    // let idSeccion = $("#mostrarSeccionMovil").val();
+    $("." + idSeccion).toggle('hide');
+    $(".btn-" + idSeccion).toggleClass('is-success');
 }
 </script>
 

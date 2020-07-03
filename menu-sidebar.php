@@ -110,7 +110,7 @@ a:hover {
         </dav>
         <dav id="hijo3" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="../sa/index.php" target="_blanck" class="menu-hijo-3 CA">Sub almacenes</a>
+                <a href="../subalmacenes/index.php" target="_blanck" class="menu-hijo-3 CA">Sub almacenes</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="../stock/stock-beta.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>

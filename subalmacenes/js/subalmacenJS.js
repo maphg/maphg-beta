@@ -175,7 +175,7 @@ function busquedaExisenciaSubalmacen() {
 function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
   $("#modalExistenciasSubalmacen").addClass('open');
   let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
-  console.log(idSubalmacen, idDestinoSeleccionado);
+  // console.log(idSubalmacen, idDestinoSeleccionado);
   const action = "consultaExistenciasSubalmacen";
   $.ajax({
     type: "POST",
@@ -192,7 +192,7 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
       alertaImg(' Resultados Obtenidos: ' + data.totalResultados, 'text-orange-300', 'success', 3000);
       $("#nombreSubalmacen").html(data.nombreSubalmacen);
       $("#faseSubalmacen").html(data.faseSubalmacen);
-      console.log(data);
+      // console.log(data);
     }
   });
 }
@@ -214,7 +214,7 @@ function inputBusquedaExisenciaSubalmacen() {
 
 // Función para Preparar Carrito.
 function salidasSubalmacen(idSubalmacen, palabraBuscar) {
-  console.log('Here niggas');
+  // console.log('Here niggas');
   $("#modalSalidasSubalmacen").addClass('open');
   let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
 
@@ -788,7 +788,7 @@ function confirmarEntradaCarrito() {
     contador++;
     if (element > 0) {
       var index = indexCantidadInput[contador];
-      console.log(index);
+      // console.log(index);
       finalizarEntradaCarrito(index, idSubalmacen, idDestinoSeleccionado);
     }
   });
@@ -807,7 +807,7 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
     },
     // dataType: "json",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data == 1) {
         alertaImg(' Entradas Finalizas', '', 'success', 3000);
         $("#" + idItemGlobal).val(0);
@@ -862,10 +862,10 @@ function movimientoExistenciasItems() {
 function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
   var cantidadEntrada = $("#" + idItemGlobal).val();
-  console.log('S;' + cantidadEntrada);
+  // console.log('S;' + cantidadEntrada);
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   cantidadEntrada = parseFloat(cantidadEntrada);
-  console.log('C;' + cantidadEntrada);
+  // console.log('C;' + cantidadEntrada);
 
   if (cantidadEntrada >= 0.0) {
     if (cantidadEntrada <= stockActual) {
@@ -896,7 +896,7 @@ function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, 
     },
     // dataType: "json",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data != "error") {
         alertaImg('Stock' + data, '', 'success', 3500);
       } else {
@@ -922,7 +922,7 @@ function consultaMovimientoCarrito() {
     },
     dataType: "json",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data.dataMovimientos != "") {
 
         $("#dataMovimientosCarrito").html(data.dataMovimientos);
@@ -963,17 +963,17 @@ function confirmarMovimientoCarrito() {
     idRegistro.pop();
     idInput.pop();
     let longitudArray = idRegistro.length;
-    console.log(idRegistro);
-    console.log(longitudArray);
+    // console.log(idRegistro);
+    // console.log(longitudArray);
     let contador = -1;
 
     idRegistro.forEach(element => {
       contador++;
-      console.log(element);
+      // console.log(element);
       if (contador >= 0) {
         // var idRegistro_aux = idRegistro[contador];
         var idItemGlobal = idInput[contador];
-        console.log('*: ' + element, '*: ' + idItemGlobal);
+        // console.log('*: ' + element, '*: ' + idItemGlobal);
         finalizarMovimientosCarrito(element, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal);
       }
     });
@@ -983,7 +983,7 @@ function confirmarMovimientoCarrito() {
 }
 
 function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal) {
-  console.log(idRegistro, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal);
+  // console.log(idRegistro, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal);
 
   const action = "finalizarMovimientoCarrito";
   $.ajax({
@@ -998,7 +998,7 @@ function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSe
     },
     // dataType: "json",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data == 2) {
         alertaImg('Se agrego Item con Stock', '', 'success', 3000);
         $("#" + idItemGlobal).val(0);
@@ -1090,9 +1090,9 @@ consultaSubalmacen();
 
 
 // Funciones de Prueba.
-function obtnerValorHTML(id) {
-  console.log($("#" + id).html());
-}
-function obtnerValorINPUT(id) {
-  console.log($("#" + id).html());
-}
+// function obtnerValorHTML(id) {
+//   console.log($("#" + id).html());
+// }
+// function obtnerValorINPUT(id) {
+//   console.log($("#" + id).html());
+// }
