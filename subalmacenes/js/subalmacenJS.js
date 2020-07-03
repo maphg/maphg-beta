@@ -6,10 +6,6 @@ const arrayDestino = { 1: "RM", 7: "CMU", 2: "PVR", 6: "MBJ", 5: "PUJ", 11: "CAP
 
 function toggleModalTailwind(idModal) {
   $("#" + idModal).toggleClass('open');
-
-  if (idModal == "modalCarritoSalidas") {
-    $("#modalSalidasSubalmacen").addClass('open');
-  }
 }
 
 
@@ -643,6 +639,7 @@ function confirmarSalidaCarrito() {
               $("#spinnerConfirmarSalida").addClass('invisible');
               $("#justifiacionSalidaCarrito").removeClass('invisible');
               recuperarCarrito();
+              $("#modalSalidasSubalmacen").toggleClass('open');
             }
           });
         }
@@ -810,8 +807,8 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
       // console.log(data);
       if (data == 1) {
         alertaImg(' Entradas Finalizas', '', 'success', 3000);
-        $("#" + idItemGlobal).val(0);
-        toggleModalTailwind('modalSubalmacenEntradas');
+        // $("#" + idItemGlobal).val(0);
+        $('#modalSubalmacenEntradas').removeClass('open');
       } else {
         alertaImg('Intente de Nuevo', '', 'warning', 3000);
       }
@@ -998,21 +995,26 @@ function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSe
     },
     // dataType: "json",
     success: function (data) {
-      // console.log(data);
+      console.log(data);
       if (data == 2) {
+
         alertaImg('Se agrego Item con Stock', '', 'success', 3000);
         $("#" + idItemGlobal).val(0);
         $("#dataMovimientosCarrito").val('');
-        $("#modalConfirmarMovimiento").removeClass('open');
+        // $("#modalConfirmarMovimiento").removeClass('open');
         $("#modalExistenciasSubalmacen").removeClass('open');
         $("#modalSubalmacenEntradas").removeClass('open');
+        $("#modalMoverItems").removeClass('open');
+        $("#dataMovimientosCarrito").html('');
       } else if (data == 1) {
         alertaImg('Stock Actualizado', '', 'success', 3000);
         $("#" + idItemGlobal).val(0);
         $("#dataMovimientosCarrito").val('');
-        $("#modalConfirmarMovimiento").removeClass('open');
+        // $("#modalConfirmarMovimiento").removeClass('open');
         $("#modalExistenciasSubalmacen").removeClass('open');
         $("#modalSubalmacenEntradas").removeClass('open');
+        $("#modalMoverItems").removeClass('open');
+        $("#dataMovimientosCarrito").html('');
       } else {
         alertaImg('Intente de Nuevo', '', 'question', 3000);
       }

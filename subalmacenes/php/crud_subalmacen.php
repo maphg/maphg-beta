@@ -993,13 +993,13 @@ if (isset($_POST['action'])) {
             if ($nuevoStockActual >= 0) {
 
               $queryUpdateStock = "UPDATE t_subalmacenes_items_stock
-              SET stock_actual = $nuevoStockActual, stock_anterior = $stockActual, fecha_movimiento = '$fechaActual' 
-              WHERE id = $idRegistroStock AND id_destino = $idDestinoSeleccionado AND id_subalmacen = $idSubalmacen";
+              SET stock_actual = $nuevoStockActual, stock_anterior = $stockActual, fecha_movimiento = '$fechaActual' WHERE id = $idRegistroStock AND id_destino = $idDestinoSeleccionado AND id_subalmacen = $idSubalmacen";
 
               if ($resultUpdateStock = mysqli_query($conn_2020, $queryUpdateStock)) {
 
                 $queryFinalizar = "UPDATE t_subalmacenes_items_stock_salidas 
-                SET status = 'FINALIZADO', fecha_movimiento = '$fechaActual' WHERE id = $idRegistroSalida AND id_destino = $idDestinoSeleccionado AND id_subalmacen = $idSubalmacen";
+                SET status = 'FINALIZADO', fecha_movimiento = '$fechaActual',  tipo_salida = '$tipoSalida', id_equipo = $idEquipo, id_MCE = $idMCE, id_MCTG = $idMCTG, id_MP = $idMP, motivo = '$motivo', gift = $gift
+               WHERE id = $idRegistroSalida AND id_destino = $idDestinoSeleccionado AND id_subalmacen = $idSubalmacen";
 
                 if ($resultFinalizar = mysqli_query($conn_2020, $queryFinalizar)) {
                   echo "Carrito Finalizado";
@@ -1014,11 +1014,11 @@ if (isset($_POST['action'])) {
             }
           }
         } else {
-          echo "Item No Encontrado 1";
+          echo "Item No Encontrado";
         }
       }
     } else {
-      echo "Item No Encontrado 11";
+      echo "Item No Encontrado";
     }
   }
 
@@ -1443,7 +1443,7 @@ if (isset($_POST['action'])) {
       $arraySubalmacenMovimientos['dataMovimientos'] = $dataMovimientos;
     }
 
-    $query = "SELECT id, nombre, fase FROM t_subalmacenes WHERE id_destino = $idDestinoSeleccionado AND activo = 1";
+    $query = "SELECT id, nombre, fase FROM t_subalmacenes WHERE id_destino = $idDestinoSeleccionado AND activo = 1 AND id IN($subalmacenesAcceso)";
     if ($result = mysqli_query($conn_2020, $query)) {
       $opcionesSubalmacenes .= "
         <select id=\"idOpcionSubalmacenMovimientos\" class=\"block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500\"

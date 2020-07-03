@@ -399,7 +399,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                                             </label>
                                             <input id="inputJustificacionOtro"
                                                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                                type="text" placeholder="Descripción del Motivo">
+                                                type="text" placeholder="Descripción del Motivo" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -414,7 +414,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                                             </label>
                                             <input id="giftSalida"
                                                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                                type="number" placeholder="Digite el Número de GIFT">
+                                                type="number" placeholder="Digite el Número de GIFT" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
