@@ -9,8 +9,20 @@ $usuario = $_SESSION['usuario'];
 $arrayDestino = array(1 => "RM", 7 => "CMU", 2 => "PVR", 6 => "MBJ", 5 => "PUJ", 11 => "CAP", 3 => "SDQ", 4 => "SSA", 10 => "AME");
 $idDestino = $_SESSION['idDestino'];
 
+$queryNombre = "SELECT nombre, apellido FROM t_users 
+INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+WHERE t_users.id = $usuario";
+if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
+    if ($rowNombre = mysqli_fetch_array($resultNombre)) {
+        $nombre = $rowNombre['nombre'];
+        $apellido = $rowNombre['apellido'];
+        $nombreUsuario = $nombre . " " . $apellido;
+    }
+} else {
+    $nombreUsuario = "ND";
+}
 
-$nombreUsuario = "Eduardo";
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
