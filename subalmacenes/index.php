@@ -50,17 +50,17 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <input type="hidden" id="inputID">
     <input type="hidden" id="inputResultadosXLS">
 
-    <div class="container flex flex-col z-20 relative items-center">
-        <div class="flex flex-row w-full items-center">
-            <?php
-            include 'php/navbartop.php';
-            include 'php/menu-sidebar.php';
-            ?>
-        </div>
-    </div>
 
-    <div class="flex flex-col justify-evenly items-center  px-4 mt-5">
-        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10 relative"
+
+    <div class="flex flex-col justify-evenly items-center  px-1">
+        <!-- <div class=""> -->
+        <?php
+        include 'php/navbartop.php';
+        include 'php/menu-sidebar.php';
+        ?>
+        <!-- </div> -->
+        <br>
+        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10 px-3 w-screen h-screen"
             style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
             <img src="img/export.jpg" class="absolute bottom-0 right-0 opacity-25 w-64 m-2" alt="">
 

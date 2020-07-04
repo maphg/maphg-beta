@@ -233,7 +233,7 @@ a:hover {
 <!-- FIN MENU -->
 
 <!-- INICIO DESTINO -->
-<dav id="sidedestino" class="animated fadeOutRight d1">
+<dav id="sidedestino" class="animated fadeOutUp d1">
     <!-- d1 -->
     <dav id="sideDestinoHijo" class="d2">
         <!-- d2 -->
@@ -281,10 +281,10 @@ function botonMenu() {
 function botonDestino() {
     // $("#sideDestinoHijo").toggleClass('absolute');
     var element = document.getElementById("sidedestino");
-    if (element.classList.contains('fadeOutRight')) {
-        element.classList.replace('fadeOutRight', 'fadeInRight');
+    if (element.classList.contains('fadeOutUp')) {
+        element.classList.replace('fadeOutUp', 'fadeInUp');
     } else {
-        element.classList.replace('fadeInRight', 'fadeOutRight');
+        element.classList.replace('fadeInUp', 'fadeOutUp');
     }
 };
 /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */

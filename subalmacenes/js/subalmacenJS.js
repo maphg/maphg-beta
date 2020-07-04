@@ -995,7 +995,7 @@ function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSe
     },
     // dataType: "json",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data == 2) {
 
         alertaImg('Se agrego Item con Stock', '', 'success', 3000);
