@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    $("#needs-validation").keypress(function(e) {
+$(document).ready(function () {
+    $("#needs-validation").keypress(function (e) {
         if (e.keyCode == 13) {
             $("#btnLogin").click();
         }
@@ -28,10 +28,10 @@ function cargarTareasDestinoPlanner(pagina, idDestino) {
         type: 'post',
         url: url,
         data: 'action=34&idDestino=' + destino,
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             location.reload();
 
@@ -49,16 +49,22 @@ function validarUsuario() {
                 type: 'post',
                 url: 'php/usuariosPHP.php',
                 data: 'action=' + 1 + '&txtUsername=' + username + '&txtPassword=' + password,
-
-                success: function(data) {
-                    if (data == 1) {
-                        alertaImg('Bienvenido a MAPHG', 'has-text-success', 'success', 4000);
+                dataType: 'json',
+                success: function (data) {
+                    if (data.respuesta == 1) {
+                        if (data.usuario != "" && data.idDestino != "" && data.superAdmin != "") {
+                            localStorage.setItem('usuario', data.usuario);
+                            localStorage.setItem('idDestino', data.idDestino);
+                            localStorage.setItem('superAdmin', data.superAdmin);
+                        }
+                        alertaImg('Bienvenido a MAPHG' + data.usuario + data.idDestino, 'has-text-success', 'success', 4000);
                         location.href = "index.php";
 
-                    } else if (data == 2) {
+
+                    } else if (data.respuesta == 2) {
                         alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
 
-                    } else if (data == 3) {
+                    } else if (data.respuesta == 3) {
                         alertaImg('No existe el usuario', 'has-text-danger', 'error', 3000);
                     } else {
                         // toastr.warning(data, 'Advertencia', {
@@ -95,10 +101,10 @@ function logout() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=2',
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.href = "login.php";
@@ -116,10 +122,10 @@ function logout2() {
         type: 'post',
         url: '../php/usuariosPHP.php',
         data: 'action=2',
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.href = "../login.php";
@@ -137,7 +143,7 @@ function obtDatosEmpleado(idEmpleado) {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=3&idPersonal=' + idEmpleado,
-        success: function(data) {
+        success: function (data) {
             try {
                 var empleado = JSON.parse(data);
                 $("#idEmpleadoHdn").val(empleado.id);
@@ -209,10 +215,10 @@ function actualizar(idUsuario) {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=4&idUsuario=' + idUsuario + '&email=' + email + '&telefono=' + telefono,
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 location.reload();
@@ -241,10 +247,10 @@ function actualizarFoto(idUsuario) {
         contentType: false, // The content type used when sending data to the server.
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             alert(data);
             location.reload();
@@ -260,7 +266,7 @@ function cargarPuestos() {
         url: 'php/usuariosPHP.php',
         data: 'action=6&idDepto=' + depto,
 
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             document.getElementById("cbCargo").innerHTML = data;
         }
@@ -328,7 +334,7 @@ function crearUsuario() {
                     '&cargo=' + cargo + '&nivel=' + nivel + '&username=' + username + '&password=' + password +
                     '&permiso=' + permiso + '&destino=' + destino + '&fase=' + fase + '&seccion=' + seccion + '&contratado=' + contratado +
                     '&trabajando=' + trabajando + '&usuario=' + chkbUsuario,
-                success: function(data) {
+                success: function (data) {
                     if (data == 1) {
                         obtListaTrabajadores();
                         closeModal('modal-agregar-trabajador');
@@ -425,7 +431,7 @@ function actualizarEmpleado() {
             data: 'action=8&idEmpleado=' + idEmpleado + '&nombre=' + nombre + '&apellido=' + apellido +
                 '&telefono=' + telefono + '&email=' + email + '&destino=' + destino + '&cargo=' + cargo +
                 '&nivel=' + nivel + '&fase=' + fase + '&seccion=' + seccion,
-            success: function(data) {
+            success: function (data) {
                 $(".loader").fadeOut('slow');
                 if (data == 1) {
                     obtListaTrabajadores();
@@ -511,7 +517,7 @@ function actualizarUsuario() {
             url: 'php/usuariosPHP.php',
             data: 'action=9&idEmpleado=' + idEmpleado + '&idUsuario=' + idUsuario + '&username=' + username + '&password=' + password +
                 '&permiso=' + permiso + '&codigoSA=' + codigoSA + '&acciones=' + acciones + '&subalmacenes=' + subalmacenes,
-            success: function(data) {
+            success: function (data) {
                 if (data == 1) {
                     toastr.success("Se han guardado los cambios", "Correcto!", {
                         "closeButton": true,
@@ -568,10 +574,10 @@ function actualizarSueldo() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=12&idEmpleado=' + idEmpleado + '&sueldoD=' + sueldoD,
-        beforeSend: function() {
+        beforeSend: function () {
             $(".loader").show();
         },
-        success: function(data) {
+        success: function (data) {
             $(".loader").fadeOut('slow');
             if (data == 1) {
                 alert("Datos actualizados");
@@ -599,7 +605,7 @@ function eliminarCol() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=10&idEmpleado=' + idColaborador,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 closeModal('modal-eliminar-trabajador');
                 obtListaTrabajadores();
@@ -653,7 +659,7 @@ function eliminarUser() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=11&idUser=' + idUser,
-        success: function(data) {
+        success: function (data) {
             if (data == 1) {
                 closeModal('modal-eliminar-usuario');
                 toastr.success("Usuario eliminado!", "Correcto!", {
@@ -693,7 +699,7 @@ function obtListaTrabajadores() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=13',
-        success: function(data) {
+        success: function (data) {
             try {
                 $("#divListaUsuarios .mCSB_container").html(data);
             } catch (ex) {
@@ -721,7 +727,7 @@ function buscarTrabajador() {
         type: 'post',
         url: 'php/usuariosPHP.php',
         data: 'action=14&word=' + trabajador,
-        success: function(data) {
+        success: function (data) {
             try {
                 $("#divListaUsuarios .mCSB_container").html(data);
             } catch (ex) {

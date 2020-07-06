@@ -383,7 +383,6 @@ function eliminarAdjuntoMPNP(idImg, idMPNP) {
 
 
 function detalleMPNP(idMPNP) {
-
     $("#idMPNP").val(idMPNP);
     showModal('modal-agregar-MPNP');
     $('#formMPNP').removeClass('hidden');

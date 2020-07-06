@@ -1326,6 +1326,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
     <!-- CDN para Alertas -->
     <script src="js/sweetalert2@9.js"></script>
     <script src="js/bitacora_manttoJS.js"></script>
+    <script src="js/refreshSession.js"></script>
 </body>
 
 </html>

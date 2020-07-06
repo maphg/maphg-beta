@@ -20,7 +20,7 @@ if (!isset($_SESSION['usuario'])) {
     //Obtener datos del usuario
     $query = "SELECT * FROM t_users WHERE id = $idUsuario";
     try {
-        $zhh = "";
+        // $zhh = "";
         $resp = $conn->obtDatos($query);
         if ($conn->filasConsultadas > 0) {
             foreach ($resp as $dts) {
@@ -7389,7 +7389,7 @@ $tablaRanking .= "</div>";
 <!-- Libreria para notificaciones prediseñadas sweetAlert -->
 <script src="js/alertasSweet.js"></script>
 <script src="js/plannerBeta.js"></script>
-
+<script src="js/refreshSession.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {

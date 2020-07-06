@@ -10,6 +10,18 @@ if (isset($_POST['action'])) {
     $superAdmin = $_SESSION['super_admin'];
     $fechaActual = date("Y-m-d H:m:s");
 
+    if ($action == "recuperarSession") {
+        $idUsuario = $_POST['idUsuario'];
+        $idDestino = $_POST['idDestino'];
+        $superAdmin = $_POST['superAdmin'];
+        if ($idUsuario != "" and $idDestino != "" and $superAdmin != "") {
+            $_SESSION['usuario'] = $idUsuario;
+            $_SESSION['idDestino'] = $idDestino;
+            $_SESSION['super_admin'] = $super_admin;
+        }
+        echo $idUsuario . $idDestino . $superAdmin;
+    }
+
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
         $data = array();
