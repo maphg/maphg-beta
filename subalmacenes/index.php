@@ -54,20 +54,14 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <input type="hidden" id="inputID">
     <input type="hidden" id="inputResultadosXLS">
 
+    <?php
+    include 'php/navbartop.php';
+    include 'php/menu-sidebar.php';
+    ?>
 
-
-    <div class="flex flex-col justify-evenly items-center">
-        <!-- <div class=""> -->
-        <?php
-        include 'php/navbartop.php';
-        include 'php/menu-sidebar.php';
-        ?>
-        <!-- </div> -->
-        <br>
-        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10 px-4 w-screen h-screen"
+    <div class="flex flex-col justify-evenly items-center w-screen h-screen">
+        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10"
             style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
-            <img src="img/export.jpg" class="absolute bottom-0 right-0 opacity-25 w-64 m-2" alt="">
-
             <div class="flex flex-row w-full m-3 items-center justify-start relative">
                 <div class="mr-2 text-orange-500">
                     <i class="fad fa-box-alt fa-lg"></i>
@@ -90,7 +84,6 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                 style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem; height: 80vh;">
 
                 <div class="flex flex-col md:flex-row w-full">
-
                     <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
                         <div class="text-center font-semibold text-gray-700 text-xl">
                             <h1>GP</h1>
@@ -113,12 +106,8 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         <div id="subalmacenZI"></div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
-
     </div>
 
     <!-- MODALES ------------------------------------------------------------------- -->
