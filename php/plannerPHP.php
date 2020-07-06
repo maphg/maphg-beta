@@ -6295,9 +6295,9 @@ class Planner
                             $checkedTRS = "checked";
                         } elseif ($zona == "ZI") {
                             $checkedZI = "checked";
-                        }else{
+                        } else {
                             $checkedGP = "";
-                            $checkedTRS = ""; 
+                            $checkedTRS = "";
                             $checkedZI = "";
                         }
 
@@ -6315,9 +6315,9 @@ class Planner
                         ZI
                         </label>
                         </p></div>";
-                            $checkedGP = "";
-                            $checkedTRS = ""; 
-                            $checkedZI = "";
+                        $checkedGP = "";
+                        $checkedTRS = "";
+                        $checkedZI = "";
                     } else {
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p></div>";
                     }
@@ -9013,9 +9013,9 @@ class Planner
                             $checkedTRS = "checked";
                         } elseif ($zona == "ZI") {
                             $checkedZI = "checked";
-                        }else{
+                        } else {
                             $checkedGP = "";
-                            $checkedTRS = ""; 
+                            $checkedTRS = "";
                             $checkedZI = "";
                         }
 
@@ -9035,9 +9035,9 @@ class Planner
                             ZI
                             </label>
                             ";
-                            $checkedGP = "";
-                            $checkedTRS = ""; 
-                            $checkedZI = "";
+                        $checkedGP = "";
+                        $checkedTRS = "";
+                        $checkedZI = "";
                     } else {
                         $equipo->correctivos .= "<div class=\"column\"><p class=\"t-normal\">NA</p>";
                     }

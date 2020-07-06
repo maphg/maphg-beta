@@ -57,7 +57,7 @@ function validarUsuario() {
                             localStorage.setItem('idDestino', data.idDestino);
                             localStorage.setItem('superAdmin', data.superAdmin);
                         }
-                        alertaImg('Bienvenido a MAPHG' + data.usuario + data.idDestino, 'has-text-success', 'success', 4000);
+                        alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
                         location.href = "index.php";
 
 
