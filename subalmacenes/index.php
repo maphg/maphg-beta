@@ -5,6 +5,10 @@ session_start();
 $destinoT = $_SESSION['idDestino'];
 $usuario = $_SESSION['usuario'];
 
+if ($destinoT == "" and $usuario == "") {
+    header('Location: ../login.php');
+}
+
 // Variables Globales.
 $arrayDestino = array(1 => "RM", 7 => "CMU", 2 => "PVR", 6 => "MBJ", 5 => "PUJ", 11 => "CAP", 3 => "SDQ", 4 => "SSA", 10 => "AME");
 $idDestino = $_SESSION['idDestino'];
@@ -52,7 +56,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
 
 
-    <div class="flex flex-col justify-evenly items-center  px-1">
+    <div class="flex flex-col justify-evenly items-center">
         <!-- <div class=""> -->
         <?php
         include 'php/navbartop.php';
@@ -60,11 +64,11 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         ?>
         <!-- </div> -->
         <br>
-        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10 px-3 w-screen h-screen"
+        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10 px-4 w-screen h-screen"
             style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
             <img src="img/export.jpg" class="absolute bottom-0 right-0 opacity-25 w-64 m-2" alt="">
 
-            <div class="flex flex-row w-full m-3 items-center">
+            <div class="flex flex-row w-full m-3 items-center justify-start relative">
                 <div class="mr-2 text-orange-500">
                     <i class="fad fa-box-alt fa-lg"></i>
                 </div>
@@ -488,8 +492,10 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                             onclick="consultaEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                             Entrada</button>
                         <button
-                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-redo mr-2 ga-lg"></i>Restablecer</button>
+                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
+                            onclick="restablecerCarritoEntradasConfirmar();">
+                            <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
+                        </button>
 
                     </div>
                     <!-- BUSCADOR -->
@@ -897,7 +903,6 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <script>
     function expandir(id) {
         let idtoggle = id + 'toggle';
-        console.log(idtoggle);
         let toggle = document.getElementById(idtoggle);
         // toggle.classList.toggle("hidden");
         $("#" + idtoggle).toggleClass('hidden');

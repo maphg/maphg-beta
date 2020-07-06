@@ -228,8 +228,9 @@ function salidasSubalmacen(idSubalmacen, palabraBuscar) {
     success: function (data) {
       $("#dataSalidasSubalmacen").html(data.dataSalidaSubalmacen);
       alertaImg(' Resultados Obtenidos: ' + data.totalResultados, '', 'success', 3000);
-      $("#nombreSalidaSubalmacen").html(data.nombreSubalmacen);
       $("#faseSalidaSubalmacen").html(data.faseSubalmacen);
+      $("#nombreSalidaSubalmacen").html(data.nombreSubalmacen);
+      $("#faseSalidaSubalmacen").html(data.nombreSubalmacen);
       consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
     }
   });
@@ -656,8 +657,8 @@ function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
   $("#dataMovimientos").html('');
 
   $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
-  $("#subalmacenEntradasFase").val(fase);
-  $("#subalmacenEntradasTitulo").val(nombre);
+  $("#subalmacenEntradasFase").html(fase);
+  $("#subalmacenEntradasTitulo").html(nombre);
 
 }
 
@@ -815,6 +816,46 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
     }
   });
 }
+
+// FUNCIÓN PARA RESTABLECER CARRITO.
+function restablecerCarritoEntradasConfirmar() {
+  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  Swal.fire({
+    toast: true,
+    title: '¿Desea Eliminar los items del Carrito?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Eliminar'
+  }).then((result) => {
+    if (result.value) {
+      restablecerCarritoEntradas(idDestinoSeleccionado, idSubalmacen)
+    }
+  })
+}
+
+function restablecerCarritoEntradas(idDestinoSeleccionado, idSubalmacen) {
+  const action = "restablecerCarritoEntradas";
+  $.ajax({
+    type: "POST",
+    url: "php/crud_subalmacen.php",
+    data: {
+      action: action,
+      idDestinoSeleccionado: idDestinoSeleccionado,
+      idSubalmacen: idSubalmacen
+    },
+    // dataType: "dataType",
+    success: function (data) {
+      alertaImg(data, '', 'success', 3000);
+      $("#dataSubalmacenEntradas").html('');
+      $("#modalSubalmacenEntradas").removeClass('open');
+
+    }
+  });
+}
+// FIN DE FUNCIONES PARA RESTABLECER CARRITO.
 
 
 // Funciones para Movimientos Entre Bodegas.

@@ -1,5 +1,5 @@
 <style>
-  .menu-contenedor-1 {
+.menu-contenedor-1 {
     background-color: #000;
     width: 16rem;
     position: absolute;
@@ -15,9 +15,9 @@
     margin-top: 5rem;
     border-radius: 0.5rem;
     z-index: 50;
-  }
+}
 
-  .menu-contenedor-2 {
+.menu-contenedor-2 {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -25,9 +25,9 @@
     width: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-  }
+}
 
-  .menu-contenedor-3 {
+.menu-contenedor-3 {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -36,20 +36,20 @@
     margin-bottom: 1.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
-  }
+}
 
-  .menu-contenedor-logo {
+.menu-contenedor-logo {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
+}
 
-  .menu-contenedor-logo-imagen {
+.menu-contenedor-logo-imagen {
     height: 2.5rem;
-  }
+}
 
-  .menu-contenedor-flecha {
+.menu-contenedor-flecha {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -62,9 +62,9 @@
     right: 0;
     margin-right: 0.5rem;
     margin-top: 0.5rem;
-  }
+}
 
-  .menu-contenedor-padre-1 {
+.menu-contenedor-padre-1 {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -79,23 +79,23 @@
     background-color: #1a202c;
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
-  }
+}
 
-  .menu-contenedor-padre-1:hover {
+.menu-contenedor-padre-1:hover {
     background-color: #fff;
     color: #1a202c;
     font-weight: 500;
-  }
+}
 
-  .menu-contenedor-padre-2 {
+.menu-contenedor-padre-2 {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-  }
+}
 
-  .menu-hijo-1 {
+.menu-hijo-1 {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -105,11 +105,11 @@
     border-left: 2px;
     margin-left: 1.5rem;
     font-size: 0.875rem;
-  }
+}
 
-  /* aqui */
+/* aqui */
 
-  .menu-hijo-2 {
+.menu-hijo-2 {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -121,19 +121,19 @@
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     cursor: pointer;
-  }
+}
 
-  .menu-hijo-2:hover {
+.menu-hijo-2:hover {
     background-color: #1a202c;
     font-weight: 500;
     color: #fff;
-  }
+}
 
-  .menu-hijo-3 {
+.menu-hijo-3 {
     margin-left: 2rem;
-  }
+}
 
-  .menu-nieto-1 {
+.menu-nieto-1 {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -143,9 +143,9 @@
     border-left-width: 2px;
     margin-left: 1.5rem;
     font-size: 0.875rem;
-  }
+}
 
-  .menu-nieto-2 {
+.menu-nieto-2 {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -156,19 +156,19 @@
     padding-left: 0.25rem;
     padding-right: 0.25rem;
     cursor: pointer;
-  }
+}
 
-  .menu-nieto-2:hover {
+.menu-nieto-2:hover {
     background-color: #1a202c;
     font-weight: 500;
     color: #fff;
-  }
+}
 
-  .menu-nieto-3 {
+.menu-nieto-3 {
     margin-left: 2rem;
-  }
+}
 
-  .menu-contenedor-4 {
+.menu-contenedor-4 {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -180,9 +180,9 @@
     border-style: solid;
     border-color: #4a5568;
     border-top-width: 1px;
-  }
+}
 
-  .menu-contenedor-5 {
+.menu-contenedor-5 {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -191,30 +191,30 @@
     border-radius: 9999px;
     overflow: hidden;
     margin-top: 1rem;
-  }
+}
 
-  .menu-contenedor-6 {
+.menu-contenedor-6 {
     width: 100%;
-  }
+}
 
-  .menu-contenedor-7 {
+.menu-contenedor-7 {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     margin-top: 0.5rem;
-  }
+}
 
-  .menu-contenedor-8 {
+.menu-contenedor-8 {
     font-size: 0.875rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 600;
-  }
+}
 
-  .menu-contenedor-9 {
+.menu-contenedor-9 {
     font-size: 1.25rem;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
@@ -222,22 +222,22 @@
     position: absolute;
     bottom: 0;
     right: 0;
-  }
+}
 
-  .menu-contenedor-10 {
+.menu-contenedor-10 {
     font-size: 0.75rem;
     margin-left: 0.25rem;
-  }
+}
 
-  .ocultalo {
+.ocultalo {
     display: none;
-  }
+}
 
-  .menu-hijo-4 {
+.menu-hijo-4 {
     margin-right: 1.5rem;
-  }
+}
 
-  .d1 {
+.d1 {
     background-color: #000;
     width: 6rem;
     position: absolute;
@@ -253,9 +253,9 @@
     margin-top: 5rem;
     border-radius: 0.5rem;
     z-index: 50;
-  }
+}
 
-  .d2 {
+.d2 {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -263,9 +263,9 @@
     width: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-  }
+}
 
-  .d3 {
+.d3 {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -274,9 +274,9 @@
     margin-bottom: 1.5rem;
     padding-left: 1rem;
     padding-right: 1rem;
-  }
+}
 
-  .d4 {
+.d4 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -284,17 +284,17 @@
     height: 3rem;
     font-size: 3rem;
     color: #e53e3e;
-  }
+}
 
-  .d5 {
+.d5 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
     align-items: center;
-  }
+}
 
-  .d6 {
+.d6 {
     display: flex;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -310,13 +310,13 @@
     font-weight: 500;
     color: #a0aec0;
     margin-bottom: 1rem;
-  }
+}
 
-  .d6:hover {
+.d6:hover {
     border-color: #edf2f7;
-  }
+}
 
-  .nt1 {
+.nt1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -325,23 +325,23 @@
     background-color: #000;
     padding: 0.75rem;
     width: 100%;
-  }
+}
 
-  .nt2 {
+.nt2 {
     display: flex;
     align-items: center;
     color: #63b3ed;
     cursor: pointer;
-  }
+}
 
-  .nt3 {
+.nt3 {
     font-weight: 600;
     font-size: 1.5rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
-  }
+}
 
-  .nt4 {
+.nt4 {
     color: #975a16;
     background-color: #f6e05e;
     border-radius: 9999px;
@@ -351,18 +351,18 @@
     padding-right: 0.75rem;
     font-weight: 500;
     font-size: 0.875rem;
-  }
+}
 
-  .nt5 {
+.nt5 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-  }
+}
 
 
-  .nt6 {
+.nt6 {
     font-size: 0.875rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -374,42 +374,42 @@
     color: #63b3ed;
     border-color: #63b3ed;
     margin-top: 0;
-  }
+}
 
-  .nt6:hover {
+.nt6:hover {
     border-color: transparent;
     color: #2c5282;
     background-color: #63b3ed;
-  }
+}
 
-  .nt7 {
+.nt7 {
     margin-right: 0.5rem;
     cursor: pointer;
-  }
+}
 
-  .nt8 {
+.nt8 {
     margin-left: 0.5rem;
-  }
+}
 </style>
 <style>
-  /* * {
+/* * {
     border: solid red 1px;
 } */
 </style>
 <!-- navbar -->
 <dav class="nt1">
-  <!-- nt1 -->
-  <dav class="nt2">
-    <!-- nt2 -->
-    <spen onclick="botonMenu()" class="nt3"><i class="fas fa-bars"></i></spen><!-- nt3 -->
-    <o href="#" class="nt4"><?= $nombreUsuario; ?> <spen class="nt8"><i class="fal fa-angle-down"></i></spen>
-    </o><!-- nt4 -->
-  </dav>
-  <dav class="nt5">
-    <!-- nt5 -->
-    <o onclick="botonDestino()" href="#" class="nt6">
-      <spen><i class="fas fa-map-marker-alt nt7"></i></spen><span id="destinoSeleccionado"></span>
-    </o><!-- nt6 -->
-  </dav>
+    <!-- nt1 -->
+    <dav class="nt2">
+        <!-- nt2 -->
+        <spen onclick="botonMenu()" class="nt3"><i class="fas fa-bars"></i></spen><!-- nt3 -->
+        <o href="#" class="nt4"><?= $nombreUsuario; ?> <spen class="nt8"><i class="fal fa-angle-down"></i></spen>
+        </o><!-- nt4 -->
+    </dav>
+    <dav class="nt5">
+        <!-- nt5 -->
+        <o onclick="botonDestino()" href="#" class="nt6">
+            <spen><i class="fas fa-map-marker-alt nt7"></i></spen><span id="destinoSeleccionado"></span>
+        </o><!-- nt6 -->
+    </dav>
 </dav>
 <!-- navbar -->

@@ -1028,7 +1028,7 @@ if (isset($_POST['action'])) {
 
     $arraySubalmacenEntradas = array();
     $idSubalmacen = $_POST['idSubalmacen'];
-    $idDestino = $_POST['idDestinoSeleccionado'];
+    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
     $palabraBuscar = $_POST['palabraBuscar'];
     $dataSubalmacenEntradas = "";
 
@@ -1055,7 +1055,7 @@ if (isset($_POST['action'])) {
     INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
     INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
     WHERE t_subalmacenes_items_stock.id_subalmacen = $idSubalmacen 
-    AND t_subalmacenes_items_stock.id_destino = $idDestino
+    AND t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado
     AND t_subalmacenes_items_stock.activo = 1
     AND t_subalmacenes_items_globales.activo = 1 $palabraBuscar
     ";
@@ -1249,6 +1249,24 @@ if (isset($_POST['action'])) {
     }
   }
 
+  if ($action == "restablecerCarritoEntradas") {
+    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+    $idSubalmacen = $_POST['idSubalmacen'];
+    $query = "UPDATE t_subalmacenes_items_stock_reporte SET status = 'CANCELADO' WHERE id_usuario = $idUsuario 
+      AND id_subalmacen = $idSubalmacen 
+      AND id_destino = $idDestinoSeleccionado
+      AND status = 'ESPERA'
+      AND activo = 1
+    ";
+    if ($result = mysqli_query($conn_2020, $query)) {
+      echo "Carrito Restablecido";
+    } else {
+      echo "Intenta de Nuevo";
+    }
+  }
+
+
+  // Movimientos.
   if ($action == "consultaMoverExistenciasItems") {
     $arraySubalmacenMovimientos = array();
     $idSubalmacen = $_POST['idSubalmacen'];
