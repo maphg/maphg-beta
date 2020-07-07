@@ -1674,7 +1674,8 @@ class Planner
         //Se obtienen los datos de los equipos
         if ($idDestino == 10) { //Buscar equipos de la seccion de todos los destinos
             if ($idCategoria == 1) { //Equipos MC/MP
-                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
+                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) {
+                    //Subseccion Fan&Coils, Villas GP, TRS o Familiy
                     //Se obtiene el nombre de la subcategoria que seria el nombre del hotel
                     $query = "SELECT subcategoria "
                         . "FROM c_subcategorias_planner "

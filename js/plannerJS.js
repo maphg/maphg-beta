@@ -156,6 +156,7 @@ function obtenerEquipos(
             }
         },
         success: function (data) {
+            $("#modalHotel").removeClass('is-active');
             var pageloader = document.getElementById("loader");
             pageloader.classList.toggle("is-active");
             try {
