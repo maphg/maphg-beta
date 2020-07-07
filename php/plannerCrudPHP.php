@@ -1,26 +1,27 @@
 <?php
-session_start();
+// Se establece la Zona Horaria.
+date_default_timezone_set('America/Cancun');
+setlocale(LC_MONETARY, 'es_ES');
+
+// Modulo para importar la Conxión a la DB.
 include 'conexion.php';
+
+
 if (isset($_POST['action'])) {
+    // Se migro la session de PHP a JS, para evitar la caducidad de session_star();
+    // $idUsuario = $_SESSION['usuario'];
+    // $idDestino = $_SESSION['idDestino'];
+    // $superAdmin = $_SESSION['super_admin'];
+
+
 
     // Variables Globales.
     $action = $_POST['action'];
-    $idUsuario = $_SESSION['usuario'];
-    $idDestino = $_SESSION['idDestino'];
-    $superAdmin = $_SESSION['super_admin'];
+    $idUsuario = $_POST['idUsuario'];
+    $idDestino = $_POST['idDestino'];
+    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
     $fechaActual = date("Y-m-d H:m:s");
 
-    if ($action == "recuperarSession") {
-        $idUsuario = $_POST['idUsuario'];
-        $idDestino = $_POST['idDestino'];
-        $superAdmin = $_POST['superAdmin'];
-        if ($idUsuario != "" and $idDestino != "" and $superAdmin != "") {
-            $_SESSION['usuario'] = $idUsuario;
-            $_SESSION['idDestino'] = $idDestino;
-            $_SESSION['super_admin'] = $super_admin;
-        }
-        echo $idUsuario . $idDestino . $superAdmin;
-    }
 
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
@@ -33,11 +34,11 @@ if (isset($_POST['action'])) {
         INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
         INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
         WHERE c_rel_destino_seccion.id_destino=1 AND c_subsecciones.id != 200 ORDER BY c_subsecciones.grupo";
-        $result = mysqli_query($conn_2020, $query);
-        if ($result) {
+        if ($result = mysqli_query($conn_2020, $query)) {
+            if ($result) {
 
-            // Se genera el encabezado de las subsecciones.
-            $dataZIC .= " 
+                // Se genera el encabezado de las subsecciones.
+                $dataZIC .= " 
                 <div id=\"colzic\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                     <div
                         class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
@@ -54,14 +55,14 @@ if (isset($_POST['action'])) {
                             class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
             ";
 
-            while ($row = mysqli_fetch_array($result)) {
-                $seccion = $row['seccion'];
-                $subseccion = $row['grupo'];
-                $pendientes = 22;
+                while ($row = mysqli_fetch_array($result)) {
+                    $seccion = $row['seccion'];
+                    $subseccion = $row['grupo'];
+                    $pendientes = 22;
 
-                if ($seccion == "ZIC") {
-                    // $dataZIC .= $subseccion;
-                    $dataZIC .= "
+                    if ($seccion == "ZIC") {
+                        // $dataZIC .= $subseccion;
+                        $dataZIC .= "
                         <!-- Subsecciones -->
                             <div id=\"abremodal\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\">
@@ -73,17 +74,18 @@ if (isset($_POST['action'])) {
                             </div>
                         <!-- Subsecciones -->
                     ";
+                    }
                 }
-            }
 
-            $dataZIC .= "
+                $dataZIC .= "
                             </div>
                         </div>
                     </div>
                 </div>
             ";
-        } else {
-            $error = "Proceso Finalizado";
+            } else {
+                $error = "Proceso Finalizado";
+            }
         }
         $data['dataZIC'] = $dataZIC;
         echo json_encode($data);

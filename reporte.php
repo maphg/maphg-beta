@@ -16,41 +16,57 @@
         <table id="" class="">
             <tr>
                 <th class="p-1 m-0">#</th>
-                <th class="p-1 m-0">DESTINO</th>
-                <th class="p-1 m-0">SECCIÓN</th>
-                <th class="p-1 m-0">SUBSECCIÓN</th>
-                <th class="p-1 m-0">TIPO EQUIPO</th>
-                <th class="p-1 m-0">NOMBRE PLAN</th>
-                <th class="p-1 m-0">ACTIVIDAD</th>
-                <th class="p-1 m-0">PERIODO</th>
+                <th class="p-1 m-0">destino</th>
+                <th class="p-1 m-0">tipo</th>
+                <th class="p-1 m-0">equipo</th>
+                <th class="p-1 m-0">lista_actividades_realizadas EQUIPO</th>
+                <th class="p-1 m-0">fecha_registro </th>
             </tr>
             <?php
             $contador = 0;
             $query = "
-                SELECT c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, c_tipos.tipo, t_planes_mantto.nombre, t_planes_actividades.actividad, t_planes_mantto.periodicidad FROM t_equipos INNER JOIN c_destinos ON t_equipos.id_destino = c_destinos.id INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id INNER JOIN c_tipos ON t_equipos.id_tipo = c_tipos.id INNER JOIN t_planes_mantto ON t_equipos.id_tipo = t_planes_mantto.id_tipo_equipo INNER JOIN t_planes_actividades ON t_planes_mantto.id = t_planes_actividades.id_mantto WHERE t_equipos.status='A' AND c_tipos.status='A' ORDER BY c_destinos.destino ASC
+            SELECT t_ordenes_trabajo.id 'OT', t_equipos.id, c_destinos.destino, c_tipos.tipo, t_equipos.equipo, t_ordenes_trabajo.lista_actividades_realizadas, t_ordenes_trabajo.fecha_realizado 
+            FROM t_equipos 
+            INNER JOIN c_tipos ON t_equipos.id_tipo = c_tipos.id 
+            INNER JOIN c_destinos ON t_equipos.id_destino = c_destinos.id 
+            INNER JOIN t_mp_planeacion ON t_equipos.id = t_mp_planeacion.id_equipo 
+            INNER JOIN t_ordenes_trabajo ON t_equipos.id = t_ordenes_trabajo.id_equipo 
+            WHERE c_tipos.id IN(314,444,445,446,37) 
+            and t_mp_planeacion.status = 'F' 
+            and t_ordenes_trabajo.status = 'F'
             ";
 
             $result = mysqli_query($conn_2020, $query);
             while ($row = mysqli_fetch_array($result)) {
                 $contador++;
+                $OT = $row['OT'];
                 $destino = $row['destino'];
-                $seccion = $row['seccion'];
-                $grupo = $row['grupo'];
                 $tipo = $row['tipo'];
-                $nombre = $row['nombre'];
-                $actividad = $row['actividad'];
-                $periodicidad = $row['periodicidad'];
+                $equipo = $row['equipo'];
+                $lista_actividades_realizadas = $row['lista_actividades_realizadas'];
+                $fecha_registro  = $row['fecha_realizado'];
+                // explode(",", $lista_actividades_realizadas);
+                // echo var_dump($lista_actividades_realizadas);
 
-                echo "<tr>"
-                    . "<td class=\"p-1 m-0\"> $contador </td>"
-                    . "<td class=\"p-1 m-0\">$destino</td>"
-                    . "<td class=\"p-1 m-0\">$seccion</td>"
-                    . "<td class=\"p-1 m-0\">$grupo</td>"
-                    . "<td class=\"p-1 m-0\">$tipo</td>"
-                    . "<td class=\"p-1 m-0\">$nombre</td>"
-                    . "<td class=\"p-1 m-0\">$actividad</td>"
-                    . "<td class=\"p-1 m-0\">$periodicidad</td>"
-                    . "</tr>";
+                foreach (explode(",", $lista_actividades_realizadas) as $key => $value) {
+                    // echo $value;
+                    if ($value > 0 and $value != "") {
+                        $queryActividades = "SELECT actividad FROM t_planes_actividades WHERE id = $value";
+                        if ($resultActividades = mysqli_query($conn_2020, $queryActividades)) {
+                            if ($rowActividades = mysqli_fetch_array($resultActividades)) {
+                                $actividades = $rowActividades['actividad'];
+                                echo "<tr>"
+                                    . "<td class=\"p-1 m-0\"> $contador </td>"
+                                    . "<td class=\"p-1 m-0\">$destino</td>"
+                                    . "<td class=\"p-1 m-0\">$tipo</td>"
+                                    . "<td class=\"p-1 m-0\">$equipo</td>"
+                                    . "<td class=\"p-1 m-0\">$actividades</td>"
+                                    . "<td class=\"p-1 m-0\">$fecha_registro </td>"
+                                    . "</tr>";
+                            }
+                        }
+                    }
+                }
             }
             ?>
 
