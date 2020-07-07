@@ -708,7 +708,7 @@ $tablaRanking .= "</div>";
                             </div>
                             <span class="navbar-item">
 
-                                <p id="divNameSubseccion" class="subtitle is-3">Aqui va nombre de la subseccion</p>
+                                <p id="divNameSubseccion" class="subtitle is-3">Subseccion</p>
 
                             </span>
                         </div>
@@ -1637,20 +1637,29 @@ $tablaRanking .= "</div>";
                                 if ($id_destino == 1 and $idSubseccion == 12) {
                                     echo
                                         "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotel', 'show')\">"
+                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelRM', 'show')\">"
+                                            . "<p class=\"t-normal has-text-left px-4\">"
+                                            . "$nombreGrupo"
+                                            . "</p>"
+                                            . "</div>"
+                                            . "<div class=\"column\">";
+                                } elseif ($id_destino == 7 and $idSubseccion == 12) {
+                                    echo
+                                        "<div class=\"columns is-gapless my-1 is-mobile\">"
+                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelCMU', 'show')\">"
                                             . "<p class=\"t-normal has-text-left px-4\">"
                                             . "$nombreGrupo"
                                             . "</p>"
                                             . "</div>"
                                             . "<div class=\"column\">";
                                 } else {
-                                    echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                        . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                        . "<div class=\"column is-10\">"
-                                        . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo']
-                                        . "</p>"
-                                        . "</div>"
-                                        . "<div class=\"column\">";
+                                    echo
+                                        "<div class=\"columns btn-subsecciones is-gapless my-1 is-mobile\"  onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
+                                            . "<div class=\"column is-10\">"
+                                            . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo']
+                                            . "</p>"
+                                            . "</div>"
+                                            . "<div class=\"column\">";
                                 }
                                 if ($total > 0) {
                                     echo "<p class=\"t-pendiente\">$total</p>";
@@ -4321,26 +4330,45 @@ $tablaRanking .= "</div>";
     <!--AREA DE MODALS-->
 
     <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
-    <div id="modalHotel" class="modal">
+    <div id="modalHotelRM" class="modal">
         <!-- <div class="modal-background"></div> -->
         <div class="modal-content columns is-centered">
             <div class="box column is-8">
-                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotel','hide');"></a>
+                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelRM','hide');"></a>
                 <article class="media mt-4">
                     <div class="buttons">
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'AME', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM COLONIAL
                             RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'AME', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM KANTENAH
                             RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'AME', 'ZIC', 'FAN&COILS');">TRS
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'RM', 'ZIC', 'FAN&COILS');">TRS
                             YUCATÁN
                             HOTEL</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'AME', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM
                             WHITE SAND RESORT &
                             SPA</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+    <div id="modalHotelCMU" class="modal">
+        <!-- <div class="modal-background"></div> -->
+        <div class="modal-content columns is-centered">
+            <div class="box column is-8">
+                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelCMU','hide');"></a>
+                <article class="media mt-4">
+                    <div class="buttons">
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 22, 6703, 1, 'CMU', 'ZIC', 'FAN&COILS');">GRAND
+                            PALLADIUM COSTA MUJERES RESORT & SPA</button>
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 23, 6704, 1, 'CMU', 'ZIC', 'FAN&COILS');">TRS
+                            CORAL HOTEL</button>
                     </div>
                 </article>
             </div>
