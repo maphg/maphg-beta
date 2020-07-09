@@ -65,17 +65,13 @@ function alertaImg(text, classColorText, icon, timeAlert) {
     })
     Toast.fire({
         // title: 'Sweet!',
-        imageUrl: 'svg/logo6.svg',
-        imageWidth: '40px',
-        imageHeight: '40px',
         text: text,
         icon: icon,
         background: '#e2e8f0',
         height: '0px',
         customClass: {
-            container: 'm-1 w-30',
-            content: 'mt-3 ' + classColorText,
-            image: 'mt-1 is-overlay',
+            container: 'm-1 w-30 text-red-400',
+            content: 'mt-3 text-red-400',
             icon: 'mt-3 mx-2 w-5'
         }
     })

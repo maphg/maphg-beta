@@ -1329,7 +1329,7 @@ if (isset($_POST['action'])) {
                 <h1>$nombreGremio</h1>
             </div>
             <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                <h1>$descripcion de rosca corrida</h1>
+                <h1>$descripcion</h1>
             </div>
             <div class=\"w-64 flex h-full items-center justify-center truncate\">
                 <h1>$caracteristicas</h1>
