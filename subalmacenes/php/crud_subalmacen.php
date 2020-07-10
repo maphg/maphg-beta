@@ -138,7 +138,7 @@ if (isset($_POST['action'])) {
     $query = "SELECT 
         id, id_destino, id_fase, nombre, fase, tipo 
         FROM t_subalmacenes 
-        WHERE activo = 1 $filtroDestino";
+        WHERE activo = 1 $filtroDestino ORDER BY tipo DESC";
     $result = mysqli_query($conn_2020, $query);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -640,7 +640,7 @@ if (isset($_POST['action'])) {
                     </div>
                     <div class=\"w-32 flex h-full items-center justify-center\">
                       
-                      <input id=\"$idItem\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"number\" placeholder=\"Cantidad Max $cantidadActual\" 
+                      <input id=\"$idItem\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"number\" placeholder=\"Cantidad\" 
                       onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58)validarCantidaSalidaSubalmacen($idItem, '$descripcion', $cantidadActual, $idSubalmacen);\">
                     </div>
                 </div>

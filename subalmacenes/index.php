@@ -164,7 +164,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         <button onclick="movimientoExistenciasItems();" data-target="modalMoverItems"
                             data-toggle="modal"
                             class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-random fa-lg mr-2"></i>Mover items</button>
+                                class="fas fa-random fa-lg mr-2"></i>Traspasos</button>
 
                     </div>
                     <!-- BUSCADOR -->

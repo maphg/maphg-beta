@@ -69,7 +69,7 @@ if (isset($_POST['action'])) {
                     $idSeccion = $row['id_seccion'];
 
                     $dataZIL .= " 
-                        <div id=\"colzil\" class=\" scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
+                        <div id=\"colzil\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
@@ -120,6 +120,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     // ZIC
@@ -133,7 +134,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -780,30 +781,52 @@ if (isset($_POST['action'])) {
                         $nombre = $rowMCN['nombre'];
                         $apellido = $rowMCN['apellido'];
 
+                        // Obtiene el ultimo Comentario por cada t_mc
                         $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
                         INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
                         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                         WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
                         $resultComentario = mysqli_query($conn_2020, $queryComentario);
-                        if ($rowComentario = mysqli_fetch_array($resultComentario)) {
-                            $comentarioC = $rowComentario['comentario'];
-                            $nombreC = $rowComentario['nombre'];
-                            $apellidoC = $rowComentario['apellido'];
-                            $fechaC = $rowComentario['fecha'];
+                        if (mysqli_num_rows($resultComentario) > 0) {
+                            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                                $comentarioC = $rowComentario['comentario'];
+                                $nombreC = $rowComentario['nombre'];
+                                $apellidoC = $rowComentario['apellido'];
+                                $fechaC = $rowComentario['fecha'];
+                                $iconoComentario = "<i class=\"fas fa-comment-dots\"></i>";
+                            }
                         } else {
-                            $comentarioC = "";
+                            $comentarioC = "Sin Comentario";
                             $nombreC = "";
                             $apellidoC = "";
                             $fechaC = "";
+                            $iconoComentario = "";
                         }
 
+                        // Obtiene la cantidad de Adjuntos por cada t_mc
+                        $queryAdjunto = "SELECT count(id) FROM t_mc_adjuntos 
+                        WHERE id_mc = $idMC";
+                        $resultAdjunto = mysqli_query($conn_2020, $queryAdjunto);
+                        if ($rowAdjunto = mysqli_fetch_array($resultAdjunto)) {
+                            $cantidadAjunto = $rowAdjunto['count(id)'];
+
+                            if ($cantidadAjunto > 0) {
+                                $iconoAdjunto = "<i class=\"fas fa-paperclip mr-2\">$cantidadAjunto</i>";
+                            } else {
+                                $iconoAdjunto = "";
+                            }
+                        } else {
+                            $iconoAdjunto = "";
+                        }
+
+
                         echo "
-                            <div id=\"$idMC\" onclick=\"expandir(this.id)\"
+                            <div id=\"" . $idMC . "C\" onclick=\"expandir(this.id)\"
                                 class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                     
                                 <!-- Titulo -->
                                 <div class=\"my-1\">
-                                    <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
+                                    <p id=\"" . $idMC . "Ctitulo\" class=\"truncate\">$actividad</p>
                                 </div>
                                 <!-- Iconos -->
                                 <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -813,12 +836,14 @@ if (isset($_POST['action'])) {
                                         <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                     </div>
                                     <div class=\"text-gray-600\">
-                                        <i class=\"fas fa-paperclip mr-2\"></i>
-                                        <i class=\"fas fa-comment-dots\"></i>
+
+                                        <!-- Iconos para Adjuntos y Comentarios. -->
+                                        $iconoComentario
+                                        $iconoAdjunto
                                     </div>
                                 </div>
                                 <!-- Toogle -->
-                                <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
+                                <div id=\"" . $idMC . "Ctoggle\" class=\"hidden mt-2\">
                                     <div
                                         class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                         <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
@@ -861,7 +886,7 @@ if (isset($_POST['action'])) {
 
                 ";
 
-                $queryMCD = "SELECT  t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh,t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  FROM t_mc 
+                $queryMCD = "SELECT  t_mc.id, t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh,t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  FROM t_mc 
                 LEFT JOIN t_users ON t_mc.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                 WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion AND (t_mc.departamento_calidad != '' OR t_mc.departamento_compras != '' OR t_mc.departamento_direccion != '' OR t_mc.departamento_finanzas != '' OR t_mc.departamento_rrhh != '') 
@@ -870,6 +895,7 @@ if (isset($_POST['action'])) {
 
                 if (mysqli_num_rows($resultMCD) > 0) {
                     while ($rowMCD = mysqli_fetch_array($resultMCD)) {
+                        $idMC = $rowMCD['id'];
                         $actividad = $rowMCD['actividad'];
                         $nombre = $rowMCD['nombre'];
                         $apellido = $rowMCD['apellido'];
@@ -878,6 +904,44 @@ if (isset($_POST['action'])) {
                         $direccion = $rowMCD['departamento_direccion'];
                         $finanzas = $rowMCD['departamento_finanzas'];
                         $rrhh = $rowMCD['departamento_rrhh'];
+
+                        // Obtiene el ultimo Comentario por cada t_mc
+                        $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
+                        INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
+                        $resultComentario = mysqli_query($conn_2020, $queryComentario);
+                        if (mysqli_num_rows($resultComentario) > 0) {
+                            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                                $comentarioC = $rowComentario['comentario'];
+                                $nombreC = $rowComentario['nombre'];
+                                $apellidoC = $rowComentario['apellido'];
+                                $fechaC = $rowComentario['fecha'];
+                                $iconoComentario = "<i class=\"fas fa-comment-dots\"></i>";
+                            }
+                        } else {
+                            $comentarioC = "Sin Comentario";
+                            $nombreC = "";
+                            $apellidoC = "";
+                            $fechaC = "";
+                            $iconoComentario = "";
+                        }
+
+                        // Obtiene la cantidad de Adjuntos por cada t_mc
+                        $queryAdjunto = "SELECT count(id) FROM t_mc_adjuntos 
+                        WHERE id_mc = $idMC";
+                        $resultAdjunto = mysqli_query($conn_2020, $queryAdjunto);
+                        if ($rowAdjunto = mysqli_fetch_array($resultAdjunto)) {
+                            $cantidadAjunto = $rowAdjunto['count(id)'];
+
+                            if ($cantidadAjunto > 0) {
+                                $iconoAdjunto = "<i class=\"fas fa-paperclip mr-2\">$cantidadAjunto</i>";
+                            } else {
+                                $iconoAdjunto = "";
+                            }
+                        } else {
+                            $iconoAdjunto = "";
+                        }
 
                         if ($calidad != '') {
                             $calidad = 1;
@@ -950,14 +1014,12 @@ if (isset($_POST['action'])) {
                                         <div
                                             class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                             <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
+                                            <p>$comentarioC</p>
                                             <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                     width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                             </div>
                                         </div>
                                         <button
@@ -972,11 +1034,11 @@ if (isset($_POST['action'])) {
                             if ($rrhh != '') {
                                 echo "
                                     <!-- Contenedor de tarea -->
-                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                    <div id=\"$idMC\" onclick=\"expandir(this.id)\"
                                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                         <!-- Titulo -->
                                         <div class=\"my-1\">
-                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
+                                            <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
                                         </div>
                                         <!-- Iconos -->
                                         <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -986,26 +1048,23 @@ if (isset($_POST['action'])) {
                                                 <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                             </div>
                                             <div class=\"flex flex-row items-center text-gray-600\">
-                                                <i class=\"fas fa-paperclip mr-2\"></i>
-                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                $iconoComentario $iconoAdjunto
                                                 <p
                                                     class=\"text-xs font-normal bg-teal-200 text-teal-500 py-1 px-2 rounded-full\">
                                                     RRHH</p>
                                             </div>
                                         </div>
                                         <!-- Toogle -->
-                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                        <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
                                             <div
                                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                                 <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                    temporibus.</p>
+                                                <p>$comentarioC</p>
                                                 <div class=\"flex flex-row mt-1 self-center\">
-                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                         width=\"20\" height=\"20\" alt=\"\">
-                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1020,11 +1079,11 @@ if (isset($_POST['action'])) {
                             if ($calidad != '') {
                                 echo "
                                     <!-- Contenedor de tarea -->
-                                    <div id=\"123\" onclick=\"expandir(this.id)\"
+                                    <div id=\"$idMC\" onclick=\"expandir(this.id)\"
                                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                         <!-- Titulo -->
                                         <div class=\"my-1\">
-                                            <p id=\"123titulo\" class=\"truncate\">$actividad</p>
+                                            <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
                                         </div>
                                         <!-- Iconos -->
                                         <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1034,25 +1093,22 @@ if (isset($_POST['action'])) {
                                                 <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                             </div>
                                             <div class=\"flex flex-row items-center text-gray-600\">
-                                                <i class=\"fas fa-paperclip mr-2\"></i>
-                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                $iconoComentario $iconoAdjunto
                                                 <p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-2 rounded-full\">
                                                     Calidad</p>
                                             </div>
                                         </div>
                                         <!-- Toogle -->
-                                        <div id=\"123toggle\" class=\"hidden mt-2\">
+                                        <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
                                             <div
                                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                                 <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                    temporibus.</p>
+                                                <p>$comentarioC</p>
                                                 <div class=\"flex flex-row mt-1 self-center\">
-                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                         width=\"20\" height=\"20\" alt=\"\">
-                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1067,11 +1123,11 @@ if (isset($_POST['action'])) {
                             if ($compras != '') {
                                 echo "
                                     <!-- Contenedor de tarea -->
-                                    <div id=\"456\" onclick=\"expandir(this.id)\"
+                                    <div id=\"$idMC\" onclick=\"expandir(this.id)\"
                                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                         <!-- Titulo -->
                                         <div class=\"my-1\">
-                                            <p id=\"456titulo\" class=\"truncate\">$actividad</p>
+                                            <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
                                         </div>
                                         <!-- Iconos -->
                                         <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1081,25 +1137,22 @@ if (isset($_POST['action'])) {
                                                 <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                             </div>
                                             <div class=\"flex flex-row items-center text-gray-600\">
-                                                <i class=\"fas fa-paperclip mr-2\"></i>
-                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                $iconoComentario $iconoAdjunto
                                                 <p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">
                                                     Compras</p>
                                             </div>
                                         </div>
                                         <!-- Toogle -->
-                                        <div id=\"456toggle\" class=\"hidden mt-2\">
+                                        <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
                                             <div
                                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                                 <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                    temporibus.</p>
+                                                <p>$comentarioC</p>
                                                 <div class=\"flex flex-row mt-1 self-center\">
-                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                         width=\"20\" height=\"20\" alt=\"\">
-                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1114,11 +1167,11 @@ if (isset($_POST['action'])) {
                             if ($direccion != '') {
                                 echo "
                                     <!-- Contenedor de tarea -->
-                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                    <div id=\"$idMC\" onclick=\"expandir(this.id)\"
                                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                         <!-- Titulo -->
                                         <div class=\"my-1\">
-                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
+                                            <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
                                         </div>
                                         <!-- Iconos -->
                                         <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1128,15 +1181,14 @@ if (isset($_POST['action'])) {
                                                 <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                             </div>
                                             <div class=\"flex flex-row items-center text-gray-600\">
-                                                <i class=\"fas fa-paperclip mr-2\"></i>
-                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                $iconoComentario $iconoAdjunto
                                                 <p
                                                     class=\"text-xs font-normal bg-purple-200 text-purple-500 py-1 px-2 rounded-full\">
                                                     Dirección</p>
                                             </div>
                                         </div>
                                         <!-- Toogle -->
-                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                        <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
                                             <div
                                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                                 <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
@@ -1144,10 +1196,10 @@ if (isset($_POST['action'])) {
                                                     recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
                                                     temporibus.</p>
                                                 <div class=\"flex flex-row mt-1 self-center\">
-                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                         width=\"20\" height=\"20\" alt=\"\">
-                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1162,40 +1214,39 @@ if (isset($_POST['action'])) {
                             if ($finanzas != '') {
                                 echo "
                                     <!-- Contenedor de tarea -->
-                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                    <div id=\"$idMC\" onclick=\"expandir(this.id)\"
                                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                         <!-- Titulo -->
                                         <div class=\"my-1\">
-                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
+                                            <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
                                         </div>
                                         <!-- Iconos -->
                                         <div class=\"flex flex-row justify-between items-center text-sm\">
                                             <div class=\"flex flex-row\">
                                                 <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
                                                     width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellio</p>
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                             </div>
                                             <div class=\"flex flex-row items-center text-gray-600\">
-                                                <i class=\"fas fa-paperclip mr-2\"></i>
-                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                            <!-- Icono de Adjuntos y Comentarios si Existe-->
+                                            $iconoComentario
+                                            $iconoAdjunto
                                                 <p
                                                     class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">
-                                                    Compras</p>
+                                                    Finanzas</p>
                                             </div>
                                         </div>
                                         <!-- Toogle -->
-                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                        <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
                                             <div
                                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                                 <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                    temporibus.</p>
+                                                <p>$comentarioC</p>
                                                 <div class=\"flex flex-row mt-1 self-center\">
-                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                         width=\"20\" height=\"20\" alt=\"\">
-                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                                 </div>
                                             </div>
                                             <button
@@ -1236,17 +1287,58 @@ if (isset($_POST['action'])) {
 
                 if (mysqli_num_rows($resultMCT) > 0) {
                     while ($rowMCT = mysqli_fetch_array($resultMCT)) {
+                        $idMC = $rowMCT['id'];
                         $actividad = $rowMCT['actividad'];
                         $nombre = $rowMCT['nombre'];
                         $apellido = $rowMCT['apellido'];
+
+                        // Obtiene el ultimo Comentario por cada t_mc
+                        $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
+                        INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
+                        $resultComentario = mysqli_query($conn_2020, $queryComentario);
+                        if (mysqli_num_rows($resultComentario) > 0) {
+                            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                                $comentarioC = $rowComentario['comentario'];
+                                $nombreC = $rowComentario['nombre'];
+                                $apellidoC = $rowComentario['apellido'];
+                                $fechaC = $rowComentario['fecha'];
+                                $iconoComentario = "<i class=\"fas fa-comment-dots\"></i>";
+                            }
+                        } else {
+                            $comentarioC = "Sin Comentario";
+                            $nombreC = "";
+                            $apellidoC = "";
+                            $fechaC = "";
+                            $iconoComentario = "";
+                        }
+
+                        // Obtiene la cantidad de Adjuntos por cada t_mc
+                        $queryAdjunto = "SELECT count(id) FROM t_mc_adjuntos 
+                        WHERE id_mc = $idMC";
+                        $resultAdjunto = mysqli_query($conn_2020, $queryAdjunto);
+                        if ($rowAdjunto = mysqli_fetch_array($resultAdjunto)) {
+                            $cantidadAjunto = $rowAdjunto['count(id)'];
+
+                            if ($cantidadAjunto > 0) {
+                                $iconoAdjunto = "<i class=\"fas fa-paperclip mr-2\">$cantidadAjunto</i>";
+                            } else {
+                                $iconoAdjunto = "";
+                            }
+                        } else {
+                            $iconoAdjunto = "";
+                        }
+
+
                         echo "
                         <!-- COLUMNA TRABAJANDO -->
                         <!-- Contenedor de tarea -->
-                        <div id=\"980\" onclick=\"expandir(this.id)\"
+                        <div id=\"" . $idMC . "T\" onclick=\"expandir(this.id)\"
                         class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
                             <div class=\"my-1\">
-                                <p id=\"980titulo\" class=\"truncate\">$actividad</p>
+                                <p id=\"" . $idMC . "T\" class=\"truncate\">$actividad</p>
                             </div>
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1256,24 +1348,22 @@ if (isset($_POST['action'])) {
                                     <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                     </div>
                                     <div class=\"flex flex-row items-center text-gray-600\">
-                                    <i class=\"fas fa-paperclip mr-2\"></i>
-                                    <i class=\"fas fa-comment-dots mr-2\"></i>
+                                        <!-- Iconos para Adjuntos y Comentarios. -->
+                                        $iconoComentario
+                                        $iconoAdjunto
                                     <p class=\"text-xs font-black bg-blue-200 text-blue-500 py-1 px-2 rounded\">T</p>
                                     </div>
                                     </div>
                             <!-- Toogle -->
-                            <div id=\"980toggle\" class=\"hidden mt-2\">
+                            <div id=\"" . $idMC . "Ttoggle\" class=\"hidden mt-2\">
                                 <div
                                 class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                    <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                        recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                        temporibus.</p>
+                                    <h1 class=\"text-left font-bold text-left mb-1\">$comentarioC</p>
                                     <div class=\"flex flex-row mt-1 self-center\">
-                                        <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                     </div>
                                 </div>
                                 <button
@@ -1312,17 +1402,59 @@ if (isset($_POST['action'])) {
                 $resultMCF = mysqli_query($conn_2020, $queryMCF);
                 if (mysqli_num_rows($resultMCF) > 0) {
                     while ($rowMCF = mysqli_fetch_array($resultMCF)) {
+                        $idMC = $rowMCF['id'];
                         $actividad = $rowMCF['actividad'];
                         $nombre = $rowMCF['nombre'];
                         $apellido = $rowMCF['apellido'];
+
+
+                        // Obtiene el ultimo Comentario por cada t_mc
+                        $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
+                        INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
+                        $resultComentario = mysqli_query($conn_2020, $queryComentario);
+                        if (mysqli_num_rows($resultComentario) > 0) {
+                            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                                $comentarioC = $rowComentario['comentario'];
+                                $nombreC = $rowComentario['nombre'];
+                                $apellidoC = $rowComentario['apellido'];
+                                $fechaC = $rowComentario['fecha'];
+                                $iconoComentario = "<i class=\"fas fa-comment-dots\"></i>";
+                            }
+                        } else {
+                            $comentarioC = "Sin Comentario";
+                            $nombreC = "";
+                            $apellidoC = "";
+                            $fechaC = "";
+                            $iconoComentario = "";
+                        }
+
+                        // Obtiene la cantidad de Adjuntos por cada t_mc
+                        $queryAdjunto = "SELECT count(id) FROM t_mc_adjuntos 
+                        WHERE id_mc = $idMC";
+                        $resultAdjunto = mysqli_query($conn_2020, $queryAdjunto);
+                        if ($rowAdjunto = mysqli_fetch_array($resultAdjunto)) {
+                            $cantidadAjunto = $rowAdjunto['count(id)'];
+
+                            if ($cantidadAjunto > 0) {
+                                $iconoAdjunto = "<i class=\"fas fa-paperclip mr-2\">$cantidadAjunto</i>";
+                            } else {
+                                $iconoAdjunto = "";
+                            }
+                        } else {
+                            $iconoAdjunto = "";
+                        }
+
+
                         echo "
                             <!-- COLUMNA SOLUCIONADOS -->
                             <!-- Contenedor de tarea -->
-                            <div id=\"111\" onclick=\"expandir(this.id)\"
+                            <div id=\"" . $idMC . "F\" onclick=\"expandir(this.id)\"
                                 class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                 <!-- Titulo -->
                                 <div class=\"my-1\">
-                                    <p id=\"111titulo\" class=\"truncate\">$actividad</p>
+                                    <p id=\"" . $idMC . "Ftitulo\" class=\"truncate\">$actividad</p>
                                 </div>
                                 <!-- Iconos -->
                                 <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1332,25 +1464,22 @@ if (isset($_POST['action'])) {
                                         <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                     </div>
                                     <div class=\"flex flex-row items-center text-gray-600\">
-                                        <i class=\"fas fa-paperclip mr-2\"></i>
-                                        <i class=\"fas fa-comment-dots mr-2\"></i>
+                                        $iconoComentario $iconoAdjunto
                                         <p class=\"text-xs font-black bg-green-200 text-green-500 py-1 px-2 rounded\">F
                                         </p>
                                     </div>
                                 </div>
                                 <!-- Toogle -->
-                                <div id=\"111toggle\" class=\"hidden mt-2\">
+                                <div id=\"" . $idMC . "Ftoggle\" class=\"hidden mt-2\">
                                     <div
                                         class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                         <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                            recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                            temporibus.</p>
+                                        <p>$comentarioC</p>
                                         <div class=\"flex flex-row mt-1 self-center\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
                                                 width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                            <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                            <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
                                         </div>
                                     </div>
                                     <button

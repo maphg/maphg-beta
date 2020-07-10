@@ -95,6 +95,7 @@ function consultaSubsecciones(idDestino, idUsuario, idDestino) {
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion) {
     $("#modalTituloSeccion").html(nombreSeccion);
+    $("#dataSubseccionesPendientes").html('Sin Datos');
     const action = "consultarPendientesSubsecciones";
     $.ajax({
         type: "POST",
