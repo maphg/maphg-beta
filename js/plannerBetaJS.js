@@ -143,49 +143,59 @@ function calendarioSecciones() {
 
     switch (hoydia) {
         case 'lunes':
-            document.getElementById('colzia').classList.toggle('hidden');
-            document.getElementById('colzhp').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
             document.getElementById('btn-zia').classList.toggle('btn-activo');
             document.getElementById('btn-zhp').classList.toggle('btn-activo');
             document.getElementById('btn-dep').classList.toggle('btn-activo');
             document.getElementById('label-lunes').classList.add('text-gray-700');
+            document.getElementById('colzia').classList.toggle('hidden');
+            document.getElementById('colzhp').classList.toggle('hidden');
+            document.getElementById('coldep').classList.toggle('hidden');
             break;
         case 'martes':
-            document.getElementById('colzic').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
             document.getElementById('btn-dep').classList.toggle('btn-activo');
             document.getElementById('btn-zic').classList.toggle('btn-activo');
             document.getElementById('label-martes').classList.add('text-gray-700');
+            document.getElementById('colzic').classList.toggle('hidden');
+            document.getElementById('coldep').classList.toggle('hidden');
             break;
         case 'miercoles':
-            document.getElementById('coldec').classList.toggle('hidden')
-            document.getElementById('coldep').classList.toggle('hidden');
-            document.getElementById('colzie').classList.toggle('hidden');
             document.getElementById('btn-dec').classList.toggle('btn-activo');
             document.getElementById('btn-dep').classList.toggle('btn-activo');
             document.getElementById('btn-zie').classList.toggle('btn-activo');
             document.getElementById('label-miercoles').classList.add('text-gray-700');
+            document.getElementById('coldec').classList.toggle('hidden')
+            document.getElementById('coldep').classList.toggle('hidden');
+            document.getElementById('colzie').classList.toggle('hidden');
             break;
         case 'jueves':
-            document.getElementById('colzhc').classList.toggle('hidden');
-            document.getElementById('colzha').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
             document.getElementById('btn-zhc').classList.toggle('btn-activo');
             document.getElementById('btn-zha').classList.toggle('btn-activo');
             document.getElementById('btn-dep').classList.toggle('btn-activo');
             document.getElementById('label-jueves').classList.add('text-gray-700');
+            document.getElementById('colzhc').classList.toggle('hidden');
+            document.getElementById('colzha').classList.toggle('hidden');
+            document.getElementById('coldep').classList.toggle('hidden');
             break;
         case 'viernes':
-            document.getElementById('colzil').classList.toggle('hidden');
-            document.getElementById('colauto').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
             document.getElementById('btn-zil').classList.toggle('btn-activo');
             document.getElementById('btn-auto').classList.toggle('btn-activo');
             document.getElementById('btn-dep').classList.toggle('btn-activo');
             document.getElementById('label-viernes').classList.add('text-gray-700');
+            document.getElementById('colzil').classList.toggle('hidden');
+            document.getElementById('colauto').classList.toggle('hidden');
+            document.getElementById('coldep').classList.toggle('hidden');
             break;
         default:
+            document.getElementById('btn-zil').classList.toggle('btn-activo');
+            document.getElementById('btn-auto').classList.toggle('btn-activo');
+            document.getElementById('btn-dep').classList.toggle('btn-activo');
+            document.getElementById('btn-zia').classList.toggle('btn-activo');
+            document.getElementById('btn-zhp').classList.toggle('btn-activo');
+            document.getElementById('btn-zic').classList.toggle('btn-activo');
+            document.getElementById('btn-dec').classList.toggle('btn-activo');
+            document.getElementById('btn-zie').classList.toggle('btn-activo');
+            document.getElementById('btn-zhc').classList.toggle('btn-activo');
+            document.getElementById('btn-zha').classList.toggle('btn-activo');
             document.getElementById('colzia').classList.toggle('hidden');
             document.getElementById('colzhp').classList.toggle('hidden');
             document.getElementById('coldep').classList.toggle('hidden');
@@ -196,16 +206,6 @@ function calendarioSecciones() {
             document.getElementById('colzha').classList.toggle('hidden');
             document.getElementById('colzil').classList.toggle('hidden');
             document.getElementById('colauto').classList.toggle('hidden');
-            document.getElementById('btn-zil').classList.toggle('btn-activo');
-            document.getElementById('btn-auto').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
-            document.getElementById('btn-zia').classList.toggle('btn-activo');
-            document.getElementById('btn-zhp').classList.toggle('btn-activo');
-            document.getElementById('btn-zic').classList.toggle('btn-activo');
-            document.getElementById('btn-dec').classList.toggle('btn-activo');
-            document.getElementById('btn-zie').classList.toggle('btn-activo');
-            document.getElementById('btn-zhc').classList.toggle('btn-activo');
-            document.getElementById('btn-zha').classList.toggle('btn-activo');
             break;
     }
 }
