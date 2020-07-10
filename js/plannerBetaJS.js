@@ -60,7 +60,7 @@ function consultaSubsecciones(idDestino, idUsuario, idDestino) {
             idUsuario: idUsuario,
             idDestino: idDestino
         },
-        // dataType: "json",
+        dataType: "json",
         success: function (data) {
             // console.log(data);
             // console.log(data.dataZIL);
