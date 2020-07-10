@@ -60,21 +60,21 @@ function consultaSubsecciones(idDestino, idUsuario, idDestino) {
             idUsuario: idUsuario,
             idDestino: idDestino
         },
-        dataType: "json",
+        // dataType: "json",
         success: function (data) {
-            console.log(data);
-            console.log(data.dataZIL);
-            console.log(data.dataZIE);
-            console.log(data.dataAUTO);
-            console.log(data.dataDEC);
-            console.log(data.dataDEP);
-            console.log(data.dataOMA);
-            console.log(data.dataZHA);
-            console.log(data.dataZHC);
-            console.log(data.dataZHH);
-            console.log(data.dataZHP);
-            console.log(data.dataZIA);
-            console.log(data.dataZIC);
+            // console.log(data);
+            // console.log(data.dataZIL);
+            // console.log(data.dataZIE);
+            // console.log(data.dataAUTO);
+            // console.log(data.dataDEC);
+            // console.log(data.dataDEP);
+            // console.log(data.dataOMA);
+            // console.log(data.dataZHA);
+            // console.log(data.dataZHC);
+            // console.log(data.dataZHH);
+            // console.log(data.dataZHP);
+            // console.log(data.dataZIA);
+            // console.log(data.dataZIC);
             $("#columnasSeccionesZIL").html(data.dataZIL);
             $("#columnasSeccionesZIE").html(data.dataZIE);
             $("#columnasSeccionesAUTO").html(data.dataAUTO);
@@ -87,7 +87,7 @@ function consultaSubsecciones(idDestino, idUsuario, idDestino) {
             $("#columnasSeccionesZHP").html(data.dataZHP);
             $("#columnasSeccionesZIA").html(data.dataZIA);
             $("#columnasSeccionesZIC").html(data.dataZIC);
-            // calendarioSecciones();
+            calendarioSecciones();
         }
     });
 }
@@ -116,7 +116,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion) {
 }
 
 
-consultaSubsecciones(idUsuario, 1, 1);
+consultaSubsecciones(1, 1, 1);
 
 function calendarioSecciones() {
     var numSem = new Date().getDay();
