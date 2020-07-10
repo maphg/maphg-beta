@@ -65,16 +65,16 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
-                    $seccion = $row['seccion'];
                     $idSeccion = $row['id_seccion'];
+                    $seccion = $row['seccion'];
 
                     $dataZIL .= " 
                         <div id=\"colzil\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-green-700 bg-green-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
@@ -123,14 +123,14 @@ if (isset($_POST['action'])) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
-                    // ZIC
+                    // ZIE
                     $dataZIE .= " 
                         <div id=\"colzie\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-yellow-700 bg-yellow-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
@@ -176,6 +176,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataAUTO .= " 
@@ -183,12 +184,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-teal-700 bg-teal-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -230,6 +231,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataDEC .= " 
@@ -237,12 +239,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-purple-700 bg-purple-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -284,6 +286,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataDEP .= " 
@@ -291,12 +294,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-gray-300 bg-gray-900 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -338,6 +341,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataOMA .= " 
@@ -350,7 +354,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -392,6 +396,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataZHA .= " 
@@ -399,12 +404,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-indigo-700 bg-indigo-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -446,6 +451,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataZHC .= " 
@@ -453,12 +459,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-orange-700 bg-orange-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -500,6 +506,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataZHH .= " 
@@ -512,7 +519,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -554,6 +561,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataZHP .= " 
@@ -561,12 +569,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-lightblue-700 bg-lightblue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -608,6 +616,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     $dataZIA .= " 
@@ -615,12 +624,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"zia-icon flex justify-center items-center absolute top-20 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -662,6 +671,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
+                    $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
 
                     // ZIC
@@ -670,12 +680,12 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
+                                    class=\"absolute text-red-700 bg-red-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\"></i>
+                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion');\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
@@ -785,7 +795,7 @@ if (isset($_POST['action'])) {
                         $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
                         INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
                         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
+                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC ";
                         $resultComentario = mysqli_query($conn_2020, $queryComentario);
                         if (mysqli_num_rows($resultComentario) > 0) {
                             if ($rowComentario = mysqli_fetch_array($resultComentario)) {
