@@ -16,7 +16,7 @@ a:hover {
 }
 </style>
 <!-- INICIO MENU -->
-<dav id="sidemenu" class="animated fadeOutLeft menu-contenedor-1">
+<dav id="sidemenu" class="animated fadeOut menu-contenedor-1">
     <dav class="menu-contenedor-2">
         <dav class="menu-contenedor-3">
             <dav class="menu-contenedor-logo">
@@ -229,7 +229,7 @@ a:hover {
 <!-- FIN MENU -->
 
 <!-- INICIO DESTINO -->
-<dav id="sidedestino" class="animated fadeOutRight d1">
+<dav id="sidedestino" class="animated fadeOut d1">
     <!-- d1 -->
     <dav class="d2">
         <!-- d2 -->
@@ -272,19 +272,19 @@ a:hover {
 <script>
 function botonMenu() {
     var element = document.getElementById("sidemenu");
-    if (element.classList.contains('fadeOutLeft')) {
-        element.classList.replace('fadeOutLeft', 'fadeInLeft');
+    if (element.classList.contains('fadeOut')) {
+        element.classList.replace('fadeOut', 'fadeIn');
     } else {
-        element.classList.replace('fadeInLeft', 'fadeOutLeft');
+        element.classList.replace('fadeIn', 'fadeOut');
     }
 };
 
 function botonDestino() {
     var element = document.getElementById("sidedestino");
-    if (element.classList.contains('fadeOutRight')) {
-        element.classList.replace('fadeOutRight', 'fadeInRight');
+    if (element.classList.contains('fadeOut')) {
+        element.classList.replace('fadeOut', 'fadeIn');
     } else {
-        element.classList.replace('fadeInRight', 'fadeOutRight');
+        element.classList.replace('fadeIn', 'fadeOut');
     }
 };
 /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */

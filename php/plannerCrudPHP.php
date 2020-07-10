@@ -614,7 +614,7 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
+                                    class=\"zia-icon flex justify-center items-center absolute top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
                                 </div>
                                 <div
@@ -742,14 +742,14 @@ if (isset($_POST['action'])) {
         // Query para obtener todas las subsecciones, según la sección.
         $query = "SELECT c_rel_seccion_subseccion.id, c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino, c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_secciones.seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo FROM c_rel_destino_seccion INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id WHERE c_destinos.id = $idDestino AND c_secciones.id = $idSeccion";
         if ($result = mysqli_query($conn_2020, $query)) {
-            while ($row = mysqli_fetch_array($result)) {
+            foreach ($result as $row) {
                 $subseccion = $row['grupo'];
                 $idSubseccion = $row['id_subseccion'];
 
-                $data .= "
+                echo "
                     <div class=\"flex flex-row justify-center items-center w-full py-4\">
                         <div class=\"w-2/12 font-medium text-sm text-gray-800 text-center\">
-                            <h1>$subseccion</h1>
+                            <h1>$idSubseccion $subseccion</h1>
                         </div>
                         
                         <!-- Contenedor de las 4 columnas -->
@@ -767,174 +767,182 @@ if (isset($_POST['action'])) {
                                 <!-- Contenedor de tarea -->
                 ";
                 // Se obtienen los MC.
-                $query = "SELECT* FROM t_mc WHERE id_destino = $idDestino ORDER BY id DESC LIMIT 20";
-                $result = mysqli_query($conn_2020, $query);
-                while ($row = mysqli_fetch_array($result)) {
-                    $actividad = $row['actividad'];
+                $queryMCN = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
+                FROM t_mc 
+                LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion AND t_mc.status = 'N' ORDER BY t_mc.id DESC";
+                $resultMCN = mysqli_query($conn_2020, $queryMCN);
+                if (mysqli_num_rows($resultMCN) > 0) {
+                    while ($rowMCN = mysqli_fetch_array($resultMCN)) {
+                        $idMC = $rowMCN['id'];
+                        $actividad = $rowMCN['actividad'];
+                        $nombre = $rowMCN['nombre'];
+                        $apellido = $rowMCN['apellido'];
 
+                        $queryComentario = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido FROM t_mc_comentarios 
+                        INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        WHERE t_mc_comentarios.id_mc = $idMC ORDER BY t_mc_comentarios.fecha DESC";
+                        $resultComentario = mysqli_query($conn_2020, $queryComentario);
+                        if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                            $comentarioC = $rowComentario['comentario'];
+                            $nombreC = $rowComentario['nombre'];
+                            $apellidoC = $rowComentario['apellido'];
+                            $fechaC = $rowComentario['fecha'];
+                        } else {
+                            $comentarioC = "";
+                            $nombreC = "";
+                            $apellidoC = "";
+                            $fechaC = "";
+                        }
 
-                    $data .= "
-                                <div id=\"567\" onclick=\"expandir(this.id)\"
-                                    class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                        
-                                    <!-- Titulo -->
-                                    <div class=\"my-1\">
-                                        <p id=\"567titulo\" class=\"truncate\">$actividad</p>
+                        echo "
+                            <div id=\"$idMC\" onclick=\"expandir(this.id)\"
+                                class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                    
+                                <!-- Titulo -->
+                                <div class=\"my-1\">
+                                    <p id=\"" . $idMC . "titulo\" class=\"truncate\">$actividad</p>
+                                </div>
+                                <!-- Iconos -->
+                                <div class=\"flex flex-row justify-between items-center text-sm\">
+                                    <div class=\"flex flex-row\">
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                            width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                     </div>
-                                    <!-- Iconos -->
-                                    <div class=\"flex flex-row justify-between items-center text-sm\">
-                                        <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
-                                                width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
-                                        </div>
-                                        <div class=\"text-gray-600\">
-                                            <i class=\"fas fa-paperclip mr-2\"></i>
-                                            <i class=\"fas fa-comment-dots\"></i>
-                                        </div>
-                                    </div>
-                                    <!-- Toogle -->
-                                    <div id=\"567toggle\" class=\"hidden mt-2\">
-                                        <div
-                                            class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                            <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
-                                            <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
-                                                    width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                            <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                                        </button>
+                                    <div class=\"text-gray-600\">
+                                        <i class=\"fas fa-paperclip mr-2\"></i>
+                                        <i class=\"fas fa-comment-dots\"></i>
                                     </div>
                                 </div>
-
-                ";
+                                <!-- Toogle -->
+                                <div id=\"" . $idMC . "toggle\" class=\"hidden mt-2\">
+                                    <div
+                                        class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                        <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                        <p>$comentarioC</p>
+                                        <div class=\"flex flex-row mt-1 self-center\">
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreC%20$apellidoC\"
+                                                width=\"20\" height=\"20\" alt=\"\">
+                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreC $apellidoC</p>
+                                            <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaC</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                        <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    </button>
+                                </div>
+                            </div>
+                        ";
+                    }
+                } else {
+                    echo "
+                        <div class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md text-center\">
+                            <!-- Titulo -->
+                            <div class=\"my-1\">
+                                <p class=\"truncate\">Sin Datos</p>
+                            </div>
+                        </div>
+                    ";
                 }
 
-                $data .= "                
-                            </div>
-                            <!-- Fin contenedor 1 *******************************-->
 
-                            <!-- contenedor 2 *******************************-->
-                            <div id=\"filtrodep\" ondblclick=\"expandirpapa(this.id)\"
-                                class=\"w-1/4 h-40 overflow-y-auto scrollbar px-2\">
-                                <!-- COLUMNA DEP -->
-                                <!-- Contenedor de tarea -->
-                                <div id=\"123\" onclick=\"expandir(this.id)\"
-                                    class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                                    <!-- Titulo -->
-                                    <div class=\"my-1\">
-                                        <p id=\"123titulo\" class=\"truncate\">Aqui iria el titulo de la tarea correctiva o la
-                                            descripcion de la misma.</p>
-                                    </div>
-                                    <!-- Iconos -->
-                                    <div class=\"flex flex-row justify-between items-center text-sm\">
-                                        <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
-                                                width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
-                                        </div>
-                                        <div class=\"flex flex-row items-center text-gray-600\">
-                                            <i class=\"fas fa-paperclip mr-2\"></i>
-                                            <i class=\"fas fa-comment-dots mr-2\"></i>
-                                            <p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">
-                                                Material</p>
-                                        </div>
-                                    </div>
-                                    <!-- Toogle -->
-                                    <div id=\"123toggle\" class=\"hidden mt-2\">
-                                        <div
-                                            class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                            <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
-                                            <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
-                                                    width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                            <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                                        </button>
-                                    </div>
-                                </div>
+                echo "                
+                    </div>
+                    <!-- Fin contenedor 1 *******************************-->
 
-                                <!-- Contenedor de tarea -->
-                                <div id=\"456\" onclick=\"expandir(this.id)\"
-                                    class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                                    <!-- Titulo -->
-                                    <div class=\"my-1\">
-                                        <p id=\"456titulo\" class=\"truncate\">Aqui iria el titulo de la tarea correctiva o la
-                                            descripcion de la misma.</p>
-                                    </div>
-                                    <!-- Iconos -->
-                                    <div class=\"flex flex-row justify-between items-center text-sm\">
-                                        <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
-                                                width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
-                                        </div>
-                                        <div class=\"flex flex-row items-center text-gray-600\">
-                                            <i class=\"fas fa-paperclip mr-2\"></i>
-                                            <i class=\"fas fa-comment-dots mr-2\"></i>
-                                            <p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-2 rounded-full\">
-                                                Calidad</p>
-                                        </div>
-                                    </div>
-                                    <!-- Toogle -->
-                                    <div id=\"456toggle\" class=\"hidden mt-2\">
-                                        <div
-                                            class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                            <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
-                                            <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
-                                                    width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                            <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                                        </button>
-                                    </div>
-                                </div>
+                    <!-- contenedor 2 PENDIENTES DEP *******************************-->
+                    <div id=\"filtrodep\" ondblclick=\"expandirpapa(this.id)\"
+                        class=\"w-1/4 h-40 overflow-y-auto scrollbar px-2\">
+                    <!-- COLUMNA DEP -->
 
+                ";
+
+                $queryMCD = "SELECT  t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh,t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  FROM t_mc 
+                LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion AND (t_mc.departamento_calidad != '' OR t_mc.departamento_compras != '' OR t_mc.departamento_direccion != '' OR t_mc.departamento_finanzas != '' OR t_mc.departamento_rrhh != '') 
+                ORDER BY t_mc.id ASC";
+                $resultMCD = mysqli_query($conn_2020, $queryMCD);
+
+                if (mysqli_num_rows($resultMCD) > 0) {
+                    while ($rowMCD = mysqli_fetch_array($resultMCD)) {
+                        $actividad = $rowMCD['actividad'];
+                        $nombre = $rowMCD['nombre'];
+                        $apellido = $rowMCD['apellido'];
+                        $calidad = $rowMCD['departamento_calidad'];
+                        $compras = $rowMCD['departamento_compras'];
+                        $direccion = $rowMCD['departamento_direccion'];
+                        $finanzas = $rowMCD['departamento_finanzas'];
+                        $rrhh = $rowMCD['departamento_rrhh'];
+
+                        if ($calidad != '') {
+                            $calidad = 1;
+                            $calidadI = "C";
+                        } else {
+                            $calidad = 0;
+                            $calidadI = "";
+                        }
+
+                        if ($compras != '') {
+                            $compras = 1;
+                            $comprasI = "CP";
+                        } else {
+                            $compras = 0;
+                            $comprasI = "";
+                        }
+
+                        if ($direccion != '') {
+                            $direccion = 1;
+                            $direccionI = "D";
+                        } else {
+                            $direccion = 0;
+                            $direccionI = "";
+                        }
+
+                        if ($finanzas != '') {
+                            $finanzas = 1;
+                            $finanzasI = "F";
+                        } else {
+                            $finanzas = 0;
+                            $finanzasI = "";
+                        }
+
+                        if ($rrhh != '') {
+                            $rrhh = 1;
+                            $rrhhI = "RH";
+                        } else {
+                            $rrhh = 0;
+                            $rrhhI = "";
+                        }
+
+                        $variosDepartamentos = $calidad + $compras + $direccion + $finanzas + $rrhh;
+
+                        if ($variosDepartamentos > 1) {
+                            echo "
                                 <!-- Contenedor de tarea -->
                                 <div id=\"678\" onclick=\"expandir(this.id)\"
                                     class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                                     <!-- Titulo -->
                                     <div class=\"my-1\">
-                                        <p id=\"678titulo\" class=\"truncate\">Aqui iria el titulo de la tarea correctiva o la
-                                            descripcion de la misma.</p>
+                                        <p id=\"678titulo\" class=\"truncate\">$actividad</p>
                                     </div>
                                     <!-- Iconos -->
                                     <div class=\"flex flex-row justify-between items-center text-sm\">
                                         <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
                                                 width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
+                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                         </div>
                                         <div class=\"flex flex-row items-center text-gray-600\">
                                             <i class=\"fas fa-paperclip mr-2\"></i>
                                             <i class=\"fas fa-comment-dots mr-2\"></i>
                                             <p
                                                 class=\"text-xs font-normal bg-purple-200 text-purple-500 py-1 px-2 rounded-full\">
-                                                Dirección</p>
+                                                $calidadI $comprasI $direccionI $finanzasI $rrhhI </p>
                                         </div>
                                     </div>
                                     <!-- Toogle -->
@@ -958,56 +966,336 @@ if (isset($_POST['action'])) {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- contenedor 2 *******************************-->
+                            ";
+                        } else {
 
-
-                            <!-- contenedor 3 *******************************-->
-                            <div id=\"filtrotra\" ondblclick=\"expandirpapa(this.id)\"
-                                class=\"w-1/4 h-40 overflow-y-auto scrollbar px-2\">
-                                <!-- COLUMNA TRABAJANDO -->
-                                <!-- Contenedor de tarea -->
-                                <div id=\"980\" onclick=\"expandir(this.id)\"
-                                    class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                                    <!-- Titulo -->
-                                    <div class=\"my-1\">
-                                        <p id=\"980titulo\" class=\"truncate\">Aqui iria el titulo de la tarea correctiva o la
-                                            descripcion de la misma.</p>
-                                    </div>
-                                    <!-- Iconos -->
-                                    <div class=\"flex flex-row justify-between items-center text-sm\">
-                                        <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
-                                                width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
+                            if ($rrhh != '') {
+                                echo "
+                                    <!-- Contenedor de tarea -->
+                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                        <!-- Titulo -->
+                                        <div class=\"my-1\">
+                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
                                         </div>
-                                        <div class=\"flex flex-row items-center text-gray-600\">
-                                            <i class=\"fas fa-paperclip mr-2\"></i>
-                                            <i class=\"fas fa-comment-dots mr-2\"></i>
-                                            <p class=\"text-xs font-black bg-blue-200 text-blue-500 py-1 px-2 rounded\">T</p>
-                                        </div>
-                                    </div>
-                                    <!-- Toogle -->
-                                    <div id=\"980toggle\" class=\"hidden mt-2\">
-                                        <div
-                                            class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                            <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
-                                            <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                        <!-- Iconos -->
+                                        <div class=\"flex flex-row justify-between items-center text-sm\">
+                                            <div class=\"flex flex-row\">
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%$apellido\"
                                                     width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                            </div>
+                                            <div class=\"flex flex-row items-center text-gray-600\">
+                                                <i class=\"fas fa-paperclip mr-2\"></i>
+                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                <p
+                                                    class=\"text-xs font-normal bg-teal-200 text-teal-500 py-1 px-2 rounded-full\">
+                                                    RRHH</p>
                                             </div>
                                         </div>
-                                        <button
-                                            class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                            <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                                        </button>
+                                        <!-- Toogle -->
+                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                            <div
+                                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                                    temporibus.</p>
+                                                <div class=\"flex flex-row mt-1 self-center\">
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                        width=\"20\" height=\"20\" alt=\"\">
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                            </button>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                            if ($calidad != '') {
+                                echo "
+                                    <!-- Contenedor de tarea -->
+                                    <div id=\"123\" onclick=\"expandir(this.id)\"
+                                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                        <!-- Titulo -->
+                                        <div class=\"my-1\">
+                                            <p id=\"123titulo\" class=\"truncate\">$actividad</p>
+                                        </div>
+                                        <!-- Iconos -->
+                                        <div class=\"flex flex-row justify-between items-center text-sm\">
+                                            <div class=\"flex flex-row\">
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                                    width=\"20\" height=\"20\" alt=\"\">
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                            </div>
+                                            <div class=\"flex flex-row items-center text-gray-600\">
+                                                <i class=\"fas fa-paperclip mr-2\"></i>
+                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                <p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-2 rounded-full\">
+                                                    Calidad</p>
+                                            </div>
+                                        </div>
+                                        <!-- Toogle -->
+                                        <div id=\"123toggle\" class=\"hidden mt-2\">
+                                            <div
+                                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                                    temporibus.</p>
+                                                <div class=\"flex flex-row mt-1 self-center\">
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                        width=\"20\" height=\"20\" alt=\"\">
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                            </button>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                            if ($compras != '') {
+                                echo "
+                                    <!-- Contenedor de tarea -->
+                                    <div id=\"456\" onclick=\"expandir(this.id)\"
+                                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                        <!-- Titulo -->
+                                        <div class=\"my-1\">
+                                            <p id=\"456titulo\" class=\"truncate\">$actividad</p>
+                                        </div>
+                                        <!-- Iconos -->
+                                        <div class=\"flex flex-row justify-between items-center text-sm\">
+                                            <div class=\"flex flex-row\">
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                                    width=\"20\" height=\"20\" alt=\"\">
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                            </div>
+                                            <div class=\"flex flex-row items-center text-gray-600\">
+                                                <i class=\"fas fa-paperclip mr-2\"></i>
+                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                <p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">
+                                                    Compras</p>
+                                            </div>
+                                        </div>
+                                        <!-- Toogle -->
+                                        <div id=\"456toggle\" class=\"hidden mt-2\">
+                                            <div
+                                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                                    temporibus.</p>
+                                                <div class=\"flex flex-row mt-1 self-center\">
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                        width=\"20\" height=\"20\" alt=\"\">
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                            </button>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                            if ($direccion != '') {
+                                echo "
+                                    <!-- Contenedor de tarea -->
+                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                        <!-- Titulo -->
+                                        <div class=\"my-1\">
+                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
+                                        </div>
+                                        <!-- Iconos -->
+                                        <div class=\"flex flex-row justify-between items-center text-sm\">
+                                            <div class=\"flex flex-row\">
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                                    width=\"20\" height=\"20\" alt=\"\">
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                            </div>
+                                            <div class=\"flex flex-row items-center text-gray-600\">
+                                                <i class=\"fas fa-paperclip mr-2\"></i>
+                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                <p
+                                                    class=\"text-xs font-normal bg-purple-200 text-purple-500 py-1 px-2 rounded-full\">
+                                                    Dirección</p>
+                                            </div>
+                                        </div>
+                                        <!-- Toogle -->
+                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                            <div
+                                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                                    temporibus.</p>
+                                                <div class=\"flex flex-row mt-1 self-center\">
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                        width=\"20\" height=\"20\" alt=\"\">
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                            </button>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+
+                            if ($finanzas != '') {
+                                echo "
+                                    <!-- Contenedor de tarea -->
+                                    <div id=\"678\" onclick=\"expandir(this.id)\"
+                                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                        <!-- Titulo -->
+                                        <div class=\"my-1\">
+                                            <p id=\"678titulo\" class=\"truncate\">$actividad</p>
+                                        </div>
+                                        <!-- Iconos -->
+                                        <div class=\"flex flex-row justify-between items-center text-sm\">
+                                            <div class=\"flex flex-row\">
+                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                                    width=\"20\" height=\"20\" alt=\"\">
+                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellio</p>
+                                            </div>
+                                            <div class=\"flex flex-row items-center text-gray-600\">
+                                                <i class=\"fas fa-paperclip mr-2\"></i>
+                                                <i class=\"fas fa-comment-dots mr-2\"></i>
+                                                <p
+                                                    class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">
+                                                    Compras</p>
+                                            </div>
+                                        </div>
+                                        <!-- Toogle -->
+                                        <div id=\"678toggle\" class=\"hidden mt-2\">
+                                            <div
+                                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                                    recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                                    temporibus.</p>
+                                                <div class=\"flex flex-row mt-1 self-center\">
+                                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                        width=\"20\" height=\"20\" alt=\"\">
+                                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                            </button>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+                } else {
+                    echo "
+                        <div onclick=\"expandir(this.id)\" class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md text-center\">
+                            <!-- Titulo -->
+                            <div class=\"my-1\">
+                                <p class=\"truncate\">Sin Datos</p>
+                                </div>
+                                </div>
+                                ";
+                }
+
+                echo "
+                
+                </div>
+                    <!-- contenedor 2 *******************************-->
+                    <!-- contenedor 3 TRABAJANDO *******************************-->
+                    <div id=\"filtrotra\" ondblclick=\"expandirpapa(this.id)\"
+                        class=\"w-1/4 h-40 overflow-y-auto scrollbar px-2\">
+                ";
+                $queryMCT = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
+                FROM t_mc 
+                LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion AND t_mc.status_trabajare != '' ORDER BY t_mc.id DESC";
+                $resultMCT = mysqli_query($conn_2020, $queryMCT);
+
+                if (mysqli_num_rows($resultMCT) > 0) {
+                    while ($rowMCT = mysqli_fetch_array($resultMCT)) {
+                        $actividad = $rowMCT['actividad'];
+                        $nombre = $rowMCT['nombre'];
+                        $apellido = $rowMCT['apellido'];
+                        echo "
+                        <!-- COLUMNA TRABAJANDO -->
+                        <!-- Contenedor de tarea -->
+                        <div id=\"980\" onclick=\"expandir(this.id)\"
+                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                            <!-- Titulo -->
+                            <div class=\"my-1\">
+                                <p id=\"980titulo\" class=\"truncate\">$actividad</p>
+                            </div>
+                            <!-- Iconos -->
+                            <div class=\"flex flex-row justify-between items-center text-sm\">
+                            <div class=\"flex flex-row\">
+                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                    width=\"20\" height=\"20\" alt=\"\">
+                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                    </div>
+                                    <div class=\"flex flex-row items-center text-gray-600\">
+                                    <i class=\"fas fa-paperclip mr-2\"></i>
+                                    <i class=\"fas fa-comment-dots mr-2\"></i>
+                                    <p class=\"text-xs font-black bg-blue-200 text-blue-500 py-1 px-2 rounded\">T</p>
+                                    </div>
+                                    </div>
+                            <!-- Toogle -->
+                            <div id=\"980toggle\" class=\"hidden mt-2\">
+                                <div
+                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                    <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                        recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                        temporibus.</p>
+                                    <div class=\"flex flex-row mt-1 self-center\">
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                        width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
                                     </div>
                                 </div>
+                                <button
+                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                </button>
+                                </div>
+                        </div>
+                        ";
+                    }
+                } else {
+                    echo "
+                    <div onclick=\"expandir(this.id)\" class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md text-center\">
+                            <!-- Titulo -->
+                            <div class=\"my-1\">
+                                <p class=\"truncate\">Sin Datos</p>
+                            </div>
+                        </div>
+                    ";
+                }
+
+                echo "
                             </div>
                             <!-- contenedor 3 *******************************-->
                             
@@ -1016,66 +1304,82 @@ if (isset($_POST['action'])) {
                                 class=\"w-1/4 h-40 overflow-y-auto scrollbar px-2\">
                 ";
 
-                $query = "SELECT* FROM t_mc WHERE id_destino = $idDestino and status='F' ORDER BY id DESC LIMIT 20";
-                $result = mysqli_query($conn_2020, $query);
-                while ($row = mysqli_fetch_array($result)) {
-                    $actividad = $row['actividad'];
-                    $data .= "
-
-                                <!-- COLUMNA SOLUCIONADOS -->
-                                <!-- Contenedor de tarea -->
-                                <div id=\"111\" onclick=\"expandir(this.id)\"
-                                    class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                                    <!-- Titulo -->
-                                    <div class=\"my-1\">
-                                        <p id=\"111titulo\" class=\"truncate\">$actividad</p>
+                $queryMCF = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
+                FROM t_mc 
+                LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion AND t_mc.status = 'F' ORDER BY t_mc.id DESC";
+                $resultMCF = mysqli_query($conn_2020, $queryMCF);
+                if (mysqli_num_rows($resultMCF) > 0) {
+                    while ($rowMCF = mysqli_fetch_array($resultMCF)) {
+                        $actividad = $rowMCF['actividad'];
+                        $nombre = $rowMCF['nombre'];
+                        $apellido = $rowMCF['apellido'];
+                        echo "
+                            <!-- COLUMNA SOLUCIONADOS -->
+                            <!-- Contenedor de tarea -->
+                            <div id=\"111\" onclick=\"expandir(this.id)\"
+                                class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                                <!-- Titulo -->
+                                <div class=\"my-1\">
+                                    <p id=\"111titulo\" class=\"truncate\">$actividad</p>
+                                </div>
+                                <!-- Iconos -->
+                                <div class=\"flex flex-row justify-between items-center text-sm\">
+                                    <div class=\"flex flex-row\">
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%20$apellido\"
+                                            width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
                                     </div>
-                                    <!-- Iconos -->
-                                    <div class=\"flex flex-row justify-between items-center text-sm\">
-                                        <div class=\"flex flex-row\">
-                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses\"
-                                                width=\"20\" height=\"20\" alt=\"\">
-                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Eduardo Meneses</p>
-                                        </div>
-                                        <div class=\"flex flex-row items-center text-gray-600\">
-                                            <i class=\"fas fa-paperclip mr-2\"></i>
-                                            <i class=\"fas fa-comment-dots mr-2\"></i>
-                                            <p class=\"text-xs font-black bg-green-200 text-green-500 py-1 px-2 rounded\">F
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- Toogle -->
-                                    <div id=\"111toggle\" class=\"hidden mt-2\">
-                                        <div
-                                            class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                            <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-                                                recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
-                                                temporibus.</p>
-                                            <div class=\"flex flex-row mt-1 self-center\">
-                                                <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
-                                                    width=\"20\" height=\"20\" alt=\"\">
-                                                <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
-                                                <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                            <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                                        </button>
+                                    <div class=\"flex flex-row items-center text-gray-600\">
+                                        <i class=\"fas fa-paperclip mr-2\"></i>
+                                        <i class=\"fas fa-comment-dots mr-2\"></i>
+                                        <p class=\"text-xs font-black bg-green-200 text-green-500 py-1 px-2 rounded\">F
+                                        </p>
                                     </div>
                                 </div>
-                                ";
+                                <!-- Toogle -->
+                                <div id=\"111toggle\" class=\"hidden mt-2\">
+                                    <div
+                                        class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                        <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat,
+                                            recusandae natus vel dolor placeat expedita unde repudiandae voluptatem
+                                            temporibus.</p>
+                                        <div class=\"flex flex-row mt-1 self-center\">
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=J%20D\"
+                                                width=\"20\" height=\"20\" alt=\"\">
+                                            <p class=\"text-xs font-bold ml-1 text-gray-600\">Javier Duarte</p>
+                                            <p class=\"text-xs font-bold ml-6 text-gray-600\">13/09/2020 14:22:45</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                        <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    </button>
+                                </div>
+                            </div>
+                        ";
+                    }
+                } else {
+                    echo "
+                        <div onclick=\"expandir(this.id)\" class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md text-center\">
+                            <!-- Titulo -->
+                            <div class=\"my-1\">
+                                <p class=\"truncate\">Sin Datos</p>
+                            </div>
+                        </div>
+                    ";
                 }
-                $data .= "                
+                echo "                
                             </div>
                             <!-- contenedor 4 *******************************-->
                         </div>
                     </div>
                 ";
             }
-            $arrayData['result'] = $data;
+            // $arrayData['result'] = $data;
         }
-        echo json_encode($arrayData);
+        // echo json_encode($arrayData);
     }
 }

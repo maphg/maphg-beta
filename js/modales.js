@@ -18,15 +18,15 @@ document.addEventListener('click', function (e) {
     }
 }, false);
 
-function cerrarmodal(idmodal){
+function cerrarmodal(idmodal) {
     var cerrarr = document.getElementById(idmodal);
     cerrarr.classList.remove('open');
 };
 
-var scrollAbajo = document.getElementById("ddd");
-scrollAbajo.scrollTop = scrollAbajo.scrollHeight;
+// var scrollAbajo = document.getElementById("ddd");
+// scrollAbajo.scrollTop = scrollAbajo.scrollHeight;
 
-/* 
+/*
 
 EL disparador del modal tiene que tener esto
 data-target="modal-personal" data-toggle="modal"
@@ -37,7 +37,7 @@ EL modal tiene que tener esto
     <div class="modal-window w-full md:w-4/5 rounded-lg flex flex-col items-center justify-center">
         <!-- CONTENIDO MODAL -->
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        
+
         <!-- CONTENIDO MODAL -->
     </div>
 </div>
