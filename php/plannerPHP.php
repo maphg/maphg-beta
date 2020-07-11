@@ -2310,7 +2310,7 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
                             }
 
-                            if ($fechaMPR != "NA") {
+                            if ($fechaMPR != "NA" AND $fechaMPR !="") {
                                 $fechaMPR = new DateTime($fechaMPR);
                                 $fechaMPR = $fechaMPR->format("d-m-Y");
                             }
@@ -3257,7 +3257,7 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
                             }
 
-                            if ($fechaMPR != "NA") {
+                            if ($fechaMPR != "NA" AND $fechaMPR != "") {
                                 $fechaMPR = new DateTime($fechaMPR);
                                 $fechaMPR = $fechaMPR->format("d-m-Y");
                             }

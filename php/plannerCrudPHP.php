@@ -63,6 +63,7 @@ if (isset($_POST['action'])) {
         if ($ZIL_Permiso == 1) {
             $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 $contador = 0;
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
@@ -87,16 +88,29 @@ if (isset($_POST['action'])) {
 
                     foreach ($result as $value) {
                         $contador++;
+                        $idSubseccion = $value['id_subseccion'];
                         $subseccion = $value['grupo'];
                         $pendientes = $contador;
+                        $conn_2020->next_result();
+                        $queryTotal = "SELECT id FROM t_mc WHERE id_destino = $idDestino AND id_subseccion = $idSubseccion AND status = 'N' AND activo = 1";
+                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
+                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
+                                $totalPendiente = $totalPendiente;
+                            } else {
+                                $totalPendiente = 0;
+                            }
+                        } else {
+                            $totalPendiente = 0;
+                        }
+
 
                         $dataZIL .= "
-                            <div id=\"abremodal\" data-id=\"$pendientes\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$pendientes</h1>
+                                    <h1>$totalPendiente</h1>
                                 </div>
                             </div>
                         ";
@@ -110,7 +124,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
                 $result->close();
-                $conn_2020->next_result();
+                // $conn_2020->next_result();
             }
         }
 
