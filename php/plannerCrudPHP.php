@@ -32,6 +32,18 @@ if (isset($_POST['action'])) {
             $ZIA_Permiso = $permiso['ZIA'];
             $ZIC_Permiso = $permiso['ZIC'];
             $ZIE_Permiso = $permiso['ZIE'];
+            $ZIL_Permiso = 1;
+            $AUTO_Permiso = 1;
+            $DEC_Permiso = 1;
+            $DEP_Permiso = 1;
+            $OMA_Permiso = 1;
+            $ZHA_Permiso = 1;
+            $ZHC_Permiso = 1;
+            $ZHH_Permiso = 1;
+            $ZHP_Permiso = 1;
+            $ZIA_Permiso = 1;;
+            $ZIC_Permiso = 1;
+            $ZIE_Permiso = 1;
             $idDestinoUsuarioPermiso = $permiso['id_destino'];
         }
     }
@@ -1712,11 +1724,11 @@ if (isset($_POST['action'])) {
                                 $fechaMPF = (new DateTime($fechaMPF))->format('d-m-Y');
                             } else {
                                 $totalMPF = "0";
-                                $fechaMPF = "";
+                                $fechaMPF = "NA";
                             }
                         } else {
                             $totalMPF = "0";
-                            $fechaMPF = "";
+                            $fechaMPF = "NA";
                         }
 
                         // Nombre de Equipo.
