@@ -1998,7 +1998,7 @@ class Planner
                                     foreach ($resp as $d) {
                                         $idPlaneacion = $d['id'];
                                         $query = "SELECT * FROM t_ordenes_trabajo "
-                                            . "WHERE id_planeacion_mp = $idPlaneacion";
+                                            . "WHERE id_planeacion_mp = $idPlaneacion AND status = 'F'";
                                         try {
                                             $r = $conn->obtDatos($query);
                                             if ($conn->filasConsultadas > 0) {
@@ -2310,7 +2310,7 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
                             }
 
-                            if ($fechaMPR != "NA" AND $fechaMPR !="") {
+                            if ($fechaMPR != "NA" and $fechaMPR != "") {
                                 $fechaMPR = new DateTime($fechaMPR);
                                 $fechaMPR = $fechaMPR->format("d-m-Y");
                             }
@@ -2944,7 +2944,7 @@ class Planner
                                     foreach ($resp as $d) {
                                         $idPlaneacion = $d['id'];
                                         $query = "SELECT * FROM t_ordenes_trabajo "
-                                            . "WHERE id_planeacion_mp = $idPlaneacion";
+                                            . "WHERE id_planeacion_mp = $idPlaneacion AND status = 'F'";
                                         try {
                                             $r = $conn->obtDatos($query);
                                             if ($conn->filasConsultadas > 0) {
@@ -3257,7 +3257,7 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpRealizado</p></div>";
                             }
 
-                            if ($fechaMPR != "NA" AND $fechaMPR != "") {
+                            if ($fechaMPR != "NA" and $fechaMPR != "") {
                                 $fechaMPR = new DateTime($fechaMPR);
                                 $fechaMPR = $fechaMPR->format("d-m-Y");
                             }
