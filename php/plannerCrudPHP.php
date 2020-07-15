@@ -65,7 +65,14 @@ if (isset($_POST['action'])) {
 
         // ZIL
         if ($ZIL_Permiso == 1) {
-            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
+            if ($idDestino == 10) {
+                $query = "SELECT c_secciones.id 'id_seccion', c_secciones.seccion, c_subsecciones.id 'id_subsecciones', c_subsecciones.grupo 'grupo' 
+                FROM c_secciones 
+                INNER JOIN c_subsecciones ON c_secciones.id = c_subsecciones.id_seccion
+                WHERE c_secciones.id = 11";
+            } else {
+                $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
+            }
             if ($result = mysqli_query($conn_2020, $query)) {
                 $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
@@ -73,7 +80,7 @@ if (isset($_POST['action'])) {
                     $seccion = $row['seccion'];
 
                     $dataZIL .= " 
-                        <div id=\"colzil\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
+                        <div id=\"colzil\" class=\" scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div

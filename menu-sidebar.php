@@ -37,7 +37,7 @@ a:hover {
                 <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora diaria</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="lavanderia.php" target="_blanck" class="menu-hijo-3 CA">Lavanderiá</a>
+                <a href="lavanderia.php" target="_blanck" class="menu-hijo-3 CA">Lavandería</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o data-target="nieto1" data-toggle="hijo" href="#" class="menu-hijo-3 CA">Satisfacción</o>
