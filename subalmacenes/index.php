@@ -39,9 +39,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/animate.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-gray-300" style="font-family: 'Roboto', sans-serif;">
@@ -60,8 +58,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     ?>
 
     <div class="flex flex-col justify-evenly items-center w-screen h-screen">
-        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10"
-            style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
+        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
             <div class="flex flex-row w-full m-3 items-center justify-start relative">
                 <div class="mr-2 text-orange-500">
                     <i class="fad fa-box-alt fa-lg"></i>
@@ -70,18 +67,13 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <h1>Sub Almacenes & Bodegas</h1>
                 </div>
                 <div class="absolute right-0 mr-10">
-                    <button data-target="modalBusquedaGeneral" data-toggle="modal"
-                        class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
-                        onclick="obtenerTodosItemsGlobales();"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
+                    <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales();"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
                         General</button>
-                    <button data-target="modalInformes" data-toggle="modal"
-                        class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                            class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
+                    <button data-target="modalInformes" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
                 </div>
             </div>
 
-            <div class="flex flex-col justify-start items-center w-full rounded-b-md bg-white p-3"
-                style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem; height: 80vh;">
+            <div class="flex flex-col justify-start items-center w-full rounded-b-md bg-white p-3" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem; height: 80vh;">
 
                 <div class="flex flex-col md:flex-row w-full">
                     <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
@@ -116,8 +108,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10" style="width: 1500px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalExistenciasSubalmacen')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalExistenciasSubalmacen')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -141,36 +132,21 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPalabraBuscarSubalmacen"
-                            class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2"
-                            type="search" name="search" placeholder="Buscar material"
-                            onkeyup="if(event.keyCode == 13) busquedaExisenciaSubalmacen();" autocomplete="off"
-                            pattern="[A-Za-z0-9]{1,15}">
-                        <button
-                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-history mr-2 ga-lg"></i>Históricos</button>
+                        <input id="inputPalabraBuscarSubalmacen" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) busquedaExisenciaSubalmacen();" autocomplete="off" pattern="[A-Za-z0-9]{1,15}">
+                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-history mr-2 ga-lg"></i>Históricos</button>
                         <div id="exportarexis" onclick="expandir(this.id)" class="relative">
-                            <button
-                                class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                    class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
-                            <div id="exportarexistoggle"
-                                class="absolute mt-2 hidden p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
-                                <a onclick="generarXLSItems('generalPorSubalmacen');" href="#"
-                                    class="w-full p-2 hover:bg-gray-200 rounded-md mb-1 text-gray-900">Exportar Todo</a>
-                                <a onclick="generarXLSItems('generalPorSubalmacenStock0');" href="#"
-                                    class="w-full p-2 hover:bg-gray-200 rounded-md text-gray-900">Exportar stock 0</a>
+                            <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
+                            <div id="exportarexistoggle" class="absolute mt-2 hidden p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
+                                <a onclick="generarXLSItems('generalPorSubalmacen');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md mb-1 text-gray-900">Exportar Todo</a>
+                                <a onclick="generarXLSItems('generalPorSubalmacenStock0');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md text-gray-900">Exportar stock 0</a>
                             </div>
                         </div>
-                        <button onclick="movimientoExistenciasItems();" data-target="modalMoverItems"
-                            data-toggle="modal"
-                            class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-random fa-lg mr-2"></i>Traspasos</button>
+                        <button onclick="movimientoExistenciasItems();" data-target="modalMoverItems" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-random fa-lg mr-2"></i>Traspasos</button>
 
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CATEGORÍA</h1>
                         </div>
@@ -202,8 +178,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
                     <!-- Contenido -->
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4"
-                        style="height: 70vh;">
+                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                         <div id="dataExistenciasSubalmacen"></div>
                     </div>
                     <!-- Fin Contenido -->
@@ -218,8 +193,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10" style="width: 1400px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalSalidasSubalmacen');"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -244,27 +218,19 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
 
-                        <input id="inputPalabraBuscarSubalmacenSalida"
-                            class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2"
-                            type="search" name="search" placeholder="Buscar material" autocomplete="off"
-                            onkeyup="if(event.keyCode == 13) inputBusquedaExisenciaSubalmacen();">
+                        <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeykeyup="if(event.keyCode == 13) inputBusquedaExisenciaSubalmacen();">
 
-                        <button onclick="toggleModalTailwind('modalCarritoSalidas'); recuperarCarrito();"
-                            class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
+                        <button onclick="toggleModalTailwind('modalCarritoSalidas'); recuperarCarrito();" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
                         </button>
 
-                        <button
-                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
-                            onclick="restablecerCarritoSalidasConfirmar() ;">
+                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoSalidasConfirmar() ;">
                             <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
                         </button>
 
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CATEGORÍA</h1>
                         </div>
@@ -299,8 +265,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
                     <!-- Contenido -->
-                    <div id="dataSalidasSubalmacen"
-                        class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
+                    <div id="dataSalidasSubalmacen" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                     </div>
 
                 </div>
@@ -313,8 +278,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalCarritoSalidas')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalCarritoSalidas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -338,8 +302,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CANTIDAD</h1>
                         </div>
@@ -356,8 +319,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div id="dataCarritoSalidas"
-                        class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
+                    <div id="dataCarritoSalidas" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
                     </div>
 
                     <div id="justifiacionSalidaCarrito" class="flex flex-col justify-center items-center w-full">
@@ -366,9 +328,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         </div>
                         <div class="flex flex-row justify-center items-center w-full">
                             <div class="relative w-full">
-                                <select id="carritoSalidaMotivo" onclick="carritoSalidaMotivo('opcionSeccion');"
-                                    class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                    id="grid-state">
+                                <select id="carritoSalidaMotivo" onclick="carritoSalidaMotivo('opcionSeccion');" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                                     <option value="">Seleccione</option>
                                     <option value="MCE">MANTENIMIENTO CORRECTIVO (Equipos)</option>
                                     <option value="MP">MANTENIMIENTO PREVENTIVO</option>
@@ -385,14 +345,10 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                                 <div id="opcionSalidaOtro" class="hidden">
                                     <div class="flex flex-wrap -mx-3 mb-6">
                                         <div class="w-full px-3">
-                                            <label
-                                                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                                for="grid-password">
+                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
                                                 Motivo
                                             </label>
-                                            <input id="inputJustificacionOtro"
-                                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                                type="text" placeholder="Descripción del Motivo" autocomplete="off">
+                                            <input id="inputJustificacionOtro" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" placeholder="Descripción del Motivo" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -400,35 +356,24 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                                 <div id="opcionSalidaGift" class="hidden">
                                     <div class="flex flex-wrap -mx-3 mb-6">
                                         <div class="w-full px-3">
-                                            <label
-                                                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                                for="grid-password">
+                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
                                                 GIFT
                                             </label>
-                                            <input id="giftSalida"
-                                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                                type="number" placeholder="Digite el Número de GIFT" autocomplete="off">
+                                            <input id="giftSalida" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="number" placeholder="Digite el Número de GIFT" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                     </svg>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-2 mb-3" onclick="confirmarSalidaCarrito();">
-                            <button id="confirmarSalidaCarrito"
-                                class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                    class="fas fa-check fa-lg mr-2"></i>Confirmar
+                            <button id="confirmarSalidaCarrito" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                                 Salida Carrito
-                                <i id="spinnerConfirmarSalida"
-                                    class="invisible text-3xl fas fa-spinner fa-spin absolute"
-                                    style="margin-top:-24px;"></i>
+                                <i id="spinnerConfirmarSalida" class="invisible text-3xl fas fa-spinner fa-spin absolute" style="margin-top:-24px;"></i>
                             </button>
                         </div>
                     </div>
@@ -443,8 +388,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10" style="width: 1500px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalSubalmacenEntradas');"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalSubalmacenEntradas');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -472,25 +416,17 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPablabraBuscarEntradas"
-                            class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2"
-                            type="search" name="search" placeholder="Buscar material" autocomplete="off"
-                            onkeyup="if(event.keyCode == 13) entradasSubalmacen();">
-                        <button data-target="modalConfirmacionEntradas" data-toggle="modal"
-                            class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
-                            onclick="consultaEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
+                        <input id="inputPablabraBuscarEntradas" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) entradasSubalmacen();">
+                        <button data-target="modalConfirmacionEntradas" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="consultaEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                             Entrada</button>
-                        <button
-                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
-                            onclick="restablecerCarritoEntradasConfirmar();">
+                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoEntradasConfirmar();">
                             <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
                         </button>
 
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CATEGORÍA</h1>
                         </div>
@@ -525,8 +461,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4"
-                        style="height: 70vh;">
+                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                         <div id="dataSubalmacenEntradas"></div>
                     </div>
                 </div>
@@ -539,8 +474,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10" style="width: 1500px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalMoverItems')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalMoverItems')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -564,23 +498,14 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputBuscarMovimientos"
-                            class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2"
-                            type="search" name="search" placeholder="Buscar material" autocomplete="off"
-                            onkeyup="if(event.keyCode == 13) movimientoExistenciasItems();">
-                        <button onclick="consultaMovimientoCarrito();" data-target="modalConfirmarMovimiento"
-                            data-toggle="modal"
-                            class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-check fa-lg mr-2"></i>Confirmar Movimiento</button>
-                        <button
-                            class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                class="fas fa-redo mr-2 ga-lg"></i>Restablecer</button>
+                        <input id="inputBuscarMovimientos" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) movimientoExistenciasItems();">
+                        <button onclick="consultaMovimientoCarrito();" data-target="modalConfirmarMovimiento" data-toggle="modal" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Movimiento</button>
+                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-redo mr-2 ga-lg"></i>Restablecer</button>
 
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CATEGORÍA</h1>
                         </div>
@@ -615,8 +540,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div id="dataMovimientos" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4"
-                        style="height: 70vh;"></div>
+                    <div id="dataMovimientos" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;"></div>
                 </div>
             </div>
         </div>
@@ -628,8 +552,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalConfirmarMovimiento');"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalConfirmarMovimiento');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -653,8 +576,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CANTIDAD</h1>
                         </div>
@@ -671,8 +593,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div id="dataMovimientosCarrito"
-                        class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
+                    <div id="dataMovimientosCarrito" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
                     </div>
 
                     <div class="flex flex-col justify-center items-center w-full">
@@ -681,8 +602,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         </div>
                         <div class="flex flex-row justify-center items-center w-full mb-3">
                             <div class="relative w-full">
-                                <h1 id="subalmacenSeleccionado"
-                                    class="w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight font-bold text-center">
+                                <h1 id="subalmacenSeleccionado" class="w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight font-bold text-center">
                                     BODEGA ACTUAL</h1>
 
                             </div>
@@ -693,20 +613,15 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         <div class="flex flex-row justify-center items-center w-full">
                             <div class="relative w-full">
                                 <div id="opctionSubalmacenes"></div>
-                                <div
-                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20">
-                                        <path
-                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                     </svg>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-2">
-                            <button id="btnFinalizarMovimiento" onclick="confirmarMovimientoCarrito();"
-                                class="invisible button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                    class="fas fa-check fa-lg mr-2"></i>Confirmar Movimiento</button>
+                            <button id="btnFinalizarMovimiento" onclick="confirmarMovimientoCarrito();" class="invisible button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Movimiento</button>
                         </div>
                     </div>
 
@@ -720,8 +635,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalConfirmacionEntradas')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalConfirmacionEntradas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -745,8 +659,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CANTIDAD</h1>
                         </div>
@@ -763,16 +676,13 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4"
-                        style="height: 20vh;">
+                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
                         <div id="dataCarritoEntradas"></div>
                     </div>
                     <div class="flex flex-col justify-center items-center w-full">
 
                         <div class="mt-2">
-                            <button
-                                class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"
-                                onclick="confirmarEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
+                            <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="confirmarEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                                 Entrada</button>
                         </div>
                     </div>
@@ -787,8 +697,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
         <div class="modal-window rounded-md pt-10" style="width: 1500px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalBusquedaGeneral')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="toggleModalTailwind('modalBusquedaGeneral')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -812,22 +721,14 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPalabraBuscarTodo"
-                            class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2"
-                            type="search" name="search" placeholder="Buscar material"
-                            onkeyup="if(event.keyCode == 13) obtenerTodosItemsGlobales();" autocomplete="off">
+                        <input id="inputPalabraBuscarTodo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) obtenerTodosItemsGlobales();" autocomplete="off">
                         <div id="generalExistencia" onclick="expandir(this.id);" class="relative">
-                            <button
-                                class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i
-                                    class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
-                            <div id="generalExistenciatoggle"
-                                class="absolute hidden mt-2 p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
-                                <a href="#" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md mb-1"
-                                    onclick="generarXLSItems('generalPorDestino');">
+                            <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
+                            <div id="generalExistenciatoggle" class="absolute hidden mt-2 p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
+                                <a href="#" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md mb-1" onclick="generarXLSItems('generalPorDestino');">
                                     Exportar Todo
                                 </a>
-                                <a href="#" onclick="generarXLSItems('generarStock0');"
-                                    class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md">
+                                <a href="#" onclick="generarXLSItems('generarStock0');" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md">
                                     Exportar Stock 0
                                 </a>
                             </div>
@@ -835,8 +736,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     </div>
                     <!-- BUSCADOR -->
                     <!-- TITULOS -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 text-center px-2">
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 text-center px-2">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CATEGORÍA</h1>
                         </div>
@@ -871,8 +771,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
 
-                    <div id="dataTodosItems" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4"
-                        style="height: 70vh;">
+                    <div id="dataTodosItems" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                     </div>
                 </div>
             </div>
@@ -890,12 +789,12 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <script src="js/alertasSweet.js"></script>
 
     <script>
-    function expandir(id) {
-        let idtoggle = id + 'toggle';
-        let toggle = document.getElementById(idtoggle);
-        // toggle.classList.toggle("hidden");
-        $("#" + idtoggle).toggleClass('hidden');
-    }
+        function expandir(id) {
+            let idtoggle = id + 'toggle';
+            let toggle = document.getElementById(idtoggle);
+            // toggle.classList.toggle("hidden");
+            $("#" + idtoggle).toggleClass('hidden');
+        }
     </script>
 </body>
 

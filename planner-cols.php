@@ -172,7 +172,8 @@
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-blue-500">ZIA</h1>
+                    <h1 id="seccionEquipos" class="font-medium text-base text-blue-500"><i
+                            class="fas fa-spinner fa-pulse fa-2x fa-fw"></i></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
                     <h1>SUBSECCION / EQUIPOS Y LOCALES</h1>
@@ -183,10 +184,12 @@
             <div class="p-2 mt-6 flex justify-center items-center flex-col">
                 <div class="flex flex-row items-center w-full">
                     <div class="ml-10 relative text-gray-600 w-2/6 self-start">
-                        <input
+                        <input id="inputPalabraEquipo"
                             class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full"
-                            type="search" name="search" placeholder="Buscar Equipo/Local">
-                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                            type="search" name="search" placeholder="Buscar Equipo/Local"
+                            onkeyup="if(event.keyCode == 13) llamarFuncionX('obtenerEquipos')" autocomplete="off">
+                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4"
+                            onclick="llamarFuncionX('obtenerEquipos');">
                             <i class="fad fa-search"></i>
                         </button>
                     </div>
@@ -234,399 +237,8 @@
                             <h1>MEDIA</h1>
                         </div>
                     </div>
+                    <div id="dataEquipos" class="w-full">
 
-                    <!-- equipo -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer">
-                        <div id="equipo123" onclick="expandir(this.id)"
-                            class="w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md">
-                            <div class=" flex flex-row items-center truncate">
-                                <i class="fas fa-cog mx-2"></i>
-                                <h1>UMA 01 CHICK CABARET</h1>
-                            </div>
-                            <div class="mx-2">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        <!-- MC PENDIENTES -->
-                        <div data-target="modal-mc-p" data-toggle="modal"
-                            class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MC SOLUCIONADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP PLANIFICADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP NO PLANIFICADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP FINALIZADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  ULTIMO MP -->
-                        <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                            <h1 class="font-xs">ENE 2020</h1>
-                        </div>
-                        <!--  TEST -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  ULTIMO TEST -->
-                        <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                            <h1 class="font-xs">AGO 2020</h1>
-                        </div>
-                        <!--  COTIZACIONES -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  INFO -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                            <h1><i class="fas fa-eye fa-lg"></i></h1>
-                        </div>
-                        <!--  MEDIA -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                            <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                        </div>
-                    </div>
-                    <!-- despiece -->
-                    <div id="equipo123toggle" class="hidden w-full mb-2">
-                        <!-- equipo de despiece -->
-                        <div
-                            class="mt-1 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer border-gray-600">
-                            <div class="w-2/6 h-full flex flex-row items-center justify-between">
-                                <div
-                                    class="ml-3 flex flex-row items-center truncate bg-gray-200 h-full w-full rounded-l-md hover:shadow-md">
-                                    <i class="fas fa-level-up mx-2 fa-rotate-90"></i>
-                                    <i class="fas fa-cog mr-2"></i>
-                                    <h1>BOMBA X</h1>
-                                </div>
-                            </div>
-                            <!-- MC PENDIENTES -->
-                            <div class="w-16 h-full flex items-center justify-center text-red-400 hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!-- MC SOLUCIONADOS -->
-                            <div class="w-16 flex h-full items-center justify-center text-green-500">
-                                <h1>---</h1>
-                            </div>
-                            <!-- MP PLANIFICADOS -->
-                            <div class="w-16 flex h-full items-center justify-center text-blue-500 hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!-- MP NO PLANIFICADOS -->
-                            <div class="w-16 flex h-full items-center justify-center text-purple-500 hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!-- MP FINALIZADOS -->
-                            <div class="w-16 flex h-full items-center justify-center text-green-500 hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!--  ULTIMO MP -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">---</h1>
-                            </div>
-                            <!--  TEST -->
-                            <div class="w-16 flex h-full items-center justify-center hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!--  ULTIMO TEST -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">---</h1>
-                            </div>
-                            <!--  COTIZACIONES -->
-                            <div class="w-16 flex h-full items-center justify-center text-blue-500 hover:shadow-md">
-                                <h1>---</h1>
-                            </div>
-                            <!--  INFO -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                                <h1><i class="fas fa-eye fa-lg"></i></h1>
-                            </div>
-                            <!--  MEDIA -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                                <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                            </div>
-                        </div>
-
-                        <!-- equipo de despiece -->
-                        <div
-                            class="mt-1 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer border-gray-600">
-                            <div class="w-2/6 h-full flex flex-row items-center justify-between ">
-                                <div
-                                    class="ml-3 flex flex-row items-center truncate bg-gray-200 h-full w-full rounded-l-md  hover:shadow-md">
-                                    <i class="fas fa-level-up mx-2 fa-rotate-90"></i>
-                                    <i class="fas fa-cog mr-2"></i>
-                                    <h1>CONDENSADOR Y</h1>
-                                </div>
-                            </div>
-                            <!-- MC PENDIENTES -->
-                            <div
-                                class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MC SOLUCIONADOS -->
-                            <div class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP NO PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP FINALIZADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO MP -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">ENE 2020</h1>
-                            </div>
-                            <!--  TEST -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO TEST -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">AGO 2020</h1>
-                            </div>
-                            <!--  COTIZACIONES -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  INFO -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                                <h1><i class="fas fa-eye fa-lg"></i></h1>
-                            </div>
-                            <!--  MEDIA -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                                <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- local -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer">
-                        <div id="local123" onclick="expandir(this.id)"
-                            class="w-2/6 h-full flex flex-row items-center justify-between bg-purple-100 text-purple-500 rounded-l-md cursor-pointer hover:shadow-md">
-                            <div class=" flex flex-row items-center truncate">
-                                <i class="fas fa-home-lg mx-2"></i>
-                                <h1>VILLA 65 COLONIAL</h1>
-                            </div>
-                            <div class="mx-2">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        <!-- MC PENDIENTES -->
-                        <div
-                            class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MC SOLUCIONADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP PLANIFICADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP NO PLANIFICADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!-- MP FINALIZADOS -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  ULTIMO MP -->
-                        <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                            <h1 class="font-xs">ENE 2020</h1>
-                        </div>
-                        <!--  TEST -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  ULTIMO TEST -->
-                        <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                            <h1 class="font-xs">AGO 2020</h1>
-                        </div>
-                        <!--  COTIZACIONES -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                            <h1>22</h1>
-                        </div>
-                        <!--  INFO -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                            <h1><i class="fas fa-eye fa-lg"></i></h1>
-                        </div>
-                        <!--  MEDIA -->
-                        <div
-                            class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                            <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                        </div>
-                    </div>
-                    <!-- despiece -->
-                    <div id="local123toggle" class="hidden w-full mb-2">
-                        <!-- equipo de despiece -->
-                        <div
-                            class="mt-1 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer border-gray-600">
-                            <div class="w-2/6 h-full flex flex-row items-center justify-between">
-                                <div
-                                    class="ml-3 flex flex-row items-center truncate bg-gray-200 h-full w-full rounded-l-md hover:shadow-md">
-                                    <i class="fas fa-level-up mx-2 fa-rotate-90"></i>
-                                    <i class="fas fa-home-lg-alt mr-2"></i>
-                                    <h1>HABITACIÓN 6501</h1>
-                                </div>
-                            </div>
-                            <!-- MC PENDIENTES -->
-                            <div
-                                class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MC SOLUCIONADOS -->
-                            <div class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP NO PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP FINALIZADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO MP -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">ENE 2020</h1>
-                            </div>
-                            <!--  TEST -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO TEST -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">AGO 2020</h1>
-                            </div>
-                            <!--  COTIZACIONES -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  INFO -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                                <h1><i class="fas fa-eye fa-lg"></i></h1>
-                            </div>
-                            <!--  MEDIA -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                                <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                            </div>
-                        </div>
-
-                        <!-- equipo de despiece -->
-                        <div
-                            class="mt-1 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer border-gray-600">
-                            <div class="w-2/6 h-full flex flex-row items-center justify-between">
-                                <div
-                                    class="ml-3 flex flex-row items-center truncate bg-gray-200 h-full w-full rounded-l-md hover:shadow-md">
-                                    <i class="fas fa-level-up mx-2 fa-rotate-90"></i>
-                                    <i class="fas fa-home-lg-alt mr-2"></i>
-                                    <h1>HABITACIÓN 6502</h1>
-                                </div>
-                            </div>
-                            <!-- MC PENDIENTES -->
-                            <div
-                                class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MC SOLUCIONADOS -->
-                            <div class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP NO PLANIFICADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!-- MP FINALIZADOS -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO MP -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">ENE 2020</h1>
-                            </div>
-                            <!--  TEST -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  ULTIMO TEST -->
-                            <div class="w-24 flex h-full items-center justify-center hover:shadow-md">
-                                <h1 class="font-xs">AGO 2020</h1>
-                            </div>
-                            <!--  COTIZACIONES -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md">
-                                <h1>22</h1>
-                            </div>
-                            <!--  INFO -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md">
-                                <h1><i class="fas fa-eye fa-lg"></i></h1>
-                            </div>
-                            <!--  MEDIA -->
-                            <div
-                                class="w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md">
-                                <h1><i class="fas fa-photo-video fa-lg"></i></h1>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -676,11 +288,109 @@
         </div>
     </div>
 
+
+    <div id="modalPendientes" class="modal">
+        <div class="modal-window py-10 rounded-md" style="width: 1300px;">
+            <div class=" flex flex-col items-center justify-center">
+                <div class="absolute top-0 right-0">
+                    <button onclick="cerrarmodal('modalPendientes')"
+                        class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="absolute top-0 left-0 flex flex-row">
+                    <div>
+                        <button id="btnExpandirMenu" onclick="expandir(this.id)"
+                            class="py-1 px-2 rounded-br-md bg-indigo-200 text-indigo-500 hover:shadow-sm rounded-tl-md font-normal relative">
+                            <i class="fas fa-arrow-to-bottom mr-1"></i>Exportar Pendientes
+                        </button>
+                        <div id="btnExpandirMenutoggle"
+                            class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+
+                            <a id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
+                                Pendientes</a>
+
+                            <a id="exportarSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sección
+                                completa</a>
+
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700"
+                                onclick="toggleModalTailwind('modalExportarSubsecciones')">Subsecciones</a>
+
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700"
+                                onclick="toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador</a>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <button id="btnvisualizarpendientesde" onclick="expandir(this.id)"
+                            class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
+                            <i class="fas fa-eye mr-1"></i>Mis Pendientes
+                        </button>
+                        <div id="btnvisualizarpendientesdetoggle"
+                            class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+                            <a id="misPendientesUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
+                                Pendientes</a>
+                            <a id="misPendientesSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sección</a>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <button id="dataOpcionesSubsecciones" onclick="expandir(this.id)"
+                            class="py-1 px-2 rounded-b-md bg-orange-200 text-orange-500 hover:shadow-sm font-normal relative">
+                            <i class="fas fa-eye mr-1"></i>Subsecciones
+                        </button>
+                        <div id="dataOpcionesSubseccionestoggle"
+                            class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+                            <div id=""></div>
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700">Subseccion 1</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div
+                    class="text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
+                    <h1 id="estiloSeccion" class="font-medium text-md">
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    </h1>
+                </div>
+                <div class="flex flex-row text-sm bg-white mt-4">
+                    <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
+                        <h1>Correctivo</h1>
+                    </div>
+                    <div
+                        class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <h1>Preventivo</h1>
+                    </div>
+                    <div
+                        class="py-1 px-2 rounded-r-md bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <h1>Proyectos</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-2 mt-12">
+                <table class="table-auto text-xs text-center w-full">
+                    <thead>
+                        <tr class="cursor pointer">
+                            <th class="px-4 py-2">Subsección</th>
+                            <th class="px-4 py-2">Pendientes</th>
+                            <th class="px-4 py-2">Pendiente DEP</th>
+                            <th class="px-4 py-2">Trabajando</th>
+                            <th class="px-4 py-2">Solucionado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataSubseccionesPendientes" class="divide-y">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
+
     <!-- Modal Pendientes -->
-    <div id="modalPendientes" class="modal">
+    <div id="modalPendientes-" class="modal">
         <div class="modal-window rounded-md pt-10 w-11/12 rounded-md">
             <!-- CONTENIDO MODAL -->
             <div class="flex flex-row-items-center justify-center">
@@ -754,13 +464,14 @@
                 </div>
 
                 <!-- Fila de subseccion -->
-                <div id="dataSubseccionesPendientes"></div>
+                <!-- <div id="dataSubseccionesPendientes"></div> -->
                 <!-- Fila de subseccion -->
 
             </div>
             <!-- CONTENIDO MODAL -->
         </div>
     </div>
+
 
     <!-- MODAL MC-P -->
     <div id="modal-mc-p" class="modal">
@@ -965,12 +676,12 @@
     </div>
 
 
-    <!-- MODAL RESPONSABLE -->
-    <div id="modal-responsable" class="modal">
+    <!-- MODAL Exportar Secciones Usuarios -->
+    <div id="modalExportarSeccionesUsuarios" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 370px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modal-responsable')"
+                <button onclick="cerrarmodal('modalExportarSeccionesUsuarios')"
                     class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
@@ -978,31 +689,43 @@
             <!-- INDICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                    <h1>RESPONSABLE</h1>
+                    <h1>Colaboradores</h1>
                 </div>
             </div>
 
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
-                <div class="mb-3 w-full">
-                    <input
-                        class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full"
-                        type="search" name="search" placeholder="Buscar...">
+                <div id="dataExportarSeccionesUsuarios"
+                    class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar"
+                    style="height: 200px;">
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar"
-                    style="height: 400px;">
-                    <div
-                        class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate">
-                        <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=Eduardo%20Meneses"
-                            width="20" height="20" alt="">
-                        <h1 class="ml-2">Eduardo Meneses Denis</h1>
-                        <p class="font-bold mx-1"> / </p>
-                        <h1 class="font-normal text-xs">Coordinador MP América</h1>
-                    </div>
+    <!-- MODAL Exportar Subsecciones -->
+    <div id="modalExportarSubsecciones" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 370px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalExportarSubsecciones')"
+                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Subsecciones</h1>
                 </div>
+            </div>
 
-
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div id="dataModalOpciones"
+                    class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar"
+                    style="height: 200px;">
+                </div>
             </div>
         </div>
     </div>
@@ -1380,7 +1103,7 @@
 
     <!-- MODAL STATUS   -->
     <div id="modal-status" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+        <div class="modal-window rounded-md pt-10" style="width: 200px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modal-status')"
@@ -1573,6 +1296,7 @@
 
 
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
     <script src="js/modales.js"></script>
@@ -1581,6 +1305,7 @@
     <script src="js/alertasSweet.js"></script>
     <script src="js/calendarioBotones.js"></script>
     <script src="js/plannerBetaJS.js"></script>
+
 </body>
 
 </html>
