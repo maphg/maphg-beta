@@ -919,11 +919,13 @@ if (isset($_POST['action'])) {
 
                 // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
                 $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesSinUsuario = "$idSeccion, 'MCU', '$nombreSeccion', 0, $idDestino";
                 $misPendientesSeccion = "$idSeccion, 'MC', '$nombreSeccion', $idUsuario, $idDestino";
 
                 // Exportar Pendientes.
                 $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
                 $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
+                $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
                 $exportarSubseccion .= "
                     <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
                     onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
@@ -938,7 +940,7 @@ if (isset($_POST['action'])) {
 
                 $data .= "
                     <tr id=\"$idSubseccion\" class=\"hover:shadow-md cursor-pointer\">
-                        <td class=\"px-2 py-3 font-semibold text-base text-center text-gray-800\">
+                        <td class=\"px-2 py-3 font-semibold text-xs text-center text-gray-800\">
                             <h1>$idSubseccion - $subseccion</h1>
                         </td>
                 ";
@@ -949,7 +951,7 @@ if (isset($_POST['action'])) {
                     <td class=\"px-2 py-3\">
                         <div id=\"" . $idSubseccion . "PRow\" ondblclick=\"expandirpapa(this.id)\"
                             class=\"h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto\"
-                            style=\"width: 250px;\">
+                            style=\"width: 270px;\">
                 ";
 
                 $queryMCP = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
@@ -970,6 +972,16 @@ if (isset($_POST['action'])) {
                     $actividad = $pendiente['actividad'];
                     $nombre = $pendiente['nombre'];
                     $apellido = $pendiente['apellido'];
+                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+
+                    if ($nombreCompleto == "SIN RESPONSABLE") {
+                        $estiloResponsable = "text-red-600";
+                        $nombreCompleto = "SIN RESPONSABLE";
+                        $iconoResponsable = "";
+                    } else {
+                        $estiloResponsable = "text-gray-600";
+                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                    }
 
                     // Se obtiene los Adjuntos.
                     $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
@@ -998,7 +1010,8 @@ if (isset($_POST['action'])) {
                         $comentarioMC = $rowComentarioMC['comentario'];
                         $nombreMC = $rowComentarioMC['nombre'];
                         $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = $rowComentarioMC['fecha'];
+                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
                         if (mysqli_num_rows($resultComentarioMC) > 0) {
                             $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
@@ -1008,6 +1021,7 @@ if (isset($_POST['action'])) {
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreCompletoMC = "";
                         }
                     } else {
                         $iconoComentarioMC = "";
@@ -1016,6 +1030,7 @@ if (isset($_POST['action'])) {
                         $fechaMC = "";
                         $nombreMC = "";
                         $apellidoMC = "";
+                        $nombreCompletoMC = "";
                     }
 
 
@@ -1029,9 +1044,9 @@ if (isset($_POST['action'])) {
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
                                 <div class=\"flex flex-row\">
-                                    <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombre%$apellido\"
+                                    <img src=\"$iconoResponsable\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
                                 </div>
                                 <div class=\"text-gray-600\">
                                     $iconoComentarioMC
@@ -1043,11 +1058,11 @@ if (isset($_POST['action'])) {
                                 <div
                                     class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                     <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                    <p>$comentarioMC</p>
+                                    <p class=\"uppercase\">$comentarioMC</p>
                                     <div class=\"flex flex-row mt-1 self-center\">
                                         <img src=\"$AvatarNombre\"
                                             width=\"20\" height=\"20\" alt=\"\">
-                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreMC $apellidoMC</p>
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
                                         <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
                                         </p>
                                     </div>
@@ -1061,6 +1076,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
+
                 $data .= "
                         </div>
                     </td>
@@ -1073,13 +1089,13 @@ if (isset($_POST['action'])) {
                         <td class=\"px-2 py-3\">
                             <div id=\"" . $idSubseccion . "DEP\" ondblclick=\"expandirpapa(this.id)\"
                                 class=\"h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto\"
-                                style=\"width: 250px;\">
+                                style=\"width: 270px;\">
                 ";
 
                 $queryDEP = "SELECT 
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
                 FROM t_mc 
-                LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+                INNER JOIN t_users ON t_mc.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                 WHERE t_mc.id_destino = $idDestino AND t_mc.id_subseccion = $idSubseccion 
                 AND t_mc.status = 'N' AND activo = 1 
@@ -1097,6 +1113,16 @@ if (isset($_POST['action'])) {
                     $direccion = $dep['departamento_direccion'];
                     $finanzas = $dep['departamento_finanzas'];
                     $rrhh = $dep['departamento_rrhh'];
+                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+
+                    if ($nombreCompleto == "SIN RESPONSABLE") {
+                        $estiloResponsable = "text-red-600";
+                        $nombreCompleto = "SIN RESPONSABLE";
+                        $iconoResponsable = "";
+                    } else {
+                        $estiloResponsable = "text-gray-600";
+                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                    }
 
                     if ($calidad != "") {
                         $calidad = "CA";
@@ -1176,7 +1202,8 @@ if (isset($_POST['action'])) {
                         $comentarioMC = $rowComentarioMC['comentario'];
                         $nombreMC = $rowComentarioMC['nombre'];
                         $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = $rowComentarioMC['fecha'];
+                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
                         if (mysqli_num_rows($resultComentarioMC) > 0) {
                             $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
@@ -1186,6 +1213,7 @@ if (isset($_POST['action'])) {
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreCompletoMC = "";
                         }
                     } else {
                         $iconoComentarioMC = "";
@@ -1194,6 +1222,7 @@ if (isset($_POST['action'])) {
                         $fechaMC = "";
                         $nombreMC = "";
                         $apellidoMC = "";
+                        $nombreCompletoMC = "";
                     }
 
 
@@ -1207,9 +1236,9 @@ if (isset($_POST['action'])) {
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
                                 <div class=\"flex flex-row\">
-                                    <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido\"
+                                    <img src=\"$iconoResponsable\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
                                 </div>
                                 <div class=\"flex flex-row items-center text-gray-600\">
                                     <!-- Iconos -->
@@ -1223,10 +1252,10 @@ if (isset($_POST['action'])) {
                                 <div
                                     class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                     <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                    <p>$comentarioMC</p>
+                                    <p class=\"uppercase\">$comentarioMC</p>
                                     <div class=\"flex flex-row mt-1 self-center\">
                                         <img src=\"$AvatarNombre\" width=\"20\" height=\"20\" alt=\"\">
-                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreMC $apellidoMC</p>
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
                                         <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
                                         </p>
                                     </div>
@@ -1251,7 +1280,7 @@ if (isset($_POST['action'])) {
                         <td class=\"px-2 py-3\">
                             <div id=\"coltra\" ondblclick=\"expandirpapa(this.id)\"
                                 class=\"h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto\"
-                                style=\"width: 250px;\">
+                                style=\"width: 270px;\">
                 ";
 
                 $queryT = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
@@ -1268,7 +1297,16 @@ if (isset($_POST['action'])) {
                     $actidad = $t['actividad'];
                     $nombre = $t['nombre'];
                     $apellido = $t['apellido'];
+                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
+                    if ($nombreCompleto == "SIN RESPONSABLE") {
+                        $estiloResponsable = "text-red-600";
+                        $nombreCompleto = "SIN RESPONSABLE";
+                        $iconoResponsable = "";
+                    } else {
+                        $estiloResponsable = "text-gray-600";
+                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                    }
 
                     // Se obtiene los Adjuntos.
                     $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
@@ -1297,7 +1335,8 @@ if (isset($_POST['action'])) {
                         $comentarioMC = $rowComentarioMC['comentario'];
                         $nombreMC = $rowComentarioMC['nombre'];
                         $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = $rowComentarioMC['fecha'];
+                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
                         if (mysqli_num_rows($resultComentarioMC) > 0) {
                             $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
@@ -1307,6 +1346,7 @@ if (isset($_POST['action'])) {
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreCompletoMC = "";
                         }
                     } else {
                         $iconoComentarioMC = "";
@@ -1315,6 +1355,7 @@ if (isset($_POST['action'])) {
                         $fechaMC = "";
                         $nombreMC = "";
                         $apellidoMC = "";
+                        $nombreCompletoMC = "";
                     }
 
                     $data .= "
@@ -1327,9 +1368,9 @@ if (isset($_POST['action'])) {
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
                                 <div class=\"flex flex-row\">
-                                    <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido\"
+                                    <img src=\"$iconoResponsable\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
                                 </div>
                                 <div class=\"flex flex-row items-center text-gray-600\">
                                     $iconoComentarioMC
@@ -1344,10 +1385,10 @@ if (isset($_POST['action'])) {
                                 <div
                                     class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                     <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                    <p>$comentarioMC</p>
+                                    <p class=\"uppercase\">$comentarioMC</p>
                                     <div class=\"flex flex-row mt-1 self-center\">
                                         <img src=\"$AvatarNombre\" width=\"20\" height=\"20\" alt=\"\">
-                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreMC $apellidoMC</p>
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
                                         <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
                                         </p>
                                     </div>
@@ -1372,7 +1413,7 @@ if (isset($_POST['action'])) {
                         <td class=\"px-2 py-3\">
                             <div id=\"" . $idSubseccion . "S\" ondblclick=\"expandirpapa(this.id)\"
                                 class=\"h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto\"
-                                style=\"width: 250px;\">
+                                style=\"width: 270px;\">
                 ";
 
                 $queryT = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
@@ -1389,7 +1430,16 @@ if (isset($_POST['action'])) {
                     $actidad = $t['actividad'];
                     $nombre = $t['nombre'];
                     $apellido = $t['apellido'];
+                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
+                    if ($nombreCompleto == "SIN RESPONSABLE") {
+                        $estiloResponsable = "text-red-600";
+                        $nombreCompleto = "SIN RESPONSABLE";
+                        $iconoResponsable = "";
+                    } else {
+                        $estiloResponsable = "text-gray-600";
+                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                    }
 
                     // Se obtiene los Adjuntos.
                     $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
@@ -1418,7 +1468,8 @@ if (isset($_POST['action'])) {
                         $comentarioMC = $rowComentarioMC['comentario'];
                         $nombreMC = $rowComentarioMC['nombre'];
                         $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = $rowComentarioMC['fecha'];
+                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
                         if (mysqli_num_rows($resultComentarioMC) > 0) {
                             $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
@@ -1428,6 +1479,7 @@ if (isset($_POST['action'])) {
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreCompletoMC = "";
                         }
                     } else {
                         $iconoComentarioMC = "";
@@ -1436,6 +1488,7 @@ if (isset($_POST['action'])) {
                         $fechaMC = "";
                         $nombreMC = "";
                         $apellidoMC = "";
+                        $nombreCompletoMC = "";
                     }
                     $data .= "
                         <div id=\"" . $idMC . "S\" onclick=\"expandir(this.id)\"
@@ -1447,9 +1500,9 @@ if (isset($_POST['action'])) {
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
                                 <div class=\"flex flex-row\">
-                                    <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\"
+                                    <img src=\"$iconoResponsable\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombre $apellido</p>
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
                                 </div>
                                 <div class=\"flex flex-row items-center text-gray-600\">
                                     $iconoComentarioMC
@@ -1465,11 +1518,11 @@ if (isset($_POST['action'])) {
                                 <div
                                     class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
                                     <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                    <p>$comentarioMC</p>
+                                    <p class=\"uppercase\">$comentarioMC</p>
                                     <div class=\"flex flex-row mt-1 self-center\">
                                         <img src=\"$AvatarNombre\"
                                             width=\"20\" height=\"20\" alt=\"\">
-                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreMC $apellidoMC</p>
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
                                         <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
                                         </p>
                                     </div>
@@ -1499,11 +1552,13 @@ if (isset($_POST['action'])) {
             $arrayData['resultData'] = $resultData;
             $arrayData['dataOpcionesSubsecciones'] = $dataOpcionesSubsecciones;
             $arrayData['misPendientesUsuario'] = $misPendientesUsuario;
+            $arrayData['misPendientesSinUsuario'] = $misPendientesSinUsuario;
             $arrayData['misPendientesSeccion'] = $misPendientesSeccion;
             $arrayData['estiloSeccion'] = $estiloSeccion;
             $arrayData['exportarSubseccion'] = $exportarSubseccion;
             $arrayData['exportarSeccion'] = $exportarSeccion;
             $arrayData['exportarMisPendientes'] = $exportarMisPendientes;
+            $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
         }
         echo json_encode($arrayData);
     }
@@ -1528,8 +1583,13 @@ if (isset($_POST['action'])) {
                 $nombre = $row['nombre'];
                 $apellido = $row['apellido'];
                 $exportarSeccionUsuario .= "
-                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    <div class=\"exportarEXCEL hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
                     onclick=\"exportarPendientes($idUsuario, $idDestino, $idSeccion, 0, 'exportarSeccionUsuario');\">
+                        <h1 class=\"ml-2\">$nombre $apellido</h1>
+                    </div> 
+
+                    <div class=\"exportarPDF hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"exportarPendientes($idUsuario, $idDestino, $idSeccion, 0, 'exportarSeccionUsuarioPDF');\">
                         <h1 class=\"ml-2\">$nombre $apellido</h1>
                     </div>                
                 ";
@@ -1553,6 +1613,10 @@ if (isset($_POST['action'])) {
         } elseif ($tipoExportar == "exportarSubseccion") {
             $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
         } elseif ($tipoExportar == "exportarSeccionUsuario") {
+            $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND responsable = $idUsuario";
+        } elseif ($tipoExportar == "exportarMisPendientesPDF") {
+            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+        } elseif ($tipoExportar == "exportarSeccionUsuarioPDF") {
             $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND responsable = $idUsuario";
         } else {
             $filtroTipo = "activo = 2";

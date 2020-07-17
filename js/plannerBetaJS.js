@@ -105,12 +105,13 @@ function calendarioSecciones() {
     }
 }
 
-
-// función expandir.
 function expandir(id) {
     idtoggle = id + 'toggle';
     var toggle = document.getElementById(idtoggle);
     toggle.classList.toggle("hidden");
+
+    var titulox = document.getElementById(idtitulo);
+    titulox.classList.remove("truncate");
 }
 
 
@@ -151,6 +152,12 @@ function toggleModalTailwind(idModal) {
     $("#" + idModal).toggleClass('open');
 }
 
+
+// Funcion para ocultar y mostrar con clases.
+function mostrarOcultar(claseMostrar, claseOcultar) {
+    $("." + claseMostrar).removeClass('hidden invisible');
+    $("." + claseOcultar).addClass('hidden invisible');
+}
 
 // toggle Inivisible Generico.
 function toggleInivisble(id) {
@@ -258,12 +265,14 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 
             // Pestañas para Mostrar Pendientes.
             $('#misPendientesUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesUsuario + ')');
+            $('#misPendientesSinUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSinUsuario + ')');
             $('#misPendientesSeccion').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSeccion + ')');
 
             // Pestañas para Exportar.
             exportarListarUsuarios(idUsuario, idDestino, idSeccion);
             $('#exportarSeccion').attr('onclick', 'exportarPendientes(' + data.exportarSeccion + ')');
             $('#exportarMisPendientes').attr('onclick', 'exportarPendientes(' + data.exportarMisPendientes + ')');
+            $('#exportarMisPendientesPDF').attr('onclick', 'exportarPendientes(' + data.exportarMisPendientesPDF + ')');
             $("#dataModalOpciones").html(data.exportarSubseccion);
 
             console.log(data);
@@ -330,6 +339,12 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
             } else if (tipoExportar == "exportarSeccionUsuario") {
                 page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
                 window.location = page;
+            } else if (tipoExportar == "exportarMisPendientesPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
+                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
+            } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
+                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
             }
         }
     });
