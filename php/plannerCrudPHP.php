@@ -52,18 +52,18 @@ if (isset($_POST['action'])) {
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
         $data = array();
-        $dataZIL = " ";
-        $dataZIE = " ";
-        $dataAUTO = " ";
-        $dataDEC = " ";
-        $dataDEP = " ";
-        $dataOMA = " ";
-        $dataZHA = " ";
-        $dataZHC = " ";
-        $dataZHH = " ";
-        $dataZHP = " ";
-        $dataZIA = "  ";
-        $dataZIC = " ";
+        $dataZIL = "";
+        $dataZIE = "";
+        $dataAUTO = "";
+        $dataDEC = "";
+        $dataDEP = "";
+        $dataOMA = "";
+        $dataZHA = "";
+        $dataZHC = "";
+        $dataZHH = "";
+        $dataZHP = "";
+        $dataZIA = "";
+        $dataZIC = "";
 
         // Lista para Ordenar Columnas
         $listaZIL = "";
@@ -1922,5 +1922,4 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
-}   }
 }
