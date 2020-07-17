@@ -52,18 +52,18 @@ if (isset($_POST['action'])) {
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
         $data = array();
-        $dataZIL = "";
-        $dataZIE = "";
-        $dataAUTO = "";
-        $dataDEC = "";
-        $dataDEP = "";
-        $dataOMA = "";
-        $dataZHA = "";
-        $dataZHC = "";
-        $dataZHH = "";
-        $dataZHP = "";
-        $dataZIA = "";
-        $dataZIC = "";
+        $dataZIL = " ";
+        $dataZIE = " ";
+        $dataAUTO = " ";
+        $dataDEC = " ";
+        $dataDEP = " ";
+        $dataOMA = " ";
+        $dataZHA = " ";
+        $dataZHC = " ";
+        $dataZHH = " ";
+        $dataZHP = " ";
+        $dataZIA = "  ";
+        $dataZIC = " ";
 
         // Lista para Ordenar Columnas
         $listaZIL = "";
@@ -77,14 +77,9 @@ if (isset($_POST['action'])) {
 
         // ZIL
         if ($ZIL_Permiso == 1) {
-            if ($idDestino == 10) {
-                $query = "SELECT c_secciones.id 'id_seccion', c_secciones.seccion, c_subsecciones.id 'id_subsecciones', c_subsecciones.grupo 'grupo' 
-                FROM c_secciones 
-                INNER JOIN c_subsecciones ON c_secciones.id = c_subsecciones.id_seccion
-                WHERE c_secciones.id = 11";
-            } else {
+ 
                 $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
-            }
+            
             if ($result = mysqli_query($conn_2020, $query)) {
                 $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
@@ -1927,4 +1922,5 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
+}   }
 }

@@ -409,7 +409,7 @@ function llamarFuncionX(nombreFuncion) {
 
     switch (nombreFuncion) {
         case (nombreFuncion = 'consultaSubsecciones'):
-            consultaSubsecciones(idUsuario, idDestino);
+            consultaSubsecciones(idDestino, idUsuario);
             break;
 
         case (nombreFuncion = 'obtenerEquipos'):
