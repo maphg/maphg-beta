@@ -87,7 +87,7 @@ if (isset($_POST['action'])) {
                     $seccion = $row['seccion'];
 
                     $dataZIL .= " 
-                        <div id=\"colzil\" class=\" scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
+                        <div id=\"colzil\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
@@ -934,9 +934,9 @@ if (isset($_POST['action'])) {
                 $dataOpcionesSubsecciones .= "<a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">$subseccion</a>";
 
                 $data .= "
-                    <tr id=\"$idSubseccion\" class=\"hover:shadow-md cursor-pointer\">
+                    <tr id=\"$idSubseccion\" class=\"modal hover:shadow-md cursor-pointer\">
                         <td class=\"px-2 py-3 font-semibold text-xs text-center text-gray-800\">
-                            <h1>$idSubseccion - $subseccion</h1>
+                            <h1>$subseccion</h1>
                         </td>
                 ";
 
@@ -1034,7 +1034,7 @@ if (isset($_POST['action'])) {
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
                             <div class=\"my-1\">
-                                <p id=\"" . $idMC . "Ptitulo\" class=\"truncate\">$idMC  $actividad</p>
+                                <p id=\"" . $idMC . "Ptitulo\" class=\"truncate\">$actividad</p>
                             </div>
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1226,7 +1226,7 @@ if (isset($_POST['action'])) {
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
                             <div class=\"my-1\">
-                                <p id=\"" . $idMC . "Dtitulo\" class=\"truncate\">$idMC $actividad</p>
+                                <p id=\"" . $idMC . "Dtitulo\" class=\"truncate\">$actividad</p>
                             </div>
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1358,7 +1358,7 @@ if (isset($_POST['action'])) {
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
                             <div class=\"my-1\">
-                                <p id=\"" . $idMC . "Ttitulo\" class=\"truncate\">$idMC $actidad</p>
+                                <p id=\"" . $idMC . "Ttitulo\" class=\"truncate\">$actidad</p>
                             </div>
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
@@ -1490,7 +1490,7 @@ if (isset($_POST['action'])) {
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
                             <div class=\"my-1\">
-                                <p id=\"" . $idMC . "Stitulo\" class=\"truncate\">$idMC $actidad</p>
+                                <p id=\"" . $idMC . "Stitulo\" class=\"truncate\">$actidad</p>
                             </div>
                             <!-- Iconos -->
                             <div class=\"flex flex-row justify-between items-center text-sm\">
