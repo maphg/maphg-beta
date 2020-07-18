@@ -1728,7 +1728,7 @@ class Planner
             }
         } else { //Buscar equipos de un destino en especifico
             if ($idCategoria == 1) {
-                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
+                if ($idGrupo == "12-quitar" || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
                     //Se obtiene el nombre de la subcategoria que seria el nombre del hotel
                     $query = "SELECT subcategoria FROM c_subcategorias_planner "
                         . "WHERE id = $idSubcategoria";
@@ -1853,7 +1853,7 @@ class Planner
             }
         } else { //Buscar equipos de un destino en especifico
             if ($idCategoria == 1) {
-                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
+                if ($idGrupo == "12-quitar" || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
                     //Se obtiene el nombre de la subcategoria que seria el nombre del hotel
                     $query = "SELECT subcategoria FROM c_subcategorias_planner "
                         . "WHERE id = $idSubcategoria";
@@ -2636,7 +2636,7 @@ class Planner
             }
         } else { //Buscar equipos de un destino en especifico
             if ($idCategoria == 1) {
-                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
+                if ($idGrupo == "12-quitar" || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
                     //Se obtiene el nombre de la subcategoria que seria el nombre del hotel
                     $query = "SELECT subcategoria FROM c_subcategorias_planner "
                         . "WHERE id = $idSubcategoria";
@@ -2769,7 +2769,7 @@ class Planner
             }
         } else { //Buscar equipos de un destino en especifico
             if ($idCategoria == 1) {
-                if ($idGrupo == 12 || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
+                if ($idGrupo == "12-quitar" || $idGrupo == 342 || $idGrupo == 343 || $idGrupo == 344) { //Subseccion Fan&Coils, Villas GP, TRS o Familiy
                     //Se obtiene el nombre de la subcategoria que seria el nombre del hotel
                     $query = "SELECT subcategoria FROM c_subcategorias_planner "
                         . "WHERE id = $idSubcategoria";

@@ -62,8 +62,11 @@ if (isset($_GET['listaIdMC'])) {
 
 
     if ($result = mysqli_query($conn_2020, $query)) {
-        $totalResultados = mysqli_num_rows($result);
-        while ($row = mysqli_fetch_array($result)) {
+        // $totalResultados = mysqli_num_rows($result);
+        $totalResultados++;
+        foreach ($result as $row) {
+        // }
+        // while ($row = mysqli_fetch_array($result)) {
             $idMC = $row['id'];
             $destino = $row['destino'];
             $seccion = $row['seccion'];
@@ -75,8 +78,8 @@ if (isset($_GET['listaIdMC'])) {
 
             $queryComentario = "SELECT t_mc_comentarios.comentario, t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_mc_comentarios 
-            INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_mc_comentarios.id_mc = $idMC 
             ORDER BY t_mc_comentarios.fecha DESC LIMIT 1";
 

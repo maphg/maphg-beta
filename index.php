@@ -311,7 +311,8 @@ $tablaRanking .= "</div>";
         <?php include 'menu-sidebar.php'; ?>
 
         <!-- Select para Versión Movil -->
-        <div id="opcionMovil" class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 text-center pt-3 hidden">
+        <div id="opcionMovil"
+            class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 text-center pt-3 hidden">
             <div class="inline-block relative">
                 <!-- <select id="mostrarSeccionMovil"
                     class="block appearance-none w-full border border-gray-400 bg-gray-200 hover:border-gray-500 px-4 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline p-2">
@@ -354,7 +355,8 @@ $tablaRanking .= "</div>";
                     <nav class="navbar" role="navigation" aria-label="dropdown navigation">
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="bd-navbar-icon navbar-item">
-                                <span class="mr-1"><i class="fad fa-grip-lines-vertical has-text-dark"></i></span><?php echo $nombre . " " . $apellido; ?>
+                                <span class="mr-1"><i
+                                        class="fad fa-grip-lines-vertical has-text-dark"></i></span><?php echo $nombre . " " . $apellido; ?>
                             </a>
 
                             <div class="navbar-dropdown">
@@ -529,7 +531,8 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
+                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox"
+                                    name="chkb1" checked="checked">
                                 <label for="chkb1"></label>
                                 <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                 HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
@@ -549,7 +552,8 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
+                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox"
+                                    name="chkb2" checked="checked">
                                 <label for="chkb2"></label>
                                 <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                 HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
@@ -603,7 +607,8 @@ $tablaRanking .= "</div>";
                     </h3>
                 </div>
                 <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
+                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i
+                                class="fa fa-edit"></i></a></span>
                 </div>
             </div>
 
@@ -621,7 +626,8 @@ $tablaRanking .= "</div>";
                     <div class="columns is-centered px-3">
                         <div class="column is-10">
                             <div class="control has-icons-right">
-                                <input id="txtComentario" class="input is-medium" type="text" placeholder="Agregar comentario">
+                                <input id="txtComentario" class="input is-medium" type="text"
+                                    placeholder="Agregar comentario">
                                 <span class="icon is-right">
                                     <i class="fas fa-comment-dots"></i>
                                 </span>
@@ -677,7 +683,8 @@ $tablaRanking .= "</div>";
                                 <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                             </div>
                             <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                <p class="heading"><strong>Eduardo Meneses <span
+                                            class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
                                 <img src="svg/secciones/zia.svg" width="40px" alt="">
                                 <img src="svg/secciones/zic.svg" width="40px" alt="">
                                 <img src="svg/secciones/zil.svg" width="40px" alt="">
@@ -700,7 +707,8 @@ $tablaRanking .= "</div>";
                     <div id="navbarMenuHeroA" class="navbar-menu">
                         <div class="navbar-start">
                             <span class="navbar-item">
-                                <button class="button is-warning" onclick="reloadPlanner('')"><i class="fas fa-arrow-left"></i></button>
+                                <button class="button is-warning" onclick="reloadPlanner('')"><i
+                                        class="fas fa-arrow-left"></i></button>
                             </span>
                             <!-- Cambia el estilo de las categorias en la barra -->
                             <div id="divNameSeccion" class="navbar-item bannerbit3">
@@ -727,7 +735,8 @@ $tablaRanking .= "</div>";
                                     <p class="control">
                                         <div class="dropdown is-active">
                                             <div class="dropdown-trigger">
-                                                <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <button class="button is-light" aria-haspopup="true"
+                                                    aria-controls="dropdown-menu">
                                                     <span class="icon is-small">
                                                         <i class="fas fa-info-circle" aria-hidden="true"></i>
                                                     </span>
@@ -793,7 +802,9 @@ $tablaRanking .= "</div>";
                     <div class="field has-addons has-addons-right is-fullwidth">
                         <div class="control">
                             <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                                <input id="busqueda" name="busqueda" class="input" type="text"
+                                    placeholder="Buscar equipo"><span class="icon is-small is-left"><i
+                                        class="fas fa-search"></i></span>
                             </div>
                             <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
@@ -913,7 +924,7 @@ $tablaRanking .= "</div>";
                 $id_destino = $idDestinoT;
                 if ($id_destino != 10) {
                 ?>
-                    <?php
+                <?php
                     $id_seccion = 24;
                     $nombre_seccion = "AUTO";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
@@ -992,7 +1003,7 @@ $tablaRanking .= "</div>";
                     ?>
 
 
-                    <?php
+                <?php
                     $id_seccion = 1;
                     $nombre_seccion = "DEC";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
@@ -1068,7 +1079,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 23;
                     $nombre_seccion = "DEP";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion AND id_destino=$id_destino";
@@ -1147,7 +1158,7 @@ $tablaRanking .= "</div>";
                     ?>
 
 
-                    <?php
+                <?php
                     $id_seccion = 19;
                     $nombre_seccion = "OMA";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
@@ -1220,7 +1231,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 5;
                     $nombre_seccion = "ZHA";
 
@@ -1294,7 +1305,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 6;
                     $nombre_seccion = "ZHC";
 
@@ -1370,7 +1381,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 7;
                     $nombre_seccion = "ZHH";
 
@@ -1445,7 +1456,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 12;
                     $nombre_seccion = "ZHP";
 
@@ -1520,7 +1531,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 8;
                     $nombre_seccion = "ZIA";
 
@@ -1594,7 +1605,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 9;
                     $nombre_seccion = "ZIC";
 
@@ -1634,7 +1645,7 @@ $tablaRanking .= "</div>";
                                 $idSubseccion = $row_subsecciones['id'];
                                 $nombreGrupo = $row_subsecciones['grupo'];
 
-                                if ($id_destino == 1 and $idSubseccion == 12) {
+                                if ($id_destino == 1444 and $idSubseccion == 12) {
                                     echo
                                         "<div class=\"columns is-gapless my-1 is-mobile\">"
                                             . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelRM', 'show')\">"
@@ -1643,7 +1654,7 @@ $tablaRanking .= "</div>";
                                             . "</p>"
                                             . "</div>"
                                             . "<div class=\"column\">";
-                                } elseif ($id_destino == 7 and $idSubseccion == 12) {
+                                } elseif ($id_destino == 74444 and $idSubseccion == 12) {
                                     echo
                                         "<div class=\"columns is-gapless my-1 is-mobile\">"
                                             . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelCMU', 'show')\">"
@@ -1690,7 +1701,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 10;
                     $nombre_seccion = "ZIE";
 
@@ -1764,7 +1775,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 11;
                     $nombre_seccion = "ZIL";
 
@@ -1919,7 +1930,7 @@ $tablaRanking .= "</div>";
 
 
 
-                    <?php
+                <?php
                     $id_seccion = 1;
                     $nombre_seccion = "DEC";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
@@ -1996,7 +2007,7 @@ $tablaRanking .= "</div>";
                     ?>
 
 
-                    <?php
+                <?php
                     $id_seccion = 23;
                     $nombre_seccion = "DEP";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
@@ -2077,7 +2088,7 @@ $tablaRanking .= "</div>";
 
 
 
-                    <?php
+                <?php
                     $id_seccion = 19;
                     $nombre_seccion = "OMA";
                     $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
@@ -2150,7 +2161,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 5;
                     $nombre_seccion = "ZHA";
 
@@ -2224,7 +2235,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 6;
                     $nombre_seccion = "ZHC";
 
@@ -2300,7 +2311,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 7;
                     $nombre_seccion = "ZHH";
 
@@ -2375,7 +2386,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 12;
                     $nombre_seccion = "ZHP";
 
@@ -2450,7 +2461,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 8;
                     $nombre_seccion = "ZIA";
 
@@ -2524,7 +2535,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 9;
                     $nombre_seccion = "ZIC";
 
@@ -2599,7 +2610,7 @@ $tablaRanking .= "</div>";
                     }
                     ?>
 
-                    <?php
+                <?php
                     $id_seccion = 10;
                     $nombre_seccion = "ZIE";
 
@@ -2796,7 +2807,9 @@ $tablaRanking .= "</div>";
                     <div class="field has-addons has-addons-right is-fullwidth">
                         <div class="control">
                             <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                                <input id="busqueda" name="busqueda" class="input" type="text"
+                                    placeholder="Buscar equipo"><span class="icon is-small is-left"><i
+                                        class="fas fa-search"></i></span>
                             </div>
                             <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
@@ -2892,7 +2905,8 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
+                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox"
+                                    name="chkb1" checked="checked">
                                 <label for="chkb1"></label>
                                 <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                 HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
@@ -2912,7 +2926,8 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
+                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox"
+                                    name="chkb2" checked="checked">
                                 <label for="chkb2"></label>
                                 <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                 HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
@@ -2967,7 +2982,8 @@ $tablaRanking .= "</div>";
                     </h3>
                 </div>
                 <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
+                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i
+                                class="fa fa-edit"></i></a></span>
                 </div>
             </div>
 
@@ -2985,7 +3001,8 @@ $tablaRanking .= "</div>";
                     <div class="columns is-centered px-3">
                         <div class="column is-10">
                             <div class="control has-icons-right">
-                                <input id="txtComentario" class="input is-medium" type="text" placeholder="Agregar comentario">
+                                <input id="txtComentario" class="input is-medium" type="text"
+                                    placeholder="Agregar comentario">
                                 <span class="icon is-right">
                                     <i class="fas fa-comment-dots"></i>
                                 </span>
@@ -3041,7 +3058,8 @@ $tablaRanking .= "</div>";
                                 <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                             </div>
                             <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                <p class="heading"><strong>Eduardo Meneses <span
+                                            class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
                                 <img src="svg/secciones/zia.svg" width="40px" alt="">
                                 <img src="svg/secciones/zic.svg" width="40px" alt="">
                                 <img src="svg/secciones/zil.svg" width="40px" alt="">
@@ -3239,8 +3257,10 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle"
+                                    type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                <label for="exampleCheckboxSuccessCircle"><span><i
+                                            class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                     HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
                             </div>
                         </div>
@@ -3258,8 +3278,10 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-9">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle"
+                                    type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                <label for="exampleCheckboxSuccessCircle"><span><i
+                                            class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
                                     HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
                             </div>
                         </div>
@@ -3555,7 +3577,8 @@ $tablaRanking .= "</div>";
                                     </p>
                                     <p class="control">
                                         <a class="button is-primary is-small">
-                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT2" multiple>
+                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT2"
+                                                multiple>
                                             <span class="icon">
                                                 <i class="fas fa-paperclip"></i>
                                             </span>
@@ -3567,7 +3590,8 @@ $tablaRanking .= "</div>";
 
                             <div class="column">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input id="txtComentarioOT2" class="input is-medium is-primary" type="text" placeholder="Añadir un comentario">
+                                    <input id="txtComentarioOT2" class="input is-medium is-primary" type="text"
+                                        placeholder="Añadir un comentario">
                                     <span class="icon is-left"><i class="fas fa-comment-dots"></i></span>
                                     <span class="icon is-right"><i class="fas fa-plus"></i></span>
                                 </div>
@@ -3582,7 +3606,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
                                                 mayor</label>
                                         </div>
@@ -3592,7 +3618,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3601,7 +3629,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3610,7 +3640,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3619,7 +3651,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3628,7 +3662,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3637,7 +3673,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -3714,7 +3752,8 @@ $tablaRanking .= "</div>";
                                             </h4>
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                            <p class="heading"><strong>Eduardo Meneses <span
+                                                        class="has-text-danger">Andjuntó</span></strong> 14/11/1989
                                                 20:30</p>
                                             <img src="svg/secciones/zia.svg" width="40px" alt="">
                                             <img src="svg/secciones/zic.svg" width="40px" alt="">
@@ -3946,7 +3985,8 @@ $tablaRanking .= "</div>";
 
                 </div>
                 <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
+                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i
+                                class="fa fa-edit"></i></a></span>
                 </div>
             </div>
 
@@ -3964,7 +4004,8 @@ $tablaRanking .= "</div>";
                     <div class="columns is-centered px-3">
                         <div class="column is-10">
                             <div class="control has-icons-right">
-                                <input id="txtComentarioMC" class="input is-medium" type="text" placeholder="Agregar comentario">
+                                <input id="txtComentarioMC" class="input is-medium" type="text"
+                                    placeholder="Agregar comentario">
                                 <span class="icon is-right">
                                     <i class="fas fa-comment-dots"></i>
                                 </span>
@@ -4019,7 +4060,8 @@ $tablaRanking .= "</div>";
                                 <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                             </div>
                             <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                <p class="heading"><strong>Eduardo Meneses <span
+                                            class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
                                 <img src="svg/secciones/zia.svg" width="40px" alt="">
                                 <img src="svg/secciones/zic.svg" width="40px" alt="">
                                 <img src="svg/secciones/zil.svg" width="40px" alt="">
@@ -4085,7 +4127,8 @@ $tablaRanking .= "</div>";
 
                 <div id="columnaAñadirPA" class="column has-text-centered">
                     <div class="control has-icons-left has-icons-right">
-                        <input id="txtActividadPA" class="input is-medium" type="text" placeholder="Añadir Actividad Plan accion">
+                        <input id="txtActividadPA" class="input is-medium" type="text"
+                            placeholder="Añadir Actividad Plan accion">
                         <span class="icon is-left">
                             <i class="fas fa-fire-extinguisher"></i>
                         </span>
@@ -4111,7 +4154,8 @@ $tablaRanking .= "</div>";
                             </div>
                         </div>
                         <div class="column">
-                            <input type="text" class="input is-small" id="txtTituloProyecto" placeholder="Titulo Proyecto">
+                            <input type="text" class="input is-small" id="txtTituloProyecto"
+                                placeholder="Titulo Proyecto">
                         </div>
                         <div id="divAñoProy" class="column is-2" style="display: none;">
                             <input type="text" class="input is-small" id="txtAñoProyecto" placeholder="Año">
@@ -4132,14 +4176,16 @@ $tablaRanking .= "</div>";
                     <div class="columns">
                         <div class="column is-2">
                             <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle is-small" id="chkbProyF" type="checkbox" name="chkbProyF" checked="checked">
+                                <input class="is-checkradio is-success is-circle is-small" id="chkbProyF"
+                                    type="checkbox" name="chkbProyF" checked="checked">
                                 <label for="chkbProyF"><span></span>PROYECTO TERMINADO</label>
                             </div>
                         </div>
                         <div class="column">
                             <div class="field">
                                 <div class="control">
-                                    <textarea id="txtJustificacion" class="textarea is-small" placeholder="Justificacion" rows="2"></textarea>
+                                    <textarea id="txtJustificacion" class="textarea is-small"
+                                        placeholder="Justificacion" rows="2"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -4154,7 +4200,9 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-7">
                             <div class="field">
-                                <input class="is-checkradio is-success is-circle is-small" id="exampleCheckboxSuccessCircle2" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                <input class="is-checkradio is-success is-circle is-small"
+                                    id="exampleCheckboxSuccessCircle2" type="checkbox"
+                                    name="exampleCheckboxSuccessCircle" checked="checked">
                                 <label for="exampleCheckboxSuccessCircle2"></label>
                                 <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
                                     </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
@@ -4173,7 +4221,9 @@ $tablaRanking .= "</div>";
                     <div class="columns hvr-float">
                         <div class="column is-7">
                             <div class="field">
-                                <input class="is-checkradio is-success is-circle is-small   " id="exampleCheckboxSuccessCircle3" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                <input class="is-checkradio is-success is-circle is-small   "
+                                    id="exampleCheckboxSuccessCircle3" type="checkbox"
+                                    name="exampleCheckboxSuccessCircle" checked="checked">
                                 <label for="exampleCheckboxSuccessCircle3"></label>
                                 <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
                                     </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
@@ -4192,7 +4242,8 @@ $tablaRanking .= "</div>";
                 </div>
                 <div id="columnaComentariosProyecto" class="column">
 
-                    <input id="txtComentarioProyecto" type="text" class="input is-small mb-2" placeholder="Agregar comentario" style="display: none;">
+                    <input id="txtComentarioProyecto" type="text" class="input is-small mb-2"
+                        placeholder="Agregar comentario" style="display: none;">
                     <div id="timeLineComentariosProyecto" class="timeline" style="display: none;">
                         <header class="timeline-header">
                             <span class="tag is-small is-info">Inicio</span>
@@ -4247,7 +4298,8 @@ $tablaRanking .= "</div>";
                     <div class="columns">
                         <div class="column">
                             <a class="button is-primary is-small mb-2">
-                                <input class="file-input" type="file" name="txtCotProyecto" id="txtCotProyecto" multiple>
+                                <input class="file-input" type="file" name="txtCotProyecto" id="txtCotProyecto"
+                                    multiple>
                                 <span class="icon">
                                     <i class="fas fa-paperclip"></i>
                                 </span>
@@ -4264,9 +4316,13 @@ $tablaRanking .= "</div>";
                                         <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                                     </div>
                                     <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                        <p class="heading"><strong>Eduardo Meneses <span
+                                                    class="has-text-danger">Andjuntó</span></strong> 14/11/1989
                                             20:30</p>
-                                        <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="cot-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
+                                        <a class="example-image-link" href="https://picsum.photos/200/200"
+                                            data-lightbox="cot-gallery" data-title=""><img width="64" height="64"
+                                                class="example-image img-fluid" src="https://picsum.photos/200/200"
+                                                alt="" /></a>
 
                                         <button class="button is-danger is-small is-rounded">
                                             <span class="icon is-small">
@@ -4283,7 +4339,8 @@ $tablaRanking .= "</div>";
                         </div>
                         <div class="column">
                             <a class="button is-primary is-small mb-2">
-                                <input class="file-input" type="file" name="txtJustificacionProyecto" id="txtJustificacionProyecto" multiple>
+                                <input class="file-input" type="file" name="txtJustificacionProyecto"
+                                    id="txtJustificacionProyecto" multiple>
                                 <span class="icon">
                                     <i class="fas fa-paperclip"></i>
                                 </span>
@@ -4300,9 +4357,13 @@ $tablaRanking .= "</div>";
                                         <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                                     </div>
                                     <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                        <p class="heading"><strong>Eduardo Meneses <span
+                                                    class="has-text-danger">Andjuntó</span></strong> 14/11/1989
                                             20:30</p>
-                                        <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="just-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
+                                        <a class="example-image-link" href="https://picsum.photos/200/200"
+                                            data-lightbox="just-gallery" data-title=""><img width="64" height="64"
+                                                class="example-image img-fluid" src="https://picsum.photos/200/200"
+                                                alt="" /></a>
 
                                         <button class="button is-danger is-small is-rounded">
                                             <span class="icon is-small">
@@ -4337,16 +4398,20 @@ $tablaRanking .= "</div>";
                 <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelRM','hide');"></a>
                 <article class="media mt-4">
                     <div class="buttons">
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM COLONIAL
                             RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM KANTENAH
                             RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'RM', 'ZIC', 'FAN&COILS');">TRS
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'RM', 'ZIC', 'FAN&COILS');">TRS
                             YUCATÁN
                             HOTEL</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM
                             WHITE SAND RESORT &
                             SPA</button>
@@ -4365,9 +4430,11 @@ $tablaRanking .= "</div>";
                 <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelCMU','hide');"></a>
                 <article class="media mt-4">
                     <div class="buttons">
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 22, 6703, 1, 'CMU', 'ZIC', 'FAN&COILS');">GRAND
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 7, 1, 22, 6703, 1, 'CMU', 'ZIC', 'FAN&COILS');">GRAND
                             PALLADIUM COSTA MUJERES RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 23, 6704, 1, 'CMU', 'ZIC', 'FAN&COILS');">TRS
+                        <button class="button is-info btn-subsecciones"
+                            onclick="showHide('show'); obtenerEquipos(12, 7, 1, 23, 6704, 1, 'CMU', 'ZIC', 'FAN&COILS');">TRS
                             CORAL HOTEL</button>
                     </div>
                 </article>
@@ -4402,7 +4469,8 @@ $tablaRanking .= "</div>";
                                             </button>
                                         </div>
                                         <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mc');">
+                                            <button type="button" class="button is-warning" name="button"
+                                                onclick="closeModal('modal-mc');">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
@@ -4550,7 +4618,8 @@ $tablaRanking .= "</div>";
                             <div class="hero-head">
                                 <nav class="navbar">
                                     <div class="navbar-item">
-                                        <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-MPNP');">
+                                        <button type="button" class="button is-warning" name="button"
+                                            onclick="closeModal('modal-MPNP');">
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
@@ -4558,7 +4627,8 @@ $tablaRanking .= "</div>";
                                         <div id="divNameSeccionMPNP" class="navbar-item zia-background">
                                             <p class="seccion-logo">ZIA</p>
                                         </div>
-                                        <a class="navbar-item"> <span id="subseccionMPNP"> </span> / <span id="equipoMPNP"> </span> /
+                                        <a class="navbar-item"> <span id="subseccionMPNP"> </span> / <span
+                                                id="equipoMPNP"> </span> /
                                             Preventivo No Planificado</a>
                                     </div>
                                 </nav>
@@ -4569,7 +4639,8 @@ $tablaRanking .= "</div>";
                                 <div class="column is-2">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <button class="button is-success is-rounded" onclick="showModal('modal-agregar-MPNP'); modalInicialMPNP();">
+                                            <button class="button is-success is-rounded"
+                                                onclick="showModal('modal-agregar-MPNP'); modalInicialMPNP();">
                                                 Agregar MP No Planificado</button>
                                         </div>
                                     </div>
@@ -4654,7 +4725,9 @@ $tablaRanking .= "</div>";
                         <div class="field">
                             Título:
                             <div class="control">
-                                <input id="tituloMPNP" class="input is-primary" type="text" placeholder="título MP (5 Caracteres Mínimo)" onkeyup="if(event.keyCode == 13) tituloMPNP('');">
+                                <input id="tituloMPNP" class="input is-primary" type="text"
+                                    placeholder="título MP (5 Caracteres Mínimo)"
+                                    onkeyup="if(event.keyCode == 13) tituloMPNP('');">
                             </div>
                         </div>
                     </div>
@@ -4715,7 +4788,8 @@ $tablaRanking .= "</div>";
                         <div class="column is-5">
                             Fecha Realizado:
                             <div class="control">
-                                <input id="dateMPNP" class="input is-primary" type="date" placeholder="" value="<?= date('Y-m-d'); ?>">
+                                <input id="dateMPNP" class="input is-primary" type="date" placeholder=""
+                                    value="<?= date('Y-m-d'); ?>">
                             </div>
                         </div>
                     </div>
@@ -4724,7 +4798,8 @@ $tablaRanking .= "</div>";
                         <div class="column is-12 has-text-centered">
                             <div class="field has-addons">
                                 <div class="control is-expanded">
-                                    <input id="actividadMPNP" class="input" type="text" placeholder="titulo de la actividad">
+                                    <input id="actividadMPNP" class="input" type="text"
+                                        placeholder="titulo de la actividad">
                                 </div>
                                 <div class="control">
                                     <a class="button is-info" onclick="agregarActividadMPNP('');">
@@ -4755,7 +4830,8 @@ $tablaRanking .= "</div>";
             <footer class="modal-card bd-notificatio has-text-centered has-background-white">
                 <div class="columns">
                     <div class="column my-3">
-                        <button id="btnGuardarMPNP" class="button is-success" disabled onclick="btnConfirmarMPNP('');">Guardar MP</button>
+                        <button id="btnGuardarMPNP" class="button is-success" disabled
+                            onclick="btnConfirmarMPNP('');">Guardar MP</button>
                     </div>
                 </div>
             </footer>
@@ -4780,7 +4856,8 @@ $tablaRanking .= "</div>";
                                     <div class="navbar-end has-text-centered">
 
                                         <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mc-fecha');">
+                                            <button type="button" class="button is-warning" name="button"
+                                                onclick="closeModal('modal-mc-fecha');">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
@@ -4820,7 +4897,8 @@ $tablaRanking .= "</div>";
         <div class="modal-card">
             <header class="modal-card-head">
 
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuario(this, <?php echo $idDestinoT; ?>);">
+                <input class="input is-primary" type="text" placeholder="Buscar..."
+                    onkeyup="buscarUsuario(this, <?php echo $idDestinoT; ?>);">
 
             </header>
             <!-- Any other Bulma elements you want -->
@@ -4875,7 +4953,8 @@ $tablaRanking .= "</div>";
                 <div class="container">
                     <div class="columns">
                         <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsable');">Cerrar</button>
+                            <button class="button is-danger"
+                                onclick="closeModal('modalAgregarResponsable');">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -4899,7 +4978,8 @@ $tablaRanking .= "</div>";
                                 <button id="btnFinalizarTarea" class="button is-success">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarTarea" class="button is-danger" onclick="closeModal('modalConfirmacionTarea');">CANCELAR</button>
+                                <button id="btnCancelarFinalizarTarea" class="button is-danger"
+                                    onclick="closeModal('modalConfirmacionTarea');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -4936,7 +5016,8 @@ $tablaRanking .= "</div>";
                                             </button>
                                         </div>
                                         <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mp');">
+                                            <button type="button" class="button is-warning" name="button"
+                                                onclick="closeModal('modal-mp');">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </div>
@@ -5161,7 +5242,8 @@ $tablaRanking .= "</div>";
                                     </p>
                                     <p class="control">
                                         <a class="button is-primary is-small">
-                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT" multiple>
+                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT"
+                                                multiple>
                                             <span class="icon">
                                                 <i class="fas fa-paperclip"></i>
                                             </span>
@@ -5173,7 +5255,8 @@ $tablaRanking .= "</div>";
 
                             <div class="column">
                                 <div class="control has-icons-left has-icons-right">
-                                    <input id="txtComentarioOT" class="input is-medium is-primary" type="text" placeholder="Añadir un comentario">
+                                    <input id="txtComentarioOT" class="input is-medium is-primary" type="text"
+                                        placeholder="Añadir un comentario">
                                     <span class="icon is-left"><i class="fas fa-comment-dots"></i></span>
                                     <span class="icon is-right"><i class="fas fa-plus"></i></span>
                                 </div>
@@ -5188,7 +5271,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
                                                 mayor</label>
                                         </div>
@@ -5198,7 +5283,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5207,7 +5294,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5216,7 +5305,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5225,7 +5316,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5234,7 +5327,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5243,7 +5338,9 @@ $tablaRanking .= "</div>";
                                 <div class="columns hvr-float ml-4">
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
+                                            <input class="is-checkradio is-success is-circle"
+                                                id="exampleCheckboxSuccessCircle" type="checkbox"
+                                                name="exampleCheckboxSuccessCircle" checked="checked">
                                             <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
                                                 eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
@@ -5320,7 +5417,8 @@ $tablaRanking .= "</div>";
                                             </h4>
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                            <p class="heading"><strong>Eduardo Meneses <span
+                                                        class="has-text-danger">Andjuntó</span></strong> 14/11/1989
                                                 20:30</p>
                                             <img src="svg/secciones/zia.svg" width="40px" alt="">
                                             <img src="svg/secciones/zic.svg" width="40px" alt="">
@@ -5471,14 +5569,18 @@ $tablaRanking .= "</div>";
 
                         <div class="level">
                             <div class="media-content">
-                                <input id="txtFechaRealizacion" type='text' class='input has-text-centered datepicker-here' data-language='es' data-auto-close="true" data-date-format="mm/dd/yyyy" placeholder="Fecha de realizacion" />
+                                <input id="txtFechaRealizacion" type='text'
+                                    class='input has-text-centered datepicker-here' data-language='es'
+                                    data-auto-close="true" data-date-format="mm/dd/yyyy"
+                                    placeholder="Fecha de realizacion" />
                             </div>
                         </div>
                         <div class="level">
                             <div class="media-content">
                                 <div class="level-item has-text-centered">
                                     <button id="btnFinalizarOT" class="button is-success mr-5">ACEPTAR</button>
-                                    <button class="button is-danger ml-5" onclick="closeModal('modalFinalizarOT');">CANCELAR</button>
+                                    <button class="button is-danger ml-5"
+                                        onclick="closeModal('modalFinalizarOT');">CANCELAR</button>
                                 </div>
 
                             </div>
@@ -5499,7 +5601,8 @@ $tablaRanking .= "</div>";
         <div class="modal-card">
             <header class="modal-card-head">
 
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
+                <input class="input is-primary" type="text" placeholder="Buscar..."
+                    onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
 
             </header>
             <!-- Any other Bulma elements you want -->
@@ -5554,7 +5657,8 @@ $tablaRanking .= "</div>";
                 <div class="container">
                     <div class="columns">
                         <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsableProyecto');">Cerrar</button>
+                            <button class="button is-danger"
+                                onclick="closeModal('modalAgregarResponsableProyecto');">Cerrar</button>
                         </div>
                     </div>
                 </div>
@@ -5578,7 +5682,8 @@ $tablaRanking .= "</div>";
                                 <button id="btnFinalizarTareaProy" class="button is-success">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarTareaProy" class="button is-danger" onclick="closeModal('modalConfirmacionTareaProy');">CANCELAR</button>
+                                <button id="btnCancelarFinalizarTareaProy" class="button is-danger"
+                                    onclick="closeModal('modalConfirmacionTareaProy');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -5604,7 +5709,8 @@ $tablaRanking .= "</div>";
                                 <button id="btnFinalizarProy" class="button is-success">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarProy" class="button is-danger" onclick="closeModal('modalFinalizarProyecto');">CANCELAR</button>
+                                <button id="btnCancelarFinalizarProy" class="button is-danger"
+                                    onclick="closeModal('modalFinalizarProyecto');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -5630,7 +5736,8 @@ $tablaRanking .= "</div>";
                                 <button id="btnEliminarTareaProy" class="button is-success">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="btnCancelarEliminarTareaProy" class="button is-danger" onclick="closeModal('modalEliminarTareaProy');">CANCELAR</button>
+                                <button id="btnCancelarEliminarTareaProy" class="button is-danger"
+                                    onclick="closeModal('modalEliminarTareaProy');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -5656,7 +5763,8 @@ $tablaRanking .= "</div>";
                                 <button id="btnEliminarArchivoProy" class="button is-success">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="btnCancelarEliminarArchivoProy" class="button is-danger" onclick="closeModal('modalEliminarAdjuntoProy');">CANCELAR</button>
+                                <button id="btnCancelarEliminarArchivoProy" class="button is-danger"
+                                    onclick="closeModal('modalEliminarAdjuntoProy');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -5682,7 +5790,8 @@ $tablaRanking .= "</div>";
                                 <button id="" class="button is-success" onclick="logout();">ACEPTAR</button>
                             </div>
                             <div class="level-item has-text-centered">
-                                <button id="" class="button is-danger" onclick="closeModal('modalLogout');">CANCELAR</button>
+                                <button id="" class="button is-danger"
+                                    onclick="closeModal('modalLogout');">CANCELAR</button>
                             </div>
                         </div>
 
@@ -5714,7 +5823,8 @@ $tablaRanking .= "</div>";
                             </div>
                             <div class="columns">
                                 <div class="column">
-                                    <textarea type="text" id="txtJustificacionProy" class="input" placeholder="Justificacion"></textarea>
+                                    <textarea type="text" id="txtJustificacionProy" class="input"
+                                        placeholder="Justificacion"></textarea>
                                 </div>
                             </div>
                             <div class="columns">
@@ -5737,13 +5847,15 @@ $tablaRanking .= "</div>";
                                     </div>
                                     <div class="columns">
                                         <div class="column">
-                                            <input type="number" maxlength="4" class="input" id="txtAñoN" placeholder="Año" />
+                                            <input type="number" maxlength="4" class="input" id="txtAñoN"
+                                                placeholder="Año" />
                                         </div>
                                     </div>
                                     <div class="columns">
                                         <div class="column">
                                             <a class="button is-primary">
-                                                <input class="file-input" type="file" name="resume" id="txtAdjuntoProyectoN" multiple>
+                                                <input class="file-input" type="file" name="resume"
+                                                    id="txtAdjuntoProyectoN" multiple>
                                                 <span class="icon">
                                                     <i class="fas fa-paperclip"></i>
                                                 </span>
@@ -5758,10 +5870,12 @@ $tablaRanking .= "</div>";
                         <div class="container">
                             <div class="columns has-text-centered">
                                 <div class="column">
-                                    <button id="" class="button is-danger" onclick="closeModal('modalCrearProyecto');">CANCELAR</button>
+                                    <button id="" class="button is-danger"
+                                        onclick="closeModal('modalCrearProyecto');">CANCELAR</button>
                                 </div>
                                 <div class="column">
-                                    <button id="" class="button is-success" onclick="agregarProyecto(<?php echo $idDestinoT; ?>, <?php echo $idPermiso; ?>, <?php echo $idUsuario; ?>)">CREAR
+                                    <button id="" class="button is-success"
+                                        onclick="agregarProyecto(<?php echo $idDestinoT; ?>, <?php echo $idPermiso; ?>, <?php echo $idUsuario; ?>)">CREAR
                                         PROYECTO</button>
                                 </div>
                             </div>
@@ -5791,11 +5905,13 @@ $tablaRanking .= "</div>";
                                 <div class="column">
                                     <div class="field">
                                         <div class="control">
-                                            <input id="txtEditTituloTarea" class="input" type="text" placeholder="Titulo tarea...">
+                                            <input id="txtEditTituloTarea" class="input" type="text"
+                                                placeholder="Titulo tarea...">
                                         </div>
                                     </div>
                                     <div class="field">
-                                        <input class="is-checkradio is-danger" id="chkbEliminarTarea" type="checkbox" name="chkbEliminarTarea">
+                                        <input class="is-checkradio is-danger" id="chkbEliminarTarea" type="checkbox"
+                                            name="chkbEliminarTarea">
                                         <label for="chkbEliminarTarea">Eliminar tarea</label>
                                     </div>
                                 </div>
@@ -5823,7 +5939,8 @@ $tablaRanking .= "</div>";
             <section class="modal-card-body">
                 <div class="columns">
                     <div id="divHeaderComentarios" class="column">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-comentarios');"></button>
+                        <button class="delete" aria-label="close"
+                            onclick="closeModal('modal-equipo-comentarios');"></button>
                     </div>
                 </div>
                 <div class="columns">
@@ -5916,7 +6033,8 @@ $tablaRanking .= "</div>";
             <section class="modal-card-body">
                 <div class="columns">
                     <div id="divHeaderFotos" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-pictures');"></button>
+                        <button class="delete" aria-label="close"
+                            onclick="closeModal('modal-equipo-pictures');"></button>
                     </div>
                 </div>
                 <div class="columns">
@@ -6027,7 +6145,8 @@ $tablaRanking .= "</div>";
             <section class="modal-card-body">
                 <div class="columns">
                     <div id="divHeaderCot" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-cotizaciones');"></button>
+                        <button class="delete" aria-label="close"
+                            onclick="closeModal('modal-equipo-cotizaciones');"></button>
                     </div>
                 </div>
                 <div class="columns">
@@ -6281,7 +6400,8 @@ $tablaRanking .= "</div>";
                 <nav class="navbar-menu">
                     <div class="navbar-start has-text-centered">
                         <span class="navbar-item">
-                            <button class="button is-warning" onclick="showsubsecciones('')"><i class="fas fa-arrow-left"></i></button>
+                            <button class="button is-warning" onclick="showsubsecciones('')"><i
+                                    class="fas fa-arrow-left"></i></button>
                         </span>
                         <div class="s-zia">
                             <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
@@ -6298,7 +6418,8 @@ $tablaRanking .= "</div>";
                             </button>
                         </div>
                         <div class="navbar-item">
-                            <button type="button" class="button is-success" name="button" onclick="proyectosFinalizados();">
+                            <button type="button" class="button is-success" name="button"
+                                onclick="proyectosFinalizados();">
                                 <i class="fad fa-check-double mr-2"></i>Ver finalizados
                             </button>
                         </div>
@@ -6313,7 +6434,8 @@ $tablaRanking .= "</div>";
                 <div class="column is-3 has-text-left">
                     <div class="field has-addons">
                         <div class="control is-expanded ml-5">
-                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Nuevo Proyecto" maxlength="60">
+                            <input id="tituloProyectoNuevo" class="input" type="text"
+                                placeholder="Agregar Nuevo Proyecto" maxlength="60">
                         </div>
                         <div class="control">
                             <a class="button is-warning" onclick="nuevoProyecto();">
@@ -6403,7 +6525,9 @@ $tablaRanking .= "</div>";
             <div class="hero-head">
                 <nav class="navbar-menu">
                     <div class="navbar-start has-text-centered">
-                        <button class="button is-warning m-2" onclick="show_hide_modal('reporteStatusDEP','hide'); show_hide_modalProyectos('modal-proyectos','show');"><i class=" fas fa-arrow-left"></i></button>
+                        <button class="button is-warning m-2"
+                            onclick="show_hide_modal('reporteStatusDEP','hide'); show_hide_modalProyectos('modal-proyectos','show');"><i
+                                class=" fas fa-arrow-left"></i></button>
                         <div class="DEP" style="background: #c8a7fc; width:60px;">
                             <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
                             <h3 class="title  is-4 has-text-centered mt-2">DEP</h3>
@@ -6438,7 +6562,8 @@ $tablaRanking .= "</div>";
                     <div class="column is-half">
                         <div class="columns is-mobile">
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de los correctivos</strong></p>
+                                <p class="barratitulos" data-tooltip="Responsable"><strong
+                                        class="has-text-white">Descripcion de los correctivos</strong></p>
                             </div>
 
                         </div>
@@ -6446,16 +6571,20 @@ $tablaRanking .= "</div>";
                     <div class="column is-white">
                         <div class="columns is-gapless is-mobile">
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Responsable</strong></p>
+                                <p class="barratitulos" data-tooltip="Responsable"><strong
+                                        class="has-text-white">Responsable</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Fecha estimada de solucion"><strong class="has-text-white">Fecha</strong></p>
+                                <p class="barratitulos" data-tooltip="Fecha estimada de solucion"><strong
+                                        class="has-text-white">Fecha</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Documentos e imagenes adjuntoas"><strong class="has-text-white">Adjuntos</strong></p>
+                                <p class="barratitulos" data-tooltip="Documentos e imagenes adjuntoas"><strong
+                                        class="has-text-white">Adjuntos</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Feedback/Comentarios"><strong class="has-text-white">Comentarios</strong></p>
+                                <p class="barratitulos" data-tooltip="Feedback/Comentarios"><strong
+                                        class="has-text-white">Comentarios</strong></p>
                             </div>
                             <div class="column">
                                 <p class="barratitulos">Status</p>
@@ -6482,7 +6611,8 @@ $tablaRanking .= "</div>";
                 <nav class="navbar-menu">
                     <div class="navbar-start has-text-centered">
                         <span class="navbar-item">
-                            <button class="button is-warning" onclick="regresarProyectos()"><i class="fas fa-arrow-left"></i></button>
+                            <button class="button is-warning" onclick="regresarProyectos()"><i
+                                    class="fas fa-arrow-left"></i></button>
                         </span>
                         <div class="s-zia">
                             <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
@@ -6572,9 +6702,14 @@ $tablaRanking .= "</div>";
 
                         <div class="columns">
                             <div class="column">
-                                <textarea id="dataJustificacion" class="textarea" placeholder="Escriba la justificacion del proyecto..."></textarea>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarJustificacionProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
-                                <br><button class="button is-info is-fullwidth mt-2" onclick="consultaArchivoJustificacion();"><i class="fad fa-cloud-upload-alt fa-lg"></i>Adjuntos</button>
+                                <textarea id="dataJustificacion" class="textarea"
+                                    placeholder="Escriba la justificacion del proyecto..."></textarea>
+                                <button class="button is-info is-fullwidth mt-2"
+                                    onclick="actualizarJustificacionProyecto();"><i
+                                        class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
+                                <br><button class="button is-info is-fullwidth mt-2"
+                                    onclick="consultaArchivoJustificacion();"><i
+                                        class="fad fa-cloud-upload-alt fa-lg"></i>Adjuntos</button>
 
                             </div>
                         </div>
@@ -6602,9 +6737,11 @@ $tablaRanking .= "</div>";
                         <div class="columns">
                             <div class="column">
                                 <div class="control">
-                                    <span></span><input id="dataCoste" class="input" type="text" placeholder="Coste en USD">
+                                    <span></span><input id="dataCoste" class="input" type="text"
+                                        placeholder="Coste en USD">
                                 </div>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarCostoProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
+                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarCostoProyecto();"><i
+                                        class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
                             </div>
                         </div>
 
@@ -6628,27 +6765,45 @@ $tablaRanking .= "</div>";
                     <div class="content">
                         <div class="columns">
                             <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="aplicarStatus('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                <button class="button is-danger is-fullwidth" onclick="aplicarStatus('urgente');"><i
+                                        class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
                                     urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="aplicarStatus('material');"><span class="mr-4 fa-lg"><strong> M
+                                <button class="button is-dark is-fullwidth mt-2"
+                                    onclick="aplicarStatus('material');"><span class="mr-4 fa-lg"><strong> M
                                         </strong></span> No hay material</button>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="aplicarStatus('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
-                                <button class="button is-success is-fullwidth mt-2" onclick="aplicarStatus('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
+                                <button class="button is-warning is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalEnergetico', 'show');"><span
+                                        class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
+                                <button class="button is-primary is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalDepartamento', 'show');"><span
+                                        class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
+                                <button class="button is-info is-fullwidth mt-2"
+                                    onclick="aplicarStatus('trabajare');"><span
+                                        class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
+                                <button class="button is-success is-fullwidth mt-2"
+                                    onclick="aplicarStatus('solucionado');"><i
+                                        class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
                                 <div class="column has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarPlan();">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="btnEditarPlan();">
                                         <i class="far fa-edit"></i>
                                         <span> Editar</span>
                                     </button>
-                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarPlanAccion('');">
+                                    <button id="btnEditarPlan"
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="eliminarPlanAccion('');">
                                         <i class="far fa-trash-alt"></i>
                                         <span> Eliminar</span>
                                     </button>
                                 </div>
                                 <div class="column has-text-centered">
-                                    <input id="editarTituloPlan" class="hidden bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button id="btnTituloPlan" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="actualizarPlanAccion('');">
+                                    <input id="editarTituloPlan"
+                                        class="hidden bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+                                        type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnTituloPlan"
+                                        class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                                        onclick="actualizarPlanAccion('');">
                                         <i class="far fa-save"></i>
                                         <span> Guardar</span>
                                     </button>
@@ -6675,13 +6830,21 @@ $tablaRanking .= "</div>";
                     <div class="content">
                         <div class="columns">
                             <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="statusProyecto('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                <button class="button is-danger is-fullwidth" onclick="statusProyecto('urgente');"><i
+                                        class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
                                     urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusProyecto('material');"><span class="mr-4 fa-lg"><strong> M
+                                <button class="button is-dark is-fullwidth mt-2"
+                                    onclick="statusProyecto('material');"><span class="mr-4 fa-lg"><strong> M
                                         </strong></span> No hay material</button>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="statusProyecto('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
+                                <button class="button is-warning is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalEnergetico', 'show');"><span
+                                        class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
+                                <button class="button is-primary is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalDepartamento', 'show');"><span
+                                        class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
+                                <button class="button is-info is-fullwidth mt-2"
+                                    onclick="statusProyecto('trabajare');"><span
+                                        class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
                                 <!--<button class="button is-success is-fullwidth mt-2" onclick="statusProyecto('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>-->
                             </div>
                         </div>
@@ -6693,18 +6856,26 @@ $tablaRanking .= "</div>";
                         <div class="columns my-0">
                             <div class="column has-text-centered my-0">
                                 <div class="has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarProyecto();">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="btnEditarProyecto();">
                                         <i class="far fa-edit"></i>
                                         <span> Editar</span>
                                     </button>
-                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarProyecto('');">
+                                    <button id="btnEditarPlan"
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="eliminarProyecto('');">
                                         <i class="far fa-trash-alt"></i>
                                         <span> Eliminar</span>
                                     </button>
                                 </div>
                                 <div id="btnInputProyecto" class="has-text-centered hidden">
-                                    <input id="editarTituloProyecto" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarProyecto('');">
+                                    <input id="editarTituloProyecto"
+                                        class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+                                        type="text" placeholder="Nuevo Titulo">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                                        onclick="editarProyecto('');">
                                         <i class="far fa-save"></i>
                                         <span> Guardar</span>
                                     </button>
@@ -6734,30 +6905,47 @@ $tablaRanking .= "</div>";
                     <div class="content">
                         <div class="columns">
                             <div class="column mb-0">
-                                <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i
+                                        class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
                                     urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusMC('material');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalDepartamentoMC', 'show'); consultaEDMC('departamento');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="statusMC('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
-                                <button class="button is-success is-fullwidth mt-2" onclick="statusMC('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="statusMC('material');"><span
+                                        class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                                <button class="button is-warning is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span
+                                        class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
+                                <button class="button is-primary is-fullwidth mt-2"
+                                    onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalDepartamentoMC', 'show'); consultaEDMC('departamento');"><span
+                                        class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
+                                <button class="button is-info is-fullwidth mt-2" onclick="statusMC('trabajare');"><span
+                                        class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
+                                <button class="button is-success is-fullwidth mt-2"
+                                    onclick="statusMC('solucionado');"><i
+                                        class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
                             </div>
                         </div>
                         <div class="columns my-0">
                             <div class="column has-text-centered my-0">
                                 <div class="has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarMC();">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="btnEditarMC();">
                                         <i class="far fa-edit"></i>
                                         <span> Editar</span>
                                     </button>
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarMC('');">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center"
+                                        onclick="eliminarMC('');">
                                         <i class="far fa-trash-alt"></i>
                                         <span> Eliminar</span>
                                     </button>
                                 </div>
                                 <div id="btnInputMC" class="has-text-centered hidden">
-                                    <input id="editarTituloMC" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarMC('');">
+                                    <input id="editarTituloMC"
+                                        class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
+                                        type="text" placeholder="Nuevo Titulo">
+                                    <button
+                                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center"
+                                        onclick="editarMC('');">
                                         <i class="far fa-save"></i>
                                         <span> Guardar</span>
                                     </button>
@@ -6796,7 +6984,8 @@ $tablaRanking .= "</div>";
                                         </select>
                                     </div>
                                 </div>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarTipoProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button><br>
+                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarTipoProyecto();"><i
+                                        class="fad fa-save mr-4 fa-lg"></i>Guardar</button><br>
                             </div>
                         </div>
                     </div>
@@ -6834,7 +7023,8 @@ $tablaRanking .= "</div>";
                                                 </span>
                                                 <span class="file-name"> Nombre Archivo </span>
                                             </label>
-                                            <button class="btn button is-primary" type="submit" onclick="subirArchivo();"><span class="fas fa-save fa-lg">
+                                            <button class="btn button is-primary" type="submit"
+                                                onclick="subirArchivo();"><span class="fas fa-save fa-lg">
                                                 </span></button>
                                             <!-- <span class="fas fa-save"> </span><input class="btn button is-primary" value="Subir" onclick="subirArchivo();"> -->
                                         </div>
@@ -6882,7 +7072,8 @@ $tablaRanking .= "</div>";
         <div class="modal-card">
             <header class="modal-card-head">
 
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
+                <input class="input is-primary" type="text" placeholder="Buscar..."
+                    onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
 
             </header>
             <!-- Any other Bulma elements you want -->
@@ -6966,7 +7157,8 @@ $tablaRanking .= "</div>";
                             <div class="columns is-centered">
                                 <div class="field has-addons">
                                     <div class="control">
-                                        <input id="textComentarioProyecto" class="input" type="text" placeholder="Agregar Comentarios...">
+                                        <input id="textComentarioProyecto" class="input" type="text"
+                                            placeholder="Agregar Comentarios...">
                                     </div>
                                     <div class="control" onclick="agregarComentarioProyectos()">
                                         <a class="button is-info">Agregar</a>
@@ -7000,7 +7192,8 @@ $tablaRanking .= "</div>";
                 <div class="columns">
                     <div class="column is-4">
                         <h4 class="subtitle is-4 has-text-centered">Plan de acción</h4>
-                        <input id="inputPlanAccion" class="input is-rounded" type="text" placeholder="Agregar Plan Acción"><br><br>
+                        <input id="inputPlanAccion" class="input is-rounded" type="text"
+                            placeholder="Agregar Plan Acción"><br><br>
 
                         <div class="timeline is-left">
 
@@ -7019,14 +7212,16 @@ $tablaRanking .= "</div>";
 
                     <div class="column is-5">
                         <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
-                        <input id="inputComentarioPlanAccion" class="input is-rounded is-fullwidth is-4" type="text" placeholder="Añadir comentario"><br>
+                        <input id="inputComentarioPlanAccion" class="input is-rounded is-fullwidth is-4" type="text"
+                            placeholder="Añadir comentario"><br>
 
                         <div id="comentarioPlanAccion"></div>
                     </div>
 
                     <div class="column">
                         <h4 class="subtitle is-4 has-text-centered">Adjuntos</h4>
-                        <input id="inputAdjuntoPlanAccion" class="file is-fullwidth" type="file" placeholder="Añadir Adjunto"><br>
+                        <input id="inputAdjuntoPlanAccion" class="file is-fullwidth" type="file"
+                            placeholder="Añadir Adjunto"><br>
 
                         <img src="svg/formatos/avi.svg" alt="" width="80px">
 
@@ -7070,15 +7265,24 @@ $tablaRanking .= "</div>";
                         </div>
                         <div class=" columns">
                             <div class="column buttons">
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatus('departamento_calidad')">Calidad</button>
+                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered"
+                                    onclick="aplicarStatus('departamento_calidad')">Calidad</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_compras')">Compras</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('departamento_compras')">Compras</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_direccion')">Dirección</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('departamento_direccion')">Dirección</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_finanzas')">Finanzas</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('departamento_finanzas')">Finanzas</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_rrhh')">RRHH</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('departamento_rrhh')">RRHH</button>
                             </div>
                         </div>
                         <div class="columns">
@@ -7111,15 +7315,24 @@ $tablaRanking .= "</div>";
                         </div>
                         <div class=" columns">
                             <div class="column buttons">
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatusMC('departamento_calidad')">Calidad</button>
+                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered"
+                                    onclick="aplicarStatusMC('departamento_calidad')">Calidad</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_compras')">Compras</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('departamento_compras')">Compras</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_direccion')">Dirección</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('departamento_direccion')">Dirección</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_finanzas')">Finanzas</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('departamento_finanzas')">Finanzas</button>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_rrhh')">RRHH</button>
+                                <button
+                                    class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('departamento_rrhh')">RRHH</button>
                             </div>
                         </div>
                         <div class="has-text-centered title is-5 mb-2">
@@ -7153,13 +7366,20 @@ $tablaRanking .= "</div>";
                         </div>
                         <div class=" columns">
                             <div class="column buttons">
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatusMC('energetico_electricidad');">Electricidad</button>
+                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered"
+                                    onclick="aplicarStatusMC('energetico_electricidad');">Electricidad</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_agua');">Agua</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('energetico_agua');">Agua</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_diesel');">Diésel</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('energetico_diesel');">Diésel</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_gas');">Gas</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatusMC('energetico_gas');">Gas</button>
                             </div>
                         </div>
                         <div class="has-text-centered title is-5 mb-2">
@@ -7191,13 +7411,20 @@ $tablaRanking .= "</div>";
                         <div class=" columns">
                             <div class="column buttons">
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatus('energetico_electricidad')">Electricidad</button>
+                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered"
+                                    onclick="aplicarStatus('energetico_electricidad')">Electricidad</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_agua')">Agua</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('energetico_agua')">Agua</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_diesel')">Diésel</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('energetico_diesel')">Diésel</button>
 
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_gas')">Gas</button>
+                                <button
+                                    class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2"
+                                    onclick="aplicarStatus('energetico_gas')">Gas</button>
 
                             </div>
                         </div>
@@ -7217,7 +7444,8 @@ $tablaRanking .= "</div>";
     </div>
 
 
-    <a id="btnAncla" href="#nav-menu" class="button is-primary is-rounded ancla" style="display:none;"><i class="fa fa-arrow-up"></i></a>
+    <a id="btnAncla" href="#nav-menu" class="button is-primary is-rounded ancla" style="display:none;"><i
+            class="fa fa-arrow-up"></i></a>
 
 
 </body>
@@ -7239,313 +7467,313 @@ $tablaRanking .= "</div>";
 <script src="js/refreshSession.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal-dark"
-        });
-
-        $('#dismiss, .overlay').on('click', function() {
-            $('#sidebar').removeClass('active');
-            $('.overlay').removeClass('active');
-        });
-
-        $('#sidebarCollapse').on('click', function() {
-            $('#sidebar').addClass('active');
-            $('.overlay').addClass('active');
-            $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        });
+$(document).ready(function() {
+    $("#sidebar").mCustomScrollbar({
+        theme: "minimal-dark"
     });
+
+    $('#dismiss, .overlay').on('click', function() {
+        $('#sidebar').removeClass('active');
+        $('.overlay').removeClass('active');
+    });
+
+    $('#sidebarCollapse').on('click', function() {
+        $('#sidebar').addClass('active');
+        $('.overlay').addClass('active');
+        $('.collapse.in').toggleClass('in');
+        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+    });
+});
 </script>
 <script>
-    $(document).ready(function() {
-        var alturaFilas = screen.height - 400;
-        var dFilas = document.getElementById("dFilas");
-        //dFilas.setAttribute("style", "min-height: " + alturaFilas + "px;");
-        var pageloader = document.getElementById("loader");
-        if (pageloader) {
+$(document).ready(function() {
+    var alturaFilas = screen.height - 400;
+    var dFilas = document.getElementById("dFilas");
+    //dFilas.setAttribute("style", "min-height: " + alturaFilas + "px;");
+    var pageloader = document.getElementById("loader");
+    if (pageloader) {
 
-            var pageloaderTimeout = setTimeout(function() {
-                pageloader.classList.toggle('is-active');
-                clearTimeout(pageloaderTimeout);
-            }, 3000);
+        var pageloaderTimeout = setTimeout(function() {
+            pageloader.classList.toggle('is-active');
+            clearTimeout(pageloaderTimeout);
+        }, 3000);
+    }
+
+    $(window).scroll(function() {
+        var position = $(this).scrollTop();
+        var positionHead = $(this).scrollTop();
+        if (position >= 200) {
+            $('#btnAncla').fadeIn('slow');
+        } else {
+            $('#btnAncla').fadeOut('slow');
         }
-
-        $(window).scroll(function() {
-            var position = $(this).scrollTop();
-            var positionHead = $(this).scrollTop();
-            if (position >= 200) {
-                $('#btnAncla').fadeIn('slow');
-            } else {
-                $('#btnAncla').fadeOut('slow');
-            }
-            if (positionHead >= 300) {
-                $(".tg").addClass("top-head");
-            } else {
-                $(".tg").removeClass("top-head");
-            }
-        });
-
-        $(function() {
-            $("#btnAncla").on('click', function() {
-                $("html, body").animate({
-                    scrollTop: 0
-                }, 1000);
-                return false;
-            });
-        });
+        if (positionHead >= 300) {
+            $(".tg").addClass("top-head");
+        } else {
+            $(".tg").removeClass("top-head");
+        }
     });
-</script>
-<script>
+
     $(function() {
-        $('select[multiple].active.3col').multiselect({
-            columns: 1,
-            placeholder: 'Secciones',
-            search: false,
-            searchOptions: {
-                'default': 'Buscar secciones'
-            },
-        });
-
-        $(".ms-options").mCustomScrollbar({
-            theme: "minimal-dark"
+        $("#btnAncla").on('click', function() {
+            $("html, body").animate({
+                scrollTop: 0
+            }, 1000);
+            return false;
         });
     });
+});
 </script>
 <script>
-    $('#myDatePicker').datepicker({
-        // Let's make a function which will add class 'my-class' to every 11 of the month
-        // and make these cells disabled.
-
-        onSelect: function onSelect(fd, date) {
-            var idEquipo = $("#hddIdEquipo").val();
-            var idDestino = $("#hddIdDestino").val();
-            var idSubseccion = $("#hddIdSubseccion").val();
-            var idCategoria = $("#hddIdCategoria").val();
-            var idSubcategoria = $("#hddIdSubcategoria").val();
-            if (date.length == 2) {
-                var idTarea = $("#hddIDTarea").val();
-                actualizarRangoFechas(idTarea, fd);
-                recargarListaTareas(idSubseccion, idDestino, idCategoria, idSubcategoria);
-
-                // alert(date + " " + idTarea);
-            }
-        }
+$(function() {
+    $('select[multiple].active.3col').multiselect({
+        columns: 1,
+        placeholder: 'Secciones',
+        search: false,
+        searchOptions: {
+            'default': 'Buscar secciones'
+        },
     });
 
-    $('#myDatePickerMC').datepicker({
-        // Let's make a function which will add class 'my-class' to every 11 of the month
-        // and make these cells disabled.
-
-        onSelect: function onSelect(fd, date) {
-            var idEquipo = $("#hddIdEquipo").val();
-            var idDestino = $("#hddIdDestino").val();
-            var idSubseccion = $("#hddIdSubseccion").val();
-            var idCategoria = $("#hddIdCategoria").val();
-            var idSubcategoria = $("#hddIdSubcategoria").val();
-            var idRelSubcategoria = 0;
-            if (date.length == 2) {
-                var idTarea = $("#hddIDTarea").val();
-                actualizarRangoFechas(idTarea, fd);
-                //closeModal('modal-mc-fecha');
-                if (idEquipo != 0) {
-                    obtCorrectivos(idEquipo, 'N');
-                } else {
-                    obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria,
-                        'N');
-                }
-
-                //recargarListaTareasMC(idEquipo);
-                // alert(date + " " + idTarea);
-            }
-        }
+    $(".ms-options").mCustomScrollbar({
+        theme: "minimal-dark"
     });
+});
 </script>
 <script>
-    // Obtener Día
-    var fecha = new Date();
+$('#myDatePicker').datepicker({
+    // Let's make a function which will add class 'my-class' to every 11 of the month
+    // and make these cells disabled.
 
-    switch (fecha.getDay()) {
-        case 1:
-            $('.hide-seccion-is-3').hide();
-            $('.id-12, .id-23, .id-8').show();
-            $('.btn-id-12, .btn-id-23, .btn-id-8').addClass('is-success');
-            $(".btn-8, .btn-3, .btn-9").addClass("bannersec")
-            break;
-        case 2:
-            $('.hide-seccion-is-3').hide();
-            $('.id-9, .id-23').show();
-            $('.id-9, .btn-id-23').addClass('is-success');
-            $(".btn-10, .btn-3").addClass("bannersec")
-            break;
-        case 3:
-            $('.hide-seccion-is-3').hide();
-            $('.id-1, .id-23, .id-10').show();
-            $('.btn-id-1, .btn-id-23, .btn-id-10').addClass('is-success');
-            $(".btn-2, .btn-3, .btn-11").addClass("bannersec")
-            break;
-        case 4:
-            $('.hide-seccion-is-3').hide();
-            $('.id-5, .id-23, .id-6').show();
-            $('.btn-id-5, .btn-id-23, .btn-id-6').addClass('is-success');
-            $(".btn-5, .btn-3, .btn-6").addClass("bannersec")
-            break;
-        case 5:
-            $('.hide-seccion-is-3').hide();
-            $('.id-24, .id-23, .id-11').show();
-            $('.btn-id-24, .btn-id-23, .btn-id-11').addClass('is-success');
-            $('.btn-1, .btn-3, .btn-12').addClass("bannersec");
-            break;
-        default:
-            $('.btn-seccion').addClass("bannersec");
+    onSelect: function onSelect(fd, date) {
+        var idEquipo = $("#hddIdEquipo").val();
+        var idDestino = $("#hddIdDestino").val();
+        var idSubseccion = $("#hddIdSubseccion").val();
+        var idCategoria = $("#hddIdCategoria").val();
+        var idSubcategoria = $("#hddIdSubcategoria").val();
+        if (date.length == 2) {
+            var idTarea = $("#hddIDTarea").val();
+            actualizarRangoFechas(idTarea, fd);
+            recargarListaTareas(idSubseccion, idDestino, idCategoria, idSubcategoria);
+
+            // alert(date + " " + idTarea);
+        }
     }
+});
 
-    $(".btn-1").click(function() {
-        $(".id-24").toggle("hide");
-        $(".btn-1").toggleClass("bannersec");
-    });
+$('#myDatePickerMC').datepicker({
+    // Let's make a function which will add class 'my-class' to every 11 of the month
+    // and make these cells disabled.
 
-    $(".btn-2").click(function() {
-        $(".id-1").toggle("hide");
-        $(".btn-2").toggleClass("bannersec");
-    });
+    onSelect: function onSelect(fd, date) {
+        var idEquipo = $("#hddIdEquipo").val();
+        var idDestino = $("#hddIdDestino").val();
+        var idSubseccion = $("#hddIdSubseccion").val();
+        var idCategoria = $("#hddIdCategoria").val();
+        var idSubcategoria = $("#hddIdSubcategoria").val();
+        var idRelSubcategoria = 0;
+        if (date.length == 2) {
+            var idTarea = $("#hddIDTarea").val();
+            actualizarRangoFechas(idTarea, fd);
+            //closeModal('modal-mc-fecha');
+            if (idEquipo != 0) {
+                obtCorrectivos(idEquipo, 'N');
+            } else {
+                obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria,
+                    'N');
+            }
 
-    $(".btn-3").click(function() {
-        $(".id-23").toggle("hide");
-        $(".btn-3").toggleClass("bannersec");
-    });
-
-    $(".btn-4").click(function() {
-        $(".id-19").toggle("hide");
-        $(".btn-4").toggleClass("bannersec");
-    });
-
-    $(".btn-5").click(function() {
-        $(".id-5").toggle("hide");
-        $(".btn-5").toggleClass("bannersec");
-    });
-
-    $(".btn-6").click(function() {
-        $(".id-6").toggle("hide");
-        $(".btn-6").toggleClass("bannersec");
-    });
-
-    $(".btn-7").click(function() {
-        $(".id-7").toggle("hide");
-        $(".btn-7").toggleClass("bannersec");
-    });
-
-    $(".btn-8").click(function() {
-        $(".id-12").toggle("hide");
-        $(".btn-8").toggleClass("bannersec");
-    });
-
-    $(".btn-9").click(function() {
-        $(".id-8").toggle("hide");
-        $(".btn-9").toggleClass("bannersec");
-    });
-
-    $(".btn-10").click(function() {
-        $(".id-9").toggle("hide");
-        $(".btn-10").toggleClass("bannersec");
-    });
-
-    $(".btn-11").click(function() {
-        $(".id-10").toggle("hide");
-        $(".btn-11").toggleClass("bannersec");
-    });
-
-    $(".btn-12").click(function() {
-        $(".id-11").toggle("hide");
-        $(".btn-12").toggleClass("bannersec");
-    });
-
-
-    $(".btn-subsecciones").click(function() {
-        $("#seccion-bar").css('display', 'none');
-    });
-
-    $(".btn-proyectos").click(function() {
-        $("#seccion-bar").css('display', 'none');
-        $("#seccionColumnas").css('display', 'none');
-        $("#modal-proyectos").css('display', 'block');
-    });
-
-    $(".btn-regresar-subsecciones").click(function() {
-        $("#sectionHeroListaEquipos").css('display', 'none');
-        $("#seccionListaEquipos").css('display', 'none');
-        $("#seccion-bar").css('display', 'block');
-    });
-
-    function modalproyectos() {
-        $("#modal-proyectos").css("display", "none");
-        $("#seccionColumnas").css('display', 'block');
+            //recargarListaTareasMC(idEquipo);
+            // alert(date + " " + idTarea);
+        }
     }
+});
+</script>
+<script>
+// Obtener Día
+var fecha = new Date();
 
-    function showsubsecciones() {
-        $("#sectionHeroListaEquipos").css('display', 'none');
-        $("#seccionListaEquipos").css('display', 'none');
-        $("#modal-proyectos").css('display', 'none');
-        $("#seccion-bar").css('display', 'block');
-        $("#seccionColumnas").css('display', 'block');
-    }
+switch (fecha.getDay()) {
+    case 1:
+        $('.hide-seccion-is-3').hide();
+        $('.id-12, .id-23, .id-8').show();
+        $('.btn-id-12, .btn-id-23, .btn-id-8').addClass('is-success');
+        $(".btn-8, .btn-3, .btn-9").addClass("bannersec")
+        break;
+    case 2:
+        $('.hide-seccion-is-3').hide();
+        $('.id-9, .id-23').show();
+        $('.id-9, .btn-id-23').addClass('is-success');
+        $(".btn-10, .btn-3").addClass("bannersec")
+        break;
+    case 3:
+        $('.hide-seccion-is-3').hide();
+        $('.id-1, .id-23, .id-10').show();
+        $('.btn-id-1, .btn-id-23, .btn-id-10').addClass('is-success');
+        $(".btn-2, .btn-3, .btn-11").addClass("bannersec")
+        break;
+    case 4:
+        $('.hide-seccion-is-3').hide();
+        $('.id-5, .id-23, .id-6').show();
+        $('.btn-id-5, .btn-id-23, .btn-id-6').addClass('is-success');
+        $(".btn-5, .btn-3, .btn-6").addClass("bannersec")
+        break;
+    case 5:
+        $('.hide-seccion-is-3').hide();
+        $('.id-24, .id-23, .id-11').show();
+        $('.btn-id-24, .btn-id-23, .btn-id-11').addClass('is-success');
+        $('.btn-1, .btn-3, .btn-12').addClass("bannersec");
+        break;
+    default:
+        $('.btn-seccion').addClass("bannersec");
+}
 
-    function crearProyecto(idDestino) {
-        $("#idDestino-p").val(idDestino);
-        alert(idDestino);
-    }
+$(".btn-1").click(function() {
+    $(".id-24").toggle("hide");
+    $(".btn-1").toggleClass("bannersec");
+});
 
-    function showcomentarioproyecto(comentario) {
-        $("#comentario-proyecto").val(comentario);
-        $("#modal-justificacion").css("display", "block");
-    }
+$(".btn-2").click(function() {
+    $(".id-1").toggle("hide");
+    $(".btn-2").toggleClass("bannersec");
+});
 
-    function cerrarComentario() {
-        $("#modal-justificacion").css("display", "none");
-    }
+$(".btn-3").click(function() {
+    $(".id-23").toggle("hide");
+    $(".btn-3").toggleClass("bannersec");
+});
+
+$(".btn-4").click(function() {
+    $(".id-19").toggle("hide");
+    $(".btn-4").toggleClass("bannersec");
+});
+
+$(".btn-5").click(function() {
+    $(".id-5").toggle("hide");
+    $(".btn-5").toggleClass("bannersec");
+});
+
+$(".btn-6").click(function() {
+    $(".id-6").toggle("hide");
+    $(".btn-6").toggleClass("bannersec");
+});
+
+$(".btn-7").click(function() {
+    $(".id-7").toggle("hide");
+    $(".btn-7").toggleClass("bannersec");
+});
+
+$(".btn-8").click(function() {
+    $(".id-12").toggle("hide");
+    $(".btn-8").toggleClass("bannersec");
+});
+
+$(".btn-9").click(function() {
+    $(".id-8").toggle("hide");
+    $(".btn-9").toggleClass("bannersec");
+});
+
+$(".btn-10").click(function() {
+    $(".id-9").toggle("hide");
+    $(".btn-10").toggleClass("bannersec");
+});
+
+$(".btn-11").click(function() {
+    $(".id-10").toggle("hide");
+    $(".btn-11").toggleClass("bannersec");
+});
+
+$(".btn-12").click(function() {
+    $(".id-11").toggle("hide");
+    $(".btn-12").toggleClass("bannersec");
+});
+
+
+$(".btn-subsecciones").click(function() {
+    $("#seccion-bar").css('display', 'none');
+});
+
+$(".btn-proyectos").click(function() {
+    $("#seccion-bar").css('display', 'none');
+    $("#seccionColumnas").css('display', 'none');
+    $("#modal-proyectos").css('display', 'block');
+});
+
+$(".btn-regresar-subsecciones").click(function() {
+    $("#sectionHeroListaEquipos").css('display', 'none');
+    $("#seccionListaEquipos").css('display', 'none');
+    $("#seccion-bar").css('display', 'block');
+});
+
+function modalproyectos() {
+    $("#modal-proyectos").css("display", "none");
+    $("#seccionColumnas").css('display', 'block');
+}
+
+function showsubsecciones() {
+    $("#sectionHeroListaEquipos").css('display', 'none');
+    $("#seccionListaEquipos").css('display', 'none');
+    $("#modal-proyectos").css('display', 'none');
+    $("#seccion-bar").css('display', 'block');
+    $("#seccionColumnas").css('display', 'block');
+}
+
+function crearProyecto(idDestino) {
+    $("#idDestino-p").val(idDestino);
+    alert(idDestino);
+}
+
+function showcomentarioproyecto(comentario) {
+    $("#comentario-proyecto").val(comentario);
+    $("#modal-justificacion").css("display", "block");
+}
+
+function cerrarComentario() {
+    $("#modal-justificacion").css("display", "none");
+}
 </script>
 
 
 <script>
-    const fileInput = document.querySelector('.fileName input[type=file]');
-    fileInput.onchange = () => {
-        if (fileInput.files.length > 0) {
-            const fileName = document.querySelector('.fileName .file-name');
-            fileName.textContent = fileInput.files[0].name;
+const fileInput = document.querySelector('.fileName input[type=file]');
+fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+        const fileName = document.querySelector('.fileName .file-name');
+        fileName.textContent = fileInput.files[0].name;
+    }
+}
+
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    $("#opcionMovil").removeClass('hidden');
+    $("#seccion-bar").removeClass('mt-5');
+    // $(".hide-seccion-is-3").addClass('hide');
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
-    }
+    })
 
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        $("#opcionMovil").removeClass('hidden');
-        $("#seccion-bar").removeClass('mt-5');
-        // $(".hide-seccion-is-3").addClass('hide');
+    Toast.fire({
+        icon: 'success',
+        title: 'Versión Móvil'
+    })
+} else {
+    $("#opcionMovil").addClass('hidden');
+    $("#seccion-bar").addClass('mt-5');
+}
 
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
-        Toast.fire({
-            icon: 'success',
-            title: 'Versión Móvil'
-        })
-    } else {
-        $("#opcionMovil").addClass('hidden');
-        $("#seccion-bar").addClass('mt-5');
-    }
-
-    function mostrarSeccion(idSeccion) {
-        // let idSeccion = $("#mostrarSeccionMovil").val();
-        $("." + idSeccion).toggle('hide');
-        $(".btn-" + idSeccion).toggleClass('is-success');
-    }
+function mostrarSeccion(idSeccion) {
+    // let idSeccion = $("#mostrarSeccionMovil").val();
+    $("." + idSeccion).toggle('hide');
+    $(".btn-" + idSeccion).toggleClass('is-success');
+}
 </script>
 
 </html>
