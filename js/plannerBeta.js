@@ -404,3 +404,59 @@ function detalleMPNP(idMPNP) {
         }
     });
 }
+
+// Función para el modal de pendientes.
+
+function pendientesSubseccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
+    if (tipoPendiente != "") {
+        // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
+        page = 'modalPendientes.php?idSeccion=' + idSeccion + '&tipoPendiente=' + tipoPendiente + '&idUsuario=' +
+            idUsuario + '&idDestino=' + idDestino;
+        window.open(page, "Pendientes",
+            "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=800px"
+        );
+    }
+}
+
+// Exportación de Pendientes.
+function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
+    console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
+    const action = "consultaFinalExcel";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idSeccion: idSeccion,
+            idSubseccion: idSubseccion,
+            tipoExportar: tipoExportar
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // $("#dataExportarSeccionesUsuarios").html(data);
+            console.log(data);
+            if (tipoExportar == "exportarMisPendientes") {
+                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                window.location = page;
+            } else if (tipoExportar == "exportarSeccion") {
+                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                window.location = page;
+            } else if (tipoExportar == "exportarSubseccion") {
+                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                window.location = page;
+            } else if (tipoExportar == "exportarSeccionUsuario") {
+                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                window.location = page;
+            } else if (tipoExportar == "exportarMisPendientesPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
+                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
+            } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
+                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
+            }
+        }
+    });
+}

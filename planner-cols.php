@@ -352,7 +352,7 @@
 
 
 
-    <!-- Modal Pendientes -->
+    <!-- Modal Pendientes Eliminar -->
     <div id="modalPendientes-" class="modal">
         <div class="modal-window rounded-md pt-10 w-11/12 rounded-md">
             <!-- CONTENIDO MODAL -->

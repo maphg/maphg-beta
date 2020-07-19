@@ -63,10 +63,8 @@ if (isset($_GET['listaIdMC'])) {
 
     if ($result = mysqli_query($conn_2020, $query)) {
         // $totalResultados = mysqli_num_rows($result);
-        $totalResultados++;
         foreach ($result as $row) {
-        // }
-        // while ($row = mysqli_fetch_array($result)) {
+            $totalResultados++;
             $idMC = $row['id'];
             $destino = $row['destino'];
             $seccion = $row['seccion'];
@@ -147,8 +145,7 @@ if (isset($_GET['listaIdMC'])) {
 <body class="flex flex-col justify-start items-start h-auto bg-gray-900">
 
     <div id="33">
-        <div class="flex flex-col items-start justify-start bg-white pt-4 px-4 overflow-hidden mt-1 relative"
-            style="width: 1223px; height: 1576px;">
+        <div class="flex flex-col items-start justify-start bg-white pt-4 px-4 overflow-hidden mt-1 relative" style="width: 1223px; height: 1576px;">
 
             <div class="w-12 flex items-center justify-center absolute w-full h-full">
                 <div class="p-20">
@@ -166,8 +163,7 @@ if (isset($_GET['listaIdMC'])) {
 
                     <div class="zia-logo relative">
                         <h1 class="">ZIA</h1>
-                        <div class="font-semibold text-xs px-1 rounded bg-red-300 text-red-600 absolute"
-                            style="bottom: -20%; right: -30%;">
+                        <div class="font-semibold text-xs px-1 rounded bg-red-300 text-red-600 absolute" style="bottom: -20%; right: -30%;">
                             <h1 class="font-bold"><?= $nombreDestino; ?></h1>
                         </div>
                     </div>

@@ -77,9 +77,9 @@ if (isset($_POST['action'])) {
 
         // ZIL
         if ($ZIL_Permiso == 1) {
- 
-                $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
-            
+
+            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 11)";
+
             if ($result = mysqli_query($conn_2020, $query)) {
                 $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
@@ -898,7 +898,7 @@ if (isset($_POST['action'])) {
         if ($tipoPendiente == "MCU") {
             $filtroUsuario = "AND (t_mc.creado_por = $idUsuario OR t_mc.responsable = $idUsuario)";
         } elseif ($tipoPendiente == "MCS") {
-            $filtroSeccion = "AND id_seccion = $idUsuario";
+            $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
         }
 
         // Query para obtener todas las subsecciones, según la sección.
@@ -915,7 +915,7 @@ if (isset($_POST['action'])) {
                 // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
                 $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
                 $misPendientesSinUsuario = "$idSeccion, 'MCU', '$nombreSeccion', 0, $idDestino";
-                $misPendientesSeccion = "$idSeccion, 'MC', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesSeccion = "$idSeccion, 'MCS', '$nombreSeccion', $idUsuario, $idDestino";
 
                 // Exportar Pendientes.
                 $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
@@ -1617,7 +1617,7 @@ if (isset($_POST['action'])) {
             $filtroTipo = "activo = 2";
         }
 
-        $query = "SELECT id FROM t_mc WHERE activo = 1 $filtroTipo";
+        $query = "SELECT id FROM t_mc WHERE activo = 1 and status = 'N' $filtroTipo";
         if ($result = mysqli_query($conn_2020, $query)) {
             $totalResultados = mysqli_num_rows($result);
             $contador = 0;

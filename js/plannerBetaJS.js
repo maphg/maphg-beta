@@ -264,7 +264,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
             $("#dataOpcionesSubseccionestoggle").html(data.dataOpcionesSubsecciones);
 
             // Pestañas para Mostrar Pendientes.
-            $('#misPendientesUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesUsuario + ')');
+            $('#misPendientesUsuario').attr('onclick', 'F(' + data.misPendientesUsuario + ')');
             $('#misPendientesSinUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSinUsuario + ')');
             $('#misPendientesSeccion').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSeccion + ')');
 
@@ -309,6 +309,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
         }
     });
 }
+
 function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
     console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
     const action = "consultaFinalExcel";
