@@ -22,7 +22,7 @@ if ($idDestino == 10) {
 $queryUsuario = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_users 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_users.status = 'A' $filtroDestino";
+        WHERE t_users.status = 'A' $filtroDestino OR t_users.id_destino = 10 ORDER BY t_colaboradores.nombre ASC";
 if ($resultUsuario = mysqli_query($conn_2020, $queryUsuario)) {
     foreach ($resultUsuario as $row) {
         $idUsuario = $row['id'];
@@ -41,13 +41,6 @@ if ($resultUsuario = mysqli_query($conn_2020, $queryUsuario)) {
                 ";
     }
 }
-
-
-
-
-
-
-
 
 
 
@@ -73,9 +66,19 @@ if ($tipoPendiente == "MCU") {
 }
 
 // Query para obtener todas las subsecciones, según la sección.
-$query = "CALL obtenerSubseccionesDestinoSeccion($idDestino,$idSeccion)";
-if ($result = mysqli_query($conn_2020, $query)) {
+if ($idDestino == 10) {
+    $query = "
+        SELECT c_rel_seccion_subseccion.id, c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino, c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_secciones.seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo FROM c_rel_destino_seccion INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id WHERE c_secciones.id = idSeccion
+    ";
+    $result = mysqli_query($conn_2020, $query);
+} else {
+    $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino,$idSeccion)";
+    $result = mysqli_query($conn_2020, $query);
     $conn_2020->next_result();
+}
+
+if ($result) {
+
     foreach ($result as $row) {
         $data = "";
         $subseccion = $row['grupo'];
@@ -100,7 +103,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
             ";
 
 
-        $estiloSeccion = $nombreSeccion;
+        $estiloSeccion = strtolower("$nombreSeccion" . "-logo");
 
         $dataOpcionesSubsecciones .= "<a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">$subseccion</a>";
 
@@ -839,8 +842,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
 
                 <div class="text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
-                    <h1 id="estiloSeccion" class="font-medium text-md">
-                        <?= $estiloSeccion; ?>
+                    <h1 id="estiloSeccion" class="font-medium text-md <?= $estiloSeccion; ?>">
+                        <?= $nombreSeccion; ?>
                     </h1>
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
@@ -997,8 +1000,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 },
                 // dataType: "JSON",
                 success: function(data) {
-                    // $("#dataExportarSeccionesUsuarios").html(data);
-                    console.log(data);
+                    let usuarioSession = localStorage.getItem('usuario');
+
                     if (tipoExportar == "exportarMisPendientes") {
                         page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
                         window.location = page;
@@ -1013,13 +1016,15 @@ if ($result = mysqli_query($conn_2020, $query)) {
                         window.location = page;
                     } else if (tipoExportar == "exportarMisPendientesPDF") {
                         page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
-                            '&idUsuario=' + idUsuario;
+                            '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                            usuarioSession;
                         window.open(page, "Reporte Pendientes PDF",
                             "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );
                     } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
                         page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
-                            '&idUsuario=' + idUsuario;
+                            '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                            usuarioSession;
                         window.open(page, "Reporte Pendientes PDF",
                             "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );

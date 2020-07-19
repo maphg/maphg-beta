@@ -14,6 +14,8 @@ if (isset($_GET['listaIdMC'])) {
     $listaIdMC = $_GET['listaIdMC'];
     $idDestino = $_GET['idDestino'];
     $idUsuario = $_GET['idUsuario'];
+    $idSeccion = $_GET['idSeccion'];
+    $usuarioSession = $_GET['usuarioSession'];
 
     // Busca el destino.
     $queryDestino = "SELECT destino FROM c_destinos WHERE id = $idDestino";
@@ -25,12 +27,20 @@ if (isset($_GET['listaIdMC'])) {
         $nombreDestino = "NA";
     }
 
+    $querySeccion = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+    if ($resultSeccion = mysqli_query($conn_2020, $querySeccion)) {
+        foreach ($resultSeccion as $s) {
+            $seccion = $s['seccion'];
+        }
+    } else {
+        $seccion = "ND";
+    }
 
     // Busca el Usuario que creo el reporte.
     $queryUsuario = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
     FROM t_users 
     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_users.id = $idUsuario LIMIT 1";
+    WHERE t_users.id = $usuarioSession LIMIT 1";
     if ($resulUsuario = mysqli_query($conn_2020, $queryUsuario)) {
         foreach ($resulUsuario as $usuario) {
             $nombreCompleto = $usuario['nombre'] . " " . $usuario['apellido'];
@@ -161,8 +171,8 @@ if (isset($_GET['listaIdMC'])) {
                         <img src="../svg/logo2.png" alt="">
                     </div>
 
-                    <div class="zia-logo relative">
-                        <h1 class="">ZIA</h1>
+                    <div class="<?= strtolower($seccion); ?>-logo relative">
+                        <h1 class=""><?= $seccion; ?></h1>
                         <div class="font-semibold text-xs px-1 rounded bg-red-300 text-red-600 absolute" style="bottom: -20%; right: -30%;">
                             <h1 class="font-bold"><?= $nombreDestino; ?></h1>
                         </div>

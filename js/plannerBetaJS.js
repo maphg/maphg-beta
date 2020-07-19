@@ -326,8 +326,8 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
         },
         // dataType: "JSON",
         success: function (data) {
-            // $("#dataExportarSeccionesUsuarios").html(data);
-            console.log(data);
+            let usuarioSession = localStorage.getItem('usuario');
+
             if (tipoExportar == "exportarMisPendientes") {
                 page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
                 window.location = page;
@@ -341,11 +341,19 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
                 page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
                 window.location = page;
             } else if (tipoExportar == "exportarMisPendientesPDF") {
-                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
-                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
+                    '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                    usuarioSession;
+                window.open(page, "Reporte Pendientes PDF",
+                    "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                );
             } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
-                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario;
-                window.open(page, "Reporte Pendientes PDF", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800");
+                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
+                    '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                    usuarioSession;
+                window.open(page, "Reporte Pendientes PDF",
+                    "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                );
             }
         }
     });
