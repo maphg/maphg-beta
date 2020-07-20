@@ -1940,7 +1940,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-1'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2017,7 +2017,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-23'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2098,7 +2098,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-19'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2172,7 +2172,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-5'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2246,7 +2246,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-6'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2322,7 +2322,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-7'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2397,7 +2397,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-12'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2472,7 +2472,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-8'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2546,7 +2546,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-9'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2621,7 +2621,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-10'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
 
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
@@ -2695,7 +2695,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-11'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);

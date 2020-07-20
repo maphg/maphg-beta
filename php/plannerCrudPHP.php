@@ -1601,18 +1601,25 @@ if (isset($_POST['action'])) {
         $tipoExportar = $_POST['tipoExportar'];
         $listaId = "";
 
+        if($idDestino == 10){
+            $filtroDestino = "";
+        }else{
+            $filtroDestino = "AND id_destino = $idDestino";
+        }
+        
+
         if ($tipoExportar == "exportarMisPendientes") {
             $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccion") {
-            $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion";
+            $filtroTipo = "AND id_seccion = $idSeccion $filtroDestino";
         } elseif ($tipoExportar == "exportarSubseccion") {
-            $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
+            $filtroTipo = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestino";
         } elseif ($tipoExportar == "exportarSeccionUsuario") {
-            $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestino";
         } elseif ($tipoExportar == "exportarMisPendientesPDF") {
             $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccionUsuarioPDF") {
-            $filtroTipo = "AND id_destino = $idDestino AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestino";
         } else {
             $filtroTipo = "activo = 2";
         }

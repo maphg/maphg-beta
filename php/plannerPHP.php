@@ -5982,7 +5982,7 @@ class Planner
                 . "t_mc.energetico_gas 'ENERGETICO_GAS', "
                 . "t_mc.energetico_electricidad 'ENERGETICO_ELECTRICIDAD', "
                 . "t_mc.energetico_diesel 'ENERGETICO_DIESEL', "
-                . "t_mc.zona 'FASE', "
+                . "t_mc.zona 'ZONA', "
                 . "c_destinos.destino 'DESTINO' "
                 . "FROM t_mc "
                 . "INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id "
