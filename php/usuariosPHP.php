@@ -247,96 +247,98 @@ class Usuarios
                     date_default_timezone_set('America/Cancun');
                     $hoy = getdate();
                     $dia = $hoy['weekday'];
-                    switch ($dia) {
-                        case 'Monday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 1, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
-                                    . "ZHC = 0, ZHP = 1, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
-                            break;
-                        case 'Tuesday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 1, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
-                                    . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
 
-                            break;
-                        case 'Wednesday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 1, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 1, ZIL = 0, AUTO = 0, ZHA = 0, "
-                                    . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
+                    // Función comentada para evitar quitar permisos en la nueva version. 2020
+                    // switch ($dia) {
+                    //     case 'Monday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 1, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
+                    //                 . "ZHC = 0, ZHP = 1, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
+                    //         break;
+                    //     case 'Tuesday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 1, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
+                    //                 . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
 
-                            break;
-                        case 'Thursday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0, "
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, "
-                                    . "ZHA = 1, ZHC = 1, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 1 WHERE id = $idUsuario";
+                    //         break;
+                    //     case 'Wednesday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 1, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 1, ZIL = 0, AUTO = 0, ZHA = 0, "
+                    //                 . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
 
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
+                    //         break;
+                    //     case 'Thursday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0, "
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, "
+                    //                 . "ZHA = 1, ZHC = 1, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 1 WHERE id = $idUsuario";
 
-                            break;
-                        case 'Friday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 1, AUTO = 1, ZHA = 0, "
-                                    . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
 
-
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
-
-                            break;
-                        case 'Saturday':
-                            if ($idPermiso == 1 || $idPermiso == 3) {
-                                $query = "UPDATE t_users SET "
-                                    . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
-                                    . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
-                                    . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+                    //         break;
+                    //     case 'Friday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 1, AUTO = 1, ZHA = 0, "
+                    //                 . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
 
 
-                                try {
-                                    $resp = $conn->consulta($query);
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-                            }
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
 
-                            break;
-                    }
+                    //         break;
+                    //     case 'Saturday':
+                    //         if ($idPermiso == 1 || $idPermiso == 3) {
+                    //             $query = "UPDATE t_users SET "
+                    //                 . "DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0,"
+                    //                 . "ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, AUTO = 0, ZHA = 0, "
+                    //                 . "ZHC = 0, ZHP = 0, DEP = 0, SEG = 0, OMA = 0, ZHH = 0 WHERE id = $idUsuario";
+
+
+                    //             try {
+                    //                 $resp = $conn->consulta($query);
+                    //             } catch (Exception $ex) {
+                    //                 echo $ex;
+                    //             }
+                    //         }
+
+                    //         break;
+                    // }
                     //header('Location: ../index.php');
                 } else {
                     $resp = "2";

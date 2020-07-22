@@ -6,6 +6,7 @@ function comprobarSession() {
     // Comprueba que exista la session.
     if (idUsuario != '' && idDestino != '') {
         llamarFuncionX('consultaSubsecciones');
+        hora();
     } else {
         location.replace("login.php");
     }
@@ -135,13 +136,13 @@ function hora() {
         10: "AME"
     };
     let idDestino = localStorage.getItem('idDestino');
-    console.log('2394:' + localStorage.getItem('idDestino'));
     let h = new Date();
     let hora = h.getHours() + ':' + h.getMinutes();
     let nombreDestinoArray = arrayDestino[idDestino];
-    console.log(nombreDestinoArray);
+
     document.getElementById("hora").innerHTML = hora;
     document.getElementById("nombreDestino").innerHTML = nombreDestinoArray;
+    // console.log(hora, nombreDestinoArray);
 }
 // Desde aquí se habla a la función hora(), cada 1min.
 setInterval('hora()', 70000);
@@ -180,7 +181,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             $("#columnasSeccionesZIL").html(data.dataZIL);
             $("#columnasSeccionesZIE").html(data.dataZIE);
             $("#columnasSeccionesAUTO").html(data.dataAUTO);
@@ -227,7 +228,6 @@ function ordenarSubsecciones(listaData, ordenarPadre, ordenarHijos) {
                 orden.pop();
                 orden.sort();
                 orden.reverse();
-                // console.log('xxxxx', orden);
                 return orden ? orden : [];
             }
         },
@@ -264,7 +264,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
             $("#dataOpcionesSubseccionestoggle").html(data.dataOpcionesSubsecciones);
 
             // Pestañas para Mostrar Pendientes.
-            $('#misPendientesUsuario').attr('onclick', 'F(' + data.misPendientesUsuario + ')');
+            $('#misPendientesUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesUsuario + ')');
             $('#misPendientesSinUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSinUsuario + ')');
             $('#misPendientesSeccion').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSeccion + ')');
 
@@ -310,6 +310,8 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
     });
 }
 
+
+// Funcion para Ver y Exportar los pendientes de las secciones.
 function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
     console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
     const action = "consultaFinalExcel";
@@ -359,12 +361,25 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
     });
 }
 
-function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion) {
+// Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
+function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
+    console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
+
+    // Se agregan los filtros en las columnas de los equipos.
+    document.getElementById("tipoOrdenamientoMCN").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"MCN")');
+    document.getElementById("tipoOrdenamientoMCF").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"MCF")');
+    document.getElementById("tipoOrdenamientoNombreEquipo").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"nombreEquipo")');
+
     document.getElementById("dataEquipos").innerHTML = '';
-    document.getElementById("seccionEquipos").innerHTML = ('<i class="fas fa-spinner fa-pulse fa-2x fa-fw" ></i > ');
+    document.getElementById("seccionEquipos").innerHTML =
+        ('<i class="fas fa-spinner fa-pulse fa-2x fa-fw" ></i > ');
+    document.getElementById('modalEquipos').classList.add('open');
+
+    let palabraEquipo = document.getElementById("inputPalabraEquipo").value;
     const action = "obtenerEquipos";
-    let palabraEquipo = $("#inputPalabraEquipo").val();
-    console.log('obtenerEquipos', idUsuario, idDestino, idSeccion, idSubseccion, palabraEquipo);
+
+    // Alerta para Notificar el tipo de ordenamiento.
+    alertaImg('Ordenando Equipos', '', 'info', 3000);
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -374,21 +389,182 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion) {
             idDestino: idDestino,
             idSeccion: idSeccion,
             idSubseccion: idSubseccion,
-            palabraEquipo: palabraEquipo
+            palabraEquipo: palabraEquipo,
+            rangoInicial: rangoInicial,
+            rangoFinal: rangoFinal,
+            tipoOrdenamiento: tipoOrdenamiento
         },
         dataType: "JSON",
         success: function (data) {
             console.log(data);
-            document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             console.log('orden Equipos: ', data.ordenEquipos);
-            $("#inputPalabraEquipo").val('');
-            alertaImg(data.totalEquipos, '', 'success', 3000);
+            console.log(data.totalEquipos);
+
+            document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
+            document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
+
+            // alerta para mostrar información de los Equipos obtenidos.
+            alertaImg(data.totalEquipos, '', 'success', 3000);
+        }
+    });
+}
+
+// Obtiene todos los MC-N por Equipo.
+function obtenerMCN(idEquipo) {
+    // Actualiza el MC seleccionado.
+    localStorage.setItem('idEquipo', idEquipo);
+
+    document.getElementById("modalMCN").classList.add('open');
+    document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataMCN").innerHTML = '';
+
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "obtenerMCN";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("seccionMCN").innerHTML = data.seccion;
+            document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
+            document.getElementById("dataMCN").innerHTML = data.MC;
+            alertaImg('Pendientes: ' + data.contadorMC, '', 'info', 3000);
+        }
+    });
+}
+
+
+// Obtiene todos los MC-F por Equipo.
+function obtenerMCF(idEquipo) {
+    console.log(idEquipo);
+    document.getElementById("modalMCF").classList.add('open');
+    const action = "exportarListarUsuarios";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idSeccion: idSeccion,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            $("#dataExportarSeccionesUsuarios").html(data);
+        }
+    });
+}
+
+
+function obtenerUsuarios() {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let palabraUsuario = document.getElementById('palabraUsuario').value;
+
+    document.getElementById("modalUsuarios").classList.add('open');
+    document.getElementById("dataUsuarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+    const action = "obtenerUsuarios";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            palabraUsuario: palabraUsuario
+        },
+        dataType: "JSON",
+        success: function (data) {
+            alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 2000);
+            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
+        }
+    });
+
+}
+
+
+// Funcion para Obtener Adjuntos.
+function obtenerAdjuntos(idMC) {
+    // Actualiza el MC seleccionado.
+    localStorage.setItem('idMC', idMC);
+
+    // Recupera datos.
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
+
+    document.getElementById("dataImagenes").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataAdjuntos").classList.add('justify-center');
+
+    document.getElementById("dataAdjuntos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataImagenes").classList.add('justify-center');
+    document.getElementById("modalMedia").classList.add('open');
+
+    const action = "obtenerAdjuntosMC";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idMC: idMC
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataImagenes").classList.remove('justify-center');
+            document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
+
+            document.getElementById("dataAdjuntos").classList.remove('justify-center');
+            document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
 
         }
     });
 }
 
+
+// Funcion para Obtener Comentarios.
+function obtenerComentarios(idMC) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    document.getElementById("modalComentarios").classList.add('open');
+    document.getElementById("dataComentarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+    const action = "obtenerComentarios";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idMC: idMC
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataComentarios").innerHTML = data.dataComentarios;
+        }
+    });
+}
+
+
+// Función para Status.
+function statusMC() {
+    document.getElementById("modalStatus").classList.add('open');
+}
 
 
 // Funciones para actualizar idSeccion y idSubseccion.
@@ -414,7 +590,7 @@ function llamarFuncionX(nombreFuncion) {
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
-    console.log(idUsuario, idDestino, idSeccion, idSubseccion);
+    // console.log(idUsuario, idDestino, idSeccion, idSubseccion);
 
     switch (nombreFuncion) {
         case (nombreFuncion = 'consultaSubsecciones'):
@@ -422,8 +598,7 @@ function llamarFuncionX(nombreFuncion) {
             break;
 
         case (nombreFuncion = 'obtenerEquipos'):
-            console.log('obtenerEquipos');
-            obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion);
+            obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
             break;
     }
 }

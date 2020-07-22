@@ -58,6 +58,8 @@ function validarUsuario() {
                             localStorage.setItem('superAdmin', data.superAdmin);
                             localStorage.setItem('idSeccion', 0);
                             localStorage.setItem('idSubseccion', 0);
+                            localStorage.setItem('idEquipo', 0);
+                            localStorage.setItem('idMC', 0);
                         }
                         alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
                         location.href = "index.php";
