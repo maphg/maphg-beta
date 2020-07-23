@@ -393,9 +393,9 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
             rangoFinal: rangoFinal,
             tipoOrdenamiento: tipoOrdenamiento
         },
-        // dataType: "JSON",
+        dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             // console.log(data.dataEquipos);
 
 

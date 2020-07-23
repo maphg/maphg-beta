@@ -1836,7 +1836,7 @@ if (isset($_POST['action'])) {
         // Variables locales
         $contadorRango = 0;
         $data = array();
-        // $dataEquipos = "";
+        $dataEquipos = "";
         $opcionBuscarEquipo = "";
         $paginacionEquipos = "";
         $ordenMCEquipos = array();
