@@ -132,7 +132,7 @@ if (isset($_POST['action'])) {
                         $dataZIL .= "
                             <div data-identificador=\"$totalPendiente$sinEspacioSubseccion\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center ordenarHijos$seccion\" 
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -208,7 +208,7 @@ if (isset($_POST['action'])) {
                         $dataZIE .= "
                             <div data-identificador=\"$totalPendiente$sinEspacioSubseccion\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -282,7 +282,7 @@ if (isset($_POST['action'])) {
                         $dataAUTO .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -356,7 +356,7 @@ if (isset($_POST['action'])) {
                         $dataDEC .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -431,7 +431,7 @@ if (isset($_POST['action'])) {
                         $dataDEP .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -505,7 +505,7 @@ if (isset($_POST['action'])) {
                         $dataOMA .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -578,7 +578,8 @@ if (isset($_POST['action'])) {
 
                         $dataZHA .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -651,7 +652,8 @@ if (isset($_POST['action'])) {
 
                         $dataZHC .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -724,7 +726,8 @@ if (isset($_POST['action'])) {
 
                         $dataZHH .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -798,7 +801,7 @@ if (isset($_POST['action'])) {
                         $dataZHP .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -872,7 +875,7 @@ if (isset($_POST['action'])) {
                         $dataZIA .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -946,7 +949,8 @@ if (isset($_POST['action'])) {
 
                         $dataZIC .= "
                             <div id=\"\" data-id=\"$totalPendiente\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
+                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1843,7 +1847,7 @@ if (isset($_POST['action'])) {
         $seccionEquipos = $arraySeccion[$idSeccion];
 
         // Busca Equipos.
-        $queryEquipos = "SELECT id FROM t_equipos WHERE id_seccion = $idSeccion AND id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo ORDER BY equipo ASC";
+        $queryEquipos = "SELECT id FROM t_equipos WHERE id_seccion = $idSeccion AND id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
         if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
             $totalEquipos = mysqli_num_rows($resultEquipos);
 
@@ -2173,7 +2177,7 @@ if (isset($_POST['action'])) {
             // Datos almacenados.
             $data['dataEquipos'] = $dataEquipos;
             $data['opcionBuscarEquipo'] = $opcionBuscarEquipo;
-            $data['totalEquipos'] = "Equipos Obtenidos: $contadorRango De $longitud";
+            $data['totalEquipos'] = "Total Equipos: $totalEquipos";
             $data['seccionEquipos'] = $seccionEquipos;
             $data['paginacionEquipos'] = $paginacionEquipos;
         }
