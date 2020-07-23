@@ -1886,17 +1886,18 @@ if (isset($_POST['action'])) {
             } elseif ($tipoOrdenamiento == 'MCN') {
                 foreach ($resultEquipos as $equipo) {
                     $idEquipo = $equipo['id'];
+
                     $queryMC = "SELECT id, COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
-                        foreach ($resultMC as $MC) {
+                        if ($MC = mysqli_fetch_array($resultMC)) {
+                           
                             // Valor MC Obtenidos.
-                            $idEquipo = $MC['id'];
                             $totalMC = $MC['COUNT(id)'];
-
+                            
                             // Los resultados se cargan en array para se ordenados.
-                            $ordenMCEquipos[] = intval($totalMC);
                             $ordenIdEquipos[] = intval($idEquipo);
+                            $ordenMCEquipos[] = intval($totalMC);
                         }
                     }
                 }
