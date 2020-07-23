@@ -2306,7 +2306,7 @@ if (isset($_POST['action'])) {
             $data['contadorMC'] = $contadorMC;
             $data['MC'] = $MC;
         }
-
+        // l
         $query = "
             SELECT c_secciones.seccion, t_equipos.equipo 
             FROM t_equipos 
