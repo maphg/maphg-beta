@@ -15,7 +15,7 @@ if (isset($_POST['action'])) {
     $fechaActual = date("Y-m-d H:m:s");
 
     // Array para Secciones.
-    $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP2", 8 => "ZIA", 9 => "ZIC");
+    $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC");
 
     $queryPermisosUsuario = "SELECT* FROM t_users WHERE id = $idUsuario";
     if ($resultPermisos = mysqli_query($conn_2020, $queryPermisosUsuario)) {
@@ -79,7 +79,7 @@ if (isset($_POST['action'])) {
         if ($ZIL_Permiso == 1) {
             if ($idDestino == 10) {
                 $query = "SELECT 
-                c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, c_secciones.seccion  
+                c_subsecciones.id, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, c_secciones.seccion  
                 FROM c_subsecciones 
                 INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
                 WHERE id_seccion = 11";
@@ -167,6 +167,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -243,6 +244,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -317,6 +319,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -391,6 +394,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -466,6 +470,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -540,6 +545,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -614,6 +620,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -653,7 +660,7 @@ if (isset($_POST['action'])) {
                         $dataZHC .= "
                             <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                 class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
                                 <h1 class=\"truncate mr-2\">$subseccion</h1>
                                 <div
                                     class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -688,6 +695,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -762,6 +770,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -836,6 +845,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -910,6 +920,7 @@ if (isset($_POST['action'])) {
             }
 
             if ($result = mysqli_query($conn_2020, $query)) {
+                $conn_2020->next_result();
                 if ($row = mysqli_fetch_array($result)) {
                     $idSeccion = $row['id_seccion'];
                     $seccion = $row['seccion'];
@@ -1825,7 +1836,7 @@ if (isset($_POST['action'])) {
         // Variables locales
         $contadorRango = 0;
         $data = array();
-        $dataEquipos = "";
+        // $dataEquipos = "";
         $opcionBuscarEquipo = "";
         $paginacionEquipos = "";
         $ordenMCEquipos = array();

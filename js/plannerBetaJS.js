@@ -168,7 +168,6 @@ function toggleInivisble(id) {
 
 // Obtiene las subsecciones para la pagina principal de Planner, mediante el idDestino.
 function consultaSubsecciones(idDestino, idUsuario) {
-
     const action = "consultaSubsecciones";
 
     $.ajax({
@@ -394,11 +393,11 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
             rangoFinal: rangoFinal,
             tipoOrdenamiento: tipoOrdenamiento
         },
-        dataType: "JSON",
+        // dataType: "JSON",
         success: function (data) {
             console.log(data);
-            // console.log('orden Equipos: ', data.ordenEquipos);
-            // console.log(data.totalEquipos);
+            // console.log(data.dataEquipos);
+
 
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
