@@ -397,8 +397,8 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
         dataType: "JSON",
         success: function (data) {
             console.log(data);
-            console.log('orden Equipos: ', data.ordenEquipos);
-            console.log(data.totalEquipos);
+            // console.log('orden Equipos: ', data.ordenEquipos);
+            // console.log(data.totalEquipos);
 
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
@@ -414,13 +414,13 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
 function obtenerMCN(idEquipo) {
     // Actualiza el MC seleccionado.
     localStorage.setItem('idEquipo', idEquipo);
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
 
     document.getElementById("modalMCN").classList.add('open');
     document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("dataMCN").innerHTML = '';
 
-    let idUsuario = localStorage.getItem('usuario');
-    let idDestino = localStorage.getItem('idDestino');
     const action = "obtenerMCN";
 
     $.ajax({

@@ -2206,11 +2206,12 @@ if (isset($_POST['action'])) {
 
                 // Responsable.
                 $queryResponsable = "
-                SELECT t_colaboradores.nombre, t_colaboradores.apellido
+                SELECT t_colaboradores.id, t_colaboradores.nombre, t_colaboradores.apellido
                 FROM t_users
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_users.id = $responsable LIMIT 1
+                WHERE t_users.id = $responsable
                 ";
+
                 if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
                     foreach ($resultResponsable as $value) {
                         $nombreResponsable = $value['nombre'] . " " . $value['apellido'];
@@ -2238,11 +2239,6 @@ if (isset($_POST['action'])) {
                 } else {
                     $totalComentario = 0;
                 }
-
-
-
-
-
 
                 $MC .= "
                     <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
@@ -2307,11 +2303,25 @@ if (isset($_POST['action'])) {
                     </div>                
                 ";
             }
+            $data['contadorMC'] = $contadorMC;
+            $data['MC'] = $MC;
         }
-        $data['seccion'] = "ZICcx";
-        $data['nombreEquipo'] = "Chiller 1";
-        $data['contadorMC'] = $contadorMC;
-        $data['MC'] = $MC;
+
+        $query = "
+            SELECT c_secciones.seccion, t_equipos.equipo 
+            FROM t_equipos 
+            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            WHERE t_equipos.id = $idEquipo;
+        ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $seccion = $value['seccion'];
+                $equipo = $value['equipo'];
+
+                $data['seccion'] = $seccion;
+                $data['nombreEquipo'] = $equipo;
+            }
+        }
         echo json_encode($data);
     }
 

@@ -5,7 +5,7 @@ document.addEventListener('click', function (e) {
     if (target.hasAttribute('data-toggle') && target.getAttribute('data-toggle') == 'modal') {
         if (target.hasAttribute('data-target')) {
             var m_ID = target.getAttribute('data-target');
-            document.getElementById(m_ID).classList.add('open');
+            // document.getElementById(m_ID).classList.add('open');
             e.preventDefault();
         }
     }

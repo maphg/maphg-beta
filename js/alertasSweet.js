@@ -68,7 +68,6 @@ function alertaImg(text, classColorText, icon, timeAlert) {
         text: text,
         icon: icon,
         background: '#e2e8f0',
-        height: '0px',
         customClass: {
             container: 'm-1 w-30 text-red-400',
             content: 'mt-3 text-red-400',
