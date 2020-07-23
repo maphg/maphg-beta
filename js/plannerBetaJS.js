@@ -599,6 +599,7 @@ function llamarFuncionX(nombreFuncion) {
 
         case (nombreFuncion = 'obtenerEquipos'):
             obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
+            console.log(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
             break;
     }
 }
