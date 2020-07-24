@@ -42,8 +42,8 @@ if ($xlsIdDestino != 10) {
 	t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.fecha_creacion,
 	t_mc.departamento_finanzas, t_mc.responsable, 
 	t_colaboradores.nombre, t_colaboradores.apellido,
+    t_mc.cod2bend, t_mc.codsap
 	c_secciones.seccion, c_subsecciones.grupo
-	
 	FROM t_mc 
 	
 	INNER JOIN t_users ON t_mc.creado_por = t_users.id
@@ -59,7 +59,8 @@ if ($xlsIdDestino != 10) {
 	t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.fecha_creacion,
 	t_mc.departamento_finanzas, t_mc.responsable, 
 	t_colaboradores.nombre, t_colaboradores.apellido,
-	c_secciones.seccion, c_subsecciones.grupo
+	c_secciones.seccion, c_subsecciones.grupo,
+    t_mc.cod2bend, t_mc.codsap
 	
 	FROM t_mc 
 	
@@ -91,6 +92,8 @@ $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Subsección');
 $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Departamentos');
 $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Comentario');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'fecha de Creación');
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Cod2Bend');
+$objPHPExcel->getActiveSheet()->setCellValue('K1', 'CodSap');
 
 
 $fila =2;
@@ -106,6 +109,8 @@ while ($row = mysqli_fetch_array($result)) {
     $comentario = "Sin Comentario";
 	$seccion = $row['seccion'];
 	$subseccion = $row['grupo'];
+	$cod2bend = $row['cod2bend'];
+	$codsap = $row['codsap'];
 	$fecha = $row['fecha_creacion'];
 	$fecha = new DateTime($fecha);
 	$fecha = $fecha->format('d-m-Y H:m:s');
@@ -161,6 +166,8 @@ while ($row = mysqli_fetch_array($result)) {
     $objPHPExcel->getActiveSheet()->setCellValue('G'.$fila, $departamentos);
     $objPHPExcel->getActiveSheet()->setCellValue('H'.$fila, $comentario);
     $objPHPExcel->getActiveSheet()->setCellValue('I'.$fila, $fecha);	
+    $objPHPExcel->getActiveSheet()->setCellValue('J'.$fila, $cod2bend);	
+    $objPHPExcel->getActiveSheet()->setCellValue('K'.$fila, $codsap);	
 	//Inicializa variables.
 	$departamentos = "";
 	$destino = "";
