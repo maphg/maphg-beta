@@ -6108,6 +6108,9 @@ class Planner
             } elseif ($idDestino == 7) {
                 $arraySubseccion = array(0, 214, 213, 212, 211, 200, 62, 200, 344, 293, 291, 314, 301, 25, 298, 292, 305, 297, 200, 296, 299, 300, 354, 39, 320, 15, 37, 35, 34, 306, 308, 200, 14, 311, 13, 38);
                 $search = array_search($idSubseccion, $arraySubseccion, false);
+            }else{
+                $arraySubseccion = array(0);
+                $search = array_search($idSubseccion, $arraySubseccion, false);
             }
 
             $resp = $conn->obtDatos($query);

@@ -6589,12 +6589,18 @@ $tablaRanking .= "</div>";
                             <div class="column">
                                 <p class="barratitulos">Status</p>
                             </div>
+                            <div class="column">
+                                <p class="barratitulos">Cod2Bend</p>
+                            </div>
+                            <div class="column">
+                                <p class="barratitulos">CodSap</p>
+                            </div>
 
                         </div>
                     </div>
                 </div>
             </section>
-            <div id="reporteStatusDEPData"></div>
+            <div id="reporteStatusDEPData" onkeypress=""></div>
         </section>
     </div>
     <!-- ***************************************************************************************************************************************************************** -->

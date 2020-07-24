@@ -1514,9 +1514,9 @@ if (isset($_POST['action'])) {
         $query = "UPDATE t_mc SET actividad='$tituloMC' WHERE id=$idMC";
         $result = mysqli_query($conn_2020, $query);
         if ($result) {
-            echo "Tarea General, Eliminada";
+            echo "Tarea General, Actualizada";
         } else {
-            echo "Error al Eliminar Tarea General";
+            echo "Error al Actualizar";
         }
     }
 
@@ -1681,7 +1681,7 @@ if (isset($_POST['action'])) {
                             <div class=\"control is-expanded\">
                             <p id=\"$id\" class=\"has-text-justified manita $background_status px-3 py-1 rounded-pill has-text-white planAccionActividad has-text-weight-light\" onclick=\"planAccionClic($id);comentariosPlanAccion($id, $idProyecto); adjuntosPlanAccion($id); show_hide_modal('modalSubirArchivo','hide');\">$actividad</p>
                             </div>
-                            <div class=\"control ml-3\" data-tooltip=\"Agregar Status\" onclick=\"show_hide_modal('modalStatusPlanAccion','show'); datosStatusProyecto($idDestino, $idSeccion, $idSubseccion, $idProyecto, $id, 'reporte_status_proyecto');\">";
+                            <div class=\"control ml-3\" data-tooltip=\"Agregar Status\" onclick=\"show_hide_modal('modalStatusPlanAccion','show'); datosStatusProyecto($idDestino, $idSeccion, $idSubseccion, $idProyecto, $id, 'reporte_status_proyecto'); obtenerStatusPlanaccion($id);\">";
 
                 $query_status = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id";
                 $result_status = mysqli_query($conn_2020, $query_status);
@@ -1901,6 +1901,54 @@ if (isset($_POST['action'])) {
         }
     }
 
+    if ($action == "obtenerStatusPlanaccion") {
+        $idPlanAccion = $_POST['idPlanAccion'];
+        $dataStatus = "";
+
+        $query = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion = $idPlanAccion AND status IN,'status_departamento_rrhh','status_departamento_finanzas',
+        'status_departamento_direccion','status_departamento_calidad')";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            while ($row = mysqli_fetch_array($result)) {
+                $idStatus = $row['id'];
+                $status = $row['status'];
+
+                if ($status == "status_trabajare") {
+                    $status = "T";
+                } elseif ($status == "status_material") {
+                    $status = "M";
+                } elseif ($status == "status_urgente") {
+                    $status = "Urgente";
+                } elseif ($status == "status_energetico_electricidad") {
+                    $status = "Electricidad";
+                } elseif ($status == "status_energetico_agua") {
+                    $status = "Agua";
+                } elseif ($status == "status_energetico_diesel") {
+                    $status = "Diesel";
+                } elseif ($status == "status_energetico_gas") {
+                    $status = "Gas";
+                } elseif ($status == "status_departamento_rrhh") {
+                    $status = "RRHH";
+                } elseif ($status == "status_departamento_finanzas") {
+                    $status = "Finanzas";
+                } elseif ($status == "status_departamento_direccion") {
+                    $status = "Dirección";
+                } elseif ($status == "status_departamento_calidad") {
+                    $status = "Calidad";
+                }
+
+                $dataStatus .= "
+                    <span class=\"tag is-primary\">
+                        <p class=\"notifiaction subtitle is-6\"></p>        
+                        <button class=\"delete \" onclick=\"eliminarStatusPlanAccion($idPlanAccion,'$status');\"></button>
+                    </span>
+                ";
+            }
+        }
+        echo $dataStatus;
+    }
+
+
     // Agregar 
     if ($action == "finalizarPlanAccion") {
         $usuario = $_SESSION['usuario'];
@@ -1922,10 +1970,8 @@ if (isset($_POST['action'])) {
         $idSubseccion = $_POST['idGrupo'];
         $idSeccion = $_POST['idSeccion'];
 
-
-
         if ($idSubseccion == 213) {
-            $status = "AND t_mc.status_material != ''";
+            $status = "AND (t_mc.status_material != '' OR t_mc.departamento_compras != '')";
             $status_P = "AND reporte_status_proyecto.status = 'status_material'";
         }
         if ($idSubseccion == 62) {
@@ -1945,7 +1991,6 @@ if (isset($_POST['action'])) {
             $status_P = "AND reporte_status_proyecto.status = 'status_departamento_calidad'";
         }
 
-
         if ($idDestino != 10) {
             $destino = "AND t_mc.id_destino = $idDestino";
             $destino_P = "AND reporte_status_proyecto.id_destino = $idDestino";
@@ -1955,15 +2000,16 @@ if (isset($_POST['action'])) {
         }
 
         $query = "SELECT
-        t_mc.actividad, t_mc.fecha_creacion, t_mc.status_material, t_mc.status_trabajare, t_mc.responsable, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.departamento_direccion, t_mc.departamento_calidad
+        t_mc.id, t_mc.actividad, t_mc.fecha_creacion, t_mc.status_material, t_mc.status_trabajare, t_mc.responsable, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.departamento_direccion, t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.cod2bend, t_mc.codsap
         FROM t_mc
         INNER JOIN t_users ON t_mc.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_mc.status='N' AND t_mc.activo=1 $status $destino";
+        WHERE t_mc.status='N' AND t_mc.activo=1 $status $destino ORDER BY t_mc.id DESC";
 
         $result = mysqli_query($conn_2020, $query);
 
         while ($row = mysqli_fetch_array($result)) {
+            $idMC = $row['id'];
             $actividad = $row['actividad'];
             $responsable = $row['responsable'];
             $fechaCreacionDEP = $row['fecha_creacion'];
@@ -1973,10 +2019,27 @@ if (isset($_POST['action'])) {
             $creadoApellido = $row['apellido'];
             $status_material = $row['status_material'];
             $status_trabajare = $row['status_trabajare'];
+            $status_compras = $row['departamento_compras'];
             $status_finanzas = $row['departamento_finanzas'];
             $status_rrhh = $row['departamento_rrhh'];
             $status_direccion = $row['departamento_direccion'];
             $status_calidad = $row['departamento_calidad'];
+            $cod2bend = $row['cod2bend'];
+            $codsap = $row['codsap'];
+
+            if($idSubseccion == 213){
+                $cod2bendInput = "                            
+                <p class=\"t-normal p-1\">
+                    <input id=\"cod2ben$idMC\" class=\"input\" type=\"text\" value=\"$cod2bend\" placeholder=\"#\" onkeyup=\"capturarCodigo($idMC, 'cod2bend');\" >
+                </p>";
+                $codsapInput = "
+                <p class=\"t-normal p-1\">
+                    <input id=\"codsap$idMC\" class=\"input\" type=\"text\" value=\"$codsap\" placeholder=\"#\" onkeyup=\"capturarCodigo($idMC, 'codsap');\" >
+                </p>";
+            }else{
+                $cod2bendInput = "<p class=\"t-normal\">NA</p>";
+                $codsapInput = "<p class=\"t-normal\">NA</p>";
+            }
 
 
             // Busca el Responsable.
@@ -1996,14 +2059,14 @@ if (isset($_POST['action'])) {
             // Comprube si tiene información las variables, sino, le asigna uno por defecto.
 
             if ($fechaCreacionDEP == "") {
-                $fechaCreacionDEP = " <p class=\"t-icono-rojo\"><i class=\"fad fa-calendar-times\"></i></p>";
+                $fechaCreacionDEP = " <p class=\"t-icono-rojo p-0\"><i class=\"fad fa-calendar-times\"></i></p>";
             }
             if ($responsableN == "") {
                 $responsableN = "<p class=\"t-normal\">-</p>";
             }
 
-            if ($status_finanzas != "" || $status_rrhh != "" || $status_direccion != "" || $status_calidad != '') {
-                $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
+            if ($status_compras != "" || $status_finanzas != "" || $status_rrhh != "" || $status_direccion != "" || $status_calidad != '') {
+                $departamento = "<span class=\"fa-lg p-0\"><strong class=\"has-text-primary\">D</strong></span> ";
             } else {
                 $departamento = "";
             }
@@ -2036,7 +2099,14 @@ if (isset($_POST['action'])) {
                         <div class=\"column\">
                             <p class=\"t-normal\">
                              $departamento
-                            $status_material $status_trabajare</p>
+                            $status_material $status_trabajare
+                            </p>
+                        </div>
+                        <div class=\"column\">
+                            $cod2bendInput
+                        </div>
+                        <div class=\"column\">
+                            $codsapInput
                         </div>
                     </div>
                 </div>
@@ -2152,6 +2222,29 @@ if (isset($_POST['action'])) {
                 </div>
                 ";
             }
+        }
+    }
+
+
+    if ($action == "capturarCodigo") {
+        $idMC = $_POST['idMC'];
+        $tipoCodigo = $_POST['tipoCodigo'];
+        $codigo = $_POST['codigo'];
+
+        if ($codigo == "" or $codigo == 0) {
+            $codigo = "";
+        }
+
+        if ($tipoCodigo == "cod2bend") {
+            $query = "UPDATE t_mc set cod2bend = '$codigo' WHERE id = $idMC";
+        } elseif ($tipoCodigo == "codsap") {
+            $query = "UPDATE t_mc set codsap = '$codigo' WHERE id = $idMC";
+        }
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo "ok";
+        } else {
+            echo "error";
         }
     }
 

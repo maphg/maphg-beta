@@ -1876,9 +1876,9 @@ if (isset($_POST['action'])) {
                             // Valor MC Obtenidos.
                             $totalMC = $MC['COUNT(id)'];
                             $ordenMCEquipos[] = $totalMC;
+                            $ordenIdEquipos[] = $idEquipo;
                         }
                     }
-                    $ordenIdEquipos[] = $idEquipo;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'MCN') {
