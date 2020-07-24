@@ -197,7 +197,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataGP .= "
-              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
               <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -270,7 +270,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataTRS .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
             <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
             </div>
             ";
@@ -342,7 +342,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataZI .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
             <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
             </div>
             ";
