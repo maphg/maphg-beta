@@ -2217,6 +2217,14 @@ if (isset($_POST['action'])) {
                                 $status_material 
                                 $status_trabajare</p>
                             </div>
+                            <div class=\"column\">
+                                <p class=\"t-normal\">
+                                NA</p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-normal\">
+                                NA</p>
+                            </div>
                         </div>
                     </div>
                 </div>
