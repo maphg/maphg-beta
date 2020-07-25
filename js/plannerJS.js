@@ -5346,8 +5346,32 @@ function obtenerStatusPlanaccion(idPlanAccion) {
             action: action,
             idPlanAccion: idPlanAccion
         },
+        dataType:'json',
         success: function (data) {
-            // console.log(data);
+            console.log(data.dataStatus);
+            document.getElementById("dataStatusDepartamento").innerHTML = data.dataStatus;
+        },
+    });
+}
+
+
+function eliminarStatusPlanAccion (idPlanAccion, status) {
+    console.log(idPlanAccion);
+    const action = "eliminarStatusPlanAccion";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idPlanAccion: idPlanAccion,
+            status: status
+        },
+        // dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            $("#modalStatusPlanAccion").removeClass("is-active");
+            $("#modalDepartamento").removeClass("is-active");
+            refreshProyectos();
         },
     });
 }
@@ -5429,8 +5453,8 @@ function aplicarStatus(statusProyecto) {
                 statusProyecto: statusProyecto,
             },
             success: function (datos) {
-                $("#modalStatusPlanAccion").removeClass();
-                $("#modalStatusPlanAccion").addClass("modal");
+                $("#modalStatusPlanAccion").removeClass("is-active");
+                $("#modalDepartamento").removeClass("is-active");
                 refreshProyectos();
                 alertInformacionActualiza("Status Actualizado");
                 // console.log(datos);

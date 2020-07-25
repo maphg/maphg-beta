@@ -1903,10 +1903,10 @@ if (isset($_POST['action'])) {
 
     if ($action == "obtenerStatusPlanaccion") {
         $idPlanAccion = $_POST['idPlanAccion'];
+        $data = array();
         $dataStatus = "";
 
-        $query = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion = $idPlanAccion AND status IN,'status_departamento_rrhh','status_departamento_finanzas',
-        'status_departamento_direccion','status_departamento_calidad')";
+        $query = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion = $idPlanAccion AND status IN('status_departamento_rrhh', 'status_departamento_finanzas', 'status_departamento_direccion', 'status_departamento_calidad', 'status_departamento_compras')";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             while ($row = mysqli_fetch_array($result)) {
@@ -1935,17 +1935,31 @@ if (isset($_POST['action'])) {
                     $status = "Dirección";
                 } elseif ($status == "status_departamento_calidad") {
                     $status = "Calidad";
+                } elseif ($status == "status_departamento_compras") {
+                    $status = "Compras";
                 }
 
                 $dataStatus .= "
-                    <span class=\"tag is-primary\">
-                        <p class=\"notifiaction subtitle is-6\"></p>        
+                    <span class=\"tag is-primary m-1\">
+                        <p class=\"notifiaction subtitle is-6\">$status</p>        
                         <button class=\"delete \" onclick=\"eliminarStatusPlanAccion($idPlanAccion,'$status');\"></button>
                     </span>
                 ";
             }
         }
-        echo $dataStatus;
+        $data['dataStatus'] = $dataStatus;
+        echo json_encode($data); 
+    }
+
+    if ($action == "eliminarStatusPlanAccion") {
+        $idPlanAccion = $_POST['idPlanAccion'];
+        $status = $_POST['status'];
+        $query = "UPDATE reporte_status_proyecto SET status = '' WHERE id_planaccion = $idPlanAccion AND status LIKE '%$status%'";
+        if($result = mysqli_query($conn_2020, $query)){
+            echo "Eliminado $idPlanAccion $status";
+        }else{
+            echo "Error $idPlanAccion $status";
+        }
     }
 
 

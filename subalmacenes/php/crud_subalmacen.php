@@ -480,12 +480,12 @@ if (isset($_POST['action'])) {
         $descripcion = $row['descripcion'];
         $caracteristicas = $row['caracteristicas'];
         $marca = $row['marca'];
-        $cantidadActual = $row['stock_actual'];
-        $cantidadTeorico = $row['stock_teorico'];
+        $cantidadActual = floatval($row['stock_actual']);
+        $cantidadTeorico = floatval($row['stock_teorico']);
         $unidad = $row['unidad'];
 
-
-        if ($cantidadActual < 1) {
+        $porcentaje = (100 / ($cantidadTeorico + .01)) * $cantidadActual;
+        if ($porcentaje <= 20) {
           $colorstilo = "text-red-500 bg-red-200";
         } elseif ($cantidadActual >= $cantidadTeorico) {
           $colorstilo = "text-yellow-700 bg-yellow-200";
