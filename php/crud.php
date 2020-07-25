@@ -68,7 +68,7 @@ if (isset($_POST['action'])) {
         $result = mysqli_query($conn_2020, $query);
 
         // Columna para DEP.
-        // reporteStatusDEP(214, 10, 23, 0, 0, 0, 'destinoTNombre', 'seccionNombre','Calidad');
+        // reporteStatusDEP(214, 10, 23, 0, 0, 0, 'destinoTNombre', 'seccionNombre','Calidad' );
         echo $subseccionDEP;
 
 
@@ -92,7 +92,7 @@ if (isset($_POST['action'])) {
                 $urgente_icono = "";
             }
 
-            echo " 
+            echo "
                 <div class=\"columns is-gapless my-1 cursor mx-4\" >
                     <div class=\"column is-one-third modal-button\" data-target=\"modal-id\">
                         <div class=\"columns\">
@@ -343,12 +343,12 @@ if (isset($_POST['action'])) {
                         $TRS = "checked";
                     }
 
-                    echo " 
+                    echo "
                         <label class=\"checkbox px-2 has-text-weight-bold\">
                         <input type=\"checkbox\" $ZI onclick=\"agregarFaseProyectoDEP('ZI')\">
                         ZI
                         </label>
-                        
+
                         <label class=\"checkbox px-2 has-text-weight-bold\">
                         <input type=\"checkbox\" $GP onclick=\"agregarFaseProyectoDEP('GP')\">
                         GP
@@ -356,7 +356,7 @@ if (isset($_POST['action'])) {
 
                         <label class=\"checkbox px-2 has-text-weight-bold\">
                         <input type=\"checkbox\" $TRS onclick=\"agregarFaseProyectoDEP('TRS')\">
-                        TRS 
+                        TRS
                         </label>
                     ";
                 }
@@ -1643,7 +1643,7 @@ if (isset($_POST['action'])) {
                 $id_usuario = $row['creado_por'];
 
                 // Query para Consultar el Usuario que Escribio el Comentario.
-                $query_usuario_comentario = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                $query_usuario_comentario = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
                 FROM t_users
                 INNER JOIN t_colaboradores ON t_users.id_colaborador=t_colaboradores.id
                 WHERE t_users.id=$id_usuario";
@@ -1676,7 +1676,7 @@ if (isset($_POST['action'])) {
                     <div class=\"timeline-marker\"></div>
                     <div class=\"timeline-content\">
                         <p class=\"heading \"><strong>$usuario</strong> - $fecha</p>
-                       
+
                         <div class=\"field has-addons\">
                             <div class=\"control is-expanded\">
                             <p id=\"$id\" class=\"has-text-justified manita $background_status px-3 py-1 rounded-pill has-text-white planAccionActividad has-text-weight-light\" onclick=\"planAccionClic($id);comentariosPlanAccion($id, $idProyecto); adjuntosPlanAccion($id); show_hide_modal('modalSubirArchivo','hide');\">$actividad</p>
@@ -1707,7 +1707,7 @@ if (isset($_POST['action'])) {
                         echo "<i class=\"has-text-danger fad fa-siren-on mr-1 fa-lg animated infinite flash\"></i>";
                     }
 
-                    $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id AND  
+                    $query_status_departamento = "SELECT* FROM reporte_status_proyecto WHERE id_planaccion=$id AND
                                 status LIKE '%status_departamento%'";
                     $result_status_departamento = mysqli_query($conn_2020, $query_status_departamento);
                     if (mysqli_num_rows($result_status_departamento) > 0) {
@@ -1715,7 +1715,7 @@ if (isset($_POST['action'])) {
                     }
 
 
-                    $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND id_planaccion=$id AND 
+                    $query_status_energeticos = "SELECT* FROM reporte_status_proyecto WHERE id_proyecto=$idProyecto AND id_planaccion=$id AND
                                 status LIKE '%status_energetico%' ";
                     $result_status_energeticos = mysqli_query($conn_2020, $query_status_energeticos);
                     if (mysqli_num_rows($result_status_energeticos) > 0) {
@@ -1743,13 +1743,13 @@ if (isset($_POST['action'])) {
 							<i class=\"fas fa-check\"></i>
 						</span >
 						<span>¿Finalizar Proyecto?</span>
-					</button>	
+					</button>
 				</div>
 				";
             }
 
             if ($contadorPAF > 0) {
-                echo "			
+                echo "
 				<div class=\"column\">
 					<button class=\"mt-4 mx-5 has-text-centered button is-primary\" onclick=\"verPlan($idProyecto);\">
     					<span class=\"icon is-small\">
@@ -1783,7 +1783,7 @@ if (isset($_POST['action'])) {
                 $id_usuario = $row['usuario'];
 
                 // Query para Consultar el Usuario que Escribio el Comentario.
-                $query_usuario_comentario = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                $query_usuario_comentario = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
                 FROM t_users
                 INNER JOIN t_colaboradores ON t_users.id_colaborador=t_colaboradores.id
                 WHERE t_users.id=$id_usuario";
@@ -1941,14 +1941,14 @@ if (isset($_POST['action'])) {
 
                 $dataStatus .= "
                     <span class=\"tag is-primary m-1\">
-                        <p class=\"notifiaction subtitle is-6\">$status</p>        
+                        <p class=\"notifiaction subtitle is-6\">$status</p>
                         <button class=\"delete \" onclick=\"eliminarStatusPlanAccion($idPlanAccion,'$status');\"></button>
                     </span>
                 ";
             }
         }
         $data['dataStatus'] = $dataStatus;
-        echo json_encode($data); 
+        echo json_encode($data);
     }
 
     if ($action == "eliminarStatusPlanAccion") {
@@ -1963,7 +1963,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    // Agregar 
+    // Agregar
     if ($action == "finalizarPlanAccion") {
         $usuario = $_SESSION['usuario'];
         $idPlanAccion = $_POST['idPlanAccion'];
@@ -2042,7 +2042,7 @@ if (isset($_POST['action'])) {
             $codsap = $row['codsap'];
 
             if($idSubseccion == 213){
-                $cod2bendInput = "                            
+                $cod2bendInput = "
                 <p class=\"t-normal p-1\">
                     <input id=\"cod2ben$idMC\" class=\"input\" type=\"text\" value=\"$cod2bend\" placeholder=\"#\" onkeyup=\"capturarCodigo($idMC, 'cod2bend');\" >
                 </p>";
@@ -2139,14 +2139,14 @@ if (isset($_POST['action'])) {
         t_proyectos.titulo,
         t_colaboradores.nombre,
         t_colaboradores.apellido
-        
-        FROM reporte_status_proyecto 
-        
-        INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id  
+
+        FROM reporte_status_proyecto
+
+        INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-          
+
 
         WHERE reporte_status_proyecto.fecha_inicio !='' $status_P $destino_P";
         $result = mysqli_query($conn_2020, $query_P);
@@ -2164,10 +2164,10 @@ if (isset($_POST['action'])) {
                 $fecha_creacion = $fecha_creacion->format("d-m-Y");
 
 
-                $query_responsable = "SELECT 
+                $query_responsable = "SELECT
                 t_colaboradores.nombre,
                 t_colaboradores.apellido
-                FROM t_users 
+                FROM t_users
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id=$responsable
                 ";
@@ -2228,7 +2228,7 @@ if (isset($_POST['action'])) {
                             <div class=\"column\">
                                 <p class=\"t-normal\">
                                 $departamento
-                                $status_material 
+                                $status_material
                                 $status_trabajare</p>
                             </div>
                             <div class=\"column\">
@@ -2316,7 +2316,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
-                                <p class=\"notifiaction subtitle is-6\">- Agua</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Agua</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','energetico_agua',$idMC);\"></button>
                             </span>
                         </div>
@@ -2327,7 +2327,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
-                                <p class=\"notifiaction subtitle is-6\">- Gas</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Gas</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','energetico_gas',$idMC);\"></button>
                             </span>
                         </div>
@@ -2338,7 +2338,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
-                            <p class=\"notifiaction subtitle is-6\"> - Electricidad </p>       
+                            <p class=\"notifiaction subtitle is-6\"> - Electricidad </p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','energetico_electricidad',$idMC);\"></button>
                             </span>
                         </div>
@@ -2349,7 +2349,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-warning\">
-                                <p class=\"notifiaction subtitle is-6\">- Diesel</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Diesel</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','energetico_diesel',$idMC);\"></button>
                             </span>
                         </div>
@@ -2371,7 +2371,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
-                                <p class=\"notifiaction subtitle is-6\">- Calidad</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Calidad</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','departamento_calidad',$idMC);\"></button>
                             </span>
                         </div>
@@ -2382,7 +2382,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
-                                <p class=\"notifiaction subtitle is-6\">- Finanzas</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Finanzas</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','departamento_finanzas',$idMC);\"></button>
                             </span>
                         </div>
@@ -2393,7 +2393,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
-                            <p class=\"notifiaction subtitle is-6\"> - Compras Almacén </p>       
+                            <p class=\"notifiaction subtitle is-6\"> - Compras Almacén </p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','departamento_compras',$idMC);\"></button>
                             </span>
                         </div>
@@ -2404,7 +2404,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
-                                <p class=\"notifiaction subtitle is-6\">- RRHH</p>        
+                                <p class=\"notifiaction subtitle is-6\">- RRHH</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','departamento_rrhh',$idMC);\"></button>
                             </span>
                         </div>
@@ -2415,7 +2415,7 @@ if (isset($_POST['action'])) {
                     echo "
                         <div class=\"mx-2 my-2\">
                             <span class=\"tag is-primary\">
-                                <p class=\"notifiaction subtitle is-6\">- Dirección</p>        
+                                <p class=\"notifiaction subtitle is-6\">- Dirección</p>
                                 <button class=\"delete \" onclick=\"eliminarED('t_mc','departamento_direccion',$idMC);\"></button>
                             </span>
                         </div>
@@ -2459,9 +2459,9 @@ if (isset($_POST['action'])) {
             $idDestinoF = "AND t_mc.id_destino = $idDestino";
         }
 
-        $query = "SELECT* 
-        FROM t_mc 
-        -- INNER JOIN 
+        $query = "SELECT*
+        FROM t_mc
+        -- INNER JOIN
         WHERE t_mc.id_seccion = $idSeccion AND t_mc.id_subseccion = $idSubseccion and t_mc.status='N' AND t_mc.activo=1  $idDestinoF";
         $result = mysqli_query($conn_2020, $query);
 
@@ -2487,7 +2487,7 @@ if (isset($_POST['action'])) {
                     </div>
                     <div class=\"column\">
                         <div class=\"columns is-gapless\"><div class=\"column overflow\" onclick=\"hide_show_clase('sectionPlanAcion$id'); modalPlanAccion($id);\"><p class=\"filatarea\"><svg class=\"svg-inline--fa fa-check fa-w-16 has-text-success fa-lg\" aria-hidden=\"true\" data-prefix=\"fas\" data-icon=\"check\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\" data-fa-i2svg=\"\"><path fill=\"currentColor\" d=\"M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z\"></path></svg><!-- <i class=\"fas fa-check has-text-success fa-lg\"></i> --></p></div><div class=\"column overflow\" onclick=\"modalResponsable('$id');\"><p class=\"filatarea\"><i class=\"fad fa-minus has-text-danger fa-2x\"></i></p></div>
-                        <div class=\"column overflow\">    
+                        <div class=\"column overflow\">
                             <p class=\"filatarea\">$fechaCreacion</p>
                         </div>
                         <div class=\"column overflow\" onclick=\"modalSubirArchivo('t_proyectos_adjuntos',$id);\">
@@ -2576,8 +2576,8 @@ if (isset($_POST['action'])) {
 
                 $idNuevo = $idNuevo['id'] + 1;
 
-                $query_titulo = "INSERT INTO 
-                t_mp_np(id, id_equipo, id_usuario, id_destino, tipo, titulo, status, activo) 
+                $query_titulo = "INSERT INTO
+                t_mp_np(id, id_equipo, id_usuario, id_destino, tipo, titulo, status, activo)
                 VALUES($idNuevo, $idEquipo, $idUsuario, $idDestino, '$tipo', '$titulo', 'P' ,1)";
                 $result_titulo = mysqli_query($conn_2020, $query_titulo);
                 if ($result_titulo) {
@@ -2603,9 +2603,9 @@ if (isset($_POST['action'])) {
             foreach ($responsable as $key => $value) {
                 if ($value >= 1) {
                     $queryData = "SELECT
-                    t_colaboradores.nombre,  
-                    t_colaboradores.apellido  
-                    FROM t_users 
+                    t_colaboradores.nombre,
+                    t_colaboradores.apellido
+                    FROM t_users
                     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                     WHERE t_users.id = $value";
 
@@ -2702,9 +2702,9 @@ if (isset($_POST['action'])) {
                 foreach ($responsable as $key => $value) {
                     if ($value >= 1) {
                         $queryData = "SELECT
-                        t_colaboradores.nombre,  
-                        t_colaboradores.apellido  
-                        FROM t_users 
+                        t_colaboradores.nombre,
+                        t_colaboradores.apellido
+                        FROM t_users
                         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                         WHERE t_users.id = $value";
 
@@ -2749,7 +2749,7 @@ if (isset($_POST['action'])) {
         $fecha = date('Y-m-d H:m:s');
 
         $query = "INSERT INTO actividad_mp_np
-        (id_mp_np, actividad, creado_por, fecha) 
+        (id_mp_np, actividad, creado_por, fecha)
         VALUES($idMPNP, '$actividadMPNP', $idUsuario, '$fecha')";
         $result = mysqli_query($conn_2020, $query);
 
@@ -2825,9 +2825,9 @@ if (isset($_POST['action'])) {
         $fecha = $fecha->format('Y-m-d H:m:s');
         $tipo = "MPNP";
 
-        $query = "UPDATE t_mp_np 
-        SET titulo = '$titulo', fecha = '$fecha', status= 'F'  
-        
+        $query = "UPDATE t_mp_np
+        SET titulo = '$titulo', fecha = '$fecha', status= 'F'
+
         WHERE id = $idMPNP AND id_equipo = $idEquipo";
         $result = mysqli_query($conn_2020, $query);
 
@@ -2874,8 +2874,8 @@ if (isset($_POST['action'])) {
                 if ($value >= 1) {
                     $totalResponsables++;
 
-                    $query_responsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
-                    FROM t_users 
+                    $query_responsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
+                    FROM t_users
                     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                     WHERE t_users.id = $value";
                     $result_responsable = mysqli_query($conn_2020, $query_responsable);
@@ -2962,7 +2962,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     </div>
-                </div>            
+                </div>
             ";
         }
         echo $data;
@@ -2972,16 +2972,16 @@ if (isset($_POST['action'])) {
     if ($action == "comentariosMPNP") {
         $idMPNP = $_POST['idMPNP'];
         $dataComentarios = "";
-        $query = "SELECT 
+        $query = "SELECT
         comentarios_mp_np.id, comentarios_mp_np.id_usuario, comentarios_mp_np.comentario, comentarios_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido
-        FROM comentarios_mp_np 
+        FROM comentarios_mp_np
         INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE comentarios_mp_np.id_mp_np = $idMPNP AND comentarios_mp_np.activo = 1 
+        WHERE comentarios_mp_np.id_mp_np = $idMPNP AND comentarios_mp_np.activo = 1
         ORDER BY comentarios_mp_np.id DESC";
         $result = mysqli_query($conn_2020, $query);
 
-        // Cabecera para el diseño del modal.    
+        // Cabecera para el diseño del modal.
         $dataComentarios .= "
             <div class=\"timeline is-left\">
                 <h4 class=\"subtitle is-4 has-text-centered\">Comentarios Generales</h4>
@@ -3024,7 +3024,7 @@ if (isset($_POST['action'])) {
                                 $comentario
                             </p>
                         </div>
-                    </div>           
+                    </div>
                 ";
             }
         }
@@ -3040,7 +3040,7 @@ if (isset($_POST['action'])) {
                         <i class=\"fad fa-genderless\"></i>
                     </div>
                 </div>
-            </div> 
+            </div>
         ";
         echo $dataComentarios;
     }
@@ -3081,8 +3081,8 @@ if (isset($_POST['action'])) {
         $idMPNP = $_POST['idMPNP'];
         $dataAdjuntos = "";
 
-        $query = "SELECT 
-        adjuntos_mp_np.id_usuario, adjuntos_mp_np.fecha, adjuntos_mp_np.url, adjuntos_mp_np.id, t_colaboradores.nombre, t_colaboradores.apellido 
+        $query = "SELECT
+        adjuntos_mp_np.id_usuario, adjuntos_mp_np.fecha, adjuntos_mp_np.url, adjuntos_mp_np.id, t_colaboradores.nombre, t_colaboradores.apellido
         FROM adjuntos_mp_np
         INNER JOIN t_users ON adjuntos_mp_np.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -3139,7 +3139,7 @@ if (isset($_POST['action'])) {
 
         // Footer
         $dataAdjuntos .=
-            " 
+            "
                 <div class=\"timeline-item flex\">
                     <div class=\"timeline-marker\"></div>
                 </div>
@@ -3148,7 +3148,7 @@ if (isset($_POST['action'])) {
                         <i class=\"fad fa-genderless\"></i>
                     </div>
                 </div>
-            </div>  
+            </div>
         ";
         echo $dataAdjuntos;
     }
