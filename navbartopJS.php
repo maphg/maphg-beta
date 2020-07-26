@@ -397,13 +397,13 @@
     <dav class="nt2">
         <!-- nt2 -->
         <spen onclick="botonMenu()" class="nt3"><i class="fas fa-bars"></i></spen><!-- nt3 -->
-        <o href="#" class="nt4"><?= $nombreUsuario; ?> <spen class="nt8"><i class="fal fa-angle-down"></i></spen>
+        <o href="#" class="nt4"><span id="nombreUsuarioNavBarTop"></span><spen class="nt8"><i class="fal fa-angle-down"></i></spen>
         </o><!-- nt4 -->
     </dav>
     <dav class="nt5">
         <!-- nt5 -->
         <o onclick="botonDestino()" href="#" class="nt6">
-            <spen><i class="fas fa-map-marker-alt nt7"></i></spen><?= $destinoT; ?>
+            <spen><i class="fas fa-map-marker-alt nt7"></i></spen><span id="destinoNavBarTop"></span>
         </o><!-- nt6 -->
     </dav>
 </dav>

@@ -12,6 +12,40 @@ function comprobarSession() {
     }
 }
 
+function obtenerDatosUsuario(idDestino) {
+    localStorage.setItem('idDestino', idDestino);
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerDatosUsuario";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("avatarUsuario").innerHTML = '<img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=' + data.nombre + ' % ' + data.apellido + '"' + 'alt="avatar" class="menu-contenedor-6">';
+            document.getElementById("nombreUsuarioNavBarTop").innerHTML = data.nombre + ' ' + data.apellido;
+            document.getElementById("nombreUsuarioMenu").innerHTML = data.nombre + ' ' + data.apellido;
+            document.getElementById("cargoUsuarioMeu").innerHTML =data.cargo;
+            document.getElementById("destinoNavBarTop").innerHTML =data.destino;
+            document.getElementById("destinosSelecciona").innerHTML = data.destinosOpcion;
+
+            alertaImg('Destino Seleccionado: ' + data.destino, '', 'success', 2000);
+
+            comprobarSession()
+        }
+    });
+}
+
+// Función autoCall.
+(() => { 
+    let idDestino = localStorage.getItem('idDestino');
+    obtenerDatosUsuario(idDestino); 
+})();
+
 
 // Función para el calendario de Secciones.
 function calendarioSecciones() {
@@ -180,7 +214,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
         },
         dataType: "json",
         success: function (data) {
-            // console.log(data);
+            console.log(data);
             $("#columnasSeccionesZIL").html(data.dataZIL);
             $("#columnasSeccionesZIE").html(data.dataZIE);
             $("#columnasSeccionesAUTO").html(data.dataAUTO);
@@ -194,18 +228,6 @@ function consultaSubsecciones(idDestino, idUsuario) {
             $("#columnasSeccionesZIA").html(data.dataZIA);
             $("#columnasSeccionesZIC").html(data.dataZIC);
             calendarioSecciones();
-            ordenarSubsecciones(data.listaZIL, 'ordenarPadreZIL', 'ordenarHijosZIL');
-            // ordenarSubsecciones(data.listaZIE, 'ordenarPadreZIE', 'ordenarHijosZIE');
-
-            // let listaZIE = data.listaZIE.split(',');
-            // let listaZIEIndex = data.listaZIEIndex.split(',');
-            // console.log(listaZIE);
-            // console.log(listaZIEIndex);
-            // console.log(listaZIE.sort());
-            // var obj = JSON.parse(data.datalistaZIE);
-            // console.log(obj);
-            // let listaZIE = data.listaZIE.split(',');
-            // listaZIE.pop();
         }
     });
 }
@@ -236,6 +258,9 @@ function ordenarSubsecciones(listaData, ordenarPadre, ordenarHijos) {
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+    document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = '';
+    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
+    document.getElementById("modalPendientes").classList.add('open');
     $("#estiloSeccion").html('<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>');
     $("#modalTituloSeccion").html(nombreSeccion);
     $("#dataSubseccionesPendientes").html('Sin Datos');

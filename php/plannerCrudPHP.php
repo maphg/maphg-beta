@@ -48,6 +48,63 @@ if (isset($_POST['action'])) {
         }
     }
 
+    // Consulta los Destinos que tiene acceso el usuario.
+    if ($action == "obtenerDatosUsuario") {
+        $data = array();
+        $destinosOpcion = "";
+
+        $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo, c_destinos.id, c_destinos.destino
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
+        INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
+        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1;
+        ";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idDestinoUsuario = $value['id'];
+                $nombre = $value['nombre'];
+                $apellido = $value['apellido'];
+                $cargo = $value['cargo'];
+            }
+            $data['nombre'] = $nombre;
+            $data['apellido'] = $apellido;
+            $data['cargo'] = $cargo;
+        }
+
+        if ($idDestinoUsuario == 10) {
+            $query = "SELECT id, destino FROM c_destinos WHERE status='A' ORDER BY destino ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                while ($row = mysqli_fetch_array($result)) {
+                    $idDestinoS = $row['id'];
+                    $nombreDestino = $row['destino'];
+                    $destinosOpcion .= "<a href=\"#\" onclick=\"obtenerDatosUsuario($idDestinoS);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDestino</a>";
+                }
+
+                $queryDestino = "SELECT destino FROM c_destinos WHERE id = $idDestino";
+                if ($resultDestino = mysqli_query($conn_2020, $queryDestino)) {
+                    if ($row = mysqli_fetch_array($resultDestino)) {
+                        $destino = $row['destino'];
+                    }
+                    $data['destino'] = $destino;
+                }
+            }
+        } else {
+            $query = "SELECT id, destino FROM c_destinos WHERE id = $idDestinoUsuario";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($row = mysqli_fetch_array($result)) {
+                    $idDestinoS = $row['id'];
+                    $nombreDestino = $row['destino'];
+                    $data['destino'] = $nombreDestino;
+                    $destinosOpcion .= "<a href=\"#\" onclick=\"obtenerDatosUsuario($idDestinoS);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDestino</a>";
+                }
+            }
+        }
+
+        $data['destinosOpcion'] = $destinosOpcion;
+        echo json_encode($data);
+    }
 
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
@@ -103,44 +160,64 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div id=\"ordenarPadre$seccion\" class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800 ordenarHijos$seccion\">
                     ";
-
+                    
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZIL[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZIL[] = 0;
                         }
-
-                        $sinEspacioSubseccion = trim($subseccion);
-                        $sinEspacioSubseccion = substr($sinEspacioSubseccion, -3);
-                        $listaZIL[$idSubseccion] = "$totalPendiente$sinEspacioSubseccion,";
-
-
-                        $dataZIL .= "
-                            <div data-identificador=\"$totalPendiente$sinEspacioSubseccion\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center ordenarHijos$seccion\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZIL[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZIL, SORT_DESC, $idSubseccionOrdenZIL);
+
+                    foreach ($idSubseccionOrdenZIL as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZIL[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZIL .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZIL .= "
                                     </div>
@@ -150,7 +227,7 @@ if (isset($_POST['action'])) {
                     ";
                 }
                 $result->close();
-                // $conn_2020->next_result();
+                $conn_2020->next_result();
             }
         }
 
@@ -183,40 +260,63 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div id=\"ordenarPadre$seccion\"
                                     class=\"ordenarHijos$seccion flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZIE[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZIE[] = 0;
                         }
+                        $idSubseccionOrdenZIE[] = $idSubseccion;
+                    }
+                    array_multisort($totalSubseccionOrdenZIE, SORT_DESC, $idSubseccionOrdenZIE);
 
-                        $listaZIE[] = "$totalPendiente,";
+                    foreach ($idSubseccionOrdenZIE as $key => $value) {
+                        $idSubseccion = $value;
 
-                        $dataZIE .= "
-                            <div data-identificador=\"$totalPendiente$sinEspacioSubseccion\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZIE[$key];
+
+                                if($totalPendiente > 0){
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                }else{
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZIE .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
                     }
                     // Cierre de Columnas.
                     $dataZIE .= "
@@ -259,39 +359,63 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenAUTO[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenAUTO[] = 0;
                         }
+                        $idSubseccionOrdenAUTO[] = $idSubseccion;
+                    }
+                    array_multisort($totalSubseccionOrdenAUTO, SORT_DESC, $idSubseccionOrdenAUTO);
 
-                        $dataAUTO .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                    foreach ($idSubseccionOrdenAUTO as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenAUTO[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataAUTO .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
                     }
                     // Cierre de Columnas.
                     $dataAUTO .= "
@@ -334,40 +458,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenDEC[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenDEC[] = 0;
                         }
-
-                        $dataDEC .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenDEC[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenDEC, SORT_DESC, $idSubseccionOrdenDEC);
+
+                    foreach ($idSubseccionOrdenDEC as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenDEC[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataDEC .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataDEC .= "
                                     </div>
@@ -409,41 +559,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenDEP[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenDEP[] = 0;
                         }
-
-
-                        $dataDEP .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenDEP[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenDEP, SORT_DESC, $idSubseccionOrdenDEP);
+
+                    foreach ($idSubseccionOrdenDEP as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenDEP[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataDEP .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataDEP .= "
                                     </div>
@@ -457,80 +632,6 @@ if (isset($_POST['action'])) {
             }
         }
 
-        // OMA 
-        if ($OMA_Permiso == 1) {
-            if ($idDestino == 10) {
-                $query = "SELECT 
-                c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, c_secciones.seccion  
-                FROM c_subsecciones 
-                INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
-                WHERE id_seccion = 19";
-            } else {
-                $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 19)";
-            }
-
-            if ($result = mysqli_query($conn_2020, $query)) {
-                $conn_2020->next_result();
-                if ($row = mysqli_fetch_array($result)) {
-                    $idSeccion = $row['id_seccion'];
-                    $seccion = $row['seccion'];
-
-                    $dataOMA .= " 
-                        <div id=\"coloma\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
-                            <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
-                                <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
-                                </div>
-                                <div
-                                    class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
-                                </div>
-                                <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
-                                <div
-                                    class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
-                    ";
-
-                    foreach ($result as $value) {
-                        $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
-                            }
-                        } else {
-                            $totalPendiente = 0;
-                        }
-
-                        $dataOMA .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
-                    }
-                    // Cierre de Columnas.
-                    $dataOMA .= "
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ";
-                }
-                $result->close();
-                $conn_2020->next_result();
-            }
-        }
 
         // ZHA
         if ($ZHA_Permiso == 1) {
@@ -560,40 +661,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZHA[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZHA[] = 0;
                         }
-
-                        $dataZHA .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZHA[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZHA, SORT_DESC, $idSubseccionOrdenZHA);
+
+                    foreach ($idSubseccionOrdenZHA as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZHA[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZHA .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZHA .= "
                                     </div>
@@ -635,117 +762,68 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZHC[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZHC[] = 0;
                         }
-
-                        $dataZHC .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion('$idSeccion', '$idSubseccion'); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZHC[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZHC, SORT_DESC, $idSubseccionOrdenZHC);
+
+                    foreach ($idSubseccionOrdenZHC as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZHC[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZHC .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZHC .= "
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ";
-                }
-                $result->close();
-                $conn_2020->next_result();
-            }
-        }
-
-        // ZHH
-        if ($ZHH_Permiso == 1) {
-            if ($idDestino == 10) {
-                $query = "SELECT 
-                c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, c_secciones.seccion  
-                FROM c_subsecciones 
-                INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
-                WHERE id_seccion = 7";
-            } else {
-                $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, 7)";
-            }
-
-            if ($result = mysqli_query($conn_2020, $query)) {
-                $conn_2020->next_result();
-                if ($row = mysqli_fetch_array($result)) {
-                    $idSeccion = $row['id_seccion'];
-                    $seccion = $row['seccion'];
-
-                    $dataZHH .= " 
-                        <div id=\"colzhh\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
-                            <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
-                                <div
-                                    class=\"flex justify-center items-center absolute top-20 bg-gray-800 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md text-gray-100\">$seccion</h1>
-                                </div>
-                                <div
-                                    class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion'$idUsuario, $idDestino);\"></i>
-                                </div>
-                                <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
-                                <div
-                                    class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
-                    ";
-
-                    foreach ($result as $value) {
-                        $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
-                            }
-                        } else {
-                            $totalPendiente = 0;
-                        }
-
-                        $dataZHH .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
-                    }
-                    // Cierre de Columnas.
-                    $dataZHH .= "
                                     </div>
                                 </div>
                             </div>
@@ -785,40 +863,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZHP[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZHP[] = 0;
                         }
-
-                        $dataZHP .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZHP[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZHP, SORT_DESC, $idSubseccionOrdenZHP);
+
+                    foreach ($idSubseccionOrdenZHP as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZHP[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZHP .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZHP .= "
                                     </div>
@@ -860,40 +964,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZIA[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZIA[] = 0;
                         }
-
-                        $dataZIA .= "
-                            <div id=\"abremodal\" data-id=\"$totalPendiente\" data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\"
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZIA[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZIA, SORT_DESC, $idSubseccionOrdenZIA);
+
+                    foreach ($idSubseccionOrdenZIA as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZIA[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZIA .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZIA .= "
                                     </div>
@@ -936,40 +1066,66 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
-                                    <i data-target=\"modalPendientes\" data-toggle=\"modal\" class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MC', '$seccion', $idUsuario, $idDestino);\"></i>
+                                    <i class=\"fad fa-expand-arrows\" onclick=\"pendientesSubsecciones($idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino);\"></i>
                                 </div>
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+
+                    // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
-                        $subseccion = $value['grupo'];
-                        $conn_2020->next_result();
-                        $queryTotal = "SELECT id FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultTotal = mysqli_query($conn_2020, $queryTotal)) {
-                            if ($totalPendiente = mysqli_num_rows($resultTotal)) {
-                                $totalPendiente = $totalPendiente;
-                            } else {
-                                $totalPendiente = 0;
+
+                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
+                            if ($value = mysqli_fetch_array($resultPendientes)) {
+
+                                $totalPendiente = $value['count(id)'];
+                                $totalSubseccionOrdenZIC[] = $totalPendiente;
                             }
                         } else {
-                            $totalPendiente = 0;
+                            $totalSubseccionOrdenZIC[] = 0;
                         }
-
-                        $dataZIC .= "
-                            <div id=\"\" data-id=\"$totalPendiente\"
-                                class=\"p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                <h1 class=\"truncate mr-2\">$subseccion</h1>
-                                <div
-                                    class=\" bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                    <h1>$totalPendiente</h1>
-                                </div>
-                            </div>
-                        ";
+                        $idSubseccionOrdenZIC[] = $idSubseccion;
                     }
+                    array_multisort($totalSubseccionOrdenZIC, SORT_DESC, $idSubseccionOrdenZIC);
+
+                    foreach ($idSubseccionOrdenZIC as $key => $value) {
+                        $idSubseccion = $value;
+
+                        $querySubseccion = "SELECT id, id_seccion, grupo FROM c_subsecciones 
+                        WHERE id = $idSubseccion";
+                        if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
+                            if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
+                                $idSubseccion = $rowSubseccion['id'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $nombreSubseccion = $rowSubseccion['grupo'];
+                                $totalPendiente = $totalSubseccionOrdenZIC[$key];
+
+                                if ($totalPendiente > 0) {
+                                    $estiloSubseccion = "bg-red-400 text-red-700";
+                                } else {
+                                    $estiloSubseccion = "";
+                                    $totalPendiente = "";
+                                }
+
+                                $dataZIC .= "
+                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                        <div
+                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                            <h1>$totalPendiente</h1>
+                                        </div>
+                                    </div>
+                                ";
+                            }
+                        }
+                    }
+
                     // Cierre de Columnas.
                     $dataZIC .= "
                                     </div>
@@ -1008,7 +1164,6 @@ if (isset($_POST['action'])) {
     if ($action == "consultarPendientesSubsecciones") {
         // Variables recibidad de Ajax.
         $idSeccion = $_POST['idSeccion'];
-        $idDestino = $_POST['idDestino'];
         $tipoPendiente = $_POST['tipoPendiente'];
 
         $arrayData = array();
@@ -1027,6 +1182,9 @@ if (isset($_POST['action'])) {
             $filtroUsuario = "AND (t_mc.creado_por = $idUsuario OR t_mc.responsable = $idUsuario)";
         } elseif ($tipoPendiente == "MCS") {
             $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
+        } else {
+            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
+            $result = mysqli_query($conn_2020, $query);
         }
 
         if ($idDestino == 10) {
@@ -1041,14 +1199,14 @@ if (isset($_POST['action'])) {
             c_secciones.seccion  
             FROM c_subsecciones 
             INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
-            WHERE id_seccion = $idSeccion";
+            WHERE c_subsecciones.id_seccion = $idSeccion";
             $result = mysqli_query($conn_2020, $query);
         } else {
             $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
             $result = mysqli_query($conn_2020, $query);
         }
 
-        if ($result = mysqli_query($conn_2020, $query)) {
+        if ($result) {
             $conn_2020->next_result();
             foreach ($result as $row) {
                 $data = "";
@@ -2216,20 +2374,20 @@ if (isset($_POST['action'])) {
                 $idMC = $row['id'];
                 $responsable = $row['responsable'];
                 $actividad = $row['actividad'];
-                $creadoPor = $row['nombre'] . " " . $row['apellido'];
+                $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
                 $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-Y');
 
                 // Responsable.
                 $queryResponsable = "
                 SELECT t_colaboradores.id, t_colaboradores.nombre, t_colaboradores.apellido
                 FROM t_users
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id = $responsable
                 ";
 
                 if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
                     foreach ($resultResponsable as $value) {
-                        $nombreResponsable = $value['nombre'] . " " . $value['apellido'];
+                        $nombreResponsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
                     }
                 } else {
                     $nombreResponsable = "";

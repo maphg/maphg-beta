@@ -47,15 +47,17 @@
 
 <body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
 
-    <!-- <?php
-            // include 'navbartop.php';
-            // include 'menu-sidebar.php';
-            ?> -->
+    <div class="w-full">
+        <?php
+        include 'navbartopJS.php';
+        include 'menuJS.php';
+        ?>
+    </div>
 
     <!-- Inputs Temporales -->
     <input type="hidden" id="idDestinoSeleccionado">
 
-    <div class="flex flex-col justify-evenly items-center w-screen h-screen">
+    <div class="flex flex-col justify-evenly items-center w-full">
         <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4">
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
@@ -360,7 +362,7 @@
                 </div>
             </div>
 
-            <div class="flex row justify-center items-center w-full text-xs">
+            <div class="hidden flex row justify-center items-center w-full text-xs">
                 <div class="py-1 px-2 bg-red-300 text-red-700 rounded-l-md cursor-pointer">
                     <h1>AÑADIR CORRECTIVO</h1>
                 </div>
