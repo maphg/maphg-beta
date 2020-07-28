@@ -2026,7 +2026,7 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
 
-                    $queryMC = "SELECT id, count(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
+                    $queryMC = "SELECT id, count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
                         if ($MC = mysqli_fetch_array($resultMC)) {
@@ -2042,7 +2042,7 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
 
-                    $queryMC = "SELECT id, count(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
+                    $queryMC = "SELECT id, count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
                         if ($MC = mysqli_fetch_array($resultMC)) {
