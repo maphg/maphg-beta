@@ -2033,8 +2033,7 @@ if (isset($_POST['action'])) {
                             $totalMC = $MC['COUNT(id)'];
                             $ordenMCEquipos[] = $totalMC;
                         }else{
-                            $totalMC = 0;
-                            $ordenMCEquipos[] = $totalMC;
+                        $ordenMCEquipos[] = 0;
                         }
                     $ordenIdEquipos[] = $idEquipo;
                 }
