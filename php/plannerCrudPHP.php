@@ -2024,18 +2024,18 @@ if (isset($_POST['action'])) {
             if ($tipoOrdenamiento == 'MCF') {
                 foreach ($resultEquipos as $equipo) {
                     $idEquipo = $equipo['id'];
-                    $queryMC = "SELECT id, COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
+                    $queryMC = "SELECT id, count(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
-                        $MC = mysqli_fetch_array($resultMC);
+                        if ($MC = mysqli_fetch_array($resultMC)) {
+                            // Valor MC Obtenidos.
+                            $totalMC = $MC['count(id)'];
+                            $idEquipo = $MC['id'];
 
-                        // Valor MC Obtenidos.
-                        $totalMC = $MC['COUNT(id)'];
-                        $idEquipo = $MC['id'];
-                        
-                        if ($totalMCEquipo >= 0 and $idEquipo >= 0) {
-                            $ordenMCEquipos[] = intval($totalMC);
-                            $ordenIdEquipos[] = intval($idEquipo);
+                            if ($totalMC >= 0 and $idEquipo >= 0) {
+                                $ordenMCEquipos[] = intval($totalMC);
+                                $ordenIdEquipos[] = intval($idEquipo);
+                            }
                         }
                     }
                 }
@@ -2054,7 +2054,7 @@ if (isset($_POST['action'])) {
                         $totalMC = 0;
                     }
                     $ordenMCEquipos[] = intval($totalMC);
-                    $ordenIdEquipos[] = intval($idEquipo);;
+                    $ordenIdEquipos[] = intval($idEquipo);
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'nombreEquipo') {
@@ -2062,7 +2062,6 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
                 }
-            } else {
             }
 
             $topeTotalEquipos = $totalEquipos - 1;
