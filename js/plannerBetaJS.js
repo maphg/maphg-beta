@@ -467,7 +467,6 @@ function obtenerMCN(idEquipo) {
 function obtenerstatusMC(idMC) {
     document.getElementById("modalStatus").classList.add('open');
     localStorage.setItem('idMC', idMC);
-    let idEquipo = localStorage.getItem('idEquipo');
 
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
@@ -485,7 +484,7 @@ function obtenerstatusMC(idMC) {
         dataType: "JSON",
         success: function (data) {
             // Llama a la Función para reflejar los cambios en los MC por Equipo.
-            obtenerMCN(idEquipo);
+            
             // console.log(data);
             // Status
             document.getElementById("statusUrgente").
@@ -529,6 +528,7 @@ function obtenerstatusMC(idMC) {
 function actualizarStatusMC(idMC, status, valorStatus) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
     const action = "actualizarStatusMC";
 
     $.ajax({
@@ -544,6 +544,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
         },
         // dataType: "JSON",
         success: function (data) {
+            obtenerMCN(idEquipo);
             console.log(data);
             if (data == 1) {
                 alertaImg('Status Actualizado', '', 'success', 2000);
