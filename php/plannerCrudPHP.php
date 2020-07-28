@@ -1999,6 +1999,7 @@ if (isset($_POST['action'])) {
         $paginacionEquipos = "";
         $ordenMCEquipos = array();
         $ordenIdEquipos = array();
+        unset ($ordenMCEquipos,$ordenIdEquipos);
 
         if ($idDestino == 10) {
             $filtroDestino = "";
@@ -2023,7 +2024,6 @@ if (isset($_POST['action'])) {
             // Filtro para el tipo de Ordenamientos de los Equipos en la seccion de las Columnas.
             if ($tipoOrdenamiento == 'MCF') {
                 foreach ($resultEquipos as $equipo) {
-
                     $idEquipo = $equipo['id'];
                         $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
@@ -2042,7 +2042,6 @@ if (isset($_POST['action'])) {
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'MCN') {
                 foreach ($resultEquipos as $equipo) {
-
                     $idEquipo = $equipo['id'];
                     $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
