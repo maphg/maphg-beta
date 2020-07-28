@@ -2024,18 +2024,15 @@ if (isset($_POST['action'])) {
             if ($tipoOrdenamiento == 'MCF') {
                 foreach ($resultEquipos as $equipo) {
                     $idEquipo = $equipo['id'];
+                    $ordenIdEquipos[] = intval($idEquipo);
+
                     $queryMC = "SELECT id, count(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
                         if ($MC = mysqli_fetch_array($resultMC)) {
                             // Valor MC Obtenidos.
                             $totalMC = $MC['count(id)'];
-                            $idEquipo = $MC['id'];
-
-                            if ($totalMC >= 0 and $idEquipo >= 0) {
-                                $ordenMCEquipos[] = intval($totalMC);
-                                $ordenIdEquipos[] = intval($idEquipo);
-                            }
+                            $ordenMCEquipos[] = intval($totalMC);
                         }
                     }
                 }
@@ -2043,18 +2040,17 @@ if (isset($_POST['action'])) {
             } elseif ($tipoOrdenamiento == 'MCN') {
                 foreach ($resultEquipos as $equipo) {
                     $idEquipo = $equipo['id'];
-                    $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
+                    $ordenIdEquipos[] = intval($idEquipo);
+
+                    $queryMC = "SELECT id, count(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
-                        $MC = mysqli_fetch_array($resultMC);
-
-                        // Valor MC Obtenidos.
-                        $totalMC = $MC['COUNT(id)'];
-                    } else {
-                        $totalMC = 0;
+                        if ($MC = mysqli_fetch_array($resultMC)) {
+                            // Valor MC Obtenidos.
+                            $totalMC = $MC['count(id)'];
+                            $ordenMCEquipos[] = intval($totalMC);
+                        }
                     }
-                    $ordenMCEquipos[] = intval($totalMC);
-                    $ordenIdEquipos[] = intval($idEquipo);
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'nombreEquipo') {
