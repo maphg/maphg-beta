@@ -2044,16 +2044,17 @@ if (isset($_POST['action'])) {
                 foreach ($resultEquipos as $equipo) {
 
                     $idEquipo = $equipo['id'];
-                    if ($idEquipo > 0) {
-                        $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
+                    $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
-                        if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
-                            $MC = mysqli_fetch_array($resultMC);
+                    if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
+                        $MC = mysqli_fetch_array($resultMC);
 
-                            // Valor MC Obtenidos.
-                            $totalMC = $MC['COUNT(id)'];
-                            $ordenMCEquipos[] = $totalMC;
-                        }
+                        // Valor MC Obtenidos.
+                        $totalMC = $MC['COUNT(id)'];
+                        $ordenMCEquipos[] = $totalMC;
+                    } else {
+                        $totalMC = 0;
+                        $ordenMCEquipos[] = $totalMC;
                     }
                     $ordenIdEquipos[] = $idEquipo;
                 }
