@@ -29,8 +29,8 @@ function obtenerDatosUsuario(idDestino) {
             document.getElementById("avatarUsuario").innerHTML = '<img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=' + data.nombre + ' % ' + data.apellido + '"' + 'alt="avatar" class="menu-contenedor-6">';
             document.getElementById("nombreUsuarioNavBarTop").innerHTML = data.nombre + ' ' + data.apellido;
             document.getElementById("nombreUsuarioMenu").innerHTML = data.nombre + ' ' + data.apellido;
-            document.getElementById("cargoUsuarioMeu").innerHTML =data.cargo;
-            document.getElementById("destinoNavBarTop").innerHTML =data.destino;
+            document.getElementById("cargoUsuarioMeu").innerHTML = data.cargo;
+            document.getElementById("destinoNavBarTop").innerHTML = data.destino;
             document.getElementById("destinosSelecciona").innerHTML = data.destinosOpcion;
 
             alertaImg('Destino Seleccionado: ' + data.destino, '', 'success', 2000);
@@ -41,9 +41,9 @@ function obtenerDatosUsuario(idDestino) {
 }
 
 // Función autoCall.
-(() => { 
+(() => {
     let idDestino = localStorage.getItem('idDestino');
-    obtenerDatosUsuario(idDestino); 
+    obtenerDatosUsuario(idDestino);
 })();
 
 
@@ -214,7 +214,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             $("#columnasSeccionesZIL").html(data.dataZIL);
             $("#columnasSeccionesZIE").html(data.dataZIE);
             $("#columnasSeccionesAUTO").html(data.dataAUTO);
@@ -233,33 +233,10 @@ function consultaSubsecciones(idDestino, idUsuario) {
 }
 
 
-// Función para Ordenar Columnas.
-function ordenarSubsecciones(listaData, ordenarPadre, ordenarHijos) {
-    let orden = listaData.split(',');
-    // console.log(listaData);
-    var subsecciones = document.getElementById(ordenarPadre);
-
-    Sortable.create(
-        subsecciones, {
-        animation: 150,
-        group: ordenarHijos,
-        dataIdAttr: "data-identificador",
-        store: {
-            get: (sortable) => {
-                orden.pop();
-                orden.sort();
-                orden.reverse();
-                return orden ? orden : [];
-            }
-        },
-    });
-}
-
-
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
     document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = '';
-    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
+    // console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     document.getElementById("modalPendientes").classList.add('open');
     $("#estiloSeccion").html('<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>');
     $("#modalTituloSeccion").html(nombreSeccion);
@@ -308,7 +285,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccion(seccion) {
     let seccionClase = seccion.toLowerCase() + '-logo';
-    console.log(seccionClase);
+    // console.log(seccionClase);
 
     $("#estiloSeccion").removeClass('zil-logo zie-logo auto-logo dec-logo dep-logo oma-logo zha-logo zhc-logo zhh-logo zhp-logo zia-logo zic-logo');
     $("#estiloSeccion").addClass(seccionClase);
@@ -337,7 +314,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
 
 // Funcion para Ver y Exportar los pendientes de las secciones.
 function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
-    console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
+    // console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
     const action = "consultaFinalExcel";
     $.ajax({
         type: "POST",
@@ -387,7 +364,7 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
 
 // Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
 function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
-    console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
+    // console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
 
     // Se agregan los filtros en las columnas de los equipos.
     document.getElementById("tipoOrdenamientoMCN").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"MCN")');
@@ -420,18 +397,36 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
-            // console.log(data.dataEquipos);
+            console.log(data);
 
 
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
-            document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
+            // document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
+            paginacionEquipos();
 
             // alerta para mostrar información de los Equipos obtenidos.
             alertaImg(data.totalEquipos, '', 'success', 3000);
         }
     });
+}
+
+// Función para Paginar los resultados de los Equipos Obtenidos.
+function paginacionEquipos() {
+    $("div.holder").jPages({
+        containerID: 'dataEquipos',
+        perPage: 35,
+        startPage: 1,
+        endRange: 1,
+        midRange: 1,
+        previous: 'anterior',
+        next: 'siguiente',
+        animation: false
+    });
+    console.log('Paginación');
+
+    $(".holder>a").addClass('-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150');
+
 }
 
 // Obtiene todos los MC-N por Equipo.
@@ -458,7 +453,7 @@ function obtenerMCN(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("seccionMCN").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
             document.getElementById("dataMCN").innerHTML = data.MC;
@@ -470,7 +465,7 @@ function obtenerMCN(idEquipo) {
 
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
-    console.log(idEquipo);
+    // console.log(idEquipo);
     document.getElementById("modalMCF").classList.add('open');
     const action = "exportarListarUsuarios";
     $.ajax({
@@ -490,7 +485,8 @@ function obtenerMCF(idEquipo) {
 }
 
 
-function obtenerUsuarios() {
+// Obtener usuario recibe 2 parametros especificos, donde tipoAsignación se refiere a la tabla donde se va a utilizar el usuario y idItem es el identificador del registro que se le va asignar. 
+function obtenerUsuarios(tipoAsginacion, idItem) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let palabraUsuario = document.getElementById('palabraUsuario').value;
@@ -506,7 +502,9 @@ function obtenerUsuarios() {
             action: action,
             idUsuario: idUsuario,
             idDestino: idDestino,
-            palabraUsuario: palabraUsuario
+            palabraUsuario: palabraUsuario,
+            tipoAsginacion: tipoAsginacion,
+            idItem: idItem
         },
         dataType: "JSON",
         success: function (data) {
@@ -514,7 +512,40 @@ function obtenerUsuarios() {
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
         }
     });
+}
 
+
+// Función para Asignar usuario.
+function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    const action = "asignarUsuario";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idUsuarioSeleccionado: idUsuarioSeleccionado,
+            idDestino: idDestino,
+            tipoAsginacion: tipoAsginacion,
+            idItem: idItem
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+
+            if (data == "MC") {
+                alertaImg('Responsable Actualizado', '', 'success', 2500);
+                document.getElementById("modalUsuarios").classList.remove('open');
+                let idEquipo = localStorage.getItem('idEquipo');
+                obtenerMCN(idEquipo);
+            } else {
+                alertaImg('Intenete de Nuevo', '','question',2500);
+            }
+        }
+    });
 }
 
 
@@ -547,7 +578,7 @@ function obtenerAdjuntos(idMC) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("dataImagenes").classList.remove('justify-center');
             document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
 
@@ -559,15 +590,15 @@ function obtenerAdjuntos(idMC) {
 }
 
 
-// Funcion para Obtener Comentarios.
-function obtenerComentarios(idMC) {
+// Funcion para Obtener Comentarios MC.
+function obtenerComentariosMC(idMC) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
 
     document.getElementById("modalComentarios").classList.add('open');
     document.getElementById("dataComentarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 
-    const action = "obtenerComentarios";
+    const action = "obtenerComentariosMC";
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -579,9 +610,47 @@ function obtenerComentarios(idMC) {
         },
         dataType: "JSON",
         success: function (data) {
+            document.getElementById("btnComentario").
+                setAttribute('onclick', 'agregarComentarioMC(' + idMC+')');
+            document.getElementById("inputComentario").
+                setAttribute('onkeyup', 'if(event.keyCode == 13)agregarComentarioMC(' + idMC +')');
             document.getElementById("dataComentarios").innerHTML = data.dataComentarios;
+
         }
     });
+}
+
+// Agregar Comentario MC.
+function agregarComentarioMC(idMC) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let comentarioMC = document.getElementById("inputComentario").value;
+    const action = "agregarComentarioMC";
+    if (comentarioMC.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idMC: idMC,
+                comentarioMC: comentarioMC
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                if (data = 1) {   
+                    obtenerComentariosMC(idMC);
+                    document.getElementById("inputComentario").value='';
+                    alertaImg('Comentario Agregado', '', 'success', 2000);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'question', 2000);
+                }
+            }
+        });
+    } else {
+        alertaImg('Comentario Vacio', '', 'info', 2000);
+    }
 }
 
 
@@ -623,7 +692,7 @@ function llamarFuncionX(nombreFuncion) {
 
         case (nombreFuncion = 'obtenerEquipos'):
             obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
-            console.log(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
+            // console.log(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
             break;
     }
 }

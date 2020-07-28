@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="css/jPages.css">
 
     <style>
         .w-22rem {
@@ -220,10 +221,7 @@
                             <h1>MEDIA</h1>
                         </div>
                     </div>
-                    <div id="dataEquipos" class="w-full">
-
-                    </div>
-
+                    <div id="dataEquipos" class="w-full"></div>
                 </div>
             </div>
             <div class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6">
@@ -241,7 +239,12 @@
                 <!-- paginación. -->
                 <div>
                     <!-- Se agrega la paginación de los equipos -->
-                    <nav id="paginacionEquipos" class="relative inline-flex shadow-sm col"></nav>
+                    <!-- <nav id="paginacionEquipos" class="relative inline-flex shadow-sm col">
+                        <div class="holder"></div>
+                    </nav> -->
+                    <nav class="relative inline-flex shadow-sm col">
+                        <div class="holder"></div>
+                    </nav>
                 </div>
 
             </div>
@@ -535,11 +538,11 @@
 
 
     <!-- MODAL Exportar Secciones Usuarios -->
-    <div id="modalResponsable" class="modal">
+    <div id="modalExportarSeccionesUsuarios" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 370px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalResponsable')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalExportarSeccionesUsuarios')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -631,9 +634,10 @@
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
                 <div class="mb-3">
-                    <button class="py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
+                    <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
                         <i class="fad fa-cloud-upload fa-lg mr-2"></i>
                         ADJUNTAR ARCHIVOS
+                        <input type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;">
                     </button>
                 </div>
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
@@ -676,8 +680,8 @@
                     <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
-                    <input type="text" placeholder="    Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none">
-                    <button class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                    <input id="inputComentario" type="text" placeholder="    Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none">
+                    <button id="btnComentario" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                         <i class="fad fa-paper-plane"></i>
                     </button>
                 </div>
@@ -856,7 +860,7 @@
 
 
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
     <script src="js/modales.js"></script>
@@ -865,6 +869,7 @@
     <script src="js/alertasSweet.js"></script>
     <script src="js/calendarioBotones.js"></script>
     <script src="js/plannerBetaJS.js"></script>
+    <script src="js/jPages.js"></script>
 
 </body>
 

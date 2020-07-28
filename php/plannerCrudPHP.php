@@ -165,7 +165,7 @@ if (isset($_POST['action'])) {
                                 <div class=\"w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar\">
                                 <div id=\"ordenarPadre$seccion\" class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800 ordenarHijos$seccion\">
                     ";
-                    
+
                     // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
@@ -297,9 +297,9 @@ if (isset($_POST['action'])) {
                                 $nombreSubseccion = $rowSubseccion['grupo'];
                                 $totalPendiente = $totalSubseccionOrdenZIE[$key];
 
-                                if($totalPendiente > 0){
+                                if ($totalPendiente > 0) {
                                     $estiloSubseccion = "bg-red-400 text-red-700";
-                                }else{
+                                } else {
                                     $estiloSubseccion = "";
                                     $totalPendiente = "";
                                 }
@@ -2016,7 +2016,7 @@ if (isset($_POST['action'])) {
         $seccionEquipos = $arraySeccion[$idSeccion];
 
         // Busca Equipos.
-        $queryEquipos = "SELECT id FROM t_equipos WHERE id_seccion = $idSeccion AND id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
+        $queryEquipos = "SELECT id FROM t_equipos WHERE id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
         if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
             $totalEquipos = mysqli_num_rows($resultEquipos);
 
@@ -2025,7 +2025,6 @@ if (isset($_POST['action'])) {
                 foreach ($resultEquipos as $equipo) {
 
                     $idEquipo = $equipo['id'];
-                    if ($idEquipo > 0) {
                         $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
                         if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
@@ -2034,9 +2033,11 @@ if (isset($_POST['action'])) {
                             // Valor MC Obtenidos.
                             $totalMC = $MC['COUNT(id)'];
                             $ordenMCEquipos[] = $totalMC;
-                            $ordenIdEquipos[] = $idEquipo;
+                        }else{
+                            $totalMC = 0;
+                            $ordenMCEquipos[] = $totalMC;
                         }
-                    }
+                    $ordenIdEquipos[] = $idEquipo;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'MCN') {
@@ -2064,116 +2065,109 @@ if (isset($_POST['action'])) {
                 }
             }
 
-            // Obtiene el total de $ordenIdEquipos.
-            $longitud = count($ordenIdEquipos);
+            $topeTotalEquipos = $totalEquipos - 1;
 
-            if ($longitud > 0) {
-                $longitud = $longitud - 1;
-            } else {
-                $longitud = 0;
-            }
+            for ($keyMC = 0; $keyMC <= $topeTotalEquipos; $keyMC++) {
 
-            for ($keyMC = $rangoInicial; $keyMC <= $rangoFinal; $keyMC++) {
+                // Valores Inicializados para evitar Error Idex Array.
+                $totalMCEquipo = 0;
+                $idEquipo = 0;
 
-                if ($keyMC <= $longitud and $keyMC >= 0 and $longitud > 0) {
-                    // Valores Inicializados para evitar Error Idex Array.
-                    $totalMCEquipo = 0;
-                    $idEquipo = 0;
+                // Contador de Resultados Obtenidos.
 
-                    // Contador de Resultados Obtenidos.
-                    $contadorRango++;
+                // Se obtiene el Id del Equipo, mediante el array previo ordenado.
+                $idEquipo = $ordenIdEquipos[$keyMC];
 
-                    // Se obtiene el Id del Equipo, mediante el array previo ordenado.
-                    $idEquipo = $ordenIdEquipos[$keyMC];
+                // Realiza busca los equipos con el arreglo ordenado
+                $queryEquipos = "SELECT id, equipo FROM t_equipos WHERE id = $idEquipo";
+                if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
+                    if ($rowEquipo = mysqli_fetch_array($resultEquipos)) {
+                        // Variables Globales para los equipos.
+                        $nombreEquipo = $rowEquipo['equipo'];
+                        $idEquipo = $rowEquipo['id'];
 
-                    // Realiza busca los equipos con el arreglo ordenado
-                    $queryEquipos = "SELECT id, equipo FROM t_equipos WHERE id = $idEquipo";
-                    if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
-                        if ($rowEquipo = mysqli_fetch_array($resultEquipos)) {
-                            // Variables Globales para los equipos.
-                            $nombreEquipo = $rowEquipo['equipo'];
-                            $idEquipo = $rowEquipo['id'];
-
-                            //MC Pendientes N. 
-                            $queryMCN = "SELECT COUNT(id) FROM t_mc 
+                        //MC Pendientes N. 
+                        $queryMCN = "SELECT COUNT(id) FROM t_mc 
                             WHERE id_equipo = $idEquipo AND status ='N' AND activo = 1";
-                            if ($resultMCN = mysqli_query($conn_2020, $queryMCN)) {
-                                if ($rowMCN = mysqli_fetch_array($resultMCN)) {
-                                    $totalMCN = $rowMCN['COUNT(id)'];
-                                    if ($totalMCN > 0) {
-                                        $estiloMCN = "bg-red-200 text-red-400";
-                                    } else {
-                                        $estiloMCN = "bg-white text-white-400";
-                                    }
-                                }
-                            } else {
-                                $totalMCN = "0";
-                                $estiloMCN = "bg-white text-white-400";
-                            }
-
-                            //MC Solucionados F. 
-                            $queryMCF = "SELECT COUNT(id) FROM t_mc 
-                            WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
-                            if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
-                                if ($rowMCF = mysqli_fetch_array($resultMCF)) {
-                                    $totalMCF = $rowMCF['COUNT(id)'];
-                                    if ($totalMCF > 0) {
-                                        $estiloMCF = "bg-green-200 text-green-500";
-                                    } else {
-                                        $estiloMCF = "bg-white text-white-400";
-                                    }
-                                }
-                            } else {
-                                $totalMCF = "0";
-                                $estiloMCF = "bg-white text-white-400";
-                            }
-
-                            //MP PLANIFICADOS Pendientes N. 
-                            $queryMPN = "SELECT COUNT(id) FROM t_mp_planeacion 
-                            WHERE id_equipo = $idEquipo AND (status ='N' OR status = 'P') AND tipoplan = 'MP' AND activo = 1";
-                            if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
-                                if ($rowMPN = mysqli_fetch_array($resultMPN)) {
-                                    $totalMPN = $rowMPN['COUNT(id)'];
+                        if ($resultMCN = mysqli_query($conn_2020, $queryMCN)) {
+                            if ($rowMCN = mysqli_fetch_array($resultMCN)) {
+                                $totalMCN = $rowMCN['COUNT(id)'];
+                                if ($totalMCN > 0) {
+                                    $estiloMCN = "bg-red-200 text-red-400";
                                 } else {
-                                    $totalMPN = "0";
+                                    $estiloMCN = "bg-white text-white-400";
+                                    $totalMCN = "";
                                 }
+                            }
+                        } else {
+                            $totalMCN = "";
+                            $estiloMCN = "bg-white text-white-400";
+                        }
+
+                        //MC Solucionados F. 
+                        $queryMCF = "SELECT COUNT(id) FROM t_mc 
+                            WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
+                        if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
+                            if ($rowMCF = mysqli_fetch_array($resultMCF)) {
+                                $totalMCF = $rowMCF['COUNT(id)'];
+                                if ($totalMCF > 0) {
+                                    $estiloMCF = "bg-green-200 text-green-500";
+                                } else {
+                                    $estiloMCF = "bg-white text-white-400";
+                                    $totalMCF = "";
+                                }
+                            }
+                        } else {
+                            $totalMCF = "";
+                            $estiloMCF = "bg-white text-white-400";
+                        }
+
+                        //MP PLANIFICADOS Pendientes N. 
+                        $queryMPN = "SELECT COUNT(id) FROM t_mp_planeacion 
+                            WHERE id_equipo = $idEquipo AND (status ='N' OR status = 'P') AND tipoplan = 'MP' AND activo = 1";
+                        if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
+                            if ($rowMPN = mysqli_fetch_array($resultMPN)) {
+                                $totalMPN = $rowMPN['COUNT(id)'];
                             } else {
                                 $totalMPN = "0";
                             }
+                        } else {
+                            $totalMPN = "0";
+                        }
 
-                            //MP NP PLANIFICADOS, todos Finalizados F. 
-                            $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
+                        //MP NP PLANIFICADOS, todos Finalizados F. 
+                        $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
                             WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
-                            if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
-                                if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
-                                    $totalMPNP = $rowMPNP['COUNT(id)'];
-                                } else {
-                                    $totalMPNP = "0";
-                                }
+                        if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
+                            if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
+                                $totalMPNP = $rowMPNP['COUNT(id)'];
                             } else {
                                 $totalMPNP = "0";
                             }
+                        } else {
+                            $totalMPNP = "0";
+                        }
 
-                            //MP PLANIFICADOS Finalizados F. 
-                            $queryMPF = "SELECT fecha_registro, COUNT(id) FROM t_mp_planeacion 
+                        //MP PLANIFICADOS Finalizados F. 
+                        $queryMPF = "SELECT fecha_registro, COUNT(id) FROM t_mp_planeacion 
                             WHERE id_equipo = $idEquipo AND status ='F' AND tipoplan = 'MP' AND activo = 1 ORDER BY fecha_registro DESC";
-                            if ($resultMPF = mysqli_query($conn_2020, $queryMPF)) {
-                                if ($rowMPF = mysqli_fetch_array($resultMPF)) {
-                                    $totalMPF = $rowMPF['COUNT(id)'];
-                                    $fechaMPF = $rowMPF['fecha_registro'];
-                                    $fechaMPF = (new DateTime($fechaMPF))->format('d-m-Y');
-                                } else {
-                                    $totalMPF = "0";
-                                    $fechaMPF = "NA";
-                                }
+                        if ($resultMPF = mysqli_query($conn_2020, $queryMPF)) {
+                            if ($rowMPF = mysqli_fetch_array($resultMPF)) {
+                                $totalMPF = $rowMPF['COUNT(id)'];
+                                $fechaMPF = $rowMPF['fecha_registro'];
+                                $fechaMPF = (new DateTime($fechaMPF))->format('d-m-Y');
                             } else {
                                 $totalMPF = "0";
                                 $fechaMPF = "NA";
                             }
+                        } else {
+                            $totalMPF = "0";
+                            $fechaMPF = "NA";
+                        }
 
-                            // Nombre de Equipo.
-                            $dataEquipos .= "
-                                <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                        // Nombre de Equipo.
+                        $dataEquipos .= "
+                                <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
                                     <div id=\"equipo123\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
                                         <div class=\" flex flex-row items-center truncate\">
                                             <i class=\"fas fa-cog mx-2\"></i>
@@ -2185,24 +2179,24 @@ if (isset($_POST['action'])) {
                                     </div>
                             ";
 
-                            //MC Pendientes N. 
-                            $dataEquipos .= "       
+                        //MC Pendientes N. 
+                        $dataEquipos .= "       
                                 <!-- MC PENDIENTES -->
                                 <div onclick=\"obtenerMCN($idEquipo);\" class=\"w-16 h-full flex items-center justify-center $estiloMCN hover:shadow-md\">
                                     <h1>$totalMCN</h1>
                                 </div>
                             ";
 
-                            //MC Solucionados F 
-                            $dataEquipos .= "
+                        //MC Solucionados F 
+                        $dataEquipos .= "
                                 <!-- MC SOLUCIONADOS -->
                                 <div onclick=\"obtenerMCF($idEquipo);\" class=\"w-16 flex h-full items-center justify-center $estiloMCF hover:shadow-md\">
                                     <h1>$totalMCF</h1>
                                 </div>
                             ";
 
-                            // MP Planificados.
-                            $dataEquipos .= "
+                        // MP Planificados.
+                        $dataEquipos .= "
                                 <!-- MP PLANIFICADOS -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
                                     <h1>$totalMPN</h1>
@@ -2210,8 +2204,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // MP NO Planificados.
-                            $dataEquipos .= "
+                        // MP NO Planificados.
+                        $dataEquipos .= "
                                 <!-- MP NO PLANIFICADOS -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
                                     <h1>$totalMPNP</h1>
@@ -2219,8 +2213,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // MP Finalizados.
-                            $dataEquipos .= "
+                        // MP Finalizados.
+                        $dataEquipos .= "
                                 <!-- MP FINALIZADOS -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md\">
                                     <h1>$totalMPF</h1>
@@ -2228,8 +2222,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // MP Ultimo.
-                            $dataEquipos .= "
+                        // MP Ultimo.
+                        $dataEquipos .= "
                                 <!--  ULTIMO MP -->
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
                                     <h1 class=\"font-xs\">$fechaMPF</h1>
@@ -2237,8 +2231,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // Test Equipo.
-                            $dataEquipos .= "
+                        // Test Equipo.
+                        $dataEquipos .= "
                                 <!--  TEST -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md\">
                                     <h1>22</h1>
@@ -2246,8 +2240,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // Ultimo TEST Equipo.
-                            $dataEquipos .= "
+                        // Ultimo TEST Equipo.
+                        $dataEquipos .= "
                                 <!--  ULTIMO TEST -->
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
                                     <h1 class=\"font-xs\">AGO 2020</h1>
@@ -2255,8 +2249,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // Cotizaciones Equipos.
-                            $dataEquipos .= "
+                        // Cotizaciones Equipos.
+                        $dataEquipos .= "
                                 <!--  COTIZACIONES -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
                                     <h1>22</h1>
@@ -2264,8 +2258,8 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // Info Equipos.
-                            $dataEquipos .= "
+                        // Info Equipos.
+                        $dataEquipos .= "
                                 <!--  INFO -->
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md\">
                                     <h1><i class=\"fas fa-eye fa-lg\"></i></h1>
@@ -2273,74 +2267,20 @@ if (isset($_POST['action'])) {
                             ";
 
 
-                            // Fotos Equipos.
-                            $dataEquipos .= "
+                        // Fotos Equipos.
+                        $dataEquipos .= "
                                 <!--  MEDIA -->
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md\">
                                     <h1><i class=\"fas fa-photo-video fa-lg\"></i></h1>
                                 </div>
                             ";
 
-                            // Fin de Fila por Cada Equipo.
-                            $dataEquipos .= "
+                        // Fin de Fila por Cada Equipo.
+                        $dataEquipos .= "
                                 </div>          
                             ";
-                        }
                     }
                 }
-            }
-
-            if ($longitud > 50) {
-                $paginacionEquipos .= "
-                <button type=\"button\"
-                    class=\"relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150\"
-                    aria-label=\"Previous\">
-                    <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
-                        <path fill-rule=\"evenodd\"
-                            d=\"M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z\"
-                            clip-rule=\"evenodd\" />
-                    </svg>
-                </button>
-
-                <button type=\"button\"
-                    class=\"-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150\"
-                    onclick=\"obtenerEquipos($idUsuario, $idDestino, $idSeccion, $idSubseccion, 0, 49, '$tipoOrdenamiento')\">
-                    1
-                </button>
-            ";
-
-                $paginas = ($longitud - 50) / 50;
-                if ($paginas > 0) {
-                    $contadorPaginas = 1;
-                    $rangoInicial = 0;
-                    $rangoFinal = 49;
-                    for ($i = 0; $i <= $paginas; $i++) {
-                        $rangoInicial = $rangoFinal + 1;
-                        $rangoFinal = intval($rangoFinal) + 50;
-                        $contadorPaginas++;
-                        $paginacionEquipos .= "
-                        <button type=\"button\"
-                        class=\"-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150\"
-                        onclick=\"obtenerEquipos($idUsuario, $idDestino, $idSeccion, $idSubseccion, $rangoInicial, $rangoFinal, '$tipoOrdenamiento')\">
-                        $contadorPaginas
-                        </button>
-                    ";
-                    }
-                } else {
-                    $paginacionEquipos .= "NO $paginas";
-                }
-
-                $paginacionEquipos .= "
-                <button type=\"button\"
-                    class=\"-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150\"
-                    aria-label=\"Next\">
-                    <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
-                        <path fill-rule=\"evenodd\"
-                            d=\"M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z\"
-                            clip-rule=\"evenodd\" />
-                    </svg>
-                </button>            
-            ";
             }
 
             // Datos almacenados.
@@ -2449,7 +2389,7 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!-- RESPONSABLE -->
-                        <div onclick=\"obtenerUsuarios($idDestino, '');\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
+                        <div onclick=\"obtenerUsuarios('asignarMC', $idMC);\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
                             <h1>$nombreResponsable</h1>
                         </div>
 
@@ -2464,7 +2404,7 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!--  COMENTARIOS -->
-                        <div onclick=\"obtenerComentarios($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                        <div onclick=\"obtenerComentariosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
                             <h1>$totalComentario</h1>
                         </div>
 
@@ -2503,6 +2443,8 @@ if (isset($_POST['action'])) {
     if ($action == "obtenerUsuarios") {
         // Variables AJAX.
         $palabraUsuario = $_POST['palabraUsuario'];
+        $tipoAsginacion = $_POST['tipoAsginacion'];
+        $idItem = $_POST['idItem'];
 
         // Variables Locales.
         $data = array();
@@ -2522,33 +2464,53 @@ if (isset($_POST['action'])) {
             $filtroPalabraUsuario = "";
         }
 
-        $queryUsuarios = "SELECT t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo 
+        $queryUsuarios = "SELECT t_users.id 'idUsuario', t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo 
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.status= 'A' $filtroDestino $filtroPalabraUsuario";
+        WHERE t_users.status= 'A' AND t_users.id != 0 $filtroDestino $filtroPalabraUsuario ";
         if ($resultUsuarios = mysqli_query($conn_2020, $queryUsuarios)) {
             $totalUsuarios = mysqli_num_rows($resultUsuarios);
 
-            foreach ($resultUsuarios as $value) {
-                $nombre = $value['nombre'];
-                $apellido = $value['apellido'];
-                $cargo = $value['cargo'];
-                $nombreCompleto = $nombre . " " . $apellido;
+            //Tipo de Asignación sirve para mandar parametros especificos en las funciones. 
+            if ($tipoAsginacion == "asignarMC") {
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
 
-                $dataUsuarios .= "
-                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\">
+                    $dataUsuarios .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"asignarUsuario($idUsuario, 'asignarMC', $idItem);\">
                         <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
                         <h1 class=\"ml-2\">$nombreCompleto</h1>
                         <p class=\"font-bold mx-1\"> / </p>
                         <h1 class=\"font-normal text-xs\">$cargo</h1>
                     </div>
                 ";
+                }
             }
         }
         $data['dataUsuarios'] = $dataUsuarios;
         $data['totalUsuarios'] = $totalUsuarios;
         echo json_encode($data);
+    }
+
+    if ($action == "asignarUsuario") {
+        $tipoAsginacion = $_POST['tipoAsginacion'];
+        $idUsuarioSeleccionado = $_POST['idUsuarioSeleccionado'];
+        $idItem = $_POST['idItem'];
+
+        if ($tipoAsginacion == "asignarMC") {
+            $query = "UPDATE t_mc SET responsable = $idUsuarioSeleccionado WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo "MC";
+            } else {
+                echo "0";
+            }
+        }
     }
 
 
@@ -2608,8 +2570,8 @@ if (isset($_POST['action'])) {
     }
 
 
-    // obtiene Comentarios
-    if ($action == "obtenerComentarios") {
+    // obtiene Comentarios MC.
+    if ($action == "obtenerComentariosMC") {
         // Variables AJAX.
         $idMC = $_POST['idMC'];
 
@@ -2623,7 +2585,7 @@ if (isset($_POST['action'])) {
         INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_mc_comentarios.id_mc = $idMC AND t_mc_comentarios.activo = 1
-        ORDER BY t_mc_comentarios.fecha DESC
+        ORDER BY t_mc_comentarios.id DESC
         ";
         if ($resultComentario = mysqli_query($conn_2020, $queryComentario)) {
             foreach ($resultComentario as $value) {
@@ -2657,5 +2619,19 @@ if (isset($_POST['action'])) {
         }
         $data['dataComentarios'] = $dataComentarios;
         echo json_encode($data);
+    }
+
+    // Agregar Comentario MC.
+    if ($action == "agregarComentarioMC") {
+        // Variables AJAX.
+        $idMC = $_POST['idMC'];
+        $comentarioMC = $_POST['comentarioMC'];
+
+        $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario) VALUES($idMC, '$comentarioMC', $idUsuario)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
     }
 }
