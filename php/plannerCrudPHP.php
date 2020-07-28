@@ -2024,18 +2024,18 @@ if (isset($_POST['action'])) {
             if ($tipoOrdenamiento == 'MCF') {
                 foreach ($resultEquipos as $equipo) {
                     $idEquipo = $equipo['id'];
-                        $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
+                    $queryMC = "SELECT COUNT(id) FROM t_MC WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
-                        if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
-                            $MC = mysqli_fetch_array($resultMC);
+                    if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
+                        $MC = mysqli_fetch_array($resultMC);
 
-                            // Valor MC Obtenidos.
-                            $totalMC = $MC['COUNT(id)'];
-                            $ordenMCEquipos[] = $totalMC;
-                        }else{
-                        $ordenMCEquipos[] = 0;
-                        }
-                    $ordenIdEquipos[] = $idEquipo;
+                        // Valor MC Obtenidos.
+                        $totalMC = $MC['COUNT(id)'];
+                    } else {
+                        $totalMC = 0;
+                    }
+                    $ordenMCEquipos[] = $totalMC;
+                    $ordenIdEquipos[] = intval($idEquipo);;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'MCN') {
@@ -2048,12 +2048,11 @@ if (isset($_POST['action'])) {
 
                         // Valor MC Obtenidos.
                         $totalMC = $MC['COUNT(id)'];
-                        $ordenMCEquipos[] = $totalMC;
                     } else {
                         $totalMC = 0;
-                        $ordenMCEquipos[] = $totalMC;
                     }
-                    $ordenIdEquipos[] = $idEquipo;
+                    $ordenMCEquipos[] = $totalMC;
+                    $ordenIdEquipos[] = intval($idEquipo);;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
             } elseif ($tipoOrdenamiento == 'nombreEquipo') {
