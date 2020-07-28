@@ -2034,7 +2034,7 @@ if (isset($_POST['action'])) {
                     } else {
                         $totalMC = 0;
                     }
-                    $ordenMCEquipos[] = $totalMC;
+                    $ordenMCEquipos[] = intval($totalMC);
                     $ordenIdEquipos[] = intval($idEquipo);;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
@@ -2051,7 +2051,7 @@ if (isset($_POST['action'])) {
                     } else {
                         $totalMC = 0;
                     }
-                    $ordenMCEquipos[] = $totalMC;
+                    $ordenMCEquipos[] = intval($totalMC);
                     $ordenIdEquipos[] = intval($idEquipo);;
                 }
                 array_multisort($ordenMCEquipos, SORT_DESC, $ordenIdEquipos);
@@ -2060,6 +2060,8 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
                 }
+            }else{
+                
             }
 
             $topeTotalEquipos = $totalEquipos - 1;
