@@ -2166,7 +2166,7 @@ if (isset($_POST['action'])) {
                                     <div id=\"equipo123\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
                                         <div class=\" flex flex-row items-center truncate\">
                                             <i class=\"fas fa-cog mx-2\"></i>
-                                            <h1>$keyMC - $ordenIdEquipos[$keyMC] - $nombreEquipo</h1>
+                                            <h1>$nombreEquipo</h1>
                                         </div>
                                         <div class=\"mx-2\">
                                             <i class=\"fas fa-chevron-down\"></i>
@@ -2297,7 +2297,12 @@ if (isset($_POST['action'])) {
         $contadorMC = 0;
 
         $query = "
-            SELECT t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+            SELECT 
+            t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+            t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+            t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
             FROM t_mc 
             INNER JOIN t_users ON t_mc.creado_por = t_users.id
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -2312,6 +2317,81 @@ if (isset($_POST['action'])) {
                 $actividad = $row['actividad'];
                 $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
                 $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-Y');
+
+                // Status
+                $statusUrgente = $row['status_urgente'];
+                if($statusUrgente == 0 OR $statusUrgente == ""){
+                    $statusUrgente = "hidden";
+                }else{
+                    $statusUrgente = "";
+                }
+                $statusTrabajare = $row['status_trabajare'];
+                if($statusTrabajare == 0 OR $statusTrabajare == ""){
+                    $statusTrabajare = "hidden";
+                }else{
+                    $statusTrabajare = "";
+                }
+                $statusMaterial = $row['status_material'];
+                if($statusMaterial == 0 OR $statusMaterial == ""){
+                    $statusMaterial = "hidden";
+                }else{
+                    $statusMaterial = "";
+                }
+                $statusElectricidad = $row['energetico_electricidad'];
+                if($statusElectricidad == 0 OR $statusElectricidad == ""){
+                    $statusElectricidad = "hidden";
+                }else{
+                    $statusElectricidad = "";
+                }
+                $statusAgua = $row['energetico_agua'];
+                if($statusAgua == 0 OR $statusAgua == ""){
+                    $statusAgua = "hidden";
+                }else{
+                    $statusAgua = "";
+                }
+                $statusGas = $row['energetico_gas'];
+                if($statusGas == 0 OR $statusGas == ""){
+                    $statusGas = "hidden";
+                }else{
+                    $statusGas = "";
+                }
+                $statusDiesel = $row['energetico_diesel'];
+                if($statusDiesel == 0 OR $statusDiesel == ""){
+                    $statusDiesel = "hidden";
+                }else{
+                    $statusDiesel = "";
+                }
+                $statusCompras = $row['departamento_compras'];
+                if($statusCompras == 0 OR $statusCompras == ""){
+                    $statusCompras = "hidden";
+                }else{
+                    $statusCompras = "";
+                }
+                $statusFinanzas = $row['departamento_finanzas'];
+                if($statusFinanzas == 0 OR $statusFinanzas == ""){
+                    $statusFinanzas = "hidden";
+                }else{
+                    $statusFinanzas = "";
+                }
+                $statusRRHH = $row['departamento_rrhh'];
+                if($statusRRHH == 0 OR $statusRRHH == ""){
+                    $statusRRHH = "hidden";
+                }else{
+                    $statusRRHH = "";
+                }
+                $statusCalidad = $row['departamento_calidad'];
+                if($statusCalidad == 0 OR $statusCalidad == ""){
+                    $statusCalidad = "hidden";
+                }else{
+                    $statusCalidad = "";
+                }
+                $statusDireccion = $row['departamento_direccion'];
+                if($statusDireccion == 0 OR $statusDireccion == ""){
+                    $statusDireccion = "hidden";
+                }else{
+                    $statusDireccion = "";
+                }
+
 
                 // Responsable.
                 $queryResponsable = "
@@ -2354,21 +2434,52 @@ if (isset($_POST['action'])) {
                         <!-- FALLA -->
                         <div class=\"w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
 
-                            <div class=\"absolute\" style=\"left: -17px;\">
-                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                            <div class=\"$statusUrgente absolute\" style=\"left: -17px;\">
+                               <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
                             </div>
                             <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px;\">
-                                <div class=\" bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                <div class=\"$statusMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
                                     <h1 class=\"\">M</h1>
                                 </div>
-                                <div class=\" bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                
+                                <div class=\"$statusTrabajare bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
                                     <h1 class=\"\">T</h1>
                                 </div>
-                                <div class=\" bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                
+                                <div class=\"$statusElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
                                     <h1 class=\"\">Electricidad</h1>
                                 </div>
-                                <div class=\" bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                
+                                <div class=\"$statusAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Agua</h1>
+                                </div>
+                               
+                                <div class=\"$statusGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Gas</h1>
+                                </div>
+                                
+                                <div class=\"$statusDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Diesel</h1>
+                                </div>
+                                
+                                <div class=\"$statusDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Dirección</h1>
+                                </div>
+                                
+                                <div class=\"$statusRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">RRHH</h1>
+                                </div>
+                                
+                                <div class=\"$statusFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Finanzas</h1>
+                                </div>
+                                
+                                <div class=\"$statusCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Compras</h1>
+                                </div>
+                                
+                                <div class=\"$statusCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Calidad</h1>
                                 </div>
                             </div>
 
@@ -2405,7 +2516,7 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!--  STATUS -->
-                        <div onclick=\"statusMC('');\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
+                        <div onclick=\"obtenerstatusMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
                             <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
                         </div>
 
@@ -2624,6 +2735,172 @@ if (isset($_POST['action'])) {
         $comentarioMC = $_POST['comentarioMC'];
 
         $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario) VALUES($idMC, '$comentarioMC', $idUsuario)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+    // Obtener status MC.
+    if ($action == "obtenerStatusMC") {
+        $data = array();
+        $idMC = $_POST['idMC'];
+        $query = "SELECT 
+        status, activo,
+        status_material, status_trabajare, status_urgente,
+        energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas,
+        departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh
+        FROM t_mc 
+        WHERE id = $idMC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $status = $value['status'];
+                $statusActivo = $value['activo'];
+                // Status.
+                $statusMaterial = $value['status_material'];
+                $statusTrabajare = $value['status_trabajare'];
+                $statusUrgente = $value['status_urgente'];
+                // Status Energeticos.
+                $statusElectricidad = $value['energetico_electricidad'];
+                $statusAgua = $value['energetico_agua'];
+                $statusDiesel = $value['energetico_diesel'];
+                $statusGas = $value['energetico_gas'];
+                // Status Departamentos.
+                $statusCalidad = $value['departamento_calidad'];
+                $statusCompras = $value['departamento_compras'];
+                $statusDireccion = $value['departamento_direccion'];
+                $statusFinanzas = $value['departamento_finanzas'];
+                $statusRRHH = $value['departamento_rrhh'];
+
+                // Status.
+                if ($statusMaterial == "" or $statusMaterial == "0") {
+                    $dataStatusMaterial = "actualizarStatusMC($idMC, 'status_material', 0);";
+                } else {
+                    $dataStatusMaterial = "actualizarStatusMC($idMC, 'status_material', 1);";
+                }
+
+                if ($statusUrgente == "" or $statusUrgente == "0") {
+                    $dataStatusUrgente = "actualizarStatusMC($idMC, 'status_urgente', 0);";
+                } else {
+                    $dataStatusUrgente = "actualizarStatusMC($idMC, 'status_urgente', 1);";
+                }
+
+                if ($statusTrabajare == "" or $statusTrabajare == "0") {
+                    $dataStatusTrabajare = "actualizarStatusMC($idMC, 'status_trabajare', 0);";
+                } else {
+                    $dataStatusTrabajare = "actualizarStatusMC($idMC, 'status_trabajare', 1);";
+                }
+
+                // Status Departamentos.
+                if ($statusCalidad == "" or $statusCalidad == "0") {
+                    $dataStatusCalidad = "actualizarStatusMC($idMC, 'departamento_calidad', 0);";
+                } else {
+                    $dataStatusCalidad = "actualizarStatusMC($idMC, 'departamento_calidad', 1);";
+                }
+                if ($statusCompras == "" or $statusCompras == "0") {
+                    $dataStatusCompras = "actualizarStatusMC($idMC, 'departamento_compras', 0);";
+                } else {
+                    $dataStatusCompras = "actualizarStatusMC($idMC, 'departamento_compras', 1);";
+                }
+                if ($statusDireccion == "" or $statusDireccion == "0") {
+                    $dataStatusDireccion = "actualizarStatusMC($idMC, 'departamento_direccion', 0);";
+                } else {
+                    $dataStatusDireccion = "actualizarStatusMC($idMC, 'departamento_direccion', 1);";
+                }
+                if ($statusFinanzas == "" or $statusFinanzas == "0") {
+                    $dataStatusFinanzas = "actualizarStatusMC($idMC, 'departamento_finanzas', 0);";
+                } else {
+                    $dataStatusFinanzas = "actualizarStatusMC($idMC, 'departamento_finanzas', 1);";
+                }
+                if ($statusRRHH == "" or $statusRRHH == "0") {
+                    $dataStatusRRHH = "actualizarStatusMC($idMC, 'departamento_rrhh', 0);";
+                } else {
+                    $dataStatusRRHH = "actualizarStatusMC($idMC, 'departamento_rrhh', 1);";
+                }
+                // StatusEnergeticos
+                if ($statusElectricidad == "" or $statusElectricidad == "0") {
+                    $dataStatusElectricidad = "actualizarStatusMC($idMC, 'energetico_electricidad', 0);";
+                } else {
+                    $dataStatusElectricidad = "actualizarStatusMC($idMC, 'energetico_electricidad', 1);";
+                }
+                if ($statusAgua == "" or $statusAgua == "0") {
+                    $dataStatusAgua = "actualizarStatusMC($idMC, 'energetico_agua', 0);";
+                } else {
+                    $dataStatusAgua = "actualizarStatusMC($idMC, 'energetico_agua', 1);";
+                }
+                if ($statusDiesel == "" or $statusDiesel == "0") {
+                    $dataStatusDiesel = "actualizarStatusMC($idMC, 'energetico_diesel', 0);";
+                } else {
+                    $dataStatusDiesel = "actualizarStatusMC($idMC, 'energetico_diesel', 1);";
+                }
+                if ($statusGas == "" or $statusGas == "0") {
+                    $dataStatusGas = "actualizarStatusMC($idMC, 'energetico_gas', 0);";
+                } else {
+                    $dataStatusGas = "actualizarStatusMC($idMC, 'energetico_gas', 1);";
+                }
+                // Finalizar MC
+                if ($status == "N") {
+                    $dataStatus = "actualizarStatusMC($idMC, 'status', 'N');";
+                } else {
+                    $dataStatus = "actualizarStatusMC($idMC, 'status', 'F');";
+                }
+                // Activo MC
+                if ($statusActivo == "1") {
+                    $dataStatusActivo = "actualizarStatusMC($idMC, 'activo', '1');";
+                } else {
+                    $dataStatusActivo = "actualizarStatusMC($idMC, 'activo', '0');";
+                }
+            }
+            $data['dataStatusMaterial'] = $dataStatusMaterial;
+            $data['dataStatusUrgente'] = $dataStatusUrgente;
+            $data['dataStatusTrabajare'] = $dataStatusTrabajare;
+            $data['dataStatusCalidad'] = $dataStatusCalidad;
+            $data['dataStatusCompras'] = $dataStatusCompras;
+            $data['dataStatusDireccion'] = $dataStatusDireccion;
+            $data['dataStatusFinanzas'] = $dataStatusFinanzas;
+            $data['dataStatusRRHH'] = $dataStatusRRHH;
+            $data['dataStatusElectricidad'] = $dataStatusElectricidad;
+            $data['dataStatusAgua'] = $dataStatusAgua;
+            $data['dataStatusDiesel'] = $dataStatusDiesel;
+            $data['dataStatusGas'] = $dataStatusGas;
+            $data['dataStatus'] = $dataStatus;
+            $data['dataStatusActivo'] = $dataStatusActivo;
+        }
+        echo json_encode($data);
+    }
+
+    if ($action == "actualizarStatusMC") {
+        $idMC = $_POST['idMC'];
+        $status = $_POST['status'];
+        $valorStatus = $_POST['valorStatus'];
+        $fechaFinalizado = "";
+
+        if ($status == "status") {
+            if ($valorStatus == "N") {
+                $valorStatus = "F";
+                $fechaFinalizado = ", fecha_realizado = '$fechaActual'";
+            } else {
+                $valorStatus = "N";
+                $fechaFinalizado = ", fecha_realizado = ''";
+            }
+        } elseif ($status == "activo") {
+            if ($valorStatus == "1") {
+                $valorStatus = "0";
+            } else {
+                $valorStatus = "1";
+            }
+        } else {
+            if ($valorStatus == "1") {
+                $valorStatus = "0";
+            } else {
+                $valorStatus = "1";
+            }
+        }
+
+        $query = "UPDATE t_mc 
+        set $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado 
+        WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {

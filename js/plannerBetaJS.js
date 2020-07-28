@@ -463,6 +463,99 @@ function obtenerMCN(idEquipo) {
 }
 
 
+// Función para Obtener el Status y agregar la funcion para poder actualizarlo.
+function obtenerstatusMC(idMC) {
+    document.getElementById("modalStatus").classList.add('open');
+    localStorage.setItem('idMC', idMC);
+    let idEquipo = localStorage.getItem('idEquipo');
+
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "obtenerStatusMC";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idMC: idMC
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // Llama a la Función para reflejar los cambios en los MC por Equipo.
+            obtenerMCN(idEquipo);
+            // console.log(data);
+            // Status
+            document.getElementById("statusUrgente").
+                setAttribute('onclick', data.dataStatusUrgente);
+            document.getElementById("statusMaterial").
+                setAttribute('onclick', data.dataStatusMaterial);
+            document.getElementById("statusTrabajare").
+                setAttribute('onclick', data.dataStatusTrabajare);
+            // Status Departamento.
+            document.getElementById("statusCalidad").
+                setAttribute('onclick', data.dataStatusCalidad);
+            document.getElementById("statusCompras").
+                setAttribute('onclick', data.dataStatusCompras);
+            document.getElementById("statusDireccion").
+                setAttribute('onclick', data.dataStatusDireccion);
+            document.getElementById("statusFinanzas").
+                setAttribute('onclick', data.dataStatusFinanzas);
+            document.getElementById("statusRRHH").
+                setAttribute('onclick', data.dataStatusRRHH);
+            // Status Energéticos.
+            document.getElementById("statusElectricidad").
+                setAttribute('onclick', data.dataStatusElectricidad);
+            document.getElementById("statusAgua").
+                setAttribute('onclick', data.dataStatusAgua);
+            document.getElementById("statusDiesel").
+                setAttribute('onclick', data.dataStatusDiesel);
+            document.getElementById("statusGas").
+                setAttribute('onclick', data.dataStatusGas);
+            // Finalizar MC.
+            document.getElementById("statusFinalizarMC").
+                setAttribute('onclick', data.dataStatus);
+            // Activo MC.
+            document.getElementById("statusActivo").
+                setAttribute('onclick', data.dataStatusActivo);
+        }
+    });
+}
+
+
+// Función para actualizar Status t_mc.
+function actualizarStatusMC(idMC, status, valorStatus) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "actualizarStatusMC";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idMC: idMC,
+            status: status,
+            valorStatus: valorStatus
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (data == 1) {
+                alertaImg('Status Actualizado', '', 'success', 2000);
+                document.getElementById("modalStatus").classList.remove('open');
+                obtenerstatusMC(idMC);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'question', 2000);
+            }
+        }
+    });
+}
+
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
     // console.log(idEquipo);
@@ -542,7 +635,7 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
                 let idEquipo = localStorage.getItem('idEquipo');
                 obtenerMCN(idEquipo);
             } else {
-                alertaImg('Intenete de Nuevo', '','question',2500);
+                alertaImg('Intenete de Nuevo', '', 'question', 2500);
             }
         }
     });
@@ -611,9 +704,9 @@ function obtenerComentariosMC(idMC) {
         dataType: "JSON",
         success: function (data) {
             document.getElementById("btnComentario").
-                setAttribute('onclick', 'agregarComentarioMC(' + idMC+')');
+                setAttribute('onclick', 'agregarComentarioMC(' + idMC + ')');
             document.getElementById("inputComentario").
-                setAttribute('onkeyup', 'if(event.keyCode == 13)agregarComentarioMC(' + idMC +')');
+                setAttribute('onkeyup', 'if(event.keyCode == 13)agregarComentarioMC(' + idMC + ')');
             document.getElementById("dataComentarios").innerHTML = data.dataComentarios;
 
         }
@@ -639,9 +732,9 @@ function agregarComentarioMC(idMC) {
             },
             // dataType: "JSON",
             success: function (data) {
-                if (data = 1) {   
+                if (data = 1) {
                     obtenerComentariosMC(idMC);
-                    document.getElementById("inputComentario").value='';
+                    document.getElementById("inputComentario").value = '';
                     alertaImg('Comentario Agregado', '', 'success', 2000);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'question', 2000);
@@ -651,12 +744,6 @@ function agregarComentarioMC(idMC) {
     } else {
         alertaImg('Comentario Vacio', '', 'info', 2000);
     }
-}
-
-
-// Función para Status.
-function statusMC() {
-    document.getElementById("modalStatus").classList.add('open');
 }
 
 
