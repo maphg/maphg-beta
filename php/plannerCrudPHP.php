@@ -1999,7 +1999,6 @@ if (isset($_POST['action'])) {
         $paginacionEquipos = "";
         $ordenMCEquipos = array();
         $ordenIdEquipos = array();
-        unset ($ordenMCEquipos,$ordenIdEquipos);
 
         if ($idDestino == 10) {
             $filtroDestino = "";
@@ -2289,6 +2288,7 @@ if (isset($_POST['action'])) {
             $data['totalEquipos'] = "Total Equipos: $totalEquipos";
             $data['seccionEquipos'] = $seccionEquipos;
             $data['paginacionEquipos'] = $paginacionEquipos;
+            unset($ordenMCEquipos, $ordenIdEquipos);
         }
         echo json_encode($data);
     }
