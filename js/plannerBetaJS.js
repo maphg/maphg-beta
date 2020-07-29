@@ -256,10 +256,10 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
         success: function (data) {
 
             // Resultado de Consulta.
-            $("#estiloSeccion").html(data.estiloSeccion);
+            document.getElementById("estiloSeccion").innerHTML = data.estiloSeccion;
 
             // Función para darle diseño del Logo según la Sección.
-            estiloSeccion(data.estiloSeccion);
+            estiloSeccion('estiloSeccion', data.estiloSeccion);
 
             $("#dataSubseccionesPendientes").html(data.resultData);
             $("#dataOpcionesSubseccionestoggle").html(data.dataOpcionesSubsecciones);
@@ -283,12 +283,21 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 
 
 // El estilo se aplica DIV>H1(class="zie-logo").
-function estiloSeccion(seccion) {
+function estiloSeccion(padreSeccion, seccion) {
     let seccionClase = seccion.toLowerCase() + '-logo';
     // console.log(seccionClase);
+    document.getElementById(padreSeccion).classList.remove('zil-logo');
+    document.getElementById(padreSeccion).classList.remove('zie-logo');
+    document.getElementById(padreSeccion).classList.remove('auto-logo');
+    document.getElementById(padreSeccion).classList.remove('dec-logo');
+    document.getElementById(padreSeccion).classList.remove('dep-logo');
+    document.getElementById(padreSeccion).classList.remove('zha-logo');
+    document.getElementById(padreSeccion).classList.remove('zhc-logo');
+    document.getElementById(padreSeccion).classList.remove('zhp-logo');
+    document.getElementById(padreSeccion).classList.remove('zia-logo');
+    document.getElementById(padreSeccion).classList.remove('zic-logo');
 
-    $("#estiloSeccion").removeClass('zil-logo zie-logo auto-logo dec-logo dep-logo oma-logo zha-logo zhc-logo zhh-logo zhp-logo zia-logo zic-logo');
-    $("#estiloSeccion").addClass(seccionClase);
+    document.getElementById(padreSeccion).classList.add(seccionClase);
 }
 
 
@@ -306,7 +315,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
         },
         // dataType: "JSON",
         success: function (data) {
-            $("#dataExportarSeccionesUsuarios").html(data);
+            document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
         }
     });
 }
@@ -400,6 +409,7 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
             // console.log(data);
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
+            estiloSeccion('estiloSeccionEquipos', data.seccionEquipos);
             // document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
             paginacionEquipos();
 
@@ -452,6 +462,7 @@ function obtenerMCN(idEquipo) {
         dataType: "JSON",
         success: function (data) {
             // console.log(data);
+            estiloSeccion('estiloSeccionMCN', data.seccion);
             document.getElementById("seccionMCN").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
             document.getElementById("dataMCN").innerHTML = data.MC;
@@ -550,13 +561,19 @@ function actualizarStatusMC(idMC, status, valorStatus) {
         success: function (data) {
             console.log(data);
             if (data == 1) {
+
                 alertaImg('Información Actualizada', '', 'success', 2000);
                 if (status == "activo" || status == "status") {
                     llamarFuncionX('obtenerEquipos');
+                    obtenerDatosUsuario(idDestino);
                 }
-                obtenerMCN(idEquipo);
-                document.getElementById("modalEditarTituloMC").classList.remove('open');
-                document.getElementById("modalStatus").classList.remove('open');
+                if (valorStatus == 'F') {
+                    obtenerMCF(idEquipo);
+                } else {
+                    obtenerMCN(idEquipo);
+                    document.getElementById("modalEditarTituloMC").classList.remove('open');
+                    document.getElementById("modalStatus").classList.remove('open');
+                }
             } else {
                 alertaImg('Intente de Nuevo', '', 'question', 2000);
             }
@@ -567,8 +584,11 @@ function actualizarStatusMC(idMC, status, valorStatus) {
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
     // console.log(idEquipo);
+    document.getElementById("seccionMCF").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("modalMCF").classList.add('open');
-    const action = "exportarListarUsuarios";
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "obtenerMCF";
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -576,11 +596,15 @@ function obtenerMCF(idEquipo) {
             action: action,
             idUsuario: idUsuario,
             idDestino: idDestino,
-            idSeccion: idSeccion,
+            idEquipo: idEquipo
         },
         dataType: "JSON",
         success: function (data) {
-            $("#dataExportarSeccionesUsuarios").html(data);
+            console.log(data);
+            document.getElementById("dataMCF").innerHTML = data.dataMCF;
+            estiloSeccion('estiloSeccionMCF', data.seccion);
+            document.getElementById("seccionMCF").innerHTML = data.seccion;
+            document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
         }
     });
 }
@@ -695,6 +719,7 @@ function obtenerAdjuntosMC(idMC) {
 function obtenerComentariosMC(idMC) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
 
     document.getElementById("modalComentarios").classList.add('open');
     document.getElementById("dataComentarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -711,6 +736,7 @@ function obtenerComentariosMC(idMC) {
         },
         dataType: "JSON",
         success: function (data) {
+            obtenerMCN(idEquipo);
             document.getElementById("btnComentario").
                 setAttribute('onclick', 'agregarComentarioMC(' + idMC + ')');
             document.getElementById("inputComentario").

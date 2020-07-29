@@ -2163,7 +2163,7 @@ if (isset($_POST['action'])) {
                         // Nombre de Equipo.
                         $dataEquipos .= "
                                 <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                                    <div id=\"".$idEquipo."E\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
+                                    <div id=\"" . $idEquipo . "E\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
                                         <div class=\" flex flex-row items-center truncate\">
                                             <i class=\"fas fa-cog mx-2\"></i>
                                             <h1>$nombreEquipo</h1>
@@ -2289,6 +2289,257 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
+    // Se obtienes los MC Finalizados por Equipo.
+    if ($action == "obtenerMCF") {
+        $idEquipo = $_POST['idEquipo'];
+        $data = array();
+        $dataMCF = "";
+
+        $queryMCF = "
+            SELECT 
+            t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+            t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+            t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_creacion, t_mc.fecha_realizado, t_colaboradores.nombre, t_colaboradores.apellido 
+            FROM t_mc 
+            INNER JOIN t_users ON t_mc.creado_por = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'F' AND t_mc.activo = 1
+        ";
+
+        if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
+            foreach ($resultMCF as $row) {
+                $idMC = $row['id'];
+                $responsable = $row['responsable'];
+                $actividad = $row['actividad'];
+                $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
+                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('m-y');
+                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-y');
+
+                // Status
+                $statusUrgente = $row['status_urgente'];
+                if ($statusUrgente == 0 or $statusUrgente == "") {
+                    $statusUrgente = "hidden";
+                } else {
+                    $statusUrgente = "";
+                }
+                $statusTrabajare = $row['status_trabajare'];
+                if ($statusTrabajare == 0 or $statusTrabajare == "") {
+                    $statusTrabajare = "hidden";
+                } else {
+                    $statusTrabajare = "";
+                }
+                $statusMaterial = $row['status_material'];
+                if ($statusMaterial == 0 or $statusMaterial == "") {
+                    $statusMaterial = "hidden";
+                } else {
+                    $statusMaterial = "";
+                }
+                $statusElectricidad = $row['energetico_electricidad'];
+                if ($statusElectricidad == 0 or $statusElectricidad == "") {
+                    $statusElectricidad = "hidden";
+                } else {
+                    $statusElectricidad = "";
+                }
+                $statusAgua = $row['energetico_agua'];
+                if ($statusAgua == 0 or $statusAgua == "") {
+                    $statusAgua = "hidden";
+                } else {
+                    $statusAgua = "";
+                }
+                $statusGas = $row['energetico_gas'];
+                if ($statusGas == 0 or $statusGas == "") {
+                    $statusGas = "hidden";
+                } else {
+                    $statusGas = "";
+                }
+                $statusDiesel = $row['energetico_diesel'];
+                if ($statusDiesel == 0 or $statusDiesel == "") {
+                    $statusDiesel = "hidden";
+                } else {
+                    $statusDiesel = "";
+                }
+                $statusCompras = $row['departamento_compras'];
+                if ($statusCompras == 0 or $statusCompras == "") {
+                    $statusCompras = "hidden";
+                } else {
+                    $statusCompras = "";
+                }
+                $statusFinanzas = $row['departamento_finanzas'];
+                if ($statusFinanzas == 0 or $statusFinanzas == "") {
+                    $statusFinanzas = "hidden";
+                } else {
+                    $statusFinanzas = "";
+                }
+                $statusRRHH = $row['departamento_rrhh'];
+                if ($statusRRHH == 0 or $statusRRHH == "") {
+                    $statusRRHH = "hidden";
+                } else {
+                    $statusRRHH = "";
+                }
+                $statusCalidad = $row['departamento_calidad'];
+                if ($statusCalidad == 0 or $statusCalidad == "") {
+                    $statusCalidad = "hidden";
+                } else {
+                    $statusCalidad = "";
+                }
+                $statusDireccion = $row['departamento_direccion'];
+                if ($statusDireccion == 0 or $statusDireccion == "") {
+                    $statusDireccion = "hidden";
+                } else {
+                    $statusDireccion = "";
+                }
+
+
+                // Responsable.
+                $queryResponsable = "
+                    SELECT t_colaboradores.id, t_colaboradores.nombre, t_colaboradores.apellido
+                    FROM t_users
+                    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $responsable
+                ";
+
+                if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                    foreach ($resultResponsable as $value) {
+                        $nombreResponsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                    }
+                } else {
+                    $nombreResponsable = "";
+                }
+
+                // Imagenes Y Documentos.
+                $queryMedia = "SELECT COUNT(id) FROM t_mc_adjuntos WHERE id_mc = $idMC AND activo=1";
+                if ($resultMedia = mysqli_query($conn_2020, $queryMedia)) {
+                    foreach ($resultMedia as $value) {
+                        $totalMedia = $value['COUNT(id)'];
+                    }
+                } else {
+                    $totalMedia = 0;
+                }
+
+                // Comentarios.
+                $queryComentario = "SELECT COUNT(id) FROM t_mc_comentarios WHERE id_mc = $idMC AND activo=1";
+                if ($resultComentario = mysqli_query($conn_2020, $queryComentario)) {
+                    foreach ($resultComentario as $value) {
+                        $totalComentario = $value['COUNT(id)'];
+                    }
+                } else {
+                    $totalComentario = 0;
+                }
+
+                $dataMCF .= "
+                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                        <!-- FALLA -->
+                        <div class=\"w-full h-full flex flex-row items-center justify-between bg-green-100 text-green-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-green-200 relative\">
+
+                            <div class=\"$statusUrgente absolute\" style=\"left: -17px;\">
+                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                            </div>
+                            <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px;\">
+                                <div class=\"$statusMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">M</h1>
+                                </div>
+                                
+                                <div class=\"$statusTrabajare bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">T</h1>
+                                </div>
+                                
+                                <div class=\"$statusElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Electricidad</h1>
+                                </div>
+                                
+                                <div class=\"$statusAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Agua</h1>
+                                </div>
+                               
+                                <div class=\"$statusGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Gas</h1>
+                                </div>
+                                
+                                <div class=\"$statusDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Diesel</h1>
+                                </div>
+                                
+                                <div class=\"$statusDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Dirección</h1>
+                                </div>
+                                
+                                <div class=\"$statusRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">RRHH</h1>
+                                </div>
+                                
+                                <div class=\"$statusFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Finanzas</h1>
+                                </div>
+                                
+                                <div class=\"$statusCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Compras</h1>
+                                </div>
+                                
+                                <div class=\"$statusCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Calidad</h1>
+                                </div>
+                            </div>
+
+                            <div class=\" flex flex-row items-center truncate w-full\">
+                                <div>
+                                    <i class=\"fas fa-hammer mx-2\"></i>
+                                </div>
+                                <div class=\"flex flex-col leading-none w-full flex-wrap\">
+                                    <h1 class=\"\">$actividad</h1>
+                                    <h1 class=\"tex-xs font-normal italic text-green-300\">creado por: $creadoPor
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESPONSABLE -->
+                        <div data-target=\"modal-responsable\" data-toggle=\"modal\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$nombreResponsable</h1>
+                        </div>
+
+                        <!-- INICIO & FIN-->
+                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" type=\"text\" name=\"datefilter\" value=\"$fechaCreacion  $fechaRealizado\" />
+                        </div>
+                        <!--  ADJUNTOS -->
+                        <div onclick=\"obtenerAdjuntosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1 class=\"font-xs\">$totalMedia</h1>
+                        </div>
+                        <!--  COMENTARIOS -->
+                        <div onclick=\"obtenerComentariosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$totalComentario</h1>
+                        </div>
+                        <!--  STATUS -->
+                        <div onclick=\"actualizarStatusMC($idMC, 'status', 'F')\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md\">
+                            <div><i class=\"fas fa-undo fa-lg\"></i></div>
+                        </div>
+                    </div>
+                ";
+            }
+            $data['dataMCF'] = $dataMCF;
+        }
+        
+        $query = "
+            SELECT c_secciones.seccion, t_equipos.equipo 
+            FROM t_equipos 
+            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            WHERE t_equipos.id = $idEquipo;
+        ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $seccion = $value['seccion'];
+                $equipo = $value['equipo'];
+
+                $data['seccion'] = $seccion;
+                $data['nombreEquipo'] = $equipo;
+            }
+        }
+        echo json_encode($data);
+    }
+
     // Se obtienen todos los MCN - Pendientes por Equipo.
     if ($action == "obtenerMCN") {
         $idEquipo = $_POST['idEquipo'];
@@ -2302,7 +2553,7 @@ if (isset($_POST['action'])) {
             t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
             t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
             t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
             FROM t_mc 
             INNER JOIN t_users ON t_mc.creado_por = t_users.id
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -2316,7 +2567,8 @@ if (isset($_POST['action'])) {
                 $responsable = $row['responsable'];
                 $actividad = $row['actividad'];
                 $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
-                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-Y');
+                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-y');
+                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('m-y');
 
                 // Status
                 $statusUrgente = $row['status_urgente'];
@@ -2502,7 +2754,7 @@ if (isset($_POST['action'])) {
 
                         <!-- INICIO & FIN-->
                         <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaCreacion\">
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaCreacion  $fechaRealizado\">
                         </div>
 
                         <!--  ADJUNTOS -->
@@ -2526,7 +2778,7 @@ if (isset($_POST['action'])) {
             $data['contadorMC'] = $contadorMC;
             $data['MC'] = $MC;
         }
-        // l
+        // Obtiene la Seccion y Equipo.
         $query = "
             SELECT c_secciones.seccion, t_equipos.equipo 
             FROM t_equipos 

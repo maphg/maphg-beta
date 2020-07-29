@@ -160,8 +160,8 @@
             </div>
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="seccionEquipos" class="font-medium text-base text-blue-500"><i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i></h1>
+                <div id="estiloSeccionEquipos" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionEquipos" class="font-medium text-base"><i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
                     <h1>SUBSECCION / EQUIPOS Y LOCALES</h1>
@@ -345,8 +345,8 @@
             </div>
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="seccionMCN" class="font-medium text-base text-blue-500"></h1>
+                <div id="estiloSeccionMCN" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionMCN" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
                     <h1><span id="nombreEquipoMCN"></span> / CORRECTIVOS PENDIENTES</h1>
@@ -410,25 +410,13 @@
             </div>
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-blue-500">ZIA</h1>
+                <div id="estiloSeccionMCF" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionMCF" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-green-200 text-green-500 text-xs py-1 px-2 rounded">
-                    <h1>CHILLER 01 / CORRECTIVOS SOLUCIONADOS</h1>
+                    <h1><span id="nombreEquipoMCF"></span> / CORRECTIVOS SOLUCIONADOS</h1>
                 </div>
             </div>
-
-            <!-- <div class="flex row justify-center items-center w-full text-xs">
-                <div class="py-1 px-2 bg-red-300 text-red-700 rounded-l-md cursor-pointer">
-                    <h1>AÑADIR CORRECTIVO</h1>
-                </div>
-                <div class="py-1 px-2 bg-indigo-300 text-indigo-700 cursor-pointer">
-                    <h1>EXPORTAR LISTADO</h1>
-                </div>
-                <div class="py-1 px-2 bg-green-300 text-green-700 rounded-r-md cursor-pointer">
-                    <h1>VER SOLUCIONADO</h1>
-                </div>
-            </div> -->
 
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
@@ -457,64 +445,7 @@
                     </div>
 
                     <!-- equipo -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer">
-                        <!-- FALLA -->
-                        <div class="w-full h-full flex flex-row items-center justify-between bg-green-100 text-green-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-green-200 relative">
-
-                            <div class="absolute" style="left: -17px;">
-                                <i class="fas fa-siren-on animated flash infinite fa-rotate-270"></i>
-                            </div>
-                            <div class="absolute flex hover:opacity-25" style="right: 0%; font-size: 9px;">
-                                <div class=" bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1">
-                                    <h1 class="">M</h1>
-                                </div>
-                                <div class=" bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1">
-                                    <h1 class="">T</h1>
-                                </div>
-                                <div class=" bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1">
-                                    <h1 class="">Electricidad</h1>
-                                </div>
-                                <div class=" bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1">
-                                    <h1 class="">Dirección</h1>
-                                </div>
-                            </div>
-
-                            <div class=" flex flex-row items-center truncate w-full">
-                                <div>
-                                    <i class="fas fa-hammer mx-2"></i>
-                                </div>
-                                <div class="flex flex-col leading-none w-full flex-wrap">
-                                    <h1 class="">CAMBIAR LOS BALEROS A LA BOMBA Y REPARAR OTRA COSA. </h1>
-                                    <h1 class="tex-xs font-normal italic text-green-300">creado por: Eduardo Meneses
-                                    </h1>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- RESPONSABLE -->
-                        <div data-target="modal-responsable" data-toggle="modal" class="w-48 flex h-full items-center justify-center hover:shadow-md">
-                            <h1>Eduardo Meneses</h1>
-                        </div>
-
-                        <!-- INICIO & FIN-->
-                        <div class="w-64 flex h-full items-center justify-center hover:shadow-md">
-                            <input class="bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center" type="text" type="text" name="datefilter" value="---" />
-                        </div>
-                        <!--  ADJUNTOS -->
-                        <div data-target="modal-media" data-toggle="modal" class="w-32 flex h-full items-center justify-center hover:shadow-md">
-                            <h1 class="font-xs">8</h1>
-                        </div>
-                        <!--  COMENTARIOS -->
-                        <div data-target="modal-comentarios" data-toggle="modal" class="w-32 flex h-full items-center justify-center hover:shadow-md">
-                            <h1>1</h1>
-                        </div>
-                        <!--  STATUS -->
-                        <div class="w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md">
-                            <div><i class="fas fa-undo fa-lg"></i></div>
-                        </div>
-                    </div>
-
+                    <div id="dataMCF" class="w-full"></div>
                     <!-- equipo -->
                 </div>
             </div>
