@@ -85,14 +85,14 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         <div id="subalmacenGP"></div>
                     </div>
 
-                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar">
+                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
                         <div class="text-center font-semibold text-gray-700 text-xl">
                             <h1>TRS</h1>
                         </div>
                         <div id="subalmacenTRS"></div>
                     </div>
 
-                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar">
+                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
                         <div class="text-center font-semibold text-gray-700 text-xl">
                             <h1>ZI</h1>
                         </div>

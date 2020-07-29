@@ -1568,6 +1568,13 @@ if (isset($_POST['action'])) {
     $palabraBuscar = $_POST['palabraBuscar'];
     $dataTodo = "";
     $ItemsResultado = "";
+    
+    if($idDestinoSeleccionado == 10){
+      $filtroDestino= "1, 7, 2, 6, 5, 11, 3, 4, 10";
+
+    }else{
+      $filtroDestino= $idDestinoSeleccionado;
+    }
 
     if ($palabraBuscar != "") {
       $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
@@ -1597,7 +1604,7 @@ if (isset($_POST['action'])) {
     INNER JOIN t_subalmacenes ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes.id
     INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
     INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
-    WHERE t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado $palabraBuscar";
+    WHERE t_subalmacenes_items_stock.id_destino IN($filtroDestino) $palabraBuscar";
     if ($result = mysqli_query($conn_2020, $query)) {
       while ($row = mysqli_fetch_array($result)) {
         $idItemsResultado = $row['idItemsResultado'];

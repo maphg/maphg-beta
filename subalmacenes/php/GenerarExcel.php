@@ -8,9 +8,12 @@ require 'PHPExcel.php';
 $fecha = date('Y-m-d H:m:s');
 
 if (isset($_GET['idDestino'])) {
-    $idDestino = "AND t_subalmacenes_items_stock.id_destino = " . $_GET['idDestino'];
-} else {
-    $idDestino = "";
+
+    if ($_GET['idDestino'] == 10) {
+        $idDestino = "";
+    } else {
+        $idDestino = "AND t_subalmacenes_items_stock.id_destino = " . $_GET['idDestino'];
+    }
 }
 
 if (isset($_GET['idSubalmacen'])) {

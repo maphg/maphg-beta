@@ -1093,6 +1093,7 @@ function obtenerTodosItemsGlobales() {
     },
     dataType: "json",
     success: function (data) {
+      // console.log(data);
       $("#dataTodosItems").html(data.dataTodo);
       // console.log(data);
       $("#inputResultadosXLS").val(data.ItemsResultado);
