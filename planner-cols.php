@@ -184,13 +184,13 @@
                     <!-- titulos -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-white sticky top-0">
 
-                        <div class="w-2/6 h-full flex items-center justify-center">
+                        <div class="w-2/6 h-full flex items-center justify-center cursor-pointer">
                             <h1 id="tipoOrdenamientoNombreEquipo">EQUIPOS / LOCALES</h1>
                         </div>
-                        <div class="w-16 h-full flex items-center justify-center">
+                        <div class="w-16 h-full flex items-center justify-center cursor-pointer">
                             <h1 id="tipoOrdenamientoMCN">MC-P</h1>
                         </div>
-                        <div class="w-16 flex h-full items-center justify-center">
+                        <div class="w-16 flex h-full items-center justify-center cursor-pointer">
                             <h1 id="tipoOrdenamientoMCF">MC-S</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
@@ -225,17 +225,6 @@
                 </div>
             </div>
             <div class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6">
-
-                <!-- paginación para Dispositivos Pequeños. -->
-                <div class="flex-1 flex justify-between sm:hidden">
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-                        Previous
-                    </a>
-                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
-                        Next
-                    </a>
-                </div>
-
                 <!-- paginación. -->
                 <div>
                     <!-- Se agrega la paginación de los equipos -->
@@ -246,7 +235,6 @@
                         <div class="holder"></div>
                     </nav>
                 </div>
-
             </div>
         </div>
     </div>
@@ -348,7 +336,7 @@
 
     <!-- MODAL MC Nuevos -->
     <div id="modalMCN" class="modal">
-        <div class="modal-window rounded-md pt-10 w-full h:w-10/12">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-8/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMCN')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -413,7 +401,7 @@
 
     <!-- MODAL MCF -->
     <div id="modalMCF" class="modal">
-        <div class="modal-window rounded-md pt-10 w-full h:w-10/12">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-8/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMCF')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -528,9 +516,6 @@
                     </div>
 
                     <!-- equipo -->
-
-
-
                 </div>
             </div>
         </div>
@@ -637,7 +622,7 @@
                     <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
                         <i class="fad fa-cloud-upload fa-lg mr-2"></i>
                         ADJUNTAR ARCHIVOS
-                        <input type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;">
+                        <input id="inputAdjuntos" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;">
                     </button>
                 </div>
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
@@ -838,7 +823,7 @@
                 </div>
 
                 <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTituloMC');">
                         <div class="">
                             <i class="fas fa-pen fa-lg"></i>
                         </div>
@@ -855,6 +840,32 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR TITULO   -->
+    <div id="modalEditarTituloMC" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEditarTituloMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1><i class="fas fa-pen fa-lg"></i></h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm">
+
+                <h1>Editar titulo</h1>
+                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTituloMC" type="text" placeholder="Escriba titulo" value="">
+                <button id="btnEditarTituloMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i> Guardar cambios</button>
             </div>
         </div>
     </div>

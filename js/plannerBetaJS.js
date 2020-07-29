@@ -397,9 +397,7 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
-
-
+            // console.log(data);
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
             // document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
@@ -467,7 +465,6 @@ function obtenerMCN(idEquipo) {
 function obtenerstatusMC(idMC) {
     document.getElementById("modalStatus").classList.add('open');
     localStorage.setItem('idMC', idMC);
-
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     const action = "obtenerStatusMC";
@@ -484,7 +481,7 @@ function obtenerstatusMC(idMC) {
         dataType: "JSON",
         success: function (data) {
             // Llama a la Función para reflejar los cambios en los MC por Equipo.
-            
+
             // console.log(data);
             // Status
             document.getElementById("statusUrgente").
@@ -519,6 +516,10 @@ function obtenerstatusMC(idMC) {
             // Activo MC.
             document.getElementById("statusActivo").
                 setAttribute('onclick', data.dataStatusActivo);
+            // Titulo MC.
+            document.getElementById("btnEditarTituloMC").
+                setAttribute('onclick', data.dataStatusTitulo);
+            document.getElementById("inputEditarTituloMC").value = data.dataTituloMC;
         }
     });
 }
@@ -526,9 +527,11 @@ function obtenerstatusMC(idMC) {
 
 // Función para actualizar Status t_mc.
 function actualizarStatusMC(idMC, status, valorStatus) {
+    alertaImg('Procesando Cambios...', '', 'info', 1000);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idEquipo = localStorage.getItem('idEquipo');
+    let tituloMC = document.getElementById("inputEditarTituloMC").value;
     const action = "actualizarStatusMC";
 
     $.ajax({
@@ -540,16 +543,20 @@ function actualizarStatusMC(idMC, status, valorStatus) {
             idDestino: idDestino,
             idMC: idMC,
             status: status,
-            valorStatus: valorStatus
+            valorStatus: valorStatus,
+            tituloMC: tituloMC
         },
         // dataType: "JSON",
         success: function (data) {
-            obtenerMCN(idEquipo);
             console.log(data);
             if (data == 1) {
-                alertaImg('Status Actualizado', '', 'success', 2000);
+                alertaImg('Información Actualizada', '', 'success', 2000);
+                if (status == "activo" || status == "status") {
+                    llamarFuncionX('obtenerEquipos');
+                }
+                obtenerMCN(idEquipo);
+                document.getElementById("modalEditarTituloMC").classList.remove('open');
                 document.getElementById("modalStatus").classList.remove('open');
-                obtenerstatusMC(idMC);
             } else {
                 alertaImg('Intente de Nuevo', '', 'question', 2000);
             }
@@ -644,7 +651,7 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
 
 
 // Funcion para Obtener Adjuntos.
-function obtenerAdjuntos(idMC) {
+function obtenerAdjuntosMC(idMC) {
     // Actualiza el MC seleccionado.
     localStorage.setItem('idMC', idMC);
 
@@ -675,10 +682,10 @@ function obtenerAdjuntos(idMC) {
             // console.log(data);
             document.getElementById("dataImagenes").classList.remove('justify-center');
             document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
-
             document.getElementById("dataAdjuntos").classList.remove('justify-center');
             document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
-
+            document.getElementById("statusActivo").
+                setAttribute('onclick', data.dataAdjuntos);
         }
     });
 }
@@ -780,7 +787,6 @@ function llamarFuncionX(nombreFuncion) {
 
         case (nombreFuncion = 'obtenerEquipos'):
             obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
-            // console.log(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, 'MCN');
             break;
     }
 }

@@ -2163,7 +2163,7 @@ if (isset($_POST['action'])) {
                         // Nombre de Equipo.
                         $dataEquipos .= "
                                 <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                                    <div id=\"equipo123\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
+                                    <div id=\"".$idEquipo."E\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
                                         <div class=\" flex flex-row items-center truncate\">
                                             <i class=\"fas fa-cog mx-2\"></i>
                                             <h1>$nombreEquipo</h1>
@@ -2320,75 +2320,75 @@ if (isset($_POST['action'])) {
 
                 // Status
                 $statusUrgente = $row['status_urgente'];
-                if($statusUrgente == 0 OR $statusUrgente == ""){
+                if ($statusUrgente == 0 or $statusUrgente == "") {
                     $statusUrgente = "hidden";
-                }else{
+                } else {
                     $statusUrgente = "";
                 }
                 $statusTrabajare = $row['status_trabajare'];
-                if($statusTrabajare == 0 OR $statusTrabajare == ""){
+                if ($statusTrabajare == 0 or $statusTrabajare == "") {
                     $statusTrabajare = "hidden";
-                }else{
+                } else {
                     $statusTrabajare = "";
                 }
                 $statusMaterial = $row['status_material'];
-                if($statusMaterial == 0 OR $statusMaterial == ""){
+                if ($statusMaterial == 0 or $statusMaterial == "") {
                     $statusMaterial = "hidden";
-                }else{
+                } else {
                     $statusMaterial = "";
                 }
                 $statusElectricidad = $row['energetico_electricidad'];
-                if($statusElectricidad == 0 OR $statusElectricidad == ""){
+                if ($statusElectricidad == 0 or $statusElectricidad == "") {
                     $statusElectricidad = "hidden";
-                }else{
+                } else {
                     $statusElectricidad = "";
                 }
                 $statusAgua = $row['energetico_agua'];
-                if($statusAgua == 0 OR $statusAgua == ""){
+                if ($statusAgua == 0 or $statusAgua == "") {
                     $statusAgua = "hidden";
-                }else{
+                } else {
                     $statusAgua = "";
                 }
                 $statusGas = $row['energetico_gas'];
-                if($statusGas == 0 OR $statusGas == ""){
+                if ($statusGas == 0 or $statusGas == "") {
                     $statusGas = "hidden";
-                }else{
+                } else {
                     $statusGas = "";
                 }
                 $statusDiesel = $row['energetico_diesel'];
-                if($statusDiesel == 0 OR $statusDiesel == ""){
+                if ($statusDiesel == 0 or $statusDiesel == "") {
                     $statusDiesel = "hidden";
-                }else{
+                } else {
                     $statusDiesel = "";
                 }
                 $statusCompras = $row['departamento_compras'];
-                if($statusCompras == 0 OR $statusCompras == ""){
+                if ($statusCompras == 0 or $statusCompras == "") {
                     $statusCompras = "hidden";
-                }else{
+                } else {
                     $statusCompras = "";
                 }
                 $statusFinanzas = $row['departamento_finanzas'];
-                if($statusFinanzas == 0 OR $statusFinanzas == ""){
+                if ($statusFinanzas == 0 or $statusFinanzas == "") {
                     $statusFinanzas = "hidden";
-                }else{
+                } else {
                     $statusFinanzas = "";
                 }
                 $statusRRHH = $row['departamento_rrhh'];
-                if($statusRRHH == 0 OR $statusRRHH == ""){
+                if ($statusRRHH == 0 or $statusRRHH == "") {
                     $statusRRHH = "hidden";
-                }else{
+                } else {
                     $statusRRHH = "";
                 }
                 $statusCalidad = $row['departamento_calidad'];
-                if($statusCalidad == 0 OR $statusCalidad == ""){
+                if ($statusCalidad == 0 or $statusCalidad == "") {
                     $statusCalidad = "hidden";
-                }else{
+                } else {
                     $statusCalidad = "";
                 }
                 $statusDireccion = $row['departamento_direccion'];
-                if($statusDireccion == 0 OR $statusDireccion == ""){
+                if ($statusDireccion == 0 or $statusDireccion == "") {
                     $statusDireccion = "hidden";
-                }else{
+                } else {
                     $statusDireccion = "";
                 }
 
@@ -2506,7 +2506,7 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!--  ADJUNTOS -->
-                        <div onclick=\"obtenerAdjuntos($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                        <div onclick=\"obtenerAdjuntosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
                             <h1 class=\"font-xs\">$totalMedia</h1>
                         </div>
 
@@ -2747,7 +2747,7 @@ if (isset($_POST['action'])) {
         $data = array();
         $idMC = $_POST['idMC'];
         $query = "SELECT 
-        status, activo,
+        status, activo, actividad,
         status_material, status_trabajare, status_urgente,
         energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas,
         departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh
@@ -2772,6 +2772,7 @@ if (isset($_POST['action'])) {
                 $statusDireccion = $value['departamento_direccion'];
                 $statusFinanzas = $value['departamento_finanzas'];
                 $statusRRHH = $value['departamento_rrhh'];
+                $tituloMC = $value['actividad'];
 
                 // Status.
                 if ($statusMaterial == "" or $statusMaterial == "0") {
@@ -2851,6 +2852,14 @@ if (isset($_POST['action'])) {
                 } else {
                     $dataStatusActivo = "actualizarStatusMC($idMC, 'activo', '0');";
                 }
+                // Título MC
+                if ($tituloMC == "") {
+                    $dataStatusTitulo = "actualizarStatusMC($idMC, 'actividad', '1');";
+                    $dataTituloMC = $tituloMC;
+                } else {
+                    $dataStatusTitulo = "actualizarStatusMC($idMC, 'actividad', '0');";
+                    $dataTituloMC = $tituloMC;
+                }
             }
             $data['dataStatusMaterial'] = $dataStatusMaterial;
             $data['dataStatusUrgente'] = $dataStatusUrgente;
@@ -2866,6 +2875,8 @@ if (isset($_POST['action'])) {
             $data['dataStatusGas'] = $dataStatusGas;
             $data['dataStatus'] = $dataStatus;
             $data['dataStatusActivo'] = $dataStatusActivo;
+            $data['dataStatusTitulo'] = $dataStatusTitulo;
+            $data['dataTituloMC'] = $dataTituloMC;
         }
         echo json_encode($data);
     }
@@ -2874,6 +2885,7 @@ if (isset($_POST['action'])) {
         $idMC = $_POST['idMC'];
         $status = $_POST['status'];
         $valorStatus = $_POST['valorStatus'];
+        $tituloMC = $_POST['tituloMC'];
         $fechaFinalizado = "";
 
         if ($status == "status") {
@@ -2890,6 +2902,8 @@ if (isset($_POST['action'])) {
             } else {
                 $valorStatus = "1";
             }
+        } elseif ($status == "actividad") {
+            $valorStatus = $tituloMC;
         } else {
             if ($valorStatus == "1") {
                 $valorStatus = "0";
