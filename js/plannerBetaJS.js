@@ -466,7 +466,7 @@ function obtenerMCN(idEquipo) {
             document.getElementById("seccionMCN").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
             document.getElementById("dataMCN").innerHTML = data.MC;
-            alertaImg('Pendientes: ' + data.contadorMC, '', 'info', 3000);
+            alertaImg('Correctivos Pendientes: ' + data.contadorMC, '', 'info', 3000);
         }
     });
 }
@@ -605,6 +605,7 @@ function obtenerMCF(idEquipo) {
             estiloSeccion('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
+            alertaImg('Correctivos Finalizados: '+data.totalMCF, '', 'info', 2000);
         }
     });
 }

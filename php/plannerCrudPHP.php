@@ -2310,6 +2310,7 @@ if (isset($_POST['action'])) {
         ";
 
         if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
+            $totalMCF = mysqli_num_rows($resultMCF);
             foreach ($resultMCF as $row) {
                 $idMC = $row['id'];
                 $responsable = $row['responsable'];
@@ -2520,8 +2521,9 @@ if (isset($_POST['action'])) {
                 ";
             }
             $data['dataMCF'] = $dataMCF;
+            $data['totalMCF'] = $totalMCF;
         }
-        
+
         $query = "
             SELECT c_secciones.seccion, t_equipos.equipo 
             FROM t_equipos 
