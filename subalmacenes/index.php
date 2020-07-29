@@ -35,6 +35,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sub Almacenes</title>
+    <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
