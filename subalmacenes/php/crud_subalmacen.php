@@ -441,8 +441,10 @@ if (isset($_POST['action'])) {
       $palabraBuscar = "";
     }
 
-    $query_subalmacen = "SELECT nombre, fase FROM t_subalmacenes 
-    WHERE id = $idSubalmacen AND id_destino = $idDestinoSeleccionado";
+    $query_subalmacen = "
+      SELECT nombre, fase FROM t_subalmacenes 
+      WHERE id = $idSubalmacen 
+    ";
     $result_subalmacen = mysqli_query($conn_2020, $query_subalmacen);
     if ($row_subalmacen = mysqli_fetch_array($result_subalmacen)) {
       $nombre = $row_subalmacen['nombre'];
@@ -467,8 +469,9 @@ if (isset($_POST['action'])) {
     FROM t_subalmacenes_items_stock 
     INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global =  t_subalmacenes_items_globales.id
     INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio =  bitacora_gremio.id
-    WHERE t_subalmacenes_items_stock.id_subalmacen = $idSubalmacen AND
-    t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado $palabraBuscar
+    WHERE t_subalmacenes_items_stock.id_subalmacen = $idSubalmacen 
+    -- AND t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado 
+    $palabraBuscar
     ";
     if ($result = mysqli_query($conn_2020, $query)) {
       while ($row = mysqli_fetch_array($result)) {
