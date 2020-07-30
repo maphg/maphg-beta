@@ -52,13 +52,14 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <input type="hidden" id="inputIndexMovimientosCarrito">
     <input type="hidden" id="inputID">
     <input type="hidden" id="inputResultadosXLS">
+    <div class="w-full">
+        <?php
+        include 'php/navbartop.php';
+        include 'php/menu-sidebar.php';
+        ?>
+    </div>
 
-    <?php
-    include 'php/navbartop.php';
-    include 'php/menu-sidebar.php';
-    ?>
-
-    <div class="flex flex-col justify-evenly items-center w-screen h-screen">
+    <div class="flex flex-col justify-evenly items-center w-full mt-8">
         <div class="container flex flex-col bg-gray-800 rounded-b-md z-10" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
             <div class="flex flex-row w-full m-3 items-center justify-start relative">
                 <div class="mr-2 text-orange-500">

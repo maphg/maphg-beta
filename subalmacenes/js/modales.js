@@ -23,8 +23,8 @@ function cerrarmodal(idmodal) {
     cerrarr.classList.remove('open');
 };
 
-var scrollAbajo = document.getElementById("ddd");
-scrollAbajo.scrollTop = scrollAbajo.scrollHeight;
+// var scrollAbajo = document.getElementById("ddd");
+// scrollAbajo.scrollTop = scrollAbajo.scrollHeight;
 
 /*
 
