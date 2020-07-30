@@ -42,16 +42,16 @@ if ($xlsIdDestino != 10) {
 	t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.fecha_creacion,
 	t_mc.departamento_finanzas, t_mc.responsable, 
 	t_colaboradores.nombre, t_colaboradores.apellido,
-    t_mc.cod2bend, t_mc.codsap
+    t_mc.cod2bend, t_mc.codsap,
 	c_secciones.seccion, c_subsecciones.grupo
 	FROM t_mc 
 	
-	INNER JOIN t_users ON t_mc.creado_por = t_users.id
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+	LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
 	INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
 	INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
 
-	WHERE t_mc.status='N' AND t_mc.activo=1 AND t_mc.id_destino=$xlsIdDestino $status ";
+	WHERE t_mc.status='N' AND t_mc.activo=1 AND t_mc.id_destino = $xlsIdDestino $status";
 } else {
 	
     $query = "SELECT
@@ -64,8 +64,8 @@ if ($xlsIdDestino != 10) {
 	
 	FROM t_mc 
 	
-	INNER JOIN t_users ON t_mc.creado_por = t_users.id
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+	LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
 	INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
 	INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
 	WHERE t_mc.status='N' AND t_mc.activo=1 $status";
