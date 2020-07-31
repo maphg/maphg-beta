@@ -221,6 +221,54 @@
                             <h1>MEDIA</h1>
                         </div>
                     </div>
+
+                    <!-- Fila para TG -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer self-start">
+                        <div class="w-2/6 h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md">
+                            <div class=" flex flex-row items-center truncate">
+                                <i class="fad fa-dot-circle mx-2"></i>
+                                <h1>TAREAS GENERALES DEL AREA</h1>
+                            </div>
+                        </div>
+                        <!-- MC PENDIENTES -->
+                        <div data-target="modal-mc-p" data-toggle="modal" class="w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md">
+                            <h1>22</h1>
+                        </div>
+                        <!-- MC SOLUCIONADOS -->
+                        <div class="w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md rounded-r">
+                            <h1>22</h1>
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center relative">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Equipos Obtenidos -->
                     <div id="dataEquipos" class="w-full"></div>
                 </div>
             </div>

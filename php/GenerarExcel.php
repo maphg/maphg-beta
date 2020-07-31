@@ -92,7 +92,7 @@ $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Subsección');
 $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Departamentos');
 $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Comentario');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'fecha de Creación');
-$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Cod2Bend');
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Cod. Seguimiento');
 $objPHPExcel->getActiveSheet()->setCellValue('K1', 'CodSap');
 
 
@@ -180,7 +180,6 @@ $fila  = $fila + 1;
     $objPHPExcel->getActiveSheet()->setCellValue('A'.$fila,'Proyectos');
 
 
-//Proyectos
 if ($xlsIdDestino != 10) {
 	
     $query = "SELECT
