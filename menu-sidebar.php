@@ -1,19 +1,19 @@
 <style>
-.CI {
-    width: 5px;
-}
+    .CI {
+        width: 5px;
+    }
 
-.CA {
-    width: calc(99% - 5px);
-}
+    .CA {
+        width: calc(99% - 5px);
+    }
 
-a {
-    color: white;
-}
+    a {
+        color: white;
+    }
 
-a:hover {
-    color: white;
-}
+    a:hover {
+        color: white;
+    }
 </style>
 <!-- INICIO MENU -->
 <dav id="sidemenu" class="animated fadeOutLeft menu-contenedor-1">
@@ -66,8 +66,7 @@ a:hover {
                 <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck"
-                    class="menu-hijo-3 CA">Bitácora</a>
+                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora</a>
                 <i class="fal fa-angle-down menu-hijo-4"></i>
             </dav>
             <dav id="nieto2" class="menu-nieto-1 ocultalo">
@@ -117,7 +116,7 @@ a:hover {
                 <a href="../stock/stock-beta.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="../pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
+                <a href="https://www.maphg.com/pedidosEntregar.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://www.maphg.com/beta/gastos.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
@@ -215,8 +214,7 @@ a:hover {
     </dav>
     <dav class="menu-contenedor-4 relative">
         <dav class="menu-contenedor-5">
-            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?= $nombreUsuario ?>"
-                alt="avatar" class="menu-contenedor-6">
+            <img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=<?= $nombreUsuario ?>" alt="avatar" class="menu-contenedor-6">
         </dav>
         <dav class="menu-contenedor-7">
             <h99 class="menu-contenedor-8"><?= $nombreUsuario ?></h99>
@@ -270,34 +268,34 @@ a:hover {
 <!-- FIN DESTINO -->
 
 <script>
-function botonMenu() {
-    var element = document.getElementById("sidemenu");
-    if (element.classList.contains('fadeOutLeft')) {
-        element.classList.replace('fadeOutLeft', 'fadeInLeft');
-    } else {
-        element.classList.replace('fadeInLeft', 'fadeOutLeft');
-    }
-};
-
-function botonDestino() {
-    var element = document.getElementById("sidedestino");
-    if (element.classList.contains('fadeOutRight')) {
-        element.classList.replace('fadeOutRight', 'fadeInRight');
-    } else {
-        element.classList.replace('fadeInRight', 'fadeOutRight');
-    }
-};
-/* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */
-document.addEventListener('click', function(e) {
-    e = e || window.event;
-    var target = e.target || e.srcElement;
-
-    if (target.getAttribute('data-toggle') == 'hijo') {
-        if (target.hasAttribute('data-target')) {
-            var m_ID = target.getAttribute('data-target');
-            document.getElementById(m_ID).classList.toggle('ocultalo');
-            e.preventDefault();
+    function botonMenu() {
+        var element = document.getElementById("sidemenu");
+        if (element.classList.contains('fadeOutLeft')) {
+            element.classList.replace('fadeOutLeft', 'fadeInLeft');
+        } else {
+            element.classList.replace('fadeInLeft', 'fadeOutLeft');
         }
-    }
-});
+    };
+
+    function botonDestino() {
+        var element = document.getElementById("sidedestino");
+        if (element.classList.contains('fadeOutRight')) {
+            element.classList.replace('fadeOutRight', 'fadeInRight');
+        } else {
+            element.classList.replace('fadeInRight', 'fadeOutRight');
+        }
+    };
+    /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */
+    document.addEventListener('click', function(e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+
+        if (target.getAttribute('data-toggle') == 'hijo') {
+            if (target.hasAttribute('data-target')) {
+                var m_ID = target.getAttribute('data-target');
+                document.getElementById(m_ID).classList.toggle('ocultalo');
+                e.preventDefault();
+            }
+        }
+    });
 </script>
