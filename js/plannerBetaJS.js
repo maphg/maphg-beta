@@ -443,6 +443,8 @@ function obtenerMCN(idEquipo) {
     localStorage.setItem('idEquipo', idEquipo);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    console.log(idEquipo, idUsuario, idDestino, idSubseccion);
 
     document.getElementById("modalMCN").classList.add('open');
     document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -456,6 +458,7 @@ function obtenerMCN(idEquipo) {
         data: {
             action: action,
             idUsuario: idUsuario,
+            idSubseccion: idSubseccion,
             idDestino: idDestino,
             idEquipo: idEquipo
         },
@@ -588,6 +591,8 @@ function obtenerMCF(idEquipo) {
     document.getElementById("modalMCF").classList.add('open');
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+
     const action = "obtenerMCF";
     $.ajax({
         type: "POST",
@@ -596,7 +601,8 @@ function obtenerMCF(idEquipo) {
             action: action,
             idUsuario: idUsuario,
             idDestino: idDestino,
-            idEquipo: idEquipo
+            idEquipo: idEquipo,
+            idSubseccion: idSubseccion
         },
         dataType: "JSON",
         success: function (data) {
@@ -605,7 +611,7 @@ function obtenerMCF(idEquipo) {
             estiloSeccion('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
-            alertaImg('Correctivos Finalizados: '+data.totalMCF, '', 'info', 2000);
+            alertaImg('Correctivos Finalizados: ' + data.totalMCF, '', 'info', 2000);
         }
     });
 }

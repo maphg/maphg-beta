@@ -129,6 +129,9 @@ if (!isset($_SESSION['usuario'])) {
                     if ($conn->filasConsultadas > 0) {
                         foreach ($resp as $dts) {
                             $destino = $dts['destino'];
+                            $bandera = $dts['bandera'];
+                            $gp = $dts['gp'];
+                            $trs = $dts['trs'];
                         }
                     }
                 } catch (Exception $ex) {
@@ -161,6 +164,7 @@ try {
             $ubicacion = $dts['ubicacion'];
             $gp = $dts['gp'];
             $trs = $dts['trs'];
+            $division = $dts['division'];
         }
     }
 } catch (Exception $ex) {
@@ -173,14 +177,15 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>MAPHG</title>
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/fontawesome/css/all.css">
-    <link rel="stylesheet" href="css/bulma.min.css">
+
     <link rel="icon" href="svg/logo6.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.css" />
+    <link rel="stylesheet" href="css/tailwindproduccion.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
 
-
+    <link rel="stylesheet" href="../css/animate.css">
 
     <style>
         .shadow-navbar {
@@ -205,7 +210,7 @@ try {
     <?php include 'menu-sidebar.php' ?>
     <br>
     <div class="wrapper">
-        <div id="content" class="container">
+        <div id="content" class="container mx-auto px-4">
             <!--MENU-->
             <section class="mt-2">
                 <div class="columns">
@@ -215,43 +220,43 @@ try {
                             case 'AME':
                         ?>
                                 <!-- CAP -->
-                                <div class="columns is-multiline">
+                                <div class="flex flex-wrap">
                                     <div class="column is-4">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNTUxM2E4MjktZWUxZS00ZWRlLTg0NTAtZDZmNTZjNTIxYzFiIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- RM -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMGIxMjI3ZTQtZDQ4ZS00NjUwLTkyMWQtZWE4YWUzNzNlOGE4IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- CMU -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYTc5ODQzMDktNjZiNS00ZDJkLTllNDctOWU0ODU1YmNkZWI0IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- PVR -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYjhkMWY3ZjItYzBmNS00M2UyLTg3ZWYtZWEwZDU5MTRlNTYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- MBJ -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMWNiMDM0NGUtYWQyNy00NmQ0LTgyN2ItNzE2NjBmY2FkZDBlIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- PUJ -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNjg0NTY2MjMtMWUwNy00MTYwLWE4NDctMmU0MTUxMjU2NzI3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- SSA -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMDZhMjA1YjYtYmQ2Ny00OTFkLWIwOTAtNTc3MTA4Yjk4ZGIwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
                                     <!-- SDQ -->
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYzQ5MmQ1NTAtOTkwYS00OTNhLThlOGItNmQ4NTcwODE2NzcwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
                                 </div>
@@ -302,8 +307,17 @@ try {
                     </div>
                 </div>
             </section>
-            <section class="my-4">
+            <br>
+            <div class="row my-4">
+                <div class="col-12 text-center">
+                    <div class="btn-group shadow-sm text-center" role="group" aria-label="Button group with nested dropdown">
+                        <button id="btnServicios" type="button" class="btn btn-no active2" onclick="ocultar('divServicios'); ">Servicios</button>
+                        <button id="btnMateriales" type="button" class="btn btn-no" onclick="ocultar('divMateriales'); ">Materiales</button>
+                    </div>
+                </div>
+            </div>
 
+            <section class="my-4 container mx-auto px-4">
                 <div id="divServicios" class="row mt-4">
                     <div class="col-12">
                         <div class="row mt-4">
@@ -342,7 +356,7 @@ try {
                                         <tbody id="tableBodyServicios" class="fs-11">
                                             <?php
                                             //$query = "SELECT * FROM t_gastos_servicios WHERE division = '$division'";
-                                            $query = "CALL obtenerServicios(917)";
+                                            $query = "CALL obtenerServicios($division)";
                                             try {
                                                 $resp = $conn->obtDatos($query);
                                                 if ($conn->filasConsultadas > 0) {
@@ -550,14 +564,76 @@ try {
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script defer="" src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-<script src="js/plannerJS.js"></script>
-<script src="js/usuariosJS.js"></script>
+<script src="../js/moment.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.js"></script>
 
+<script src="js/plannerJS.js"></script>
+<script src="js/usuariosJS.js"></script>
 <script>
+    $(document).ready(function() {
+        var gastos = $('table.compact').DataTable({
+            select: true,
+            "scrollY": "350px",
+            "scrollX": true,
+            "scrollCollapse": true,
+            "paging": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            },
+
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excel',
+                title: 'Reporte de gastos'
+            }],
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
+
+
+        setTimeout(function() {
+            $(".loader").fadeOut('slow');
+        }, 800);
+
+        $('#sidebarCollapse').on('click', function() {
+            //$('#sidebar').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function() {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
     $(document).ready(function() {
         var pageloader = document.getElementById("loader");
         if (pageloader) {
@@ -585,6 +661,18 @@ try {
             });
         });
     });
+
+    function ocultar(id) {
+        console.log(id);
+        if (id == "divServicios") {
+            $("#divMateriales").css('display', 'none');
+            $("#divServicios").css('display', 'block');
+
+        } else {
+            $("#divMateriales").css('display', 'block');
+            $("#divServicios").css('display', 'none');
+        }
+    }
 </script>
 
 </html>

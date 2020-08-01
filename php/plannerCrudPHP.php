@@ -2015,6 +2015,56 @@ if (isset($_POST['action'])) {
         $opcionBuscarEquipo = "onclick=\"obtenerEquipos($idUsuario, $idDestino, $idSeccion, $idSubseccion);\"";
         $seccionEquipos = $arraySeccion[$idSeccion];
 
+        // Tareas Generales.
+        $queryTGF = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'F' AND 
+        id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestino";
+        if ($resultTGF = mysqli_query($conn_2020, $queryTGF)) {
+            $totalTGF = mysqli_num_rows($resultTGF);
+        }
+
+        $queryTGN = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'N' AND 
+        id_subseccion = $idSubseccion AND id_seccion = $idSeccion $filtroDestino";
+        if ($resultTGN = mysqli_query($conn_2020, $queryTGN)) {
+            $totalTGN = mysqli_num_rows($resultTGN);
+        }
+
+        $dataTG = "
+            <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer self-start\">
+                <div class=\"w-2/6 h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md\">
+                    <div class=\" flex flex-row items-center truncate\">
+                        <i class=\"fad fa-dot-circle mx-2\"></i>
+                        <h1>TAREAS GENERALES DEL AREA</h1>
+                    </div>
+                </div>
+                <!-- MC PENDIENTES -->
+                <div onclick=\"obtenerMCN(0);\" class=\"w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md\">
+                    <h1>$totalTGN</h1>
+                </div>
+                <!-- MC SOLUCIONADOS -->
+                <div onclick=\"obtenerMCF(0);\" class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md rounded-r\">
+                    <h1>$totalTGF</h1>
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-24 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-24 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+            </div>
+        ";
+
         // Busca Equipos.
         $queryEquipos = "SELECT id FROM t_equipos WHERE id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
         if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
@@ -2279,7 +2329,7 @@ if (isset($_POST['action'])) {
             }
 
             // Datos almacenados.
-            $data['dataEquipos'] = $dataEquipos;
+            $data['dataEquipos'] = $dataTG . $dataEquipos;
             $data['opcionBuscarEquipo'] = $opcionBuscarEquipo;
             $data['totalEquipos'] = "Total Equipos: $totalEquipos";
             $data['seccionEquipos'] = $seccionEquipos;
@@ -2293,21 +2343,80 @@ if (isset($_POST['action'])) {
     // Se obtienes los MC Finalizados por Equipo.
     if ($action == "obtenerMCF") {
         $idEquipo = $_POST['idEquipo'];
+        $idSubseccion = $_POST['idSubseccion'];
         $data = array();
         $dataMCF = "";
 
-        $queryMCF = "
-            SELECT 
-            t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
-            t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
-            t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
-            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_creacion, t_mc.fecha_realizado, t_colaboradores.nombre, t_colaboradores.apellido 
-            FROM t_mc 
-            INNER JOIN t_users ON t_mc.creado_por = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'F' AND t_mc.activo = 1
-        ";
+        if ($idEquipo == 0) {
+            // Obtiene la Seccion y Equipo.
+            $query = "
+                    SELECT c_secciones.seccion 
+                    FROM c_subsecciones 
+                    INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
+                    WHERE c_subsecciones.id = $idSubseccion;
+                ";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $seccion = $value['seccion'];
+                    $equipo = "Tareas Generales";
+
+                    $data['seccion'] = $seccion;
+                    $data['nombreEquipo'] = $equipo;
+                }
+            }
+        } else {
+            // Obtiene la Seccion y Equipo.
+            $query = "
+                    SELECT c_secciones.seccion, t_equipos.equipo 
+                    FROM t_equipos 
+                    INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+                    WHERE t_equipos.id = $idEquipo;
+                ";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $seccion = $value['seccion'];
+                    $equipo = $value['equipo'];
+
+                    $data['seccion'] = $seccion;
+                    $data['nombreEquipo'] = $equipo;
+                }
+            }
+        }
+
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "AND t_mc.id_destino = $idDestino";
+        }
+
+        if ($idEquipo == 0) {
+            $queryMCF = "
+                SELECT 
+                t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+                t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+                t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+                t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mc 
+                INNER JOIN t_users ON t_mc.creado_por = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino
+            ";
+        } else {
+            $queryMCF = "
+                SELECT 
+                t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+                t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+                t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+                t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mc 
+                INNER JOIN t_users ON t_mc.creado_por = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'F' AND t_mc.activo = 1
+            ";
+        }
 
         if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
             $totalMCF = mysqli_num_rows($resultMCF);
@@ -2545,24 +2654,85 @@ if (isset($_POST['action'])) {
     // Se obtienen todos los MCN - Pendientes por Equipo.
     if ($action == "obtenerMCN") {
         $idEquipo = $_POST['idEquipo'];
+        $idSubseccion = $_POST['idSubseccion'];
         $data = array();
         $MC = "";
         $contadorMC = 0;
 
-        $query = "
-            SELECT 
-            t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
-            t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
-            t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
-            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-            t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
-            FROM t_mc 
-            INNER JOIN t_users ON t_mc.creado_por = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'N' AND t_mc.activo = 1
-        ";
+        if ($idEquipo == 0) {
+            // Obtiene la Seccion y Equipo.
+            $query = "
+                    SELECT c_secciones.seccion 
+                    FROM c_subsecciones 
+                    INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
+                    WHERE c_subsecciones.id = $idSubseccion;
+                ";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $seccion = $value['seccion'];
+                    $equipo = "Tareas Generales";
+
+                    $data['seccion'] = $seccion;
+                    $data['nombreEquipo'] = $equipo;
+                }
+            }
+        } else {
+            // Obtiene la Seccion y Equipo.
+            $query = "
+                    SELECT c_secciones.seccion, t_equipos.equipo 
+                    FROM t_equipos 
+                    INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+                    WHERE t_equipos.id = $idEquipo;
+                ";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $seccion = $value['seccion'];
+                    $equipo = $value['equipo'];
+
+                    $data['seccion'] = $seccion;
+                    $data['nombreEquipo'] = $equipo;
+                }
+            }
+        }
+
+        if($idDestino == 10){
+            $filtroDestino = "";
+        }else{
+            $filtroDestino = "AND t_mc.id_destino = $idDestino";
+        }
+
+        if($idEquipo == 0){
+            $query = "
+                SELECT 
+                t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+                t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+                t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+                t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mc 
+                INNER JOIN t_users ON t_mc.creado_por = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino
+            ";
+        }else{
+            $query = "
+                SELECT 
+                t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+                t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+                t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+                t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mc 
+                INNER JOIN t_users ON t_mc.creado_por = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'N' AND t_mc.activo = 1
+            ";
+        }
+
+
 
         if ($result = mysqli_query($conn_2020, $query)) {
+
             foreach ($result as $row) {
                 $contadorMC++;
                 $idMC = $row['id'];
@@ -2779,22 +2949,6 @@ if (isset($_POST['action'])) {
             }
             $data['contadorMC'] = $contadorMC;
             $data['MC'] = $MC;
-        }
-        // Obtiene la Seccion y Equipo.
-        $query = "
-            SELECT c_secciones.seccion, t_equipos.equipo 
-            FROM t_equipos 
-            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
-            WHERE t_equipos.id = $idEquipo;
-        ";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $value) {
-                $seccion = $value['seccion'];
-                $equipo = $value['equipo'];
-
-                $data['seccion'] = $seccion;
-                $data['nombreEquipo'] = $equipo;
-            }
         }
         echo json_encode($data);
     }
