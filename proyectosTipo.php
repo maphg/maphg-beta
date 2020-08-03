@@ -177,15 +177,11 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>MAPHG</title>
-
-    <link rel="icon" href="svg/logo6.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css" />
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
-
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="icon" href="svg/logo6.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css">
 
     <style>
         .shadow-navbar {
@@ -201,17 +197,21 @@ try {
         .my-iframe-all {
             height: 300px !important;
         }
+
+        select {
+            width: 80px;
+        }
     </style>
 </head>
 
-<body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
+<body class="bg-white" style="font-family: 'Roboto', sans-serif;">
 
     <?php include 'navbartop.php' ?>
     <?php include 'menu-sidebar.php' ?>
     <br>
     <div class="wrapper">
-        <div id="content" class="container mx-auto p-4">
-            <table id="table_id" class="display">
+        <div id="content" class="w-10/12 mx-auto p-4">
+            <table id="table_id" class="display" data-page-length='50'>
                 <thead>
                     <tr>
                         <th>TIPO</th>
@@ -220,6 +220,7 @@ try {
                         <th>SUBSECCIÓN</th>
                         <th>AÑO</th>
                         <th>TÍTULO</th>
+                        <th>ESTATUS</th>
                         <th>TOTAL(USD)</th>
                         <th>JUSTIFICACIÓN</th>
                     </tr>
@@ -233,12 +234,12 @@ try {
                     }
 
 
-                    $query = "SELECT t_proyectos.tipo, t_proyectos.año, t_proyectos.titulo, t_proyectos.coste, t_proyectos.justificacion, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo
+                    $query = "SELECT t_proyectos.status, t_proyectos.tipo, t_proyectos.año, t_proyectos.titulo, t_proyectos.coste, t_proyectos.justificacion, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo
                     FROM t_proyectos
                     INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
                     INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id 
                     INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id 
-                    WHERE t_proyectos.activo = 1 AND t_proyectos.status = 'N' AND t_proyectos.tipo != '' $filtroDestino";
+                    WHERE t_proyectos.activo = 1 AND t_proyectos.tipo != '' $filtroDestino";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $row) {
                             $tipo = $row['tipo'];
@@ -247,9 +248,15 @@ try {
                             $subseccion = $row['grupo'];
                             $año = $row['año'];
                             $titulo = $row['titulo'];
+                            $status = $row['status'];
                             $coste = $row['coste'];
                             $justificacion = $row['justificacion'];
-
+                            if ($status == 'N') {
+                                $status = "PENDIENTE";
+                            } else {
+                                $status = "FINALIZADO";
+                            }
+                            
                             echo "
                             <tr>
                             <td>$tipo</td>
@@ -258,6 +265,7 @@ try {
                             <td>$subseccion</td>
                             <td>$año</td>
                             <td>$titulo</td>
+                            <td>$status</td>
                             <td>$coste</td>
                             <td>$justificacion</td>
                             </tr>
@@ -267,27 +275,60 @@ try {
                     ?>
 
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>TIPO</th>
+                        <th>DESTINO</th>
+                        <th>SECCIÓN</th>
+                        <th>SUBSECCIÓN</th>
+                        <th>AÑO</th>
+                        <th>TÍTULO</th>
+                        <th>ESTATUS</th>
+                        <th>TOTAL(USD)</th>
+                        <th>JUSTIFICACIÓN</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
 <script src="js/plannerJS.js"></script>
 <script src="js/usuariosJS.js"></script>
 <script>
     $(document).ready(function() {
         $('#table_id').DataTable({
+            "lengthMenu": [10, 25, 50, 75, 100],
             select: true,
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'excel', 'pdf'
-            ]
+            ],
+            initComplete: function() {
+                this.api().columns().every(function() {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function() {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
 
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function(d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
         });
     });
 </script>
