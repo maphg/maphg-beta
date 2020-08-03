@@ -2340,6 +2340,74 @@ if (isset($_POST['action'])) {
     }
 
 
+    // Obtiene Datos para Crear un MC.
+    if ($action == "obtenerDatosAgregarMC") {
+        $data = array();
+        $dataUsuarios = "";
+        $idEquipo = $_POST['idEquipo'];
+
+        if ($idEquipo == 0) {
+            $data['nombreEquipo'] = "Tarea General";
+        } else {
+            $query = "SELECT equipo FROM t_equipos WHERE id = $idEquipo";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $nombreEquipo = $value['equipo'];
+                }
+                $data['nombreEquipo'] = $nombreEquipo;
+            }
+        }
+
+        $query = "SELECT max(id) FROM t_mc";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idUltimoMC = $value['max(id)'];
+            }
+            $data['idUltimoMC'] = $idUltimoMC;
+        }
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "AND (t_users.id_destino = 10 OR t_users.id_destino = $idDestino)";
+        }
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.status = 'A' AND t_users.id != 0 $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idUser = $value['id'];
+                $nombre = $value['nombre'];
+                $apellido = $value['apellido'];
+
+                $dataUsuarios .= "<option value=\"$idUser\">$nombre $apellido</option>";
+            }
+            $data['dataUsuarios'] = $dataUsuarios;
+        }
+        echo json_encode($data);
+    }
+
+
+    // Agregar MC.
+    if($action == "agregarMC"){
+        $actividadMC = $_POST['actividadMC']; 
+        $idMC = $_POST['idMC'];
+        $idEquipo = $_POST['idEquipo']; 
+        $responsableMC = $_POST['responsableMC'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion']; 
+        $rangoFechaMC = $_POST['rangoFechaMC'];
+
+        $query = "INSERT INTO t_mc(id, id_equipo, actividad, status, creado_por, responsable, fecha_creacion, ultima_modificacion, id_destino, id_seccion, id_subseccion, rango_fecha) 
+        VALUES($idMC, $idEquipo, '$actividadMC', 'N', $idUsuario, $responsableMC, '$fechaActual', '$fechaActual', $idDestino, $idSeccion, $idSubseccion, '$rangoFechaMC')";
+        if($result = mysqli_query($conn_2020, $query)){
+            echo 1;
+        }else{
+            echo 0;
+        }
+    }
+
+
     // Se obtienes los MC Finalizados por Equipo.
     if ($action == "obtenerMCF") {
         $idEquipo = $_POST['idEquipo'];
@@ -2401,7 +2469,7 @@ if (isset($_POST['action'])) {
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino
+                WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino ORDER BY t_mc.id DESC
             ";
         } else {
             $queryMCF = "
@@ -2695,13 +2763,13 @@ if (isset($_POST['action'])) {
             }
         }
 
-        if($idDestino == 10){
+        if ($idDestino == 10) {
             $filtroDestino = "";
-        }else{
+        } else {
             $filtroDestino = "AND t_mc.id_destino = $idDestino";
         }
 
-        if($idEquipo == 0){
+        if ($idEquipo == 0) {
             $query = "
                 SELECT 
                 t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
@@ -2712,9 +2780,9 @@ if (isset($_POST['action'])) {
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino
+                WHERE t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino ORDER BY t_mc.id DESC
             ";
-        }else{
+        } else {
             $query = "
                 SELECT 
                 t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
@@ -2856,7 +2924,7 @@ if (isset($_POST['action'])) {
                 $MC .= "
                     <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
                         <!-- FALLA -->
-                        <div class=\"w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
+                        <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
 
                             <div class=\"$statusUrgente absolute\" style=\"left: -17px;\">
                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
@@ -2960,6 +3028,7 @@ if (isset($_POST['action'])) {
         $palabraUsuario = $_POST['palabraUsuario'];
         $tipoAsginacion = $_POST['tipoAsginacion'];
         $idItem = $_POST['idItem'];
+        $totalUsuarios = 0;
 
         // Variables Locales.
         $data = array();
@@ -2985,10 +3054,11 @@ if (isset($_POST['action'])) {
         INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
         WHERE t_users.status= 'A' AND t_users.id != 0 $filtroDestino $filtroPalabraUsuario ";
         if ($resultUsuarios = mysqli_query($conn_2020, $queryUsuarios)) {
-            $totalUsuarios = mysqli_num_rows($resultUsuarios);
+
 
             //Tipo de Asignación sirve para mandar parametros especificos en las funciones. 
             if ($tipoAsginacion == "asignarMC") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
                     $nombre = $value['nombre'];

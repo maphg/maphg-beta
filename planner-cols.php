@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="css/jPages.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+
 
     <style>
         .w-22rem {
@@ -356,20 +358,27 @@
                 </div>
             </div>
 
-            <div class="hidden flex row justify-center items-center w-full text-xs">
-                <div class="py-1 px-2 bg-red-300 text-red-700 rounded-l-md cursor-pointer">
-                    <h1>AÑADIR CORRECTIVO</h1>
-                </div>
-                <div class="py-1 px-2 bg-indigo-300 text-indigo-700 cursor-pointer">
-                    <h1>EXPORTAR LISTADO</h1>
-                </div>
-                <div class="py-1 px-2 bg-green-300 text-green-700 rounded-r-md cursor-pointer">
-                    <h1>VER SOLUCIONADO</h1>
-                </div>
-            </div>
-
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Opciones para MC -->
+                <div class="flex items-center justify-center text-sm font-semibold">
+                    <div class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500" onclick="datosModalAgregarMC('');">
+                        <h1>
+                            <i class="fas fa-plus mr-2"></i>AGREGAR MC
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+                        <h1>
+                            <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+                        <h1>
+                            <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
+                        </h1>
+                    </div>
+                </div>
+
                 <!-- Contenedor de los equipos y locales(Tabla) -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- titulos -->
@@ -421,8 +430,29 @@
                 </div>
             </div>
 
+
+
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
+
+                <!-- Opciones para MC -->
+                <div class="invisible flex items-center justify-center text-sm font-semibold">
+                    <div class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500">
+                        <h1>
+                            <i class="fas fa-plus mr-2"></i>AGREGAR MC
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+                        <h1>
+                            <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+                        <h1>
+                            <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
+                        </h1>
+                    </div>
+                </div>
                 <!-- Contenedor de los equipos y locales(Tabla) -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- titulos -->
@@ -525,7 +555,7 @@
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
                 <div class="mb-3 w-full">
-                    <input id="palabraUsuario" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." onkeydown=" obtenerUsuarios();" autocomplete="off">
+                    <input id="palabraUsuario" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
                 </div>
 
                 <div class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="height: 400px;">
@@ -804,10 +834,69 @@
         </div>
     </div>
 
+
+    <!-- MODAL EDITAR TITULO   -->
+    <div id="modalAgregarMC" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR CORRECTIVO</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <h1 class="mb-2 self-start">Equipo/Local afectado:</h1>
+                <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
+                    <h1 id="nombreEquipoMC"></h1>
+                </div>
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60">
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalizacion:</h1>
+                        <input id="inputRangoFechaMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Comentario:</h1>
+                <input id="comentarioMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario">
+
+                <button id="btnAgregarMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modales -->
 
-
+    <!-- Librerias -->
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
@@ -818,6 +907,7 @@
     <script src="js/calendarioBotones.js"></script>
     <script src="js/plannerBetaJS.js"></script>
     <script src="js/jPages.js"></script>
+    <!-- Librerias -->
 
 </body>
 

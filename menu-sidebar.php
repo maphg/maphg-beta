@@ -138,7 +138,7 @@
         </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">Proyectos</o>
+                <a href="proyectosTipo.php" class="menu-hijo-3 CA">Proyectos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Entregas</o>

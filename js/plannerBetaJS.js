@@ -47,6 +47,36 @@ function obtenerDatosUsuario(idDestino) {
 })();
 
 
+
+// Función para Input Fechas.
+$(function () {
+
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: 'Cancelar',
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }
+    });
+
+    $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YY') + ' - ' + picker.endDate.format('DD/MM/YY'));
+    });
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+
+});
+
+
 // Función para el calendario de Secciones.
 function calendarioSecciones() {
     var numSem = new Date().getDay();
@@ -283,6 +313,24 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 
 
 // El estilo se aplica DIV>H1(class="zie-logo").
+function estiloSeccionModal(padreSeccion, seccion) {
+    let seccionClase = seccion.toLowerCase() + '-logo-modal';
+    // console.log(seccionClase);
+    document.getElementById(padreSeccion).classList.remove('zil-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zie-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('auto-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('dec-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('dep-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zha-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zhc-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zhp-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zia-logo-modal');
+    document.getElementById(padreSeccion).classList.remove('zic-logo-modal');
+
+    document.getElementById(padreSeccion).classList.add(seccionClase);
+}
+
+// El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccion(padreSeccion, seccion) {
     let seccionClase = seccion.toLowerCase() + '-logo';
     // console.log(seccionClase);
@@ -409,7 +457,7 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
             // console.log(data);
             document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
             document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
-            estiloSeccion('estiloSeccionEquipos', data.seccionEquipos);
+            estiloSeccionModal('estiloSeccionEquipos', data.seccionEquipos);
             // document.getElementById("paginacionEquipos").innerHTML = data.paginacionEquipos;
             paginacionEquipos();
 
@@ -465,7 +513,7 @@ function obtenerMCN(idEquipo) {
         dataType: "JSON",
         success: function (data) {
             // console.log(data);
-            estiloSeccion('estiloSeccionMCN', data.seccion);
+            estiloSeccionModal('estiloSeccionMCN', data.seccion);
             document.getElementById("seccionMCN").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
             document.getElementById("dataMCN").innerHTML = data.MC;
@@ -608,7 +656,7 @@ function obtenerMCF(idEquipo) {
         success: function (data) {
             console.log(data);
             document.getElementById("dataMCF").innerHTML = data.dataMCF;
-            estiloSeccion('estiloSeccionMCF', data.seccion);
+            estiloSeccionModal('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
             alertaImg('Correctivos Finalizados: ' + data.totalMCF, '', 'info', 2000);
@@ -616,6 +664,82 @@ function obtenerMCF(idEquipo) {
     });
 }
 
+
+function datosModalAgregarMC() {
+    document.getElementById("responsableMC").innerHTML = '';
+    document.getElementById("modalAgregarMC").classList.add('open');
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
+
+    const action = "obtenerDatosAgregarMC";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo
+        },
+        dataType: "JSON",
+        success: function (data) {
+            let idUltimoMC = parseInt(data.idUltimoMC) + 1;
+            console.log(data);
+            document.getElementById("btnAgregarMC").setAttribute('onclick', 'agregarMC(' + idUltimoMC + ');');
+            document.getElementById("responsableMC").innerHTML = data.dataUsuarios;
+            document.getElementById("nombreEquipoMC").innerHTML = data.nombreEquipo;
+        }
+    });
+}
+
+
+function agregarMC(idMC) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let actividadMC = document.getElementById("inputActividadMC").value;
+    let rangoFechaMC = document.getElementById("inputRangoFechaMC").value;
+    let responsableMC = document.getElementById("responsableMC").value;
+    let comentarioMC = document.getElementById("comentarioMC").value;
+    console.log(idUsuario, idDestino, idEquipo, idSeccion, idSubseccion, actividadMC, rangoFechaMC, responsableMC, comentarioMC);
+
+    if (actividadMC != "" && rangoFechaMC != "" && responsableMC != "") {
+        const action = "agregarMC";
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idMC: idMC,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idEquipo: idEquipo,
+                idSeccion: idSeccion,
+                idSubseccion: idSubseccion,
+                actividadMC: actividadMC,
+                rangoFechaMC: rangoFechaMC,
+                responsableMC: responsableMC
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                document.getElementById("inputComentario").value = comentarioMC;
+                if (data >= 1) {
+                    agregarComentarioMC(idMC);
+                    alertaImg('MC agregado', '', 'success', 1500);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'question', 1500);
+                }
+                document.getElementById("modalComentarios").classList.remove("open");
+            }
+        });
+    } else {
+        alertaImg('Información No Valida', '', 'question', 2000);
+    }
+}
 
 // Obtener usuario recibe 2 parametros especificos, donde tipoAsignación se refiere a la tabla donde se va a utilizar el usuario y idItem es el identificador del registro que se le va asignar. 
 function obtenerUsuarios(tipoAsginacion, idItem) {
@@ -640,8 +764,11 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
         },
         dataType: "JSON",
         success: function (data) {
+            // console.log(data);
             alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 2000);
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
+            document.getElementById("palabraUsuario").
+                setAttribute('onkeydown', 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ')');
         }
     });
 }
