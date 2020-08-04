@@ -16,7 +16,7 @@
     }
 </style>
 <!-- INICIO MENU -->
-<dav id="sidemenu" class="animated fadeOutLeft menu-contenedor-1">
+<dav id="sidemenu" class="animated fadeOutUp menu-contenedor-1 invisible">
     <dav class="menu-contenedor-2">
         <dav class="menu-contenedor-3">
             <dav class="menu-contenedor-logo">
@@ -135,7 +135,7 @@
             <dav class="menu-contenedor-padre-2">
                 <o data-target="hijo4" data-toggle="hijo" href="#" class="CA">Instalaciones</o>
             </dav>
-        </dav> 
+        </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
                 <a href="proyectosTipo.php" class="menu-hijo-3 CA">Proyectos</a>
@@ -227,7 +227,7 @@
 <!-- FIN MENU -->
 
 <!-- INICIO DESTINO -->
-<dav id="sidedestino" class="animated fadeOutRight d1">
+<dav id="sidedestino" class="animated fadeOutUp d1 invisible">
     <!-- d1 -->
     <dav class="d2">
         <!-- d2 -->
@@ -270,19 +270,24 @@
 <script>
     function botonMenu() {
         var element = document.getElementById("sidemenu");
-        if (element.classList.contains('fadeOutLeft')) {
-            element.classList.replace('fadeOutLeft', 'fadeInLeft');
+        if (element.classList.contains('fadeOutUp')) {
+            element.classList.replace('fadeOutUp', 'fadeInDown');
+            element.classList.remove('invisible');
         } else {
-            element.classList.replace('fadeInLeft', 'fadeOutLeft');
+            element.classList.replace('fadeInDown', 'fadeOutUp');
+            element.classList.add('invisible');
         }
     };
 
     function botonDestino() {
         var element = document.getElementById("sidedestino");
-        if (element.classList.contains('fadeOutRight')) {
-            element.classList.replace('fadeOutRight', 'fadeInRight');
+        if (element.classList.contains('fadeOutUp')) {
+            element.classList.replace('fadeOutUp', 'fadeInDown');
+            element.classList.remove('invisible');
+
         } else {
-            element.classList.replace('fadeInRight', 'fadeOutRight');
+            element.classList.replace('fadeInDown', 'fadeOutUp');
+            element.classList.add('invisible');
         }
     };
     /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */

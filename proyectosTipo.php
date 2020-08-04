@@ -213,21 +213,20 @@ try {
     <br>
     <div class="wrapper">
         <div id="content" class="w-10/12 mx-auto p-4">
-            <div id="headTable"></div>
-            <table id="table_id" class="display" data-page-length='50'>
-                <thead>
-                    <tr>
-                        <th>TIPO</th>
-                        <th>DESTINO</th>
-                        <th>SECCIÓN</th>
-                        <th>SUBSECCIÓN</th>
-                        <th>AÑO</th>
-                        <th>TÍTULO</th>
-                        <th>ESTATUS</th>
-                        <th>TOTAL(USD)</th>
-                        <th>JUSTIFICACIÓN</th>
-                    </tr>
-                </thead>
+        <table id="table_id" class="display" data-page-length='50'>
+            <thead>
+                <tr>
+                    <th>TIPO</th>
+                    <th>DESTINO</th>
+                    <th>SECCIÓN</th>
+                    <th>SUBSECCIÓN</th>
+                    <th>AÑO</th>
+                    <th>TÍTULO</th>
+                    <th>ESTATUS</th>
+                    <th>TOTAL(USD)</th>
+                    <th>JUSTIFICACIÓN</th>
+                </tr>
+            </thead>
                 <tbody>
                     <?php
                     if ($idDestinoT == 10) {
@@ -307,7 +306,7 @@ try {
         $('#table_id').DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'excel', 'pdf'
+                'excel', 'pdf'
             ],
             initComplete: function() {
                 this.api().columns().every(function() {
