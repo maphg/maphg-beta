@@ -213,6 +213,7 @@ try {
     <br>
     <div class="wrapper">
         <div id="content" class="w-10/12 mx-auto p-4">
+            <div id="headTable"></div>
             <table id="table_id" class="display" data-page-length='50'>
                 <thead>
                     <tr>
@@ -275,7 +276,6 @@ try {
                         }
                     }
                     ?>
-
                 </tbody>
                 <tfoot>
                     <tr>
@@ -313,8 +313,7 @@ try {
                 this.api().columns().every(function() {
                     var column = this;
                     var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function() {
+                        .appendTo($(column.header())).on('change', function() {
                             var val = $.fn.dataTable.util.escapeRegex(
                                 $(this).val()
                             );
@@ -325,10 +324,10 @@ try {
                         });
 
                     column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
+                        select.append('<option value="' + d + '">' + d.substr(0, 30) + '</option>');
                     });
                 });
-            },
+            }
         });
     });
 </script>
