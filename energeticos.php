@@ -173,7 +173,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>MAPHG</title>
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.csws" rel="stylesheet">
+    <link href="css/tailwindproduccion.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/bulma.min.css">

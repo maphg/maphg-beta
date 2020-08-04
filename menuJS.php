@@ -254,8 +254,9 @@
             element.classList.remove('invisible');
         } else {
             element.classList.replace('fadeInDown', 'fadeOutUp');
-            element.classList.add('invisible');
-        }
+            setTimeout(function() {
+                element.classList.add('invisible');
+            }, 1000);        }
     };
 
     function botonDestino() {
@@ -266,8 +267,9 @@
 
         } else {
             element.classList.replace('fadeInDown', 'fadeOutUp');
-            element.classList.add('invisible');
-
+            setTimeout(function() {
+                element.classList.add('invisible');
+            }, 1000);
         }
     };
     /* SCRIPT PARA GENERA ID Y OCULTAR HIJOS Y NIETOS */

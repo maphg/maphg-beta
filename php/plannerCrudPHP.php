@@ -2029,7 +2029,7 @@ if (isset($_POST['action'])) {
         }
 
         $dataTG = "
-            <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer self-start\">
+            <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer self-start\" style=\"display:flex;\">
                 <div class=\"w-2/6 h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md\">
                     <div class=\" flex flex-row items-center truncate\">
                         <i class=\"fad fa-dot-circle mx-2\"></i>

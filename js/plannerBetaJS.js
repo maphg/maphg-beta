@@ -729,6 +729,7 @@ function agregarMC(idMC) {
                 document.getElementById("inputComentario").value = comentarioMC;
                 if (data >= 1) {
                     agregarComentarioMC(idMC);
+                    document.getElementById("modalComentarios").classList.remove('open');
                     alertaImg('MC agregado', '', 'success', 1500);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'question', 1500);
@@ -853,7 +854,6 @@ function obtenerAdjuntosMC(idMC) {
 function obtenerComentariosMC(idMC) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
-    let idEquipo = localStorage.getItem('idEquipo');
 
     document.getElementById("modalComentarios").classList.add('open');
     document.getElementById("dataComentarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -870,7 +870,6 @@ function obtenerComentariosMC(idMC) {
         },
         dataType: "JSON",
         success: function (data) {
-            obtenerMCN(idEquipo);
             document.getElementById("btnComentario").
                 setAttribute('onclick', 'agregarComentarioMC(' + idMC + ')');
             document.getElementById("inputComentario").
@@ -885,6 +884,7 @@ function obtenerComentariosMC(idMC) {
 function agregarComentarioMC(idMC) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
     let comentarioMC = document.getElementById("inputComentario").value;
     const action = "agregarComentarioMC";
     if (comentarioMC.length > 0) {
@@ -900,8 +900,9 @@ function agregarComentarioMC(idMC) {
             },
             // dataType: "JSON",
             success: function (data) {
-                if (data = 1) {
+                if (data == 1) {
                     obtenerComentariosMC(idMC);
+                    obtenerMCN(idEquipo);
                     document.getElementById("inputComentario").value = '';
                     alertaImg('Comentario Agregado', '', 'success', 2000);
                 } else {

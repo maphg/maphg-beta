@@ -341,7 +341,7 @@
 
     <!-- MODAL MC Nuevos -->
     <div id="modalMCN" class="modal">
-        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-8/12">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMCN')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -413,7 +413,7 @@
 
     <!-- MODAL MCF -->
     <div id="modalMCF" class="modal">
-        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-8/12">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMCF')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -629,7 +629,7 @@
                     <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
-                    <input id="inputComentario" type="text" placeholder="    Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none">
+                    <input id="inputComentario" type="text" placeholder="    Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
                     <button id="btnComentario" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                         <i class="fad fa-paper-plane"></i>
                     </button>
@@ -828,7 +828,7 @@
             <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm">
 
                 <h1>Editar titulo</h1>
-                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTituloMC" type="text" placeholder="Escriba titulo" value="">
+                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTituloMC" type="text" placeholder="Escriba titulo" value="" autocomplete="off">
                 <button id="btnEditarTituloMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i> Guardar cambios</button>
             </div>
         </div>
@@ -860,7 +860,7 @@
                     <h1 id="nombreEquipoMC"></h1>
                 </div>
                 <h1 class="self-start mb-2">Descripción:</h1>
-                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60">
+                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60" autocomplete="off">
                 <div class="flex w-full items-center justify-center">
                     <div class="w-1/2 flex flex-col pr-4">
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalizacion:</h1>
@@ -881,7 +881,7 @@
                 </div>
 
                 <h1 class="self-start mb-2">Comentario:</h1>
-                <input id="comentarioMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario">
+                <input id="comentarioMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
 
                 <button id="btnAgregarMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
                     <i class="fas fa-check"></i> Crear
