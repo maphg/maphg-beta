@@ -182,6 +182,8 @@ try {
     <link rel="stylesheet" href="css/animate.css">
     <link rel="icon" href="svg/logo6.png">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.3/css/buttons.dataTables.min.css">
+
 
     <style>
         .shadow-navbar {
@@ -256,7 +258,7 @@ try {
                             } else {
                                 $status = "FINALIZADO";
                             }
-                            
+
                             echo "
                             <tr>
                             <td>$tipo</td>
@@ -266,7 +268,7 @@ try {
                             <td>$año</td>
                             <td>$titulo</td>
                             <td>$status</td>
-                            <td>$coste</td>
+                            <td>$ $coste</td>
                             <td>$justificacion</td>
                             </tr>
                             ";
@@ -293,18 +295,16 @@ try {
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.3/b-html5-1.6.3/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
 <script src="js/plannerJS.js"></script>
 <script src="js/usuariosJS.js"></script>
 <script>
     $(document).ready(function() {
         $('#table_id').DataTable({
-            "lengthMenu": [10, 25, 50, 75, 100],
-            select: true,
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'excel', 'pdf'
@@ -328,7 +328,7 @@ try {
                         select.append('<option value="' + d + '">' + d + '</option>')
                     });
                 });
-            }
+            },
         });
     });
 </script>
