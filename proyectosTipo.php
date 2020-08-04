@@ -241,7 +241,7 @@ try {
                     INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
                     INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id 
                     INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id 
-                    WHERE t_proyectos.activo = 1 AND t_proyectos.tipo != '' $filtroDestino";
+                    WHERE t_proyectos.activo = 1 AND t_proyectos.tipo != '' AND t_proyectos.año >2017 $filtroDestino";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $row) {
                             $tipo = $row['tipo'];
