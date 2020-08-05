@@ -2502,7 +2502,7 @@ if (isset($_POST['action'])) {
                 $fechaMC = "";
 
                 // Si no Tiene fecha Rango toma la fecha de creación.
-                if ($fechaCreacion == "") {
+                if ($fechaCreacion != "") {
                     $fechaMC = $fechaRango;
                 } else {
                     $fechaMC = "$fechaCreacion - $fechaCreacion";
@@ -2692,17 +2692,20 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!-- INICIO & FIN-->
-                        <div onclick=\"datePicker('datefilter$idMC');\" class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                                <input id=\"inputRangoFechaMC$idMC\" class=\"appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4\" type=\"text\" name=\"datefilter$idMC\" value=\"$fechaMC\">
+                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaMC\" disabled>
                         </div>
+
                         <!--  ADJUNTOS -->
                         <div onclick=\"obtenerAdjuntosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
                             <h1 class=\"font-xs\">$totalMedia</h1>
                         </div>
+
                         <!--  COMENTARIOS -->
                         <div onclick=\"obtenerComentariosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
                             <h1>$totalComentario</h1>
                         </div>
+
                         <!--  STATUS -->
                         <div onclick=\"actualizarStatusMC($idMC, 'status', 'F')\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md\">
                             <div><i class=\"fas fa-undo fa-lg\"></i></div>
@@ -2820,16 +2823,16 @@ if (isset($_POST['action'])) {
                 $responsable = $row['responsable'];
                 $actividad = $row['actividad'];
                 $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
-                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-y');
-                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('m-y');
+                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('d/m/Y');
+                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('d/m/Y');
                 $fechaRango = $row['rango_fecha'];
                 $fechaMC = "";
 
                 // Si no Tiene fecha Rango toma la fecha de creación.
-                if ($fechaCreacion == "") {
+                if ($fechaRango != "") {
                     $fechaMC = $fechaRango;
                 } else {
-                    $fechaMC = "$fechaCreacion - $fechaCreacion";
+                    $fechaMC = $fechaCreacion . " - " . $fechaCreacion;
                 }
 
 
@@ -3017,7 +3020,8 @@ if (isset($_POST['action'])) {
 
                         <!-- INICIO & FIN-->
                         <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaMC\">
+                            <input id=\"fecha$idMC\" onclick=\"rangoFecha($idMC, '$fechaMC');\"
+                            id=\"fecha$idMC\" class=\"appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight mb-4\" type=\"text\" name=\"fecha$idMC\" value=\"$fechaMC\">
                         </div>
 
                         <!--  ADJUNTOS -->
@@ -3405,6 +3409,8 @@ if (isset($_POST['action'])) {
             }
         } elseif ($status == "actividad") {
             $valorStatus = $tituloMC;
+        } elseif ($status == "rango_fecha") {
+            $valorStatus = "$valorStatus";
         } else {
             if ($valorStatus == "1") {
                 $valorStatus = "0";
@@ -3414,12 +3420,13 @@ if (isset($_POST['action'])) {
         }
 
         $query = "UPDATE t_mc 
-        set $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado 
+        SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado 
         WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
             echo 0;
+            echo $idMC . $status . $valorStatus . $tituloMC . $fechaFinalizado;
         }
     }
 }

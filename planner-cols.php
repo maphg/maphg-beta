@@ -60,8 +60,8 @@
     <!-- Inputs Temporales -->
     <input type="hidden" id="idDestinoSeleccionado">
 
-    <div class="flex flex-col justify-evenly items-center w-full">
-        <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4">
+    <div class="flex flex-col justify-evenly items-center w-full h-screen ítems-center">
+        <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4 flex items-center">
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">00</p>
@@ -133,18 +133,18 @@
             </div>
 
             <!-- Inicio Columna -->
-            <div id="columnasSeccionesZIL"></div>
-            <div id="columnasSeccionesZIE"></div>
-            <div id="columnasSeccionesAUTO"></div>
-            <div id="columnasSeccionesDEC"></div>
-            <div id="columnasSeccionesDEP"></div>
-            <div id="columnasSeccionesOMA"></div>
-            <div id="columnasSeccionesZHA"></div>
-            <div id="columnasSeccionesZHC"></div>
-            <div id="columnasSeccionesZHH"></div>
-            <div id="columnasSeccionesZHP"></div>
-            <div id="columnasSeccionesZIA"></div>
-            <div id="columnasSeccionesZIC"></div>
+            <div id="columnasSeccionesZIL" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZIE" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesAUTO" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesDEC" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesDEP" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesOMA" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZHA" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZHC" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZHH" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZHP" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZIA" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZIC" class="h-screen flex items-center"></div>
         </div>
     </div>
 
@@ -863,7 +863,7 @@
                 <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60" autocomplete="off">
                 <div class="flex w-full items-center justify-center">
 
-                    <div class="w-1/2 flex flex-col pr-4" onclick="datePicker('datefilter')">
+                    <div class="w-1/2 flex flex-col pr-4">
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalizacion:</h1>
                         <input id="inputRangoFechaMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
                     </div>
@@ -897,7 +897,6 @@
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> -->
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
@@ -906,6 +905,7 @@
     <script src="js/calendarioBotones.js"></script>
     <script src="js/plannerBetaJS.js"></script>
     <script src="js/jPages.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- Librerias -->
 
 </body>

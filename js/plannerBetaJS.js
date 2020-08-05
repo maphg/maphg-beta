@@ -46,10 +46,13 @@ function obtenerDatosUsuario(idDestino) {
     obtenerDatosUsuario(idDestino);
 })();
 
+function rangoFecha(idMC, fecha) {
+    let str = fecha.split('-');
+    console.log(fecha, str, str[0], str[1]);
 
-// Función para Input Fechas.
-function datePicker(name) {
-    $('input[name="' + name + '"]').daterangepicker({
+    $('#fecha' + idMC).daterangepicker({
+        startDate: str[0],
+        endDate: str[1],
         autoUpdateInput: false,
         showWeekNumbers: true,
         locale: {
@@ -63,13 +66,49 @@ function datePicker(name) {
             monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
         }
     });
-    $('input[name="' + name + '"]').on('apply.daterangepicker', function (ev, picker) {
-        $(this).val(picker.startDate.format('DD/MM/YY') + ' - ' + picker.endDate.format('DD/MM/YY'));
+    $('#fecha' + idMC).on('apply.daterangepicker', function (ev, picker) {
+        let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+        agregarFecha(idMC, rangoFecha);
+        console.log(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
     });
-    $('input[name="' + name + '"]').on('cancel.daterangepicker', function (ev, picker) {
+    $('#fecha' + idMC).on('cancel.daterangepicker', function (ev, picker) {
+        console.log(picker);
         $(this).val('');
     });
+
+
+
 }
+
+// Función para Input Fechas.
+$(function () {
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: 'Cancelar',
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }
+    });
+    $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+        console.log(picker);
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+    });
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+        console.log(picker);
+        $(this).val('');
+    });
+});
+
+
 
 
 // Función para el calendario de Secciones.
@@ -94,73 +133,95 @@ function calendarioSecciones() {
     document.getElementById('mes').innerHTML = mes;
     document.getElementById('dia').innerHTML = dia;
 
+    // Restable Clases en los Botones.
+    document.getElementById('btn-zil').classList.remove('btn-activo');
+    document.getElementById('btn-auto').classList.remove('btn-activo');
+    document.getElementById('btn-dep').classList.remove('btn-activo');
+    document.getElementById('btn-zia').classList.remove('btn-activo');
+    document.getElementById('btn-zhp').classList.remove('btn-activo');
+    document.getElementById('btn-zic').classList.remove('btn-activo');
+    document.getElementById('btn-dec').classList.remove('btn-activo');
+    document.getElementById('btn-zie').classList.remove('btn-activo');
+    document.getElementById('btn-zhc').classList.remove('btn-activo');
+    document.getElementById('btn-zha').classList.remove('btn-activo');
+    document.getElementById('colzia').classList.add('hidden');
+    document.getElementById('colzhp').classList.add('hidden');
+    document.getElementById('coldep').classList.add('hidden');
+    document.getElementById('colzic').classList.add('hidden');
+    document.getElementById('coldec').classList.add('hidden');
+    document.getElementById('colzie').classList.add('hidden');
+    document.getElementById('colzhc').classList.add('hidden');
+    document.getElementById('colzha').classList.add('hidden');
+    document.getElementById('colzil').classList.add('hidden');
+    document.getElementById('colauto').classList.add('hidden');
+
 
 
     switch (hoydia) {
         case 'lunes':
-            document.getElementById('btn-zia').classList.toggle('btn-activo');
-            document.getElementById('btn-zhp').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
+            document.getElementById('btn-zia').classList.add('btn-activo');
+            document.getElementById('btn-zhp').classList.add('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
             document.getElementById('label-lunes').classList.add('text-gray-700');
-            document.getElementById('colzia').classList.toggle('hidden');
-            document.getElementById('colzhp').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
+            document.getElementById('colzia').classList.remove('hidden');
+            document.getElementById('colzhp').classList.remove('hidden');
+            document.getElementById('coldep').classList.remove('hidden');
             break;
         case 'martes':
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
-            document.getElementById('btn-zic').classList.toggle('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
+            document.getElementById('btn-zic').classList.add('btn-activo');
             document.getElementById('label-martes').classList.add('text-gray-700');
-            document.getElementById('colzic').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
+            document.getElementById('colzic').classList.remove('hidden');
+            document.getElementById('coldep').classList.remove('hidden');
             break;
         case 'miercoles':
-            document.getElementById('btn-dec').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
-            document.getElementById('btn-zie').classList.toggle('btn-activo');
+            document.getElementById('btn-dec').classList.add('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
+            document.getElementById('btn-zie').classList.add('btn-activo');
             document.getElementById('label-miercoles').classList.add('text-gray-700');
-            document.getElementById('coldec').classList.toggle('hidden')
-            document.getElementById('coldep').classList.toggle('hidden');
-            document.getElementById('colzie').classList.toggle('hidden');
+            document.getElementById('coldec').classList.remove('hidden')
+            document.getElementById('coldep').classList.remove('hidden');
+            document.getElementById('colzie').classList.remove('hidden');
             break;
         case 'jueves':
-            document.getElementById('btn-zhc').classList.toggle('btn-activo');
-            document.getElementById('btn-zha').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
+            document.getElementById('btn-zhc').classList.add('btn-activo');
+            document.getElementById('btn-zha').classList.add('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
             document.getElementById('label-jueves').classList.add('text-gray-700');
-            document.getElementById('colzhc').classList.toggle('hidden');
-            document.getElementById('colzha').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
+            document.getElementById('colzhc').classList.remove('hidden');
+            document.getElementById('colzha').classList.remove('hidden');
+            document.getElementById('coldep').classList.remove('hidden');
             break;
         case 'viernes':
-            document.getElementById('btn-zil').classList.toggle('btn-activo');
-            document.getElementById('btn-auto').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
+            document.getElementById('btn-zil').classList.add('btn-activo');
+            document.getElementById('btn-auto').classList.add('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
             document.getElementById('label-viernes').classList.add('text-gray-700');
-            document.getElementById('colzil').classList.toggle('hidden');
-            document.getElementById('colauto').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
+            document.getElementById('colzil').classList.remove('hidden');
+            document.getElementById('colauto').classList.remove('hidden');
+            document.getElementById('coldep').classList.remove('hidden');
             break;
         default:
-            document.getElementById('btn-zil').classList.toggle('btn-activo');
-            document.getElementById('btn-auto').classList.toggle('btn-activo');
-            document.getElementById('btn-dep').classList.toggle('btn-activo');
-            document.getElementById('btn-zia').classList.toggle('btn-activo');
-            document.getElementById('btn-zhp').classList.toggle('btn-activo');
-            document.getElementById('btn-zic').classList.toggle('btn-activo');
-            document.getElementById('btn-dec').classList.toggle('btn-activo');
-            document.getElementById('btn-zie').classList.toggle('btn-activo');
-            document.getElementById('btn-zhc').classList.toggle('btn-activo');
-            document.getElementById('btn-zha').classList.toggle('btn-activo');
-            document.getElementById('colzia').classList.toggle('hidden');
-            document.getElementById('colzhp').classList.toggle('hidden');
-            document.getElementById('coldep').classList.toggle('hidden');
-            document.getElementById('colzic').classList.toggle('hidden');
-            document.getElementById('coldec').classList.toggle('hidden');
-            document.getElementById('colzie').classList.toggle('hidden');
-            document.getElementById('colzhc').classList.toggle('hidden');
-            document.getElementById('colzha').classList.toggle('hidden');
-            document.getElementById('colzil').classList.toggle('hidden');
-            document.getElementById('colauto').classList.toggle('hidden');
+            document.getElementById('btn-zil').classList.add('btn-activo');
+            document.getElementById('btn-auto').classList.add('btn-activo');
+            document.getElementById('btn-dep').classList.add('btn-activo');
+            document.getElementById('btn-zia').classList.add('btn-activo');
+            document.getElementById('btn-zhp').classList.add('btn-activo');
+            document.getElementById('btn-zic').classList.add('btn-activo');
+            document.getElementById('btn-dec').classList.add('btn-activo');
+            document.getElementById('btn-zie').classList.add('btn-activo');
+            document.getElementById('btn-zhc').classList.add('btn-activo');
+            document.getElementById('btn-zha').classList.add('btn-activo');
+            document.getElementById('colzia').classList.remove('hidden');
+            document.getElementById('colzhp').classList.remove('hidden');
+            document.getElementById('coldep').classList.remove('hidden');
+            document.getElementById('colzic').classList.remove('hidden');
+            document.getElementById('coldec').classList.remove('hidden');
+            document.getElementById('colzie').classList.remove('hidden');
+            document.getElementById('colzhc').classList.remove('hidden');
+            document.getElementById('colzha').classList.remove('hidden');
+            document.getElementById('colzil').classList.remove('hidden');
+            document.getElementById('colauto').classList.remove('hidden');
             break;
     }
 }
@@ -301,7 +362,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
             $('#exportarMisPendientesPDF').attr('onclick', 'exportarPendientes(' + data.exportarMisPendientesPDF + ')');
             $("#dataModalOpciones").html(data.exportarSubseccion);
 
-            console.log(data);
+            // console.log(data);
         }
     });
 }
@@ -474,7 +535,7 @@ function paginacionEquipos() {
         next: 'siguiente',
         animation: false
     });
-    console.log('Paginación');
+    // console.log('Paginación');
 
     $(".holder>a").addClass('-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150');
 
@@ -487,7 +548,7 @@ function obtenerMCN(idEquipo) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idSubseccion = localStorage.getItem('idSubseccion');
-    console.log(idEquipo, idUsuario, idDestino, idSubseccion);
+    // console.log(idEquipo, idUsuario, idDestino, idSubseccion);
 
     document.getElementById("modalMCN").classList.add('open');
     document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -649,7 +710,7 @@ function obtenerMCF(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("dataMCF").innerHTML = data.dataMCF;
             estiloSeccionModal('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
@@ -680,7 +741,7 @@ function datosModalAgregarMC() {
         dataType: "JSON",
         success: function (data) {
             let idUltimoMC = parseInt(data.idUltimoMC) + 1;
-            console.log(data);
+            // console.log(data);
             document.getElementById("btnAgregarMC").setAttribute('onclick', 'agregarMC(' + idUltimoMC + ');');
             document.getElementById("responsableMC").innerHTML = data.dataUsuarios;
             document.getElementById("nombreEquipoMC").innerHTML = data.nombreEquipo;
@@ -699,7 +760,7 @@ function agregarMC(idMC) {
     let rangoFechaMC = document.getElementById("inputRangoFechaMC").value;
     let responsableMC = document.getElementById("responsableMC").value;
     let comentarioMC = document.getElementById("comentarioMC").value;
-    console.log(idUsuario, idDestino, idEquipo, idSeccion, idSubseccion, actividadMC, rangoFechaMC, responsableMC, comentarioMC);
+    // console.log(idUsuario, idDestino, idEquipo, idSeccion, idSubseccion, actividadMC, rangoFechaMC, responsableMC, comentarioMC);
 
     if (actividadMC != "" && rangoFechaMC != "" && responsableMC != "") {
         const action = "agregarMC";
@@ -720,7 +781,7 @@ function agregarMC(idMC) {
             },
             // dataType: "JSON",
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 document.getElementById("inputComentario").value = comentarioMC;
                 if (data >= 1) {
                     agregarComentarioMC(idMC);
@@ -728,16 +789,17 @@ function agregarMC(idMC) {
                     obtenerDatosUsuario(idDestino);
                     obtenerMCN(idEquipo);
                     llamarFuncionX('obtenerEquipos');
+                    datosModalAgregarMC();
                     document.getElementById("inputActividadMC").value = '';
                     document.getElementById("comentarioMC").value = '';
-                    document.getElementById("modalAgregarMC").classList.remove('open');
-                    document.getElementById("modalComentarios").classList.remove('open');
-                    datosModalAgregarMC();
+                    setTimeout(function () {
+                        document.getElementById("modalAgregarMC").classList.remove('open');
+                        document.getElementById("modalComentarios").classList.remove('open');
+                    }, 1200);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'question', 1500);
                     datosModalAgregarMC();
                 }
-                document.getElementById("modalComentarios").classList.remove("open");
             }
         });
     } else {
@@ -813,9 +875,9 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
 
 
 // Agregar Fecha MC.
-function actualizarFechaMC(idMC) {
-    let fechaMC = document.getElementById("fechaMC").value;
-    console.log(fechaMC);
+function agregarFecha(idMC, rangoFecha) {
+    console.log('Hey', idMC, rangoFecha);
+    actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
 }
 
 // Funcion para Obtener Adjuntos.
