@@ -47,11 +47,9 @@ function obtenerDatosUsuario(idDestino) {
 })();
 
 
-
 // Función para Input Fechas.
-$(function () {
-
-    $('input[name="datefilter"]').daterangepicker({
+function datePicker(name) {
+    $('input[name="' + name + '"]').daterangepicker({
         autoUpdateInput: false,
         showWeekNumbers: true,
         locale: {
@@ -65,16 +63,13 @@ $(function () {
             monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
         }
     });
-
-    $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
+    $('input[name="' + name + '"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('DD/MM/YY') + ' - ' + picker.endDate.format('DD/MM/YY'));
     });
-
-    $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
+    $('input[name="' + name + '"]').on('cancel.daterangepicker', function (ev, picker) {
         $(this).val('');
     });
-
-});
+}
 
 
 // Función para el calendario de Secciones.
@@ -729,10 +724,18 @@ function agregarMC(idMC) {
                 document.getElementById("inputComentario").value = comentarioMC;
                 if (data >= 1) {
                     agregarComentarioMC(idMC);
-                    document.getElementById("modalComentarios").classList.remove('open');
                     alertaImg('MC agregado', '', 'success', 1500);
+                    obtenerDatosUsuario(idDestino);
+                    obtenerMCN(idEquipo);
+                    llamarFuncionX('obtenerEquipos');
+                    document.getElementById("inputActividadMC").value = '';
+                    document.getElementById("comentarioMC").value = '';
+                    document.getElementById("modalAgregarMC").classList.remove('open');
+                    document.getElementById("modalComentarios").classList.remove('open');
+                    datosModalAgregarMC();
                 } else {
                     alertaImg('Intente de Nuevo', '', 'question', 1500);
+                    datosModalAgregarMC();
                 }
                 document.getElementById("modalComentarios").classList.remove("open");
             }
@@ -808,6 +811,12 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
     });
 }
 
+
+// Agregar Fecha MC.
+function actualizarFechaMC(idMC) {
+    let fechaMC = document.getElementById("fechaMC").value;
+    console.log(fechaMC);
+}
 
 // Funcion para Obtener Adjuntos.
 function obtenerAdjuntosMC(idMC) {

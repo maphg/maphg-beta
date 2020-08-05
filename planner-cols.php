@@ -862,7 +862,8 @@
                 <h1 class="self-start mb-2">Descripción:</h1>
                 <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60" autocomplete="off">
                 <div class="flex w-full items-center justify-center">
-                    <div class="w-1/2 flex flex-col pr-4">
+
+                    <div class="w-1/2 flex flex-col pr-4" onclick="datePicker('datefilter')">
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalizacion:</h1>
                         <input id="inputRangoFechaMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
                     </div>
@@ -898,8 +899,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> -->
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
     <script src="js/sweetalert2@9.js"></script>

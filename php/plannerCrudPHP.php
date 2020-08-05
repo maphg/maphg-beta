@@ -2017,13 +2017,15 @@ if (isset($_POST['action'])) {
 
         // Tareas Generales.
         $queryTGF = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'F' AND 
-        id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestino";
+        id_seccion = $idSeccion AND id_subseccion = $idSubseccion 
+        AND (t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino";
         if ($resultTGF = mysqli_query($conn_2020, $queryTGF)) {
             $totalTGF = mysqli_num_rows($resultTGF);
         }
 
         $queryTGN = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'N' AND 
-        id_subseccion = $idSubseccion AND id_seccion = $idSeccion $filtroDestino";
+        id_subseccion = $idSubseccion AND id_seccion = $idSeccion 
+        AND (t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino";
         if ($resultTGN = mysqli_query($conn_2020, $queryTGN)) {
             $totalTGN = mysqli_num_rows($resultTGN);
         }
@@ -2389,20 +2391,20 @@ if (isset($_POST['action'])) {
 
 
     // Agregar MC.
-    if($action == "agregarMC"){
-        $actividadMC = $_POST['actividadMC']; 
+    if ($action == "agregarMC") {
+        $actividadMC = $_POST['actividadMC'];
         $idMC = $_POST['idMC'];
-        $idEquipo = $_POST['idEquipo']; 
+        $idEquipo = $_POST['idEquipo'];
         $responsableMC = $_POST['responsableMC'];
         $idSeccion = $_POST['idSeccion'];
-        $idSubseccion = $_POST['idSubseccion']; 
+        $idSubseccion = $_POST['idSubseccion'];
         $rangoFechaMC = $_POST['rangoFechaMC'];
 
         $query = "INSERT INTO t_mc(id, id_equipo, actividad, status, creado_por, responsable, fecha_creacion, ultima_modificacion, id_destino, id_seccion, id_subseccion, rango_fecha) 
         VALUES($idMC, $idEquipo, '$actividadMC', 'N', $idUsuario, $responsableMC, '$fechaActual', '$fechaActual', $idDestino, $idSeccion, $idSubseccion, '$rangoFechaMC')";
-        if($result = mysqli_query($conn_2020, $query)){
+        if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
-        }else{
+        } else {
             echo 0;
         }
     }
@@ -2465,11 +2467,12 @@ if (isset($_POST['action'])) {
                 t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.rango_fecha 
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino ORDER BY t_mc.id DESC
+                WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion 
+                AND(t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino ORDER BY t_mc.id DESC
             ";
         } else {
             $queryMCF = "
@@ -2478,7 +2481,7 @@ if (isset($_POST['action'])) {
                 t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.rango_fecha 
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -2493,8 +2496,18 @@ if (isset($_POST['action'])) {
                 $responsable = $row['responsable'];
                 $actividad = $row['actividad'];
                 $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
-                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('m-y');
-                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-y');
+                $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('d/m/y');
+                $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('d/m/y');
+                $fechaRango = $row['rango_fecha'];
+                $fechaMC = "";
+
+                // Si no Tiene fecha Rango toma la fecha de creación.
+                if ($fechaCreacion == "") {
+                    $fechaMC = $fechaRango;
+                } else {
+                    $fechaMC = "$fechaCreacion - $fechaCreacion";
+                }
+
 
                 // Status
                 $statusUrgente = $row['status_urgente'];
@@ -2679,8 +2692,8 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!-- INICIO & FIN-->
-                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" type=\"text\" name=\"datefilter\" value=\"$fechaCreacion  $fechaRealizado\" />
+                        <div onclick=\"datePicker('datefilter$idMC');\" class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
+                                <input id=\"inputRangoFechaMC$idMC\" class=\"appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4\" type=\"text\" name=\"datefilter$idMC\" value=\"$fechaMC\">
                         </div>
                         <!--  ADJUNTOS -->
                         <div onclick=\"obtenerAdjuntosMC($idMC);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
@@ -2719,7 +2732,7 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
-    // Se obtienen todos los MCN - Pendientes por Equipo.
+    // Se obtienen todos los MCN - Pendientes por Equipo y TG.
     if ($action == "obtenerMCN") {
         $idEquipo = $_POST['idEquipo'];
         $idSubseccion = $_POST['idSubseccion'];
@@ -2776,11 +2789,11 @@ if (isset($_POST['action'])) {
                 t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                t_mc.id, t_mc.responsable, t_mc.actividad,t_mc.rango_fecha, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion $filtroDestino ORDER BY t_mc.id DESC
+                WHERE t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion AND(t_mc.id_equipo = 0 OR t_mc.id_equipo='') $filtroDestino ORDER BY t_mc.id DESC
             ";
         } else {
             $query = "
@@ -2789,7 +2802,7 @@ if (isset($_POST['action'])) {
                 t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
-                t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
+                t_mc.id, t_mc.responsable, t_mc.actividad,t_mc.rango_fecha, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido 
                 FROM t_mc 
                 INNER JOIN t_users ON t_mc.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -2809,6 +2822,16 @@ if (isset($_POST['action'])) {
                 $creadoPor = strtok($row['nombre'], ' ') . " " . strtok($row['apellido'], ' ');
                 $fechaCreacion = (new DateTime($row['fecha_creacion']))->format('m-y');
                 $fechaRealizado = (new DateTime($row['fecha_realizado']))->format('m-y');
+                $fechaRango = $row['rango_fecha'];
+                $fechaMC = "";
+
+                // Si no Tiene fecha Rango toma la fecha de creación.
+                if ($fechaCreacion == "") {
+                    $fechaMC = $fechaRango;
+                } else {
+                    $fechaMC = "$fechaCreacion - $fechaCreacion";
+                }
+
 
                 // Status
                 $statusUrgente = $row['status_urgente'];
@@ -2994,7 +3017,7 @@ if (isset($_POST['action'])) {
 
                         <!-- INICIO & FIN-->
                         <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaCreacion  $fechaRealizado\">
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaMC\">
                         </div>
 
                         <!--  ADJUNTOS -->
