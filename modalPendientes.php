@@ -63,7 +63,7 @@ $filtroUsuario = "";
 if ($tipoPendiente == "MCU") {
     $filtroUsuario = "AND t_mc.responsable = $idUsuario";
 } elseif ($tipoPendiente == "MCU0") {
-    $filtroUsuario = "AND t_mc.responsable = 0";
+    $filtroUsuario = "AND (t_mc.responsable = 0 OR t_mc.responsable = '')";
 } elseif ($tipoPendiente == "MCS") {
     $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
 } else {
