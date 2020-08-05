@@ -60,7 +60,7 @@
     <!-- Inputs Temporales -->
     <input type="hidden" id="idDestinoSeleccionado">
 
-    <div class="flex flex-col justify-evenly items-center w-full h-screen ítems-center">
+    <div class="flex flex-col justify-evenly items-center w-full h-screen">
         <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4 flex items-center">
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
@@ -837,7 +837,7 @@
 
     <!-- MODAL EDITAR TITULO   -->
     <div id="modalFechaMC" class="modal">
-        <div class="modal-window rounded-md py-5 px-5" style="width: 300px;">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalFechaMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
