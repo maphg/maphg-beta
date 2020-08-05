@@ -46,44 +46,10 @@ function obtenerDatosUsuario(idDestino) {
     obtenerDatosUsuario(idDestino);
 })();
 
-function rangoFecha(idMC, fecha) {
-    let str = fecha.split('-');
-    console.log(fecha, str, str[0], str[1]);
 
-    $('#fecha' + idMC).daterangepicker({
-        startDate: str[0],
-        endDate: str[1],
-        autoUpdateInput: false,
-        showWeekNumbers: true,
-        locale: {
-            cancelLabel: 'Cancelar',
-            applyLabel: "Aplicar",
-            fromLabel: "De",
-            toLabel: "A",
-            customRangeLabel: "Personalizado",
-            weekLabel: "S",
-            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-        }
-    });
-    $('#fecha' + idMC).on('apply.daterangepicker', function (ev, picker) {
-        let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
-        agregarFecha(idMC, rangoFecha);
-        console.log(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-
-        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-    });
-    $('#fecha' + idMC).on('cancel.daterangepicker', function (ev, picker) {
-        console.log(picker);
-        $(this).val('');
-    });
-
-
-
-}
-
-// Función para Input Fechas.
+// Función para Input Fechas para Agregar MC.
 $(function () {
+    console.log('OK');
     $('input[name="datefilter"]').daterangepicker({
         autoUpdateInput: false,
         showWeekNumbers: true,
@@ -99,7 +65,6 @@ $(function () {
         }
     });
     $('input[name="datefilter"]').on('apply.daterangepicker', function (ev, picker) {
-        console.log(picker);
         $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
     });
     $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
@@ -109,6 +74,35 @@ $(function () {
 });
 
 
+// Función para Input Fechas MC.
+$(function () {
+    $('input[name="fechaMC"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: 'Cancelar',
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }
+    });
+    $('input[name="fechaMC"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+
+        // Actualiza fecha MC cuando se Aplica el rango.
+        let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+        let idMC = localStorage.getItem('idMC');
+        actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
+    });
+    $('input[name="fechaMC"]').on('cancel.daterangepicker', function (ev, picker) {
+        console.log(picker);
+        $(this).val('');
+    });
+});
 
 
 // Función para el calendario de Secciones.
@@ -666,7 +660,6 @@ function actualizarStatusMC(idMC, status, valorStatus) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (data == 1) {
 
                 alertaImg('Información Actualizada', '', 'success', 2000);
@@ -681,6 +674,8 @@ function actualizarStatusMC(idMC, status, valorStatus) {
                     document.getElementById("modalEditarTituloMC").classList.remove('open');
                     document.getElementById("modalStatus").classList.remove('open');
                 }
+                // Cierra el Modal de Fecha MC.
+                document.getElementById("modalFechaMC").classList.remove('open');
             } else {
                 alertaImg('Intente de Nuevo', '', 'question', 2000);
             }
@@ -875,9 +870,10 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
 
 
 // Agregar Fecha MC.
-function agregarFecha(idMC, rangoFecha) {
-    console.log('Hey', idMC, rangoFecha);
-    actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
+function obtenerFechaMC(idMC, rangoFecha) {
+    document.getElementById("modalFechaMC").classList.add('open');
+    document.getElementById("fechaMC").value = rangoFecha;
+    localStorage.setItem('idMC', idMC);
 }
 
 // Funcion para Obtener Adjuntos.

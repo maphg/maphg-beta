@@ -2693,7 +2693,7 @@ if (isset($_POST['action'])) {
 
                         <!-- INICIO & FIN-->
                         <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"datefilter\" value=\"$fechaMC\" disabled>
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"\" value=\"$fechaMC\" disabled>
                         </div>
 
                         <!--  ADJUNTOS -->
@@ -3019,9 +3019,9 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!-- INICIO & FIN-->
-                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
-                            <input id=\"fecha$idMC\" onclick=\"rangoFecha($idMC, '$fechaMC');\"
-                            id=\"fecha$idMC\" class=\"appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight mb-4\" type=\"text\" name=\"fecha$idMC\" value=\"$fechaMC\">
+                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md self-start\">
+                            <input id=\"fecha$idMC\" onclick=\"obtenerFechaMC($idMC, '$fechaMC');\"
+                            id=\"fecha$idMC\" class=\"appearance-none block w-full text-gray-700 rounded py-3 px-4 leading-tight mb-4\" type=\"text\" name=\"fecha$idMC\" value=\"$fechaMC\">
                         </div>
 
                         <!--  ADJUNTOS -->

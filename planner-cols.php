@@ -836,6 +836,22 @@
 
 
     <!-- MODAL EDITAR TITULO   -->
+    <div id="modalFechaMC" class="modal">
+        <div class="modal-window rounded-md py-5 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="---">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR TITULO   -->
     <div id="modalAgregarMC" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 800px;">
             <!-- BOTON CERRARL -->
