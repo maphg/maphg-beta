@@ -116,7 +116,7 @@ if ($action == 3) {
         $diaActual_inicio = date("Y-m-d 00:00:00", strtotime($fechaActual . "- $i days"));
         $diaActual_fin = date("Y-m-d 23:59:59", strtotime($fechaActual . "- $i days"));
         $diaActual = date("Y-m-d", strtotime($fechaActual . "- $i days"));
-        // echo " -> $diaActual_inicio - $diaActual_fin - $diaActual <br>";
+        echo " -> $diaActual_inicio - $diaActual_fin - $diaActual <br>";
 
         $queryPendientes = "SELECT count(id) 
         FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 
@@ -197,11 +197,12 @@ if ($action == 4) {
     echo json_encode($dataArray);
 }
 
-if($action == 5){
+if ($action == 5) {
     $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
-    if($result = mysqli_query($conn_2020, $query)){
+    if ($result = mysqli_query($conn_2020, $query)) {
         foreach ($result as $value) {
             $seccion = $value['seccion'];
         }
+        echo $seccion;
     }
 }

@@ -1,4 +1,5 @@
 function cargarTareasDestino(pagina, destino) {
+    localStorage.setItem("idDestino", destino);
     if (pagina == 1) {
         var url = "../php/plannerPHP.php";
     } else {
@@ -5346,7 +5347,7 @@ function obtenerStatusPlanaccion(idPlanAccion) {
             action: action,
             idPlanAccion: idPlanAccion
         },
-        dataType:'json',
+        dataType: 'json',
         success: function (data) {
             console.log(data.dataStatus);
             document.getElementById("dataStatusDepartamento").innerHTML = data.dataStatus;
@@ -5355,7 +5356,7 @@ function obtenerStatusPlanaccion(idPlanAccion) {
 }
 
 
-function eliminarStatusPlanAccion (idPlanAccion, status) {
+function eliminarStatusPlanAccion(idPlanAccion, status) {
     console.log(idPlanAccion);
     const action = "eliminarStatusPlanAccion";
     $.ajax({
@@ -5603,7 +5604,7 @@ function capturarCodigo(idMC, tipoCodigo) {
         success: function (datos) {
             // console.log(datos);
             if (datos == "ok") {
-                alertInformacionActualiza('Codigo Actualizado: '+codigo);
+                alertInformacionActualiza('Codigo Actualizado: ' + codigo);
             } else {
                 alertInformacionVacia();
             }

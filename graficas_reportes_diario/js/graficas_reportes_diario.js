@@ -1,8 +1,8 @@
 // Variables Globales:
-// let idDestino = localStorage.getItem('idDestino');
-// let idSeccion = localStorage.getItem('idSeccion');
-let idDestino = 1;
-let idSeccion = 10;
+let idDestino = localStorage.getItem('idDestino');
+let idSeccion = localStorage.getItem('idSeccion');
+// let idDestino = 1;
+// let idSeccion = 11;
 
 (() => {
   const action = "5";
@@ -18,8 +18,10 @@ let idSeccion = 10;
     // dataType: "json",
     success: function (data) {
       console.log(data);
-      // document.getElementById("dataSeccion").classList.add(data);
-      // document.getElementById("dataNombreSeccion").innerHTML = data;
+      let estiloSeccion = data.toLowerCase() + '-logo';
+      document.getElementById("dataSeccion").classList.remove('zil-logo', 'zie-logo', 'auto-logo', 'dec-logo', 'dep-logo', 'zha-logo', 'zhc-logo', 'zhp-logo', 'zia-logo', 'zic-logo');
+      document.getElementById("dataSeccion").classList.add(estiloSeccion);
+      document.getElementById("dataNombreSeccion").innerHTML = data;
     }
   });
 })();
@@ -198,7 +200,6 @@ function graficaUltimaSemana() {
   // Add data
   graficoUltimaSemana.dataSource.url = "php/graficas_reportes_diario_crud.php?action=3&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
 
-
   // Create axes
   var ejeFechas = graficoUltimaSemana.xAxes.push(new am4charts.DateAxis());
   ejeFechas.renderer.grid.template.location = 0;
@@ -289,36 +290,37 @@ function graficaUltimaSemana() {
 
 
 function graficaSubsecciones() {
-  var idSeccion = localStorage.getItem('idSeccion');
+
+  // Themes begin
   am4core.useTheme(am4themes_animated);
   // Themes end
 
   // Create chart instance
-  var chart = am4core.create("subsecciones", am4charts.XYChart);
+  var graficosubsecciones = am4core.create("subsecciones", am4charts.XYChart);
 
   // Add percent sign to all numbers
-  chart.numberFormatter.numberFormat = "#.#";
+  graficosubsecciones.numberFormatter.numberFormat = "#.#";
 
 
 
   // Add data
-  chart.dataSource.url = "php/graficas_reportes_diario_crud.php?action=1&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  graficosubsecciones.dataSource.url = "php/graficas_reportes_diario_crud.php?action=1&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
 
   // Create axes
-  var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+  var categoryAxis = graficosubsecciones.xAxes.push(new am4charts.CategoryAxis());
   categoryAxis.dataFields.category = "Subseccion";
   categoryAxis.renderer.grid.template.location = 0;
   categoryAxis.renderer.minGridDistance = 30;
   categoryAxis.renderer.grid.template.disabled = true;
 
 
-  var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+  var valueAxis = graficosubsecciones.yAxes.push(new am4charts.ValueAxis());
   valueAxis.renderer.grid.template.disabled = true;
   valueAxis.renderer.labels.template.disabled = true;
 
 
   // Create series
-  var series = chart.series.push(new am4charts.ColumnSeries());
+  var series = graficosubsecciones.series.push(new am4charts.ColumnSeries());
   series.dataFields.valueY = "Solucionado";
   series.dataFields.categoryX = "Subseccion";
   series.clustered = false;
@@ -339,7 +341,7 @@ function graficaSubsecciones() {
 
 
 
-  var series2 = chart.series.push(new am4charts.ColumnSeries());
+  var series2 = graficosubsecciones.series.push(new am4charts.ColumnSeries());
   series2.dataFields.valueY = "Pendientes";
   series2.dataFields.categoryX = "Subseccion";
   series2.clustered = false;
@@ -356,101 +358,20 @@ function graficaSubsecciones() {
   labelBullet2.label.fill = am4core.color("#EA4C89");
 
   var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-  bullet2.circle.stroke = am4core.color("#fff");
+  bulle2t.circle.stroke = am4core.color("#fff");
   bullet2.circle.strokeWidth = 1;
 
-  chart.cursor = new am4charts.XYCursor();
-  chart.cursor.lineX.disabled = true;
-  chart.cursor.lineY.disabled = true;
+  graficosubsecciones.cursor = new am4charts.XYCursor();
+  graficosubsecciones.cursor.lineX.disabled = true;
+  graficosubsecciones.cursor.lineY.disabled = true;
 
 
-  chart.padding(10, 10, 10, 10);
-}
-
-
-function graficaResponsables() {
-
-  // Themes begin
-  am4core.useTheme(am4themes_animated);
-  // Themes end
-
-  // Create chart instance
-  var graficoResponsables = am4core.create("responsables", am4charts.XYChart);
-
-  // Add percent sign to all numbers
-  graficoResponsables.numberFormatter.numberFormat = "#.#";
-
-
-
-  // Add data
-  graficoResponsables.dataSource.url = "php/graficas_reportes_diario_crud.php?action=2&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
-
-  // Create axes
-  var categoryAxis = graficoResponsables.xAxes.push(new am4charts.CategoryAxis());
-  categoryAxis.dataFields.category = "Responsable";
-  categoryAxis.renderer.grid.template.location = 0;
-  categoryAxis.renderer.minGridDistance = 30;
-  categoryAxis.renderer.grid.template.disabled = true;
-
-
-  var valueAxis = graficoResponsables.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.renderer.grid.template.disabled = true;
-  valueAxis.renderer.labels.template.disabled = true;
-
-
-  // Create series
-  var series = graficoResponsables.series.push(new am4charts.ColumnSeries());
-  series.dataFields.valueY = "Solucionado";
-  series.dataFields.categoryX = "Responsable";
-  series.clustered = false;
-  //series.tooltipText = "Solucionado en {categoryX}: [bold]{valueY}";
-  series.fill = am4core.color("#68D391");
-  series.stroke = am4core.color("#68D391");
-  series.fillOpacity = 0.2;
-  series.strokeWidth = 2;
-
-  var bullet = series.bullets.push(new am4charts.CircleBullet());
-  bullet.circle.stroke = am4core.color("#fff");
-  bullet.circle.strokeWidth = 1;
-
-  var labelBullet = series.bullets.push(new am4charts.LabelBullet());
-  labelBullet.label.text = "[bold]{valueY}[/]";
-  labelBullet.label.dy = -20;
-  labelBullet.label.fill = am4core.color("#68D391");
-
-
-
-  var series2 = graficoResponsables.series.push(new am4charts.ColumnSeries());
-  series2.dataFields.valueY = "Pendientes";
-  series2.dataFields.categoryX = "Responsable";
-  series2.clustered = false;
-  series2.columns.template.width = am4core.percent(50);
-  //series2.tooltipText = "Pendientes en {categoryX}: [bold]{valueY}";
-  series2.fill = am4core.color("#EA4C89");
-  series2.stroke = am4core.color("#EA4C89");
-  series2.fillOpacity = 0.2;
-  series2.strokeWidth = 2;
-
-  var labelBullet2 = series2.bullets.push(new am4charts.LabelBullet());
-  labelBullet2.label.text = "[bold]{valueY}[/]";
-  labelBullet2.label.dy = -20;
-  labelBullet2.label.fill = am4core.color("#EA4C89");
-
-  var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-  bullet2.circle.stroke = am4core.color("#fff");
-  bullet2.circle.strokeWidth = 1;
-
-  graficoResponsables.cursor = new am4charts.XYCursor();
-  graficoResponsables.cursor.lineX.disabled = true;
-  graficoResponsables.cursor.lineY.disabled = true;
-
-
-  graficoResponsables.padding(10, 10, 10, 10);
+  graficosubsecciones.padding(10, 10, 10, 10);
 }
 
 
 // Inicializan las Graficas.
-graficaHistorico();
 graficaUltimaSemana();
+graficaHistorico();
 graficaSubsecciones();
 graficaResponsables();

@@ -122,7 +122,7 @@ if ($result) {
         $dataOpcionesSubsecciones .= "<a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">$subseccion</a>";
 
         $data .= "
-                <tr id=\"$idSubseccion\" class=\"modal hover:shadow-md cursor-pointer\">
+                <tr id=\"$idSubseccion\" class=\"hover:shadow-md cursor-pointer\">
                     <td class=\"px-2 py-3 font-semibold text-xs text-center text-gray-800\">
                         <h1>$subseccion</h1>
                     </td>
@@ -861,6 +861,11 @@ if ($result) {
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
                         <h1>Correctivo</h1>
+                    </div>
+                    <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <a href="http://localhost/maphg-beta/graficas_reportes_diario/">
+                            <h1>Reporte MC</h1>
+                        </a>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <h1>Preventivo</h1>

@@ -408,6 +408,7 @@ function detalleMPNP(idMPNP) {
 // Función para el modal de pendientes.
 
 function pendientesSubseccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+    localStorage.setItem("idSeccion", idSeccion);
     console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     if (tipoPendiente != "") {
         // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
