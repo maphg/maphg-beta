@@ -339,8 +339,6 @@ function graficaSubsecciones() {
   labelBullet.label.dy = -20;
   labelBullet.label.fill = am4core.color("#68D391");
 
-
-
   var series2 = graficosubsecciones.series.push(new am4charts.ColumnSeries());
   series2.dataFields.valueY = "Pendientes";
   series2.dataFields.categoryX = "Subseccion";
