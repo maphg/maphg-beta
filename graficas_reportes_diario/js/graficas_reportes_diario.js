@@ -1,6 +1,8 @@
 // Variables Globales:
-let idDestino = localStorage.getItem('idDestino');
-let idSeccion = localStorage.getItem('idSeccion');
+// let idDestino = localStorage.getItem('idDestino');
+// let idSeccion = localStorage.getItem('idSeccion');
+let idDestino = 1;
+let idSeccion = 10;
 
 (() => {
   const action = "5";
