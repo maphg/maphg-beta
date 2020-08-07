@@ -358,7 +358,7 @@ function graficaSubsecciones() {
   labelBullet2.label.fill = am4core.color("#EA4C89");
 
   var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
-  bulle2t.circle.stroke = am4core.color("#fff");
+  bullet2.circle.stroke = am4core.color("#fff");
   bullet2.circle.strokeWidth = 1;
 
   graficosubsecciones.cursor = new am4charts.XYCursor();
