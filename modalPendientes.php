@@ -863,7 +863,7 @@ if ($result) {
                         <h1>Correctivo</h1>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
-                        <a href="http://www.maphg.com/maphg-beta/graficas_reportes_diario/">
+                        <a href="http://www.maphg.com/beta/graficas_reportes_diario/">
                             <h1>Reporte MC</h1>
                         </a>
                     </div>
