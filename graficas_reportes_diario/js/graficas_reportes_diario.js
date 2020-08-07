@@ -16,8 +16,8 @@ let idSeccion = localStorage.getItem('idSeccion');
     // dataType: "json",
     success: function (data) {
       console.log(data);
-      document.getElementById("dataSeccion").classList.add(data);
-      document.getElementById("dataNombreSeccion").innerHTML = data;
+      // document.getElementById("dataSeccion").classList.add(data);
+      // document.getElementById("dataNombreSeccion").innerHTML = data;
     }
   });
 })();
