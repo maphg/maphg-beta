@@ -116,7 +116,7 @@ if ($action == 3) {
         $diaActual_inicio = date("Y-m-d 00:00:00", strtotime($fechaActual . "- $i days"));
         $diaActual_fin = date("Y-m-d 23:59:59", strtotime($fechaActual . "- $i days"));
         $diaActual = date("Y-m-d", strtotime($fechaActual . "- $i days"));
-        echo " -> $diaActual_inicio - $diaActual_fin - $diaActual <br>";
+        // echo " -> $diaActual_inicio - $diaActual_fin - $diaActual <br>";
 
         $queryPendientes = "SELECT count(id) 
         FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 

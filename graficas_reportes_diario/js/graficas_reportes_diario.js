@@ -235,13 +235,7 @@ function graficaUltimaSemana() {
     //series.legendSettings.valueText = "{valueY.close}";
     series.legendSettings.itemValueText = "[bold]{valueY}[/bold]";
 
-
-
-
-
-
     graficoUltimaSemana.padding(0, 0, 0, 0);
-
 
     // Set up tooltip
     series.adapter.add("tooltipText", function (ev) {
