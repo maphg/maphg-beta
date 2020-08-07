@@ -368,8 +368,85 @@ function graficaSubsecciones() {
 }
 
 
+function graficaResponsables() {
+
+  // Themes begin
+  am4core.useTheme(am4themes_animated);
+  // Themes end
+
+  // Create chart instance
+  var graficoResponsables = am4core.create("responsables", am4charts.XYChart);
+
+  // Add percent sign to all numbers
+  graficoResponsables.numberFormatter.numberFormat = "#.#";
+
+  // Add data
+  graficoResponsables.dataSource.url = "php/graficas_reportes_diario_crud.php?action=2&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+
+  // Create axes
+  var categoryAxis = graficoResponsables.xAxes.push(new am4charts.CategoryAxis());
+  categoryAxis.dataFields.category = "Responsable";
+  categoryAxis.renderer.grid.template.location = 0;
+  categoryAxis.renderer.minGridDistance = 30;
+  categoryAxis.renderer.grid.template.disabled = true;
+
+
+  var valueAxis = graficoResponsables.yAxes.push(new am4charts.ValueAxis());
+  valueAxis.renderer.grid.template.disabled = true;
+  valueAxis.renderer.labels.template.disabled = true;
+
+
+  // Create series
+  var series = graficoResponsables.series.push(new am4charts.ColumnSeries());
+  series.dataFields.valueY = "Solucionado";
+  series.dataFields.categoryX = "Responsable";
+  series.clustered = false;
+  //series.tooltipText = "Solucionado en {categoryX}: [bold]{valueY}";
+  series.fill = am4core.color("#68D391");
+  series.stroke = am4core.color("#68D391");
+  series.fillOpacity = 0.2;
+  series.strokeWidth = 2;
+
+  var bullet = series.bullets.push(new am4charts.CircleBullet());
+  bullet.circle.stroke = am4core.color("#fff");
+  bullet.circle.strokeWidth = 1;
+
+  var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+  labelBullet.label.text = "[bold]{valueY}[/]";
+  labelBullet.label.dy = -20;
+  labelBullet.label.fill = am4core.color("#68D391");
+
+
+
+  var series2 = graficoResponsables.series.push(new am4charts.ColumnSeries());
+  series2.dataFields.valueY = "Pendientes";
+  series2.dataFields.categoryX = "Responsable";
+  series2.clustered = false;
+  series2.columns.template.width = am4core.percent(50);
+  //series2.tooltipText = "Pendientes en {categoryX}: [bold]{valueY}";
+  series2.fill = am4core.color("#EA4C89");
+  series2.stroke = am4core.color("#EA4C89");
+  series2.fillOpacity = 0.2;
+  series2.strokeWidth = 2;
+
+  var labelBullet2 = series2.bullets.push(new am4charts.LabelBullet());
+  labelBullet2.label.text = "[bold]{valueY}[/]";
+  labelBullet2.label.dy = -20;
+  labelBullet2.label.fill = am4core.color("#EA4C89");
+
+  var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+  bullet2.circle.stroke = am4core.color("#fff");
+  bullet2.circle.strokeWidth = 1;
+
+  graficoResponsables.cursor = new am4charts.XYCursor();
+  graficoResponsables.cursor.lineX.disabled = true;
+  graficoResponsables.cursor.lineY.disabled = true;
+
+  graficoResponsables.padding(10, 10, 10, 10);
+}
+
 // Inicializan las Graficas.
-graficaUltimaSemana();
 graficaHistorico();
+graficaUltimaSemana();
 graficaSubsecciones();
 graficaResponsables();
