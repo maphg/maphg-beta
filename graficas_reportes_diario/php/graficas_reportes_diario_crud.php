@@ -123,7 +123,7 @@ if ($action == 3) {
         AND fecha_creacion BETWEEN '$diaActual_inicio' AND '$diaActual_fin'";
 
         $querySolucionados = "SELECT count(id) 
-        FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND status ='F' 
+        FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND status = 'F' 
         AND fecha_creacion BETWEEN '$diaActual_inicio' AND '$diaActual_fin'";
 
         if (
@@ -135,7 +135,6 @@ if ($action == 3) {
                 $totalPendientes = $value['count(id)'];
                 // echo $totalPendientes;
             }
-
             foreach ($resultSolucionados as $value) {
                 $totalSolucionados = $value['count(id)'];
                 // echo $totalSolucionados;
@@ -161,20 +160,25 @@ if ($action == 4) {
     $tiempoInicio = strtotime($fechaInicio);
     $tiempoFin = strtotime($fechaFin);
 
+    $acumuladoCreado = 0;
+    $acumuladoSolucionado = 0;
+    $aux = 0;
+    $acumulado = 0;
+
     # 24 horas * 60 minutos por hora * 60 segundos por minuto
     $dia = 24 * (60 * 60);
 
     while ($tiempoInicio <= $tiempoFin) {
 
-        $fechaActual = date("Y-m-d 00:00:00", $tiempoInicio);
-        $fechaFin = date("Y-m-d 23:59:59", strtotime($fechaActual . "- 0 days"));
-        $fecha = date("Y-m-d", $tiempoInicio);
+        $fechaActual = date("Y-m-d 23:59:59", $tiempoInicio);
+        $fechaFin = date("Y-m-d 00:00:00", strtotime($fechaActual . "- 0 days"));
+        $fecha = date("Y, m, d", $tiempoInicio);
         // echo "Fecha dentro del ciclo: " . $fechaActual . " - $fechaFin <br>";
         $tiempoInicio += $dia;
 
-        $queryPendientes = "SELECT count(id) FROM t_mc WHERE status ='N' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND fecha_creacion BETWEEN '$fechaActual' AND '$fechaFin'";
+        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'";
 
-        $querySolucionados = "SELECT count(id) FROM t_mc WHERE status ='F' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND fecha_creacion BETWEEN '$fechaActual' AND '$fechaFin'";
+        $querySolucionados = "SELECT count(id) FROM t_mc WHERE status ='F' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'";
 
         if (
             $resultPendientes = mysqli_query($conn_2020, $queryPendientes)
@@ -188,8 +192,15 @@ if ($action == 4) {
             foreach ($resultSolucionados as $value) {
                 $totalSolucionados = $value['count(id)'];
             }
+
+            // Acumulado
+            $acumuladoCreado = $acumuladoCreado + $totalPendientes;
+            $acumuladoSolucionado = $totalSolucionados + $acumuladoSolucionado;
+            $acumulado = $acumuladoCreado - $acumuladoSolucionado;
+            // $acumulado = $aux + $acumulado;
+
             // {"date": new Date(2020, 0, 1), "Creado": 26, "Solucionado": 10, "Acumulado": 7}
-            $arrayAux = array("date" => "new Date($fecha)", "Creado" => $totalPendientes, "Solucionado" => $totalSolucionados, "Acumulado" => $totalPendientes + $totalSolucionados);
+            $arrayAux = array("date" => "new Date($fecha)", "Creado" => $totalPendientes, "Solucionado" => $totalSolucionados, "Acumulado" => $acumulado);
 
             $dataArray[] = $arrayAux;
         }
@@ -205,4 +216,74 @@ if ($action == 5) {
         }
         echo $seccion;
     }
+}
+
+
+if ($action == 6) {
+    $dataArray = array();
+
+    // Valor Inicial:
+    $semanaCreados = 0;
+    $semanaSolucionados = 0;
+    $totalSinResponsable = 0;
+    $totalAcumulado = 0;
+
+    //Cuadro de Semana 
+    $diaActual_inicio = date("Y-m-d 23:59:59", strtotime($fechaActual . "- 0 days"));
+    $diaActual_fin = date("Y-m-d 00:00:00", strtotime($fechaActual . "- 7 days"));
+    $diaActual = date("Y-m-d", strtotime($fechaActual . "- 7 days"));
+
+    // Cuadros Semanal
+    $queryCreados = "SELECT count(id) FROM t_mc WHERE id_destino = $idDestino 
+    AND id_seccion = $idSeccion AND activo = 1
+    AND fecha_creacion BETWEEN '$diaActual_fin' AND '$diaActual_inicio'";
+
+    $querySolucionados = "SELECT count(id) FROM t_mc WHERE id_destino = $idDestino 
+    AND id_seccion = $idSeccion AND activo = 1 AND status = 'F' 
+    AND fecha_creacion BETWEEN '$diaActual_fin' AND '$diaActual_inicio'";
+
+    if (
+        $resultCreados = mysqli_query($conn_2020, $queryCreados) and
+        $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)
+    ) {
+
+        foreach ($resultCreados as $value) {
+            $semanaCreados = $value['count(id)'];
+            // echo $totalPendientes;
+        }
+        foreach ($resultSolucionados as $value) {
+            $semanaSolucionados = $value['count(id)'];
+            // echo $totalSolucionados;
+        }
+    }
+
+
+    // Cuadros Inicio 2020-01-01
+    $fechaInicio = date('2020-01-01 00:00:00');
+    $fechaFin = date('Y-m-d 23:59:59');
+
+    $querySinAsignar = "SELECT count(id) FROM t_mc WHERE status ='N' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 
+    AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND (responsable = 0 OR responsable = '')";
+
+    if ($resultSA = mysqli_query($conn_2020, $querySinAsignar)) {
+        foreach ($resultSA as $value) {
+            $totalSinResponsable = $value['count(id)'];
+        }
+    }
+
+    $queryAcumulado = "SELECT count(id) FROM t_mc WHERE status ='N' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 
+    AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+    if ($resultAcumulado = mysqli_query($conn_2020, $queryAcumulado)) {
+        foreach ($resultAcumulado as $value) {
+            $totalAcumulado = $value['count(id)'];
+        }
+    }
+
+
+    $dataArray['semanaCreados'] = $semanaCreados;
+    $dataArray['semanaSolucionados'] = $semanaSolucionados;
+    $dataArray['totalSinResponsable'] = $totalSinResponsable;
+    $dataArray['totalAcumulado'] = $totalAcumulado;
+    echo json_encode($dataArray);
 }

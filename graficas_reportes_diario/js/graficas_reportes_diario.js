@@ -1,12 +1,9 @@
 // Variables Globales:
-let idDestino = localStorage.getItem('idDestino');
-let idSeccion = localStorage.getItem('idSeccion');
-// let idDestino = 1;
-// let idSeccion = 11;
+function cargarSeccionEstilosGraficas(idDestino, idSeccion) {
+  document.getElementById("dataNombreSeccion").innerHTML =
+    '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 
-(() => {
   const action = "5";
-
   $.ajax({
     type: "GET",
     url: "php/graficas_reportes_diario_crud.php",
@@ -17,17 +14,16 @@ let idSeccion = localStorage.getItem('idSeccion');
     },
     // dataType: "json",
     success: function (data) {
-      console.log(data);
       let estiloSeccion = data.toLowerCase() + '-logo';
       document.getElementById("dataSeccion").classList.remove('zil-logo', 'zie-logo', 'auto-logo', 'dec-logo', 'dep-logo', 'zha-logo', 'zhc-logo', 'zhp-logo', 'zia-logo', 'zic-logo');
       document.getElementById("dataSeccion").classList.add(estiloSeccion);
       document.getElementById("dataNombreSeccion").innerHTML = data;
     }
   });
-})();
+}
 
 
-function graficaHistorico() {
+function graficaHistorico(idDestino, idSeccion) {
   // Themes begin
   am4core.useTheme(am4themes_animated);
   // Themes end
@@ -36,7 +32,9 @@ function graficaHistorico() {
   var chart = am4core.create("graficoManttos", am4charts.XYChart);
 
   // Add data
-  chart.dataSource.url = "php/graficas_reportes_diario_crud.php?action=4&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  let dataHistorial = "php/graficas_reportes_diario_crud.php?action=4&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  chart.dataSource.url = dataHistorial;
+
 
 
   // Create axes
@@ -48,52 +46,11 @@ function graficaHistorico() {
   dateAxis.dateFormats.setKey("day", "MMM dd");
 
   //Poner un zoom inicial a las fechas
-
-
-  var today = new Date();
-  /* Función que suma o resta días a una fecha, si el parámetro
-     días es negativo restará los días*/
-  function sumarDias(fecha, dias) {
-    fecha.setDate(fecha.getDate() + dias);
-    return fecha;
-  }
-
-  var d = new Date();
-  var menos7 = sumarDias(d, -30);
-
-  var dd = today.getDate();
-  var mm = today.getMonth() + 1;
-  var yyyy = today.getFullYear();
-
-  var dd2 = menos7.getDate();
-  var mm2 = menos7.getMonth() + 1;
-  var yyyy2 = menos7.getFullYear();
-
-
-  if (dd < 10) {
-    dd = '0' + dd;
-  }
-
-  if (mm < 10) {
-    mm = '0' + mm;
-  }
-
-  if (dd2 < 10) {
-    dd2 = '0' + dd2;
-  }
-
-  if (mm2 < 10) {
-    mm2 = '0' + mm2;
-  }
-
-
-  today = yyyy + ',' + mm + ',' + dd;
-  menos7 = yyyy2 + ',' + mm2 + ',' + dd2;
-
   chart.events.on("ready", function () {
     dateAxis.zoomToDates(
-      new Date(menos7),
-      new Date(today)
+      new Date(2020, 08, 01),
+      new Date(2020, 08, 08),
+      console.log(3)
     );
   });
 
@@ -187,9 +144,7 @@ function graficaHistorico() {
 }
 
 
-function graficaUltimaSemana() {
-
-
+function graficaUltimaSemana(idDestino, idSeccion) {
   // Themes begin
   am4core.useTheme(am4themes_animated);
   // Themes end
@@ -209,12 +164,9 @@ function graficaUltimaSemana() {
   ejeFechas.dateFormats.setKey("day", "MMM dd");
   ejeFechas.renderer.grid.template.disabled = true;
 
-
-
   var ejeValores = graficoUltimaSemana.yAxes.push(new am4charts.ValueAxis());
   ejeValores.renderer.grid.template.disabled = true;
   ejeValores.renderer.labels.template.disabled = true;
-
 
   // Colores del chart
   graficoUltimaSemana.colors.list = [
@@ -251,7 +203,6 @@ function graficaUltimaSemana() {
     series.tooltip.label.fill = am4core.color("#00");
     series.fillOpacity = 0.1;
 
-
     var bullet = series.bullets.push(new am4charts.CircleBullet());
     bullet.circle.stroke = am4core.color("#fff");
     bullet.circle.strokeWidth = 1;
@@ -283,7 +234,7 @@ function graficaUltimaSemana() {
 }
 
 
-function graficaSubsecciones() {
+function graficaSubsecciones(idDestino, idSeccion) {
 
   // Themes begin
   am4core.useTheme(am4themes_animated);
@@ -362,7 +313,7 @@ function graficaSubsecciones() {
 }
 
 
-function graficaResponsables() {
+function graficaResponsables(idDestino, idSeccion) {
 
   // Themes begin
   am4core.useTheme(am4themes_animated);
@@ -439,8 +390,37 @@ function graficaResponsables() {
   graficoResponsables.padding(10, 10, 10, 10);
 }
 
-// Inicializan las Graficas.
-graficaHistorico();
-graficaUltimaSemana();
-graficaSubsecciones();
-graficaResponsables();
+
+function CuadrosUltimaSemana(idDestino, idSeccion) {
+  const action = 6;
+  $.ajax({
+    type: "GET",
+    url: "php/graficas_reportes_diario_crud.php",
+    data: {
+      action: action,
+      idDestino: idDestino,
+      idSeccion: idSeccion
+    },
+    dataType: "json",
+    success: function (data) {
+      document.getElementById("dataCreadosSemanal").innerHTML = (data.semanaCreados);
+      document.getElementById("dataSolucionadosSemanal").innerHTML = (data.semanaSolucionados);
+      document.getElementById("dataAcumuladosHoy").innerHTML = (data.totalAcumulado);
+      document.getElementById("dataSinAsignar").innerHTML = (data.totalSinResponsable);
+    }
+  });
+}
+
+
+function recargarGraficasReportesDiario() {
+  let idDestino = localStorage.getItem('idDestino');
+  let idSeccion = localStorage.getItem('idSeccion');
+
+  graficaHistorico(idDestino, idSeccion);
+  cargarSeccionEstilosGraficas(idDestino, idSeccion);
+  graficaUltimaSemana(idDestino, idSeccion);
+  graficaSubsecciones(idDestino, idSeccion);
+  graficaResponsables(idDestino, idSeccion);
+  CuadrosUltimaSemana(idDestino, idSeccion);
+}
+recargarGraficasReportesDiario();
