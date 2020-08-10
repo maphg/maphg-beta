@@ -61,7 +61,7 @@
     <input type="hidden" id="idDestinoSeleccionado">
 
     <div class="flex flex-col justify-evenly items-center w-full h-screen">
-        <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4 flex items-center">
+        <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24- px-4 flex items-center">
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">00</p>

@@ -597,13 +597,17 @@ if ($result) {
                             class=\"h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto\"
                             style=\"width: 270px;\">
             ";
+        $fechaActual = date('Y-m-d 23:59:59');
+        $fechaFin = date("Y-m-d 00:00:00", strtotime($fechaActual . "- 70 days"));
 
         $queryT = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
             FROM t_mc 
             LEFT JOIN t_users ON t_mc.responsable = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
             WHERE t_mc.id_subseccion = $idSubseccion 
-            AND t_mc.status = 'F' AND activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
+            AND t_mc.status = 'F' AND activo = 1 AND t_mc.fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'
+            $filtroUsuario $filtroSeccion $filtroDestinoMC  
+
             ORDER BY t_mc.id DESC";
         $resultT = mysqli_query($conn_2020, $queryT);
 
@@ -884,7 +888,7 @@ if ($result) {
                             <th class="px-4 py-2">Pendientes</th>
                             <th class="px-4 py-2">Pendiente DEP</th>
                             <th class="px-4 py-2">Trabajando</th>
-                            <th class="px-4 py-2">Solucionado</th>
+                            <th class="px-4 py-2">Solucionado (10 Semanas)</th>
                         </tr>
                     </thead>
                     <tbody id="dataSubseccionesPendientes" class="divide-y">
