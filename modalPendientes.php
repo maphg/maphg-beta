@@ -1021,6 +1021,7 @@ if ($result) {
                 },
                 // dataType: "JSON",
                 success: function(data) {
+                    console.log(data);
                     let usuarioSession = localStorage.getItem('usuario');
 
                     if (tipoExportar == "exportarMisPendientes") {

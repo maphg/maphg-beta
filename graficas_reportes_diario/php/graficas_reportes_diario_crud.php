@@ -18,6 +18,9 @@ if ($idDestino == 10) {
 
 if ($action == 1) {
     // $array = array("Subseccion" => "POZOS", "Solucionado" => 23, "Pendientes" => 22);
+    $fechaInicio = date('Y-m-d 23:59:59');
+    $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
+
     $dataArray = array();
     $query = "
     SELECT c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino,  c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo
@@ -34,9 +37,9 @@ if ($action == 1) {
             $subseccion = $value['grupo'];
             // echo $subseccion . "<br>";
 
-            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' $filtroDestino";
+            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' $filtroDestino $filtroRangoFecha";
 
-            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' $filtroDestino";
+            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' $filtroDestino $filtroRangoFecha";
 
             if (
                 $resultTotalPendientes = mysqli_query($conn_2020, $queryTotalPendientes) and
@@ -63,7 +66,8 @@ if ($action == 1) {
 
 if ($action == 2) {
     // {"Responsable":"Responsable 1","Solucionado":23,"Pendientes":22}
-
+    $fechaInicio = date('Y-m-d 23:59:59');
+    $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
     $dataArray = array();
     $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
     FROM t_users 
@@ -77,10 +81,10 @@ if ($action == 2) {
             $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
             $queryPendientes = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'N'";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'N' $filtroRangoFecha";
 
             $querySolucionados = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F'";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F' $filtroRangoFecha";
 
             if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes) and $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)) {
 
