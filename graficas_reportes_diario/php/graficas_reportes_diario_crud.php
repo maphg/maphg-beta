@@ -18,9 +18,8 @@ if ($idDestino == 10) {
 
 if ($action == 1) {
     // $array = array("Subseccion" => "POZOS", "Solucionado" => 23, "Pendientes" => 22);
-    $fechaInicio = date('2020-01-01 23:59:59');
+    $fechaInicio = date('2020-01-01 00:00:00');
     $fechaFin = date('Y-m-d 23:59:59');
-    $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
 
     $dataArray = array();
     $query = "
@@ -37,9 +36,9 @@ if ($action == 1) {
             $idSubseccion = $value['id_subseccion'];
             $subseccion = $value['grupo'];
 
-            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status !='F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
+            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status !='F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
 
-            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
+            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
 
             if (
                 $resultTotalPendientes = mysqli_query($conn_2020, $queryTotalPendientes) and
