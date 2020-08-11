@@ -18,7 +18,8 @@ if ($idDestino == 10) {
 
 if ($action == 1) {
     // $array = array("Subseccion" => "POZOS", "Solucionado" => 23, "Pendientes" => 22);
-    $fechaInicio = date('Y-m-d 23:59:59');
+    $fechaInicio = date('2020-01-01 23:59:59');
+    $fechaFin = date('Y-m-d 23:59:59');
     $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
 
     $dataArray = array();
@@ -35,11 +36,10 @@ if ($action == 1) {
         foreach ($result as $value) {
             $idSubseccion = $value['id_subseccion'];
             $subseccion = $value['grupo'];
-            // echo $subseccion . "<br>";
 
-            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino $filtroRangoFecha";
+            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
 
-            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 $filtroDestino $filtroRangoFecha";
+            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
 
             if (
                 $resultTotalPendientes = mysqli_query($conn_2020, $queryTotalPendientes) and
@@ -71,8 +71,9 @@ if ($action == 2) {
     $dataArray = array();
     $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
     FROM t_users 
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_users.id_destino = $idDestino and t_users.status = 'A'";
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+    WHERE t_users.status = 'A' AND (t_users.id_destino = $idDestino OR t_users.id_destino = 10)
+    ";
     if ($result = mysqli_query($conn_2020, $query)) {
         foreach ($result as $value) {
             $idUsuario = $value['id'];
@@ -81,10 +82,10 @@ if ($action == 2) {
             $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
             $queryPendientes = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'N' $filtroRangoFecha";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'N' AND activo = 1 $filtroRangoFecha";
 
             $querySolucionados = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F' $filtroRangoFecha";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F' AND activo = 1 $filtroRangoFecha";
 
             if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes) and $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)) {
 
@@ -95,7 +96,7 @@ if ($action == 2) {
                 foreach ($resultPendientes as $value) {
                     $totalPendientes = $value['count(id)'];
                 }
-                if ($totalSolucionados > 0 or $totalPendientes > 0) {
+                if ($totalSolucionados > 0 OR $totalPendientes > 0) {
 
                     $arrayAux = array("Responsable" => $nombreCompleto, "Solucionado" => $totalSolucionados, "Pendientes" => $totalPendientes);
 
