@@ -23,23 +23,23 @@ if ($action == 1) {
 
     $dataArray = array();
     $query = "
-    SELECT c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino,  c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo
-    FROM c_rel_destino_seccion
-    INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
-    INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
-    INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
-    INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
-    WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_secciones.id = $idSeccion AND c_subsecciones.id != 200 
-";
+        SELECT c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino,  c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo
+        FROM c_rel_destino_seccion
+        INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
+        INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+        INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_secciones.id = $idSeccion AND c_subsecciones.id != 200 
+    ";
     if ($result = mysqli_query($conn_2020, $query)) {
         foreach ($result as $value) {
             $idSubseccion = $value['id_subseccion'];
             $subseccion = $value['grupo'];
             // echo $subseccion . "<br>";
 
-            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' $filtroDestino $filtroRangoFecha";
+            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino $filtroRangoFecha";
 
-            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' $filtroDestino $filtroRangoFecha";
+            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 $filtroDestino $filtroRangoFecha";
 
             if (
                 $resultTotalPendientes = mysqli_query($conn_2020, $queryTotalPendientes) and

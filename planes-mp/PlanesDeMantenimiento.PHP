@@ -180,6 +180,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="w-full px-3 mb-4">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                            Personal requerido
+                        </label>
+                        <div class="relative">
+
+                            <input placeholder="Cantidad de operadores requeridos para la ejecucion" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="0" value="1">
+
+                        </div>
+                    </div>
                 </div>
 
                 <div class="w-3/4 flex flex-col md:flex-row items-start justify-center mt-6 h-full">
@@ -261,7 +271,7 @@
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-start flex-row w-full flex-wrap">
 
-                <div class="w-1/3 px-3 mb-6">
+                <div class="w-1/4 px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                         Actividad
                     </label>
@@ -269,7 +279,7 @@
 
                 </div>
 
-                <div class="w-1/3 px-3 mb-4">
+                <div class="w-1/4 px-3 mb-4">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
                         ¿Qué tipo de actividad será?
                     </label>
@@ -287,7 +297,19 @@
                     </div>
                 </div>
 
-                <div class="w-1/3 px-3 mb-6 flex items-center justify-center">
+                <div class="w-1/4 px-3 mb-4">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                        Tiempo estimado de ejecucion
+                    </label>
+                    <div class="relative">
+                        <div class="relative">
+                            <input placeholder="En minutos" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="1">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-1/4 px-3 mb-6 flex items-center justify-center">
                     <button class="btn btn-indigo mr-10" onclick="agregarActividadPlanMP();">
                         GUARDAR CAMBIOS
                     </button>
