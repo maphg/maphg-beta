@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/tailwindproduccion.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="../css/modales.css">
+    <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
+    <link rel="alternate" href="../css/animate.css" type="application/rss+xml" title="RSS">
 </head>
 
 <body class="bg-fondos-7 text-bluegray-800">
@@ -15,7 +17,7 @@
         <h1>Planes de Mantenimiento</h1>
     </div>
     <div class="flex flex-row container mx-auto text-base mb-6">
-        <input type="search" name="" id="" placeholder="Buscar Plan" class="w-1/4 px-3 bg-white focus:outline-none py-2 rounded-lg shadow-md">
+        <input id="buscarPlanMP" type="search" name="" id="" placeholder="Buscar Plan" class="w-1/4 px-3 bg-white focus:outline-none py-2 rounded-lg shadow-md" onkeyup="obtenerPlanesMP('SINORDEN');">
         <button class="btn btn-indigo shadow-md mx-4" onclick="AgregarPlanMP();">
             <i class="fas fa-plus"></i>
             Crear Plan
@@ -27,22 +29,22 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr class="cursor-pointer">
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARDESTINO')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Destino
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARMARCA')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Marca
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARTIPO')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Tipo equipo/local
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARPLAN')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Tipo de plan
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARGRADO')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Grado
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            <th onclick="obtenerPlanesMP('ORDENARPERIODICIDAD')" class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Periodicidad
                             </th>
                         </tr>
@@ -136,10 +138,10 @@
                             TIPO DE PLAN
                         </label>
                         <div class="relative">
-                            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option>PREVENTIVO</option>
-                                <option>TEST</option>
-                                <option>CHECKLIST</option>
+                            <select id="dataOpcionTipoPlan" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                <option value="PREVENTIVO">PREVENTIVO</option>
+                                <option value="TEST">TEST</option>
+                                <option value="CHECKLIST">CHECKLIST</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -153,7 +155,7 @@
                             GRADO
                         </label>
                         <div class="relative">
-                            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <select id="dataOpcionGradoPlanMP" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                                 <option>MENOR</option>
                                 <option>MAYOR</option>
                                 <option>OVERHAUL</option>
@@ -186,7 +188,7 @@
                         </label>
                         <div class="relative">
 
-                            <input placeholder="Cantidad de operadores requeridos para la ejecucion" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="0" value="1">
+                            <input id="dataPersonasPlanMP" placeholder="Cantidad de operadores requeridos para la ejecucion" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="0" value="1">
 
                         </div>
                     </div>
@@ -198,7 +200,7 @@
                             ACTIVIDADES
                         </label>
                         <div class="w-full bg-gray-200 text-gray-700 p-4 rounded flex flex-col scrollbar overflow-y-auto" style="max-height: 575px;">
-                            <div onclick="toggleModalTailwind('modalAgregarActividadMP')" class="text-gray-500 rounded-md p-2 text-center font-bold uppercase text-sm mb-2 border-dashed border-2 border-gray-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-600 cursor-pointer">
+                            <div onclick="ocultarContenidoActividadMP('')" class="text-gray-500 rounded-md p-2 text-center font-bold uppercase text-sm mb-2 border-dashed border-2 border-gray-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-600 cursor-pointer">
                                 <h1>Añadir Actividad</h1>
                             </div>
                             <div id="dataActividadesPlanMP"></div>
@@ -236,17 +238,17 @@
                 <div class="w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 flex flex-col justify-center items-center">
                     <!-- MATERIAL -->
                     <div class="w-full text-left font-bold uppercase text-sm  mb-2 flex">
-                        <textarea name="textarea" rows="10" cols="50" class="w-full bg-gray-200 focus:outline-none"></textarea>
+                        <textarea id="dataObservacionesPlanMP" name="textarea" rows="10" cols="50" class="w-full bg-gray-200 focus:outline-none"></textarea>
                     </div>
                     <!-- MATERIAL -->
                 </div>
             </div>
             <div class="my-10 flex">
-                <button class="btn btn-indigo mr-10">
+                <button onclick="guardarCambiosPlanMP('ACTIVO');" class="btn btn-indigo mr-10">
                     GUARDAR CAMBIOS
                 </button>
 
-                <button class="btn btn-orange">
+                <button onclick="guardarCambiosPlanMP('BAJA');" class="btn btn-orange">
                     DESACTIVAR ESTE PLAN
                 </button>
             </div>
@@ -258,9 +260,15 @@
         <div class="modal-window w-10/12 flex shadow-lg flex-col justify-center items-center mx-auto text-bluegray-800 pt-10 rounded-lg">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
+
+                <button onclick="showInfoPlanMP();" class="cursor-pointer text-md  text-blue-500 bg-blue-200 px-2 rounded-bl-lg rounded-tr-lg font-normal">
+                    <i class="fas fa-info"></i>
+                </button>
+
                 <button onclick="toggleModalTailwind('modalAgregarActividadMP')" class="cursor-pointer text-md  text-red-500 bg-red-200 px-2 rounded-bl-lg rounded-tr-lg font-normal">
                     <i class="fas fa-times"></i>
                 </button>
+
             </div>
             <!-- INDICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
@@ -303,23 +311,23 @@
                     </label>
                     <div class="relative">
                         <div class="relative">
-                            <input placeholder="En minutos" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="1">
+                            <input id="dataTiempoActividadPlanMP" placeholder="En minutos" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="1">
 
                         </div>
                     </div>
                 </div>
 
-                <div class="w-1/4 px-3 mb-6 flex items-center justify-center">
-                    <button class="btn btn-indigo mr-10" onclick="agregarActividadPlanMP();">
+                <div class="w-1/4 mt-5 px-3 mb-6 flex items-center justify-center">
+                    <button id="actualizarActividadPlanMP" class="btn btn-indigo mr-10" onclick="agregarActividadPlanMP();">
                         GUARDAR CAMBIOS
                     </button>
 
-                    <button class="btn btn-red" onclick="desactivarPlanMP();">
+                    <button id="desactivarActividadPlanMP" class="btn btn-red">
                         DESACTIVAR ACTIVIDAD
                     </button>
                 </div>
 
-                <div class="w-full bg-bluegray-900 rounded flex flex-col p-6">
+                <div id="infoActividadPlanMP" class="hidden w-full bg-bluegray-900 rounded flex flex-col p-6">
                     <h1 class="mb-10 text-white font-bold text-center text-lg">¿Que diferencia hay entre los tipos de actividades?</h1>
 
                     <div class="w-full flex flex-row justify-around mb-6">

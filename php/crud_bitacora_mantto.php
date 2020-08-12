@@ -160,7 +160,8 @@ if (isset($_POST['action'])) {
 
 
     if ($action == "consultaGremiocantidad") {
-
+        $data = array();
+        $gremioCantidad = "";
         $idTurno = $_POST['turnoSeleccionado'];
         $idDestino = $_POST['idDestino'];
         $fechaGeneral = $_POST['dateGeneral'];
@@ -184,18 +185,31 @@ if (isset($_POST['action'])) {
         ORDER BY bitacora_personal.fecha DESC
         ";
 
-        $result = mysqli_query($conn_2020, $query);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                $id = $row['id'];
-                $cantidad = $row['cantidad_personal_gremio'];
-                $nombreGremio = $row['nombre_gremio'];
+        if ($result = mysqli_query($conn_2020, $query)) {
 
-                echo "<h1 class=\"font-semibold text-xl text-gray-500 my-2\"><span>$cantidad</span> $nombreGremio <span><i class=\"fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_personal',$id,'modal-personal');\"></i></span></h1>";
+            $query_total_plantilla = "SELECT total_turno FROM bitacora_personal_total WHERE id_destino = $idDestino AND id_turno = $idTurno AND fecha BETWEEN '$fecha_final' AND '$fecha_inicial' AND zona='$zona'";
+            if ($resultTotal = mysqli_query($conn_2020, $query_total_plantilla)) {
+                foreach ($resultTotal as $value) {
+                    $data['cantidadTurno'] = $value['total_turno'];
+                }
+            } else {
+                $data['cantidadTurno'] = 0;
             }
-        } else {
-            echo "<h1 class=\"font-semibold text-xl text-gray-500 my-2\"><span></span> Sin Datos <span><i class=\"fad fa-times-circle text-red-400 text-xl\"></i></span></h1>";
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_array($result)) {
+                    $id = $row['id'];
+                    $cantidad = $row['cantidad_personal_gremio'];
+                    $nombreGremio = $row['nombre_gremio'];
+
+                    $gremioCantidad .= "<h1 class=\"font-semibold text-xl text-gray-500 my-2\"><span>$cantidad</span> $nombreGremio <span><i class=\"fad fa-times-circle text-red-400 text-xl\" onclick=\"eliminarItemPersonal('bitacora_personal',$id,'modal-personal');\"></i></span></h1>";
+                }
+            } else {
+                $gremioCantidad = "<h1 class=\"font-semibold text-xl text-gray-500 my-2\"><span></span> Sin Datos <span><i class=\"fad fa-times-circle text-red-400 text-xl\"></i></span></h1>";
+            }
+            $data['gremioCantidad'] = $gremioCantidad;
         }
+        echo json_encode($data);
     }
 
     // Proceso para eliminar un Item, donde recibe la TABLA y ID del registro a eliminar. 

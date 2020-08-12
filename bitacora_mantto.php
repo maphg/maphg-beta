@@ -1322,7 +1322,6 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
 
     <!-- Libreria Scripts -->
     <script src="js/jquery-3.3.1.js"></script>
-    <!-- CDN para DataPicker -->
     <!-- CDN para Alertas -->
     <script src="js/sweetalert2@9.js"></script>
     <script src="js/bitacora_manttoJS.js"></script>

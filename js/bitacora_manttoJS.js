@@ -807,10 +807,12 @@ function gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado) {
             dateGeneral: dateGeneral,
             turnoSeleccionado: turnoSeleccionado
         },
-        success: function (datos) {
-            // console.log(datos);
-            // alertSuccess('Datos Obtenidos!');
-            $("#gremioCantidad").html(datos);
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            // alertSuccess('data Obtenidos!');
+            $("#gremioCantidad").html(data.gremioCantidad);
+            $("#totalPlantillaPorTurno").val(data.cantidadTurno);
         }
     });
 }
