@@ -809,7 +809,7 @@ function gremioCantidad(idDestino, zona, dateGeneral, turnoSeleccionado) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             // alertSuccess('data Obtenidos!');
             $("#gremioCantidad").html(data.gremioCantidad);
             $("#totalPlantillaPorTurno").val(data.cantidadTurno);
