@@ -244,11 +244,12 @@ if (isset($_POST['action'])) {
         // Query para cualcular Plantilla Total por turno.
         $query_1 = "SELECT 
         sum(cantidad_personal_gremio),
-        sum(total_turno), bitacora_personal_total.total_turno
+        sum(total_turno), 
+        bitacora_personal_total.total_turno
         FROM bitacora_personal
         INNER JOIN bitacora_personal_total ON bitacora_personal.id_destino = bitacora_personal_total.id_destino 
         AND bitacora_personal.zona = bitacora_personal_total.zona
-        WHERE $destino bitacora_personal.id_turno=1 AND bitacora_personal_total.id_turno=1 AND activo=1 
+        WHERE $destino bitacora_personal.id_turno=1 AND bitacora_personal_total.id_turno = 1 AND bitacora_personal.activo = 1 
         AND bitacora_personal.zona = '$zona' 
         AND bitacora_personal.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'
         AND bitacora_personal_total.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'";
@@ -286,7 +287,7 @@ if (isset($_POST['action'])) {
         sum(total_turno), bitacora_personal_total.total_turno
         FROM bitacora_personal
         INNER JOIN bitacora_personal_total ON bitacora_personal.id_destino = bitacora_personal_total.id_destino 
-        WHERE $destino bitacora_personal.id_turno=2 AND bitacora_personal_total.id_turno=2 AND activo=1
+        WHERE $destino bitacora_personal.id_turno=2 AND bitacora_personal_total.id_turno=2 AND bitacora_personal.activo=1
         AND bitacora_personal.zona = '$zona'
         AND bitacora_personal.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'
         AND bitacora_personal_total.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'";
@@ -324,7 +325,7 @@ if (isset($_POST['action'])) {
         sum(total_turno), bitacora_personal_total.total_turno
         FROM bitacora_personal
         INNER JOIN bitacora_personal_total ON bitacora_personal.id_destino = bitacora_personal_total.id_destino 
-        WHERE $destino bitacora_personal.id_turno=3 AND bitacora_personal_total.id_turno=3 AND activo=1
+        WHERE $destino bitacora_personal.id_turno=3 AND bitacora_personal_total.id_turno=3 AND bitacora_personal.activo=1
         AND bitacora_personal.zona = '$zona'
         AND bitacora_personal.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'
         AND bitacora_personal_total.fecha BETWEEN '$fecha_final' AND '$fecha_inicial'";

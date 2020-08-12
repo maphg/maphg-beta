@@ -832,7 +832,7 @@ function cantidadTurno(idDestino, zona, dateGeneral) {
             zona: zona,
             dateGeneral: dateGeneral
         },
-        dataType: 'json',
+        dataType: 'JSON',
         success: function (data) {
             $("#totalgremio1").html(data.total_turno_1_1);
             $("#totalColaboradores1").html(' / ' + data.total_turno_1_2);
