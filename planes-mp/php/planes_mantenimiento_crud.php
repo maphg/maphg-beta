@@ -576,7 +576,7 @@ if (isset($_POST['action'])) {
             foreach ($result as $value) {
                 $cantidadMaterial = $value['cantidad_material'];
                 $cod2bendMaterial = $value['cod2bend'];
-                $descripcionMaterial = $value['cantidad_material'];
+                $descripcionMaterial = $value['descripcion'];
 
                 if ($cod2bendMaterial == "") {
                     $cod2bendMaterial = "S/C";
