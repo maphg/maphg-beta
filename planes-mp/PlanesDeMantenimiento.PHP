@@ -13,6 +13,7 @@
 </head>
 
 <body class="bg-fondos-7 text-bluegray-800">
+    <!-- Principal -->
     <div class="flex flex-col container mx-auto py-10 font-light text-3xl">
         <h1>Planes de Mantenimiento</h1>
     </div>
@@ -56,6 +57,10 @@
             </div>
         </div>
     </div>
+    <!-- Fin Principal -->
+
+    <!-- Modals -->
+
     <!-- MODAL DETALLES DEL PLAN -->
     <div id="modalDetallesPlanMP" class="modal">
         <div class="modal-window w-11/12 flex shadow-lg flex-col justify-center items-center mx-auto text-bluegray-800 pt-10 rounded-lg">
@@ -214,18 +219,11 @@
                         </label>
                         <div class="w-full bg-gray-200 text-gray-700 p-4 rounded flex flex-col justify-center scrollbar overflow-y-auto" style="max-height: 575px;">
                             <!-- MATERIAL -->
-                            <div class="text-gray-500 rounded-md p-2 text-center font-bold uppercase text-sm mb-2 border-dashed border-2 border-gray-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-600 cursor-pointer">
+                            <div class="text-gray-500 rounded-md p-2 text-center font-bold uppercase text-sm mb-2 border-dashed border-2 border-gray-500 hover:bg-gray-300 hover:border-gray-300 hover:text-gray-600 cursor-pointer" onclick="consultarMaterialesSubalmacen();">
                                 <h1>Añadir Material</h1>
                             </div>
-                            <div class="w-full text-left font-bold uppercase text-sm  mb-2 flex">
-                                <div class="p-2 bg-gray-400 text-gray-600 rounded mr-1 text-xs flex items-center justify-center">
-                                    <h1>2</h1>
-                                </div>
-                                <div class="p-2 bg-gray-400 text-gray-600 rounded w-full">
-                                    <h1><span class="px-2 text-xs font-bold rounded-full bg-gray-700 text-gray-100 mr-1 uppercase">5636</span>tornillos de media</h1>
-                                </div>
-                            </div>
                             <!-- MATERIAL -->
+                            <div id="dataMaterialesPlanMP"></div>
                         </div>
                     </div>
                 </div>
@@ -255,6 +253,7 @@
         </div>
     </div>
 
+
     <!-- MODAL AGREGAR ACTIVIDAD-->
     <div id="modalAgregarActividadMP" class="modal">
         <div class="modal-window w-10/12 flex shadow-lg flex-col justify-center items-center mx-auto text-bluegray-800 pt-10 rounded-lg">
@@ -283,7 +282,7 @@
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                         Actividad
                     </label>
-                    <input id="actividadPlanMP" class="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-100 focus:shadow" id="" type="text" placeholder="Describa actividad a realizar">
+                    <input id="actividadPlanMP" class="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-100 focus:shadow" id="" type="text" placeholder="Describa actividad a realizar" autocomplete="off">
 
                 </div>
 
@@ -367,11 +366,97 @@
 
 
                 </div>
-
             </div>
-
         </div>
     </div>
+
+
+    <!-- MODAL SALIDAS Subalmacenes-->
+    <div id="modalSalidasSubalmacen" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1550px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300">--</h1>
+                </div>
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
+                    <h1 id="nombreSalidaSubalmacen">--</h1>
+                </div>
+
+                <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">
+                    <h1>SALIDAS</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor TABLA -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+                    <!-- BUSCADOR -->
+                    <div class="mb-3 w-full flex flex-row items-center justify-center">
+
+                        <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar Material" autocomplete="off" onkeydown=" if(event.keyCode == 13) consultarMaterialesSubalmacen();">
+
+                    </div>
+                    <!-- BUSCADOR -->
+                    <!-- TITULOS -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                        <div class="w-12 flex h-full items-center justify-center">
+                            <h1>DESTINO</h1>
+                        </div>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>NOMBRE</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>CATEGORÍA</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>COD2BEND</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>GREMIO</h1>
+                        </div>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>DESCRIPCION</h1>
+                        </div>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>CARACTERISTICAS</h1>
+                        </div>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>MARCA/PROVEEDOR</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>STOCK TEÓRICO</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>STOCK ACTUAL</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>U DE M</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>CANTIDAD</h1>
+                        </div>
+                    </div>
+                    <!-- TITULOS -->
+
+                    <!-- Contenido -->
+                    <div id="dataSalidasSubalmacen" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/sweetalert2@9.js"></script>
     <script src="../js/alertasSweet.js"></script>

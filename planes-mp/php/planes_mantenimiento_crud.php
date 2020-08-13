@@ -190,7 +190,70 @@ if (isset($_POST['action'])) {
                 $data['personas'] = $personas;
             }
         }
+        echo json_encode($data);
+    }
 
+
+    if ($action == "guardarCambiosPlanMP") {
+        $data = array();
+
+        $idPlanMP = $_POST['idPlanMP'];
+        $status = $_POST['status'];
+        $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
+        $opcionFase = $_POST['opcionFase'];
+        $localEquipo = $_POST['localEquipo'];
+        $tipoEquipo = $_POST['tipoEquipo'];
+        $tipoPlan = $_POST['tipoPlan'];
+        $gradoPlan = $_POST['gradoPlan'];
+        $periodicidad = $_POST['periodicidad'];
+        $personas = $_POST['personas'];
+        $observacion = $_POST['observacion'];
+
+        $query = "UPDATE t_mp_planes_mantenimiento SET id_fase = $opcionFase, local_equipo = '$localEquipo', tipo_local_equipo = '$tipoEquipo', tipo_plan = '$tipoPlan', grado = '$gradoPlan', id_periodicidad = $periodicidad, id_destino = $idDestinoSeleccionado, descripcion = '$observacion', numero_personas_requeridas = $personas, status = '$status'
+        WHERE id = $idPlanMP";
+        if ($result  = mysqli_query($conn_2020, $query) and $status == "ACTIVO") {
+            $data['respuesta'] = 1;
+        } elseif ($result  = mysqli_query($conn_2020, $query) and $status == "BAJA") {
+            $data['respuesta'] = 2;
+        } else {
+            $data['respuesta'] = 0;
+        }
+        echo json_encode($data);
+    }
+
+
+    if ($action == "AgregarPlanMP") {
+        $idPlanResult = 0;
+        $query = "SELECT id FROM t_mp_planes_mantenimiento WHERE creado_por = $idUsuario AND status = 'PENDIENTE'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idPlanResult = intval($value['id']);
+            }
+
+            if ($idPlanResult > 0) {
+                echo $idPlanResult;
+            } else {
+                $query = "SELECT max(id) FROM t_mp_planes_mantenimiento";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $value) {
+                        $nuevoIdPlan = intval($value['max(id)'] + 1);
+                        $query = "INSERT INTO t_mp_planes_mantenimiento(id, id_destino, creado_por, fecha_creado, status) VALUES($nuevoIdPlan, $idDestino, $idUsuario, '$fechaActual', 'PENDIENTE')";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo $nuevoIdPlan;
+                        }
+                    }
+                }
+            }
+        } else {
+            echo 0;
+        }
+    }
+
+
+    if ($action == "obtenerActividadesPlanMP") {
+        $data = array();
+        $dataActividades = "";
+        $idPlanMP = $_POST['idPlanMP'];
         $queryPreventivo = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_preventivos WHERE id_plan = $idPlanMP AND status = 'ACTIVO'";
 
         $queryCheck = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_checklist WHERE id_plan = $idPlanMP AND status = 'ACTIVO'";
@@ -237,65 +300,7 @@ if (isset($_POST['action'])) {
 
             $data['dataActividades'] = $dataActividades;
         }
-
         echo json_encode($data);
-    }
-
-
-    if ($action == "guardarCambiosPlanMP") {
-        $data = array();
-
-        $idPlanMP = $_POST['idPlanMP'];
-        $status = $_POST['status'];
-        $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
-        $opcionFase = $_POST['opcionFase'];
-        $localEquipo = $_POST['localEquipo'];
-        $tipoEquipo = $_POST['tipoEquipo'];
-        $tipoPlan = $_POST['tipoPlan'];
-        $gradoPlan = $_POST['gradoPlan'];
-        $periodicidad = $_POST['periodicidad'];
-        $personas = $_POST['personas'];
-        $observacion = $_POST['observacion'];
-
-        $query = "UPDATE t_mp_planes_mantenimiento SET id_fase = $opcionFase, local_equipo = '$localEquipo', tipo_local_equipo = '$tipoEquipo', tipo_plan = '$tipoPlan', grado = '$gradoPlan', id_periodicidad = $periodicidad, id_destino = $idDestinoSeleccionado, descripcion = '$observacion', numero_personas_requeridas = $personas, status = '$status'
-        WHERE id = $idPlanMP";
-        if ($result  = mysqli_query($conn_2020, $query) and $status == "ACTIVO") {
-            $data['respuesta'] = 1;
-        } elseif ($result  = mysqli_query($conn_2020, $query) and $status == "BAJA") {
-            $data['respuesta'] = 2;
-        } else {
-            $data['respuesta'] = 0;
-        }
-        echo json_encode($data);
-    }
-
-
-
-    if ($action == "AgregarPlanMP") {
-        $idPlanResult = 0;
-        $query = "SELECT id FROM t_mp_planes_mantenimiento WHERE creado_por = $idUsuario AND status = 'PENDIENTE'";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $value) {
-                $idPlanResult = intval($value['id']);
-            }
-
-            if ($idPlanResult > 0) {
-                echo $idPlanResult;
-            } else {
-                $query = "SELECT max(id) FROM t_mp_planes_mantenimiento";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $value) {
-                        $nuevoIdPlan = intval($value['max(id)'] + 1);
-                        $query = "INSERT INTO t_mp_planes_mantenimiento(id, id_destino, creado_por, fecha_creado, status) VALUES($nuevoIdPlan, $idDestino, $idUsuario, '$fechaActual', 'PENDIENTE')";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            echo $nuevoIdPlan;
-                        }
-                    }
-                }
-            }
-        } else {
-            echo 0;
-        }
     }
 
 
@@ -368,6 +373,7 @@ if (isset($_POST['action'])) {
         $tipoActividadNuevo = $_POST['tipoActividadNuevo'];
         $tiempoActividad = $_POST['tiempoActividad'];
         $tipoActividadNuevoAux = $tipoActividadNuevo;
+        $tipoActualizacion = $_POST['tipoActualizacion'];
 
         if ($tipoActividad == "actividad") {
             $tipoActividad = "t_mp_planes_actividades_preventivos";
@@ -386,7 +392,7 @@ if (isset($_POST['action'])) {
         }
 
         if ($tipoActividad == $tipoActividadNuevo) {
-            $query = "UPDATE $tipoActividad SET descripcion_actividad = '$actividadPlan', promedio_ejecucion = $tiempoActividad WHERE id = $idActividadPlanMP";
+            $query = "UPDATE $tipoActividad SET descripcion_actividad = '$actividadPlan', promedio_ejecucion = $tiempoActividad, status = '$tipoActualizacion' WHERE id = $idActividadPlanMP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
             } else {
@@ -408,8 +414,189 @@ if (isset($_POST['action'])) {
     }
 
 
+    if ($action == "consultaItemsSubalmacen") {
+        $idPlanMP = $_POST['idPlanMP'];
+        $data = array();
+        $dataMateriales = "";
+        $palabraBuscar = $_POST['palabraBuscar'];
+
+        if ($palabraBuscar != "") {
+            $palabraBuscar =
+                "
+            AND (
+            t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
+            OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
+            OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
+            OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
+            OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%'
+            )
+            ";
+        } else {
+            $palabraBuscar = "";
+        }
 
 
+        $query = "SELECT 
+        c_destinos.destino, t_subalmacenes.nombre, t_subalmacenes.fase,
+        t_subalmacenes_items_stock.stock_actual, t_subalmacenes_items_stock.stock_teorico, t_subalmacenes_items_globales.unidad,
+        t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
+        t_subalmacenes_items_globales.descripcion, t_subalmacenes_items_globales.caracteristicas, 
+        t_subalmacenes_items_globales.marca,
+        t_subalmacenes_items_stock.id 'idItem',
+        bitacora_gremio.nombre_gremio
+        FROM t_subalmacenes
+        INNER JOIN c_destinos ON t_subalmacenes.id_destino = c_destinos.id
+        INNER JOIN t_subalmacenes_items_stock ON t_subalmacenes.id = t_subalmacenes_items_stock.id_subalmacen
+        INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
+        INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
+        WHERE  t_subalmacenes.activo = 1 AND t_subalmacenes.id_destino = $idDestino $palabraBuscar";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idItem = $i['idItem'];
+                $destino = $i['destino'];
+                $nombre = $i['nombre'];
+                $categoria = $i['categoria'];
+                $cod2bend = $i['cod2bend'];
+                $gremio = $i['nombre_gremio'];
+                $descripcion = $i['descripcion'];
+                $caracteristicas = $i['caracteristicas'];
+                $marca = $i['marca'];
+                $stockTeorico = $i['stock_teorico'];
+                $stockActual = $i['stock_actual'];
+                $unidad = $i['unidad'];
+                $valor = "";
+                $query = "SELECT cantidad_material FROM t_mp_planes_materiales WHERE id_plan = $idPlanMP AND id_item_global= $idItem AND status = 'ACTIVO'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $valor = $i['cantidad_material'];
+                    }
+                }
+
+
+                $dataMateriales .= "
+                    <div class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-bluegray-50 rounded hover:bg-indigo-100 cursor-pointer\">
+                        <div class=\"w-12 flex h-full items-center justify-center truncate\">
+                            <h1>$destino</h1>
+                        </div>
+                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                            <h1>$nombre</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                            <h1>$categoria</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                            <h1>$cod2bend</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                            <h1>$gremio</h1>
+                        </div>
+                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                            <h1>$descripcion</h1>
+                        </div>
+                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                            <h1>$caracteristicas</h1>
+                        </div>
+                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
+                            <h1>$marca</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                            <h1>$stockTeorico</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
+                            <h1>$stockActual</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center\">
+                            <h1>$unidad</h1>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center\">
+                        
+                        <input id=\"$idItem\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"text\" placeholder=\"Cantidad\" min=\"0\" value=\"$valor\"
+                        onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58) agregarMaterialesPlanMP($idItem);\" autocomplete=\"off\">
+                        </div>
+                    </div>
+                ";
+            }
+            $data['dataMateriales'] = $dataMateriales;
+        }
+        echo json_encode($data);
+    }
+
+
+    if ($action == "agregarMaterialesPlanMP") {
+        $idPlanMP = $_POST['idPlanMP'];
+        $idMaterial = $_POST['idMaterial'];
+        $cantidadMaterial = $_POST['cantidadMaterial'];
+        $idRegistro = 0;
+
+        $query = "SELECT id FROM t_mp_planes_materiales WHERE id_plan = $idPlanMP AND id_item_global = $idMaterial AND activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idRegistro = $value['id'];
+            }
+            if ($idRegistro == 0) {
+                $query = "INSERT INTO t_mp_planes_materiales(id_plan, id_item_global, cantidad_material, creado_por, fecha_creado) VALUES($idPlanMP, $idMaterial, $cantidadMaterial, $idUsuario, '$fechaActual')";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    echo 1;
+                } else {
+                    echo 0;
+                }
+            } else {
+                if ($cantidadMaterial > 0) {
+                    $query = "UPDATE t_mp_planes_materiales SET cantidad_material = $cantidadMaterial, status = 'ACTIVO' WHERE id = $idRegistro";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        echo 2;
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    $query = "UPDATE t_mp_planes_materiales SET cantidad_material = $cantidadMaterial, status = 'PENDIENTE' WHERE id = $idRegistro";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        echo 2;
+                    } else {
+                        echo 0;
+                    }
+                }
+            }
+        }
+    }
+
+
+    if ($action == "obtenerMaterialPlanMP") {
+        $data = array();
+        $idPlanMP = $_POST['idPlanMP'];
+        $dataMateriales = "";
+        $query = "SELECT t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion,
+        t_subalmacenes_items_globales.cod2bend
+        FROM t_mp_planes_materiales 
+        INNER JOIN t_subalmacenes_items_globales ON t_mp_planes_materiales.id_item_global = t_subalmacenes_items_globales.id
+        WHERE id_plan = $idPlanMP AND status = 'ACTIVO'
+        ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $cantidadMaterial = $value['cantidad_material'];
+                $cod2bendMaterial = $value['cod2bend'];
+                $descripcionMaterial = $value['cantidad_material'];
+
+                if ($cod2bendMaterial == "") {
+                    $cod2bendMaterial = "S/C";
+                }
+
+                $dataMateriales .= "
+                    <div class=\"w-full text-left font-bold uppercase text-sm  mb-2 flex\">
+                        <div class=\"p-2 bg-gray-400 text-gray-600 rounded mr-1 text-xs flex items-center justify-center\">
+                            <h1>$cantidadMaterial</h1>
+                        </div>
+                        <div class=\"p-2 bg-gray-400 text-gray-600 rounded w-full\">
+                            <h1><span class=\"px-2 text-xs font-bold rounded-full bg-gray-700 text-gray-100 mr-1 uppercase\">$cod2bendMaterial</span>$descripcionMaterial</h1>
+                        </div>
+                    </div>
+                ";
+            }
+            $data['dataMateriales'] = $dataMateriales;
+        }
+        echo json_encode($data);
+    }
 
 
 

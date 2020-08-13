@@ -562,7 +562,7 @@ if (isset($_POST['action'])) {
     }
 
     $query_subalmacen = "SELECT nombre, fase FROM t_subalmacenes 
-    WHERE id = $idSubalmacen AND id_destino = $idDestinoSeleccionado";
+    WHERE id = $idSubalmacen AND id_destino = $idDestinoSeleccionado AND activo = 1";
     $result_subalmacen = mysqli_query($conn_2020, $query_subalmacen);
     if ($row_subalmacen = mysqli_fetch_array($result_subalmacen)) {
       $nombre = $row_subalmacen['nombre'];
@@ -1571,12 +1571,11 @@ if (isset($_POST['action'])) {
     $palabraBuscar = $_POST['palabraBuscar'];
     $dataTodo = "";
     $ItemsResultado = "";
-    
-    if($idDestinoSeleccionado == 10){
-      $filtroDestino= "1, 7, 2, 6, 5, 11, 3, 4, 10";
 
-    }else{
-      $filtroDestino= $idDestinoSeleccionado;
+    if ($idDestinoSeleccionado == 10) {
+      $filtroDestino = "1, 7, 2, 6, 5, 11, 3, 4, 10";
+    } else {
+      $filtroDestino = $idDestinoSeleccionado;
     }
 
     if ($palabraBuscar != "") {

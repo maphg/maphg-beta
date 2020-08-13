@@ -121,12 +121,8 @@ function obtenerPlanesMP(tipoOrden) {
             // console.log(data);
             data.forEach(element => {
                 // console.log(element);
-               
                 setTimeout(function () { $tablaPlanesDeMantto.innerHTML += datosPlanes(element); }, 90);
             });
-
-
-
         }
     });
 }
@@ -156,7 +152,6 @@ function obtenerOpcionesPlanMP() {
         }
     });
 }
-
 
 
 // Funcion para Agregar un Plan MP.
@@ -198,6 +193,8 @@ function obtenerDetallesPlanMP(idPlanMP) {
     localStorage.setItem('idPlanMP', idPlanMP);
     document.getElementById("modalDetallesPlanMP").classList.add('open');
     alertaImg(' Debe contener al menos una ACTIVIDAD', '', 'question', 5000);
+
+    // Sirve solo para mostrar las diferentes opciones que puede tener el Plan.
     obtenerOpcionesPlanMP();
 
     // Datos Basicos.
@@ -217,7 +214,8 @@ function obtenerDetallesPlanMP(idPlanMP) {
         dataType: "JSON",
         success: function (data) {
             // console.log(data);
-            document.getElementById("dataActividadesPlanMP").innerHTML = data.dataActividades;
+            obtenerMaterialPlanMP();
+            obtenerActividadesPlanMP();
             document.getElementById("dataOptionDestinosMP").value = data.idDestino;
             document.getElementById("dataOpcionFaseMP").value = data.idFase;
             document.getElementById("equipoLocalPlanMP").value = data.local_equipo;
@@ -227,6 +225,7 @@ function obtenerDetallesPlanMP(idPlanMP) {
             document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
             document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
             document.getElementById("dataPersonasPlanMP").value = data.personas;
+
         }
     });
 }
@@ -311,6 +310,8 @@ function guardarCambiosPlanMP(status) {
 // Función para Ocultar Boton Desactivar y Agregar funcion Agregar..();
 function ocultarContenidoActividadMP() {
     document.getElementById("modalAgregarActividadMP").classList.add('open');
+    document.getElementById("actividadPlanMP").value = "";
+    document.getElementById("dataTiempoActividadPlanMP").value = 1;
     document.getElementById("actualizarActividadPlanMP").innerHTML = "AGREGAR ACTIVIDAD";
     document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'agregarActividadPlanMP();');
     document.getElementById("desactivarActividadPlanMP").classList.add('invisible');
@@ -345,10 +346,9 @@ function agregarActividadPlanMP() {
             success: function (data) {
                 // console.log(data);
                 if (data.resultado == 1) {
-                    obtenerDetallesPlanMP(idPlanMP);
+                    obtenerActividadesPlanMP();
                     document.getElementById("modalAgregarActividadMP").classList.remove('open');
                     document.getElementById("actividadPlanMP").value = '';
-
                     alertaImg('Actividad Agregada', '', 'success', 3000);
                 } else if (data.resultado == 2) {
                     alertaImg('Actividad Repetida', '', 'question', 3000);
@@ -363,7 +363,31 @@ function agregarActividadPlanMP() {
 }
 
 
-// Obtiene la información de cada Actividad.
+// Se obtienen todas las actividades relacionadas al Plan MP
+function obtenerActividadesPlanMP() {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idPlanMP = localStorage.getItem('idPlanMP');
+    const action = "obtenerActividadesPlanMP";
+    $.ajax({
+        type: "POST",
+        url: "php/planes_mantenimiento_crud.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idUsuario: idUsuario,
+            idPlanMP: idPlanMP
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("dataActividadesPlanMP").innerHTML = data.dataActividades;
+        }
+    });
+}
+
+
+// Obtiene la información por Actividad segun el plan.
 function obtenerActividadPlanMP(idActividadMP, tipoActividad) {
     document.getElementById("modalAgregarActividadMP").classList.add('open');
     document.getElementById("actualizarActividadPlanMP").innerHTML = "ACTUALIZAR CAMBIOS";
@@ -423,19 +447,19 @@ function actualizarActividadPlanMP(tipoActualizacion, idPlanMP, idActividadPlanM
         },
         // dataType: "JSON",
         success: function (data) {
-            // console.log(data);
+            console.log(data);
             if (data = 1) {
                 document.getElementById("modalAgregarActividadMP").classList.remove('open');
                 document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'agregarActividadPlanMP();');
                 document.getElementById("desactivarActividadPlanMP").setAttribute('onclick', '');
-                obtenerDetallesPlanMP(idPlanMP);
+                obtenerActividadesPlanMP();
                 alertaImg('Actividad Actualiza', '', 'success', 2000);
             } else if (data == 2) {
                 alertaImg('Tipo Actividad, Actualiza', '', 'success', 2000);
                 document.getElementById("modalAgregarActividadMP").classList.remove('open');
                 document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'agregarActividadPlanMP();');
                 document.getElementById("desactivarActividadPlanMP").setAttribute('onclick', '');
-                obtenerDetallesPlanMP(idPlanMP);
+                obtenerActividadesPlanMP();
             } else if (data == 0) {
                 alertaImg('Intente de Nuevo', '', 'error', 2500);
             }
@@ -443,6 +467,92 @@ function actualizarActividadPlanMP(tipoActualizacion, idPlanMP, idActividadPlanM
     });
 }
 
+
+// Consulta los Items de Subalmacenes por Destino.
+function consultarMaterialesSubalmacen() {
+    document.getElementById("modalSalidasSubalmacen").classList.add('open');
+    let idDestino = document.getElementById("dataOptionDestinosMP").value;
+    let idUsuario = localStorage.getItem('usuario');
+    let palabraBuscar = document.getElementById("inputPalabraBuscarSubalmacenSalida").value;
+    let idPlanMP = localStorage.getItem('idPlanMP');
+
+    const action = "consultaItemsSubalmacen";
+    $.ajax({
+        type: "POST",
+        url: "php/planes_mantenimiento_crud.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idUsuario: idUsuario,
+            palabraBuscar: palabraBuscar,
+            idPlanMP: idPlanMP
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataSalidasSubalmacen").innerHTML = data.dataMateriales;
+        }
+    });
+}
+
+
+// Agrega o Actualiza los Materiales para Cada Plan MP.
+function agregarMaterialesPlanMP(idMaterial) {
+    let idDestino = document.getElementById("dataOptionDestinosMP").value;
+    let idUsuario = localStorage.getItem('usuario');
+    let idPlanMP = localStorage.getItem("idPlanMP");
+    let cantidadMaterial = document.getElementById(idMaterial).value;
+    const action = "agregarMaterialesPlanMP";
+    $.ajax({
+        type: "POST",
+        url: "php/planes_mantenimiento_crud.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idUsuario: idUsuario,
+            idPlanMP: idPlanMP,
+            idMaterial: idMaterial,
+            cantidadMaterial: cantidadMaterial
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (data == 1) {
+                obtenerMaterialPlanMP();
+                alertaImg('Material Agregado', '', 'success', 2000);
+            } else if (data == 2) {
+                obtenerMaterialPlanMP();
+                alertaImg('Cantidad, Material Actualizado', '', 'success', 2000);
+            } else {
+                obtenerMaterialPlanMP();
+                alertaImg('Intente de Nuevo', '', 'question', 2500);
+            }
+        }
+    });
+}
+
+
+function obtenerMaterialPlanMP() {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idPlanMP = localStorage.getItem("idPlanMP");
+    const action = "obtenerMaterialPlanMP";
+    $.ajax({
+        type: "POST",
+        url: "php/planes_mantenimiento_crud.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idUsuario: idUsuario,
+            idPlanMP: idPlanMP
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataMaterialesPlanMP").innerHTML = data.dataMateriales;
+        }
+    });
+}
 
 // Funciones Iniciales:
 obtenerPlanesMP('SINORDEN');
