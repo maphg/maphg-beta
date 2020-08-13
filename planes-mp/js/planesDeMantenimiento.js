@@ -311,7 +311,7 @@ function guardarCambiosPlanMP(status) {
 function ocultarContenidoActividadMP() {
     document.getElementById("modalAgregarActividadMP").classList.add('open');
     document.getElementById("actividadPlanMP").value = "";
-    document.getElementById("dataTiempoActividadPlanMP").value = 1;
+    document.getElementById("dataTiempoActividadPlanMP").value = "";
     document.getElementById("actualizarActividadPlanMP").innerHTML = "AGREGAR ACTIVIDAD";
     document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'agregarActividadPlanMP();');
     document.getElementById("desactivarActividadPlanMP").classList.add('invisible');

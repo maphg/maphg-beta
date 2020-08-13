@@ -310,7 +310,7 @@
                     </label>
                     <div class="relative">
                         <div class="relative">
-                            <input id="dataTiempoActividadPlanMP" placeholder="En minutos" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="1">
+                            <input id="dataTiempoActividadPlanMP" placeholder="En minutos" type="number" name="" id="" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" min="0" value="">
 
                         </div>
                     </div>
@@ -382,15 +382,8 @@
             </div>
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300">--</h1>
-                </div>
-                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
-                    <h1 id="nombreSalidaSubalmacen">--</h1>
-                </div>
-
                 <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">
-                    <h1>SALIDAS</h1>
+                    <h1>MATERIALES</h1>
                 </div>
             </div>
 
