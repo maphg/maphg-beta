@@ -60,6 +60,9 @@
         </dav>
         <dav id="hijo2" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
+                <a href="https://www.maphg.com/beta/planes-mp/index.php" class="menu-hijo-3 CA">Gestión de Planes</a>
+            </dav>
+            <dav class="menu-hijo-2">
                 <a href="index.php" class="menu-hijo-3 CA">Planner</a>
             </dav>
             <dav class="menu-hijo-2">
@@ -134,9 +137,13 @@
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
                 <o data-target="hijo4" data-toggle="hijo" href="#" class="CA">Instalaciones</o>
+                <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
+            <dav class="menu-hijo-2">
+                <o href="#" class="menu-hijo-3 CA">Equipos</o>
+            </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Proyectos</o>
             </dav>
@@ -214,7 +221,7 @@
     </dav>
     <dav class="menu-contenedor-4 relative">
         <dav id="avatarUsuario" class="menu-contenedor-5">
-           
+
         </dav>
         <dav class="menu-contenedor-7">
             <h99 id="nombreUsuarioMenu" class="menu-contenedor-8">nombreUsuario</h99>
@@ -240,7 +247,7 @@
         </dav>
         <!-- Padre -->
         <dav id="destinosSelecciona" class="">
-            
+
         </dav>
     </dav>
 </dav>
@@ -256,7 +263,8 @@
             element.classList.replace('fadeInDown', 'fadeOutUp');
             setTimeout(function() {
                 element.classList.add('invisible');
-            }, 1000);        }
+            }, 1000);
+        }
     };
 
     function botonDestino() {

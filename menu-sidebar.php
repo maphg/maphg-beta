@@ -60,6 +60,9 @@
         </dav>
         <dav id="hijo2" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
+                <a href="https://www.maphg.com/beta/planes-mp/index.php" class="menu-hijo-3 CA">Gestión de Planes</a>
+            </dav>
+            <dav class="menu-hijo-2">
                 <a href="index.php" class="menu-hijo-3 CA">Planner</a>
             </dav>
             <dav class="menu-hijo-2">
@@ -134,9 +137,13 @@
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
                 <o data-target="hijo4" data-toggle="hijo" href="#" class="CA">Instalaciones</o>
+                <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
+            <dav class="menu-hijo-2">
+                <o href="#" class="menu-hijo-3 CA">Equipos</o>
+            </dav>
             <dav class="menu-hijo-2">
                 <a href="proyectosTipo.php" class="menu-hijo-3 CA">Proyectos</a>
             </dav>
