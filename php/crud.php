@@ -3365,7 +3365,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 
                                 <div class=\"column t-small t-normal\" 
-                                onclick=\"cambiarTituloTP($idTareaP, '$titulo');\">
+                                onclick=\"obtDatosTarea($idTareaP, '$titulo', $idEquipo, '$equipo');\">
                                     <p class=\"t-icono-rojo\"> 
                                         $sMaterial $sTrabajando $departamentos $energeticos $status
                                     </p>
@@ -3757,6 +3757,29 @@ if (isset($_POST['action'])) {
         }
     }
 
+    if ($action == "actualizarTarea") {
+        $columna = $_POST['columna'];
+        $idTarea = $_POST['idTarea'];
+        $titulo = $_POST['titulo'];
+
+        if ($columna == "titulo") {
+            $query = "UPDATE t_mp_np SET titulo = '$titulo' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_mp_np SET activo = 0 WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 2;
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
+        }
+    }
 
 
     //Cierre de IF para action.

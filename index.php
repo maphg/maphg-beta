@@ -6379,7 +6379,7 @@ $tablaRanking .= "</div>";
                 </div>
 
                 <div id="actividadNuevoTituloTP" class="column has-text-centered modal">
-                    <input id="nuevoTituloTP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                    <input id="nuevoTituloTP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo" autocomplete="off">
                     <button id="btnTituloTP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
                         <i class="far fa-save"></i>
                         <span> Guardar</span>
@@ -6420,15 +6420,12 @@ $tablaRanking .= "</div>";
                             </button>
                         </div>
                         <div class="navbar-item">
-
                             <button id="btnProyectosFinalizados" type="button" class="button is-success is-hidden" name="button">
                                 <i id="" class="fad fa-check-double mr-2"></i>Ver Finalizados
                             </button>
-
                             <button id="btnProyectosPendientes" type="button" class="button is-danger" name="button">
                                 <i id="" class="fad fa-check-double mr-2"></i>Ver Pendientes
                             </button>
-
                         </div>
                     </div>
                 </nav>

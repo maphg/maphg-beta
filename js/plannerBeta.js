@@ -839,9 +839,43 @@ function finalizarTareaP(idTarea, idEquipo, equipo, status) {
 }
 
 
-function cambiarTituloTP(idTareaP, titulo) {
-    console.log(idTareaP, titulo);
+function obtDatosTarea(idTarea, titulo, idEquipo, equipo) {
     document.getElementById("modal-titulo-tareas").classList.add('is-active');
     document.getElementById("nuevoTituloTP").value = titulo;
-    // document.getElementById("").setAttribute('onclick', 'actualizarTituloTP(${idTareaP})');
+
+    document.getElementById("btnEliminarATP")
+        .setAttribute('onclick', 'actualizarTarea(' + idTarea + ',' + idEquipo + ', "' + equipo + '", "eliminar")');
+    document.getElementById("btnTituloTP")
+        .setAttribute('onclick', 'actualizarTarea(' + idTarea + ',' + idEquipo + ', "' + equipo + '", "titulo")');
+}
+
+function actualizarTarea(idTarea, idEquipo, equipo, columna) {
+    console.log(idTarea, idEquipo, equipo, columna);
+    let titulo = document.getElementById("nuevoTituloTP").value;
+    const action = "actualizarTarea";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTarea: idTarea,
+            titulo: titulo,
+            columna: columna
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (data == 1) {
+                alertInformacion('Título Actualizado', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modal-titulo-tareas").classList.remove('is-active');
+            } else if (data = 2) {
+                alertInformacion('Tarea Eliminada', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modal-titulo-tareas").classList.remove('is-active');
+            } else {
+                alertInformacion('Intente de Nuevo', 'question');
+            }
+        }
+    });
 }
