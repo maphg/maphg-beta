@@ -492,9 +492,9 @@ function obtTareasP(idEquipo, equipo) {
             console.log(data);
             document.getElementById("dataEquipoTareasP").innerHTML = equipo;
             document.getElementById("dataTareasP").innerHTML = data.dataTareas;
-            document.getElementById("textSeccion").innerHTML = data.seccion;
-            document.getElementById("estiloSeccion").classList.remove();
-            document.getElementById("estiloSeccion").classList.add(data.seccion);
+            document.getElementById("textSeccionTareas").innerHTML = data.seccion;
+            document.getElementById("estiloSeccionTareas").classList.remove();
+            document.getElementById("estiloSeccionTareas").classList.add(data.seccion);
             document.getElementById("dataEquipoTareasP").innerHTML = data.equipo;
         }
     });
@@ -524,9 +524,9 @@ function obtTareasF(idEquipo, equipo) {
         success: function (data) {
             document.getElementById("dataEquipoTareasP").innerHTML = equipo;
             document.getElementById("dataTareasP").innerHTML = data.dataTareas;
-            document.getElementById("textSeccion").innerHTML = data.seccion;
-            document.getElementById("estiloSeccion").classList.remove();
-            document.getElementById("estiloSeccion").classList.add(data.seccion);
+            document.getElementById("textSeccionTareas").innerHTML = data.seccion;
+            document.getElementById("estiloSeccionTareas").classList.remove();
+            document.getElementById("estiloSeccionTareas").classList.add(data.seccion);
             document.getElementById("dataEquipoTareasP").innerHTML = data.equipo;
         }
     });

@@ -6285,8 +6285,8 @@ $tablaRanking .= "</div>";
                             <span class="navbar-item">
                                 <button class="button is-warning is-large" onclick="closeModal('modal-tareas-p');"><i class="fas fa-arrow-left"></i></button>
                             </span>
-                            <div id="estiloSeccion" class="flex items-center">
-                                <p id="textSeccion" class="seccion-logo">--</p>
+                            <div id="estiloSeccionTareas" class="flex items-center">
+                                <p id="textSeccionTareas" class="seccion-logo">--</p>
                             </div>
                             <a class="navbar-item">Equipo / <span id="dataEquipoTareasP"> </span></a>
                         </div>
@@ -6404,10 +6404,9 @@ $tablaRanking .= "</div>";
                         <span class="navbar-item">
                             <button class="button is-warning" onclick="showsubsecciones('')"><i class="fas fa-arrow-left"></i></button>
                         </span>
-                        <div class="s-zia">
-                            <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
+                        <div id="estiloSeccionProyectos" class="">
                             <input id="textSeccionAux" type="hidden">
-                            <p id="textSeccion">ZIA</p>
+                            <p class="seccion-logo" id="textSeccion"></p>
                         </div>
                         <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
                         <a class="navbar-item">Proyectos / Plan de Acción</a>
@@ -6613,7 +6612,7 @@ $tablaRanking .= "</div>";
                         </span>
                         <div class="s-zia">
                             <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
-                            <p id="textSeccionProyectosFinalizados">ZIA</p>
+                            <p id="textSeccionProyectosFinalizados">--</p>
                         </div>
                         <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
                         <a class="navbar-item"> Proyectos / Finalizados</a>

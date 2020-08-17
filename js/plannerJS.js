@@ -4374,10 +4374,10 @@ function mostrarJustificacion(idProyecto) {
     });
 }
 
-function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion) {
-    document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ')');
-    document.getElementById("btnProyectosFinalizados").classList.toggle('is-hidden');
-    document.getElementById("btnProyectosPendientes").classList.toggle('is-hidden');
+function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombreSeccion) {
+    document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
+    document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
+    document.getElementById("btnProyectosPendientes").classList.add('is-hidden');
 
     $("#data-proyectos-TG").html("");
     var action = "listarProyectos";
@@ -4410,8 +4410,8 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion) {
 
 function listarProyectosF(idUsuario, id_Destino, id_Seccion, idSubseccion) {
     document.getElementById("btnProyectosPendientes").setAttribute('onclick', 'listarProyectos(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ')');
-    document.getElementById("btnProyectosPendientes").classList.toggle('is-hidden');
-    document.getElementById("btnProyectosFinalizados").classList.toggle('is-hidden');
+    document.getElementById("btnProyectosPendientes").classList.remove('is-hidden');
+    document.getElementById("btnProyectosFinalizados").classList.add('is-hidden');
 
     $("#data-proyectos-TG").html("");
     var action = "listarProyectos";
@@ -4785,6 +4785,8 @@ function finalizarProyecto(idProyecto) {
 
 function showmodalproyectos(nombreSeccion) {
     $("#textSeccion").html(nombreSeccion);
+    $("#estiloSeccionProyectos").removeClass('');
+    $("#estiloSeccionProyectos").addClass(nombreSeccion);
     $("#textSeccionProyectosFinalizados").html(nombreSeccion);
 }
 
