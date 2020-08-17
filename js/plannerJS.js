@@ -4375,8 +4375,13 @@ function mostrarJustificacion(idProyecto) {
 }
 
 function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion) {
+    document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ')');
+    document.getElementById("btnProyectosFinalizados").classList.toggle('is-hidden');
+    document.getElementById("btnProyectosPendientes").classList.toggle('is-hidden');
+
     $("#data-proyectos-TG").html("");
     var action = "listarProyectos";
+    let statusProyecto = "N";
 
     $.ajax({
         type: "post",
@@ -4387,6 +4392,41 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion) {
             id_Seccion: id_Seccion,
             idSubseccion: idSubseccion,
             idUsuario: idUsuario,
+            statusProyecto: statusProyecto
+        },
+
+        success: function (datos) {
+            $("#titulo_proyectos").html(datos);
+
+            // Asignar valor a las variables de proyecto.
+            $("#idDestinoProyectos").val(id_Destino);
+            $("#idSeccionProyectos").val(id_Seccion);
+            $("#idUsuarioProyectos").val(idUsuario);
+            $("#idSubseccionProyectos").val(idSubseccion);
+            $("#data-proyectos").html(datos);
+        },
+    });
+}
+
+function listarProyectosF(idUsuario, id_Destino, id_Seccion, idSubseccion) {
+    document.getElementById("btnProyectosPendientes").setAttribute('onclick', 'listarProyectos(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ')');
+    document.getElementById("btnProyectosPendientes").classList.toggle('is-hidden');
+    document.getElementById("btnProyectosFinalizados").classList.toggle('is-hidden');
+
+    $("#data-proyectos-TG").html("");
+    var action = "listarProyectos";
+    let statusProyecto = "F";
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            id_Destino: id_Destino,
+            id_Seccion: id_Seccion,
+            idSubseccion: idSubseccion,
+            idUsuario: idUsuario,
+            statusProyecto: statusProyecto
         },
 
         success: function (datos) {

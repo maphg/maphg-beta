@@ -96,7 +96,7 @@ function agregarResponsableMPNP() {
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 $("#responsableMPNP").val(0);
                 alertInformacion(data.msj, data.icon);
                 $("#dataResponsablesMPNP").html(data);
@@ -409,7 +409,6 @@ function detalleMPNP(idMPNP) {
 
 function pendientesSubseccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
     localStorage.setItem("idSeccion", idSeccion);
-    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     if (tipoPendiente != "") {
         // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
         page = 'modalPendientes.php?idSeccion=' + idSeccion + '&tipoPendiente=' + tipoPendiente + '&idUsuario=' +
@@ -422,7 +421,6 @@ function pendientesSubseccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario
 
 // Exportación de Pendientes.
 function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
-    console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
     const action = "consultaFinalExcel";
     $.ajax({
         type: "POST",
@@ -438,7 +436,7 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
         // dataType: "JSON",
         success: function (data) {
             // $("#dataExportarSeccionesUsuarios").html(data);
-            console.log(data);
+            // console.log(data);
             if (tipoExportar == "exportarMisPendientes") {
                 page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
                 window.location = page;
@@ -460,4 +458,390 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
             }
         }
     });
+}
+
+
+function toggleModal(id) {
+    document.getElementById("actividad" + id).classList.toggle('modal');
+}
+
+
+function obtTareasP(idEquipo, equipo) {
+    document.getElementById("modal-tareas-p").classList.add('is-active');
+    let status = "P";
+    document.getElementById("btnTareas").
+        setAttribute('onclick', 'obtTareasF(' + idEquipo + ', "' + equipo + '")');
+    document.getElementById("btnTareas").classList.remove("is-danger");
+    document.getElementById("btnTareas").classList.add("is-success");
+    document.getElementById("txtTareas").innerHTML = 'Ver Solucionados';
+    document.getElementById("btnAgregarTareaP")
+        .setAttribute('onclick', 'agregarTareaP(' + idEquipo + ', "' + equipo + '")');
+    const action = "obtTareasP";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idEquipo: idEquipo,
+            equipo: equipo,
+            status: status
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataEquipoTareasP").innerHTML = equipo;
+            document.getElementById("dataTareasP").innerHTML = data.dataTareas;
+            document.getElementById("textSeccion").innerHTML = data.seccion;
+            document.getElementById("estiloSeccion").classList.remove();
+            document.getElementById("estiloSeccion").classList.add(data.seccion);
+            document.getElementById("dataEquipoTareasP").innerHTML = data.equipo;
+        }
+    });
+}
+
+function obtTareasF(idEquipo, equipo) {
+    document.getElementById("modal-tareas-p").classList.add('is-active');
+    document.getElementById("btnTareas").
+        setAttribute('onclick', 'obtTareasP(' + idEquipo + ', "' + equipo + '")');
+    document.getElementById("btnTareas").classList.add("is-danger");
+    document.getElementById("btnTareas").classList.remove("is-success");
+    document.getElementById("txtTareas").innerHTML = 'Ver Pendientes';
+    let status = "F";
+    document.getElementById("btnAgregarTareaP")
+        .setAttribute('onclick', 'agregarTareaP(' + idEquipo + ', "' + equipo + '")');
+    const action = "obtTareasP";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idEquipo: idEquipo,
+            equipo: equipo,
+            status: status
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataEquipoTareasP").innerHTML = equipo;
+            document.getElementById("dataTareasP").innerHTML = data.dataTareas;
+            document.getElementById("textSeccion").innerHTML = data.seccion;
+            document.getElementById("estiloSeccion").classList.remove();
+            document.getElementById("estiloSeccion").classList.add(data.seccion);
+            document.getElementById("dataEquipoTareasP").innerHTML = data.equipo;
+        }
+    });
+}
+
+
+function agregarTareaP(idEquipo, equipo) {
+    let titulo = document.getElementById("tituloTareaP").value;
+    const action = "agregarTareaP";
+    if (titulo.length > 2 && titulo.length < 61) {
+        $.ajax({
+            type: "POST",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idEquipo: idEquipo,
+                equipo: equipo,
+                titulo: titulo
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                // console.log(data);
+                if (data = 1) {
+                    alertInformacion('Tarea Agregada', 'success');
+                    document.getElementById("tituloTareaP").value = '';
+                    obtTareasP(idEquipo, equipo);
+                } else {
+                    alertInformacion('Intente de Nuevo', 'question');
+                }
+            }
+        });
+    } else {
+        alertInformacion('Título No Valido', 'question');
+    }
+}
+
+
+function agregarActividadTareaP(idTareaP, idEquipo, equipo) {
+    let actividad = document.getElementById("tituloActividad" + idTareaP).value;
+    const action = "agregarActividadTareaP";
+    if (actividad.length > 2 && actividad.length < 61) {
+        $.ajax({
+            type: "POST",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idTareaP: idTareaP,
+                actividad: actividad
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                // console.log(data);
+                if (data = 1) {
+                    alertInformacion('Actividad Agregada', 'success');
+                    document.getElementById("tituloTareaP").value = '';
+                    obtTareasP(idEquipo, equipo);
+                    alertInformacion('Actividad Agregada', 'success');
+                } else {
+                    alertInformacion('Intente de Nuevo', 'question');
+                }
+            }
+        });
+    } else {
+        alertInformacion('Título Actividad No Valido', 'question');
+    }
+}
+
+
+function actividadSeleccionada(idActividad) {
+    $(".tituloActividadS").removeClass("has-background-primary has-background-success");
+    $(".tituloActividadP").removeClass("has-background-warning has-background-primary");
+    $(".tituloActividadP").addClass("has-background-warning");
+    $(".tituloActividadS").addClass("has-background-success");
+    $("#actividad" + idActividad).removeClass("has-background-warning has-background-success");
+    $("#actividad" + idActividad).addClass("has-background-primary");
+}
+
+
+function agregarComentarioActividad(idActividad, idTareaP) {
+    let comentario = document.getElementById("comentarioActividad" + idTareaP).value;
+    const action = "agregarComentarioActividad";
+    if (comentario.length > 2 && comentario.length < 120) {
+        $.ajax({
+            type: "POST",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                comentario: comentario,
+                idActividad: idActividad,
+                idTareaP: idTareaP
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                // console.log(data);
+                if (data = 1) {
+                    alertInformacion('Comentario Agregado', 'success');
+                    document.getElementById("comentarioActividad" + idTareaP).value = '';
+                    obtenerComentarioActividad(idActividad, idTareaP);
+                    alertInformacion('Actividad Agregada', 'success');
+                } else {
+                    alertInformacion('Intente de Nuevo', 'question');
+                }
+            }
+        });
+    } else {
+        alertInformacion('Comentario No Valido', 'question');
+    }
+}
+
+function obtenerComentarioActividad(idActividad, idTareaP) {
+    document.getElementById("btnAgregarComentario" + idTareaP).
+        setAttribute('onclick', 'agregarComentarioActividad(' + idActividad + ',' + idTareaP + ')');
+    const action = "obtenerComentarioActividad";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idActividad: idActividad,
+            idTareaP: idTareaP
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("dataComentario" + idTareaP).innerHTML = data;
+        }
+    });
+}
+
+
+function obtUsuariosTareasP(idTareaP, idEquipo, equipo) {
+    document.getElementById("modaResponsableTareasP").classList.add('modal-fx-superScaled', 'is-active');
+    document.getElementById("dataResposansableTareaP").innerHTML = '';
+    const action = "obtUsuariosTareasP";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTareaP: idTareaP,
+            idEquipo: idEquipo,
+            equipo: equipo
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("dataResposansableTareaP").innerHTML = data;
+        }
+    });
+}
+
+
+function asignarResponsableTareasP(idTarea, idUsuario, idEquipo, equipo) {
+    const action = "asignarUsuarioTareasP";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTarea: idTarea,
+            idUsuario: idUsuario
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            if (data == 1) {
+                alertInformacion('Responsable Asignado', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modaResponsableTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+            } else {
+                alertInformacion('Intente de Nuevo', 'question');
+            }
+        }
+    });
+}
+
+
+function obtStatusActvidadTareaP(idActividad, idEquipo, equipo) {
+    document.getElementById("modalStatusTareasP").classList.add('modal-fx-superScaled', 'is-active');
+
+    document.getElementById("statusUrgenteATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_urgente")');
+
+    document.getElementById("statusMaterialATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_material")');
+
+    document.getElementById("statusTrabajandoATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_trabajando")');
+
+    document.getElementById("statusSolucionarATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "statusP")');
+
+    document.getElementById("btnTituloATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "titulo")');
+
+    document.getElementById("btnEliminarATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "eliminar")');
+
+
+    // Energeticos Status
+    document.getElementById("statusElectricidadATP").setAttribute('onclick', 'aplicarCambioActividad('
+        + idActividad + ', ' + idEquipo + ', "' + equipo + '", "energetico_electricidad")');
+
+    document.getElementById("statusAguaATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_agua")');
+
+    document.getElementById("statusDieselATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_diesel")');
+
+    document.getElementById("statusGasATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_gas")');
+
+
+    // Dertamentos Status.
+    document.getElementById("statusCalidadATP").setAttribute('onclick', 'aplicarCambioActividad('
+        + idActividad + ', ' + idEquipo + ', "' + equipo + '", "departamento_calidad")');
+
+    document.getElementById("statusComprasATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_compras")');
+
+    document.getElementById("statusDireccionATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_direccion")');
+
+    document.getElementById("statusFinanzasATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_finanzas")');
+
+    document.getElementById("statusRRHHATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_rrhh")');
+}
+
+
+function aplicarCambioActividad(idActividad, idEquipo, equipo, columna) {
+    let nuevoTitulo = document.getElementById("nuevoTituloATP").value;
+    const action = "aplicarCambioActividad";
+    if (columna == 'titulo' && nuevoTitulo.length < 2) {
+        alertInformacion('Título Actividad, No Valido', 'question');
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idActividad: idActividad,
+                columna: columna,
+                nuevoTitulo: nuevoTitulo
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                if (data == 1) {
+                    alertInformacion('Status Actualizado', 'success');
+                    obtTareasP(idEquipo, equipo);
+                    document.getElementById("modalStatusTareasP").
+                        classList.remove('modal-fx-superScaled', 'is-active');
+                    document.getElementById("nuevoTituloATP").value = '';
+                } else if (data == 2) {
+                    alertInformacion('Título Actualizado', 'success');
+                    obtTareasP(idEquipo, equipo);
+                    document.getElementById("modalStatusTareasP").
+                        classList.remove('modal-fx-superScaled', 'is-active');
+                    document.getElementById("nuevoTituloATP").value = '';
+                } else if (data == 3) {
+                    alertInformacion('Actividad Eliminada', 'success');
+                    obtTareasP(idEquipo, equipo);
+                    document.getElementById("modalStatusTareasP").
+                        classList.remove('modal-fx-superScaled', 'is-active');
+                    document.getElementById("nuevoTituloATP").value = '';
+                } else if (data == 4) {
+                    alertInformacion('Actividad Finalizada', 'success');
+                    document.getElementById("modalStatusTareasP").
+                        classList.remove('modal-fx-superScaled', 'is-active');
+                    obtTareasP(idEquipo, equipo);
+                } else if (data == 0) {
+                    alertInformacion('Intente de Nuevo', 'question');
+                    obtTareasP(idEquipo, equipo);
+                }
+            }
+        });
+    }
+}
+
+
+function verSolucionados(idTareaP) {
+    console.log(idTareaP);
+    $(".actividadSolucionada" + idTareaP).toggleClass("is-sr-only");
+}
+
+
+function finalizarTareaP(idTarea, idEquipo, equipo, status) {
+    const action = "finalizarTareaP";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTarea: idTarea,
+            status: status
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (data == 1) {
+                alertInformacion('Tarea Finalizada', 'success');
+                obtTareasP(idEquipo, equipo);
+            } else {
+                alertInformacion('Intente de Nuevo', 'question');
+            }
+        }
+    });
+}
+
+
+function cambiarTituloTP(idTareaP, titulo) {
+    console.log(idTareaP, titulo);
+    document.getElementById("modal-titulo-tareas").classList.add('is-active');
+    document.getElementById("nuevoTituloTP").value = titulo;
+    // document.getElementById("").setAttribute('onclick', 'actualizarTituloTP(${idTareaP})');
 }

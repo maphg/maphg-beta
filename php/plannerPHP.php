@@ -1613,7 +1613,8 @@ class Planner
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Finalizados\"> FALLAS S</p></div>"
             // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Planificado\">MP-P</p></div>"
-            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: NO Planificado\">TAREAS P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. TAREAS: P\">TAREAS P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. TAREAS: S\">TAREAS S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Finalizados\">MP-S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Test: Realizados\">TEST</p></div>"
@@ -2030,6 +2031,19 @@ class Planner
                                 $listaEquipo = $ex;
                             }
 
+                            // Obtiene Cantidad P y F de MPNP -> Tareas
+                            $query = "SELECT * FROM t_mp_np "
+                                . "WHERE id_equipo = $idEquipo "
+                                . "AND status = 'P'"
+                                . "AND activo = 1 
+                                ";
+                            try {
+                                $resp = $conn->obtDatos($query);
+                                $mpnPlanificadoP = $conn->filasConsultadas;
+                            } catch (Exception $ex) {
+                                $listaEquipo = $ex;
+                            }
+
                             $query = "SELECT * FROM t_mp_np "
                                 . "WHERE id_equipo = $idEquipo "
                                 . "AND status = 'F'"
@@ -2038,10 +2052,11 @@ class Planner
 
                             try {
                                 $resp = $conn->obtDatos($query);
-                                $mpnPlanificado = $conn->filasConsultadas;
+                                $mpnPlanificadoF = $conn->filasConsultadas;
                             } catch (Exception $ex) {
                                 $listaEquipo = $ex;
                             }
+
 
                             $query = "SELECT * FROM t_mp_planeacion "
                                 . "WHERE id_equipo = $idEquipo "
@@ -2297,10 +2312,16 @@ class Planner
                             }
 
                             // Inicio semento para la nueva columna MP-NP
-                            if ($mpnPlanificado > 0) {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-test\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo,'$equipo');\">$mpnPlanificado</p></div>";
+                            if ($mpnPlanificadoP > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendiente\" onclick=\"obtTareasP($idEquipo,'$equipo');\">$mpnPlanificadoP</p></div>";
                             } else {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
+                            }
+
+                            if ($mpnPlanificadoF > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"obtTareasF($idEquipo,'$equipo');\">$mpnPlanificadoF</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"obtTareasF($idEquipo, '$equipo');\">$mpnPlanificadoF</p></div>";
                             }
                             // Fin Segmento. 
 
@@ -2518,7 +2539,8 @@ class Planner
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Pendientes\"> FALLAS P</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Correctivo: Finalizados\"> FALLAS S</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Planificado\">MP-P</p></div>"
-            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: NO Planificado\">TAREAS P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. TAREAS: P\">TAREAS P</p></div>"
+            . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. TAREAS: S\">TAREAS S</p></div>"
             // . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: En Proceso\">MP-E</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Mantto. Preventivo: Realizado\">MP-R</p></div>"
             . "<div class=\"column\"><p class=\"t-titulos\" data-tooltip=\"Ultimo Preventivo realizado\">U.MP</p></div>"
@@ -2910,7 +2932,8 @@ class Planner
                                 . "WHERE id_equipo = $idEquipo "
                                 . "AND año = '$año' AND activo = 1";
                             $mpPlanificado = 0;
-                            $mpnPlanificado = 0;
+                            $mpnPlanificadoP = 0;
+                            $mpnPlanificadoF = 0;
                             $mpProceso = 0;
                             $mpRealizado = 0;
                             //                            try {
@@ -2976,8 +2999,21 @@ class Planner
                                 $listaEquipo = $ex;
                             }
 
-                            // Nuevo segmento
-                            $query = "SELECT * FROM t_mp_np "
+                            // Obtiene Cantidad P y F de MPNP -> Tareas
+                            $query = "SELECT id FROM t_mp_np "
+                                . "WHERE id_equipo = $idEquipo "
+                                . "AND status = 'P'"
+                                . "AND activo = 1 
+                                ";
+
+                            try {
+                                $resp = $conn->obtDatos($query);
+                                $mpnPlanificadoP = $conn->filasConsultadas;
+                            } catch (Exception $ex) {
+                                $listaEquipo = $ex;
+                            }
+
+                            $query = "SELECT id FROM t_mp_np "
                                 . "WHERE id_equipo = $idEquipo "
                                 . "AND status = 'F'"
                                 . "AND activo = 1 
@@ -2985,7 +3021,7 @@ class Planner
 
                             try {
                                 $resp = $conn->obtDatos($query);
-                                $mpnPlanificado = $conn->filasConsultadas;
+                                $mpnPlanificadoF = $conn->filasConsultadas;
                             } catch (Exception $ex) {
                                 $listaEquipo = $ex;
                             }
@@ -3238,10 +3274,15 @@ class Planner
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-mp'); obtPreventivos($idEquipo, $idGrupo, $idDestino, $idCategoria, $idSubcategoria)\">$mpPlanificado</p></div>";
                             }
                             // Segmento para agregar la nueva columna MP-NP
-                            if ($mpnPlanificado > 0) {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-test\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
+                            if ($mpnPlanificadoP > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendiente\" nclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
                             } else {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"showModal('modal-MPNP'); obtMPNP($idEquipo, '$equipo');\">$mpnPlanificado</p></div>";
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
+                            }
+                            if ($mpnPlanificadoF > 0) {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-solucionado\" onclick=\"obtTareasF($idEquipo, '$equipo');\">$mpnPlanificadoF</p></div>";
+                            } else {
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"obtTareasF($idEquipo, '$equipo');\">$mpnPlanificadoF</p></div>";
                             }
                             // Fin de Segmento.
 
@@ -6108,7 +6149,7 @@ class Planner
             } elseif ($idDestino == 7) {
                 $arraySubseccion = array(0, 214, 213, 212, 211, 200, 62, 200, 344, 293, 291, 314, 301, 25, 298, 292, 305, 297, 200, 296, 299, 300, 354, 39, 320, 15, 37, 35, 34, 306, 308, 200, 14, 311, 13, 38);
                 $search = array_search($idSubseccion, $arraySubseccion, false);
-            }else{
+            } else {
                 $arraySubseccion = array(0);
                 $search = array_search($idSubseccion, $arraySubseccion, false);
             }

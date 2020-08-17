@@ -793,7 +793,7 @@ $tablaRanking .= "</div>";
                     <div class="field has-addons has-addons-right is-fullwidth">
                         <div class="control">
                             <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo" autocomplete="off"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
                             </div>
                             <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
@@ -5774,6 +5774,7 @@ $tablaRanking .= "</div>";
         <!--            <button class="modal-close is-large" aria-label="close"></button>-->
     </div>
 
+
     <!--MODAL EDITAR DATOS DE UNA TAREA DE EQUIPO-->
     <div id="modal-editar-tarea" class="modal">
         <div class="modal-background"></div>
@@ -5815,6 +5816,7 @@ $tablaRanking .= "</div>";
         </div>
         <!--<button class="modal-close is-large" aria-label="close"></button>-->
     </div>
+
 
     <!--MODAL COMENTARIOS EQUIPO-->
     <div id="modal-equipo-comentarios" class="modal">
@@ -5908,6 +5910,7 @@ $tablaRanking .= "</div>";
             </section>
         </div>
     </div>
+
 
     <!--MODAL FOTOS EQUIPO-->
     <div id="modal-equipo-pictures" class="modal">
@@ -6015,6 +6018,7 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+
     <!--MODAL COTIZACIONES EQUIPO-->
     <div id="modal-equipo-cotizaciones" class="modal">
         <div class="modal-background"></div>
@@ -6088,8 +6092,8 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
-    <!--MODAL INFORMACION DE EQUIPO-->
 
+    <!--MODAL INFORMACION DE EQUIPO-->
     <div id="modal-equipo-info" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card modal-md">
@@ -6251,6 +6255,7 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+
     <div class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -6268,6 +6273,123 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+
+    <!-- Modal TAREAS P -->
+    <div id="modal-tareas-p" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content bg-white p-2" style="width:90%; height:90%">
+            <section class="hero is-light is-small">
+                <div class="hero-head">
+                    <nav class=" navbar-menu">
+                        <div class="navbar-start has-text-centered">
+                            <span class="navbar-item">
+                                <button class="button is-warning is-large" onclick="closeModal('modal-tareas-p');"><i class="fas fa-arrow-left"></i></button>
+                            </span>
+                            <div id="estiloSeccion" class="flex items-center">
+                                <p id="textSeccion" class="seccion-logo">--</p>
+                            </div>
+                            <a class="navbar-item">Equipo / <span id="dataEquipoTareasP"> </span></a>
+                        </div>
+                        <div class="navbar-end has-text-centered">
+                            <div class="navbar-item">
+                                <button type="button" class="button is-warning" name="button">
+                                    <i class="fad fa-file-excel mr-2"></i>Exportar
+                                </button>
+                            </div>
+                            <div class="navbar-item">
+                                <button id="btnTareas" type="button" class="button" name="button">
+                                    <i class="fad fa-check-double mr-2"></i><span id="txtTareas"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </section>
+
+            <section class="mt-4">
+                <div class="column is-3 has-text-left">
+                    <div class="field has-addons">
+                        <div class="control is-expanded ml-5">
+                            <input id="tituloTareaP" class="input" type="text" placeholder="Agregar Tarea" maxlength="60" autocomplete="off">
+                        </div>
+                        <div id="btnAgregarTareaP" class="control">
+                            <a class="button is-warning">
+                                <i class="fad fa-plus-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-4">
+                <div class="columns is-gapless mx-4 rounded mb-3 has-text-white">
+                    <div class="column column is-half">
+                        <div class="columns">
+                            <div class="column">
+                                <p class="barratitulos">Descripción</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column ">
+                        <div class="columns is-gapless">
+                            <div class="column">
+                                <p class="barratitulos" data-tooltip="Plan Acción">Actividades</p>
+                            </div>
+                            <div class="column">
+                                <p class="barratitulos" data-tooltip="Responsable">Responsable</p>
+                            </div>
+                            <div class="column">
+                                <p class="barratitulos" data-tooltip="Fecha estimada de solucion">Fecha Creado</p>
+                            </div>
+                            <div class="column">
+                                <p class="barratitulos" data-tooltip="Status">Status</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+
+                <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+            </section>
+
+            <section class="mt-4">
+                <div id="dataTareasP"></div>
+            </section>
+
+        </div>
+    </div>
+    <!-- Modal TAREAS P -->
+
+
+    <div id="modal-titulo-tareas" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content has-background-">
+            <div class="box">
+                <div class="column has-text-centered">
+
+                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloTP');">
+                        <i class="far fa-edit"></i>
+                        <span> Editar</span>
+                    </button>
+                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                        <i class="far fa-trash-alt"></i>
+                        <span> Eliminar</span>
+                    </button>
+                </div>
+
+                <div id="actividadNuevoTituloTP" class="column has-text-centered modal">
+                    <input id="nuevoTituloTP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                    <button id="btnTituloTP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                        <i class="far fa-save"></i>
+                        <span> Guardar</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
 
 
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
@@ -6298,9 +6420,15 @@ $tablaRanking .= "</div>";
                             </button>
                         </div>
                         <div class="navbar-item">
-                            <button type="button" class="button is-success" name="button" onclick="proyectosFinalizados();">
-                                <i class="fad fa-check-double mr-2"></i>Ver finalizados
+
+                            <button id="btnProyectosFinalizados" type="button" class="button is-success is-hidden" name="button">
+                                <i id="" class="fad fa-check-double mr-2"></i>Ver Finalizados
                             </button>
+
+                            <button id="btnProyectosPendientes" type="button" class="button is-danger" name="button">
+                                <i id="" class="fad fa-check-double mr-2"></i>Ver Pendientes
+                            </button>
+
                         </div>
                     </div>
                 </nav>
@@ -6313,7 +6441,7 @@ $tablaRanking .= "</div>";
                 <div class="column is-3 has-text-left">
                     <div class="field has-addons">
                         <div class="control is-expanded ml-5">
-                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Nuevo Proyecto" maxlength="60">
+                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Nuevo Proyecto" maxlength="60" autocomplete="off">
                         </div>
                         <div class="control">
                             <a class="button is-warning" onclick="nuevoProyecto();">
@@ -6397,7 +6525,6 @@ $tablaRanking .= "</div>";
 
     <!-- ****************************************************************** Modal para mostrar el Status de los Departamentos *****************************************************  -->
     <div id="reporteStatusDEP" class="modal p-4 mt-5">
-
         <section class="hero is-light is-small" style="width: 100%;">
             <!-- Hero head: will stick at the top -->
             <div class="hero-head">
@@ -6475,8 +6602,6 @@ $tablaRanking .= "</div>";
         </section>
     </div>
     <!-- ***************************************************************************************************************************************************************** -->
-
-
 
 
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
@@ -6562,7 +6687,6 @@ $tablaRanking .= "</div>";
             <div id="data-proyectos-finalizados"></div>
         </section>
     </div>
-
 
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL JUSTIFICACION xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -6727,7 +6851,6 @@ $tablaRanking .= "</div>";
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 
 
-
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalStatusMC" class="modal">
         <input type="hidden" id="idMC">
@@ -6780,8 +6903,6 @@ $tablaRanking .= "</div>";
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 
 
-
-
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modal-Tipo" class="modal">
         <input type="hidden" id="idProyectoTipo">
@@ -6813,7 +6934,6 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
 
 
     <!--MODAL Subir Archivos -->
@@ -6953,6 +7073,126 @@ $tablaRanking .= "</div>";
     </div>
 
 
+    <!--MODAL RESPONSABLE DE PROYECTO-->
+    <div id="modaResponsableTareasP" class="modal">
+        <br>
+        <br>
+        <br>
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <!-- <header class="modal-card-head">
+                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
+            </header> -->
+            <!-- Any other Bulma elements you want -->
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="dataResposansableTareaP" class="column">
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column has-text-right">
+                            <button class="button is-danger" onclick="closeModal();">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Status TareasP -->
+    <div id="modalStatusTareasP" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny has-background-white rounded">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+
+                                <button id="statusUrgenteATP" class="button is-danger is-fullwidth">
+                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>
+                                    Es urgente!
+                                </button>
+
+                                <button id="statusMaterialATP" class="button is-dark is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong> M
+                                        </strong></span> No hay material
+                                </button>
+
+                                <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
+                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
+                                </button>
+                                <div id="actividadStatusEnergeticos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusElectricidadATP" class="button is-warning has-text-centered m-1">Electricidad</button>
+
+                                    <button id="statusAguaATP" class="button is-warning has-text-centered m-1">Agua</button>
+
+                                    <button id="statusDieselATP" class="button is-warning has-text-centered m-1">Diésel</button>
+
+                                    <button id="statusGasATP" class="button is-warning has-text-centered m-1">Gas</button>
+                                </div>
+
+                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleModal('StatusDepartamentos');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
+                                </button>
+                                <div id="actividadStatusDepartamentos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusCalidadATP" class="button is-primary has-text-centered m-1">Calidad
+                                    </button>
+
+                                    <button id="statusComprasATP" class="button is-primary has-text-centered m-1">Compras
+                                    </button>
+
+                                    <button id="statusDireccionATP" class="button is-primary has-text-centered m-1">Dirección
+                                    </button>
+
+                                    <button id="statusFinanzasATP" class="button is-primary has-text-centered m-1">Finanzas
+                                    </button>
+
+                                    <button id="statusRRHHATP" class="button is-primary has-text-centered m-1">RRHH
+                                    </button>
+
+                                </div>
+
+                                <button id="statusTrabajandoATP" class="button is-info is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
+                                </button>
+
+                                <button id="statusSolucionarATP" class="button is-success is-fullwidth mt-2">
+                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
+                                </button>
+
+                                <div class="column has-text-centered">
+
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloATP');">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+
+                                <div id="actividadNuevoTituloATP" class="column has-text-centered modal">
+                                    <input id="nuevoTituloATP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnTituloATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Status TareasP -->
+
     <!--MODAL COMENTARIOS -->
     <div id="modalComentario" class="modal">
         <input type="hidden" id="idProyecto"></input>
@@ -6997,6 +7237,7 @@ $tablaRanking .= "</div>";
             </section>
         </div>
     </div>
+
 
     <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
     <div id="modalPlanAccion" class="modal">
@@ -7045,11 +7286,6 @@ $tablaRanking .= "</div>";
     <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
 
 
-
-
-
-
-
     <!--AREA DE MENSAJES-->
     <article id="article-mapas" class="message is-primary popup" style="display: none;">
         <div class="message-header">
@@ -7060,6 +7296,7 @@ $tablaRanking .= "</div>";
 
         </div>
     </article>
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalDepartamento" class="modal">
@@ -7099,6 +7336,7 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalDepartamentoMC" class="modal">
@@ -7141,6 +7379,7 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  ENERGETICOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalEnergeticoMC" class="modal">
