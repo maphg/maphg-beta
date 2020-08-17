@@ -487,7 +487,7 @@ function obtTareasP(idEquipo, equipo) {
             equipo: equipo,
             status: status
         },
-        // dataType: "JSON",
+        dataType: "JSON",
         success: function (data) {
             console.log(data);
             document.getElementById("dataEquipoTareasP").innerHTML = equipo;
