@@ -328,7 +328,7 @@ function adjuntosMPNP(idMPNP) {
 }
 
 
-function cargarAdjuntoMPNP(idMPNP) {
+function cargarAdjuntoMPNP(idMPNP,) {
     $("#colFotosMPMC").html('');
     var inputFileImage = document.getElementById("inputAdjuntoMPNP");
     var file = inputFileImage.files;
@@ -467,6 +467,7 @@ function toggleModal(id) {
 
 
 function obtTareasP(idEquipo, equipo) {
+    console.log('Tareas P');
     document.getElementById("modal-tareas-p").classList.add('is-active');
     let status = "P";
     document.getElementById("btnTareas").
@@ -486,7 +487,7 @@ function obtTareasP(idEquipo, equipo) {
             equipo: equipo,
             status: status
         },
-        dataType: "JSON",
+        // dataType: "JSON",
         success: function (data) {
             console.log(data);
             document.getElementById("dataEquipoTareasP").innerHTML = equipo;
@@ -877,5 +878,61 @@ function actualizarTarea(idTarea, idEquipo, equipo, columna) {
                 alertInformacion('Intente de Nuevo', 'question');
             }
         }
+    });
+}
+
+
+function adjuntosTareas(idTarea, idActividad, idEquipo, equipo) {
+    document.getElementById("modal-equipo-pictures").classList.add('is-active');
+    $("#colFotosEquipo").html('');
+    $("#colFotosMPMC").html('');
+    const action = "adjuntosTareas";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTarea: idTarea,
+            idActividad: idActividad
+        },
+        // dataType: "dataType",
+        success: function (data) {
+            $("#colFotosEquipo").html(data);
+        }
+    });
+}
+
+
+function cargarAdjuntoMPNP(idMPNP,) {
+    $("#colFotosMPMC").html('');
+    var inputFileImage = document.getElementById("inputAdjuntoMPNP");
+    var file = inputFileImage.files;
+    var data = new FormData();
+    for (i = 0; i < file.length; i++) {
+        data.append("fileToUpload" + i, file[i]);
+    }
+    data.append("idMPNP", idMPNP);
+
+    var url = "php/planner_uploadfiles_mpnp.php";
+
+    $.ajax({
+        url: url, // Url to which the request is send
+        type: "POST", // Type of request to be send, called as method
+        data: data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+
+        success: function (data) {
+            if (data == 1) {
+                // console.log(data);
+                alertInformacion('Adjunto Cargado.', 'success');
+
+            } else {
+                alertInformacion(data, 'info');
+            }
+            adjuntosMPNP(idMPNP);
+            refreshModalMPNP();
+        },
     });
 }

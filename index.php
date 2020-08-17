@@ -6386,7 +6386,6 @@ $tablaRanking .= "</div>";
                     </button>
                 </div>
             </div>
-
         </div>
         <button class="modal-close is-large" aria-label="close"></button>
     </div>

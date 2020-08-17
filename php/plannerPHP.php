@@ -3275,7 +3275,7 @@ class Planner
                             }
                             // Segmento para agregar la nueva columna MP-NP
                             if ($mpnPlanificadoP > 0) {
-                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendiente\" nclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
+                                $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-pendiente\" onclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
                             } else {
                                 $listaEquipo->listaEquipos .= "<div class=\"column\"><p class=\"t-normal\" onclick=\"obtTareasP($idEquipo, '$equipo');\">$mpnPlanificadoP</p></div>";
                             }

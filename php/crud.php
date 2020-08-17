@@ -3562,7 +3562,7 @@ if (isset($_POST['action'])) {
 
                             <div class=\"column is-one-third has-text-centered\">
                                 <h4 class=\"subtitle is-4\">Adjuntos</h4>
-                                <input $statusTarea id=\"inputAdjuntoPlanAccion$idTareaP\" class=\"button is-primary\" type=\"button\" onclick=\"adjuntosMPNP($idTareaP); show_hide_modal('modalSubirArchivo', 'show');\" value=\"Adjuntos\"><br>
+                                <input $statusTarea id=\"inputAdjuntoPlanAccion$idTareaP\" class=\"button is-primary\" type=\"button\" onclick=\"adjuntosMPNP($idTareaP);\" value=\"Adjuntos\"><br>
                                 <div id=\"adjuntosPlanAccion$idTareaP\">
                                     Sin Adjuntos
                                 </div>
@@ -3779,6 +3779,84 @@ if (isset($_POST['action'])) {
         } else {
             echo 0;
         }
+    }
+
+
+    if ($action == "adjuntosTareas") {
+        $idTareas = $_POST['idTareas'];
+        $idActividad = $_POST['idActividad'];
+        $dataAdjuntos = "";
+
+        $query = "SELECT
+        adjuntos_mp_np.id_usuario, adjuntos_mp_np.fecha, adjuntos_mp_np.url, adjuntos_mp_np.id, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM adjuntos_mp_np
+        INNER JOIN t_users ON adjuntos_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE adjuntos_mp_np.id_mp_np = $idTareas AND adjuntos_mp_np.activo = 1";
+        $result = mysqli_query($conn_2020, $query);
+
+        // Header.
+        $dataAdjuntos .=
+            "
+            <div class=\"timeline is-left\">
+                <h4 class=\"title is-4 has-text-centered\">Adjuntos MP</h4>
+                <div class=\"columns is-centered\">
+                    <div class=\"column is-8 has-text-centered\">
+                        <a class=\"button is-success\">
+                            <input class=\"file-input\" type=\"file\"
+                                name=\"resume\" id=\"inputAdjuntoMPNP\" multiple=\"\" onchange=\"cargarAdjuntoMPNP($idTareas);\">
+                            <span class=\"icon\">
+                                <i class=\"fad fa-file-archive\"></i>
+                            </span>
+                            <span>Añadir Adjuntos</span>
+                        </a>
+                    </div>
+                </div>
+        ";
+
+        if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
+                $usuario = $row['nombre'] . " " . $row['apellido'];
+                $fecha = new DateTime($row['fecha']);
+                $fecha = $fecha->format('Y-m-d H:m:s');
+                $idImg = $row['id'];
+                $url = $row['url'];
+                $rutaImg = "img/equipos/mpnp/";
+
+                // Body
+                $dataAdjuntos .=
+                    "
+                    <div class=\"timeline-item\">
+                        <div class=\"timeline-marker\"></div>
+                        <div class=\"timeline-content\">
+                            <p class=\"heading \">
+                                <strong>$usuario</strong>
+                                <a class=\"delete\" onclick=\"eliminarAdjuntoMPNP($idImg, $idTareas);\"></a>
+                            </p>
+                            <p class=\"heading has-text-info\">$fecha</p>
+                            <a href=\"$rutaImg$url\" target=\"_blank\">
+                                <img src=\"$rutaImg$url\" alt=\"$rutaImg.$url\" width=\"130px\">
+                            </a>
+                        </div>
+                    </div>
+                ";
+            }
+        }
+
+        // Footer
+        $dataAdjuntos .=
+            "
+                <div class=\"timeline-item flex\">
+                    <div class=\"timeline-marker\"></div>
+                </div>
+                <div class=\"timeline-item\">
+                    <div class=\"timeline-marker is-icon\">
+                        <i class=\"fad fa-genderless\"></i>
+                    </div>
+                </div>
+            </div>
+        ";
+        echo $dataAdjuntos;
     }
 
 
