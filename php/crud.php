@@ -276,8 +276,23 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                         <div class=\"timeline is-left\">
-							<div id=\"planAccion$idProyecto\"></div>
+                            <div id=\"planAccion$idProyecto\"></div>
+            ";
+            if ($statusProyecto == "F") {
+                echo "
+                <div class=\"columns has-text-center ml-5 my-2\">
+                    <button class=\"column button is-warning is-6 py-1\" 
+                    onclick=\"restaurarProyecto($idProyecto);\">
+                        <span class=\"icon is-small\">
+        					<i class=\"fas fa-undo-alt\"></i>
+						</span>
+                        <span>Restaurar Proyecto</span>
+                    </button>
+                </div>
+                ";
+            }
 
+            echo "
                         </div>
                     </div>
 
@@ -307,6 +322,16 @@ if (isset($_POST['action'])) {
                 </div>
             </section>
             ";
+        }
+    }
+
+    if ($action == "restaurarProyecto") {
+        $idProyecto = $_POST['idProyecto'];
+        $query = "UPDATE t_proyectos SET status = 'N' WHERE id = $idProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
         }
     }
 
@@ -1739,7 +1764,7 @@ if (isset($_POST['action'])) {
             if ($contadorPF <= 0) {
                 echo "
 				<div class=\"column\">
-					<button class=\"mt-4 mx-5 has-text-centered button is-primary\" onclick=\"finalizarProyecto($idProyecto);\">
+					<button class=\"mt-1 mx-5 has-text-centered button is-danger\" onclick=\"finalizarProyecto($idProyecto);\">
 						<span class=\"icon is-small\">
 							<i class=\"fas fa-check\"></i>
 						</span >
@@ -1752,9 +1777,9 @@ if (isset($_POST['action'])) {
             if ($contadorPAF > 0) {
                 echo "
 				<div class=\"column\">
-					<button class=\"mt-4 mx-5 has-text-centered button is-primary\" onclick=\"verPlan($idProyecto);\">
+					<button class=\"mt-1 mx-5 has-text-centered button is-success\" onclick=\"verPlan($idProyecto);\">
     					<span class=\"icon is-small\">
-        					<i class=\"fas fa-check\"></i>
+        					<i class=\"fas fa-tasks\"></i>
 						</span>
     					<span>Plan Acción - Finalizados</span>
 					</button>

@@ -4353,6 +4353,27 @@ function proyectosFinalizados() {
     });
 }
 
+
+function restaurarProyecto(idProyecto) {
+    const action = "restaurarProyecto";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idProyecto: idProyecto
+        },
+        success: function (data) {
+            if (data == 1) {
+                alertInformacion('Proyecto Restaurado', 'success');
+                refreshProyectos();
+            } else {
+                alertInformacion('Intente de Nuevo', 'question');
+            }
+        },
+    });
+}
+
 function regresarProyectos() {
     $("#modal-proyectos-finalizados").removeClass();
     $("#modal-proyectos-finalizados").addClass("modal");
