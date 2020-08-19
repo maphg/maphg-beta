@@ -639,6 +639,73 @@ if (isset($_POST['action'])) {
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%ZI%')";
         }
 
+
+        // MP NO Planificado -> TAREAS.            
+        $query_t_mp_np = "SELECT
+            t_mp_np.id, 
+            t_mp_np.id_destino,
+            t_mp_np.id_equipo, 
+            t_mp_np.titulo, 
+            c_secciones.seccion, 
+            c_subsecciones.grupo, 
+            t_equipos.equipo
+
+            FROM t_mp_np
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
+            WHERE t_mp_np.activo = 1 AND t_mp_np.status='F'
+            $destinoMPNP
+            $zonaFiltroMPNP
+            AND t_mp_np.fecha_finalizado BETWEEN '$fecha_final_12' AND '$fecha_inicial_12'
+            ORDER BY t_mp_np.fecha_finalizado DESC
+        ";
+
+        $result_t_mp_np = mysqli_query($conn_2020, $query_t_mp_np);
+        $total_mp_np = mysqli_num_rows($result_t_mp_np);
+
+        while ($row_t_mp_np = mysqli_fetch_array($result_t_mp_np)) {
+            $id = $row_t_mp_np['id'];
+            $id_destino = $row_t_mp_np['id_destino'];
+            $nombreDestino = $arrayDestino[$id_destino];
+            $seccion = $row_t_mp_np['seccion'];
+            $subseccion = $row_t_mp_np['grupo'];
+            $equipo = $row_t_mp_np['equipo'];
+            $titulo = $row_t_mp_np['titulo'];
+
+            $query_comentario_mp_np =
+                "SELECT comentario
+            FROM comentarios_mp_np WHERE id_mp_np=$id
+            ORDER BY fecha DESC LIMIT 1";
+
+            $result_comentario_mp_np = mysqli_query($conn_2020, $query_comentario_mp_np);
+            if ($row_comentario_mp_np = mysqli_fetch_array($result_comentario_mp_np)) {
+                $comentario_mp_np = $row_comentario_mp_np['comentario'];
+                if ($comentario_mp_np == "") {
+                    $comentario_mp_np = "Sin Comentario";
+                }
+            } else {
+                $comentario_mp_np = "Sin Comentario";
+            }
+
+            $bitacoraMC .= "
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
+                <h1 class=\"font-bold\">$nombreDestino</h1>
+                <P class=\"font-black mx-1\">/</P>
+                <h1 class=\" \">$seccion</h1><!-- SECION -->
+                <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
+                <h1 class=\"truncate\">$subseccion</h1><!-- SUBSECCION -->
+                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                <h1 class=\"truncate\">$equipo</h1><!-- NOMBRE EQUIPO o TAREA GENERAL-->
+                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                <h1 class=\"font-bold\">$titulo</h1><!-- DESCRIPCION DE LA TAREA -->
+                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                <h1 class=\"truncate\">$comentario_mp_np</h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
+                </div>
+            ";
+        }
+
+
         // Query MC
         $query_t_mc = "SELECT
         t_mc.id,
@@ -789,7 +856,7 @@ if (isset($_POST['action'])) {
 
         // Se obtiene el resultado total de los solucionados y Trabajando MC.
         $MPMCPROYECTOS['bitacoraMC'] = $bitacoraMC;
-        $MPMCPROYECTOS['totalmc'] = $totalmc;
+        $MPMCPROYECTOS['totalmc'] = intval($totalmc) + intval($total_mp_np);
 
 
         //QUERY MP Planificado.
@@ -857,75 +924,8 @@ if (isset($_POST['action'])) {
                 ";
         }
 
-
-        // MP NO Planificado.            
-        $query_t_mp_np = "SELECT
-            t_mp_np.id, 
-            t_mp_np.id_destino,
-            t_mp_np.id_equipo, 
-            t_mp_np.titulo, 
-            c_secciones.seccion, 
-            c_subsecciones.grupo, 
-            t_equipos.equipo
-
-            FROM t_mp_np
-            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
-            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
-            WHERE 
-            t_mp_np.status='F' AND t_mp_np.activo = 1
-            $destinoMPNP
-            $zonaFiltroMPNP
-            AND t_mp_np.fecha BETWEEN '$fecha_final_12' AND '$fecha_inicial_12'
-            ORDER BY t_mp_np.fecha DESC
-        ";
-
-        $result_t_mp_np = mysqli_query($conn_2020, $query_t_mp_np);
-        $total_mp_np = mysqli_num_rows($result_t_mp_np);
-
-        while ($row_t_mp_np = mysqli_fetch_array($result_t_mp_np)) {
-            $id = $row_t_mp_np['id'];
-            $id_destino = $row_t_mp_np['id_destino'];
-            $nombreDestino = $arrayDestino[$id_destino];
-            $seccion = $row_t_mp_np['seccion'];
-            $subseccion = $row_t_mp_np['grupo'];
-            $equipo = $row_t_mp_np['equipo'];
-            $titulo = $row_t_mp_np['titulo'];
-
-            $query_comentario_mp_np =
-                "SELECT comentario
-            FROM comentarios_mp_np WHERE id_mp_np=$id
-            ORDER BY fecha DESC LIMIT 1";
-
-            $result_comentario_mp_np = mysqli_query($conn_2020, $query_comentario_mp_np);
-            if ($row_comentario_mp_np = mysqli_fetch_array($result_comentario_mp_np)) {
-                $comentario_mp_np = $row_comentario_mp_np['comentario'];
-                if ($comentario_mp_np == "") {
-                    $comentario_mp_np = "Sin Comentario";
-                }
-            } else {
-                $comentario_mp_np = "Sin Comentario";
-            }
-
-            $bitacoraMP .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
-                <h1 class=\"font-bold\">$nombreDestino</h1>
-                <P class=\"font-black mx-1\">/</P>
-                <h1 class=\" \">$seccion</h1><!-- SECION -->
-                <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
-                <h1 class=\"truncate\">$subseccion</h1><!-- SUBSECCION -->
-                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
-                <h1 class=\"truncate\">$equipo</h1><!-- NOMBRE EQUIPO o TAREA GENERAL-->
-                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
-                <h1 class=\"font-bold\">$titulo</h1><!-- DESCRIPCION DE LA TAREA -->
-                <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
-                <h1 class=\"truncate\">$comentario_mp_np</h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
-                </div>
-            ";
-        }
-
         // Json 
-        $MPMCPROYECTOS['totalMP'] = $totalMP + $total_mp_np;
+        $MPMCPROYECTOS['totalMP'] = $totalMP;
         $MPMCPROYECTOS['bitacoraMP'] = $bitacoraMP;
 
 
@@ -1036,7 +1036,23 @@ if (isset($_POST['action'])) {
             $total_MC = "0";
             $total_MC = mysqli_num_rows($result_MC);
 
-            $graficaMC[] = $total_MC;
+
+            // MP NO Planificado.
+            $query_MPNP = "SELECT t_mp_np.id
+            FROM t_mp_np
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
+            WHERE
+            t_mp_np.status='F' AND t_mp_np.activo = 1 AND
+            t_mp_np.fecha_finalizado BETWEEN '$value' AND '$key'
+            $destinoMPNP $zonaFiltroMPNP
+            ";
+            $result_MPNP = mysqli_query($conn_2020, $query_MPNP);
+            $total_MPNP = 0;
+            $total_MPNP = mysqli_num_rows($result_MPNP);
+
+            $graficaMC[] = $total_MC + $total_MPNP;
 
             // MP Planificado.
             $query_MP = "SELECT 
@@ -1054,23 +1070,7 @@ if (isset($_POST['action'])) {
             $total_MP = 0;
             $total_MP = mysqli_num_rows($result_MP);
 
-            // MP NO Planificado.
-            $query_MPNP = "SELECT t_mp_np.id
-            FROM t_mp_np
-            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
-            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
-            WHERE
-            t_mp_np.status='F' AND t_mp_np.activo = 1 AND
-            t_mp_np.fecha BETWEEN '$value' AND '$key'
-            $destinoMPNP $zonaFiltroMPNP
-            ";
-            $result_MPNP = mysqli_query($conn_2020, $query_MPNP);
-            $total_MPNP = 0;
-            $total_MPNP = mysqli_num_rows($result_MPNP);
-
-            $graficaMP[] = $total_MP + $total_MPNP;
-            $total_MP_MPNP = 0;
+            $graficaMP[] = $total_MP;
 
 
             // Proyectos

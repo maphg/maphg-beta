@@ -912,7 +912,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             zona: zona,
             dateGeneral: dateGeneral
         },
-        dataType: 'json',
+        dataType: 'JSON',
         success: function (data) {
             // console.log(data.fecha);
             // console.log(data.dia);
@@ -922,7 +922,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
             // console.log(data.graficaP);
             // console.log(data.fecha);
             // console.log(data.bitacoraMC);
-            // console.log('Here', data);
+            console.log('Here', data);
 
             $("#bitacoraMP").html(data.bitacoraMP);
             $("#totalMP").html(data.totalMP);

@@ -3371,7 +3371,7 @@ if (isset($_POST['action'])) {
 
                 // Cuando Ningun status esta activo
                 if (
-                    $sMaterial == "" and $sTrabajando == "" and $statusEnergetico == ""and 
+                    $sMaterial == "" and $sTrabajando == "" and $statusEnergetico == "" and
                     $statusDepartamento == ""
                 ) {
                     $status = "<i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
@@ -3563,6 +3563,7 @@ if (isset($_POST['action'])) {
         $idTareaP = $_POST['idTareaP'];
         $columna = $_POST['columna'];
         $nuevoTitulo = $_POST['nuevoTitulo'];
+        $fechaActual = date('Y-m-d H:m:s');
 
         if ($columna == "status_urgente" || $columna == "status_material" || $columna == "status_trabajando" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
             $query = "SELECT $columna FROM t_mp_np WHERE id = $idTareaP";
@@ -3599,7 +3600,7 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "statusP") {
-            $query = "UPDATE t_mp_np SET status = 'F' WHERE id = $idTareaP";
+            $query = "UPDATE t_mp_np SET status = 'F', fecha_finalizado = '$fechaActual' WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 4;
             } else {
