@@ -3086,7 +3086,7 @@ $tablaRanking .= "</div>";
                                 <span class="icon is-small">
                                     <i class="fas fa-fire-extinguisher"></i>
                                 </span>
-                                <span>Correctivos</span>
+                                <span>Fallas</span>
                             </a>
                         </p>
                         <p class="control">
@@ -4393,7 +4393,7 @@ $tablaRanking .= "</div>";
                                         <div class="navbar-item zia-background">
                                             <p class="seccion-logo">ZIA</p>
                                         </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Correctivos</a>
+                                        <a class="navbar-item">Subseccion / Equipo / Fallas</a>
                                     </div>
                                     <div class="navbar-end has-text-centered">
                                         <div class="navbar-item">
@@ -4415,7 +4415,7 @@ $tablaRanking .= "</div>";
                                 ; <div class="column is-3">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Nuevo correctivo..">
+                                            <input class="input" type="text" placeholder="Agregar Nueva Falla">
                                         </div>
                                         <div class="control">
                                             <a class="button is-warning">
@@ -4435,8 +4435,7 @@ $tablaRanking .= "</div>";
                                 <div class="column is-half">
                                     <div class="columns is-mobile">
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de
-                                                    los correctivos</strong></p>
+                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripción de Falla</strong></p>
                                         </div>
 
                                     </div>
@@ -4927,7 +4926,7 @@ $tablaRanking .= "</div>";
                                         <div class="navbar-item zil-background">
                                             <p class="seccion-logo">ZIA</p>
                                         </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Correctivos</a>
+                                        <a class="navbar-item">Subseccion / Equipo / Falla</a>
                                     </div>
                                     <div class="navbar-end has-text-centered">
                                         <div class="navbar-item">
@@ -4949,7 +4948,7 @@ $tablaRanking .= "</div>";
                                 <div class="column is-3">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Nuevo correctivo">
+                                            <input class="input" type="text" placeholder="Agregar Falla">
                                         </div>
                                         <div class="control">
                                             <a class="button is-warning">
@@ -5850,11 +5849,15 @@ $tablaRanking .= "</div>";
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n
+                                    <p class="heading ">
+                                        <strong>
+                                            <!-- Here User --></strong>
+                                    </p>
+                                    <p class="heading ">
+                                        <!-- Here Date -->
+                                    </p>
+                                    <p class="has-text-justified">
+                                        <!-- Here Coment -->
                                     </p>
                                 </div>
                             </div>
@@ -6255,29 +6258,10 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
-
-    <div class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Modal title</p>
-                <button class="delete" aria-label="close"></button>
-            </header>
-            <section class="modal-card-body">
-                <!-- Content ... -->
-            </section>
-            <footer class="modal-card-foot">
-                <button class="button is-success">Save changes</button>
-                <button class="button">Cancel</button>
-            </footer>
-        </div>
-    </div>
-
-
     <!-- Modal TAREAS P -->
     <div id="modal-tareas-p" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content bg-white p-2" style="width:90%; height:90%">
+        <div class="modal-content bg-white p-2" style="width:90%; height:auto">
             <section class="hero is-light is-small">
                 <div class="hero-head">
                     <nav class=" navbar-menu">
@@ -6306,43 +6290,50 @@ $tablaRanking .= "</div>";
                 </div>
             </section>
 
-            <section class="mt-4">
-                <div class="column is-3 has-text-left">
-                    <div class="field has-addons">
-                        <div class="control is-expanded ml-5">
-                            <input id="tituloTareaP" class="input" type="text" placeholder="Agregar Tarea" maxlength="60" autocomplete="off">
-                        </div>
-                        <div id="btnAgregarTareaP" class="control">
-                            <a class="button is-warning">
-                                <i class="fad fa-plus-circle"></i>
-                            </a>
+            <section class="flex justify-center my-4">
+                <div class="columns is-centered">
+                    <div class="column is-12">
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input id="tituloTareaP" class="input" type="text" placeholder="Agregar Tarea" maxlength="60" autocomplete="off">
+                            </div>
+                            <div id="btnAgregarTareaP" class="control">
+                                <a class="button is-warning">
+                                    <i class="fad fa-plus-circle"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
             </section>
 
-            <section class="mt-4">
-                <div class="columns is-gapless mx-4 rounded mb-3 has-text-white">
+            <section class="">
+                <div class="columns is-gapless rounded">
                     <div class="column column is-half">
                         <div class="columns">
                             <div class="column">
-                                <p class="barratitulos">Descripción</p>
+                                <p class="t-titulos"><strong>Descripción Tarea</strong></p>
                             </div>
                         </div>
                     </div>
-                    <div class="column ">
+                    <div class="column">
                         <div class="columns is-gapless">
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Plan Acción">Actividades</p>
+                                <p class="t-titulos" data-tooltip="Plan Acción"><strong>Responsable</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable">Responsable</p>
+                                <p class="t-titulos" data-tooltip="Responsable"><strong>Fecha</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Fecha estimada de solucion">Fecha Creado</p>
+                                <p class="t-titulos" data-tooltip="Fecha estimada de solucion"><strong>Adjuntos</strong></p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Status">Status</p>
+                                <p class="t-titulos" data-tooltip="Status"><strong>Comentarios</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Status"><strong>Status</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Status"><strong>Opción</strong></p>
                             </div>
                         </div>
                     </div>
@@ -6353,7 +6344,7 @@ $tablaRanking .= "</div>";
                 <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
             </section>
 
-            <section class="mt-4">
+            <section class="mb-4">
                 <div id="dataTareasP"></div>
             </section>
 
@@ -6362,33 +6353,166 @@ $tablaRanking .= "</div>";
     <!-- Modal TAREAS P -->
 
 
-    <div id="modal-titulo-tareas" class="modal">
+    <!--MODAL COMENTARIOS EQUIPO-->
+    <div id="modal-comentarios-tareas" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-content has-background-">
-            <div class="box">
-                <div class="column has-text-centered">
+        <div class="modal-card modal-md">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="dataHeaderComentarios" class="column"></div>
 
-                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloTP');">
-                        <i class="far fa-edit"></i>
-                        <span> Editar</span>
-                    </button>
-                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
-                        <i class="far fa-trash-alt"></i>
-                        <span> Eliminar</span>
-                    </button>
+                    <div class="column is-1">
+                        <button class="button is-warning" onclick="closeModal('modal-comentarios-tareas');">
+                            <span class="icon is-small">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </button>
+                    </div>
                 </div>
+                <div class="columns">
+                    <div id="" class="column">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Comentarios Tareas</h4>
 
-                <div id="actividadNuevoTituloTP" class="column has-text-centered modal">
-                    <input id="nuevoTituloTP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo" autocomplete="off">
-                    <button id="btnTituloTP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
-                        <i class="far fa-save"></i>
-                        <span> Guardar</span>
-                    </button>
+                            <div class="columns is-centered">
+                                <div class="column is-3">
+
+                                    <div class="field has-addons">
+                                        <div class="control">
+                                            <input id="textComentarioTareas" class="input" type="text" placeholder="Agregar Comentaio" autocomplete="off">
+                                        </div>
+                                        <div id="agregarComentarioTarea" class="control">
+                                            <a class="button is-info">
+                                                Agregar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <!-- Data Comentarios -->
+                                <div id="dataComentariosTareas"></div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+        </div>
+    </div>
+
+    <!--MODAL FOTOS EQUIPO-->
+    <div id="modal-tareas-pictures" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-md">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="" class="column has-text-right">
+                        <button class="delete" aria-label="close" onclick="closeModal('modal-tareas-pictures');"></button>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div id="colFotosTareas" class="column is-6">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <!-- Status TareasP -->
+    <div id="modalStatusTareasP" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny has-background-white rounded">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+
+                                <button id="statusUrgenteATP" class="button is-danger is-fullwidth">
+                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>
+                                    Es urgente!
+                                </button>
+
+                                <button id="statusMaterialATP" class="button is-dark is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong> M
+                                        </strong></span> No hay material
+                                </button>
+
+                                <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
+                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
+                                </button>
+                                <div id="actividadStatusEnergeticos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusElectricidadATP" class="button is-warning has-text-centered m-1">Electricidad</button>
+
+                                    <button id="statusAguaATP" class="button is-warning has-text-centered m-1">Agua</button>
+
+                                    <button id="statusDieselATP" class="button is-warning has-text-centered m-1">Diésel</button>
+
+                                    <button id="statusGasATP" class="button is-warning has-text-centered m-1">Gas</button>
+                                </div>
+
+                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleModal('StatusDepartamentos');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
+                                </button>
+                                <div id="actividadStatusDepartamentos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusCalidadATP" class="button is-primary has-text-centered m-1">Calidad
+                                    </button>
+
+                                    <button id="statusComprasATP" class="button is-primary has-text-centered m-1">Compras
+                                    </button>
+
+                                    <button id="statusDireccionATP" class="button is-primary has-text-centered m-1">Dirección
+                                    </button>
+
+                                    <button id="statusFinanzasATP" class="button is-primary has-text-centered m-1">Finanzas
+                                    </button>
+
+                                    <button id="statusRRHHATP" class="button is-primary has-text-centered m-1">RRHH
+                                    </button>
+
+                                </div>
+
+                                <button id="statusTrabajandoATP" class="button is-info is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
+                                </button>
+
+                                <button id="statusSolucionarATP" class="button is-success is-fullwidth mt-2">
+                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
+                                </button>
+
+                                <button id="statusRestaurarATP" class="button is-danger is-fullwidth mt-2">
+                                    <i class="fad fa-undo mr-4 fa-lg"></i>Restaurar
+                                </button>
+
+                                <div class="column has-text-centered">
+
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloATP');">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+
+                                <div id="actividadNuevoTituloATP" class="column has-text-centered modal">
+                                    <input id="nuevoTituloATP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnTituloATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
     </div>
+    <!-- Status TareasP -->
 
 
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
@@ -6560,7 +6684,7 @@ $tablaRanking .= "</div>";
                     <div class="column is-half">
                         <div class="columns is-mobile">
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de los correctivos</strong></p>
+                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de Falla</strong></p>
                             </div>
 
                         </div>
@@ -7096,97 +7220,6 @@ $tablaRanking .= "</div>";
             </footer>
         </div>
     </div>
-
-    <!-- Status TareasP -->
-    <div id="modalStatusTareasP" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-
-                                <button id="statusUrgenteATP" class="button is-danger is-fullwidth">
-                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>
-                                    Es urgente!
-                                </button>
-
-                                <button id="statusMaterialATP" class="button is-dark is-fullwidth mt-2">
-                                    <span class="mr-4 fa-lg"><strong> M
-                                        </strong></span> No hay material
-                                </button>
-
-                                <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
-                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
-                                </button>
-                                <div id="actividadStatusEnergeticos" class="modal has-background-light p-3 m-2">
-
-                                    <button id="statusElectricidadATP" class="button is-warning has-text-centered m-1">Electricidad</button>
-
-                                    <button id="statusAguaATP" class="button is-warning has-text-centered m-1">Agua</button>
-
-                                    <button id="statusDieselATP" class="button is-warning has-text-centered m-1">Diésel</button>
-
-                                    <button id="statusGasATP" class="button is-warning has-text-centered m-1">Gas</button>
-                                </div>
-
-                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleModal('StatusDepartamentos');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
-                                </button>
-                                <div id="actividadStatusDepartamentos" class="modal has-background-light p-3 m-2">
-
-                                    <button id="statusCalidadATP" class="button is-primary has-text-centered m-1">Calidad
-                                    </button>
-
-                                    <button id="statusComprasATP" class="button is-primary has-text-centered m-1">Compras
-                                    </button>
-
-                                    <button id="statusDireccionATP" class="button is-primary has-text-centered m-1">Dirección
-                                    </button>
-
-                                    <button id="statusFinanzasATP" class="button is-primary has-text-centered m-1">Finanzas
-                                    </button>
-
-                                    <button id="statusRRHHATP" class="button is-primary has-text-centered m-1">RRHH
-                                    </button>
-
-                                </div>
-
-                                <button id="statusTrabajandoATP" class="button is-info is-fullwidth mt-2">
-                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
-                                </button>
-
-                                <button id="statusSolucionarATP" class="button is-success is-fullwidth mt-2">
-                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
-                                </button>
-
-                                <div class="column has-text-centered">
-
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloATP');">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-
-                                <div id="actividadNuevoTituloATP" class="column has-text-centered modal">
-                                    <input id="nuevoTituloATP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button id="btnTituloATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Status TareasP -->
 
     <!--MODAL COMENTARIOS -->
     <div id="modalComentario" class="modal">

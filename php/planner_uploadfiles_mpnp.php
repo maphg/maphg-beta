@@ -7,7 +7,7 @@ $conn->conectar();
 $ds = DIRECTORY_SEPARATOR; //1 
 $storeFolder = '../img/equipos/mpnp/'; //2
 $idMPNP = $_POST['idMPNP'];
-$idActividad = $_POST['idActividad'];
+// $idActividad = $_POST['idActividad'];
 $usuario = $_SESSION['usuario'];
 date_default_timezone_set('America/Cancun');
 $fecha = date("Y-m-d H:i:s");
@@ -30,11 +30,11 @@ if (!empty($_FILES)) {
             echo "El archivo ya Existe.";
         } else {
             if (move_uploaded_file($tempFile, $targetFile)) {
-                $query = "INSERT INTO adjuntos_mp_np (id_usuario, id_mp_np, id_actividad, url, fecha)VALUES ($usuario, $idMPNP, $idActividad, '$fileName', '$fecha')";
+                $query = "INSERT INTO adjuntos_mp_np (id_usuario, id_mp_np, url, fecha)VALUES ($usuario, $idMPNP, '$fileName', '$fecha')";
                 try {
                     $resp = $conn->consulta($query);
                     if ($resp == 1) {
-                        $resp = "Adjunto Cargado";
+                        $resp = "1";
                     } else { 
                         $resp = "-1";
                     }

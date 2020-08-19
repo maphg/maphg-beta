@@ -308,6 +308,7 @@ function eliminarComentarioMPNP(idComentario, idMPNP) {
 
 
 function adjuntosMPNP(idMPNP) {
+    document.getElementById("modal-equipo-pictures").classList.add('is-active');
     $("#colFotosEquipo").html('');
     $("#colFotosMPMC").html('');
     var action = "adjuntosMPNP";
@@ -467,7 +468,8 @@ function toggleModal(id) {
 
 
 function obtTareasP(idEquipo, equipo) {
-    console.log('Tareas P');
+    document.getElementById("statusSolucionarATP").classList.remove("is-hidden");
+    document.getElementById("statusRestaurarATP").classList.add("is-hidden");
     document.getElementById("modal-tareas-p").classList.add('is-active');
     let status = "P";
     document.getElementById("btnTareas").
@@ -489,7 +491,6 @@ function obtTareasP(idEquipo, equipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             document.getElementById("dataEquipoTareasP").innerHTML = equipo;
             document.getElementById("dataTareasP").innerHTML = data.dataTareas;
             document.getElementById("textSeccionTareas").innerHTML = data.seccion;
@@ -501,6 +502,8 @@ function obtTareasP(idEquipo, equipo) {
 }
 
 function obtTareasF(idEquipo, equipo) {
+    document.getElementById("statusSolucionarATP").classList.add("is-hidden");
+    document.getElementById("statusRestaurarATP").classList.remove("is-hidden");
     document.getElementById("modal-tareas-p").classList.add('is-active');
     document.getElementById("btnTareas").
         setAttribute('onclick', 'obtTareasP(' + idEquipo + ', "' + equipo + '")');
@@ -705,108 +708,116 @@ function asignarResponsableTareasP(idTarea, idUsuario, idEquipo, equipo) {
 }
 
 
-function obtStatusActvidadTareaP(idActividad, idEquipo, equipo) {
+function obtStatusActvidadTareaP(idTareaP, titulo, idEquipo, equipo) {
     document.getElementById("modalStatusTareasP").classList.add('modal-fx-superScaled', 'is-active');
 
+    document.getElementById("nuevoTituloATP").value = titulo;
+
     document.getElementById("statusUrgenteATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_urgente")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_urgente")');
 
     document.getElementById("statusMaterialATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_material")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_material")');
 
     document.getElementById("statusTrabajandoATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "status_trabajando")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_trabajando")');
 
+    // Finalizar la Tarea
     document.getElementById("statusSolucionarATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "statusP")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "statusP")');
+
+    // Restaura la Tarea.
+    document.getElementById("statusRestaurarATP").setAttribute('onclick',
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "statusF")');
 
     document.getElementById("btnTituloATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "titulo")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "titulo")');
 
     document.getElementById("btnEliminarATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "eliminar")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "eliminar")');
 
 
     // Energeticos Status
     document.getElementById("statusElectricidadATP").setAttribute('onclick', 'aplicarCambioActividad('
-        + idActividad + ', ' + idEquipo + ', "' + equipo + '", "energetico_electricidad")');
+        + idTareaP + ', ' + idEquipo + ', "' + equipo + '", "energetico_electricidad")');
 
     document.getElementById("statusAguaATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_agua")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "energetico_agua")');
 
     document.getElementById("statusDieselATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_diesel")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "energetico_diesel")');
 
     document.getElementById("statusGasATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "energetico_gas")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "energetico_gas")');
 
 
     // Dertamentos Status.
     document.getElementById("statusCalidadATP").setAttribute('onclick', 'aplicarCambioActividad('
-        + idActividad + ', ' + idEquipo + ', "' + equipo + '", "departamento_calidad")');
+        + idTareaP + ', ' + idEquipo + ', "' + equipo + '", "departamento_calidad")');
 
     document.getElementById("statusComprasATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_compras")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "departamento_compras")');
 
     document.getElementById("statusDireccionATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_direccion")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "departamento_direccion")');
 
     document.getElementById("statusFinanzasATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_finanzas")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "departamento_finanzas")');
 
     document.getElementById("statusRRHHATP").setAttribute('onclick',
-        'aplicarCambioActividad(' + idActividad + ',' + idEquipo + ',"' + equipo + '", "departamento_rrhh")');
+        'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "departamento_rrhh")');
 }
 
 
-function aplicarCambioActividad(idActividad, idEquipo, equipo, columna) {
+function aplicarCambioActividad(idTareaP, idEquipo, equipo, columna) {
     let nuevoTitulo = document.getElementById("nuevoTituloATP").value;
     const action = "aplicarCambioActividad";
-    if (columna == 'titulo' && nuevoTitulo.length < 2) {
-        alertInformacion('Título Actividad, No Valido', 'question');
-    } else {
-        $.ajax({
-            type: "POST",
-            url: "php/crud.php",
-            data: {
-                action: action,
-                idActividad: idActividad,
-                columna: columna,
-                nuevoTitulo: nuevoTitulo
-            },
-            // dataType: "JSON",
-            success: function (data) {
-                console.log(data);
-                if (data == 1) {
-                    alertInformacion('Status Actualizado', 'success');
-                    obtTareasP(idEquipo, equipo);
-                    document.getElementById("modalStatusTareasP").
-                        classList.remove('modal-fx-superScaled', 'is-active');
-                    document.getElementById("nuevoTituloATP").value = '';
-                } else if (data == 2) {
-                    alertInformacion('Título Actualizado', 'success');
-                    obtTareasP(idEquipo, equipo);
-                    document.getElementById("modalStatusTareasP").
-                        classList.remove('modal-fx-superScaled', 'is-active');
-                    document.getElementById("nuevoTituloATP").value = '';
-                } else if (data == 3) {
-                    alertInformacion('Actividad Eliminada', 'success');
-                    obtTareasP(idEquipo, equipo);
-                    document.getElementById("modalStatusTareasP").
-                        classList.remove('modal-fx-superScaled', 'is-active');
-                    document.getElementById("nuevoTituloATP").value = '';
-                } else if (data == 4) {
-                    alertInformacion('Actividad Finalizada', 'success');
-                    document.getElementById("modalStatusTareasP").
-                        classList.remove('modal-fx-superScaled', 'is-active');
-                    obtTareasP(idEquipo, equipo);
-                } else if (data == 0) {
-                    alertInformacion('Intente de Nuevo', 'question');
-                    obtTareasP(idEquipo, equipo);
-                }
+
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTareaP: idTareaP,
+            columna: columna,
+            nuevoTitulo: nuevoTitulo
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            if (data == 1) {
+                alertInformacion('Status Actualizado', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modalStatusTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+                document.getElementById("nuevoTituloATP").value = '';
+            } else if (data == 2) {
+                alertInformacion('Título Actualizado', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modalStatusTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+                document.getElementById("nuevoTituloATP").value = '';
+            } else if (data == 3) {
+                alertInformacion('Tarea Eliminada', 'success');
+                obtTareasP(idEquipo, equipo);
+                document.getElementById("modalStatusTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+                document.getElementById("nuevoTituloATP").value = '';
+            } else if (data == 4) {
+                alertInformacion('Tarea Finalizada', 'success');
+                document.getElementById("modalStatusTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+                obtTareasP(idEquipo, equipo);
+            } else if (data == 5) {
+                alertInformacion('Tarea Restaurada', 'success');
+                document.getElementById("modalStatusTareasP").
+                    classList.remove('modal-fx-superScaled', 'is-active');
+                obtTareasP(idEquipo, equipo);
+            } else if (data == 0) {
+                alertInformacion('Intente de Nuevo', 'question');
+                obtTareasP(idEquipo, equipo);
             }
-        });
-    }
+        }
+    });
 }
 
 
@@ -882,32 +893,32 @@ function actualizarTarea(idTarea, idEquipo, equipo, columna) {
 }
 
 
-function adjuntosTareas(idTarea, idActividad, idEquipo, equipo) {
-    document.getElementById("modal-equipo-pictures").classList.add('is-active');
-    $("#colFotosEquipo").html('');
-    $("#colFotosMPMC").html('');
+function adjuntosTareas(idTareas, idEquipo, equipo) {
+    document.getElementById("modal-tareas-pictures").classList.add('is-active', 'modal-fx-superScaled');
+    $("#colFotosTareas").html('');
     const action = "adjuntosTareas";
     $.ajax({
         type: "post",
         url: "php/crud.php",
         data: {
             action: action,
-            idTarea: idTarea,
-            idActividad: idActividad
+            idTareas: idTareas,
+            idEquipo: idEquipo,
+            equipo: equipo
         },
         // dataType: "dataType",
         success: function (data) {
-            $("#colFotosEquipo").html(data);
+            $("#colFotosTareas").html(data);
         }
     });
 }
 
 
-function cargarAdjuntoMPNP(idMPNP,) {
-    $("#colFotosMPMC").html('');
-    var inputFileImage = document.getElementById("inputAdjuntoMPNP");
+function cargarAdjuntoTarea(idTarea, idEquipo, equipo) {
+    var inputFileImage = document.getElementById("inputAdjuntoTarea");
     var file = inputFileImage.files;
     var data = new FormData();
+    let idMPNP = idTarea;
     for (i = 0; i < file.length; i++) {
         data.append("fileToUpload" + i, file[i]);
     }
@@ -926,13 +937,120 @@ function cargarAdjuntoMPNP(idMPNP,) {
         success: function (data) {
             if (data == 1) {
                 // console.log(data);
-                alertInformacion('Adjunto Cargado.', 'success');
+                alertInformacion('Adjunto Cargado', 'success');
+                adjuntosTareas(idTarea, idEquipo, equipo);
+                obtTareasP(idEquipo, equipo);
 
             } else {
-                alertInformacion(data, 'info');
+                alertInformacion('Intente de Nuevo', 'info');
             }
-            adjuntosMPNP(idMPNP);
-            refreshModalMPNP();
         },
     });
+}
+
+
+function obtComentariosTarea(idEquipo, equipo, idTareaP, titulo) {
+    document.getElementById("agregarComentarioTarea").setAttribute('onclick', 'agregarComentarioTarea(' + idEquipo + ', "' + equipo + '", ' + idTareaP + ', "' + titulo + '")');
+    document.getElementById("dataComentariosTareas").innerHTML = '';
+    document.getElementById("dataHeaderComentarios").innerHTML = ''; document.getElementById("modal-comentarios-tareas").classList.add('is-active');
+    const action = "obtComentariosTarea";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTareaP: idTareaP,
+            idEquipo: idEquipo,
+            titulo: titulo,
+            equipo: equipo
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataComentariosTareas").innerHTML = data.dataComentarios;
+            document.getElementById("dataHeaderComentarios").innerHTML = data.dataHeaderComentario;
+        }
+    });
+}
+
+
+function eliminarComentarioTarea(idComentario, idEquipo, equipo, idTareaP, titulo) {
+    var action = "eliminarComentarioMPNP";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idComentario: idComentario
+        },
+        // dataType: "dataType",
+        success: function (data) {
+            if (data == "Comentario Eliminado.") {
+                alertInformacion('Comentario Eliminado.', 'success');
+                obtComentariosTarea(idEquipo, equipo, idTareaP, titulo);
+                obtTareasP(idEquipo, equipo);
+            } else {
+                alertInformacion('Intente de Nuevo.', 'question');
+                obtComentariosTarea(idEquipo, equipo, idTareaP, titulo);
+            }
+        }
+    });
+}
+
+
+function agregarComentarioTarea(idEquipo, equipo, idTareaP, titulo) {
+    console.log('Agregar Comentario');
+    let comentario = document.getElementById("textComentarioTareas").value;
+
+    var action = "agregarComentarioMPNP";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            comentario: comentario,
+            idMPNP: idTareaP
+        },
+        // dataType: "dataType",
+        success: function (data) {
+            if (data == 1) {
+                alertInformacion('Comentario Agregado.', 'success');
+                document.getElementById("textComentarioTareas").value = '';
+                obtComentariosTarea(idEquipo, equipo, idTareaP, titulo);
+                obtTareasP(idEquipo, equipo);
+            } else {
+                alertInformacion('Intente de Nuevo.', 'question');
+                obtComentariosTarea(idEquipo, equipo, idTareaP, titulo);
+            }
+        }
+    });
+}
+
+
+function eliminarAdjuntoTarea(idImg, idTarea, idEquipo, equipo) {
+    var action = "eliminarAdjuntoMPNP";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idImg: idImg
+        },
+        // dataType: "dataType",
+        success: function (data) {
+            if (data == "Adjunto Eliminado.") {
+                adjuntosTareas(idTarea, idEquipo, equipo);
+                obtTareasP(idEquipo, equipo);
+                alertInformacion('Adjunto Eliminado', 'success');
+            } else {
+                alertInformacion('Intente de Nuevo.', 'question');
+
+            }
+        }
+    });
+}
+
+
+function obtStatusTareas() {
+    document.getElementById("modalStatusTareasP").classList.add('modal-fx-superScaled', 'is-active');
 }

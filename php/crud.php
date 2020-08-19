@@ -3256,7 +3256,10 @@ if (isset($_POST['action'])) {
             }
         }
 
-        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.responsable, t_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.responsable, t_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.status_urgente, t_mp_np.status_material, t_mp_np.status_trabajando,
+        t_mp_np.energetico_electricidad, t_mp_np.energetico_agua, t_mp_np.energetico_diesel, 
+        t_mp_np.energetico_gas, t_mp_np.departamento_calidad, t_mp_np.departamento_compras, 
+        t_mp_np.departamento_direccion, t_mp_np.departamento_finanzas, t_mp_np.departamento_rrhh
         FROM t_mp_np 
         INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -3274,75 +3277,25 @@ if (isset($_POST['action'])) {
                 $idResponsable = $i['responsable'];
                 $idResponsable = explode(',', $idResponsable);
                 $fechaCreado = (new DateTime($i['fecha']))->format('d-m-Y');
+                $sUrgente = $i['status_urgente'];
+                $sMaterial = $i['status_material'];
+                $sTrabajando = $i['status_trabajando'];
+                $eElectricidad = $i['energetico_electricidad'];
+                $eAgua = $i['energetico_agua'];
+                $eDiesel = $i['energetico_diesel'];
+                $eGas = $i['energetico_gas'];
+                $dCalidad = $i['departamento_calidad'];
+                $dCompras = $i['departamento_compras'];
+                $dDireccion = $i['departamento_direccion'];
+                $dFinanzas = $i['departamento_finanzas'];
+                $dRRHH = $i['departamento_rrhh'];
 
                 // Default
                 $responsable = "<i class=\"fad fa-minus has-text-danger fa-2x\"></i>";
-                $status = "<i class=\"fad fa-exclamation-circle has-text-info fa-1x\"></i>";
 
-                // Obtiene el total de actividades.
-                $queryActividades = "SELECT count(id), sum(status_urgente), sum(status_material), 
-                sum(status_trabajando), sum(departamento_calidad + departamento_compras + 
-                departamento_direccion + departamento_finanzas + departamento_rrhh) 'departamentos', 
-                sum(energetico_electricidad + energetico_agua + energetico_diesel + energetico_gas) 'energeticos'
-                FROM actividad_mp_np 
-                WHERE id_mp_np = $idTareaP AND activo= 1";
-                if ($resultActividades = mysqli_query($conn_2020, $queryActividades)) {
-                    foreach ($resultActividades as $i) {
-
-                        $totalActividades = $i['count(id)'];
-                        $sUrgente = $i['sum(status_urgente)'];
-                        $sMaterial = $i['sum(status_material)'];
-                        $sTrabajando = $i['sum(status_trabajando)'];
-                        $departamentos = $i['departamentos'];
-                        $energeticos = $i['energeticos'];
-                    }
-                    if ($totalActividades == 0 or $totalActividades == "") {
-                        $totalActividades = "<i class=\"fad fa-minus has-text-danger fa-2x\"></i>";
-                    }
-
-                    // Status
-                    if ($sUrgente > 0) {
-                        $sUrgente = "<i class=\"fad fa-siren-on fa-1x animated has-text-danger pr-3 infinite flash\"></i>";
-                    } else {
-                        $sUrgente = "";
-                    }
-
-                    if ($sMaterial > 0) {
-                        $sMaterial = "<span class=\"tag is-dark fa-1x\">M</span>";
-                    } else {
-                        $sMaterial = "";
-                    }
-
-                    if ($sTrabajando > 0) {
-                        $sTrabajando = "<strong class=\"mr-1 fa-1x has-text-info\">T</strong>";
-                    } else {
-                        $sTrabajando = "";
-                    }
-
-                    // Departamento
-                    if ($departamentos > 0) {
-                        $departamentos = "<strong>D</strong>";
-                    } else {
-                        $departamentos = "";
-                    }
-
-                    // Energetico
-                    if ($energeticos > 0) {
-                        $energeticos = "<strong>E</strong>";
-                    } else {
-                        $energeticos = "";
-                    }
-
-                    // Comprobación Final.
-                    if ($sMaterial == "" and $sTrabajando == "" and $departamentos <= 0 and $energeticos <= 0) {
-                        $status = "<i class=\"fad fa-exclamation-circle has-text-info fa-1x\"></i>";
-                    } else {
-                        $status = "";
-                    }
-                }
 
                 // Obtiene el responsable asignado.
-                foreach ($idResponsable as $key => $value) {
+                foreach ($idResponsable as $value) {
                     if ($value != "") {
                         $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                         FROM t_users 
@@ -3355,15 +3308,86 @@ if (isset($_POST['action'])) {
                         }
                     }
                 }
+
+                // Obtiene el Numero de Comentarios.
+                $queryComentario = "SELECT count(id) FROM comentarios_mp_np WHERE id_mp_np = $idTareaP AND activo = 1";
+                if ($resultComentario = mysqli_query($conn_2020, $queryComentario)) {
+                    foreach ($resultComentario as $i) {
+                        $totalComentario = $i['count(id)'];
+                    }
+                }
+
+                if ($totalComentario == 0 || $totalComentario == "") {
+                    $totalComentario = "<i class=\"fad fa-minus has-text-danger fa-2x\"></i>";
+                } else {
+                    $totalComentario = $totalComentario;
+                }
+
+                // Obtiene el Numero de Adjuntos.
+                $queryAdjuntos = "SELECT count(id) FROM adjuntos_mp_np WHERE id_mp_np = $idTareaP AND activo = 1";
+                if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                    foreach ($resultAdjuntos as $i) {
+                        $totalAdjuntos = $i['count(id)'];
+                    }
+                }
+
+                if ($totalAdjuntos == 0 || $totalAdjuntos == "") {
+                    $totalAdjuntos = "<i class=\"fad fa-minus has-text-danger fa-2x\"></i>";
+                } else {
+                    $totalAdjuntos = $totalAdjuntos;
+                }
+
+
+                // Status Principales
+                if ($sUrgente == 1) {
+                    $sUrgente = "<span><i class=\"has-text-danger fad fa-siren-on mr-2 fa-lg animated infinite flash\"></i></span>";
+                } else {
+                    $sUrgente = "";
+                }
+
+                if ($sMaterial == 1) {
+                    $sMaterial = "<span class=\"fa-lg\"><strong>M</strong></span>";
+                } else {
+                    $sMaterial = "";
+                }
+
+                if ($sTrabajando == 1) {
+                    $sTrabajando = "<span class=\"fa-lg\"><strong class=\"has-text-info bold\">T</strong></span>";
+                } else {
+                    $sTrabajando = "";
+                }
+
+                if ($dCalidad == 1 || $dCompras == 1 || $dDireccion == 1 || $dFinanzas == 1 || $dRRHH == 1) {
+                    $statusDepartamento = "<span class=\"fa-lg\"><strong class=\"has-text-primary\">D</strong></span>";
+                } else {
+                    $statusDepartamento = "";
+                }
+
+                if ($eElectricidad == 1 || $eAgua == 1 || $eDiesel == 1 || $eGas == 1) {
+                    $statusEnergetico = "<span class=\"fa-lg\"><strong class=\"has-text-warning\">E</strong></span>";
+                } else {
+                    $statusEnergetico = "";
+                }
+
+                // Cuando Ningun status esta activo
+                if (
+                    $sMaterial == "" and $sTrabajando == "" and $statusEnergetico == ""and 
+                    $statusDepartamento == ""
+                ) {
+                    $status = "<i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
+                } else {
+                    $status = "";
+                }
+
                 // Tarea
                 $dataTareas .= "
                     <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
-                        <div class=\"column is-half\" onclick=\"toggleModal($idTareaP);\">
+                        <div class=\"column is-half\">
                             <div class=\"columns\">
                                 <div class=\"column\">
                                 <div class=\"is-small is-success\">
                                 
-                                        <p class=\"message-body\">$sUrgente <strong> $titulo</strong>
+                                        <p class=\"message-body\"> $sUrgente <strong> $titulo</strong>
                                             <span class=\"\">
                                                 <i class=\"fad fa-user-circle mx-2 fa-lg\"></i>
                                                 $nombreCompleto
@@ -3375,225 +3399,38 @@ if (isset($_POST['action'])) {
                         </div>
                         <div class=\"column\">
                             <div class=\"columns is-gapless\">
-                               
-                            <div class=\"column t-small t-normal\">
-                                    <p class=\"t-normal\">$totalActividades</p>
-                                </div>
                                 
-                                <div class=\"column t-small t-normal\" 
+                                <div class=\"column is-small t-normal\" 
                                 onclick=\"obtUsuariosTareasP($idTareaP, $idEquipo, '$equipo');\">
                                     <p class=\"t-normal\">$responsable</p>
                                 </div>
                                
-                                <div class=\"column t-small t-normal\">
+                                <div class=\"column is-small t-normal\">
                                     <p class=\"t-normal\">$fechaCreado</p>
                                 </div>
                                 
-                                <div class=\"column t-small t-normal\" 
-                                onclick=\"obtDatosTarea($idTareaP, '$titulo', $idEquipo, '$equipo');\">
-                                    <p class=\"t-icono-rojo\"> 
-                                        $sMaterial $sTrabajando $departamentos $energeticos $status
+                                <div class=\"column is-small t-normal\" onclick=\"adjuntosTareas($idTareaP, $idEquipo, '$equipo')\">
+                                    <p class=\"t-normal\">$totalAdjuntos</p>
+                                </div>
+
+                                <div class=\"column is-small t-normal\" onclick=\"obtComentariosTarea($idEquipo, '$equipo', '$idTareaP', '$titulo');\">
+                                    <p class=\"t-normal\">$totalComentario</p>
+                                </div>
+
+                                <div class=\"column is-small t-normal\" 
+                                onclick=\"obtStatusActvidadTareaP($idTareaP, '$titulo', $idEquipo, '$equipo');\">
+                                    <p class=\"p-3\"> 
+                                    $status $sMaterial $sTrabajando $statusEnergetico $statusDepartamento
                                     </p>
+                                </div>
+                                
+                                <div class=\"column is-small t-normal\">
+                                    <p class=\"t-normal\">N/A</p>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                ";
-
-                // Actividades.
-                $dataTareas .= "
-                    <section id=\"actividad$idTareaP\" class=\"modal box mt-0 mb-4 cursor mx-2\">
-                        <div class=\"columns\">
-                            <div class=\"column is-one-third\">
-                                <h4 class=\"subtitle is-4 has-text-centered\">Plan de acción</h4>
-                                <div class=\"field has-addons\">
-                                    <div class=\"control is-expanded\">
-                                        <input $statusTarea id=\"tituloActividad$idTareaP\" class=\"input is-rounded\" type=\"text\" placeholder=\"Agregar Actividad\" maxlength=\"60\">
-                                    </div>
-                                    <div class=\"control\">
-                                        <a class=\"button is-primary is-rounded\" onclick=\"agregarActividadTareaP($idTareaP, $idEquipo, '$equipo');\">
-                                            <i class=\"fad fa-plus-circle\"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class=\"timeline is-left\">
-                                    <div id=\"planAccion2537\">
-                ";
-
-                $query = "SELECT actividad_mp_np.id, actividad_mp_np.actividad, actividad_mp_np.status, actividad_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido,
-                actividad_mp_np.status_urgente, actividad_mp_np.status_material, 
-                actividad_mp_np.status_trabajando, actividad_mp_np.energetico_electricidad, actividad_mp_np.energetico_agua, actividad_mp_np.energetico_diesel, actividad_mp_np.energetico_gas,
-                actividad_mp_np.departamento_calidad, actividad_mp_np.departamento_compras, 
-                actividad_mp_np.departamento_direccion, actividad_mp_np.departamento_finanzas, actividad_mp_np.departamento_rrhh
-                FROM actividad_mp_np 
-                INNER JOIN t_users ON actividad_mp_np.creado_por = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE actividad_mp_np.id_mp_np = $idTareaP AND actividad_mp_np.activo = 1";
-
-                $contadorPendiente = 0;
-
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $value) {
-                        $idActividad = $value['id'];
-                        $actividad = $value['actividad'];
-                        $status = $value['status'];
-                        $creadoPor = $value['nombre'] . " " . $value['apellido'];
-                        $fecha = (new DateTime($value['fecha']))->format('d-m-Y');
-
-                        // Status.
-                        $sUrgente = $value['status_urgente'];
-                        $sMaterial = $value['status_material'];
-                        $sTrabajando = $value['status_trabajando'];
-                        $energeticos = intval($value['energetico_electricidad']) + intval($value['energetico_agua']) + intval($value['energetico_diesel']) + intval($value['energetico_gas']);
-
-                        $departamento = intval($value['departamento_calidad']) + intval($value['departamento_compras']) + intval($value['departamento_direccion']) +
-                            intval($value['departamento_finanzas']) + intval($value['departamento_rrhh']);
-
-
-
-                        if ($status == "SOLUCIONADO") {
-                            $status = "is-sr-only actividadSolucionada$idTareaP";
-                            $estiloActividad = "has-background-success";
-                            $claseSeleccionado = "tituloActividadS";
-                        } else {
-                            $status = "";
-                            $estiloActividad = "has-background-warning";
-                            $claseSeleccionado = "tituloActividadP";
-                            $contadorPendiente++;
-                        }
-
-                        if ($contadorPendiente == 0 and $statusTarea == "") {
-                            $btnRestaurar = "is-sr-only";
-                            $btnFinalizar = "";
-                        } elseif ($contadorPendiente == 0 and $statusTarea == "disabled") {
-                            $btnRestaurar = "";
-                            $btnFinalizar = "is-sr-only";
-                        } else {
-                            $btnFinalizar = "is-sr-only";
-                            $btnRestaurar = "is-sr-only";
-                        }
-
-                        if ($sUrgente == "0") {
-                            $sUrgente = "";
-                        } else {
-                            $sUrgente = "<i class=\"fad fa-siren-on fa-lg has-text-danger animated infinite flash\"></i>";
-                        }
-
-                        if ($sMaterial == "0") {
-                            $sMaterial = "";
-                        } else {
-                            $sMaterial = "<span class=\"tag is-dark fa-lg\">M</span>";
-                        }
-
-                        if ($sTrabajando == "0") {
-                            $sTrabajando = "";
-                        } else {
-                            $sTrabajando = "<strong class=\"mr-1 fa-lg has-text-info\">T</strong>";
-                        }
-
-                        // Departamento
-                        if ($departamento > 0) {
-                            $departamento = "<strong>D</strong>";
-                        } else {
-                            $departamento = "";
-                        }
-
-                        // Energetico
-                        if ($energeticos > 0) {
-                            $energeticos = "<strong>E</strong>";
-                        } else {
-                            $energeticos = "";
-                        }
-
-                        // Comprobacion final
-                        if ($sUrgente == "" and $sMaterial == "" and $sTrabajando == "" and $departamento == "" and $energeticos == "") {
-                            $statusDefault = "<i class=\"fad fa-exclamation-circle has-text-info fa-2x\"></i>";
-                        } else {
-                            $statusDefault = "";
-                        }
-
-                        // Actividades
-                        $dataTareas .= "
-                            <div class=\"$status timeline-item  my-0 py-0\">
-                                <div class=\"timeline-marker\"></div>
-                                <div class=\"timeline-content\">
-                                    <p class=\"heading \"><strong>$creadoPor</strong> - $fecha</p>
-
-                                    <div class=\"field has-addons\">
-                                        <div class=\"control is-expanded\">
-                                            <p id=\"actividad$idActividad\" 
-                                            class=\"$claseSeleccionado has-text-justified manita $estiloActividad px-3 py-1 rounded-pill has-text-white has-text-weight-light\" 
-                                            onclick=\"actividadSeleccionada($idActividad);obtenerComentarioActividad($idActividad, $idTareaP); 
-                                            \">
-                                            $actividad
-                                            </p>
-                                        </div>
-                                        <div class=\"control ml-3\" data-tooltip=\"Agregar Status\" 
-                                        onclick=\" obtStatusActvidadTareaP($idActividad, $idEquipo, '$equipo');\">
-                                            $statusDefault
-                                            $sUrgente
-                                            $sMaterial
-                                            $sTrabajando
-                                            $energeticos
-                                            $departamento
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ";
-                        // Actividades
-                    }
-                }
-
-                $dataTareas .= "
-                                        <div class=\"timeline-item\">
-                                            <div class=\"timeline-marker is-icon\">
-                                                <i class=\"fad fa-genderless\"></i>
-                                            </div>
-                                        </div>
-                    
-                                        <div class=\"column\">
-                                            <button class=\"$btnFinalizar m-1 has-text-centered button is-danger\" onclick=\"finalizarTareaP($idTareaP, $idEquipo, '$equipo','F');\">
-                                                <span>Finalizar Tarea</span>
-                                            </button>
-                                            <button class=\"$btnRestaurar m-1 has-text-centered button is-success\" onclick=\"finalizarTareaP($idTareaP, $idEquipo, '$equipo','P');\">
-                                                <span>Restaurar Tarea</span>
-                                            </button>
-                                            <button class=\"m-1 has-text-centered button is-primary\" onclick=\"verSolucionados($idTareaP);\">
-                                                <span>Ver Finalizadas</span>
-                                            </button>
-                                        </div>
-                                     </div>
-
-                                </div>
-                            </div>
-
-                            <div class=\" column is-one-third\">
-                                <h4 class=\"subtitle is-4 has-text-centered\">Comentarios</h4>
-                                <div class=\"field has-addons\">
-                                    <div class=\"control is-expanded\">
-                                        <input $statusTarea id=\"comentarioActividad$idTareaP\" class=\"input is-rounded\" type=\"text\" placeholder=\"Agregar Comentarios\" maxlength=\"150\">
-                                    </div>
-                                    <div class=\"control\">
-                                        <a id=\"btnAgregarComentario$idTareaP\" class=\"button is-primary is-rounded\" onclick=\"agregarComentarioActividad($idActividad);\">
-                                            <i class=\"fad fa-plus-circle\"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div id=\"dataComentario$idTareaP\"> </div>
-                            </div>
-
-                            <div class=\"column is-one-third has-text-centered\">
-                                <h4 class=\"subtitle is-4\">Adjuntos</h4>
-                                <input $statusTarea id=\"inputAdjuntoPlanAccion$idTareaP\" class=\"button is-primary\" type=\"button\" onclick=\"adjuntosMPNP($idTareaP);\" value=\"Adjuntos\"><br>
-                                <div id=\"adjuntosPlanAccion$idTareaP\">
-                                    Sin Adjuntos
-                                </div>
-                            </div>
-                        </div>
-                    </section>                
                 ";
             }
             $data['dataTareas'] = $dataTareas;
@@ -3723,12 +3560,12 @@ if (isset($_POST['action'])) {
 
 
     if ($action == "aplicarCambioActividad") {
-        $idActividad = $_POST['idActividad'];
+        $idTareaP = $_POST['idTareaP'];
         $columna = $_POST['columna'];
         $nuevoTitulo = $_POST['nuevoTitulo'];
 
         if ($columna == "status_urgente" || $columna == "status_material" || $columna == "status_trabajando" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
-            $query = "SELECT $columna FROM actividad_mp_np WHERE id = $idActividad";
+            $query = "SELECT $columna FROM t_mp_np WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $i) {
                     $valor = $i[$columna];
@@ -3738,7 +3575,7 @@ if (isset($_POST['action'])) {
                         $nuevoValor = "0";
                     }
                 }
-                $query = "UPDATE actividad_mp_np SET $columna = '$nuevoValor' WHERE id = $idActividad";
+                $query = "UPDATE t_mp_np SET $columna = '$nuevoValor' WHERE id = $idTareaP";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     echo 1;
                 } else {
@@ -3748,23 +3585,30 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "titulo") {
-            $query = "UPDATE actividad_mp_np SET actividad = '$nuevoTitulo' WHERE id = $idActividad";
+            $query = "UPDATE t_mp_np SET titulo = '$nuevoTitulo' WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 2;
             } else {
                 echo 0;
             }
         } elseif ($columna == "eliminar") {
-            $query = "UPDATE actividad_mp_np SET activo = 0 WHERE id = $idActividad";
+            $query = "UPDATE t_mp_np SET activo = 0 WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 3;
             } else {
                 echo 0;
             }
         } elseif ($columna == "statusP") {
-            $query = "UPDATE actividad_mp_np SET status = 'SOLUCIONADO' WHERE id = $idActividad";
+            $query = "UPDATE t_mp_np SET status = 'F' WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 4;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "statusF") {
+            $query = "UPDATE t_mp_np SET status = 'P' WHERE id = $idTareaP";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 5;
             } else {
                 echo 0;
             }
@@ -3808,9 +3652,10 @@ if (isset($_POST['action'])) {
 
 
     if ($action == "adjuntosTareas") {
-        $idTareas = $_POST['idTareas'];
-        $idActividad = $_POST['idActividad'];
         $dataAdjuntos = "";
+        $idTareas = $_POST['idTareas'];
+        $idEquipo = $_POST['idEquipo'];
+        $equipo = $_POST['equipo'];
 
         $query = "SELECT
         adjuntos_mp_np.id_usuario, adjuntos_mp_np.fecha, adjuntos_mp_np.url, adjuntos_mp_np.id, t_colaboradores.nombre, t_colaboradores.apellido
@@ -3829,7 +3674,7 @@ if (isset($_POST['action'])) {
                     <div class=\"column is-8 has-text-centered\">
                         <a class=\"button is-success\">
                             <input class=\"file-input\" type=\"file\"
-                                name=\"resume\" id=\"inputAdjuntoMPNP\" multiple=\"\" onchange=\"cargarAdjuntoMPNP($idTareas);\">
+                                name=\"resume\" id=\"inputAdjuntoTarea\" multiple=\"\" onchange=\"cargarAdjuntoTarea($idTareas, $idEquipo, '$equipo');\">
                             <span class=\"icon\">
                                 <i class=\"fad fa-file-archive\"></i>
                             </span>
@@ -3856,7 +3701,7 @@ if (isset($_POST['action'])) {
                         <div class=\"timeline-content\">
                             <p class=\"heading \">
                                 <strong>$usuario</strong>
-                                <a class=\"delete\" onclick=\"eliminarAdjuntoMPNP($idImg, $idTareas);\"></a>
+                                <a class=\"delete\" onclick=\"eliminarAdjuntoTarea($idImg, $idTareas, $idEquipo, '$equipo');\"></a>
                             </p>
                             <p class=\"heading has-text-info\">$fecha</p>
                             <a href=\"$rutaImg$url\" target=\"_blank\">
@@ -3882,6 +3727,81 @@ if (isset($_POST['action'])) {
             </div>
         ";
         echo $dataAdjuntos;
+    }
+
+
+    if ($action == "obtComentariosTarea") {
+        $data = array();
+        $dataComentarios = "";
+        $idTareaP = $_POST['idTareaP'];
+        $idEquipo = $_POST['idEquipo'];
+        $titulo = $_POST['titulo'];
+        $equipo = $_POST['equipo'];
+
+
+        $query = "SELECT t_equipos.equipo, c_secciones.seccion
+        FROM t_equipos 
+        INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id 
+        WHERE t_equipos.id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $equipo = $i['equipo'];
+                $seccion = $i['seccion'];
+                $estiloSeccion = strtolower($seccion);
+
+                $dataHeaderComentario = "
+                    <div class=\"navbar-start has-text-centered\">
+                        <div class=\"navbar-item $estiloSeccion" . "-background\">
+                            <p class=\"seccion-logo\">$seccion</p>
+                        </div>
+                        <a class=\"navbar-item\">$equipo / $titulo / 
+                        <strong class=\"ml-1\"> COMENTARIOS</strong></a>
+                    </div>    
+                ";
+            }
+            $data['dataHeaderComentario'] = $dataHeaderComentario;
+        }
+
+
+
+
+        $query = "SELECT comentarios_mp_np.id, comentarios_mp_np.comentario, comentarios_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM comentarios_mp_np 
+        INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE comentarios_mp_np.id_mp_np = $idTareaP AND comentarios_mp_np.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idComentario = $i['id'];
+                $comentario = $i['comentario'];
+                $fecha = (new DateTime($i['fecha']))->format('d-m-Y');
+                $nombreCompleto = $i['nombre'] . " " . $i['apellido'];
+
+                $dataComentarios .= "
+                    <div class=\"timeline-item\">
+                        <div class=\"timeline-marker\"></div>
+                        <div class=\"timeline-content\">
+                            <p class=\"heading \"><strong>$nombreCompleto</strong> 
+                            <a class=\"delete\" onclick=\"eliminarComentarioTarea($idComentario, $idEquipo, '$equipo', $idTareaP, '$titulo')\"></a></p>
+                            <p class=\"heading \">$fecha</p>
+                            <p class=\"has-text-justified\">
+                            $comentario
+                            </p>
+                        </div>
+                    </div>            
+                ";
+            }
+            $dataComentarios .= "
+                        <div class=\"timeline-item\">
+                <div class=\"timeline-marker is-icon\">
+                    <i class=\"fad fa-genderless\"></i>
+                </div>
+            </div> 
+            ";
+
+            $data['dataComentarios'] = $dataComentarios;
+        }
+        echo json_encode($data);
     }
 
 
