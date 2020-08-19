@@ -3576,7 +3576,7 @@ if (isset($_POST['action'])) {
                         $nuevoValor = "0";
                     }
                 }
-                $query = "UPDATE t_mp_np SET $columna = '$nuevoValor' WHERE id = $idTareaP";
+                $query = "UPDATE t_mp_np SET $columna = '$nuevoValor', fecha_finalizado = '$fechaActual' WHERE id = $idTareaP";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     echo 1;
                 } else {

@@ -646,15 +646,16 @@ if (isset($_POST['action'])) {
             t_mp_np.id_destino,
             t_mp_np.id_equipo, 
             t_mp_np.titulo, 
+            t_mp_np.status,
+            t_mp_np.status_trabajando,
             c_secciones.seccion, 
             c_subsecciones.grupo, 
             t_equipos.equipo
-
             FROM t_mp_np
             INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
             INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
-            WHERE t_mp_np.activo = 1 AND t_mp_np.status='F'
+            WHERE t_mp_np.activo = 1 AND (t_mp_np.status='F' OR t_mp_np.status_trabajando = 1)
             $destinoMPNP
             $zonaFiltroMPNP
             AND t_mp_np.fecha_finalizado BETWEEN '$fecha_final_12' AND '$fecha_inicial_12'
@@ -672,10 +673,10 @@ if (isset($_POST['action'])) {
             $subseccion = $row_t_mp_np['grupo'];
             $equipo = $row_t_mp_np['equipo'];
             $titulo = $row_t_mp_np['titulo'];
+            $status = $row_t_mp_np['status'];
+            $sTrabajando = $row_t_mp_np['status_trabajando'];
 
-            $query_comentario_mp_np =
-                "SELECT comentario
-            FROM comentarios_mp_np WHERE id_mp_np=$id
+            $query_comentario_mp_np = "SELECT comentario FROM comentarios_mp_np WHERE id_mp_np=$id 
             ORDER BY fecha DESC LIMIT 1";
 
             $result_comentario_mp_np = mysqli_query($conn_2020, $query_comentario_mp_np);
@@ -688,8 +689,37 @@ if (isset($_POST['action'])) {
                 $comentario_mp_np = "Sin Comentario";
             }
 
-            $bitacoraMC .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '', '');\">
+            if($sTrabajando == 1){
+                $tag_statusT = "Trabajando";
+            }else{
+                $tag_statusT = "";
+            }
+            
+            if($status == 'F'){
+                $tag_statusF = "Finalizado";
+            }else{
+                $tag_statusF = "";
+            }
+
+            if ($sTrabajando == 1) {
+                $bitacoraMC .= "
+                    <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
+                    <h1 class=\"font-bold\">$nombreDestino</h1>
+                    <P class=\"font-black mx-1\">/</P>
+                    <h1 class=\" \"> <h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\"> T </h1> $seccion</h1><!-- SECION -->
+                    <P class=\"font-black mx-1 truncate\">/</P><!-- DIVISION -->
+                    <h1 class=\"truncate\">$subseccion</h1><!-- SUBSECCION -->
+                    <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                    <h1 class=\"truncate\">$equipo</h1><!-- NOMBRE EQUIPO o TAREA GENERAL-->
+                    <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                    <h1 class=\"font-bold\">$titulo</h1><!-- DESCRIPCION DE LA TAREA -->
+                    <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
+                    <h1 class=\"truncate\">$comentario_mp_np</h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
+                    </div>
+                ";
+            } else {
+                $bitacoraMC .= "
+                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
                 <h1 class=\"font-bold\">$nombreDestino</h1>
                 <P class=\"font-black mx-1\">/</P>
                 <h1 class=\" \">$seccion</h1><!-- SECION -->
@@ -702,7 +732,8 @@ if (isset($_POST['action'])) {
                 <P class=\"font-black mx-1\">/</P><!-- DIVISION -->
                 <h1 class=\"truncate\">$comentario_mp_np</h1><!-- ULTIMO COMENTARIO DE LA TAREA -->
                 </div>
-            ";
+                ";
+            }
         }
 
 
