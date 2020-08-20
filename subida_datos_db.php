@@ -257,7 +257,7 @@
 
 
     <!-- Modal Info -->
-    <div id="modalDataInfo" class="modal flex justify-center items-center open">
+    <div id="modalDataInfo" class="modal flex justify-center items-center">
         <div class="modal-window rounded-md w-auto md:w-3/12 lg:w-3/12">
 
             <!-- BOTON CERRARL -->
