@@ -253,12 +253,12 @@
         <span>Cargar Datos</span>
     </button>
 
-    <div class="footer text-center">Formato Fecha (Corta: 2020-12-31) (Larga 2020-12-31 23:59:59) </div>
+    <div class="footer text-center">Formato Fecha (Corta: 2020-12-31) (Larga 2020-12-31 23:59:59) NOTA: Registros Maximo (6,050)</div>
 
 
     <!-- Modal Info -->
     <div id="modalDataInfo" class="modal flex justify-center items-center">
-        <div class="modal-window rounded-md w-auto md:w-3/12 lg:w-3/12">
+        <div class="modal-window rounded-md w-auto md:w-5/12 lg:w-5/12">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -272,11 +272,11 @@
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10 pb-5">
 
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
-                        <div class="w-full h-full flex items-center justify-left">
-                            <h1>Resultado:</h1>
+                        <div class="w-full h-full flex items-center justify-center">
+                            <h1 class="text-2xl text-left">Resultado:</h1>
                         </div>
                     </div>
-                    <div id="dataInfo" class="w-full flex flex-row justify-center p-2">
+                    <div id="dataInfo" class="w-full flex flex-row justify-left p-2 text-base">
                         <i class="fad fa-spinner-third fa-4x fa-spin"></i>
                     </div>
                 </div>
