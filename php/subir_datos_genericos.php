@@ -107,7 +107,7 @@ if (isset($_POST['action'])) {
         $total30 = 0;
 
         // Proceso 1
-        echo "Cantidad de Filas por Columna:";
+        echo "Cantidad de Registros por Columna:";
         if ($columna1 != "" and $valorColumna1 != "") {
             $valorColumna1 = explode("\n", $valorColumna1);
             $total1 = count($valorColumna1);
