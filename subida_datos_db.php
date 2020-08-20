@@ -495,6 +495,37 @@
                 document.getElementById("columna22").value = "nombre_1";
                 document.getElementById("columna23").value = "doc_compras";
 
+            } else {
+                document.getElementById("columna1").value = '';
+                document.getElementById("columna2").value = '';
+                document.getElementById("columna3").value = '';
+                document.getElementById("columna4").value = '';
+                document.getElementById("columna5").value = '';
+                document.getElementById("columna6").value = '';
+                document.getElementById("columna7").value = '';
+                document.getElementById("columna8").value = '';
+                document.getElementById("columna9").value = '';
+                document.getElementById("columna10").value = '';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
             }
         }
 
