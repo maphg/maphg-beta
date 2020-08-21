@@ -10,8 +10,8 @@ $nombreDestino = "NA";
 $nombreCompleto = "NA";
 $totalResultados = 0;
 
-if (isset($_GET['listaIdMC'])) {
-    $listaIdMC = $_GET['listaIdMC'];
+if (isset($_GET['listaIdF'])) {
+    $listaIdF = $_GET['listaIdF'];
     $idDestino = $_GET['idDestino'];
     $idUsuario = $_GET['idUsuario'];
     $idSeccion = $_GET['idSeccion'];
@@ -27,6 +27,7 @@ if (isset($_GET['listaIdMC'])) {
         $nombreDestino = "NA";
     }
 
+    // Busca la seccion
     $querySeccion = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
     if ($resultSeccion = mysqli_query($conn_2020, $querySeccion)) {
         foreach ($resultSeccion as $s) {
@@ -50,10 +51,10 @@ if (isset($_GET['listaIdMC'])) {
     }
 
 
-    if ($listaIdMC != "") {
-        $filtroMC = "AND t_mc.id IN($listaIdMC)";
+    if ($listaIdF != "") {
+        $filtroF = "AND t_mc.id IN($listaIdF)";
     } else {
-        $filtroMC = "AND t_mc.id IN(0)";
+        $filtroF = "AND t_mc.id IN(0)";
     }
 
 
@@ -67,12 +68,11 @@ if (isset($_GET['listaIdMC'])) {
     LEFT JOIN t_equipos ON t_mc.id_equipo = t_equipos.id 
     LEFT JOIN t_users ON t_mc.responsable = t_users.id 
     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-    WHERE t_mc.activo = 1 $filtroMC;
+    WHERE t_mc.activo = 1 $filtroF;
     ";
 
 
     if ($result = mysqli_query($conn_2020, $query)) {
-        // $totalResultados = mysqli_num_rows($result);
         foreach ($result as $row) {
             $totalResultados++;
             $idMC = $row['id'];
@@ -107,16 +107,6 @@ if (isset($_GET['listaIdMC'])) {
             if ($responsable == "") {
                 $responsable = "Sin Responsable";
             }
-
-
-            // $data .= "$destino";
-            // $data .= "$seccion";
-            // $data .= "$subseccion";
-            // $data .= "$equipo";
-            // $data .= "$actividad";
-            // $data .= "$responsable";
-            // $data .= "$comentario";
-            // $data .= "$realizoComentario";
 
             $data .= "
                 <div
@@ -182,7 +172,7 @@ if (isset($_GET['listaIdMC'])) {
 
                     <div class="ml-2 font-light text-4xl flex flex-col leading-none">
                         <div>
-                            <h1 class="">TAREAS PENDIENTES</h1>
+                            <h1 class="">FALLAS Y TAREAS PENDIENTES</h1>
                         </div>
                         <div class="flex flex-col ml-2 font-light text-base  justify-center items-center">
                             <h1 class="mt-1">Total: <span class="font-bold"><?= $totalResultados; ?></span></h1>

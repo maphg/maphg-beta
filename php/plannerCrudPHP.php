@@ -1897,37 +1897,51 @@ if (isset($_POST['action'])) {
     }
 
     if ($action == "consultaFinalExcel") {
+        $data = array();
         $idUsuario = $_POST['idUsuario'];
         $idDestino = $_POST['idDestino'];
         $idSeccion = $_POST['idSeccion'];
         $idSubseccion = $_POST['idSubseccion'];
         $tipoExportar = $_POST['tipoExportar'];
-        $listaId = "";
+        $listaIdF = "";
+        $listaIdT = "";
 
         if ($idDestino == 10) {
-            $filtroDestino = "";
+            $filtroDestinoF = "";
+            $filtroDestinoT = "";
         } else {
-            $filtroDestino = "AND id_destino = $idDestino";
+            $filtroDestinoF = "AND id_destino = $idDestino";
+            $filtroDestinoT = "AND t_mp_np.id_destino = $idDestino";
         }
 
-
+        // Filtros para Generar Reporte Fallas.
         if ($tipoExportar == "exportarMisPendientes") {
-            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoT = "AND t_equipos.id_seccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccion") {
-            $filtroTipo = "AND id_seccion = $idSeccion $filtroDestino";
+            $filtroTipoF = "AND id_seccion = $idSeccion $filtroDestinoF";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion $filtroDestinoT";
         } elseif ($tipoExportar == "exportarSubseccion") {
-            $filtroTipo = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestino";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_equipos.id_subseccion = $idSubseccion $filtroDestinoT";
         } elseif ($tipoExportar == "exportarSeccionUsuario") {
-            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestino";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisPendientesPDF") {
-            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccionUsuarioPDF") {
-            $filtroTipo = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestino";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
+        } elseif ($tipoExportar == "exportarMisCreados") {
+            $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } else {
-            $filtroTipo = "activo = 2";
+            $filtroTipoF = "activo = 2";
         }
 
-        $query = "SELECT id FROM t_mc WHERE activo = 1 and status = 'N' $filtroTipo";
+        // Genera lista ID de Fallas.
+        $query = "SELECT id FROM t_mc WHERE activo = 1 and status = 'N' $filtroTipoF";
         if ($result = mysqli_query($conn_2020, $query)) {
             $totalResultados = mysqli_num_rows($result);
             $contador = 0;
@@ -1936,14 +1950,32 @@ if (isset($_POST['action'])) {
                 $id = $row['id'];
 
                 if ($contador < $totalResultados) {
-                    $listaId .= $id . ",";
+                    $listaIdF .= $id . ",";
                 } else {
-                    $listaId .= $id;
+                    $listaIdF .= $id;
                 }
             }
-            // echo $filtroTipo . ";";
-            echo $listaId;
+            $data['listaIdF'] = $listaIdF;
         }
+
+        // Genera lista ID Tareas
+        $queryT = "SELECT t_mp_np.id FROM t_mp_np 
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
+        WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P') $filtroTipoT";
+        if ($resultT = mysqli_query($conn_2020, $queryT)) {
+            $contador = 0;
+            foreach ($resultT as $value) {
+                $contador++;
+                $idT = $value['id'];
+                if ($contador >= 2) {
+                    $listaIdT .= "," . $idT;
+                } else {
+                    $listaIdT .= $idT;
+                }
+            }
+            $data['listaIdT'] = $listaIdT;
+        }
+        echo json_encode($data);
     }
 
     // Borrar.

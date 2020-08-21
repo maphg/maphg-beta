@@ -77,6 +77,12 @@ if ($idDestino == 10) {
     $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
 }
 
+if ($idDestino == 10) {
+    $filtroDestinoTareas = "";
+} else {
+    $filtroDestinoTareas = "AND t_mp.np.id_destino = $idDestino";
+}
+
 // Query para obtener todas las subsecciones, según la sección.
 if ($idDestino == 10) {
     $query = "SELECT 
@@ -108,6 +114,7 @@ if ($result) {
         // Exportar Pendientes.
         $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
         $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
+        $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
         $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
         $exportarSubseccion .= "
                 <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
@@ -138,12 +145,12 @@ if ($result) {
             ";
 
         $queryMCP = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
-            FROM t_mc 
-            INNER JOIN t_users ON t_mc.responsable = t_users.id 
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-            WHERE t_mc.id_subseccion = $idSubseccion 
-            AND t_mc.status = 'N' AND t_mc.activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
-            ORDER BY t_mc.id DESC";
+        FROM t_mc 
+        INNER JOIN t_users ON t_mc.responsable = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_mc.id_subseccion = $idSubseccion 
+        AND t_mc.status = 'N' AND t_mc.activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
+        ORDER BY t_mc.id DESC";
         $resultMCP = mysqli_query($conn_2020, $queryMCP);
         foreach ($resultMCP as $pendiente) {
             $idMC = "";
@@ -156,7 +163,7 @@ if ($result) {
             $apellido = $pendiente['apellido'];
             $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
-            if ($nombreCompleto == "SIN RESPONSABLE") {
+            if ($nombreCompleto == "Sin Responsable" or $nombreCompleto == "") {
                 $estiloResponsable = "text-red-600";
                 $nombreCompleto = "SIN RESPONSABLE";
                 $iconoResponsable = "";
@@ -181,13 +188,13 @@ if ($result) {
                 $iconoAdjuntoMC = "";
             }
 
-
             // Obtiene el ultimo Comentario.
             $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
             $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
 
             // Se libera la conexion.
             $conn_2020->next_result();
+            $comentarioMC = "";
             if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
                 $comentarioMC = $rowComentarioMC['comentario'];
                 $nombreMC = $rowComentarioMC['nombre'];
@@ -196,7 +203,7 @@ if ($result) {
                 $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
                 if (mysqli_num_rows($resultComentarioMC) > 0) {
-                    $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
+                    $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i>";
                     $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
                 } else {
                     $iconoComentarioMC = "";
@@ -214,48 +221,162 @@ if ($result) {
                 $apellidoMC = "";
                 $nombreCompletoMC = "";
             }
-
-
-            $data .= "
-                    <div id=\"" . $idMC . "P\" onclick=\"expandir(this.id)\"
-                        class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
-                        <!-- Titulo -->
-                        <div class=\"my-1\">
-                            <p id=\"" . $idMC . "Ptitulo\" class=\"truncate\">$actividad</p>
-                        </div>
-                        <!-- Iconos -->
-                        <div class=\"flex flex-row justify-between items-center text-sm\">
-                            <div class=\"flex flex-row\">
-                                <img src=\"$iconoResponsable\"
-                                    width=\"20\" height=\"20\" alt=\"\">
-                                <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
+            if ($actividad != "") {
+                $data .= "
+                        <div id=\"" . $idMC . "P\" onclick=\"expandir(this.id)\"
+                            class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative\">
+                            <!-- Titulo -->
+                            <div class=\"absolute right-0 top-0 w-4 h-4 absolute bg-red-200 text-red-700 rounded-full text-xxs font-bold flex items-center justify-center\">
+                            <h1>F</h1>
                             </div>
-                            <div class=\"text-gray-600\">
-                                $iconoComentarioMC
-                                $iconoAdjuntoMC
+                            <div class=\"my-1\">
+                                <p id=\"" . $idMC . "Ptitulo\" class=\"truncate\">$actividad</p>
                             </div>
-                        </div>
-                        <!-- Toogle -->
-                        <div id=\"" . $idMC . "Ptoggle\" class=\"hidden mt-2\">
-                            <div
-                                class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
-                                <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
-                                <p class=\"uppercase\">$comentarioMC</p>
-                                <div class=\"flex flex-row mt-1 self-center\">
-                                    <img src=\"$AvatarNombre\"
+                            <!-- Iconos -->
+                            <div class=\"flex flex-row justify-between items-center text-sm\">
+                                <div class=\"flex flex-row\">
+                                    <img src=\"$iconoResponsable\"
                                         width=\"20\" height=\"20\" alt=\"\">
-                                    <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
-                                    <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
-                                    </p>
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsable\">$nombreCompleto</p>
+                                </div>
+                                <div class=\"text-gray-600\">
+                                    $iconoComentarioMC
+                                    $iconoAdjuntoMC
                                 </div>
                             </div>
-                            <button
-                                class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
-                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
-                            </button>
+                            <!-- Toogle -->
+                            <div id=\"" . $idMC . "Ptoggle\" class=\"hidden mt-2\">
+                                <div
+                                    class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                    <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                    <p class=\"uppercase\">$comentarioMC</p>
+                                    <div class=\"flex flex-row mt-1 self-center\">
+                                        <img src=\"$AvatarNombre\"
+                                            width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoMC</p>
+                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaMC
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                </button>
+                            </div>
                         </div>
-                    </div>
                 ";
+            }
+        }
+
+        $queryTareas = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha_finalizado, t_colaboradores.nombre, t_colaboradores.apellido 
+        FROM t_mp_np 
+        INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE t_mp_np.id_destino = $idDestino AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') AND t_mp_np.activo = 1 AND t_equipos.id_subseccion = $idSubseccion";
+        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+            foreach ($resultTareas as $value) {
+                $tarea = "";
+                $idTarea = $value['id'];
+                $tarea = $value['titulo'];
+                $nombreCompleto_T = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+
+                if ($nombreCompleto_T != "" and $nombreCompleto_T != "Sin Responsable") {
+                    $estiloResponsableT = "text-gray-600";
+                    $avatarResponsableT = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombreCompleto_T";
+                } else {
+                    $estiloResponsableT = "text-red-600";
+                    $avatarResponsableT = "";
+                }
+
+                $queryComentarioT = "SELECT count(comentarios_mp_np.id), comentarios_mp_np.comentario, comentarios_mp_np.fecha,
+                t_colaboradores.nombre, t_colaboradores.apellido  
+                FROM comentarios_mp_np
+                INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE comentarios_mp_np.activo = 1 AND comentarios_mp_np.id_mp_np = $idTarea";
+                if ($resultComentarioT = mysqli_query($conn_2020, $queryComentarioT)) {
+                    foreach ($resultComentarioT as $value) {
+                        $comentarioT = $value['comentario'];
+                        $nombreCompletoT = $value['nombre'] . " " . $value['apellido'];
+                        $fechaComentarioT = $value['fecha'];
+
+                        if ($fechaComentarioT != "") {
+                            $fechaComentarioT = (new DateTime($fechaComentarioT))->format('d-m-y');
+                        } else {
+                            $fechaComentarioT = "";
+                        }
+
+                        if ($comentarioT != "") {
+                            $iconoComentarioT = " <i class=\"fas fa-comment-dots\"></i>";
+                            $avatarComentarioT = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombreCompletoT";
+                        } else {
+                            $iconoComentarioT = "";
+                            $avatarComentarioT = "";
+                        }
+                    }
+                } else {
+                    $iconoComentarioT = "";
+                    $avatarComentarioT = "";
+                }
+
+                $queryAdjuntosT = "SELECT count(id) FROM adjuntos_mp_np WHERE id_mp_np = $idTarea";
+                if ($resultAdjuntoT = mysqli_query($conn_2020, $queryAdjuntosT)) {
+                    foreach ($resultAdjuntoT as $value) {
+                        $totalAdjuntosT = $value['count(id)'];
+                        if ($totalAdjuntosT > 0) {
+                            $iconoAdjuntoT = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                        } else {
+                            $iconoAdjuntoT = "";
+                        }
+                    }
+                }
+
+                if ($tarea != "") {
+                    $data .= "
+                        <div id=\"" . $idTarea . "P\" onclick=\"expandir(this.id)\"
+                            class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative\">
+                            <!-- Titulo -->
+                            <div class=\"absolute right-0 top-0 w-4 h-4 absolute bg-purple-200 text-purple-700 rounded-full text-xxs font-bold flex items-center justify-center\">
+                            <h1>T</h1>
+                            </div>
+                            <div class=\"my-1\">
+                                <p id=\"" . $idTarea . "Ptitulo\" class=\"truncate\">$tarea</p>
+                            </div>
+                            <!-- Iconos -->
+                            <div class=\"flex flex-row justify-between items-center text-sm\">
+                                <div class=\"flex flex-row\">
+                                    <img src=\"$avatarResponsableT\"
+                                        width=\"20\" height=\"20\" alt=\"\">
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsableT\">$nombreCompleto_T</p>
+                                </div>
+                                <div class=\"text-gray-600\">
+                                $iconoComentarioT
+                                $iconoAdjuntoT
+                                </div>
+                            </div>
+                            <!-- Toogle -->
+                            <div id=\"" . $idTarea . "Ptoggle\" class=\"hidden mt-2\">
+                                <div
+                                    class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                    <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                    <p class=\"uppercase\">$comentarioT</p>
+                                    <div class=\"flex flex-row mt-1 self-center\">
+                                        <img src=\"$avatarComentarioT\"
+                                            width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoT</p>
+                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaComentarioT</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                </button>
+                            </div>
+                        </div>
+                    ";
+                }
+            }
         }
 
 
@@ -466,12 +587,12 @@ if ($result) {
             ";
 
         $queryT = "SELECT t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
-            FROM t_mc 
-            LEFT JOIN t_users ON t_mc.responsable = t_users.id 
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-            WHERE t_mc.id_subseccion = $idSubseccion 
-            AND t_mc.status = 'N' AND activo = 1 AND t_mc.status_trabajare !='' $filtroUsuario $filtroSeccion $filtroDestinoMC
-            ORDER BY t_mc.id DESC";
+        FROM t_mc 
+        LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_mc.id_subseccion = $idSubseccion 
+        AND t_mc.status = 'N' AND activo = 1 AND t_mc.status_trabajare !='' $filtroUsuario $filtroSeccion $filtroDestinoMC
+        ORDER BY t_mc.id DESC";
         $resultT = mysqli_query($conn_2020, $queryT);
 
         foreach ($resultT as $t) {
@@ -747,6 +868,7 @@ if ($result) {
     $arrayData['exportarSubseccion'] = $exportarSubseccion;
     $arrayData['exportarSeccion'] = $exportarSeccion;
     $arrayData['exportarMisPendientes'] = $exportarMisPendientes;
+    $arrayData['exportarMisCreados'] = $exportarMisCreados;
     $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
 }
 // echo json_encode($arrayData);
@@ -803,12 +925,6 @@ if ($result) {
     <div id="modalPendientes" class="">
         <div class="modal-window py-10 rounded-md" style="width: 1300px;">
             <div class=" flex flex-col items-center justify-center">
-                <div class="absolute top-0 right-0">
-                    <button onclick="cerrarmodal('modalPendientes')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
                 <div class="absolute top-0 left-0 flex flex-row">
                     <div>
                         <button id="btnExpandirMenu" onclick="expandir(this.id)" class="py-1 px-2 rounded-br-md bg-indigo-200 text-indigo-500 hover:shadow-sm rounded-tl-md font-normal relative">
@@ -826,6 +942,11 @@ if ($result) {
 
                             <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarEXCEL','exportarPDF'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador
                                 (EXCEL)</a>
+
+                            <a onclick="exportarPendientes(<?= $exportarMisCreados; ?>);" id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Creados Por Mi (EXCEL)</a>
+
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarEXCEL','exportarPDF'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Creados por (EXCEL)</a>
 
                             <a onclick="exportarPendientes(<?= $exportarMisPendientesPDF; ?>);" id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
                                 Mis Pendientes (PDF)</a>
@@ -864,7 +985,7 @@ if ($result) {
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
-                        <h1>Correctivo</h1>
+                        <h1>Fallas y Tareas</h1>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <a href="graficas_reportes_diario/">
@@ -885,7 +1006,7 @@ if ($result) {
                     <thead>
                         <tr class="cursor pointer">
                             <th class="px-4 py-2">Subsección</th>
-                            <th class="px-4 py-2">Pendientes</th>
+                            <th class="px-4 py-2">Fallas y Tareas</th>
                             <th class="px-4 py-2">Pendiente DEP</th>
                             <th class="px-4 py-2">Trabajando</th>
                             <th class="px-4 py-2">Solucionado (10 Semanas)</th>
@@ -1019,36 +1140,40 @@ if ($result) {
                     idSubseccion: idSubseccion,
                     tipoExportar: tipoExportar
                 },
-                // dataType: "JSON",
+                dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
+                    console.log(data.listaIdT);
+                    console.log(data.listaIdF);
                     let usuarioSession = localStorage.getItem('usuario');
 
                     if (tipoExportar == "exportarMisPendientes") {
-                        page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarSeccion") {
-                        page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarSubseccion") {
-                        page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarSeccionUsuario") {
-                        page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
+                        window.location = page;
+                    } else if (tipoExportar == "exportarMisCreados") {
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarMisPendientesPDF") {
-                        page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
+                        page = 'php/generarPendientesPDF.php?listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
                             '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                             usuarioSession;
-                        window.open(page, "Reporte Pendientes PDF",
-                            "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                        window.open(page, "Reporte Fallas Y Tareas PDF",
+                            "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );
                     } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
-                        page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
+                        page = 'php/generarPendientesPDF.php?listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
                             '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                             usuarioSession;
-                        window.open(page, "Reporte Pendientes PDF",
-                            "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                        window.open(page, "Reporte Fallas Y Tareas PDF",
+                            "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );
                     }
                 }
