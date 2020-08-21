@@ -1862,37 +1862,45 @@ if (isset($_POST['action'])) {
     }
 
 
-    if ($action == "exportarListarUsuarios") {
+    if ($action == "exportarPorUsuario") {
+        $data = "";
+        $idDestino = $_POST['idDestino'];
         $idSeccion = $_POST['idSeccion'];
-        $exportarSeccionUsuario = "";
-        if ($idDestinoUsuarioPermiso == 10) {
+        $idSubseccion = $_POST['idSubseccion'];
+        $tipoExportar = $_POST['tipoExportar'];
+        $palabraUsuario = $_POST['palabraUsuario'];
+
+        if ($idDestino == 10) {
             $filtroDestino = "";
         } else {
-            $filtroDestino = "AND t_users.id_destino = $idDestino";
+            $filtroDestino = "AND(t_users.id_destino = $idDestino OR t_users.id_destino = 10)";
+        }
+
+        if ($palabraUsuario == "") {
+            $filtroPalabraEquipo = "";
+        } else {
+            $filtroPalabraEquipo = "AND(t_colaboradores.nombre LIKE '%$palabraUsuario%' OR t_colaboradores.apellido  LIKE '%$palabraUsuario%')";
         }
 
         $queryUsuario = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_users 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_users.status = 'A' $filtroDestino";
+        WHERE t_users.status = 'A' $filtroDestino $filtroPalabraEquipo ORDER BY t_colaboradores.nombre ASC";
+
         if ($resultUsuario = mysqli_query($conn_2020, $queryUsuario)) {
             foreach ($resultUsuario as $row) {
-                $idUsuario = $row['id'];
+                $idUsuarioExport = $row['id'];
                 $nombre = $row['nombre'];
                 $apellido = $row['apellido'];
-                $exportarSeccionUsuario .= "
-                    <div class=\"exportarEXCEL hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                    onclick=\"exportarPendientes($idUsuario, $idDestino, $idSeccion, 0, 'exportarSeccionUsuario');\">
-                        <h1 class=\"ml-2\">$nombre $apellido</h1>
-                    </div> 
 
-                    <div class=\"exportarPDF hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                    onclick=\"exportarPendientes($idUsuario, $idDestino, $idSeccion, 0, 'exportarSeccionUsuarioPDF');\">
+                $data .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"exportarPendientes($idUsuarioExport, $idDestino, $idSeccion, 0, '$tipoExportar');\">
                         <h1 class=\"ml-2\">$nombre $apellido</h1>
                     </div>                
                 ";
             }
-            echo $exportarSeccionUsuario;
+            echo $data;
         }
     }
 
@@ -1924,7 +1932,7 @@ if (isset($_POST['action'])) {
         } elseif ($tipoExportar == "exportarSubseccion") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_equipos.id_subseccion = $idSubseccion $filtroDestinoT";
-        } elseif ($tipoExportar == "exportarSeccionUsuario") {
+        } elseif ($tipoExportar == "exportarPorResponsable") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisPendientesPDF") {
@@ -1934,6 +1942,9 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisCreados") {
+            $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
+        } elseif ($tipoExportar == "exportarCreadosDe") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } else {

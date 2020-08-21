@@ -8,45 +8,11 @@ $tipoPendiente = $_GET['tipoPendiente'];
 $idUsuario = $_GET['idUsuario'];
 
 
-$exportarSeccionUsuario = "";
 if ($idDestino == 10) {
     $filtroDestino = "";
 } else {
     $filtroDestino = "AND t_users.id_destino = $idDestino";
 }
-
-if ($idDestino == 10) {
-    $queryUsuario = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
-    FROM t_users 
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_users.status = 'A' ORDER BY t_colaboradores.nombre ASC";
-} else {
-    $queryUsuario = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
-    FROM t_users 
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_users.status = 'A' AND(t_users.id_destino = $idDestino OR t_users.id_destino = 10) ORDER BY t_colaboradores.nombre ASC";
-}
-
-if ($resultUsuario = mysqli_query($conn_2020, $queryUsuario)) {
-    foreach ($resultUsuario as $row) {
-        $idUsuario1 = $row['id'];
-        $nombre = $row['nombre'];
-        $apellido = $row['apellido'];
-        $exportarSeccionUsuario .= "
-            <div class=\"exportarEXCEL hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-            onclick=\"exportarPendientes($idUsuario1, $idDestino, $idSeccion, 0, 'exportarSeccionUsuario');\">
-                <h1 class=\"ml-2\">$nombre $apellido</h1>
-            </div> 
-
-            <div class=\"exportarPDF hidden w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-            onclick=\"exportarPendientes($idUsuario1, $idDestino, $idSeccion, 0, 'exportarSeccionUsuarioPDF');\">
-                <h1 class=\"ml-2\">$nombre $apellido</h1>
-            </div>                
-                ";
-    }
-}
-
-
 
 $arrayData = array();
 $data = "";
@@ -55,6 +21,8 @@ $dataOpcionesSubsecciones = "";
 $exportarSubseccion = "";
 $exportarSeccion = "";
 $exportarMisPendientes = "";
+$exportarCreadosDe = "";
+$exportarPorResponsable = "";
 
 // Identifica si el filtro es en General, Usuario o Seccion.
 $filtroSeccion = "";
@@ -114,6 +82,8 @@ if ($result) {
         // Exportar Pendientes.
         $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
         $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
+        $exportarCreadosDe = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosDe'";
+        $exportarPorResponsable = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarPorResponsable'";
         $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
         $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
         $exportarSubseccion .= "
@@ -868,6 +838,8 @@ if ($result) {
     $arrayData['exportarSubseccion'] = $exportarSubseccion;
     $arrayData['exportarSeccion'] = $exportarSeccion;
     $arrayData['exportarMisPendientes'] = $exportarMisPendientes;
+    $arrayData['exportarCreadosDe'] = $exportarCreadosDe;
+    $arrayData['exportarPorResponsable'] = $exportarPorResponsable;
     $arrayData['exportarMisCreados'] = $exportarMisCreados;
     $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
 }
@@ -930,7 +902,7 @@ if ($result) {
                         <button id="btnExpandirMenu" onclick="expandir(this.id)" class="py-1 px-2 rounded-br-md bg-indigo-200 text-indigo-500 hover:shadow-sm rounded-tl-md font-normal relative">
                             <i class="fas fa-arrow-to-bottom mr-1"></i>Exportar Pendientes
                         </button>
-                        <div id="btnExpandirMenutoggle" class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+                        <div id="btnExpandirMenutoggle" class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
 
                             <a onclick="exportarPendientes(<?= $exportarMisPendientes; ?>);" id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
                                 Pendientes (EXCEL)</a>
@@ -940,13 +912,13 @@ if ($result) {
 
                             <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleModalTailwind('modalExportarSubsecciones')">Subsecciones (EXCEL)</a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarEXCEL','exportarPDF'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="exportarPorUsuario(<?= $exportarPorResponsable; ?>);">Responsable
                                 (EXCEL)</a>
 
                             <a onclick="exportarPendientes(<?= $exportarMisCreados; ?>);" id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
                                 Creados Por Mi (EXCEL)</a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarEXCEL','exportarPDF'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Creados por (EXCEL)</a>
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="exportarPorUsuario(<?= $exportarCreadosDe; ?>);">Creados Por (EXCEL)</a>
 
                             <a onclick="exportarPendientes(<?= $exportarMisPendientesPDF; ?>);" id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
                                 Mis Pendientes (PDF)</a>
@@ -958,7 +930,7 @@ if ($result) {
                         <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
                             <i class="fas fa-eye mr-1"></i>Mis Pendientes
                         </button>
-                        <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+                        <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
                             <a id="misPendientesUsuario" onclick="pendientesSubseccion(<?= $misPendientesUsuario; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
                                 Pendientes</a>
 
@@ -971,7 +943,7 @@ if ($result) {
                         <button id="dataOpcionesSubsecciones" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-orange-200 text-orange-500 hover:shadow-sm font-normal relative">
                             <i class="fas fa-eye mr-1"></i>Subsecciones
                         </button>
-                        <div id="dataOpcionesSubseccionestoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+                        <div id="dataOpcionesSubseccionestoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
                             <?= $dataOpcionesSubsecciones; ?>
                         </div>
                     </div>
@@ -1040,8 +1012,10 @@ if ($result) {
 
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3 w-full">
+                    <input id="palabraUsuarioExportar" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                </div>
                 <div id="dataExportarSeccionesUsuarios" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
-                    <?= $exportarSeccionUsuario; ?>
                 </div>
             </div>
         </div>
@@ -1127,7 +1101,7 @@ if ($result) {
         }
 
         function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
-            console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
+            // console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
             const action = "consultaFinalExcel";
             $.ajax({
                 type: "POST",
@@ -1155,10 +1129,14 @@ if ($result) {
                     } else if (tipoExportar == "exportarSubseccion") {
                         page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
-                    } else if (tipoExportar == "exportarSeccionUsuario") {
+                    } else if (tipoExportar == "exportarPorResponsable") {
                         page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarMisCreados") {
+                        page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
+                        window.location = page;
+
+                    } else if (tipoExportar == "exportarCreadosDe") {
                         page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
                     } else if (tipoExportar == "exportarMisPendientesPDF") {
@@ -1176,6 +1154,34 @@ if ($result) {
                             "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );
                     }
+                }
+            });
+        }
+
+        function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
+            document.getElementById("dataExportarSeccionesUsuarios").innerHTML = '';
+            let palabraUsuario = document.getElementById("palabraUsuarioExportar").value;
+            // Agrega la función en el Input palabraUsuarioExportar.
+            document.getElementById("palabraUsuarioExportar").
+            setAttribute('onkeyup', 'exportarPorUsuario(' + idUsuario + ', ' + idDestino + ', ' + idSeccion + ', ' + idSubseccion + ', "' + tipoExportar + '")');
+            const action = "exportarPorUsuario";
+            $.ajax({
+                type: "POST",
+                url: "php/plannerCrudPHP.php",
+                data: {
+                    action: action,
+                    idUsuario: idUsuario,
+                    idDestino: idDestino,
+                    idSeccion: idSeccion,
+                    idSubseccion: idSubseccion,
+                    tipoExportar: tipoExportar,
+                    palabraUsuario: palabraUsuario
+                },
+                // dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    document.getElementById("modalExportarSeccionesUsuarios").classList.add('open');
+                    document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
                 }
             });
         }
