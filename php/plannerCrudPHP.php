@@ -2108,6 +2108,8 @@ if (isset($_POST['action'])) {
                 </div>
                 <div class=\"w-16 flex h-full items-center justify-center relative\">
                 </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
             </div>
         ";
 
@@ -2226,17 +2228,34 @@ if (isset($_POST['action'])) {
                             $totalMPN = "0";
                         }
 
-                        //MP NP PLANIFICADOS, todos Finalizados F. 
+                        //Tareas Finalizadas F. 
                         $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
                             WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
                         if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
                             if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
                                 $totalMPNP = $rowMPNP['COUNT(id)'];
+                                $estiloMCF = "bg-green-200 text-green-500";
                             } else {
                                 $totalMPNP = "0";
+                                $estiloMCF = "bg-white text-white-400";
                             }
                         } else {
                             $totalMPNP = "0";
+                        }
+
+                        //Tareas Pendientes P. 
+                        $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
+                            WHERE id_equipo = $idEquipo 
+                            AND (status='P' OR status='N' OR status='' OR status='Pendiente') 
+                            AND activo = 1";
+                        if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
+                            if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
+                                $totalTareasF = $rowMPNP['COUNT(id)'];
+                            } else {
+                                $totalTareasF = "0";
+                            }
+                        } else {
+                            $totalTareasF = "0";
                         }
 
                         //MP PLANIFICADOS Finalizados F. 
@@ -2270,17 +2289,15 @@ if (isset($_POST['action'])) {
                                     </div>
                             ";
 
-                        //MC Pendientes N. 
+                        //Fallas Pendientes N. 
                         $dataEquipos .= "       
-                                <!-- MC PENDIENTES -->
                                 <div onclick=\"obtenerMCN($idEquipo);\" class=\"w-16 h-full flex items-center justify-center $estiloMCN hover:shadow-md\">
                                     <h1>$totalMCN</h1>
                                 </div>
                             ";
 
-                        //MC Solucionados F 
+                        //Fallas Solucionados F 
                         $dataEquipos .= "
-                                <!-- MC SOLUCIONADOS -->
                                 <div onclick=\"obtenerMCF($idEquipo);\" class=\"w-16 flex h-full items-center justify-center $estiloMCF hover:shadow-md\">
                                     <h1>$totalMCF</h1>
                                 </div>
@@ -2288,79 +2305,69 @@ if (isset($_POST['action'])) {
 
                         // MP Planificados.
                         $dataEquipos .= "
-                                <!-- MP PLANIFICADOS -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
                                     <h1>$totalMPN</h1>
                                 </div>
                             ";
 
-
-                        // MP NO Planificados.
+                        // Tareas P.
                         $dataEquipos .= "
-                                <!-- MP NO PLANIFICADOS -->
-                                <div class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
+                                <div onclick=\"obtTareasP($idEquipo);\" class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
                                     <h1>$totalMPNP</h1>
                                 </div>
                             ";
 
+                        // Tareas F.
+                        $dataEquipos .= "
+                                <div onclick=\"obtTareasF($idEquipo);\" class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
+                                    <h1>$totalMPNP</h1>
+                                </div>
+                            ";
 
                         // MP Finalizados.
                         $dataEquipos .= "
-                                <!-- MP FINALIZADOS -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md\">
                                     <h1>$totalMPF</h1>
                                 </div>
                             ";
 
-
                         // MP Ultimo.
                         $dataEquipos .= "
-                                <!--  ULTIMO MP -->
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
                                     <h1 class=\"font-xs\">$fechaMPF</h1>
                                 </div>
                             ";
 
-
                         // Test Equipo.
                         $dataEquipos .= "
-                                <!--  TEST -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md\">
                                     <h1>22</h1>
                                 </div>
                             ";
 
-
                         // Ultimo TEST Equipo.
                         $dataEquipos .= "
-                                <!--  ULTIMO TEST -->
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
                                     <h1 class=\"font-xs\">AGO 2020</h1>
                                 </div>
                             ";
 
-
                         // Cotizaciones Equipos.
                         $dataEquipos .= "
-                                <!--  COTIZACIONES -->
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
                                     <h1>22</h1>
                                 </div>
                             ";
 
-
                         // Info Equipos.
                         $dataEquipos .= "
-                                <!--  INFO -->
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md\">
                                     <h1><i class=\"fas fa-eye fa-lg\"></i></h1>
                                 </div>
                             ";
 
-
                         // Fotos Equipos.
                         $dataEquipos .= "
-                                <!--  MEDIA -->
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md\">
                                     <h1><i class=\"fas fa-photo-video fa-lg\"></i></h1>
                                 </div>
@@ -2996,7 +3003,7 @@ if (isset($_POST['action'])) {
                         <!-- FALLA -->
                         <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
 
-                            <div class=\"$statusUrgente absolute\" style=\"left: -17px;\">
+                            <div class=\" $statusUrgente absolute\" style=\"left:0%;\">
                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
                             </div>
                             <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px;\">

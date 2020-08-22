@@ -190,16 +190,19 @@
                             <h1 id="tipoOrdenamientoNombreEquipo">EQUIPOS / LOCALES</h1>
                         </div>
                         <div class="w-16 h-full flex items-center justify-center cursor-pointer">
-                            <h1 id="tipoOrdenamientoMCN">MC-P</h1>
+                            <h1 id="tipoOrdenamientoMCN">FALLAS P</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center cursor-pointer">
-                            <h1 id="tipoOrdenamientoMCF">MC-S</h1>
+                            <h1 id="tipoOrdenamientoMCF">FALLAS S</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
                             <h1>MP-P</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
-                            <h1>MP-NP</h1>
+                            <h1>TAREAS P</h1>
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>TAREAS S</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
                             <h1>MP-S</h1>
@@ -309,7 +312,7 @@
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
-                        <h1>Correctivo</h1>
+                        <h1>Fallas</h1>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <h1>Preventivo</h1>
@@ -340,11 +343,11 @@
 
 
     <!-- MODAL MC Nuevos -->
-    <div id="modalMCN" class="modal">
+    <div id="modalPendientesX" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalMCN')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalPendientesX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -354,7 +357,7 @@
                     <h1 id="seccionMCN" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
-                    <h1><span id="nombreEquipoMCN"></span> / CORRECTIVOS PENDIENTES</h1>
+                    <h1><span id="nombreEquipoMCN"></span> / FALLAS PENDIENTES</h1>
                 </div>
             </div>
 
@@ -412,11 +415,11 @@
     </div>
 
     <!-- MODAL MCF -->
-    <div id="modalMCF" class="modal">
+    <div id="modalSolucionadosX" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalMCF')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalSolucionadosX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -426,7 +429,7 @@
                     <h1 id="seccionMCF" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-green-200 text-green-500 text-xs py-1 px-2 rounded">
-                    <h1><span id="nombreEquipoMCF"></span> / CORRECTIVOS SOLUCIONADOS</h1>
+                    <h1><span id="nombreEquipoMCF"></span> / FALLAS SOLUCIONADAS</h1>
                 </div>
             </div>
 
@@ -865,7 +868,7 @@
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
                     <h1>
 
-                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR CORRECTIVO</h1>
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR FALLA</h1>
                     </h1>
                 </div>
             </div>

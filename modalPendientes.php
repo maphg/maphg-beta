@@ -24,20 +24,37 @@ $exportarMisPendientes = "";
 $exportarCreadosDe = "";
 $exportarPorResponsable = "";
 
-// Identifica si el filtro es en General, Usuario o Seccion.
+// Identifica si el filtro es en General, Usuario Responsable, Usuario Creao o Seccion.
+$tipoPendienteNombre = "";
 $filtroSeccion = "";
 $filtroUsuario = "";
+$filtroSeccionT = "";
+$filtroUsuarioT = "";
 
 if ($tipoPendiente == "MCU") {
-    $filtroUsuario = "AND t_mc.responsable = $idUsuario";
+    $tipoPendienteNombre = "Mis Pendientes";
+    $filtroUsuario = "AND t_mc.responsable = $idUsuario AND t_mc.id_seccion = $idSeccion";
+    $filtroUsuarioT = "AND t_mp_np.reponsable = $idUsuario AND t_equipos.id_seccion = $idSeccion";
 } elseif ($tipoPendiente == "MCU0") {
+    $tipoPendienteNombre = "Sin Responsable";
     $filtroUsuario = "AND (t_mc.responsable = 0 OR t_mc.responsable = '')";
+    $filtroUsuarioT = "AND (t_mp_np.responsable = 0 OR t_mp_np.responsable = '')";
 } elseif ($tipoPendiente == "MCS") {
+    $tipoPendienteNombre = "Todos";
     $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
+    $filtroSeccionT = "AND t_equipos.id_seccion = $idSeccion";
+} elseif ($tipoPendiente == "MCC") {
+    $tipoPendienteNombre = "Creados Por Mi";
+    $filtroUsuario = "AND t_mc.creado_por = $idUsuario AND t_mc.id_seccion = $idSeccion";
+    $filtroUsuarioT = "AND t_mp_np.id_usuario = $idUsuario AND t_equipos.id_seccion = $idSeccion";
 } else {
-    $filtroSeccion = "AND id_seccion = 0";
-    $filtroUsuario = "AND (t_mc.creado_por = 0 OR t_mc.responsable = 0)";
+    $tipoPendienteNombre = "";
+    $filtroSeccion = "AND t_mc.id_seccion = 0";
+    $filtroUsuario = "";
+    $filtroSeccionT = "AND t_equipos.id_seccion = 0";
+    $filtroUsuarioT = "";
 }
+
 
 if ($idDestino == 10) {
     $filtroDestinoMC = "";
@@ -48,7 +65,7 @@ if ($idDestino == 10) {
 if ($idDestino == 10) {
     $filtroDestinoTareas = "";
 } else {
-    $filtroDestinoTareas = "AND t_mp.np.id_destino = $idDestino";
+    $filtroDestinoTareas = "AND t_mp_np.id_destino = $idDestino";
 }
 
 // Query para obtener todas las subsecciones, según la sección.
@@ -76,6 +93,7 @@ if ($result) {
 
         // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
         $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
+        $misPendientesCreado = "$idSeccion, 'MCC', '$nombreSeccion', $idUsuario, $idDestino";
         $misPendientesSinUsuario = "$idSeccion, 'MCU0', '$nombreSeccion', $idUsuario, $idDestino";
         $misPendientesSeccion = "$idSeccion, 'MCS', '$nombreSeccion', $idUsuario, $idDestino";
 
@@ -96,7 +114,21 @@ if ($result) {
 
         $estiloSeccion = strtolower("$nombreSeccion" . "-logo");
 
-        $dataOpcionesSubsecciones .= "<a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">$subseccion</a>";
+        // $dataOpcionesSubsecciones .= "
+        // <input class=\"mr-2 leading-tight\" type=\"checkbox\">
+        // <a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">
+        // $subseccion
+        // </a>";
+        $dataOpcionesSubsecciones .= "
+        <div class=\"py-1 px-2 w-full hover:bg-gray-700\" onchange=\"toggleInivisble($idSubseccion);\">
+            <div class=\"py-1 px-2 w-full hover:bg-gray-700\"></div>
+            <label class=\"md:w-2/3 block text-gray-500 font-bold\">
+                <input class=\"leading-tight\" type=\"checkbox\" checked>
+                <span class=\"\">
+                    $subseccion
+                </span>
+            </label>
+        </div>";
 
         $data .= "
                 <tr id=\"$idSubseccion\" class=\"hover:shadow-md cursor-pointer\">
@@ -243,7 +275,9 @@ if ($result) {
         INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-        WHERE t_mp_np.id_destino = $idDestino AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') AND t_mp_np.activo = 1 AND t_equipos.id_subseccion = $idSubseccion";
+        WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') 
+        $filtroSeccionT $filtroUsuarioT $filtroDestinoTareas";
+        // echo $queryTareas;
         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
             foreach ($resultTareas as $value) {
                 $tarea = "";
@@ -832,6 +866,7 @@ if ($result) {
     $arrayData['resultData'] = $resultData;
     $arrayData['dataOpcionesSubsecciones'] = $dataOpcionesSubsecciones;
     $arrayData['misPendientesUsuario'] = $misPendientesUsuario;
+    $arrayData['misPendientesCreado'] = $misPendientesCreado;
     $arrayData['misPendientesSinUsuario'] = $misPendientesSinUsuario;
     $arrayData['misPendientesSeccion'] = $misPendientesSeccion;
     $arrayData['estiloSeccion'] = $estiloSeccion;
@@ -926,17 +961,22 @@ if ($result) {
                             <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarPDF','exportarEXCEL'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador(PDF)</a>
                         </div>
                     </div>
-                    <div class="ml-3" (Excel)>
-                        <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
-                            <i class="fas fa-eye mr-1"></i>Mis Pendientes
-                        </button>
-                        <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
-                            <a id="misPendientesUsuario" onclick="pendientesSubseccion(<?= $misPendientesUsuario; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
-                                Pendientes</a>
+                    <div class="ml-3">
 
-                            <a id="misPendientesSinUsuario" onclick="pendientesSubseccion(<?= $misPendientesSinUsuario; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sin
-                                Responsable</a>
-                            <a id="misPendientesSeccion" onclick="pendientesSubseccion(<?= $misPendientesSeccion; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Todos</a>
+                        <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
+                            <i class="fas fa-eye mr-1"></i><?= $tipoPendienteNombre; ?>
+                        </button>
+
+                        <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
+
+                            <a id="misPendientesCreados" onclick="pendientesSeccion(<?= $misPendientesCreado; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Creados Por Mi</a>
+
+                            <a id="misPendientesUsuario" onclick="pendientesSeccion(<?= $misPendientesUsuario; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis Pendientes</a>
+
+                            <a id="misPendientesSinUsuario" onclick="pendientesSeccion(<?= $misPendientesSinUsuario; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sin Responsable</a>
+
+                            <a id="misPendientesSeccion" onclick="pendientesSeccion(<?= $misPendientesSeccion; ?>);" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Todos</a>
+
                         </div>
                     </div>
                     <div class="ml-3">
@@ -1090,12 +1130,11 @@ if ($result) {
         }
 
 
-        function pendientesSubseccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
-            console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
+        function pendientesSeccion(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+
             if (tipoPendiente != "") {
                 // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
-                page = 'modalPendientes.php?idSeccion=' + idSeccion + '&tipoPendiente=' + tipoPendiente + '&idUsuario=' +
-                    idUsuario + '&idDestino=' + idDestino;
+                page = 'modalPendientes.php?idSeccion=' + idSeccion + '&tipoPendiente=' + tipoPendiente + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
                 window.location = page;
             }
         }

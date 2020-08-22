@@ -544,7 +544,7 @@ function obtenerMCN(idEquipo) {
     let idSubseccion = localStorage.getItem('idSubseccion');
     // console.log(idEquipo, idUsuario, idDestino, idSubseccion);
 
-    document.getElementById("modalMCN").classList.add('open');
+    document.getElementById("modalPendientesX").classList.add('open');
     document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("dataMCN").innerHTML = '';
 
@@ -687,7 +687,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
 function obtenerMCF(idEquipo) {
     // console.log(idEquipo);
     document.getElementById("seccionMCF").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-    document.getElementById("modalMCF").classList.add('open');
+    document.getElementById("modalSolucionadosX").classList.add('open');
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idSubseccion = localStorage.getItem('idSubseccion');
@@ -947,6 +947,7 @@ function obtenerComentariosMC(idMC) {
     });
 }
 
+
 // Agregar Comentario MC.
 function agregarComentarioMC(idMC) {
     let idUsuario = localStorage.getItem('usuario');
@@ -983,18 +984,31 @@ function agregarComentarioMC(idMC) {
 }
 
 
-// Funciones para actualizar idSeccion y idSubseccion.
+function obtTareasP(idEquipo) {
+    document.getElementById("modalPendientesX").classList.add('open');
+
+}
+
+function obtTareasF(idEquipo) {
+    document.getElementById("modalSolucionadosX").classList.add('open');
+
+}
+
+
+// Funciones para actualizar idSeccion y idSubseccion en localstorage..
 function actualizarSeccionSubseccion(idSeccion, idSubseccion) {
     localStorage.setItem('idSeccion', idSeccion);
     localStorage.setItem('idSubseccion', idSubseccion);
 }
 
-// Funciones para actualizar idSeccion y idSubseccion.
+
+// Funciones para actualizar idSeccion en localstorage.
 function actualizarSeccion(idSeccion) {
     localStorage.SetItem('idSeccion', idSeccion);
 }
 
-// Funciones para actualizar idSeccion y idSubseccion.
+
+// Funciones para actualizar idSeccion en localstorage.
 function actualizarSubseccion(idSubseccion) {
     localStorage.SetItem('idSubseccion', idSubseccion);
 }
@@ -1018,7 +1032,6 @@ function llamarFuncionX(nombreFuncion) {
             break;
     }
 }
-
 
 
 // Función para comprobar session.
