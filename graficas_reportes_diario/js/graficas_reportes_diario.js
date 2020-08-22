@@ -1,9 +1,9 @@
-// Variables Globales:
+
 function cargarSeccionEstilosGraficas(idDestino, idSeccion) {
   document.getElementById("dataNombreSeccion").innerHTML =
     '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 
-  const action = "5";
+  const action = "cargarSeccionEstilosGraficas";
   $.ajax({
     type: "GET",
     url: "php/graficas_reportes_diario_crud.php",
@@ -32,7 +32,7 @@ function graficaHistorico(idDestino, idSeccion) {
   var chart = am4core.create("graficoManttos", am4charts.XYChart);
 
   // Add data
-  let dataHistorial = "php/graficas_reportes_diario_crud.php?action=4&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  let dataHistorial = "php/graficas_reportes_diario_crud.php?action=graficaHistorico&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
   chart.dataSource.url = dataHistorial;
 
 
@@ -153,7 +153,7 @@ function graficaUltimaSemana(idDestino, idSeccion) {
   var graficoUltimaSemana = am4core.create("graficoUltimaSemana", am4charts.XYChart);
 
   // Add data
-  graficoUltimaSemana.dataSource.url = "php/graficas_reportes_diario_crud.php?action=3&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  graficoUltimaSemana.dataSource.url = "php/graficas_reportes_diario_crud.php?action=graficaUltimaSemana&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
 
   // Create axes
   var ejeFechas = graficoUltimaSemana.xAxes.push(new am4charts.DateAxis());
@@ -249,7 +249,7 @@ function graficaSubsecciones(idDestino, idSeccion) {
 
 
   // Add data
-  graficosubsecciones.dataSource.url = "php/graficas_reportes_diario_crud.php?action=1&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  graficosubsecciones.dataSource.url = "php/graficas_reportes_diario_crud.php?action=graficaSubsecciones&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
 
   // Create axes
   var categoryAxis = graficosubsecciones.xAxes.push(new am4charts.CategoryAxis());
@@ -326,7 +326,7 @@ function graficaResponsables(idDestino, idSeccion) {
   graficoResponsables.numberFormatter.numberFormat = "#.#";
 
   // Add data
-  graficoResponsables.dataSource.url = "php/graficas_reportes_diario_crud.php?action=2&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
+  graficoResponsables.dataSource.url = "php/graficas_reportes_diario_crud.php?action=graficaResponsables&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
 
   // Create axes
   var categoryAxis = graficoResponsables.xAxes.push(new am4charts.CategoryAxis());
@@ -392,7 +392,7 @@ function graficaResponsables(idDestino, idSeccion) {
 
 
 function CuadrosUltimaSemana(idDestino, idSeccion) {
-  const action = 6;
+  const action = "CuadrosUltimaSemana";
   $.ajax({
     type: "GET",
     url: "php/graficas_reportes_diario_crud.php",

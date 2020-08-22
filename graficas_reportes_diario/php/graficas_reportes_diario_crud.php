@@ -16,13 +16,14 @@ if ($idDestino == 10) {
     $filtroDestino = "AND id_destino = $idDestino";
 }
 
-if ($action == 1) {
+if ($action == "graficaSubsecciones") {
+    // Fallas y Tareas
     // $array = array("Subseccion" => "POZOS", "Solucionado" => 23, "Pendientes" => 22);
     $fechaInicio = date('2020-01-01 00:00:00');
     $fechaFin = date('Y-m-d 23:59:59');
 
     $dataArray = array();
-    $query = "
+    $queryF = "
         SELECT c_rel_seccion_subseccion.fase, c_rel_destino_seccion.id_destino, c_destinos.id, c_destinos.destino,  c_rel_destino_seccion.id_seccion, c_secciones.id, c_secciones.titulo_seccion, c_rel_seccion_subseccion.id_subseccion, c_subsecciones.id, c_subsecciones.grupo
         FROM c_rel_destino_seccion
         INNER JOIN c_rel_seccion_subseccion ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
@@ -31,30 +32,30 @@ if ($action == 1) {
         INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
         WHERE c_rel_destino_seccion.id_destino = $idDestino AND c_secciones.id = $idSeccion AND c_subsecciones.id != 200 
     ";
-    if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $value) {
-            $idSubseccion = $value['id_subseccion'];
-            $subseccion = $value['grupo'];
+    if ($resultF = mysqli_query($conn_2020, $queryF)) {
+        foreach ($resultF as $F) {
+            $idSubseccion = $F['id_subseccion'];
+            $subseccion = $F['grupo'];
 
-            $queryTotalPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status !='F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
+            $queryTotalPendientesF = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status !='F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
 
-            $queryTotalSolucionados = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
+            $queryTotalSolucionadosF = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
 
             if (
-                $resultTotalPendientes = mysqli_query($conn_2020, $queryTotalPendientes) and
-                $resultTotalSolucionados = mysqli_query($conn_2020, $queryTotalSolucionados)
+                $resultTotalPendientesF = mysqli_query($conn_2020, $queryTotalPendientesF) and
+                $resultTotalSolucionadosF = mysqli_query($conn_2020, $queryTotalSolucionadosF)
             ) {
 
-                foreach ($resultTotalSolucionados as $total) {
-                    $totalSolucionados = $total['count(id)'];
+                foreach ($resultTotalPendientesF as $total) {
+                    $totalPendientesF = $total['count(id)'];
                 }
 
-                foreach ($resultTotalPendientes as $total) {
-                    $totalPendientes = $total['count(id)'];
+                foreach ($resultTotalSolucionadosF as $total) {
+                    $totalSolucionadosF = $total['count(id)'];
                 }
 
                 // Da formato para los arrays.
-                $arrayAux = array("Subseccion" => $subseccion, "Solucionado" => $totalSolucionados, "Pendientes" => $totalPendientes);
+                $arrayAux = array("Subseccion" => $subseccion, "Solucionado" => $totalSolucionadosF, "Pendientes" => $totalPendientesF);
                 // Se almacenan los Arrays.
                 $dataArray[] = $arrayAux;
             }
@@ -63,7 +64,7 @@ if ($action == 1) {
     echo json_encode($dataArray);
 }
 
-if ($action == 2) {
+if ($action == "graficaResponsables") {
     // {"Responsable":"Responsable 1","Solucionado":23,"Pendientes":22}
     $fechaInicio = date('Y-m-d 23:59:59');
     $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
@@ -108,7 +109,7 @@ if ($action == 2) {
 }
 
 
-if ($action == 3) {
+if ($action == "graficaUltimaSemana") {
     // date("d-m-Y", strtotime($fechaActual . "- 10 days"));
     //   { "date": new Date(2020, 8, 8), "Creado": 15, "Solucionado": 18}
     $dataArray = array();
@@ -153,7 +154,7 @@ if ($action == 3) {
 }
 
 
-if ($action == 4) {
+if ($action == "graficaHistorico") {
     //   { "date": new Date(2020, 0, 1), "Creado": 26, "Solucionado": 10, "Acumulado": 7 },
 
     $dataArray = array();
@@ -211,7 +212,7 @@ if ($action == 4) {
     echo json_encode($dataArray);
 }
 
-if ($action == 5) {
+if ($action == "cargarSeccionEstilosGraficas") {
     $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
     if ($result = mysqli_query($conn_2020, $query)) {
         foreach ($result as $value) {
@@ -222,7 +223,7 @@ if ($action == 5) {
 }
 
 
-if ($action == 6) {
+if ($action == "CuadrosUltimaSemana") {
     $dataArray = array();
 
     // Valor Inicial:

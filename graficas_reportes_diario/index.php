@@ -19,7 +19,7 @@
         <h1 id="dataNombreSeccion" class="">--</h1>
       </div>
       <div class="ml-10 font-bold text-2xl uppercase">
-        <h1>Reporte de correctivos</h1>
+        <h1>Reporte de Fallas</h1>
       </div>
     </div>
 
@@ -61,14 +61,14 @@
     </div>
 
     <div class="ml-10 font-bold text-2xl uppercase self-start">
-      <h1>Pendientes por Subsección</h1>
+      <h1>Fallas por Subsección</h1>
     </div>
     <div class="w-full mb-10">
       <div id="subsecciones" class=" w-full h-108  bg-white"></div>
     </div>
 
     <div class="ml-10 font-bold text-2xl uppercase self-start">
-      <h1>Pendientes por Responsables asignados</h1>
+      <h1>Fallas por Responsables asignados</h1>
     </div>
     <div class="w-full mb-10">
       <div id="responsables" class=" w-full h-108  bg-white"></div>

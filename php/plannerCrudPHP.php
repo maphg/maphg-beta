@@ -1949,6 +1949,7 @@ if (isset($_POST['action'])) {
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } else {
             $filtroTipoF = "activo = 2";
+            $filtroTipoT = "t_mp_np.activo = 2";
         }
 
         // Genera lista ID de Fallas.
