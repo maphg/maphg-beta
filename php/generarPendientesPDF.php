@@ -126,6 +126,7 @@ if (isset($_GET['listaIdF'])) {
                         </div>
                         <div
                             class=\"flex flex-row items-center justify-evenly w-full text-xs font-semibold flex-wrap py-1 bg-gray-300 text-gray-800\">
+                            <h1>Tipo Pendiente: <span class=\"font-bold\"> FALLA</span></h1>
                             <h1>ID: <span class=\"font-bold\">$idMC</span></h1>
                             <h1>Creado el: <span class=\"font-bold\">$fecha</span></h1>
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
@@ -197,10 +198,11 @@ if (isset($_GET['listaIdF'])) {
                     class=\"w-full border-t-2 border-b-8 border-r-2 rounded-r-md h-10 rounded-l-md flex flex-row items-center justify-start border-l-2 border-gray-300 mb-2\">
                     <div class=\"flex flex-col items-start justify-center leading-none font-bold uppercase w-full\">
                         <div class=\"ml-4 mt-2 text-base truncate\">
-                            <h1>$actividad</h1>
+                            <h1>Tarea: $actividad</h1>
                         </div>
                         <div
                             class=\"flex flex-row items-center justify-evenly w-full text-xs font-semibold flex-wrap py-1 bg-gray-300 text-gray-800\">
+                            <h1>Tipo Pendiente: <span class=\"font-bold\"> TAREA</span></h1>
                             <h1>ID: <span class=\"font-bold\">$idT</span></h1>
                             <h1>Creado el: <span class=\"font-bold\">$fecha</span></h1>
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
