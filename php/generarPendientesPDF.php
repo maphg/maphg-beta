@@ -12,6 +12,7 @@ $totalResultados = 0;
 
 if (isset($_GET['listaIdF'])) {
     $listaIdF = $_GET['listaIdF'];
+    $listaIdT = $_GET['listaIdT'];
     $idDestino = $_GET['idDestino'];
     $idUsuario = $_GET['idUsuario'];
     $idSeccion = $_GET['idSeccion'];
@@ -50,16 +51,20 @@ if (isset($_GET['listaIdF'])) {
         $nombreCompleto = "NA";
     }
 
-
     if ($listaIdF != "") {
         $filtroF = "AND t_mc.id IN($listaIdF)";
     } else {
         $filtroF = "AND t_mc.id IN(0)";
     }
 
+    if ($listaIdT != "") {
+        $filtroT = "AND t_mp_np.id IN($listaIdT)";
+    } else {
+        $filtroT = "AND t_mp_np.id IN(0)";
+    }
 
 
-    //Correctivos Generales.
+    //Fallas
     $query = "SELECT t_mc.id, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.fecha_creacion 
     FROM t_mc 
     INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
@@ -71,7 +76,6 @@ if (isset($_GET['listaIdF'])) {
     WHERE t_mc.activo = 1 $filtroF;
     ";
 
-
     if ($result = mysqli_query($conn_2020, $query)) {
         foreach ($result as $row) {
             $totalResultados++;
@@ -82,7 +86,12 @@ if (isset($_GET['listaIdF'])) {
             $equipo = $row['equipo'];
             $actividad = $row['actividad'];
             $responsable = $row['nombre'] . " " . $row['apellido'];
-            $fecha = (new DateTime($row['fecha_creacion']))->format('d-m-Y');
+            $fecha = $row['fecha_creacion'];
+            if ($fecha != "") {
+                $fecha = (new DateTime($fecha))->format('d-m-Y');
+            } else {
+                $fecha = "";
+            }
 
             $queryComentario = "SELECT t_mc_comentarios.comentario, t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_mc_comentarios 
@@ -91,8 +100,8 @@ if (isset($_GET['listaIdF'])) {
             WHERE t_mc_comentarios.id_mc = $idMC 
             ORDER BY t_mc_comentarios.fecha DESC LIMIT 1";
 
-            $resultComentaio = mysqli_query($conn_2020, $queryComentario);
-            if ($rowComentario = mysqli_fetch_array($resultComentaio)) {
+            $resultComentario = mysqli_query($conn_2020, $queryComentario);
+            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
                 $comentario = $rowComentario['comentario'];
                 $realizoComentario = $rowComentario['nombre'] . " " . $rowComentario['apellido'];
             } else {
@@ -101,7 +110,7 @@ if (isset($_GET['listaIdF'])) {
             }
 
             if ($equipo == "") {
-                $equipo = "Tarea General";
+                $equipo = "Fallas Generales";
             }
 
             if ($responsable == "") {
@@ -118,6 +127,81 @@ if (isset($_GET['listaIdF'])) {
                         <div
                             class=\"flex flex-row items-center justify-evenly w-full text-xs font-semibold flex-wrap py-1 bg-gray-300 text-gray-800\">
                             <h1>ID: <span class=\"font-bold\">$idMC</span></h1>
+                            <h1>Creado el: <span class=\"font-bold\">$fecha</span></h1>
+                            <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
+                            <h1 class=\"font-bold\">$equipo</h1>
+                            <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            ";
+        }
+    }
+
+    //Tareas
+    $query = "SELECT t_mp_np.id, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.fecha 
+    FROM t_mp_np 
+    LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
+    INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
+    INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id 
+    INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id 
+    LEFT JOIN t_users ON t_mp_np.responsable = t_users.id 
+    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+    WHERE t_mp_np.activo = 1 $filtroT;
+    ";
+
+    if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $row) {
+            $totalResultados++;
+            $idT = $row['id'];
+            $destino = $row['destino'];
+            $seccion = $row['seccion'];
+            $subseccion = $row['grupo'];
+            $equipo = $row['equipo'];
+            $actividad = $row['titulo'];
+            $responsable = $row['nombre'] . " " . $row['apellido'];
+            $fecha = $row['fecha'];
+            if ($fecha != "") {
+                $fecha = (new DateTime($fecha))->format('d-m-Y');
+            } else {
+                $fecha = "";
+            }
+
+            $queryComentario = "SELECT comentarios_mp_np.comentario, t_colaboradores.nombre, t_colaboradores.apellido
+            FROM comentarios_mp_np 
+            LEFT JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE comentarios_mp_np.id_mp_np = $idT 
+            ORDER BY comentarios_mp_np.fecha DESC LIMIT 1";
+
+            $resultComentario = mysqli_query($conn_2020, $queryComentario);
+            if ($rowComentario = mysqli_fetch_array($resultComentario)) {
+                $comentario = $rowComentario['comentario'];
+                $realizoComentario = $rowComentario['nombre'] . " " . $rowComentario['apellido'];
+            } else {
+                $realizoComentario = "";
+                $comentario = "";
+            }
+
+            if ($equipo == "") {
+                $equipo = "Tareas Generales";
+            }
+
+            if ($responsable == "") {
+                $responsable = "Sin Responsable";
+            }
+
+            $data .= "
+                <div
+                    class=\"w-full border-t-2 border-b-8 border-r-2 rounded-r-md h-10 rounded-l-md flex flex-row items-center justify-start border-l-2 border-gray-300 mb-2\">
+                    <div class=\"flex flex-col items-start justify-center leading-none font-bold uppercase w-full\">
+                        <div class=\"ml-4 mt-2 text-base truncate\">
+                            <h1>$actividad</h1>
+                        </div>
+                        <div
+                            class=\"flex flex-row items-center justify-evenly w-full text-xs font-semibold flex-wrap py-1 bg-gray-300 text-gray-800\">
+                            <h1>ID: <span class=\"font-bold\">$idT</span></h1>
                             <h1>Creado el: <span class=\"font-bold\">$fecha</span></h1>
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>

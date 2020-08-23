@@ -19,9 +19,11 @@ $data = "";
 $resultData = "";
 $dataOpcionesSubsecciones = "";
 $exportarSubseccion = "";
+$exportarSubseccionPDF = "";
 $exportarSeccion = "";
 $exportarMisPendientes = "";
 $exportarCreadosDe = "";
+$exportarCreadosPorPDF = "";
 $exportarPorResponsable = "";
 
 // Identifica si el filtro es en General, Usuario Responsable, Usuario Creao o Seccion.
@@ -104,21 +106,23 @@ if ($result) {
         $exportarPorResponsable = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarPorResponsable'";
         $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
         $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
+        $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
+        $exportarMisCreadosPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreadosPDF'";
         $exportarSubseccion .= "
-                <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
-                    <h1 class=\"ml-2\">$nombreSubseccion</h1>
-                </div>                
-            ";
-
+            <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+            onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
+                <h1 class=\"ml-2\">$nombreSubseccion</h1>
+            </div>                
+        ";
+        $exportarSubseccionPDF .= "
+            <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+            onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccionPDF');\">
+                <h1 class=\"ml-2\">$nombreSubseccion</h1>
+            </div>                
+        ";
 
         $estiloSeccion = strtolower("$nombreSeccion" . "-logo");
 
-        // $dataOpcionesSubsecciones .= "
-        // <input class=\"mr-2 leading-tight\" type=\"checkbox\">
-        // <a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">
-        // $subseccion
-        // </a>";
         $dataOpcionesSubsecciones .= "
         <div class=\"py-1 px-2 w-full hover:bg-gray-700\" onchange=\"toggleInivisble($idSubseccion);\">
             <div class=\"py-1 px-2 w-full hover:bg-gray-700\"></div>
@@ -876,7 +880,10 @@ if ($result) {
     $arrayData['exportarCreadosDe'] = $exportarCreadosDe;
     $arrayData['exportarPorResponsable'] = $exportarPorResponsable;
     $arrayData['exportarMisCreados'] = $exportarMisCreados;
+    $arrayData['exportarCreadosPorPDF'] = $exportarCreadosPorPDF;
+    $arrayData['exportarMisCreadosPDF'] = $exportarMisCreadosPDF;
     $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
+    $arrayData['exportarSubseccionPDF'] = $exportarSubseccionPDF;
 }
 // echo json_encode($arrayData);
 ?>
@@ -945,7 +952,7 @@ if ($result) {
                             <a onclick="exportarPendientes(<?= $exportarSeccion; ?>);" id="exportarSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sección
                                 completa (EXCEL)</a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleModalTailwind('modalExportarSubsecciones')">Subsecciones (EXCEL)</a>
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('modalExportarSubsecciones', 'subseccionesEXCEL', 'subseccionesPDF');">Subsecciones (EXCEL)</a>
 
                             <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="exportarPorUsuario(<?= $exportarPorResponsable; ?>);">Responsable
                                 (EXCEL)</a>
@@ -958,7 +965,13 @@ if ($result) {
                             <a onclick="exportarPendientes(<?= $exportarMisPendientesPDF; ?>);" id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
                                 Mis Pendientes (PDF)</a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarPDF','exportarEXCEL'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador(PDF)</a>
+                            <a onclick="exportarPendientes(<?= $exportarMisCreadosPDF; ?>);" id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Creado Por Mi (PDF)</a>
+
+                            <a id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('modalExportarSubsecciones', 'subseccionesPDF', 'subseccionesEXCEL');">
+                                Subsección (PDF)</a>
+
+                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="exportarPorUsuario(<?= $exportarCreadosPorPDF; ?>);">Colaborador(PDF)</a>
                         </div>
                     </div>
                     <div class="ml-3">
@@ -1001,7 +1014,7 @@ if ($result) {
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <a href="graficas_reportes_diario/">
-                            <h1>Reporte MC</h1>
+                            <h1>Reporte Fallas Y Tareas</h1>
                         </a>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
@@ -1078,9 +1091,14 @@ if ($result) {
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+            <div id="subseccionesEXCEL" class="hidden p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
                 <div id="dataModalOpciones" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
                     <?= $exportarSubseccion; ?>
+                </div>
+            </div>
+            <div id="subseccionesPDF" class="hidden p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div id="dataModalOpciones" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                    <?= $exportarSubseccionPDF; ?>
                 </div>
             </div>
         </div>
@@ -1174,19 +1192,30 @@ if ($result) {
                     } else if (tipoExportar == "exportarMisCreados") {
                         page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
-
                     } else if (tipoExportar == "exportarCreadosDe") {
                         page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                         window.location = page;
+                    } else if (tipoExportar == "exportarMisCreadosPDF") {
+                        page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                            usuarioSession;
+                        window.open(page, "Reporte Fallas Y Tareas PDF",
+                            "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                        );
                     } else if (tipoExportar == "exportarMisPendientesPDF") {
-                        page = 'php/generarPendientesPDF.php?listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
+                        page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                            usuarioSession;
+                        window.open(page, "Reporte Fallas Y Tareas PDF",
+                            "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                        );
+                    } else if (tipoExportar == "exportarCreadosPorPDF") {
+                        page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
                             '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                             usuarioSession;
                         window.open(page, "Reporte Fallas Y Tareas PDF",
                             "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                         );
-                    } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
-                        page = 'php/generarPendientesPDF.php?listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
+                    } else if (tipoExportar == "exportarSubseccionPDF") {
+                        page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
                             '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                             usuarioSession;
                         window.open(page, "Reporte Fallas Y Tareas PDF",
@@ -1242,6 +1271,12 @@ if ($result) {
                     $("#dataExportarSeccionesUsuarios").html(data);
                 }
             });
+        }
+
+        function toggleSubseccionesTipo(idUno, idDos, idTres) {
+            document.getElementById(idUno).classList.add('open');
+            document.getElementById(idDos).classList.remove('hidden');
+            document.getElementById(idTres).classList.add('hidden');
         }
     </script>
 
