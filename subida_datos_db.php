@@ -29,6 +29,7 @@
                 <option value="t_colaboradores">Colaboradores (t_colaboradores)</option>
                 <option value="t_subalmacenes">Subalmacenes (t_subalmacenes)</option>
                 <option value="t_subalmacenes_items_globales">Materiales Globales Subalmacenes (t_subalmacenes_items_globales)</option>
+                <option value="t_subalmacenes_items_stock">Stock Subalmacenes (t_subalmacenes_items_stock)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -255,7 +256,7 @@
         <span>Cargar Datos</span>
     </button>
 
-    <div class="footer text-center">Formato Fecha (Corta: 2020-12-31) (Larga 2020-12-31 23:59:59) NOTA: Registros Maximo (6,050)</div>
+    <div class="footer text-center">Formato Fecha (Corta: 2020-12-31) (Larga 2020-12-31 23:59:59) NOTA: Registros Máximo (6,050) - No debe contener (Comilla simple<strong> ' </strong> - Apostrofe <strong> ´ </strong> )</div>
 
 
     <!-- Modal Info -->
@@ -559,6 +560,38 @@
                 document.getElementById("columna12").value = 'fecha_registro';
                 document.getElementById("columna13").value = 'categoria';
                 document.getElementById("columna14").value = 'color';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+
+            } else if (tabla == "t_subalmacenes_items_stock") {
+                document.getElementById("columna1").value = 'id_subalmacen';
+                document.getElementById("columna2").value = 'id_destino';
+                document.getElementById("columna3").value = 'id_item_global';
+                document.getElementById("columna4").value = 'stock_actual';
+                document.getElementById("columna5").value = 'stock_anterior';
+                document.getElementById("columna6").value = 'stock_teorico';
+                document.getElementById("columna7").value = 'fecha_movimiento';
+                document.getElementById("columna8").value = 'fecha_creacion';
+                document.getElementById("columna9").value = '';
+                document.getElementById("columna10").value = '';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
                 document.getElementById("columna15").value = '';
                 document.getElementById("columna16").value = '';
                 document.getElementById("columna17").value = '';
