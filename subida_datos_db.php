@@ -28,6 +28,7 @@
                 <option value="t_users">Usuarios (t_users)</option>
                 <option value="t_colaboradores">Colaboradores (t_colaboradores)</option>
                 <option value="t_subalmacenes">Subalmacenes (t_subalmacenes)</option>
+                <option value="t_subalmacenes_items_globales">Materiales Globales Subalmacenes (t_subalmacenes_items_globales)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -511,7 +512,7 @@
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
 
-            } else if (tabla = "t_subalmacenes") {
+            } else if (tabla == "t_subalmacenes") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'id_fase';
                 document.getElementById("columna3").value = 'nombre';
@@ -526,6 +527,38 @@
                 document.getElementById("columna12").value = '';
                 document.getElementById("columna13").value = '';
                 document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+
+            } else if (tabla == "t_subalmacenes_items_globales") {
+                document.getElementById("columna1").value = 'id_destino';
+                document.getElementById("columna2").value = 'id_gremio';
+                document.getElementById("columna3").value = 'barcode';
+                document.getElementById("columna4").value = 'cod2bend';
+                document.getElementById("columna5").value = 'descripcion';
+                document.getElementById("columna6").value = 'marca';
+                document.getElementById("columna7").value = 'modelo';
+                document.getElementById("columna8").value = 'caracteristicas';
+                document.getElementById("columna9").value = 'tipo_material';
+                document.getElementById("columna10").value = 'unidad';
+                document.getElementById("columna11").value = 'precio';
+                document.getElementById("columna12").value = 'fecha_registro';
+                document.getElementById("columna13").value = 'categoria';
+                document.getElementById("columna14").value = 'color';
                 document.getElementById("columna15").value = '';
                 document.getElementById("columna16").value = '';
                 document.getElementById("columna17").value = '';

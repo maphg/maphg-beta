@@ -469,7 +469,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 2) {
@@ -480,7 +480,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 3) {
@@ -492,7 +492,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 4) {
@@ -505,7 +505,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 5) {
@@ -520,7 +520,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 6) {
@@ -536,7 +536,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 7) {
@@ -553,7 +553,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 8) {
@@ -571,7 +571,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 9) {
@@ -590,7 +590,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 10) {
@@ -610,7 +610,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 11) {
@@ -632,7 +632,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 12) {
@@ -655,7 +655,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 13) {
@@ -679,7 +679,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 14) {
@@ -704,7 +704,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 15) {
@@ -731,7 +731,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 16) {
@@ -758,7 +758,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 17) {
@@ -786,7 +786,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 18) {
@@ -815,7 +815,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 19) {
@@ -845,7 +845,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 20) {
@@ -876,7 +876,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 21) {
@@ -908,7 +908,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 22) {
@@ -941,7 +941,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 23) {
@@ -975,7 +975,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 24) {
@@ -1010,7 +1010,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 25) {
@@ -1046,7 +1046,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 26) {
@@ -1083,7 +1083,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 27) {
@@ -1121,7 +1121,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 28) {
@@ -1160,7 +1160,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 29) {
@@ -1200,7 +1200,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             } elseif ($nivel == 30) {
@@ -1241,7 +1241,7 @@ if (isset($_POST['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
-                        echo "<br>" . "Registro Error: $valor1";
+                        echo "<br>" . "Registro Error Fila: $contadorRegistro";
                     }
                 }
             }
