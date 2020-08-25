@@ -459,7 +459,7 @@ if (isset($_POST['action'])) {
 
 
         // Proceso 4
-        echo "<br><br><br> Reporte de Registros: ";
+        echo "<br><br><br> Reporte de Registros: <br>";
         if ($nivel >= 1 and $totalGlobal == 1 and $comprovacionColummnas == 1 and $tabla != "") {
             $contadorRegistro = 0;
             if ($nivel == 1) {
@@ -488,7 +488,7 @@ if (isset($_POST['action'])) {
                     $valor1 = $valorColumna1[$i];
                     $valor2 = $valorColumna2[$i];
                     $valor3 = $valorColumna3[$i];
-                    $query = "INSERT INTO $tabla ($columna1, $columna2) VALUES('$valor1', '$valor2', '$valor3')";
+                    $query = "INSERT INTO $tabla ($columna1, $columna2, $columna3) VALUES('$valor1', '$valor2', '$valor3')";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
@@ -501,7 +501,7 @@ if (isset($_POST['action'])) {
                     $valor2 = $valorColumna2[$i];
                     $valor3 = $valorColumna3[$i];
                     $valor4 = $valorColumna4[$i];
-                    $query = "INSERT INTO $tabla ($columna1, $columna2) VALUES('$valor1', '$valor2', '$valor3', '$valor4')";
+                    $query = "INSERT INTO $tabla ($columna1, $columna2, $columna3, $columna4) VALUES('$valor1', '$valor2', '$valor3', '$valor4')";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {
@@ -510,12 +510,13 @@ if (isset($_POST['action'])) {
                 }
             } elseif ($nivel == 5) {
                 for ($i = 0; $i <= ($iAux - 1); $i++) {
+                    // echo $nivel;
                     $valor1 = $valorColumna1[$i];
                     $valor2 = $valorColumna2[$i];
                     $valor3 = $valorColumna3[$i];
                     $valor4 = $valorColumna4[$i];
                     $valor5 = $valorColumna5[$i];
-                    $query = "INSERT INTO $tabla ($columna1, $columna2) VALUES('$valor1', '$valor2', '$valor3', '$valor4', '$valor5')";
+                    $query = "INSERT INTO $tabla ($columna1, $columna2, $columna3, $columna4, $columna5) VALUES('$valor1', '$valor2', '$valor3', '$valor4', '$valor5')";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $contadorRegistro++;
                     } else {

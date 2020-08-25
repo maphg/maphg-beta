@@ -36,7 +36,7 @@ $filtroUsuarioT = "";
 if ($tipoPendiente == "MCU") {
     $tipoPendienteNombre = "Mis Pendientes";
     $filtroUsuario = "AND t_mc.responsable = $idUsuario AND t_mc.id_seccion = $idSeccion";
-    $filtroUsuarioT = "AND t_mp_np.reponsable = $idUsuario AND t_equipos.id_seccion = $idSeccion";
+    $filtroUsuarioT = "AND t_mp_np.responsable = $idUsuario AND t_equipos.id_seccion = $idSeccion";
 } elseif ($tipoPendiente == "MCU0") {
     $tipoPendienteNombre = "Sin Responsable";
     $filtroUsuario = "AND (t_mc.responsable = 0 OR t_mc.responsable = '')";
@@ -60,15 +60,12 @@ if ($tipoPendiente == "MCU") {
 
 if ($idDestino == 10) {
     $filtroDestinoMC = "";
-} else {
-    $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
-}
-
-if ($idDestino == 10) {
     $filtroDestinoTareas = "";
 } else {
+    $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
     $filtroDestinoTareas = "AND t_mp_np.id_destino = $idDestino";
 }
+
 
 // Query para obtener todas las subsecciones, según la sección.
 if ($idDestino == 10) {
@@ -108,6 +105,7 @@ if ($result) {
         $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
         $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
         $exportarMisCreadosPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreadosPDF'";
+        
         $exportarSubseccion .= "
             <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
             onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">

@@ -1171,26 +1171,47 @@ if (isset($_POST['action'])) {
         $resultData = "";
         $dataOpcionesSubsecciones = "";
         $exportarSubseccion = "";
+        $exportarSubseccionPDF = "";
         $exportarSeccion = "";
         $exportarMisPendientes = "";
 
         // Identifica si el filtro es en General, Usuario o Seccion.
         $filtroSeccion = "";
         $filtroUsuario = "";
+        $filtroSeccionT = "";
+        $filtroUsuarioT = "";
 
         if ($tipoPendiente == "MCU") {
-            $filtroUsuario = "AND (t_mc.creado_por = $idUsuario OR t_mc.responsable = $idUsuario)";
+            $arrayData['tipoPendienteNombre'] = "Mis Pendientes";
+            $filtroUsuario = "AND t_mc.responsable = $idUsuario AND t_mc.id_seccion = $idSeccion";
+            $filtroUsuarioT = "AND t_mp_np.responsable = $idUsuario AND t_equipos.id_seccion = $idSeccion";
+        } elseif ($tipoPendiente == "MCU0") {
+            $arrayData['tipoPendienteNombre'] = "Sin Responsable";
+            $filtroUsuario = "AND (t_mc.responsable = 0 OR t_mc.responsable = '')";
+            $filtroUsuarioT = "AND (t_mp_np.responsable = 0 OR t_mp_np.responsable = '')";
         } elseif ($tipoPendiente == "MCS") {
+            $arrayData['tipoPendienteNombre'] = "Todos";
             $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
+            $filtroSeccionT = "AND t_equipos.id_seccion = $idSeccion";
+        } elseif ($tipoPendiente == "MCC") {
+            $arrayData['tipoPendienteNombre'] = "Creados Por Mi";
+            $filtroUsuario = "AND t_mc.creado_por = $idUsuario AND t_mc.id_seccion = $idSeccion";
+            $filtroUsuarioT = "AND t_mp_np.id_usuario = $idUsuario AND t_equipos.id_seccion = $idSeccion";
         } else {
-            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
-            $result = mysqli_query($conn_2020, $query);
+            $arrayData['tipoPendienteNombre'] = "";
+            $filtroSeccion = "AND t_mc.id_seccion = 0";
+            $filtroUsuario = "";
+            $filtroSeccionT = "AND t_equipos.id_seccion = 0";
+            $filtroUsuarioT = "";
         }
+
 
         if ($idDestino == 10) {
             $filtroDestinoMC = "";
+            $filtroDestinoTareas = "";
         } else {
             $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
+            $filtroDestinoTareas = "AND t_mp_np.id_destino = $idDestino";
         }
 
         // Query para obtener todas las subsecciones, según la sección.
@@ -1217,13 +1238,20 @@ if (isset($_POST['action'])) {
 
                 // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
                 $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
-                $misPendientesSinUsuario = "$idSeccion, 'MCU', '$nombreSeccion', 0, $idDestino";
+                $misPendientesCreados = "$idSeccion, 'MCC', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesSinUsuario = "$idSeccion, 'MCU0', '$nombreSeccion', $idUsuario, $idDestino";
                 $misPendientesSeccion = "$idSeccion, 'MCS', '$nombreSeccion', $idUsuario, $idDestino";
 
                 // Exportar Pendientes.
                 $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
                 $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
+                $exportarCreadosDe = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosDe'";
+                $exportarPorResponsable = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarPorResponsable'";
+                $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
                 $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
+                $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
+                $exportarMisCreadosPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreadosPDF'";
+
                 $exportarSubseccion .= "
                     <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
                     onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
@@ -1231,13 +1259,30 @@ if (isset($_POST['action'])) {
                     </div>                
                 ";
 
+                $exportarSubseccionPDF .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccionPDF');\">
+                        <h1 class=\"ml-2\">$nombreSubseccion</h1>
+                    </div>                
+                ";
+
 
                 $estiloSeccion = $nombreSeccion;
 
-                $dataOpcionesSubsecciones .= "<a href=\"#\" class=\"py-1 px-2 w-full hover:bg-gray-700\" onclick=\"toggleInivisble($idSubseccion);\">$subseccion</a>";
+                $dataOpcionesSubsecciones .= "
+                    <div class=\"py-1 px-2 w-full hover:bg-gray-700\" onchange=\"toggleInivisble($idSubseccion);\">
+                        <div class=\"py-1 px-2 w-full hover:bg-gray-700\"></div>
+                        <label class=\"md:w-2/3 block text-gray-500 font-bold\">
+                            <input class=\"leading-tight\" type=\"checkbox\" checked>
+                            <span class=\"\">
+                                $subseccion
+                            </span>
+                        </label>
+                    </div>";
 
+                // Columna de Subsecciones
                 $data .= "
-                    <tr id=\"$idSubseccion\" class=\"modal hover:shadow-md cursor-pointer\">
+                    <tr id=\"$idSubseccion\" class=\"hover:shadow-md cursor-pointer\">
                         <td class=\"px-2 py-3 font-semibold text-xs text-center text-gray-800\">
                             <h1>$subseccion</h1>
                         </td>
@@ -1334,8 +1379,11 @@ if (isset($_POST['action'])) {
 
                     $data .= "
                         <div id=\"" . $idMC . "P\" onclick=\"expandir(this.id)\"
-                            class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
+                            class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative\">
                             <!-- Titulo -->
+                            <div class=\"absolute right-0 top-0 w-4 h-4 absolute bg-red-200 text-red-700 rounded-full text-xxs font-bold flex items-center justify-center\">
+                                <h1>F</h1>
+                            </div>
                             <div class=\"my-1\">
                                 <p id=\"" . $idMC . "Ptitulo\" class=\"truncate\">$actividad</p>
                             </div>
@@ -1373,6 +1421,122 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
+
+
+
+                $queryTareas = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha_finalizado, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mp_np 
+                INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+                WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') 
+                $filtroSeccionT $filtroUsuarioT $filtroDestinoTareas";
+                // echo $queryTareas;
+                if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+                    foreach ($resultTareas as $value) {
+                        $tarea = "";
+                        $idTarea = $value['id'];
+                        $tarea = $value['titulo'];
+                        $nombreCompleto_T = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+
+                        if ($nombreCompleto_T != "" and $nombreCompleto_T != "Sin Responsable") {
+                            $estiloResponsableT = "text-gray-600";
+                            $avatarResponsableT = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombreCompleto_T";
+                        } else {
+                            $estiloResponsableT = "text-red-600";
+                            $avatarResponsableT = "";
+                        }
+
+                        $queryComentarioT = "SELECT count(comentarios_mp_np.id), comentarios_mp_np.comentario, comentarios_mp_np.fecha,
+                        t_colaboradores.nombre, t_colaboradores.apellido  
+                        FROM comentarios_mp_np
+                        INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        WHERE comentarios_mp_np.activo = 1 AND comentarios_mp_np.id_mp_np = $idTarea";
+                        if ($resultComentarioT = mysqli_query($conn_2020, $queryComentarioT)) {
+                            foreach ($resultComentarioT as $value) {
+                                $comentarioT = $value['comentario'];
+                                $nombreCompletoT = $value['nombre'] . " " . $value['apellido'];
+                                $fechaComentarioT = $value['fecha'];
+
+                                if ($fechaComentarioT != "") {
+                                    $fechaComentarioT = (new DateTime($fechaComentarioT))->format('d-m-y');
+                                } else {
+                                    $fechaComentarioT = "";
+                                }
+
+                                if ($comentarioT != "") {
+                                    $iconoComentarioT = " <i class=\"fas fa-comment-dots\"></i>";
+                                    $avatarComentarioT = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombreCompletoT";
+                                } else {
+                                    $iconoComentarioT = "";
+                                    $avatarComentarioT = "";
+                                }
+                            }
+                        } else {
+                            $iconoComentarioT = "";
+                            $avatarComentarioT = "";
+                        }
+
+                        $queryAdjuntosT = "SELECT count(id) FROM adjuntos_mp_np WHERE id_mp_np = $idTarea";
+                        if ($resultAdjuntoT = mysqli_query($conn_2020, $queryAdjuntosT)) {
+                            foreach ($resultAdjuntoT as $value) {
+                                $totalAdjuntosT = $value['count(id)'];
+                                if ($totalAdjuntosT > 0) {
+                                    $iconoAdjuntoT = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                                } else {
+                                    $iconoAdjuntoT = "";
+                                }
+                            }
+                        }
+
+                        if ($tarea != "") {
+                            $data .= "
+                        <div id=\"" . $idTarea . "P\" onclick=\"expandir(this.id)\"
+                            class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative\">
+                            <!-- Titulo -->
+                            <div class=\"absolute right-0 top-0 w-4 h-4 absolute bg-purple-200 text-purple-700 rounded-full text-xxs font-bold flex items-center justify-center\">
+                            <h1>T</h1>
+                            </div>
+                            <div class=\"my-1\">
+                                <p id=\"" . $idTarea . "Ptitulo\" class=\"truncate\">$tarea</p>
+                            </div>
+                            <!-- Iconos -->
+                            <div class=\"flex flex-row justify-between items-center text-sm\">
+                                <div class=\"flex flex-row\">
+                                    <img src=\"$avatarResponsableT\"
+                                        width=\"20\" height=\"20\" alt=\"\">
+                                    <p class=\"text-xs font-bold ml-1 $estiloResponsableT\">$nombreCompleto_T</p>
+                                </div>
+                                <div class=\"text-gray-600\">
+                                $iconoComentarioT
+                                $iconoAdjuntoT
+                                </div>
+                            </div>
+                            <!-- Toogle -->
+                            <div id=\"" . $idTarea . "Ptoggle\" class=\"hidden mt-2\">
+                                <div
+                                    class=\"flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal\">
+                                    <h1 class=\"text-left font-bold text-left mb-1\">Último comentario:</h1>
+                                    <p class=\"uppercase\">$comentarioT</p>
+                                    <div class=\"flex flex-row mt-1 self-center\">
+                                        <img src=\"$avatarComentarioT\"
+                                            width=\"20\" height=\"20\" alt=\"\">
+                                        <p class=\"text-xs font-bold ml-1 text-gray-600\">$nombreCompletoT</p>
+                                        <p class=\"text-xs font-bold ml-6 text-gray-600\">$fechaComentarioT</p>
+                                    </div>
+                                </div>
+                                <button
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                </button>
+                            </div>
+                        </div>
+                    ";
+                        }
+                    }
+                }
+
 
 
                 $data .= "
@@ -1850,13 +2014,21 @@ if (isset($_POST['action'])) {
             $arrayData['resultData'] = $resultData;
             $arrayData['dataOpcionesSubsecciones'] = $dataOpcionesSubsecciones;
             $arrayData['misPendientesUsuario'] = $misPendientesUsuario;
+            $arrayData['misPendientesCreados'] = $misPendientesCreados;
             $arrayData['misPendientesSinUsuario'] = $misPendientesSinUsuario;
             $arrayData['misPendientesSeccion'] = $misPendientesSeccion;
             $arrayData['estiloSeccion'] = $estiloSeccion;
+
             $arrayData['exportarSubseccion'] = $exportarSubseccion;
             $arrayData['exportarSeccion'] = $exportarSeccion;
             $arrayData['exportarMisPendientes'] = $exportarMisPendientes;
+            $arrayData['exportarCreadosDe'] = $exportarCreadosDe;
+            $arrayData['exportarPorResponsable'] = $exportarPorResponsable;
+            $arrayData['exportarMisCreados'] = $exportarMisCreados;
+            $arrayData['exportarCreadosPorPDF'] = $exportarCreadosPorPDF;
+            $arrayData['exportarMisCreadosPDF'] = $exportarMisCreadosPDF;
             $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
+            $arrayData['exportarSubseccionPDF'] = $exportarSubseccionPDF;
         }
         echo json_encode($arrayData);
     }
@@ -1925,7 +2097,7 @@ if (isset($_POST['action'])) {
         // Filtros para Generar Reporte Fallas.
         if ($tipoExportar == "exportarMisPendientes") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion AND t_mp_np.responsable = $idUsuario";
+            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccion") {
             $filtroTipoF = "AND id_seccion = $idSeccion $filtroDestinoF";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion $filtroDestinoT";
@@ -2185,7 +2357,7 @@ if (isset($_POST['action'])) {
                         $nombreEquipo = $rowEquipo['equipo'];
                         $idEquipo = $rowEquipo['id'];
 
-                        //MC Pendientes N. 
+                        //FALLAS PENDIENTES 
                         $queryMCN = "SELECT COUNT(id) FROM t_mc 
                             WHERE id_equipo = $idEquipo AND status ='N' AND activo = 1";
                         if ($resultMCN = mysqli_query($conn_2020, $queryMCN)) {
@@ -2203,7 +2375,7 @@ if (isset($_POST['action'])) {
                             $estiloMCN = "bg-white text-white-400";
                         }
 
-                        //MC Solucionados F. 
+                        //FALLAS SOLUCIONADAS. 
                         $queryMCF = "SELECT COUNT(id) FROM t_mc 
                             WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
                         if ($resultMCF = mysqli_query($conn_2020, $queryMCF)) {
@@ -2221,7 +2393,38 @@ if (isset($_POST['action'])) {
                             $estiloMCF = "bg-white text-white-400";
                         }
 
-                        //MP PLANIFICADOS Pendientes N. 
+                        //TAREAS PENDIENTES. 
+                        $queryTareas = "SELECT COUNT(id) FROM t_mp_np 
+                        WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
+                        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+                            if ($row = mysqli_fetch_array($resultTareas)) {
+                                $totalTareasF = $row['COUNT(id)'];
+                                if ($totalTareasF > 0) {
+                                    $estiloTareasF = "bg-green-200 text-green-400";
+                                } else {
+                                    $totalTareasF = "";
+                                    $estiloTareasF = "bg-white text-white-400";
+                                }
+                            }
+                        }
+
+                        //TAREAS SOLUCIONADAS 
+                        $queryTareas = "SELECT COUNT(id) FROM t_mp_np 
+                        WHERE id_equipo = $idEquipo AND (status ='N' OR status ='P' OR status = '') 
+                        AND activo = 1";
+                        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+                            if ($row = mysqli_fetch_array($resultTareas)) {
+                                $totalTareasP = $row['COUNT(id)'];
+                                if ($totalTareasP > 0) {
+                                    $estiloTareasP = "bg-red-200 text-red-400";
+                                } else {
+                                    $totalTareasP = "";
+                                    $estiloTareasP = "bg-white text-white-400";
+                                }
+                            }
+                        }
+
+                        //PLANES 
                         $queryMPN = "SELECT COUNT(id) FROM t_mp_planeacion 
                             WHERE id_equipo = $idEquipo AND (status ='N' OR status = 'P') AND tipoplan = 'MP' AND activo = 1";
                         if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
@@ -2232,36 +2435,6 @@ if (isset($_POST['action'])) {
                             }
                         } else {
                             $totalMPN = "0";
-                        }
-
-                        //Tareas Finalizadas F. 
-                        $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
-                            WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
-                        if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
-                            if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
-                                $totalMPNP = $rowMPNP['COUNT(id)'];
-                                $estiloMCF = "bg-green-200 text-green-500";
-                            } else {
-                                $totalMPNP = "0";
-                                $estiloMCF = "bg-white text-white-400";
-                            }
-                        } else {
-                            $totalMPNP = "0";
-                        }
-
-                        //Tareas Pendientes P. 
-                        $queryMPNP = "SELECT COUNT(id) FROM t_mp_np 
-                            WHERE id_equipo = $idEquipo 
-                            AND (status='P' OR status='N' OR status='' OR status='Pendiente') 
-                            AND activo = 1";
-                        if ($resultMPNP = mysqli_query($conn_2020, $queryMPNP)) {
-                            if ($rowMPNP = mysqli_fetch_array($resultMPNP)) {
-                                $totalTareasF = $rowMPNP['COUNT(id)'];
-                            } else {
-                                $totalTareasF = "0";
-                            }
-                        } else {
-                            $totalTareasF = "0";
                         }
 
                         //MP PLANIFICADOS Finalizados F. 
@@ -2309,24 +2482,24 @@ if (isset($_POST['action'])) {
                                 </div>
                             ";
 
-                        // MP Planificados.
-                        $dataEquipos .= "
-                                <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
-                                    <h1>$totalMPN</h1>
-                                </div>
-                            ";
-
                         // Tareas P.
                         $dataEquipos .= "
-                                <div onclick=\"obtTareasP($idEquipo);\" class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
-                                    <h1>$totalMPNP</h1>
+                                <div onclick=\"obtenerTareasP($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasP\">
+                                    <h1>$totalTareasP</h1>
                                 </div>
                             ";
 
                         // Tareas F.
                         $dataEquipos .= "
-                                <div onclick=\"obtTareasF($idEquipo);\" class=\"w-16 flex h-full items-center justify-center bg-purple-200 text-purple-500 hover:shadow-md\">
-                                    <h1>$totalMPNP</h1>
+                                <div onclick=\"obtenerTareasS($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasF\">
+                                    <h1>$totalTareasF</h1>
+                                </div>
+                            ";
+
+                        // MP Planificados.
+                        $dataEquipos .= "
+                                <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
+                                    <h1>$totalMPN</h1>
                                 </div>
                             ";
 
@@ -3112,7 +3285,6 @@ if (isset($_POST['action'])) {
         $palabraUsuario = $_POST['palabraUsuario'];
         $tipoAsginacion = $_POST['tipoAsginacion'];
         $idItem = $_POST['idItem'];
-        $totalUsuarios = 0;
 
         // Variables Locales.
         $data = array();
@@ -3139,7 +3311,6 @@ if (isset($_POST['action'])) {
         WHERE t_users.status= 'A' AND t_users.id != 0 $filtroDestino $filtroPalabraUsuario ";
         if ($resultUsuarios = mysqli_query($conn_2020, $queryUsuarios)) {
 
-
             //Tipo de Asignación sirve para mandar parametros especificos en las funciones. 
             if ($tipoAsginacion == "asignarMC") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
@@ -3160,13 +3331,34 @@ if (isset($_POST['action'])) {
                     </div>
                 ";
                 }
+            } elseif ($tipoAsginacion == "asignarTarea") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"asignarUsuario($idUsuario, 'asignarTarea', $idItem);\">
+                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                        <h1 class=\"ml-2\">$nombreCompleto</h1>
+                        <p class=\"font-bold mx-1\"> / </p>
+                        <h1 class=\"font-normal text-xs\">$cargo</h1>
+                    </div>
+                ";
+                }
             }
+            $data['totalUsuarios'] = $totalUsuarios;
+            $data['dataUsuarios'] = $dataUsuarios;
         }
-        $data['dataUsuarios'] = $dataUsuarios;
-        $data['totalUsuarios'] = $totalUsuarios;
         echo json_encode($data);
     }
 
+
+    // Asigna Responsable de la Falla
     if ($action == "asignarUsuario") {
         $tipoAsginacion = $_POST['tipoAsginacion'];
         $idUsuarioSeleccionado = $_POST['idUsuarioSeleccionado'];
@@ -3179,11 +3371,18 @@ if (isset($_POST['action'])) {
             } else {
                 echo "0";
             }
+        } elseif ($tipoAsginacion == "asignarTarea") {
+            $query = "UPDATE t_mp_np SET responsable = '$idUsuarioSeleccionado' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo "TAREA";
+            } else {
+                echo "0";
+            }
         }
     }
 
 
-    // obtiene Adjuntos e Imagenes.
+    // obtiene Adjuntos e Imagenes de FALLAS o MC
     if ($action == "obtenerAdjuntosMC") {
         // Variables AJAX.
         $idMC = $_POST['idMC'];
@@ -3239,7 +3438,7 @@ if (isset($_POST['action'])) {
     }
 
 
-    // obtiene Comentarios MC.
+    // obtiene Comentarios FALLAS o MC.
     if ($action == "obtenerComentariosMC") {
         // Variables AJAX.
         $idMC = $_POST['idMC'];
@@ -3290,13 +3489,14 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
-    // Agregar Comentario MC.
+
+    // Agregar Comentario FALLAS o MC.
     if ($action == "agregarComentarioMC") {
         // Variables AJAX.
         $idMC = $_POST['idMC'];
         $comentarioMC = $_POST['comentarioMC'];
 
-        $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario) VALUES($idMC, '$comentarioMC', $idUsuario)";
+        $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha) VALUES($idMC, '$comentarioMC', $idUsuario, '$fechaActual')";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
@@ -3304,7 +3504,8 @@ if (isset($_POST['action'])) {
         }
     }
 
-    // Obtener status MC.
+
+    // Obtener status FALLAS o MC.
     if ($action == "obtenerStatusMC") {
         $data = array();
         $idMC = $_POST['idMC'];
@@ -3443,6 +3644,8 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
+    // Actualzar el status de las Fallas
     if ($action == "actualizarStatusMC") {
         $idMC = $_POST['idMC'];
         $status = $_POST['status'];
@@ -3484,6 +3687,671 @@ if (isset($_POST['action'])) {
         } else {
             echo 0;
             echo $idMC . $status . $valorStatus . $tituloMC . $fechaFinalizado;
+        }
+    }
+
+
+    // Obtienes las TAREAS PENDIETES de los equipos.
+    if ($action == "obtenerTareasP") {
+        $data = array();
+        $dataTareas = "";
+        $idEquipo = $_POST['idEquipo'];
+        $contadorTareas = 0;
+
+        $queryEquipo = "SELECT t_equipos.equipo, c_secciones.seccion 
+        FROM t_equipos 
+        INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+        WHERE t_equipos.id = $idEquipo AND t_equipos.status = 'A'";
+
+        if ($resultEquipo = mysqli_query($conn_2020, $queryEquipo)) {
+            foreach ($resultEquipo as $value) {
+                $equipo = $value['equipo'];
+                $seccion = $value['seccion'];
+
+                //Regresa datos. 
+                $data['nombreEquipo'] = $equipo;
+                $data['seccion'] = $seccion;
+            }
+        }
+
+        $query = "SELECT t_mp_np.id, t_mp_np.fecha, t_mp_np.titulo, t_mp_np.id_usuario, t_colaboradores.nombre, 
+        t_colaboradores.apellido, t_mp_np.responsable,
+        t_mp_np.status_urgente, t_mp_np.status_material, t_mp_np.status_trabajando, t_mp_np.energetico_electricidad, t_mp_np.energetico_agua, t_mp_np.energetico_diesel, t_mp_np.energetico_gas, t_mp_np.departamento_calidad, t_mp_np.departamento_compras, t_mp_np.departamento_direccion, t_mp_np.departamento_finanzas, 
+        t_mp_np.departamento_rrhh
+        FROM t_mp_np 
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
+        INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo = 1 
+        AND (t_mp_np.status = 'N' OR t_mp_np.status = 'PENDIENTE' OR t_mp_np.status = 'P' OR t_mp_np.status = '')";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $contadorTareas++;
+
+                $idTarea = $value['id'];
+                $idResponsable = $value['responsable'];
+                $actividad = $value['titulo'];
+                $creadoPor = strtok($value['nombre'], '') . " " . strtok($value['apellido'], '');
+                $fechaTarea = $value['fecha'];
+                $sUrgente = $value['status_urgente'];
+                $sMaterial = $value['status_material'];
+                $sTrabajando = $value['status_trabajando'];
+                $eElectricidad = $value['energetico_electricidad'];
+                $eAgua = $value['energetico_agua'];
+                $eDiesel = $value['energetico_diesel'];
+                $eGas = $value['energetico_gas'];
+                $dCalidad = $value['departamento_calidad'];
+                $dCompras = $value['departamento_compras'];
+                $dDireccion = $value['departamento_direccion'];
+                $dFinanzas = $value['departamento_finanzas'];
+                $dRRHH = $value['departamento_rrhh'];
+
+                // Obtiene el Responsable
+                $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM  t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                $responsable = "";
+                if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                    foreach ($resultResponsable as $value) {
+                        $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                    }
+                }
+
+
+                // Obtiene el numero de Comentarios
+                $queryComentario = "SELECT id FROM comentarios_mp_np WHERE id_mp_np = $idTarea";
+                if ($resultComentarios = mysqli_query($conn_2020, $queryComentario)) {
+                    $totalComentarios = mysqli_num_rows($resultComentarios);
+                }
+
+                // Obtiene el numero de Adjuntos
+                $queryMedia = "SELECT id FROM adjuntos_mp_np WHERE id_mp_np = $idTarea";
+                if ($resultMedia = mysqli_query($conn_2020, $queryMedia)) {
+                    $totalMedia = mysqli_num_rows($resultMedia);
+                }
+
+                //El estatus urgente se quito temporalmente 
+                if ($sUrgente == 1 or $sUrgente != "0") {
+                    $sUrgente = "";
+                } else {
+                    $sUrgente = "hidden";
+                }
+
+                if ($sMaterial == 1 or $sMaterial != "0") {
+                    $sMaterial = "";
+                } else {
+                    $sMaterial = "hidden";
+                }
+
+                if ($sTrabajando == 1 or $sTrabajando != "0") {
+                    $sTrabajando = "";
+                } else {
+                    $sTrabajando = "hidden";
+                }
+
+                if ($eElectricidad == 1 or $eElectricidad != "0") {
+                    $eElectricidad = "";
+                } else {
+                    $eElectricidad = "hidden";
+                }
+
+                if ($eAgua == 1 or $eAgua != "0") {
+                    $eAgua = "";
+                } else {
+                    $eAgua = "hidden";
+                }
+
+                if ($eDiesel == 1 or $eDiesel != "0") {
+                    $eDiesel = "";
+                } else {
+                    $eDiesel = "hidden";
+                }
+
+                if ($eGas == 1 or $eGas != "0") {
+                    $eGas = "";
+                } else {
+                    $eGas = "hidden";
+                }
+
+                if ($dCalidad == 1 or $dCalidad != "0") {
+                    $dCalidad = "";
+                } else {
+                    $dCalidad = "hidden";
+                }
+
+                if ($dCompras == 1 or $dCompras != "0") {
+                    $dCompras = "";
+                } else {
+                    $dCompras = "hidden";
+                }
+
+                if ($dDireccion == 1 or $dDireccion != "0") {
+                    $dDireccion = "";
+                } else {
+                    $dDireccion = "hidden";
+                }
+
+                if ($dFinanzas == 1 or $dFinanzas != "0") {
+                    $dFinanzas = "";
+                } else {
+                    $dFinanzas = "hidden";
+                }
+
+                if ($dRRHH == 1 or $dRRHH != "0") {
+                    $dRRHH = "";
+                } else {
+                    $dRRHH = "hidden";
+                }
+
+                $dataTareas .= "
+                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                        <!-- FALLA -->
+                        <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
+
+                            <div class=\" hidden absolute\" style=\"left:0%;\">
+                               <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                            </div>
+                            <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px;\">
+                            
+                                <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">M</h1>
+                                </div>
+                                
+                                <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">T</h1>
+                                </div>
+                                
+                                <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Electricidad</h1>
+                                </div>
+                                
+                                <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Agua</h1>
+                                </div>
+                               
+                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Gas</h1>
+                                </div>
+                                
+                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Diesel</h1>
+                                </div>
+                                
+                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Dirección</h1>
+                                </div>
+                                
+                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">RRHH</h1>
+                                </div>
+                                
+                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Finanzas</h1>
+                                </div>
+                                
+                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Compras</h1>
+                                </div>
+                                
+                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Calidad</h1>
+                                </div>
+                            </div>
+
+                            <div class=\" flex flex-row items-center truncate w-full\">
+                                <div>
+                                    <i class=\"fas fa-hammer mx-2\"></i>
+                                </div>
+                                <div class=\"flex flex-col leading-none w-full flex-wrap\">
+                                    <h1 class=\"\"> $actividad </h1>
+                                    <h1 class=\"tex-xs font-normal italic text-red-300\">
+                                        creado por: $creadoPor
+                                    </h1>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESPONSABLE -->
+                        <div onclick=\"obtenerUsuarios('asignarTarea', $idTarea);\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$responsable</h1>
+                        </div>
+
+                        <!-- INICIO & FIN-->
+                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md self-start\">
+                            <input id=\"fecha$idTarea\" onclick=\"obtenerFechaTareas($idTarea, '$fechaTarea');\"
+                            id=\"fecha$idTarea\" class=\"appearance-none block w-full text-gray-700 rounded py-3 px-4 leading-tight mb-4\" type=\"text\" name=\"fecha$idTarea\" value=\"$fechaTarea\">
+                        </div>
+
+                        <!--  ADJUNTOS -->
+                        <div onclick=\"obtenerAdjuntosTareas($idTarea);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1 class=\"font-xs\">$totalMedia</h1>
+                        </div>
+
+                        <!--  COMENTARIOS -->
+                        <div onclick=\"obtenerComentariosTareas($idTarea);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$totalComentarios</h1>
+                        </div>
+
+                        <!--  STATUS -->
+                        <div onclick=\"obtenerInformacionTareas($idTarea, '$actividad');\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
+                            <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                        </div>
+
+                    </div>                
+                ";
+            }
+            $data['dataTareas'] = $dataTareas;
+            $data['contadorTareas'] = $contadorTareas;
+        }
+        echo json_encode($data);
+    }
+
+
+
+    // Obtienes las TAREAS PENDIETES de los equipos.
+    if ($action == "obtenerTareasS") {
+        $data = array();
+        $dataTareas = "";
+        $idEquipo = $_POST['idEquipo'];
+        $contadorTareas = 0;
+
+        $queryEquipo = "SELECT t_equipos.equipo, c_secciones.seccion 
+        FROM t_equipos 
+        INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+        WHERE t_equipos.id = $idEquipo AND t_equipos.status = 'A'";
+
+        if ($resultEquipo = mysqli_query($conn_2020, $queryEquipo)) {
+            foreach ($resultEquipo as $value) {
+                $equipo = $value['equipo'];
+                $seccion = $value['seccion'];
+
+                //Regresa datos. 
+                $data['nombreEquipo'] = $equipo;
+                $data['seccion'] = $seccion;
+            }
+        }
+
+        $query = "SELECT t_mp_np.id, t_mp_np.fecha, t_mp_np.titulo, t_mp_np.id_usuario, t_colaboradores.nombre, 
+        t_colaboradores.apellido, t_mp_np.responsable,
+        t_mp_np.status_urgente, t_mp_np.status_material, t_mp_np.status_trabajando, t_mp_np.energetico_electricidad, t_mp_np.energetico_agua, t_mp_np.energetico_diesel, t_mp_np.energetico_gas, t_mp_np.departamento_calidad, t_mp_np.departamento_compras, t_mp_np.departamento_direccion, t_mp_np.departamento_finanzas, 
+        t_mp_np.departamento_rrhh
+        FROM t_mp_np 
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
+        INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo = 1 
+        AND (t_mp_np.status = 'F' OR t_mp_np.status = 'SOLUCIONADA' OR t_mp_np.status = 'FINALIZADA')";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $contadorTareas++;
+
+                $idTarea = $value['id'];
+                $idResponsable = $value['responsable'];
+                $actividad = $value['titulo'];
+                $creadoPor = strtok($value['nombre'], '') . " " . strtok($value['apellido'], '');
+                $fechaTarea = $value['fecha'];
+                $sUrgente = $value['status_urgente'];
+                $sMaterial = $value['status_material'];
+                $sTrabajando = $value['status_trabajando'];
+                $eElectricidad = $value['energetico_electricidad'];
+                $eAgua = $value['energetico_agua'];
+                $eDiesel = $value['energetico_diesel'];
+                $eGas = $value['energetico_gas'];
+                $dCalidad = $value['departamento_calidad'];
+                $dCompras = $value['departamento_compras'];
+                $dDireccion = $value['departamento_direccion'];
+                $dFinanzas = $value['departamento_finanzas'];
+                $dRRHH = $value['departamento_rrhh'];
+
+                // Obtiene el Responsable
+                $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM  t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                $responsable = "";
+                if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                    foreach ($resultResponsable as $value) {
+                        $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                    }
+                }
+
+
+                // Obtiene el numero de Comentarios
+                $queryComentario = "SELECT id FROM comentarios_mp_np WHERE id_mp_np = $idTarea";
+                if ($resultComentarios = mysqli_query($conn_2020, $queryComentario)) {
+                    $totalComentarios = mysqli_num_rows($resultComentarios);
+                }
+
+                // Obtiene el numero de Adjuntos
+                $queryMedia = "SELECT id FROM adjuntos_mp_np WHERE id_mp_np = $idTarea";
+                if ($resultMedia = mysqli_query($conn_2020, $queryMedia)) {
+                    $totalMedia = mysqli_num_rows($resultMedia);
+                }
+
+                //El estatus urgente se quito temporalmente 
+                if ($sUrgente == 1 or $sUrgente != "0") {
+                    $sUrgente = "";
+                } else {
+                    $sUrgente = "hidden";
+                }
+
+                if ($sMaterial == 1 or $sMaterial != "0") {
+                    $sMaterial = "";
+                } else {
+                    $sMaterial = "hidden";
+                }
+
+                if ($sTrabajando == 1 or $sTrabajando != "0") {
+                    $sTrabajando = "";
+                } else {
+                    $sTrabajando = "hidden";
+                }
+
+                if ($eElectricidad == 1 or $eElectricidad != "0") {
+                    $eElectricidad = "";
+                } else {
+                    $eElectricidad = "hidden";
+                }
+
+                if ($eAgua == 1 or $eAgua != "0") {
+                    $eAgua = "";
+                } else {
+                    $eAgua = "hidden";
+                }
+
+                if ($eDiesel == 1 or $eDiesel != "0") {
+                    $eDiesel = "";
+                } else {
+                    $eDiesel = "hidden";
+                }
+
+                if ($eGas == 1 or $eGas != "0") {
+                    $eGas = "";
+                } else {
+                    $eGas = "hidden";
+                }
+
+                if ($dCalidad == 1 or $dCalidad != "0") {
+                    $dCalidad = "";
+                } else {
+                    $dCalidad = "hidden";
+                }
+
+                if ($dCompras == 1 or $dCompras != "0") {
+                    $dCompras = "";
+                } else {
+                    $dCompras = "hidden";
+                }
+
+                if ($dDireccion == 1 or $dDireccion != "0") {
+                    $dDireccion = "";
+                } else {
+                    $dDireccion = "hidden";
+                }
+
+                if ($dFinanzas == 1 or $dFinanzas != "0") {
+                    $dFinanzas = "";
+                } else {
+                    $dFinanzas = "hidden";
+                }
+
+                if ($dRRHH == 1 or $dRRHH != "0") {
+                    $dRRHH = "";
+                } else {
+                    $dRRHH = "hidden";
+                }
+
+                $dataTareas .= "
+                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                        <!-- FALLA -->
+                        <div class=\"w-full h-full flex flex-row items-center justify-between bg-green-100 text-green-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-green-200 relative\">
+
+                            <div class=\"$sUrgente absolute\" style=\"left: -17px;\">
+                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                            </div>
+                            <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px;\">
+                                <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">M</h1>
+                                </div>
+                                
+                                <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                    <h1 class=\"\">T</h1>
+                                </div>
+                                
+                                <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Electricidad</h1>
+                                </div>
+                                
+                                <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Agua</h1>
+                                </div>
+                               
+                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Gas</h1>
+                                </div>
+                                
+                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                    <h1 class=\"\">Diesel</h1>
+                                </div>
+                                
+                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Dirección</h1>
+                                </div>
+                                
+                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">RRHH</h1>
+                                </div>
+                                
+                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Finanzas</h1>
+                                </div>
+                                
+                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Compras</h1>
+                                </div>
+                                
+                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                    <h1 class=\"\">Calidad</h1>
+                                </div>
+                            </div>
+
+                            <div class=\" flex flex-row items-center truncate w-full\">
+                                <div>
+                                    <i class=\"fas fa-hammer mx-2\"></i>
+                                </div>
+                                <div class=\"flex flex-col leading-none w-full flex-wrap\">
+                                    <h1 class=\"\">$actividad</h1>
+                                    <h1 class=\"tex-xs font-normal italic text-green-300\">creado por: $creadoPor
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RESPONSABLE -->
+                        <div data-target=\"modal-responsable\" data-toggle=\"modal\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$responsable</h1>
+                        </div>
+
+                        <!-- INICIO & FIN-->
+                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md\">
+                            <input class=\"bg-white focus:outline-none focus:shadow-none py-2 px-4 block w-full appearance-none leading-normal font-semibold text-xs text-center\" type=\"text\" name=\"\" value=\"$fechaTarea\" disabled>
+                        </div>
+
+                        <!--  ADJUNTOS -->
+                        <div onclick=\"obtenerAdjuntosTareas($idTarea);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1 class=\"font-xs\">$totalMedia</h1>
+                        </div>
+
+                        <!--  COMENTARIOS -->
+                        <div onclick=\"obtenerComentariosTareas($idTarea);\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md\">
+                            <h1>$totalComentarios</h1>
+                        </div>
+
+                        <!--  STATUS -->
+                        <div onclick=\"actualizarStatusTareas($idTarea, 'status', 'F')\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md\">
+                            <div><i class=\"fas fa-undo fa-lg\"></i></div>
+                        </div>
+                    </div>
+                ";
+            }
+            $data['dataTareas'] = $dataTareas;
+            $data['contadorTareas'] = $contadorTareas;
+        }
+        echo json_encode($data);
+    }
+
+    // obtiene Adjuntos e Imagenes TAREAS
+    if ($action == "obtenerAdjuntosTareas") {
+        // Variables AJAX.
+        $idTarea = $_POST['idTarea'];
+
+        // Variables Locales.
+        $data = array();
+        $dataImagenes = "";
+        $dataAdjuntos = "";
+
+        $queryAdjuntos = "SELECT adjuntos_mp_np.id, adjuntos_mp_np.url, adjuntos_mp_np.fecha, 
+        adjuntos_mp_np.id_usuario FROM adjuntos_mp_np 
+        WHERE adjuntos_mp_np.id_mp_np = $idTarea AND adjuntos_mp_np.activo = 1";
+
+        if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+
+            foreach ($resultAdjuntos as $value) {
+                $url = $value['url'];
+
+                if (file_exists("../img/equipos/mpnp/$url")) {
+                    $adjuntoURL = "img/equipos/mpnp/$url";
+                } else {
+                    $adjuntoURL = "";
+                }
+
+                // Admite solo Imagenes.
+                if (strpos(
+                    $url,
+                    "jpg"
+                ) || strpos($url, "jpeg") || strpos($url, "png")) {
+                    $dataImagenes .= "
+                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                    </div>
+                    </a>
+                    ";
+
+                    // Admite todo, menos lo anterior.
+                } else {
+
+                    $dataAdjuntos .= "
+                        <a href=\"$adjuntoURL\" target=\"_blank\">
+                            <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                <i class=\"fad fa-file-alt fa-3x\"></i>
+                                <p class=\"text-sm font-normal ml-2\">$url
+                                </p>
+                            </div>
+                        </a>                    
+                    ";
+                }
+            }
+        }
+        $data['dataImagenes'] = $dataImagenes;
+        $data['dataAdjuntos'] = $dataAdjuntos;
+        echo json_encode($data);
+    }
+
+
+    // obtiene Comentarios TAREAS.
+    if ($action == "obtenerComentariosTareas") {
+        // Variables AJAX.
+        $idTarea = $_POST['idTarea'];
+
+        // Variables Locales.
+        $data = array();
+        $dataComentarios = "";
+
+        $queryComentario = "SELECT comentarios_mp_np.comentario, comentarios_mp_np.fecha, 
+        t_colaboradores.nombre, t_colaboradores.apellido
+        FROM comentarios_mp_np
+        INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE comentarios_mp_np.id_mp_np = $idTarea AND comentarios_mp_np.activo = 1
+        ORDER BY comentarios_mp_np.id DESC
+        ";
+        if ($resultComentario = mysqli_query($conn_2020, $queryComentario)) {
+            foreach ($resultComentario as $value) {
+                $comentario = $value['comentario'];
+                $nombre = $value['nombre'];
+                $apellido = $value['apellido'];
+                $nombreCompleto = $value['nombre'] . " " . $value['apellido'];
+                $fecha = $value['fecha'];
+
+                if ($fecha != "") {
+                    $fecha = (new DateTime($fecha))->format('d-m-Y H:m:s');
+                } else {
+                    $fecha = "";
+                }
+
+                $dataComentarios .= "
+                    <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
+                        <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"48\" height=\"48\" alt=\"\">
+                        </div>
+                        <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                            <div class=\"text-xs font-bold flex flex-row justify-between w-full\">
+                                <div>
+                                    <h1>$nombreCompleto</h1>
+                                </div>
+                                <div>
+                                    <p class=\"font-mono ml-2 text-gray-600\">$fecha</p>
+                                </div>
+                            </div>
+                            <div class=\"text-xs w-full\">
+                                <p>$comentario</p>
+                            </div>
+                        </div>
+                    </div>                
+                ";
+            }
+        }
+        $data['dataComentarios'] = $dataComentarios;
+        echo json_encode($data);
+    }
+
+
+    // Agregar Comentario FALLAS o MC.
+    if ($action == "agregarComentarioTarea") {
+        // Variables AJAX.
+        $idTarea = $_POST['idTarea'];
+        $comentarioTarea = $_POST['comentarioTarea'];
+
+        $query = "INSERT INTO comentarios_mp_np(id_mp_np, comentario, id_usuario, fecha) VALUES($idTarea, '$comentarioTarea', $idUsuario, '$fechaActual')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+    // Actualiza la información de las Tareas
+    if ($action == "actualizarTarea") {
+        $columna = $_POST['columna'];
+        $idTarea = $_POST['idTarea'];
+
+        if ($columna == "status_urgente" || $columna == "status_material") {
+            $query = "SELECT $columna FROM t_mp_np WHERE id =  $idTarea";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($row = mysqli_fetch_array($result))
+                    $valorAnterior = $row[$columna];
+                if ($valorAnterior == "0") {
+                    $valorNuevo = 1;
+                    $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
+                } else {
+                    $valorNuevo = 0;
+                    $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
+                }
+            }
         }
     }
 }

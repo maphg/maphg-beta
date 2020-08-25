@@ -49,7 +49,6 @@ function obtenerDatosUsuario(idDestino) {
 
 // Función para Input Fechas para Agregar MC.
 $(function () {
-    console.log('OK');
     $('input[name="datefilter"]').daterangepicker({
         autoUpdateInput: false,
         showWeekNumbers: true,
@@ -99,6 +98,36 @@ $(function () {
         actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
     });
     $('input[name="fechaMC"]').on('cancel.daterangepicker', function (ev, picker) {
+        console.log(picker);
+        $(this).val('');
+    });
+});
+
+// Función para Input Fechas TAREAS.
+$(function () {
+    $('input[name="fechaTarea"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: 'Cancelar',
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }
+    });
+    $('input[name="fechaTarea"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+
+        // Actualiza fecha MC cuando se Aplica el rango.
+        let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+        let idMC = localStorage.getItem('idMC');
+        actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
+    });
+    $('input[name="fechaTarea"]').on('cancel.daterangepicker', function (ev, picker) {
         console.log(picker);
         $(this).val('');
     });
@@ -221,12 +250,11 @@ function calendarioSecciones() {
 }
 
 function expandir(id) {
-    idtoggle = id + 'toggle';
+    let idtoggle = id + 'toggle';
+    let idtitulo = id + 'titulo';
     var toggle = document.getElementById(idtoggle);
     toggle.classList.toggle("hidden");
-
-    var titulox = document.getElementById(idtitulo);
-    titulox.classList.remove("truncate");
+    document.getElementById(idtitulo).classList.toggle('truncate');
 }
 
 
@@ -315,12 +343,13 @@ function consultaSubsecciones(idDestino, idUsuario) {
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = '';
-    // console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     document.getElementById("modalPendientes").classList.add('open');
-    $("#estiloSeccion").html('<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>');
-    $("#modalTituloSeccion").html(nombreSeccion);
-    $("#dataSubseccionesPendientes").html('Sin Datos');
+    document.getElementById("estiloSeccion").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    // document.getElementById("modalTituloSeccion").innerHTML = nombreSeccion;
+    document.getElementById("dataSubseccionesPendientes").innerHTML = 'Obteniendo Datos...';
+
     const action = "consultarPendientesSubsecciones";
     $.ajax({
         type: "POST",
@@ -334,33 +363,109 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
         },
         dataType: "JSON",
         success: function (data) {
+            console.log(data);
+            // Tipo de Vista Seleccionado
+            document.getElementById("tipoPendienteNombre").innerHTML = data.tipoPendienteNombre;
 
             // Resultado de Consulta.
             document.getElementById("estiloSeccion").innerHTML = data.estiloSeccion;
 
             // Función para darle diseño del Logo según la Sección.
             estiloSeccion('estiloSeccion', data.estiloSeccion);
+            document.getElementById("dataSubseccionesPendientes").innerHTML = data.resultData;
 
-            $("#dataSubseccionesPendientes").html(data.resultData);
-            $("#dataOpcionesSubseccionestoggle").html(data.dataOpcionesSubsecciones);
+            document.getElementById("dataExportarSubseccionesEXCEL").innerHTML = data.exportarSubseccion;
+            document.getElementById("dataExportarSubseccionesPDF").innerHTML = data.exportarSubseccionPDF;
 
             // Pestañas para Mostrar Pendientes.
-            $('#misPendientesUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesUsuario + ')');
-            $('#misPendientesSinUsuario').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSinUsuario + ')');
-            $('#misPendientesSeccion').attr('onclick', 'pendientesSubsecciones(' + data.misPendientesSeccion + ')');
+            document.getElementById("misPendientesUsuario").
+                setAttribute('onclick', 'pendientesSubsecciones(' + data.misPendientesUsuario + ')');
 
-            // Pestañas para Exportar.
-            exportarListarUsuarios(idUsuario, idDestino, idSeccion);
-            $('#exportarSeccion').attr('onclick', 'exportarPendientes(' + data.exportarSeccion + ')');
-            $('#exportarMisPendientes').attr('onclick', 'exportarPendientes(' + data.exportarMisPendientes + ')');
-            $('#exportarMisPendientesPDF').attr('onclick', 'exportarPendientes(' + data.exportarMisPendientesPDF + ')');
-            $("#dataModalOpciones").html(data.exportarSubseccion);
+            document.getElementById("misPendientesCreados").
+                setAttribute('onclick', 'pendientesSubsecciones(' + data.misPendientesCreados + ')');
 
-            // console.log(data);
+            document.getElementById("misPendientesSinUsuario").
+                setAttribute('onclick', 'pendientesSubsecciones(' + data.misPendientesSinUsuario + ')');
+
+            document.getElementById("misPendientesSeccion").
+                setAttribute('onclick', 'pendientesSubsecciones(' + data.misPendientesSeccion + ')');
+
+
+            // Pestaña Exportar
+            document.getElementById("exportarMisPendientes").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarMisPendientes + ')');
+
+            document.getElementById("exportarSeccion").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarSeccion + ')');
+
+            // Subseccion EXCEL
+            document.getElementById("exportarSeccion").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarSeccion + ')');
+
+            // Responsable EXCEL
+            document.getElementById("responsableUsuario").
+                setAttribute('onclick', 'exportarPorUsuario(' + data.exportarPorResponsable + ')');
+
+            document.getElementById("exportarMisCreados").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarMisCreados + ')');
+
+            // Creados Por
+            document.getElementById("exportarCreadosPorEXCEL").
+                setAttribute('onclick', 'exportarPorUsuario(' + data.exportarMisCreados + ')');
+
+            document.getElementById("exportarMisPendientesPDF").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarMisPendientesPDF + ')');
+
+            document.getElementById("exportarMisCreadosPDF").
+                setAttribute('onclick', 'exportarPendientes(' + data.exportarMisCreadosPDF + ')');
+
+            // Subsección PDF
+            document.getElementById("exportarMisCreadosPDF").
+                setAttribute('onclick', 'exportarPendientes(' + data + ')');
+
+            // Colaborador PDF
+            document.getElementById("exportarCreadosPorPDF").
+                setAttribute('onclick', 'exportarPorUsuario(' + data.exportarMisCreadosPDF + ')');
+
         }
     });
 }
 
+
+function toggleSubseccionesTipo(mostrar, ocultar) {
+    document.getElementById("modalExportarSubsecciones").classList.add('open');
+    document.getElementById(mostrar).classList.remove('hidden');
+    document.getElementById(ocultar).classList.add('hidden');
+}
+
+// Muestra Usuario para Exportar sus pendientes o Creados.
+function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
+    document.getElementById("dataExportarSeccionesUsuarios").innerHTML = '';
+    let palabraUsuario = document.getElementById("palabraUsuarioExportar").value;
+    // Agrega la función en el Input palabraUsuarioExportar.
+    document.getElementById("palabraUsuarioExportar").
+        setAttribute('onkeyup', 'exportarPorUsuario(' + idUsuario + ', ' + idDestino + ', ' + idSeccion + ', ' + idSubseccion + ', "' + tipoExportar + '")');
+    const action = "exportarPorUsuario";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idSeccion: idSeccion,
+            idSubseccion: idSubseccion,
+            tipoExportar: tipoExportar,
+            palabraUsuario: palabraUsuario
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("modalExportarSeccionesUsuarios").classList.add('open');
+            document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
+        }
+    });
+}
 
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccionModal(padreSeccion, seccion) {
@@ -434,35 +539,55 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
             idSubseccion: idSubseccion,
             tipoExportar: tipoExportar
         },
-        // dataType: "JSON",
+        dataType: "JSON",
         success: function (data) {
+            console.log(data.listaIdT);
+            console.log(data.listaIdF);
             let usuarioSession = localStorage.getItem('usuario');
 
             if (tipoExportar == "exportarMisPendientes") {
-                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                 window.location = page;
             } else if (tipoExportar == "exportarSeccion") {
-                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                 window.location = page;
             } else if (tipoExportar == "exportarSubseccion") {
-                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                 window.location = page;
-            } else if (tipoExportar == "exportarSeccionUsuario") {
-                page = 'php/generarPendientesExcel.php?listaIdMC=' + data;
+            } else if (tipoExportar == "exportarPorResponsable") {
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
                 window.location = page;
-            } else if (tipoExportar == "exportarMisPendientesPDF") {
-                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
-                    '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+            } else if (tipoExportar == "exportarMisCreados") {
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
+                window.location = page;
+            } else if (tipoExportar == "exportarCreadosDe") {
+                page = 'php/generarPendientesExcel.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&generadoPor=' + usuarioSession;
+                window.location = page;
+            } else if (tipoExportar == "exportarMisCreadosPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                     usuarioSession;
-                window.open(page, "Reporte Pendientes PDF",
-                    "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                window.open(page, "Reporte Fallas Y Tareas PDF",
+                    "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                 );
-            } else if (tipoExportar == "exportarSeccionUsuarioPDF") {
-                page = 'php/generarPendientesPDF.php?listaIdMC=' + data + '&idDestino=' + idDestino +
+            } else if (tipoExportar == "exportarMisPendientesPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino + '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                    usuarioSession;
+                window.open(page, "Reporte Fallas Y Tareas PDF",
+                    "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                );
+            } else if (tipoExportar == "exportarCreadosPorPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
                     '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
                     usuarioSession;
-                window.open(page, "Reporte Pendientes PDF",
-                    "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                window.open(page, "Reporte Fallas Y Tareas PDF",
+                    "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
+                );
+            } else if (tipoExportar == "exportarSubseccionPDF") {
+                page = 'php/generarPendientesPDF.php?listaIdT=' + data.listaIdT + '&listaIdF=' + data.listaIdF + '&idDestino=' + idDestino +
+                    '&idUsuario=' + idUsuario + '&idSeccion=' + idSeccion + '&usuarioSession=' +
+                    usuarioSession;
+                window.open(page, "Reporte Fallas Y Tareas PDF",
+                    "directories=no, location=no, menubar=si, scrollbars=yes, statusbar=no, tittlebar=no, width=800, height=800"
                 );
             }
         }
@@ -538,6 +663,8 @@ function paginacionEquipos() {
 // Obtiene todos los MC-N por Equipo.
 function obtenerMCN(idEquipo) {
     // Actualiza el MC seleccionado.
+    document.getElementById("tipoPendientesX").innerHTML = 'FALLAS PENDIENTES';
+
     localStorage.setItem('idEquipo', idEquipo);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
@@ -546,7 +673,7 @@ function obtenerMCN(idEquipo) {
 
     document.getElementById("modalPendientesX").classList.add('open');
     document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-    document.getElementById("dataMCN").innerHTML = '';
+    document.getElementById("dataPendientes").innerHTML = '';
 
     const action = "obtenerMCN";
 
@@ -566,8 +693,8 @@ function obtenerMCN(idEquipo) {
             estiloSeccionModal('estiloSeccionMCN', data.seccion);
             document.getElementById("seccionMCN").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
-            document.getElementById("dataMCN").innerHTML = data.MC;
-            alertaImg('Correctivos Pendientes: ' + data.contadorMC, '', 'info', 3000);
+            document.getElementById("dataPendientes").innerHTML = data.MC;
+            alertaImg('Fallas Pendientes: ' + data.contadorMC, '', 'info', 3000);
         }
     });
 }
@@ -686,6 +813,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
     // console.log(idEquipo);
+    document.getElementById("tipoSolucionadosX").innerHTML = 'FALLAS SOLUCIONADAS';
     document.getElementById("seccionMCF").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("modalSolucionadosX").classList.add('open');
     let idUsuario = localStorage.getItem('usuario');
@@ -710,7 +838,7 @@ function obtenerMCF(idEquipo) {
             estiloSeccionModal('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
             document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
-            alertaImg('Correctivos Finalizados: ' + data.totalMCF, '', 'info', 2000);
+            alertaImg('Fallas Solucionadas: ' + data.totalMCF, '', 'info', 2000);
         }
     });
 }
@@ -854,13 +982,20 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
         },
         // dataType: "JSON",
         success: function (data) {
-            // console.log(data);
+            console.log(data);
 
             if (data == "MC") {
                 alertaImg('Responsable Actualizado', '', 'success', 2500);
                 document.getElementById("modalUsuarios").classList.remove('open');
                 let idEquipo = localStorage.getItem('idEquipo');
                 obtenerMCN(idEquipo);
+
+                // TAREAS
+            } else if (data == "TAREA") {
+                alertaImg('Responsable Actualizado', '', 'success', 2500);
+                document.getElementById("modalUsuarios").classList.remove('open');
+                let idEquipo = localStorage.getItem('idEquipo');
+                obtenerTareasP(idEquipo);
             } else {
                 alertaImg('Intenete de Nuevo', '', 'question', 2500);
             }
@@ -984,17 +1119,270 @@ function agregarComentarioMC(idMC) {
 }
 
 
-function obtTareasP(idEquipo) {
+// Se obtienen las Tareas Pendientes.
+function obtenerTareasP(idEquipo) {
+    document.getElementById("tipoPendientesX").innerHTML = 'TAREAS PENDIENTES';
+    localStorage.setItem('idEquipo', idEquipo);
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    // console.log(idEquipo, idUsuario, idDestino, idSubseccion);
+
     document.getElementById("modalPendientesX").classList.add('open');
+    document.getElementById("seccionMCN").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataPendientes").innerHTML = '';
 
+    const action = "obtenerTareasP";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idSubseccion: idSubseccion,
+            idDestino: idDestino,
+            idEquipo: idEquipo
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            estiloSeccionModal('estiloSeccionMCN', data.seccion);
+            document.getElementById("seccionMCN").innerHTML = data.seccion;
+            document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
+            document.getElementById("dataPendientes").innerHTML = data.dataTareas;
+            alertaImg('Tareas Pendientes: ' + data.contadorTareas, '', 'info', 3000);
+        }
+    });
 }
 
-function obtTareasF(idEquipo) {
+
+//Se obtienen las Tareas Finaizadas. 
+function obtenerTareasS(idEquipo) {
+    // console.log(idEquipo);
+    document.getElementById("tipoSolucionadosX").innerHTML = 'FALLAS SOLUCIONADAS';
+    document.getElementById("seccionMCF").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("modalSolucionadosX").classList.add('open');
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSubseccion = localStorage.getItem('idSubseccion');
 
+    const action = "obtenerTareasS";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo,
+            idSubseccion: idSubseccion
+        },
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("dataMCF").innerHTML = data.dataTareas;
+            estiloSeccionModal('estiloSeccionMCF', data.seccion);
+            document.getElementById("seccionMCF").innerHTML = data.seccion;
+            document.getElementById("nombreEquipoMCF").innerHTML = data.nombreEquipo;
+            alertaImg('Tareas Solucionadas: ' + data.contadorTareas, '', 'info', 2000);
+        }
+    })
 }
 
 
+// Obtener Media para las TAREAS.
+function obtenerAdjuntosTareas(idTarea) {
+    // Actualiza id TAREA seleccionado.
+    localStorage.setItem('idTarea', idTarea);
+
+    // Recupera datos.
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    document.getElementById("dataImagenes").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataAdjuntos").classList.add('justify-center');
+
+    document.getElementById("dataAdjuntos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("dataImagenes").classList.add('justify-center');
+    document.getElementById("modalMedia").classList.add('open');
+
+    const action = "obtenerAdjuntosTareas";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTarea: idTarea
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("dataImagenes").classList.remove('justify-center');
+            document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
+            document.getElementById("dataAdjuntos").classList.remove('justify-center');
+            document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
+            document.getElementById("statusActivo").
+                setAttribute('onclick', data.dataAdjuntos);
+        }
+    });
+}
+
+// Funcion para Obtener Comentarios TAREAS
+function obtenerComentariosTareas(idTarea) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    document.getElementById("modalComentarios").classList.add('open');
+    document.getElementById("dataComentarios").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+    const action = "obtenerComentariosTareas";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTarea: idTarea
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("btnComentario").
+                setAttribute('onclick', 'agregarComentarioTarea(' + idTarea + ')');
+            document.getElementById("inputComentario").
+                setAttribute('onkeyup', 'if(event.keyCode == 13)agregarComentarioTarea(' + idTarea + ')');
+            document.getElementById("dataComentarios").innerHTML = data.dataComentarios;
+
+        }
+    });
+}
+
+// Agregar Comentario TAREA.
+function agregarComentarioTarea(idTarea) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
+    let comentarioTarea = document.getElementById("inputComentario").value;
+    const action = "agregarComentarioTarea";
+    if (comentarioTarea.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idTarea: idTarea,
+                comentarioTarea: comentarioTarea
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                if (data == 1) {
+                    obtenerComentariosTarea(idTarea);
+                    obtenerTareasP(idEquipo);
+                    document.getElementById("inputComentario").value = '';
+                    alertaImg('Comentario Agregado', '', 'success', 2000);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'question', 2000);
+                }
+            }
+        });
+    } else {
+        alertaImg('Comentario Vacio', '', 'info', 2000);
+    }
+}
+
+
+// Modifica Status o alguna Columna(titulo, activo, status) en TAREAS
+function obtenerInformacionTareas(idTarea, tituloTarea) {
+    document.getElementById("modalStatus").classList.add('open');
+    localStorage.setItem('idTarea', idTarea);
+
+    // La función actulizarTarea(), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
+    // Status
+    document.getElementById("statusUrgente").
+        setAttribute('onclick', 'actualizarTarea(' + idTarea + ', status_urgente, 0)');
+    document.getElementById("statusMaterial").
+        setAttribute('onclick', 'actualizarTarea(' + idTarea + ', status_urgente, 0)');
+    document.getElementById("statusTrabajare").
+        setAttribute('onclick', 'actualizarTarea(' + idTarea + ', status_urgente, 0)');
+    // Status Departamento.
+    document.getElementById("statusCalidad").
+        setAttribute('onclick', data.dataStatusCalidad);
+    document.getElementById("statusCompras").
+        setAttribute('onclick', data.dataStatusCompras);
+    document.getElementById("statusDireccion").
+        setAttribute('onclick', data.dataStatusDireccion);
+    document.getElementById("statusFinanzas").
+        setAttribute('onclick', data.dataStatusFinanzas);
+    document.getElementById("statusRRHH").
+        setAttribute('onclick', data.dataStatusRRHH);
+    // Status Energéticos.
+    document.getElementById("statusElectricidad").
+        setAttribute('onclick', data.dataStatusElectricidad);
+    document.getElementById("statusAgua").
+        setAttribute('onclick', data.dataStatusAgua);
+    document.getElementById("statusDiesel").
+        setAttribute('onclick', data.dataStatusDiesel);
+    document.getElementById("statusGas").
+        setAttribute('onclick', data.dataStatusGas);
+    // Finalizar MC.
+    document.getElementById("statusFinalizarMC").
+        setAttribute('onclick', data.dataStatus);
+    // Activo MC.
+    document.getElementById("statusActivo").
+        setAttribute('onclick', data.dataStatusActivo);
+    // Titulo MC.
+    document.getElementById("btnEditarTituloMC").
+        setAttribute('onclick', data.dataStatusTitulo);
+    document.getElementById("inputEditarTituloMC").value = data.dataTituloMC;
+}
+
+
+function actualizarTarea(idTarea, columna, valor) {
+    let tituloNuevo = document.getElementById("inputEditarTituloMC").value;
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idEquipo = localStorage.getItem('idEquipo');
+    const action = "agregarComentarioTarea";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTarea: idTarea,
+            columna: columna,
+            valor: valor,
+            tituloNuevo: tituloNuevo
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            if (data == 1) {
+                obtenerComentariosTarea(idTarea);
+                obtenerTareasP(idEquipo);
+                document.getElementById("inputComentario").value = '';
+                alertaImg('Comentario Agregado', '', 'success', 2000);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'question', 2000);
+            }
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+// Mantener de Ultimo.
 // Funciones para actualizar idSeccion y idSubseccion en localstorage..
 function actualizarSeccionSubseccion(idSeccion, idSubseccion) {
     localStorage.setItem('idSeccion', idSeccion);
@@ -1012,6 +1400,7 @@ function actualizarSeccion(idSeccion) {
 function actualizarSubseccion(idSubseccion) {
     localStorage.SetItem('idSubseccion', idSubseccion);
 }
+
 
 
 function llamarFuncionX(nombreFuncion) {

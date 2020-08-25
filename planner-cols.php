@@ -196,13 +196,13 @@
                             <h1 id="tipoOrdenamientoMCF">FALLAS S</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
-                            <h1>MP-P</h1>
-                        </div>
-                        <div class="w-16 flex h-full items-center justify-center">
                             <h1>TAREAS P</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
                             <h1>TAREAS S</h1>
+                        </div>
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>MP-P</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
                             <h1>MP-S</h1>
@@ -262,44 +262,64 @@
                         <button id="btnExpandirMenu" onclick="expandir(this.id)" class="py-1 px-2 rounded-br-md bg-indigo-200 text-indigo-500 hover:shadow-sm rounded-tl-md font-normal relative">
                             <i class="fas fa-arrow-to-bottom mr-1"></i>Exportar Pendientes
                         </button>
-                        <div id="btnExpandirMenutoggle" class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
 
-                            <a id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
-                                Pendientes (EXCEL)</a>
+                        <div id="btnExpandirMenutoggle" class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
 
-                            <a id="exportarSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sección
-                                completa (EXCEL)</a>
+                            <a id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Mis Pendientes (EXCEL)
+                            </a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleModalTailwind('modalExportarSubsecciones')">Subsecciones (EXCEL)</a>
+                            <a id="exportarSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Sección Completa (EXCEL)
+                            </a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarEXCEL','exportarPDF'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador
-                                (EXCEL)</a>
+                            <!-- Pendiente por terminar  -->
+                            <a id="exportarExportarSubseccionEXCEL" href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('dataExportarSubseccionesEXCEL', 'dataExportarSubseccionesPDF')">Subsecciones (EXCEL)</a>
+
+                            <a id="responsableUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Responsable (EXCEL)
+                            </a>
+
+                            <a id="exportarMisCreados" href="#" class="py-1 px-2 w-full hover:bg-gray-700"> Creados Por Mi (EXCEL)</a>
+
+                            <a id="exportarCreadosPorEXCEL" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Creados Por (EXCEL)
+                            </a>
 
                             <a id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
                                 Mis Pendientes (PDF)</a>
 
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="mostrarOcultar('exportarPDF','exportarEXCEL'); toggleModalTailwind('modalExportarSeccionesUsuarios')">Colaborador(PDF)</a>
+                            <a id="exportarMisCreadosPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700"> Creados Por Mi (PDF)</a>
+
+                            <a id="exportarSubseccionesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('dataExportarSubseccionesPDF', 'dataExportarSubseccionesEXCEL')">Subsecciones (PDF)</a>
+
+                            <a id="exportarCreadosPorPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700"> Colaborador (PDF)</a>
+
                         </div>
                     </div>
                     <div class="ml-3" (Excel)>
                         <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
-                            <i class="fas fa-eye mr-1"></i>Mis Pendientes
+                            <i class="fas fa-eye mr-1"></i><span id="tipoPendienteNombre"></span>
                         </button>
                         <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
+
                             <a id="misPendientesUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
                                 Pendientes</a>
+
+                            <a id="misPendientesCreados" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Creados Por Mi</a>
+
                             <a id="misPendientesSinUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sin
                                 Responsable</a>
+
                             <a id="misPendientesSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Todos</a>
+
                         </div>
                     </div>
                     <div class="ml-3">
                         <button id="dataOpcionesSubsecciones" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-orange-200 text-orange-500 hover:shadow-sm font-normal relative">
                             <i class="fas fa-eye mr-1"></i>Subsecciones
                         </button>
-                        <div id="dataOpcionesSubseccionestoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
-                            <div id=""></div>
-                            <a href="#" class="py-1 px-2 w-full hover:bg-gray-700">Subseccion 1</a>
+                        <div id="dataOpcionesSubseccionestoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
                         </div>
                     </div>
                 </div>
@@ -312,8 +332,15 @@
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
-                        <h1>Fallas</h1>
+                        <h1>Fallas Y Tareas</h1>
                     </div>
+
+                    <a class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="graficas_reportes_diario/">
+                        <div>
+                            <h1>Reporte Fallas Y Tareas</h1>
+                        </div>
+                    </a>
+
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <h1>Preventivo</h1>
                     </div>
@@ -357,7 +384,7 @@
                     <h1 id="seccionMCN" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
-                    <h1><span id="nombreEquipoMCN"></span> / FALLAS PENDIENTES</h1>
+                    <h1><span id="nombreEquipoMCN"></span> / <span id="tipoPendientesX"></span></h1>
                 </div>
             </div>
 
@@ -387,7 +414,7 @@
                     <!-- titulos -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-full h-full flex items-center justify-center">
-                            <h1>FALLA</h1>
+                            <h1 id="tipoPendiente">--</h1>
                         </div>
                         <div class="w-48 h-full flex items-center justify-center">
                             <h1>RESPONSABLE</h1>
@@ -407,7 +434,7 @@
                     </div>
 
                     <!--Data MCN equipo -->
-                    <div id="dataMCN" class="w-full"></div>
+                    <div id="dataPendientes" class="w-full"></div>
 
                 </div>
             </div>
@@ -429,7 +456,7 @@
                     <h1 id="seccionMCF" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-green-200 text-green-500 text-xs py-1 px-2 rounded">
-                    <h1><span id="nombreEquipoMCF"></span> / FALLAS SOLUCIONADAS</h1>
+                    <h1><span id="nombreEquipoMCF"></span> / <span id="tipoSolucionadosX"></span></h1>
                 </div>
             </div>
 
@@ -461,7 +488,7 @@
                     <!-- titulos -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-full h-full flex items-center justify-center">
-                            <h1>FALLA</h1>
+                            <h1 id="tipoSolucionado">--</h1>
                         </div>
                         <div class="w-48 h-full flex items-center justify-center">
                             <h1>RESPONSABLE</h1>
@@ -507,6 +534,9 @@
 
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3 w-full">
+                    <input id="palabraUsuarioExportar" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                </div>
                 <div id="dataExportarSeccionesUsuarios" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
                 </div>
             </div>
@@ -519,7 +549,7 @@
         <div class="modal-window rounded-md pt-10" style="width: 370px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onkeydown="cerrarmodal('modalExportarSubsecciones')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalExportarSubsecciones');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -532,7 +562,9 @@
 
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
-                <div id="dataModalOpciones" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                <div id="dataExportarSubseccionesEXCEL" class="hidden divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                </div>
+                <div id="dataExportarSubseccionesPDF" class="hidden divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
                 </div>
             </div>
         </div>
@@ -660,7 +692,7 @@
             <!-- CONTENIDO -->
             <div class="px-8 py-2 flex flex-col justify-center items-center flex-col w-full font-bold text-sm">
 
-                <div id="statusUrgente" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
+                <div id="statusUrgente" class="hidden w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
                     <div class="">
                         <h1>ES URGENTE</h1>
                     </div>
