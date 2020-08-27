@@ -30,6 +30,8 @@
                 <option value="t_subalmacenes">Subalmacenes (t_subalmacenes)</option>
                 <option value="t_subalmacenes_items_globales">Materiales Globales Subalmacenes (t_subalmacenes_items_globales)</option>
                 <option value="t_subalmacenes_items_stock">Stock Subalmacenes (t_subalmacenes_items_stock)</option>
+                <option value="t_users">Cuentas Usuarios (t_users)</option>
+                <option value="t_colaboradores">Cuentas Colaboradores (t_colaboradores)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -589,6 +591,70 @@
                 document.getElementById("columna9").value = '';
                 document.getElementById("columna10").value = '';
                 document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+
+            } else if (tabla == "t_users") {
+                document.getElementById("columna1").value = 'username';
+                document.getElementById("columna2").value = 'password';
+                document.getElementById("columna3").value = 'id_colaborador ';
+                document.getElementById("columna4").value = 'id_permiso ';
+                document.getElementById("columna5").value = 'id_destino ';
+                document.getElementById("columna6").value = 'fase ';
+                document.getElementById("columna7").value = 'status';
+                document.getElementById("columna8").value = 'id_seccion';
+                document.getElementById("columna9").value = '';
+                document.getElementById("columna10").value = '';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+
+            } else if (tabla == "t_colaboradores") {
+                document.getElementById("columna1").value = 'id_manto';
+                document.getElementById("columna2").value = 'nombre';
+                document.getElementById("columna3").value = 'apellido';
+                document.getElementById("columna4").value = 'telefono';
+                document.getElementById("columna5").value = 'email';
+                document.getElementById("columna6").value = 'id_cargo ';
+                document.getElementById("columna7").value = 'id_nivel';
+                document.getElementById("columna8").value = 'status';
+                document.getElementById("columna9").value = 'id_destino';
+                document.getElementById("columna10").value = 'id_fase';
+                document.getElementById("columna11").value = 'id_seccion';
                 document.getElementById("columna12").value = '';
                 document.getElementById("columna13").value = '';
                 document.getElementById("columna14").value = '';

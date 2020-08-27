@@ -220,7 +220,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
 
-                        <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeykeyup="if(event.keyCode == 13) inputBusquedaExisenciaSubalmacen();">
+                        <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off">
 
                         <button onclick="toggleModalTailwind('modalCarritoSalidas'); recuperarCarrito();" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
                         </button>

@@ -196,23 +196,17 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
 
 // ****** Funciones para Salidas Subalmacénes y Carrito de Salidas. ******
 
-// Función para buscar un Item de Subalmacén Salidas.
-function inputBusquedaExisenciaSubalmacen() {
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
-  let palabraBuscar = $("#inputPalabraBuscarSubalmacenSalida").val();
-
-  if (palabraBuscar != "") {
-    salidasSubalmacen(idSubalmacen, palabraBuscar);
-  } else {
-    salidasSubalmacen(idSubalmacen, '');
-  }
-}
 
 // Función para Preparar Carrito.
-function salidasSubalmacen(idSubalmacen, palabraBuscar) {
-  // console.log('Here niggas');
+function salidasSubalmacen() {
+  console.log("Buscando");
   $("#modalSalidasSubalmacen").addClass('open');
+  let palabraBuscar = $("#inputPalabraBuscarSubalmacenSalida").val();
   let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+
+  document.getElementById("inputPalabraBuscarSubalmacenSalida").
+    setAttribute('onkeyup', 'if(event.keyCode == 13) salidasSubalmacen()');
 
   const action = "consultaSalidaSubalmacen";
   $.ajax({

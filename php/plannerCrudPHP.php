@@ -15,7 +15,7 @@ if (isset($_POST['action'])) {
     $fechaActual = date("Y-m-d H:m:s");
 
     // Array para Secciones.
-    $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC");
+    $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC", 0 => "");
 
     $queryPermisosUsuario = "SELECT* FROM t_users WHERE id = $idUsuario";
     if ($resultPermisos = mysqli_query($conn_2020, $queryPermisosUsuario)) {
@@ -121,7 +121,7 @@ if (isset($_POST['action'])) {
         $dataZHP = "";
         $dataZIA = "";
         $dataZIC = "";
-
+        $dataAux = "";
         // Lista para Ordenar Columnas
         $listaZIL = "";
         $listaZIE = array();
@@ -192,7 +192,7 @@ if (isset($_POST['action'])) {
                         if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
                             if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
                                 $idSubseccion = $rowSubseccion['id'];
-                                $idSeccion = $rowSubseccion['id_seccion'];
+                                $idSeccionAux = $rowSubseccion['id_seccion'];
                                 $nombreSubseccion = $rowSubseccion['grupo'];
                                 $totalPendiente = $totalSubseccionOrdenZIL[$key];
 
@@ -206,7 +206,7 @@ if (isset($_POST['action'])) {
                                 $dataZIL .= "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        onclick=\"actualizarSeccionSubseccion($idSeccionAux, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
                                         <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                         <div
                                             class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -215,6 +215,34 @@ if (isset($_POST['action'])) {
                                     </div>
                                 ";
                             }
+                        }
+                    }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZIL .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
                         }
                     }
 
@@ -304,20 +332,35 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataZIE .= "
-                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
-                                        <div
-                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                            <h1>$totalPendiente</h1>
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
                                         </div>
-                                    </div>
-                                ";
+                                    ";
+                                } else {
+                                    $dataZIE .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
+                    $dataZIE = $dataZIE . $dataAux;
                     // Cierre de Columnas.
                     $dataZIE .= "
                                     </div>
@@ -403,20 +446,35 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataAUTO .= "
-                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
-                                        <div
-                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                            <h1>$totalPendiente</h1>
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
                                         </div>
-                                    </div>
-                                ";
+                                    ";
+                                } else {
+                                    $dataAUTO .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
+                    $dataAUTO = $dataAUTO . $dataAux;
                     // Cierre de Columnas.
                     $dataAUTO .= "
                                     </div>
@@ -503,7 +561,8 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataDEC .= "
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
                                         onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
@@ -514,10 +573,23 @@ if (isset($_POST['action'])) {
                                         </div>
                                     </div>
                                 ";
+                                } else {
+                                    $dataDEC .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataDEC = $dataDEC . $dataAux;
                     // Cierre de Columnas.
                     $dataDEC .= "
                                     </div>
@@ -604,21 +676,35 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataDEP .= "
-                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
-                                        <div
-                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                            <h1>$totalPendiente</h1>
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
                                         </div>
-                                    </div>
-                                ";
+                                    ";
+                                } else {
+                                    $dataDEP .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataDEP = $dataDEP . $dataAux;
                     // Cierre de Columnas.
                     $dataDEP .= "
                                     </div>
@@ -706,7 +792,8 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataZHA .= "
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
                                         onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
@@ -717,10 +804,23 @@ if (isset($_POST['action'])) {
                                         </div>
                                     </div>
                                 ";
+                                } else {
+                                    $dataZHA .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataZHA = $dataZHA . $dataAux;
                     // Cierre de Columnas.
                     $dataZHA .= "
                                     </div>
@@ -807,7 +907,8 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataZHC .= "
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
                                         onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
@@ -818,10 +919,23 @@ if (isset($_POST['action'])) {
                                         </div>
                                     </div>
                                 ";
+                                } else {
+                                    $dataZHC .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataZHC = $dataZHC . $dataAux;
                     // Cierre de Columnas.
                     $dataZHC .= "
                                     </div>
@@ -908,7 +1022,8 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataZHP .= "
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
                                         onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
@@ -919,10 +1034,23 @@ if (isset($_POST['action'])) {
                                         </div>
                                     </div>
                                 ";
+                                } else {
+                                    $dataZHP .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataZHP = $dataZHP . $dataAux;
                     // Cierre de Columnas.
                     $dataZHP .= "
                                     </div>
@@ -1009,7 +1137,8 @@ if (isset($_POST['action'])) {
                                     $totalPendiente = "";
                                 }
 
-                                $dataZIA .= "
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
                                         onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
@@ -1020,10 +1149,23 @@ if (isset($_POST['action'])) {
                                         </div>
                                     </div>
                                 ";
+                                } else {
+                                    $dataZIA .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataZIA = $dataZIA . $dataAux;
                     // Cierre de Columnas.
                     $dataZIA .= "
                                     </div>
@@ -1110,22 +1252,35 @@ if (isset($_POST['action'])) {
                                     $estiloSubseccion = "";
                                     $totalPendiente = "";
                                 }
-
-                                $dataZIC .= "
-                                    <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
-                                        class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
-                                        <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
-                                        <div
-                                            class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
-                                            <h1>$totalPendiente</h1>
+                                if ($idSubseccion == 200) {
+                                    $dataAux = "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
                                         </div>
-                                    </div>
-                                ";
+                                    ";
+                                } else {
+                                    $dataZIC .= "
+                                        <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                            class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
+                                            <div
+                                                class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                                <h1>$totalPendiente</h1>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
                             }
                         }
                     }
-
+                    $dataZIC = $dataZIC . $dataAux;
                     // Cierre de Columnas.
                     $dataZIC .= "
                                     </div>
@@ -3322,14 +3477,14 @@ if (isset($_POST['action'])) {
                     $nombreCompleto = $nombre . " " . $apellido;
 
                     $dataUsuarios .= "
-                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                    onclick=\"asignarUsuario($idUsuario, 'asignarMC', $idItem);\">
-                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
-                        <h1 class=\"ml-2\">$nombreCompleto</h1>
-                        <p class=\"font-bold mx-1\"> / </p>
-                        <h1 class=\"font-normal text-xs\">$cargo</h1>
-                    </div>
-                ";
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"asignarUsuario($idUsuario, 'asignarMC', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
                 }
             } elseif ($tipoAsginacion == "asignarTarea") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
@@ -3341,16 +3496,36 @@ if (isset($_POST['action'])) {
                     $nombreCompleto = $nombre . " " . $apellido;
 
                     $dataUsuarios .= "
-                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                    onclick=\"asignarUsuario($idUsuario, 'asignarTarea', $idItem);\">
-                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
-                        <h1 class=\"ml-2\">$nombreCompleto</h1>
-                        <p class=\"font-bold mx-1\"> / </p>
-                        <h1 class=\"font-normal text-xs\">$cargo</h1>
-                    </div>
-                ";
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"asignarUsuario($idUsuario, 'asignarTarea', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
+                }
+            } elseif ($tipoAsginacion == "asignarProyecto") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"actualizarProyecto($idUsuario, 'asignarProyecto', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
                 }
             }
+
             $data['totalUsuarios'] = $totalUsuarios;
             $data['dataUsuarios'] = $dataUsuarios;
         }
@@ -3714,7 +3889,7 @@ if (isset($_POST['action'])) {
             }
         }
 
-        $query = "SELECT t_mp_np.id, t_mp_np.fecha, t_mp_np.titulo, t_mp_np.id_usuario, t_colaboradores.nombre, 
+        $query = "SELECT t_mp_np.id, t_mp_np.rango_fecha, t_mp_np.titulo, t_mp_np.id_usuario, t_colaboradores.nombre, 
         t_colaboradores.apellido, t_mp_np.responsable,
         t_mp_np.status_urgente, t_mp_np.status_material, t_mp_np.status_trabajando, t_mp_np.energetico_electricidad, t_mp_np.energetico_agua, t_mp_np.energetico_diesel, t_mp_np.energetico_gas, t_mp_np.departamento_calidad, t_mp_np.departamento_compras, t_mp_np.departamento_direccion, t_mp_np.departamento_finanzas, 
         t_mp_np.departamento_rrhh
@@ -3723,7 +3898,7 @@ if (isset($_POST['action'])) {
         INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo = 1 
-        AND (t_mp_np.status = 'N' OR t_mp_np.status = 'PENDIENTE' OR t_mp_np.status = 'P' OR t_mp_np.status = '')";
+        AND (t_mp_np.status = 'N' OR t_mp_np.status = 'PENDIENTE' OR t_mp_np.status = 'P' OR t_mp_np.status = '') ORDER BY t_mp_np.id DESC";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
@@ -3733,7 +3908,7 @@ if (isset($_POST['action'])) {
                 $idResponsable = $value['responsable'];
                 $actividad = $value['titulo'];
                 $creadoPor = strtok($value['nombre'], '') . " " . strtok($value['apellido'], '');
-                $fechaTarea = $value['fecha'];
+                $fechaTarea = $value['rango_fecha'];
                 $sUrgente = $value['status_urgente'];
                 $sMaterial = $value['status_material'];
                 $sTrabajando = $value['status_trabajando'];
@@ -3871,31 +4046,31 @@ if (isset($_POST['action'])) {
                                     <h1 class=\"\">Agua</h1>
                                 </div>
                                
-                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
                                     <h1 class=\"\">Gas</h1>
                                 </div>
                                 
-                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
                                     <h1 class=\"\">Diesel</h1>
                                 </div>
                                 
-                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Dirección</h1>
                                 </div>
                                 
-                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">RRHH</h1>
                                 </div>
                                 
-                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Finanzas</h1>
                                 </div>
                                 
-                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Compras</h1>
                                 </div>
                                 
-                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Calidad</h1>
                                 </div>
                             </div>
@@ -3983,7 +4158,7 @@ if (isset($_POST['action'])) {
         INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mp_np.id_equipo = $idEquipo AND t_mp_np.activo = 1 
-        AND (t_mp_np.status = 'F' OR t_mp_np.status = 'SOLUCIONADA' OR t_mp_np.status = 'FINALIZADA')";
+        AND (t_mp_np.status = 'F' OR t_mp_np.status = 'SOLUCIONADA' OR t_mp_np.status = 'FINALIZADA') ORDER BY t_mp_np.id DESC";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
@@ -4130,31 +4305,31 @@ if (isset($_POST['action'])) {
                                     <h1 class=\"\">Agua</h1>
                                 </div>
                                
-                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
                                     <h1 class=\"\">Gas</h1>
                                 </div>
                                 
-                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
                                     <h1 class=\"\">Diesel</h1>
                                 </div>
                                 
-                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Dirección</h1>
                                 </div>
                                 
-                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">RRHH</h1>
                                 </div>
                                 
-                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Finanzas</h1>
                                 </div>
                                 
-                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Compras</h1>
                                 </div>
                                 
-                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
                                     <h1 class=\"\">Calidad</h1>
                                 </div>
                             </div>
@@ -4192,7 +4367,7 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!--  STATUS -->
-                        <div onclick=\"actualizarStatusTareas($idTarea, 'status', 'F')\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md\">
+                        <div onclick=\"actualizarTareas($idTarea,  'status', 'P');\" class=\"w-32 flex h-full items-center justify-center hover:shadow-md hover:bg-red-200 text-red-500 rounded-r-md\">
                             <div><i class=\"fas fa-undo fa-lg\"></i></div>
                         </div>
                     </div>
@@ -4203,6 +4378,7 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
+
 
     // obtiene Adjuntos e Imagenes TAREAS
     if ($action == "obtenerAdjuntosTareas") {
@@ -4334,12 +4510,15 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     // Actualiza la información de las Tareas
-    if ($action == "actualizarTarea") {
+    if ($action == "actualizarTareas") {
         $columna = $_POST['columna'];
         $idTarea = $_POST['idTarea'];
+        $valor = $_POST['valor'];
+        $tituloNuevo = $_POST['tituloNuevo'];
 
-        if ($columna == "status_urgente" || $columna == "status_material") {
+        if ($columna == "status_urgente" || $columna == "status_material" || $columna == "status_trabajando" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
             $query = "SELECT $columna FROM t_mp_np WHERE id =  $idTarea";
             if ($result = mysqli_query($conn_2020, $query)) {
                 if ($row = mysqli_fetch_array($result))
@@ -4347,11 +4526,238 @@ if (isset($_POST['action'])) {
                 if ($valorAnterior == "0") {
                     $valorNuevo = 1;
                     $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
+                    if ($result = mysqli_query($conn_2020, $update)) {
+                        echo 1;
+                    } else {
+                        echo 0;
+                    }
                 } else {
                     $valorNuevo = 0;
                     $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
+                    if ($result = mysqli_query($conn_2020, $update)) {
+                        echo 1;
+                    } else {
+                        echo 0;
+                    }
                 }
             }
+        } elseif ($columna == "status" and $valor == "F") {
+            $update = "UPDATE t_mp_np SET status = 'F' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                echo 2;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "status" and $valor == "P") {
+            $update = "UPDATE t_mp_np SET status = 'P' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                echo 3;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "activo" and $valor == "0") {
+            $update = "UPDATE t_mp_np SET $columna = '0' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                echo 4;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "titulo" and $tituloNuevo != "") {
+            $update = "UPDATE t_mp_np SET titulo = '$tituloNuevo' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                echo 5;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "rango_fecha" and $valor != "") {
+            $update = "UPDATE t_mp_np SET rango_fecha = '$valor' WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                echo 6;
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
         }
     }
+
+
+    // Agrega una Nueva TAREA con Comentario(opcional).
+    if ($action == "agregarTarea") {
+        $idEquipo = $_POST['idEquipo'];
+        $titulo = $_POST['titulo'];
+        $responsable = $_POST['responsable'];
+        $rangoFecha = $_POST['rangoFecha'];
+        $comentario = $_POST['comentario'];
+
+        $query = "SELECT max(id) FROM t_mp_np";
+        $id = 0;
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idUltimo = intval($value['max(id)']) + 1;
+            }
+            $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, titulo, responsable, rango_fecha, fecha) 
+            VALUES($idUltimo, $idEquipo, $idUsuario, $idDestino,  '$titulo', '$responsable', '$rangoFecha', '$fechaActual')";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($comentario != "" and $idUltimo > 0) {
+                    $queryComentario = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha) 
+                    VALUES($idUltimo, $idUsuario, '$comentario', '$fechaActual')";
+                    if ($result = mysqli_query($conn_2020, $queryComentario)) {
+                        echo 2;
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 1;
+                }
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
+        }
+    }
+
+
+    if ($action == "obtenerProyectos") {
+        $data = array();
+        $dataProyectos = "";
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $palabraProyecto = $_POST['palabraProyecto'];
+
+        // Filtro para Destinos
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "AND t_proyectos.id_destino = $idDestino";
+        }
+
+        //Filtro para Buscar Proyecto 
+        if ($palabraProyecto != "") {
+            $filtroPalabreProyecto = "AND t_proyectos.titulo LIKE '%$palabraProyecto%'";
+        } else {
+            $filtroPalabreProyecto = "";
+        }
+
+
+
+        $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
+        t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
+        FROM t_proyectos 
+        INNER JOIN t_users ON t_proyectos.responsable = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos.status = 'N' AND t_proyectos.activo = 1 
+        AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idProyecto = $value['id'];
+                $titulo = $value['titulo'];
+                $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                $rangoFecha = $value['rango_fecha'];
+                $tipo = $value['tipo'];
+                $justificacion = $value['justificacion'];
+                $coste = $value['coste'];
+
+
+                $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
+
+                if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                    foreach ($resultAdjuntos as $value) {
+                        $totalAdjuntos = $value['count(id)'];
+                    }
+                }
+
+                if ($totalAdjuntos <= 0 or $totalAdjuntos != "") {
+                    $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                }
+
+                if ($rangoFecha == "") {
+                    $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
+                }
+
+                if ($justificacion == "") {
+                    $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
+                } else {
+                    $justificacion = "<i class=\"fas fa-check\"></i>";
+                }
+
+                if ($coste < 0 or $coste == "") {
+                    $coste = "<i class=\"fas fa-window-minimize\"></i>";
+                }
+
+                if ($tipo == "") {
+                    $tipo = "<i class=\"fas fa-window-minimize\"></i>";
+                }
+
+
+                $dataProyectos .= "
+                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
+                        <div id=\"equipo123\" onclick=\"expandir(this.id)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
+                            <div class=\" flex flex-row items-center truncate\">
+                                <i class=\"fad fa-scrubber mx-2\"></i>
+                                <h1>$titulo</h1>
+                            </div>
+                            <div class=\"mx-2\">
+                                <i class=\"fas fa-chevron-down\"></i>
+                            </div>
+                        </div>
+                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
+                            <i class=\"fas fa-check\"></i>
+                        </div>
+                        <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
+                        onclick=\"obtenerResponsablesProyectos($idProyecto);\">
+                            <h1>$responsable</h1>
+                        </div>
+                        <div class=\"w-24 flex h-full items-center justify-center text-xxs\">
+                            <h1>$rangoFecha</h1>
+                        </div>
+                        <div class=\"w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500\">
+                            <h1>$totalAdjuntos</h1>
+                        </div>
+                        <div class=\"w-24 flex h-full items-center justify-center font-bold\">
+                            <h1>$tipo</h1>
+                        </div>
+                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
+                            $justificacion
+                        </div>
+                        <div class=\"w-24 flex h-full items-center justify-center font-bold\">
+                            <h1>$coste</h1>
+                        </div>
+                        <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
+                            <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                        </div>
+                    </div>
+                ";
+            }
+
+            $data['dataProyectos'] = $dataProyectos;
+        }
+        echo json_encode($data);
+    }
+
+    if ($action == "actualizarProyecto") {
+        $valor = $_POST['valor'];
+        $columna = $_POST['columna'];
+        $idProyecto = $_POST['idProyecto'];
+
+        if ($columna == "asignarProyecto") {
+            $columna = "responsable";
+        }
+
+        $query = "UPDATE t_proyectos SET $columna = '$valor' WHERE id = $idProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+
+
+
+
+
+
+    // FIN
 }

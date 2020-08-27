@@ -50,7 +50,7 @@
 
 <body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
 
-    <div class="w-full">
+    <div class="w-full absolute top-0">
         <?php
         include 'navbartopJS.php';
         include 'menuJS.php';
@@ -61,7 +61,7 @@
     <input type="hidden" id="idDestinoSeleccionado">
 
     <div class="flex flex-col justify-evenly items-center w-full h-screen">
-        <div class="scroll flex flex-row justify-start items-start w-full overflow-x-auto py-24- px-4 flex items-center">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4 flex items-center">
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">00</p>
@@ -133,23 +133,25 @@
             </div>
 
             <!-- Inicio Columna -->
-            <div id="columnasSeccionesZIL" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZIE" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesAUTO" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesDEC" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesDEP" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesOMA" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZHA" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZHC" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZHH" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZHP" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZIA" class="h-screen flex items-center"></div>
-            <div id="columnasSeccionesZIC" class="h-screen flex items-center"></div>
+            <div id="columnasSeccionesZIL" class="flex items-center"></div>
+            <div id="columnasSeccionesZIE" class="flex items-center"></div>
+            <div id="columnasSeccionesAUTO" class="flex items-center"></div>
+            <div id="columnasSeccionesDEC" class="flex items-center"></div>
+            <div id="columnasSeccionesDEP" class="flex items-center"></div>
+            <div id="columnasSeccionesOMA" class="flex items-center"></div>
+            <div id="columnasSeccionesZHA" class="flex items-center"></div>
+            <div id="columnasSeccionesZHC" class="flex items-center"></div>
+            <div id="columnasSeccionesZHH" class="flex items-center"></div>
+            <div id="columnasSeccionesZHP" class="flex items-center"></div>
+            <div id="columnasSeccionesZIA" class="flex items-center"></div>
+            <div id="columnasSeccionesZIC" class="flex items-center"></div>
         </div>
     </div>
 
 
     <!-- Inicio de Modales Modales -->
+
+    <!-- ********** MODALES PRINCIPALES ********** -->
 
     <!-- MODAL EQUIPOS Y LOCALES -->
     <div id="modalEquipos" class="modal">
@@ -369,7 +371,7 @@
     </div>
 
 
-    <!-- MODAL MC Nuevos -->
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
     <div id="modalPendientesX" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
@@ -392,17 +394,17 @@
             <div class="p-2 flex justify-center items-center flex-col w-full">
                 <!-- Opciones para MC -->
                 <div class="flex items-center justify-center text-sm font-semibold">
-                    <div class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500" onclick="datosModalAgregarMC('');">
+                    <div id="btnAgregarPendiente" class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500">
                         <h1>
-                            <i class="fas fa-plus mr-2"></i>AGREGAR MC
+                            <i class="fas fa-plus mr-2"></i><span id="agregarPendiente">Agregar</span>
                         </h1>
                     </div>
-                    <div class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+                    <div id="verGANTT" class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
                         <h1>
                             <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
                         </h1>
                     </div>
-                    <div class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+                    <div id="exportarPendientes" class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
                         <h1>
                             <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
                         </h1>
@@ -441,7 +443,8 @@
         </div>
     </div>
 
-    <!-- MODAL MCF -->
+
+    <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
     <div id="modalSolucionadosX" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
@@ -514,6 +517,161 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal de Proyectos -->
+    <div id="modalProyectos" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalProyectos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 class="font-medium text-base text-blue-500">ZIA</h1>
+                </div>
+                <div class="ml-4 font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded">
+                    <h1>PROYECTOS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 mt-6 flex justify-center items-center flex-col">
+                <div class="flex flex-row items-center w-full">
+                    <div class="ml-10 relative text-gray-600 w-2/6 self-start">
+                        <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                            <i class="fad fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center">
+                    <!-- titulos -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xxs h-8 text-bluegray-500 divide-x">
+                        <div class="w-2/5 h-full flex items-center justify-center ">
+                            <h1>PROYECTO</h1>
+                        </div>
+                        <div class="w-24 h-full flex items-center justify-center">
+                            <h1>PDA</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>RESP.</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>FECHA</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>COT</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>TIPO</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>JUST</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>COSTE</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>STATUS</h1>
+                        </div>
+                    </div>
+
+                    <div id="dataProyectos" class="w-full"></div>
+
+                    <!-- PLAN DE ACCION -->
+                    <div id="equipo123toggle" class="hidden w-full mb-2 text-xxs px-6 py-2 bg-bluegray-900 rounded-b-md flex flex-col items-center justify-center">
+                        <div class="flex items-center mb-2">
+                            <input type="text" name="" id="" class="bg-white p-1 pl-2  rounded-full w-64" placeholder="Añadir actividad" autocomplete="off">
+                            <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase ml-2 rounded-full">Añadir</button>
+                            <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded-full">Ver
+                                solucionado</button>
+                        </div>
+
+                        <div>
+                            <div class="flex bg-bluegray-900 justify-center items-center font-bold text-xxs text-white divide-x divide-bluegray-500">
+                                <div class="w-1/2 h-full flex items-center justify-center ">
+                                    <h1>ACTIVIDAD</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>RESPONSABLE</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>COMENTARIOS</h1>
+                                </div>
+                                <div class="w-24 h-full flex items-center justify-center">
+                                    <h1>ADJUNTOS</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>STATUS</h1>
+                                </div>
+
+                            </div>
+
+                            <div class="bg-white flex flex-col rounded-md p-1">
+                                <div class="flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer">
+                                    <div class="w-1/2 flex flex-col items-center justify-center">
+                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate">
+                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
+                                                tam</h1>
+                                        </div>
+                                        <div class="self-start">
+                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
+                                        </div>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>EDUARDO MENESES</h1>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>8</h1>
+                                    </div>
+                                    <div class="w-24 h-full flex items-center justify-center">
+                                        <h1>4</h1>
+                                    </div>
+                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
+                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer">
+                                    <div class="w-1/2 flex flex-col items-center justify-center">
+                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate">
+                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
+                                                tam</h1>
+                                        </div>
+                                        <div class="self-start">
+                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
+                                        </div>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>EDUARDO MENESES</h1>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>8</h1>
+                                    </div>
+                                    <div class="w-24 h-full flex items-center justify-center">
+                                        <h1>4</h1>
+                                    </div>
+                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
+                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- PLAN DE ACCION -->
+                </div>
+            </div>
+            <div id="paginacionProyectos" class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6"></div>
+        </div>
+    </div>
+
+
+    <!-- ********** MODALES SECUNDARIOS ********** -->
 
 
     <!-- MODAL Exportar Secciones Usuarios -->
@@ -599,6 +757,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- MODAL MEDIA -->
     <div id="modalMedia" class="modal">
@@ -870,7 +1029,7 @@
     </div>
 
 
-    <!-- MODAL EDITAR TITULO   -->
+    <!-- MODAL EDITAR FECHA EN FALLAS   -->
     <div id="modalFechaMC" class="modal">
         <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
             <!-- BOTON CERRARL -->
@@ -886,6 +1045,24 @@
         </div>
     </div>
 
+
+    <!-- MODAL EDITAR FECHA EN FALLAS   -->
+    <div id="modalFechaTareas" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaTareas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaTareas" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaTareas" value="---">
+            </div>
+        </div>
+    </div>
+
+
     <!-- MODAL EDITAR TITULO   -->
     <div id="modalAgregarMC" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 800px;">
@@ -900,7 +1077,7 @@
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
                     <h1>
 
-                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR FALLA</h1>
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR Pendiente</h1>
                     </h1>
                 </div>
             </div>
@@ -911,7 +1088,7 @@
                     <h1 id="nombreEquipoMC"></h1>
                 </div>
                 <h1 class="self-start mb-2">Descripción:</h1>
-                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del MC" maxlength="60" autocomplete="off">
+                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción" maxlength="60" autocomplete="off">
                 <div class="flex w-full items-center justify-center">
 
                     <div class="w-1/2 flex flex-col pr-4">
@@ -941,6 +1118,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Modales -->
 
