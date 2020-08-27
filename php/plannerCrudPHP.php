@@ -2197,7 +2197,7 @@ if (isset($_POST['action'])) {
         $tipoExportar = $_POST['tipoExportar'];
         $palabraUsuario = $_POST['palabraUsuario'];
 
-        if ($idDestino == 10) {
+        if ($idDestino == 10 || $idDestinoUsuarioPermiso == 10) {
             $filtroDestino = "";
         } else {
             $filtroDestino = "AND(t_users.id_destino = $idDestino OR t_users.id_destino = 10)";
