@@ -1039,6 +1039,11 @@
                 </button>
             </div>
             <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
+                </div>
+            </div>
             <div class="flex flex-row items-center pt-10">
                 <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="---">
             </div>
@@ -1115,6 +1120,28 @@
                 <button id="btnAgregarMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
                     <i class="fas fa-check"></i> Crear
                 </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR INFORMACION -->
+    <div id="modalActualizarInformacion" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalActualizarInformacion')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1 id="actualizarInformacion">-</h1>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-10">
+                <input id="valorInformacion" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text">
             </div>
         </div>
     </div>

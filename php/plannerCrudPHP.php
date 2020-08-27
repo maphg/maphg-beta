@@ -4661,10 +4661,23 @@ if (isset($_POST['action'])) {
 
 
                 $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
-
                 if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                     foreach ($resultAdjuntos as $value) {
                         $totalAdjuntos = $value['count(id)'];
+                    }
+                }
+
+
+                $queryPlanaccion = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto";
+                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
+                    foreach ($resultPlanaccion as $value) {
+                        $totalPlanaccion = $value['count(id)'];
+                    }
+
+                    if ($totalPlanaccion <= 0 and $totalPlanaccion == "") {
+                        $PDA = "<i class=\"fas fa-window-minimize\"></i>";
+                    } else {
+                        $PDA = "<i class=\"fas fa-check\"></i>";
                     }
                 }
 
@@ -4678,8 +4691,10 @@ if (isset($_POST['action'])) {
 
                 if ($justificacion == "") {
                     $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
+                    $justificacionEspecial = "";
                 } else {
                     $justificacion = "<i class=\"fas fa-check\"></i>";
+                    $justificacionEspecial = preg_replace('([^A-Za-z0-9])', '', $justificacion);
                 }
 
                 if ($coste < 0 or $coste == "") {
@@ -4703,7 +4718,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                         <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
-                            <i class=\"fas fa-check\"></i>
+                            $PDA
                         </div>
                         <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
                         onclick=\"obtenerResponsablesProyectos($idProyecto);\">
@@ -4718,7 +4733,7 @@ if (isset($_POST['action'])) {
                         <div class=\"w-24 flex h-full items-center justify-center font-bold\">
                             <h1>$tipo</h1>
                         </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
+                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\" onclick=\"actualizarJustificacionProyectos($idProyecto, $justificacionEspecial);\">
                             $justificacion
                         </div>
                         <div class=\"w-24 flex h-full items-center justify-center font-bold\">

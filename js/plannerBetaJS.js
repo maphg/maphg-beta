@@ -1619,7 +1619,11 @@ function actualizarProyecto(valor, columna, idProyecto) {
 }
 
 
-
+// ACTUALIZA LA JUSTIFICACION DE LOS PROYECTOS
+function actualizarJustificacionProyectos(idProyecto, justificacion) {
+    document.getElementById("actualizarInformacion").innerHTML = "JUSTIFIACION";
+    document.getElementById("valorInformacion").value = justificacion;
+}
 
 
 
