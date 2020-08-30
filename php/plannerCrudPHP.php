@@ -2457,7 +2457,7 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
 
-                    $queryMC = "SELECT id, count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
+                    $queryMC = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'F' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
                         if ($MC = mysqli_fetch_array($resultMC)) {
@@ -2473,7 +2473,7 @@ if (isset($_POST['action'])) {
                     $idEquipo = $equipo['id'];
                     $ordenIdEquipos[] = intval($idEquipo);
 
-                    $queryMC = "SELECT id, count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
+                    $queryMC = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo AND status = 'N' AND activo = 1";
 
                     if ($resultMC = mysqli_query($conn_2020, $queryMC)) {
                         if ($MC = mysqli_fetch_array($resultMC)) {
@@ -3516,7 +3516,26 @@ if (isset($_POST['action'])) {
 
                     $dataUsuarios .= "
                         <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
-                        onclick=\"actualizarProyecto($idUsuario, 'asignarProyecto', $idItem);\">
+                        onclick=\"actualizarProyectos($idUsuario, 'asignarProyecto', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
+                }
+            } elseif ($tipoAsginacion == "asignarPlanaccion") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"actualizarPlanaccion($idUsuario, 'asignarPlanaccion', $idItem);\">
                             <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
                             <h1 class=\"ml-2\">$nombreCompleto</h1>
                             <p class=\"font-bold mx-1\"> / </p>
@@ -3580,21 +3599,20 @@ if (isset($_POST['action'])) {
                 } elseif (file_exists("../../planner/tareas/adjuntos/$url")) {
                     $adjuntoURL = "../planner/tareas/adjuntos/$url";
                 } else {
-                    $adjunto = "";
+                    $adjuntoURL = "";
                 }
 
                 // Admite solo Imagenes.
                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
                     $dataImagenes .= "
-                    <a href=\"$adjuntoURL\" target=\"_blank\">
-                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                    </div>
-                    </a>
+                        <a href=\"$adjuntoURL\" target=\"_blank\">
+                        <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                        </div>
+                        </a>
                     ";
 
                     // Admite todo, menos lo anterior.
                 } else {
-
                     $dataAdjuntos .= "
                         <a href=\"$adjuntoURL\" target=\"_blank\">
                             <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
@@ -4651,6 +4669,7 @@ if (isset($_POST['action'])) {
         AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
+                $idProyecto = 0;
                 $idProyecto = $value['id'];
                 $titulo = $value['titulo'];
                 $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
@@ -4681,7 +4700,7 @@ if (isset($_POST['action'])) {
                     }
                 }
 
-                if ($totalAdjuntos <= 0 or $totalAdjuntos != "") {
+                if ($totalAdjuntos <= 0 or $totalAdjuntos == "") {
                     $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
                 }
 
@@ -4689,12 +4708,10 @@ if (isset($_POST['action'])) {
                     $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
                 }
 
-                if ($justificacion == "") {
+                if ($justificacion == "" or $justificacion == " ") {
                     $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
-                    $justificacionEspecial = "";
                 } else {
                     $justificacion = "<i class=\"fas fa-check\"></i>";
-                    $justificacionEspecial = preg_replace('([^A-Za-z0-9])', '', $justificacion);
                 }
 
                 if ($coste < 0 or $coste == "") {
@@ -4705,16 +4722,16 @@ if (isset($_POST['action'])) {
                     $tipo = "<i class=\"fas fa-window-minimize\"></i>";
                 }
 
-
+                // PROYECTOS
                 $dataProyectos .= "
                     <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                        <div id=\"equipo123\" onclick=\"expandir(this.id)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
+                        <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
                             <div class=\" flex flex-row items-center truncate\">
                                 <i class=\"fad fa-scrubber mx-2\"></i>
-                                <h1>$titulo</h1>
+                                <h1 id=\"tituloP$idProyecto\">$titulo</h1>
                             </div>
-                            <div class=\"mx-2\">
-                                <i class=\"fas fa-chevron-down\"></i>
+                            <div  class=\"mx-2\">
+                                <i id=\"icono$idProyecto\" class=\"fas fa-chevron-right\"></i>
                             </div>
                         </div>
                         <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
@@ -4724,23 +4741,162 @@ if (isset($_POST['action'])) {
                         onclick=\"obtenerResponsablesProyectos($idProyecto);\">
                             <h1>$responsable</h1>
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center text-xxs\">
+                        <div class=\"w-24 flex h-full items-center justify-center text-xxs text-center\" onclick=\"obtenerDatoProyectos($idProyecto,'rango_fecha');\">
                             <h1>$rangoFecha</h1>
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500\">
+                        <div class=\"w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500\" onclick=\"cotizacionesProyectos($idProyecto);\">
                             <h1>$totalAdjuntos</h1>
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center font-bold\">
+                        <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'tipo');\">
                             <h1>$tipo</h1>
                         </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\" onclick=\"actualizarJustificacionProyectos($idProyecto, $justificacionEspecial);\">
+                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
                             $justificacion
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center font-bold\">
+                        <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
                             <h1>$coste</h1>
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
+                        <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\" onclick=\"statusProyecto($idProyecto);\">
                             <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                        </div>
+                    </div>
+                ";
+                // PROYECTOS
+
+
+                // ENCABEZADO PRINCIPAL PLANACCION
+                $dataProyectos .= "
+                    <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-bluegray-900 rounded-b-md flex flex-col items-center justify-center my-1\">
+                        <div class=\"flex items-center mb-2\">
+                            <input id=\"NA$idProyecto\" type=\"text\" class=\"bg-white p-1 pl-2  rounded-full w-64\" placeholder=\"Añadir actividad\" autocomplete=\"off\">
+
+                            <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase ml-2 rounded-full\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
+
+                            <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded-full\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
+                                solucionado</button>
+                        </div>
+                ";
+
+                // ENCABEZADO ACTIVIDADES PLANACCION
+                $dataProyectos .= "
+                        <div class=\"w-full\">
+                            <div class=\"flex bg-bluegray-900 justify-center items-center font-bold text-xxs text-white divide-x divide-bluegray-500\">
+                                <div class=\"w-1/2 h-full flex items-center justify-center \">
+                                    <h1>ACTIVIDAD</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>RESPONSABLE</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>COMENTARIOS</h1>
+                                </div>
+                                <div class=\"w-24 h-full flex items-center justify-center\">
+                                    <h1>ADJUNTOS</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>STATUS</h1>
+                                </div>
+                            </div>
+                            <div class=\"bg-white flex flex-col rounded-md p-1\">
+                ";
+
+                //ACTIVIDADES PLANACCION 
+                $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion
+                FROM t_proyectos_planaccion
+                INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_proyectos_planaccion.activo AND t_proyectos_planaccion.id_proyecto = $idProyecto
+                ";
+                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
+                    foreach ($resultPlanaccion as $value) {
+                        $idPlanaccion = $value['id'];
+                        $actividad = $value['actividad'];
+                        $creadoPor = $value['nombre'] . " " . $value['apellido'];
+                        $fecha = $value['fecha_creacion'];
+                        $idResponsable = $value['responsable'];
+                        $status = $value['status'];
+
+                        if ($fecha != "" or $fecha == " ") {
+                            $fecha = "-";
+                        }
+
+                        if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
+                            $solucionados = "actividades$idProyecto hidden bg-teal-300";
+                        } else {
+                            $solucionados = "";
+                        }
+
+                        // RESPONSABLE DE LA ACTIVIDAD
+                        $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                        FROM t_users
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        WHERE t_users.id = $idResponsable
+                        ";
+                        if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                            foreach ($resultResponsable as $value) {
+                                $responsable = $value['nombre'] . " " . $value['apellido'];
+                            }
+                        } else {
+                            $responsable = "";
+                        }
+
+                        // TOTAL DE COMENTARIOS
+                        $queryComentarios = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion";
+                        if ($resultComentarios = mysqli_query($conn_2020, $queryComentarios)) {
+                            foreach ($resultComentarios as $value) {
+                                $totalComentarios = $value['count(id)'];
+                            }
+                            if ($totalComentarios <= 0) {
+                                $totalComentarios = "<i class=\"fas fa-window-minimize\"></i>";
+                            }
+                        }
+
+                        // TOTAL DE ADJUNTOS
+                        $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                        if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                            foreach ($resultAdjuntos as $value) {
+                                $totalAdjuntos = $value['count(id)'];
+                            }
+
+                            if ($totalAdjuntos <= 0) {
+                                $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                            }
+                        }
+
+
+                        // Actividades PLANAACION
+                        $dataProyectos .= "
+                                <div class=\"$solucionados flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer\">
+                                    <div class=\"w-1/2 flex flex-col items-center justify-center\">
+                                        <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate\">
+                                            <h1 id=\"AP$idPlanaccion\">$actividad</h1>
+                                        </div>
+                                        <div class=\"self-start\">
+                                            <h1>$creadoPor - 2020-08-16 16:58:41</h1>
+                                        </div>
+                                    </div>
+                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\">
+                                        <h1>$responsable</h1>
+                                    </div>
+                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
+                                        <h1>$totalComentarios</h1>
+                                    </div>
+                                    <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
+                                        <h1>$totalAdjuntos</h1>
+                                    </div>
+                                    <div class=\"w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                        <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                                    </div>
+                                </div>
+                        ";
+                        // Actividades PLANAACION
+
+                    }
+                }
+
+                // CIERRE DE ENCABEZADOS
+                $dataProyectos .= "
+                            </div>
                         </div>
                     </div>
                 ";
@@ -4751,22 +4907,401 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
-    if ($action == "actualizarProyecto") {
+    if ($action == "actualizarProyectos") {
         $valor = $_POST['valor'];
         $columna = $_POST['columna'];
         $idProyecto = $_POST['idProyecto'];
+        $justificacion = $_POST['justificacion'];
+        $coste = $_POST['coste'];
+        $tipo = $_POST['tipo'];
+        $titulo = $_POST['titulo'];
 
         if ($columna == "asignarProyecto") {
             $columna = "responsable";
+            $query = "UPDATE t_proyectos SET $columna = '$valor' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "justificacion" and $justificacion != "") {
+            $query = "UPDATE t_proyectos SET justificacion = '$justificacion' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 2;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "coste" and $coste > 0) {
+            $query = "UPDATE t_proyectos SET coste = '$coste' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 3;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "tipo" and $tipo != "") {
+            $query = "UPDATE t_proyectos SET tipo = '$tipo' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 4;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "rango_fecha" and $valor != "") {
+            $query = "UPDATE t_proyectos SET rango_fecha = '$valor' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 5;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "eliminar" and $valor == 0) {
+            $query = "UPDATE t_proyectos SET activo = '0' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 6;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "titulo" and $titulo != "") {
+            $query = "UPDATE t_proyectos SET titulo = '$titulo' WHERE id = $idProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 7;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "status" and $valor == "F") {
+            $query = "SELECT count(id) FROM t_proyectos_planaccion 
+            WHERE id_proyecto = $idProyecto AND status = 'F'";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $pendientes = $value['count(id)'];
+                }
+                if ($pendientes <= 0) {
+                    $query = "UPDATE t_proyectos SET status = 'F', finalizado_por = '$idUsuario', fecha_finalizado = '$fechaActual' 
+                    WHERE id = $idProyecto";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        echo 7;
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 0;
+                }
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
         }
+    }
 
-        $query = "UPDATE t_proyectos SET $columna = '$valor' WHERE id = $idProyecto";
+
+    //Obtiene datos de las columnas de los Proyectos 
+    if ($action == "obtenerDatoProyectos") {
+        $data = array();
+        $idProyecto = $_POST['idProyecto'];
+        $columna = $_POST['columna'];
+
+        $query = "SELECT id, coste, justificacion, tipo, rango_fecha  FROM t_proyectos WHERE id = $idProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $tipo = $value['tipo'];
+                $justificacion = $value['justificacion'];
+                $coste = $value['coste'];
+                $rangoFecha = $value['rango_fecha'];
+
+                $data['tipo'] = $tipo;
+                $data['justificacion'] = $justificacion;
+                $data['coste'] = $coste;
+                $data['rangoFecha'] = $rangoFecha;
+            }
+        }
+        echo json_encode($data);
+    }
+
+
+    // Agrega planaccion en PROYECTOS
+    if ($action == "agregarPlanaccion") {
+        $idProyecto = $_POST['idProyecto'];
+        $actividad = $_POST['actividad'];
+
+        $query = "SELECT responsable, titulo FROM t_proyectos WHERE id = $idProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $responsable = 0;
+            foreach ($result as $value) {
+                $responsable = $value['responsable'];
+                $proyecto = $value['titulo'];
+            }
+            $query = "INSERT INTO t_proyectos_planaccion(id_proyecto, actividad, status, creado_por, fecha_creacion, responsable, activo) VALUES($idProyecto, '$actividad', 'N', $idUsuario, '$fechaActual', $responsable, 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo $proyecto;
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
+        }
+    }
+
+    if ($action == "actualizarPlanaccion") {
+        $columna = $_POST['columna'];
+        $valor = $_POST['valor'];
+        $idPlanaccion = $_POST['idPlanaccion'];
+        $actividad = $_POST['actividad'];
+
+        if ($columna == "asignarPlanaccion" and $valor > 0) {
+            $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "actividad" and $actividad != "") {
+            $query = "UPDATE t_proyectos_planaccion SET actividad = '$actividad' WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 2;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "activo") {
+            $query = "UPDATE t_proyectos_planaccion SET activo = '0' WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 3;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "status" and $valor == "F") {
+            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 4;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "status_material" and $valor != "") {
+            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 5;
+            } else {
+                echo 0;
+            }
+        } else {
+            echo 0;
+        }
+    }
+
+
+    // Comentarios para Planaccion
+    if ($action == "comentariosPlanaccion") {
+        $data = "";
+        $idPlanaccion = $_POST['idPlanaccion'];
+
+        $query = "SELECT t_proyectos_planaccion_comentarios.comentario, t_proyectos_planaccion_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_proyectos_planaccion_comentarios
+        INNER JOIN t_users ON t_proyectos_planaccion_comentarios.usuario = t_users.id 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos_planaccion_comentarios.id_actividad = $idPlanaccion 
+        ORDER BY t_proyectos_planaccion_comentarios.id DESC
+        ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $comentario = $value['comentario'];
+                $fecha = $value['fecha'];
+                $nombreCompleto = $value['nombre'] . "" . $value['apellido'];
+
+                $data .= "
+                    <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
+                        <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombreCompleto\" width=\"48\" height=\"48\" alt=\"\">
+                        </div>
+                        <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                            <div class=\"text-xs font-bold flex flex-row justify-between w-full\">
+                                <div>
+                                    <h1>$nombreCompleto</h1>
+                                </div>
+                                <div>
+                                    <p class=\"font-mono ml-2 text-gray-600\">$fecha</p>
+                                </div>
+                            </div>
+                            <div class=\"text-xs w-full\">
+                                <p>$comentario</p>
+                            </div>
+                        </div>
+                    </div>            
+                ";
+            }
+            echo $data;
+        }
+    }
+
+    if ($action == "agregarComentarioPlanaccion") {
+        $idPlanaccion = $_POST['idPlanaccion'];
+        $comentario = $_POST['comentario'];
+
+        $query = "INSERT INTO t_proyectos_planaccion_comentarios(id_actividad, comentario, usuario, fecha) VALUES($idPlanaccion, '$comentario', $idUsuario, '$fechaActual')";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
             echo 0;
         }
     }
+
+    // Sube Adjuntos (TABLA, IDTABLA)
+    if ($action == "subirImagenGeneral") {
+        $tabla = $_POST['tabla'];
+        $idTabla = $_POST['idTabla'];
+        $img = $_FILES['adjuntoUrl'];
+        $extension = pathinfo($img['name'], PATHINFO_EXTENSION);
+        $nombreTratado = preg_replace('([^A-Za-z0-9.])', '', $img['name']);
+        $aleatorio = rand(1, 1500);
+
+        // Cambia Tabla, Ruta y Nombre de Archivos, donde se enviara.
+        if ($tabla == "t_proyectos_adjuntos") {
+            $imgNombre = "COT_PROYECTO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/proyectos/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_proyectos_adjuntos(id_proyecto, url_adjunto, fecha, subido_por, status) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 3;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
+        } elseif ($tabla == "t_proyectos_planaccion_adjuntos") {
+            $imgNombre = "PLANACCION_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/proyectos/planaccion/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_proyectos_planaccion_adjuntos(id_actividad, url_adjunto, fecha_creado, subido_por, status) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 4;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
+        }
+    }
+
+
+    //Obtener Adjuntos (TABLA, IDTABLA)
+    if ($action == "obtenerAdjuntos") {
+        $tabla = $_POST['tabla'];
+        $idTabla = $_POST['idTabla'];
+        $data = array();
+        $imagen = "";
+        $documento = "";
+
+        if ($tabla == "t_proyectos_adjuntos") {
+            $query = "SELECT t_proyectos_adjuntos.id, t_proyectos_adjuntos.url_adjunto, 
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_proyectos_adjuntos 
+            INNER JOIN t_users ON t_proyectos_adjuntos.subido_por = t_users.id 
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE id_proyecto = $idTabla AND t_proyectos_adjuntos.status = 1
+            ORDER BY t_proyectos_adjuntos.fecha DESC
+            ";
+
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $url = $value['url_adjunto'];
+
+                    if (file_exists("../planner/proyectos/$url")) {
+                        $adjuntoURL = "planner/proyectos/$url";
+                    } else {
+                        $adjuntoURL = "";
+                    }
+
+                    // Admite solo Imagenes.
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                        $imagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                            </div>
+                            </a>
+                        ";
+                    } else {
+                        $documento .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>                    
+                        ";
+                    }
+                }
+                $data['imagen'] = $imagen;
+                $data['documento'] = $documento;
+            }
+        } elseif ($tabla == "t_proyectos_planaccion_adjuntos") {
+            $query = "SELECT t_proyectos_planaccion_adjuntos.id, t_proyectos_planaccion_adjuntos.url_adjunto, 
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_proyectos_planaccion_adjuntos 
+            INNER JOIN t_users ON t_proyectos_planaccion_adjuntos.subido_por = t_users.id 
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE id_actividad = $idTabla AND t_proyectos_planaccion_adjuntos.status = 1
+            ORDER BY t_proyectos_planaccion_adjuntos.fecha_creado DESC
+            ";
+
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $url = $value['url_adjunto'];
+
+                    if (file_exists("../planner/proyectos/$url")) {
+                        $adjuntoURL = "planner/proyectos/$url";
+                    } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
+                        $adjuntoURL = "planner/proyectos/planaccion/$url";
+                    } else {
+                        $adjuntoURL = "";
+                    }
+
+                    // Admite solo Imagenes.
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                        $imagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                            </div>
+                            </a>
+                        ";
+                    } else {
+                        $documento .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>                    
+                        ";
+                    }
+                }
+                $data['imagen'] = $imagen;
+                $data['documento'] = $documento;
+            }
+        }
+
+        echo json_encode($data);
+    }
+
+
 
 
 

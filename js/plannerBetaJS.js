@@ -67,13 +67,44 @@ $(function () {
         $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
     });
     $('input[name="datefilter"]').on('cancel.daterangepicker', function (ev, picker) {
-        console.log(picker);
+        // console.log(picker);
         $(this).val('');
     });
 });
 
 
-// Función para Input Fechas MC.
+// Función para Input Fechas PROYECTOS
+$(function () {
+    $('input[name="fechaProyecto"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: 'Cancelar',
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }
+    });
+    $('input[name="fechaProyecto"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+
+        // Actualiza fecha TAREAS cuando se Aplica el rango.
+        let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+        let idProyecto = localStorage.getItem('idProyecto');
+        actualizarProyectos(rangoFecha, 'rango_fecha', idProyecto);
+    });
+    $('input[name="fechaProyecto"]').on('cancel.daterangepicker', function (ev, picker) {
+        // console.log(picker);
+        $(this).val('');
+    });
+});
+
+
+// Función para Input Fechas TAREAS
 $(function () {
     $('input[name="fechaTareas"]').daterangepicker({
         autoUpdateInput: false,
@@ -98,15 +129,15 @@ $(function () {
         actualizarTareas(idTarea, 'rango_fecha', rangoFecha);
     });
     $('input[name="fechaTareas"]').on('cancel.daterangepicker', function (ev, picker) {
-        console.log(picker);
+        // console.log(picker);
         $(this).val('');
     });
 });
 
 
-// Función para Input Fechas TAREAS.
+// Función para Input Fechas FALLAS
 $(function () {
-    $('input[name="fechaTarea"]').daterangepicker({
+    $('input[name="fechaMC"]').daterangepicker({
         autoUpdateInput: false,
         showWeekNumbers: true,
         locale: {
@@ -120,7 +151,7 @@ $(function () {
             monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
         }
     });
-    $('input[name="fechaTarea"]').on('apply.daterangepicker', function (ev, picker) {
+    $('input[name="fechaMC"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
 
         // Actualiza fecha MC cuando se Aplica el rango.
@@ -128,8 +159,8 @@ $(function () {
         let idMC = localStorage.getItem('idMC');
         actualizarStatusMC(idMC, 'rango_fecha', rangoFecha);
     });
-    $('input[name="fechaTarea"]').on('cancel.daterangepicker', function (ev, picker) {
-        console.log(picker);
+    $('input[name="fechaMC"]').on('cancel.daterangepicker', function (ev, picker) {
+        // console.log(picker);
         $(this).val('');
     });
 });
@@ -251,6 +282,7 @@ function calendarioSecciones() {
 }
 
 function expandir(id) {
+    // console.log(id);
     let idtoggle = id + 'toggle';
     let idtitulo = id + 'titulo';
     var toggle = document.getElementById(idtoggle);
@@ -344,7 +376,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
-    console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
+    // console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
     document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = '';
     document.getElementById("modalPendientes").classList.add('open');
     document.getElementById("estiloSeccion").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -364,7 +396,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             // Tipo de Vista Seleccionado
             document.getElementById("tipoPendienteNombre").innerHTML = data.tipoPendienteNombre;
 
@@ -461,7 +493,7 @@ function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("modalExportarSeccionesUsuarios").classList.add('open');
             document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
         }
@@ -542,8 +574,8 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data.listaIdT);
-            console.log(data.listaIdF);
+            // console.log(data.listaIdT);
+            // console.log(data.listaIdF);
             let usuarioSession = localStorage.getItem('usuario');
 
             if (tipoExportar == "exportarMisPendientes") {
@@ -596,6 +628,7 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
 }
 
 // Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
+// rangoInicial y rangoFinal, ya no se necesita, solo se utilizaba para la paginación.
 function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
     // console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
 
@@ -754,15 +787,15 @@ function obtenerstatusMC(idMC) {
             document.getElementById("statusGas").
                 setAttribute('onclick', data.dataStatusGas);
             // Finalizar MC.
-            document.getElementById("statusFinalizarMC").
+            document.getElementById("statusFinalizar").
                 setAttribute('onclick', data.dataStatus);
             // Activo MC.
             document.getElementById("statusActivo").
                 setAttribute('onclick', data.dataStatusActivo);
             // Titulo MC.
-            document.getElementById("btnEditarTituloMC").
+            document.getElementById("btnEditarTitulo").
                 setAttribute('onclick', data.dataStatusTitulo);
-            document.getElementById("inputEditarTituloMC").value = data.dataTituloMC;
+            document.getElementById("inputEditarTitulo").value = data.dataTituloMC;
         }
     });
 }
@@ -774,7 +807,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idEquipo = localStorage.getItem('idEquipo');
-    let tituloMC = document.getElementById("inputEditarTituloMC").value;
+    let tituloMC = document.getElementById("inputEditarTitulo").value;
     const action = "actualizarStatusMC";
 
     $.ajax({
@@ -802,7 +835,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
                     obtenerMCF(idEquipo);
                 } else {
                     obtenerMCN(idEquipo);
-                    document.getElementById("modalEditarTituloMC").classList.remove('open');
+                    document.getElementById("modalEditarTitulo").classList.remove('open');
                     document.getElementById("modalStatus").classList.remove('open');
                 }
                 // Cierra el Modal de Fecha MC.
@@ -986,7 +1019,7 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
 
             if (data == "MC") {
                 alertaImg('Responsable Actualizado', '', 'success', 2500);
@@ -1188,7 +1221,7 @@ function obtenerTareasS(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("dataMCF").innerHTML = data.dataTareas;
             estiloSeccionModal('estiloSeccionMCF', data.seccion);
             document.getElementById("seccionMCF").innerHTML = data.seccion;
@@ -1342,21 +1375,21 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
         setAttribute('onclick', 'actualizarTareas(' + idTarea + ', "energetico_gas", 0)');
 
     // Finalizar MC.
-    document.getElementById("statusFinalizarMC").
+    document.getElementById("statusFinalizar").
         setAttribute('onclick', 'actualizarTareas(' + idTarea + ', "status", "F")');
     // Activo MC.
     document.getElementById("statusActivo").
         setAttribute('onclick', 'actualizarTareas(' + idTarea + ', "activo", 0)');
     // Titulo MC.
-    document.getElementById("btnEditarTituloMC").
+    document.getElementById("btnEditarTitulo").
         setAttribute('onclick', 'actualizarTareas(' + idTarea + ', "titulo", 0)');
-    document.getElementById("inputEditarTituloMC").value = tituloTarea;
+    document.getElementById("inputEditarTitulo").value = tituloTarea;
 }
 
 
 // Actualiza Datos de las Tareas
 function actualizarTareas(idTarea, columna, valor) {
-    let tituloNuevo = document.getElementById("inputEditarTituloMC").value;
+    let tituloNuevo = document.getElementById("inputEditarTitulo").value;
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idEquipo = localStorage.getItem('idEquipo');
@@ -1480,7 +1513,7 @@ function agregarTarea() {
             },
             // dataType: "JSON",
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data == 1) {
                     obtenerDatosUsuario(idDestino);
                     llamarFuncionX('obtenerEquipos');
@@ -1507,14 +1540,30 @@ function agregarTarea() {
 }
 
 
-// PROYECTOS
+// ---------- PROYECTOS ----------
+
+// Expande las actividades de los proyectos y Cambia el icono
+function expandirProyectos(id, idProyecto) {
+    document.getElementById(id + "toggle").classList.toggle("hidden");
+
+    if (document.getElementById("icono" + idProyecto).classList[1] == "fa-chevron-down") {
+        document.getElementById("icono" + idProyecto).classList.remove("fa-chevron-down");
+        document.getElementById("icono" + idProyecto).classList.add("fa-chevron-right");
+    } else {
+        document.getElementById("icono" + idProyecto).classList.add("fa-chevron-down");
+        document.getElementById("icono" + idProyecto).classList.remove("fa-chevron-right");
+    }
+}
+
+
+// Obtiene los proyectos de las secciones
 function obtenerProyectos() {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
-    console.log(idUsuario, idSeccion, idSubseccion, idDestino, palabraProyecto);
+    // console.log(idUsuario, idSeccion, idSubseccion, idDestino, palabraProyecto);
     document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectos()');
     document.getElementById("modalProyectos").classList.add('open');
 
@@ -1532,7 +1581,7 @@ function obtenerProyectos() {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
             paginacionProyectos();
         }
@@ -1583,7 +1632,7 @@ function obtenerResponsablesProyectos(idProyecto) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
             alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 200);
         }
@@ -1591,10 +1640,15 @@ function obtenerResponsablesProyectos(idProyecto) {
 }
 
 
-function actualizarProyecto(valor, columna, idProyecto) {
+// Función para  Actualizar Información de un proyecto en la tabla t_proyectos
+function actualizarProyectos(valor, columna, idProyecto) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
-    const action = "actualizarProyecto";
+    let tipo = document.getElementById("tipoProyecto").value;
+    let justificacion = document.getElementById("justificacionProyecto").value;
+    let coste = document.getElementById("costeProyecto").value;
+    let titulo = document.getElementById("inputEditarTitulo").value;
+    const action = "actualizarProyectos";
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -1604,15 +1658,43 @@ function actualizarProyecto(valor, columna, idProyecto) {
             idDestino: idDestino,
             valor: valor,
             columna: columna,
-            idProyecto: idProyecto
+            idProyecto: idProyecto,
+            justificacion: justificacion,
+            tipo: tipo,
+            coste: coste,
+            titulo: titulo
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
+            // console.log(data);
+            obtenerProyectos();
             if (data == 1) {
-                alertaImg('Responsable Actualizado', '', 'info', 200);
-            } else if (data = 0) {
-                alertaImg('Intente de Nuevo', '', 'info', 200);
+                alertaImg('Responsable Actualizado', '', 'success', 2000);
+                document.getElementById("modalUsuarios").classList.remove('open');
+            } else if (data == 2) {
+                document.getElementById("modalActualizarProyecto").classList.remove('open');
+                alertaImg('Justifiacion Actualizado', '', 'success', 2000);
+            } else if (data == 3) {
+                document.getElementById("modalActualizarProyecto").classList.remove('open');
+                alertaImg('Coste Actualizado', '', 'success', 2000);
+            } else if (data == 4) {
+                document.getElementById("modalActualizarProyecto").classList.remove('open');
+                alertaImg('Tipo Actualizado', '', 'success', 2000);
+            } else if (data == 5) {
+                document.getElementById("modalFechaProyectos").classList.remove('open');
+                alertaImg('Fecha Actualizada', '', 'success', 2000);
+            } else if (data == 6) {
+                document.getElementById("modalTituloEliminar").classList.remove('open');
+                alertaImg('Proyecto Eliminado', '', 'success', 2000);
+            } else if (data == 7) {
+                document.getElementById("modalTituloEliminar").classList.remove('open');
+                document.getElementById("modalEditarTitulo").classList.remove('open');
+                alertaImg('Título Actualizado', '', 'success', 2000);
+            } else if (data == 8) {
+                document.getElementById("modalTituloEliminar").classList.remove('open');
+                alertaImg('Proyecto Finalizado', '', 'success', 2000);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 3000);
             }
         }
     });
@@ -1620,9 +1702,379 @@ function actualizarProyecto(valor, columna, idProyecto) {
 
 
 // ACTUALIZA LA JUSTIFICACION DE LOS PROYECTOS
-function actualizarJustificacionProyectos(idProyecto, justificacion) {
-    document.getElementById("actualizarInformacion").innerHTML = "JUSTIFIACION";
-    document.getElementById("valorInformacion").value = justificacion;
+function obtenerDatoProyectos(idProyecto, columna) {
+    localStorage.setItem('idProyecto', idProyecto);
+
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    document.getElementById("tipoProyectoDiv").classList.add('hidden');
+    document.getElementById("justificacionProyectoDiv").classList.add('hidden');
+    document.getElementById("costeProyectoDiv").classList.add('hidden');
+
+    if (columna == "justificacion") {
+        document.getElementById("modalActualizarProyecto").classList.add('open');
+        document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFIACIÓN";
+        document.getElementById("justificacionProyectoDiv").classList.remove('hidden');
+    } else if (columna == "coste") {
+        document.getElementById("modalActualizarProyecto").classList.add('open');
+        document.getElementById("tituloActualizarProyecto").innerHTML = "COSTE";
+        document.getElementById("costeProyectoDiv").classList.remove('hidden');
+    } else if (columna == "tipo") {
+        document.getElementById("modalActualizarProyecto").classList.add('open');
+        document.getElementById("tituloActualizarProyecto").innerHTML = "TIPO";
+        document.getElementById("tipoProyectoDiv").classList.remove('hidden');
+    } else if (columna == "rango_fecha") {
+        document.getElementById("modalFechaProyectos").classList.add('open');
+    }
+
+    const action = "obtenerDatoProyectos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idProyecto: idProyecto,
+            columna: columna
+        },
+        dataType: "JSON",
+        success: function (data) {
+
+            document.getElementById("tipoProyecto").value = data.tipo;
+            document.getElementById("justificacionProyecto").value = data.justificacion;
+            document.getElementById("costeProyecto").value = data.coste;
+            document.getElementById("fechaProyecto").value = data.rangoFecha;
+
+            document.getElementById("btnGuardarInformacion").
+                setAttribute('onclick', 'actualizarProyectos(0, "' + columna + '",' + idProyecto + ')');
+        }
+    });
+}
+
+
+// Obtener Status de proyectos
+function statusProyecto(idProyecto) {
+    document.getElementById("modalTituloEliminar").classList.add('open');
+    let tituloActual = document.getElementById("tituloP" + idProyecto).innerHTML;
+    document.getElementById("inputEditarTitulo").value = tituloActual;
+
+    document.getElementById("btnEditarTitulo").
+        setAttribute('onclick', 'actualizarProyectos(0, "titulo",' + idProyecto + ')');
+
+    document.getElementById("eliminar").
+        setAttribute('onclick', 'actualizarProyectos(0, "eliminar",' + idProyecto + ')');
+
+    document.getElementById("finalizar").
+        setAttribute('onclick', 'actualizarProyectos("F", "status",' + idProyecto + ')');
+}
+
+
+// Obtienes las Cotizaciones de PROYECTOS
+function cotizacionesProyectos(idProyecto) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idTabla = idProyecto;
+    let tabla = "t_proyectos_adjuntos";
+
+    document.getElementById("modalMedia").classList.add('open');
+    document.getElementById("inputAdjuntos").
+        setAttribute('onchange', 'subirImagenGeneral(' + idProyecto + ', "t_proyectos_adjuntos")');
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataImagenes").innerHTML = data.imagen;
+            document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        }
+    });
+}
+
+
+// Agrega una Actividad en PROYECTOS.
+function agregarPlanaccion(idProyecto) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let actividad = document.getElementById("NA" + idProyecto).value;
+    if (actividad.length >= 1) {
+        const action = "agregarPlanaccion";
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idProyecto: idProyecto,
+                actividad: actividad
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                // console.log(data);
+                if (data.length > 1) {
+                    obtenerProyectos();
+                    alertaImg('Actividad Agregada en:' + data, '', 'success', 2500);
+                    expandir('proyecto' + idProyecto);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 3000);
+                }
+            }
+        });
+    } else {
+        alertaImg('Intente de Nuevo', '', 'info', 3000);
+    }
+}
+
+
+// Obtener posibles RESPONSABLES para PLANACCION
+function obtenerResponsablesPlanaccion(idPlanaccion) {
+    document.getElementById("palabraUsuario").setAttribute('onkeyup', 'obtenerResponsablesPlanaccion(' + idPlanaccion + ')');
+    document.getElementById("modalUsuarios").classList.add('open');
+    let idItem = idPlanaccion;
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let tipoAsginacion = "asignarPlanaccion";
+    let palabraUsuario = document.getElementById("palabraUsuario").value;
+    const action = "obtenerUsuarios";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idItem: idItem,
+            tipoAsginacion: tipoAsginacion,
+            palabraUsuario: palabraUsuario
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
+            alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 200);
+        }
+    });
+}
+
+
+// Actualizar PLANACCION
+function actualizarPlanaccion(valor, columna, idPlanaccion) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let actividad = document.getElementById("inputEditarTitulo").value;
+
+    const action = "actualizarPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlanaccion: idPlanaccion,
+            valor: valor,
+            columna: columna,
+            actividad: actividad
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+
+            obtenerProyectos();
+            if (data == 1) {
+                document.getElementById("modalUsuarios").classList.remove('open');
+                alertaImg('Responsable Actualizado', '', 'success', 2500);
+            } else if (data == 2) {
+                document.getElementById("modalEditarTitulo").classList.remove('open');
+                document.getElementById("modalStatus").classList.remove('open');
+                alertaImg('Actividad Actualizada', '', 'success', 2500);
+            } else if (data == 3) {
+                document.getElementById("modalStatus").classList.remove('open');
+                alertaImg('Actividad Eliminada', '', 'success', 2500);
+            } else if (data == 4) {
+                document.getElementById("modalStatus").classList.remove('open');
+                alertaImg('Actividad Solucionada', '', 'success', 2500);
+            }
+        }
+    });
+}
+
+
+// Status para Planaccion
+function statusPlanaccion(idPlanaccion) {
+    let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
+    document.getElementById("inputEditarTitulo").value = actividadActual;
+    document.getElementById("modalStatus").classList.add('open');
+
+    document.getElementById("btnEditarTitulo").
+        setAttribute('onclick', 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ')');
+
+    document.getElementById("statusActivo").
+        setAttribute('onclick', 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ')');
+
+    document.getElementById("statusFinalizar").
+        setAttribute('onclick', 'actualizarPlanaccion("F","status",' + idPlanaccion + ')');
+
+}
+
+
+// Comentarios para Planaccion
+function comentariosPlanaccion(idPlanaccion) {
+    document.getElementById("btnComentario").
+        setAttribute('onclick', 'agregarComentarioPlanaccion(' + idPlanaccion + ')');
+    document.getElementById("modalComentarios").classList.add('open');
+
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    const action = "comentariosPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlanaccion: idPlanaccion
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataComentarios").innerHTML = data;
+        }
+    });
+}
+
+
+// Muestra los adjuntos de Planaccion
+function adjuntosPlanaccion(idPlanaccion) {
+    document.getElementById("modalMedia").classList.add('open');
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idTabla = idPlanaccion;
+    let tabla = "t_proyectos_planaccion_adjuntos";
+
+    document.getElementById("inputAdjuntos").setAttribute
+        ('onchange', 'subirImagenGeneral(' + idPlanaccion + ', "t_proyectos_planaccion_adjuntos")');
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataImagenes").innerHTML = data.imagen;
+            document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        }
+    });
+}
+
+
+// Agrega Comentario en Planaccion
+function agregarComentarioPlanaccion(idPlanaccion) {
+    let comentario = document.getElementById("inputComentario").value;
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    const action = "agregarComentarioPlanaccion";
+    if (comentario.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idPlanaccion: idPlanaccion,
+                comentario: comentario
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                if (data == 1) {
+                    obtenerProyectos();
+                    comentariosPlanaccion(idPlanaccion);
+                    document.getElementById("inputComentario").value = '';
+                    alertaImg('Comentario Agregado', '', 'success', 2500);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 2500);
+                }
+            }
+        });
+    } else {
+        alertaImg('Comentario NO Valido', '', 'info', 2500);
+    }
+}
+
+
+// Sube imagenes con dos parametros, con el formulario #inputAdjuntos
+function subirImagenGeneral(idTabla, tabla) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let img = document.getElementById("inputAdjuntos").files;
+
+    for (let index = 0; index < img.length; index++) {
+
+        let imgData = new FormData();
+        const action = "subirImagenGeneral";
+        document.getElementById("cargandoAdjunto").
+            innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+        imgData.append("adjuntoUrl", img[index]);
+        imgData.append("action", action);
+        imgData.append("idUsuario", idUsuario);
+        imgData.append("idDestino", idDestino);
+        imgData.append("tabla", tabla);
+        imgData.append("idTabla", idTabla);
+
+        $.ajax({
+            data: imgData,
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                document.getElementById("cargandoAdjunto").innerHTML = '';
+                document.getElementById("inputAdjuntos").value = '';
+                if (data == 1) {
+                    alertaImg('Proceso Cancelado', '', 'info', 3000);
+                } else if (data == 2) {
+                    alertaImg('Archivo Pesado (MAX:99MB)', '', 'info', 3000);
+
+                    // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
+                } else if (data == 3) {
+                    alertaImg('Cotización Agregada', '', 'success', 2500);
+                    obtenerProyectos();
+                    cotizacionesProyectos(idTabla);
+
+                    // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
+                } else if (data == 4) {
+                    alertaImg('Adjunto Agregado', '', 'success', 2500);
+                    obtenerProyectos();
+                    adjuntosPlanaccion(idTabla);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 3000);
+                }
+            }
+        });
+    }
 }
 
 
@@ -1638,17 +2090,23 @@ function actualizarJustificacionProyectos(idProyecto, justificacion) {
 
 
 
-
-
-
-
-
-
-
-
-
+// Quitar estas variables en las funciones y volverlas Globales, al terminar esta versión. 
+//     let idUsuario = localStorage.getItem('usuario');
+//     let idDestino = localStorage.getItem('idDestino');
 
 // Mantener de Ultimo.
+
+// Funcion toggle por CLASENAME 
+function classNameToggle(nameClass) {
+    var x = document.getElementsByClassName(nameClass);
+    var i;
+    for (i = 0; i < x.length; i++) {
+        document.getElementsByClassName(nameClass)[i].classList.toggle('hidden');
+        // console.log(nameClass, i);
+    }
+}
+
+
 // Funciones para actualizar idSeccion y idSubseccion en localstorage..
 function actualizarSeccionSubseccion(idSeccion, idSubseccion) {
     localStorage.setItem('idSeccion', idSeccion);
@@ -1666,7 +2124,6 @@ function actualizarSeccion(idSeccion) {
 function actualizarSubseccion(idSubseccion) {
     localStorage.SetItem('idSubseccion', idSubseccion);
 }
-
 
 
 function llamarFuncionX(nombreFuncion) {

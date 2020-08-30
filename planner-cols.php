@@ -581,89 +581,6 @@
                     </div>
 
                     <div id="dataProyectos" class="w-full"></div>
-
-                    <!-- PLAN DE ACCION -->
-                    <div id="equipo123toggle" class="hidden w-full mb-2 text-xxs px-6 py-2 bg-bluegray-900 rounded-b-md flex flex-col items-center justify-center">
-                        <div class="flex items-center mb-2">
-                            <input type="text" name="" id="" class="bg-white p-1 pl-2  rounded-full w-64" placeholder="Añadir actividad" autocomplete="off">
-                            <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase ml-2 rounded-full">Añadir</button>
-                            <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded-full">Ver
-                                solucionado</button>
-                        </div>
-
-                        <div>
-                            <div class="flex bg-bluegray-900 justify-center items-center font-bold text-xxs text-white divide-x divide-bluegray-500">
-                                <div class="w-1/2 h-full flex items-center justify-center ">
-                                    <h1>ACTIVIDAD</h1>
-                                </div>
-                                <div class="w-32 flex h-full items-center justify-center">
-                                    <h1>RESPONSABLE</h1>
-                                </div>
-                                <div class="w-32 flex h-full items-center justify-center">
-                                    <h1>COMENTARIOS</h1>
-                                </div>
-                                <div class="w-24 h-full flex items-center justify-center">
-                                    <h1>ADJUNTOS</h1>
-                                </div>
-                                <div class="w-32 flex h-full items-center justify-center">
-                                    <h1>STATUS</h1>
-                                </div>
-
-                            </div>
-
-                            <div class="bg-white flex flex-col rounded-md p-1">
-                                <div class="flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer">
-                                    <div class="w-1/2 flex flex-col items-center justify-center">
-                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate">
-                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
-                                                tam</h1>
-                                        </div>
-                                        <div class="self-start">
-                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
-                                        </div>
-                                    </div>
-                                    <div class="w-32 flex h-full items-center justify-center">
-                                        <h1>EDUARDO MENESES</h1>
-                                    </div>
-                                    <div class="w-32 flex h-full items-center justify-center">
-                                        <h1>8</h1>
-                                    </div>
-                                    <div class="w-24 h-full flex items-center justify-center">
-                                        <h1>4</h1>
-                                    </div>
-                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
-                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
-                                    </div>
-                                </div>
-
-                                <div class="flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer">
-                                    <div class="w-1/2 flex flex-col items-center justify-center">
-                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate">
-                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
-                                                tam</h1>
-                                        </div>
-                                        <div class="self-start">
-                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
-                                        </div>
-                                    </div>
-                                    <div class="w-32 flex h-full items-center justify-center">
-                                        <h1>EDUARDO MENESES</h1>
-                                    </div>
-                                    <div class="w-32 flex h-full items-center justify-center">
-                                        <h1>8</h1>
-                                    </div>
-                                    <div class="w-24 h-full flex items-center justify-center">
-                                        <h1>4</h1>
-                                    </div>
-                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
-                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- PLAN DE ACCION -->
                 </div>
             </div>
             <div id="paginacionProyectos" class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6"></div>
@@ -780,9 +697,18 @@
                     <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
                         <i class="fad fa-cloud-upload fa-lg mr-2"></i>
                         ADJUNTAR ARCHIVOS
-                        <input id="inputAdjuntos" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;">
+
+                        <!-- INPUT -->
+                        <input id="inputAdjuntos" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" name="inputAdjuntos[]" multiple>
+                        <!-- INPUT -->
+
                     </button>
                 </div>
+
+                <!-- Icon upload -->
+                <span id="cargandoAdjunto" class="text-center"></span>
+                <!-- Icon upload -->
+
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
                     <div class="font-bold divide-y">
                         <h1>IMÁGENES</h1>
@@ -971,7 +897,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="statusFinalizarMC" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                <div id="statusFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
                     <div class="">
                         <h1>SOLUCIONAR</h1>
                     </div>
@@ -981,7 +907,7 @@
                 </div>
 
                 <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTituloMC');">
+                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
                         <div class="">
                             <i class="fas fa-pen fa-lg"></i>
                         </div>
@@ -1003,12 +929,61 @@
     </div>
 
 
+    <!-- MODAL STATUS   -->
+    <div id="modalTituloEliminar" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTituloEliminar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+
+            <div id="finalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                <div class="">
+                    <h1>SOLUCIONAR</h1>
+                </div>
+                <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+                    <div class="">
+                        <i class="fas fa-pen fa-lg"></i>
+                    </div>
+                </div>
+                <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-random fa-lg"></i>
+                    </div>
+                </div>
+                <div id="eliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-trash fa-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+
     <!-- MODAL EDITAR TITULO   -->
-    <div id="modalEditarTituloMC" class="modal">
+    <div id="modalEditarTitulo" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 800px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalEditarTituloMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalEditarTitulo')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1022,8 +997,8 @@
             <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm">
 
                 <h1>Editar titulo</h1>
-                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTituloMC" type="text" placeholder="Escriba titulo" value="" autocomplete="off">
-                <button id="btnEditarTituloMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i> Guardar cambios</button>
+                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTitulo" type="text" placeholder="Escriba titulo" value="" autocomplete="off">
+                <button id="btnEditarTitulo" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i> Guardar cambios</button>
             </div>
         </div>
     </div>
@@ -1126,22 +1101,68 @@
 
 
     <!-- MODAL EDITAR INFORMACION -->
-    <div id="modalActualizarInformacion" class="modal">
-        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+    <div id="modalActualizarProyecto" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5 py-3 text-center" style="width: 550px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalActualizarInformacion')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalActualizarProyecto')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <!-- INDICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                    <h1 id="actualizarInformacion">-</h1>
+                    <h1 id="tituloActualizarProyecto">-</h1>
+                </div>
+            </div>
+
+            <div id="tipoProyectoDiv" class="hidden flex flex-row items-center pt-10 justify-center">
+                <div class="inline-block relative w-64">
+                    <select id="tipoProyecto" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                        <option>CAPIN</option>
+                        <option>CAPEX</option>
+                        <option>PROYECTO</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="justificacionProyectoDiv" class="hidden flex flex-row items-center pt-10">
+                <textarea id="justificacionProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" cols="30" rows="5"></textarea>
+            </div>
+
+            <div id="costeProyectoDiv" class="hidden flex flex-row items-center pt-10 justify-center">
+                <input id="costeProyecto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="0" placeholder="Cantidad">
+            </div>
+
+            <button id="btnGuardarInformacion" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i>
+                Guardar Cambios
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR FECHA EN PROYECTOS -->
+    <div id="modalFechaProyectos" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaProyectos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
                 </div>
             </div>
             <div class="flex flex-row items-center pt-10">
-                <input id="valorInformacion" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text">
+                <input id="fechaProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaProyecto" value="--" autocomplete="off">
             </div>
         </div>
     </div>
