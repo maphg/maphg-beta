@@ -173,7 +173,7 @@
             document.getElementById("pestañaCamaras").classList.remove('bg-blue-200');
             document.getElementById("pestañaPendientes").classList.add('bg-blue-200');
 
-            document.getElementById("iframPendientes").src = 'http://maphg.com/beta/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
+            document.getElementById("iframPendientes").src = 'https://www.maphg.com/beta/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
         }
 
 
