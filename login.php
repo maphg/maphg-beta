@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="icon" href="svg/logo6.png">
+    <link rel="stylesheet" href="css/alertify.min.css">
 </head>
 
 <body>
