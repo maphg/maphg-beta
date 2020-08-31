@@ -1548,7 +1548,7 @@ function agregarTarea() {
 // Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
 function obtenerMediaEquipo(idEquipo) {
     document.getElementById("modalMedia").classList.add('open');
-    document.getElementById("").setAttribute('onchange', 'subirAdjuntos(' + subirImagenGeneral + ',"t_equipos_adjuntos")');
+    document.getElementById("inputAdjuntos").setAttribute('onchange', 'subirImagenGeneral(' + idEquipo + ',"t_equipos_adjuntos")');
 
     let idTabla = idEquipo;
     let tabla = "t_equipos_adjuntos";
@@ -1567,6 +1567,7 @@ function obtenerMediaEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
+            // console.log(data);
             document.getElementById("dataImagenes").innerHTML = data.imagen;
             document.getElementById("dataAdjuntos").innerHTML = data.documento;
         }
@@ -2107,9 +2108,13 @@ function subirImagenGeneral(idTabla, tabla) {
                     alertaImg('Adjunto Agregado', '', 'success', 2500);
                     obtenerProyectos();
                     adjuntosPlanaccion(idTabla);
+                } else if (data == 5) {
+                    alertaImg('Adjunto Agregado', '', 'success', 2500);
+                    obtenerMediaEquipo(idTabla);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'info', 3000);
                 }
+                console.log(data);
             }
         });
     }

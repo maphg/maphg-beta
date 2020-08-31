@@ -5472,6 +5472,28 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
+        } elseif ($tabla = "t_equipos_adjuntos") {
+            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../img/equipos/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_equipos_adjuntos(id_equipo, url_archivo, fecha_subida, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 5;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
         }
     }
 
@@ -5578,30 +5600,30 @@ if (isset($_POST['action'])) {
             FROM t_equipos_adjuntos 
             INNER JOIN t_users ON t_equipos_adjuntos.subido_por = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE id_actividad = $idTabla AND t_equipos_adjuntos.activo = 1
+            WHERE id_equipo = $idTabla AND t_equipos_adjuntos.activo = 1
             ORDER BY t_equipos_adjuntos.fecha_subida DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $url = $value['url_archivo'];
 
-            foreach ($result as $value) {
-                $url = $value['url_adjunto'];
+                    if (file_exists("../../equipos/files/$url")) {
+                        $adjuntoURL = "../equipos/files/$url";
+                    } elseif (file_exists("../img/equipos/$url")) {
+                        $adjuntoURL = "img/equipos/$url";
+                    } else {
+                        $adjuntoURL = "";
+                    }
 
-                if (file_exists("../../equipos/files/$url")) {
-                    $adjuntoURL = "../equipos/files/$url";
-                } elseif (file_exists("../img/equipos/$url")) {
-                    $adjuntoURL = "img/equipos/$url";
-                } else {
-                    $adjuntoURL = "";
-                }
-
-                // Admite solo Imagenes.
-                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                    $imagen .= "
+                    // Admite solo Imagenes.
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                        $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
                             <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                             </div>
                             </a>
                         ";
-                } else {
-                    $documento .= "
+                    } else {
+                        $documento .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
                                 <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
                                     <i class=\"fad fa-file-alt fa-3x\"></i>
@@ -5610,10 +5632,11 @@ if (isset($_POST['action'])) {
                                 </div>
                             </a>                    
                         ";
+                    }
                 }
+                $data['imagen'] = $imagen;
+                $data['documento'] = $documento;
             }
-            $data['imagen'] = $imagen;
-            $data['documento'] = $documento;
         }
 
         echo json_encode($data);
