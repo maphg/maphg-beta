@@ -173,6 +173,7 @@ $(function () {
 
 // Funcion para los Botones de los Calendario
 function botones(idd) {
+    let nombreCol = idd.toUpperCase();
     if (document.getElementById('col' + idd)) {
 
         switch (idd) {
@@ -218,7 +219,7 @@ function botones(idd) {
                 break;
         }
     } else {
-        alertaImg('Acceso Denegado en: ' + idd.toUpperCase(), '', 'warning', 4000);
+        alertaImg('Acceso Denegado en: ' + nombreCol, '', 'warning', 4000);
     }
 }
 
