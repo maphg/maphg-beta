@@ -1182,7 +1182,6 @@
     <script src="js/acordion.js"></script>
     <script src="js/sweetalert2@9.js"></script>
     <script src="js/alertasSweet.js"></script>
-    <script src="js/calendarioBotones.js"></script>
     <script src="js/plannerBetaJS.js"></script>
     <script src="js/jPages.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
