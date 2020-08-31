@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -7,15 +7,13 @@
     <title>Planner</title>
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/fontawesome/css/regular.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/modales.css">
-    <link rel="stylesheet" href="css/fontawesome/css/all.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="css/jPages.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"> -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/alertify.min.css">
 
     <style>
