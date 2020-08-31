@@ -19,7 +19,7 @@
 
 </head>
 
-<body>
+<body class="h-screen">
 
     <!-- MENU -->
     <?php
@@ -41,30 +41,30 @@
         </li>
     </ul>
 
-    <div id="graficos" class="grid grid-flow-col grid-cols-3 grid-rows-2 gap-4 p-4">
+    <div id="graficos" class="grid grid-flow-col grid-cols-3 grid-rows-2 gap-4 p-4 h-screen">
 
-        <div id="CMU" class="hidden">
-            <iframe width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="CMU" class="hidden h-screen">
+            <iframe width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="RM" class="hidden">
-            <iframe id="" width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="RM" class="hidden h-screen">
+            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="SSA" class="hidden">
-            <iframe id="" width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="SSA" class="hidden h-screen">
+            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="MBJ" class="hidden">
-            <iframe id="" width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="MBJ" class="hidden h-screen">
+            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="PVR" class="hidden">
-            <iframe id="" width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="PVR" class="hidden h-screen">
+            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="PUJ" class="hidden">
-            <iframe id="" width="100%" height="450" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="PUJ" class="hidden h-screen">
+            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
     </div>
@@ -74,8 +74,8 @@
         No Disponible
     </div>
 
-    <div id="pendientes" class="grid grid-flow-col grid-cols-1 grid-rows-1">
-        <iframe id="iframPendientes" width="100%" height="500" frameborder="0" allowFullScreen="true"></iframe>
+    <div id="pendientes" class="grid grid-flow-col grid-cols-1 grid-rows-1 h-screen">
+        <iframe id="iframPendientes" class="h-screen" width="100%" frameborder="0" allowFullScreen="true"></iframe>
     </div>
 
 
