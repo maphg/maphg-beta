@@ -218,7 +218,7 @@ function botones(idd) {
                 break;
         }
     } else {
-        alertaImg('Acceso Denegado', '', 'warning', 4000);
+        alertaImg('Acceso Denegado en: ' + idd.toUpperCase, '', 'warning', 4000);
     }
 }
 
