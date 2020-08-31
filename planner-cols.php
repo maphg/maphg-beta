@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -14,7 +14,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"> -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/alertify.min.css">
 
     <style>
         .w-22rem {
@@ -60,8 +62,9 @@
     <!-- Inputs Temporales -->
     <input type="hidden" id="idDestinoSeleccionado">
 
-    <div class="flex flex-col justify-evenly items-center w-full h-screen">
-        <div class="flex flex-row justify-start items-start w-full overflow-x-auto py-24 px-4 flex items-center">
+    <div class="flex flex-col justify-evenly items-center w-full h-screen pt-10">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex items-center pt-10">
+
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">00</p>
@@ -133,18 +136,18 @@
             </div>
 
             <!-- Inicio Columna -->
-            <div id="columnasSeccionesZIL" class="flex items-center"></div>
-            <div id="columnasSeccionesZIE" class="flex items-center"></div>
-            <div id="columnasSeccionesAUTO" class="flex items-center"></div>
-            <div id="columnasSeccionesDEC" class="flex items-center"></div>
-            <div id="columnasSeccionesDEP" class="flex items-center"></div>
-            <div id="columnasSeccionesOMA" class="flex items-center"></div>
-            <div id="columnasSeccionesZHA" class="flex items-center"></div>
-            <div id="columnasSeccionesZHC" class="flex items-center"></div>
-            <div id="columnasSeccionesZHH" class="flex items-center"></div>
-            <div id="columnasSeccionesZHP" class="flex items-center"></div>
-            <div id="columnasSeccionesZIA" class="flex items-center"></div>
-            <div id="columnasSeccionesZIC" class="flex items-center"></div>
+            <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesDEC" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHC" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHH" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHP" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIC" class="flex items-center py-3"></div>
         </div>
     </div>
 
@@ -530,8 +533,8 @@
             </div>
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-blue-500">ZIA</h1>
+                <div id="estiloSeccionProyectos" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionProyectos" class="font-medium text-base"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded">
                     <h1>PROYECTOS</h1>
@@ -1174,7 +1177,7 @@
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
     <script src="js/sweetalert2@9.js"></script>

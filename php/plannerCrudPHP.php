@@ -360,6 +360,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZIE .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZIE = $dataZIE . $dataAux;
                     // Cierre de Columnas.
                     $dataZIE .= "
@@ -474,6 +503,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataAUTO .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataAUTO = $dataAUTO . $dataAux;
                     // Cierre de Columnas.
                     $dataAUTO .= "
@@ -589,6 +647,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataDEC .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataDEC = $dataDEC . $dataAux;
                     // Cierre de Columnas.
                     $dataDEC .= "
@@ -704,6 +791,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataDEP .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataDEP = $dataDEP . $dataAux;
                     // Cierre de Columnas.
                     $dataDEP .= "
@@ -820,6 +936,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZHA .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZHA = $dataZHA . $dataAux;
                     // Cierre de Columnas.
                     $dataZHA .= "
@@ -935,6 +1080,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZHC .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZHC = $dataZHC . $dataAux;
                     // Cierre de Columnas.
                     $dataZHC .= "
@@ -1050,6 +1224,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZHP .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZHP = $dataZHP . $dataAux;
                     // Cierre de Columnas.
                     $dataZHP .= "
@@ -1165,6 +1368,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZIA .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZIA = $dataZIA . $dataAux;
                     // Cierre de Columnas.
                     $dataZIA .= "
@@ -1280,6 +1512,35 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
+
+                    // PROYECTOS
+                    $queryProyectos = "SELECT count(id) FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
+                        if ($row = mysqli_fetch_array($resultProyectos)) {
+                            $totalProyecto = intval($row['count(id)']);
+
+                            if ($totalProyecto > 0) {
+                                $estiloSubseccion = "bg-red-400 text-red-700";
+                            } else {
+                                $estiloSubseccion = "";
+                                $totalProyecto = "";
+                            }
+
+                            $dataZIC .= "
+                                <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
+                                    class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos();\">
+                                    <h1 class=\"truncate mr-2\">PROYECTOS</h1>
+                                    <div
+                                        class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
+                                        <h1>$totalProyecto</h1>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
                     $dataZIC = $dataZIC . $dataAux;
                     // Cierre de Columnas.
                     $dataZIC .= "
@@ -2702,7 +2963,8 @@ if (isset($_POST['action'])) {
 
                         // Fotos Equipos.
                         $dataEquipos .= "
-                                <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md\">
+                                <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md\" 
+                                onclick=\"obtenerMediaEquipo($idEquipo)\">
                                     <h1><i class=\"fas fa-photo-video fa-lg\"></i></h1>
                                 </div>
                             ";
@@ -4644,6 +4906,15 @@ if (isset($_POST['action'])) {
         $idSubseccion = $_POST['idSubseccion'];
         $palabraProyecto = $_POST['palabraProyecto'];
 
+        // Obtiene el nombre de la SECCION
+        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $seccion = $value['seccion'];
+                $data['seccion'] = $seccion;
+            }
+        }
+
         // Filtro para Destinos
         if ($idDestino == 10) {
             $filtroDestino = "";
@@ -4668,6 +4939,11 @@ if (isset($_POST['action'])) {
         WHERE t_proyectos.status = 'N' AND t_proyectos.activo = 1 
         AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto";
         if ($result = mysqli_query($conn_2020, $query)) {
+
+            // Obtiene el Total de Proyectos.
+            $totalProyectos = mysqli_num_rows($result);
+            $data['totalProyectos'] = $totalProyectos;
+
             foreach ($result as $value) {
                 $idProyecto = 0;
                 $idProyecto = $value['id'];
@@ -5296,6 +5572,48 @@ if (isset($_POST['action'])) {
                 $data['imagen'] = $imagen;
                 $data['documento'] = $documento;
             }
+        } elseif ($tabla == "t_equipos_adjuntos") {
+            $query = "SELECT t_equipos_adjuntos.id, t_equipos_adjuntos.url_archivo, 
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_equipos_adjuntos 
+            INNER JOIN t_users ON t_equipos_adjuntos.subido_por = t_users.id 
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE id_actividad = $idTabla AND t_equipos_adjuntos.activo = 1
+            ORDER BY t_equipos_adjuntos.fecha_subida DESC";
+
+            foreach ($result as $value) {
+                $url = $value['url_adjunto'];
+
+                if (file_exists("../../equipos/files/$url")) {
+                    $adjuntoURL = "../equipos/files/$url";
+                } elseif (file_exists("../img/equipos/$url")) {
+                    $adjuntoURL = "img/equipos/$url";
+                } else {
+                    $adjuntoURL = "";
+                }
+
+                // Admite solo Imagenes.
+                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                    $imagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                            </div>
+                            </a>
+                        ";
+                } else {
+                    $documento .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>                    
+                        ";
+                }
+            }
+            $data['imagen'] = $imagen;
+            $data['documento'] = $documento;
         }
 
         echo json_encode($data);

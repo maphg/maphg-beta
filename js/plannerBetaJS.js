@@ -1,3 +1,9 @@
+// VARIABLES GLOBALES, REQUERIDA PARA CADA CONSULTA AJAX
+let idUsuario = localStorage.getItem('usuario');
+let idDestino = localStorage.getItem('idDestino');
+// VARIABLES GLOBALES, REQUERIDA PARA CADA CONSULTA AJAX
+
+
 // Función principal.
 function comprobarSession() {
     let idUsuario = localStorage.getItem('usuario');
@@ -184,7 +190,7 @@ function calendarioSecciones() {
         mes = '0' + mes;
     }
 
-    document.getElementById('hora').innerHTML = horas + ':' + minutos;
+    document.getElementById('hora').innerHTML = horas + ': ' + minutos;
     document.getElementById('mes').innerHTML = mes;
     document.getElementById('dia').innerHTML = dia;
 
@@ -312,7 +318,7 @@ function hora() {
     };
     let idDestino = localStorage.getItem('idDestino');
     let h = new Date();
-    let hora = h.getHours() + ':' + h.getMinutes();
+    let hora = h.getHours() + ': ' + h.getMinutes();
     let nombreDestinoArray = arrayDestino[idDestino];
 
     document.getElementById("hora").innerHTML = hora;
@@ -503,7 +509,6 @@ function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccionModal(padreSeccion, seccion) {
     let seccionClase = seccion.toLowerCase() + '-logo-modal';
-    // console.log(seccionClase);
     document.getElementById(padreSeccion).classList.remove('zil-logo-modal');
     document.getElementById(padreSeccion).classList.remove('zie-logo-modal');
     document.getElementById(padreSeccion).classList.remove('auto-logo-modal');
@@ -1540,6 +1545,36 @@ function agregarTarea() {
 }
 
 
+// Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
+function obtenerMediaEquipo(idEquipo) {
+    document.getElementById("modalMedia").classList.add('open');
+    document.getElementById("").setAttribute('onchange', 'subirAdjuntos(' + subirImagenGeneral + ',"t_equipos_adjuntos")');
+
+    let idTabla = idEquipo;
+    let tabla = "t_equipos_adjuntos";
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla
+
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataImagenes").innerHTML = data.imagen;
+            document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        }
+    });
+}
+
+
+
 // ---------- PROYECTOS ----------
 
 // Expande las actividades de los proyectos y Cambia el icono
@@ -1563,7 +1598,7 @@ function obtenerProyectos() {
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
-    // console.log(idUsuario, idSeccion, idSubseccion, idDestino, palabraProyecto);
+    document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectos()');
     document.getElementById("modalProyectos").classList.add('open');
 
@@ -1582,7 +1617,10 @@ function obtenerProyectos() {
         dataType: "JSON",
         success: function (data) {
             // console.log(data);
+            alertaImg('Proyectos Obtenidos: ' + data.totalProyectos, '', 'info', 4000);
             document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
+            document.getElementById("seccionProyectos").innerHTML = data.seccion;
+            estiloSeccionModal('estiloSeccionProyectos', data.seccion);
             paginacionProyectos();
         }
     });
@@ -1824,7 +1862,7 @@ function agregarPlanaccion(idProyecto) {
                 // console.log(data);
                 if (data.length > 1) {
                     obtenerProyectos();
-                    alertaImg('Actividad Agregada en:' + data, '', 'success', 2500);
+                    alertaImg('Actividad Agregada en: ' + data, '', 'success', 2500);
                     expandir('proyecto' + idProyecto);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'info', 3000);
