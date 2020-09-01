@@ -589,6 +589,238 @@
     </div>
 
 
+    <div id="modal-subseccion" class="modal open">
+        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modal-subseccion')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex justify-center items-center bg-blue-200 rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 class="font-medium text-base text-blue-500">ZIA</h1>
+                </div>
+                <div class="ml-4 font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded">
+                    <h1>PROYECTOS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 mt-6 flex justify-center items-center flex-col">
+                <div class="flex flex-row items-center w-full">
+                    <div class="ml-10 relative text-gray-600 w-2/6 self-start">
+                        <input class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto">
+                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                            <i class="fad fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="text-xs ml-2">
+                        <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded">Nuevo</button>
+                        <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded">Ver
+                            solucionados</button>
+                    </div>
+                </div>
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center">
+                    <!-- titulos -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xxs h-8 text-bluegray-500 divide-x">
+                        <div class="w-2/5 h-full flex items-center justify-center ">
+                            <h1>PROYECTO</h1>
+                        </div>
+                        <div class="w-24 h-full flex items-center justify-center">
+                            <h1>PDA</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>RESP.</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>FECHA</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>COT</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>TIPO</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>JUST</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>COSTE</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>STATUS</h1>
+                        </div>
+                    </div>
+
+                    <!-- equipo -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer">
+                        <div id="equipo123" onclick="expandir(this.id)" class="w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer">
+                            <div class=" flex flex-row items-center truncate">
+                                <i class="fad fa-scrubber mx-2 text-red-500"></i>
+                                <h1>CAMBIO DE NO SE QUE POR NO SE QUE COMO DE COSAS Y TAL POR CUAL</h1>
+                            </div>
+                            <div class="mx-2">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="w-24 h-full flex items-center justify-center bg-green-200 text-green-500">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold">
+                            <h1>EDUARDO MENESES</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center text-xxs">
+                            <h1>RANGO</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500">
+                            <h1>3</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center font-bold">
+                            <h1>CAPEX</h1>
+                        </div>
+                        <div class="w-24 h-full flex items-center justify-center bg-green-200 text-green-500">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center font-bold">
+                            <h1>234524</h1>
+                        </div>
+                        <div class="w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md">
+                            <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
+                        </div>
+                    </div>
+                    <!-- PLAN DE ACCION -->
+                    <div id="equipo123toggle" class=" w-full mb-2 text-xxs px-6 py-2 bg-fondos-7 border-b border-r border-l rounded-b-md flex flex-col items-center justify-center">
+                        <!-- <div class="flex items-center mb-2">
+                                <input type="text" name="" id="" class="bg-white p-1 pl-2  rounded-full w-64" placeholder="Añadir actividad">
+                                <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase ml-2 rounded-full">Añadir</button>
+                                <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded-full">Ver solucionado</button>
+                            </div> -->
+
+                        <div class="w-full flex py-1">
+                            <input type="text" name="" placeholder="Añadir actividad" class="px-2 w-1/4 text-bluegray-900 uppercase text-xs leading-none font-semibold rounded-l py-1" id="">
+                            <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded-r">Añadir</button>
+                            <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded">Ver
+                                solucionados</button>
+                            <button class=" px-2 py-1 bg-orange-300 text-orange-500 font-bold uppercase ml-2 rounded">Generar
+                                OT</button>
+                        </div>
+
+                        <div class="w-full">
+                            <div class="flex items-center font-bold text-xxs text-bluegray-500 cursor-pointer w-full justify-start px-3 rounded">
+                                <div class="w-3/4 h-full flex items-center justify-start ">
+                                    <h1>ACTIVIDAD</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>RESPONSABLE</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>COMENTARIOS</h1>
+                                </div>
+                                <div class="w-24 h-full flex items-center justify-center">
+                                    <h1>ADJUNTOS</h1>
+                                </div>
+                                <div class="w-32 flex h-full items-center justify-center">
+                                    <h1>STATUS</h1>
+                                </div>
+
+                            </div>
+
+                            <div class="w-full flex flex-col rounded">
+
+
+
+                                <div class="flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded">
+                                    <div class="w-3/4 flex flex-col items-center justify-center">
+                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex">
+                                            <i class="fas fa-dot-circle mr-1 text-red-400"></i>
+                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
+                                                tam lorem</h1>
+                                        </div>
+                                        <div class="self-start">
+                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
+                                        </div>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>EDUARDO MENESES</h1>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>8</h1>
+                                    </div>
+                                    <div class="w-24 h-full flex items-center justify-center">
+                                        <h1>4</h1>
+                                    </div>
+                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
+                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded">
+                                    <div class="w-3/4 flex flex-col items-center justify-center">
+                                        <div class="w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex">
+                                            <i class="fas fa-dot-circle mr-1 text-green-400"></i>
+                                            <h1 class="">Hacer esto y aquello y tambien lo otro por ahi donde ya sabes y
+                                                tam lorem</h1>
+                                        </div>
+                                        <div class="self-start">
+                                            <h1>RAMON GRULLÓN - 2020-08-16 16:58:41</h1>
+                                        </div>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>EDUARDO MENESES</h1>
+                                    </div>
+                                    <div class="w-32 flex h-full items-center justify-center">
+                                        <h1>8</h1>
+                                    </div>
+                                    <div class="w-24 h-full flex items-center justify-center">
+                                        <h1>4</h1>
+                                    </div>
+                                    <div class="w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md">
+                                        <div><i class="fad fa-exclamation-circle fa-lg"></i></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- PLAN DE ACCION -->
+                </div>
+            </div>
+            <div class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6">
+                <div class="flex-1 flex justify-between sm:hidden">
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                        Previous
+                    </a>
+                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-5 font-medium rounded-md text-gray-700 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                        Next
+                    </a>
+                </div>
+                <div>
+                    <nav class="relative inline-flex shadow-sm">
+                        <button type="button" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150" aria-label="Previous">
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                            1
+                        </button>
+                        <button type="button" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+                            2
+                        </button>
+                        <button type="button" class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150" aria-label="Next">
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ********** MODALES SECUNDARIOS ********** -->
 
 

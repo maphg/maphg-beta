@@ -5042,38 +5042,41 @@ if (isset($_POST['action'])) {
 
                 // ENCABEZADO PRINCIPAL PLANACCION
                 $dataProyectos .= "
-                    <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-bluegray-900 rounded-b-md flex flex-col items-center justify-center my-1\">
-                        <div class=\"flex items-center mb-2\">
-                            <input id=\"NA$idProyecto\" type=\"text\" class=\"bg-white p-1 pl-2  rounded-full w-64\" placeholder=\"Añadir actividad\" autocomplete=\"off\">
+                    <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-fondos-7 border-b border-r border-l rounded-b-md flex flex-col items-center justify-center my-1\">
 
-                            <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase ml-2 rounded-full\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
 
-                            <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded-full\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
-                                solucionado</button>
+                        <div class=\"w-full flex py-1\">
+                            <input id=\"NA$idProyecto\" type=\"text\" name=\"\" placeholder=\"Añadir Actividad\" class=\"px-2 w-1/4 text-bluegray-900 uppercase text-xs leading-none font-semibold rounded-l py-1\" autocomplete=\"off\">
+                            <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded-r\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
+                            <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
+                                solucionados</button>
+                            <button class=\" px-2 py-1 bg-orange-300 text-orange-500 font-bold uppercase ml-2 rounded\">Generar
+                                OT</button>
                         </div>
                 ";
 
                 // ENCABEZADO ACTIVIDADES PLANACCION
                 $dataProyectos .= "
-                        <div class=\"w-full\">
-                            <div class=\"flex bg-bluegray-900 justify-center items-center font-bold text-xxs text-white divide-x divide-bluegray-500\">
-                                <div class=\"w-1/2 h-full flex items-center justify-center \">
-                                    <h1>ACTIVIDAD</h1>
-                                </div>
-                                <div class=\"w-32 flex h-full items-center justify-center\">
-                                    <h1>RESPONSABLE</h1>
-                                </div>
-                                <div class=\"w-32 flex h-full items-center justify-center\">
-                                    <h1>COMENTARIOS</h1>
-                                </div>
-                                <div class=\"w-24 h-full flex items-center justify-center\">
-                                    <h1>ADJUNTOS</h1>
-                                </div>
-                                <div class=\"w-32 flex h-full items-center justify-center\">
-                                    <h1>STATUS</h1>
-                                </div>
+                    <div class=\"w-full\">
+                        <div class=\"flex items-center font-bold text-xxs text-bluegray-500 cursor-pointer w-full justify-start px-3 rounded\">
+                            <div class=\"w-3/4 h-full flex items-center justify-start \">
+                                <h1>ACTIVIDAD</h1>
                             </div>
-                            <div class=\"bg-white flex flex-col rounded-md p-1\">
+                            <div class=\"w-32 flex h-full items-center justify-center\">
+                                <h1>RESPONSABLE</h1>
+                            </div>
+                            <div class=\"w-32 flex h-full items-center justify-center\">
+                                <h1>COMENTARIOS</h1>
+                            </div>
+                            <div class=\"w-24 h-full flex items-center justify-center\">
+                                <h1>ADJUNTOS</h1>
+                            </div>
+                            <div class=\"w-32 flex h-full items-center justify-center\">
+                                <h1>STATUS</h1>
+                            </div>
+                        </div>
+
+                        <div class=\"w-full flex flex-col rounded\">
                 ";
 
                 //ACTIVIDADES PLANACCION 
@@ -5082,6 +5085,7 @@ if (isset($_POST['action'])) {
                 INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_proyectos_planaccion.activo AND t_proyectos_planaccion.id_proyecto = $idProyecto
+                ORDER BY t_proyectos_planaccion.id DESC
                 ";
                 if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
                     foreach ($resultPlanaccion as $value) {
@@ -5092,12 +5096,12 @@ if (isset($_POST['action'])) {
                         $idResponsable = $value['responsable'];
                         $status = $value['status'];
 
-                        if ($fecha != "" or $fecha == " ") {
+                        if ($fecha == "" or $fecha == " ") {
                             $fecha = "-";
                         }
 
                         if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
-                            $solucionados = "actividades$idProyecto hidden bg-teal-300";
+                            $solucionados = "actividades$idProyecto hidden";
                         } else {
                             $solucionados = "";
                         }
@@ -5140,18 +5144,21 @@ if (isset($_POST['action'])) {
                         }
 
 
-                        // Actividades PLANAACION
-                        $dataProyectos .= "
-                                <div class=\"$solucionados flex bg-white justify-center items-center font-bold text-xxs text-bluegray-500 hover:bg-fondos-3 cursor-pointer\">
-                                    <div class=\"w-1/2 flex flex-col items-center justify-center\">
-                                        <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate\">
+                        if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
+                            // Actividades PLANAACION PENDIENTE
+                            $dataProyectos .= "            
+                                <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded\">
+                                    <div class=\"w-3/4 flex flex-col items-center justify-center\">
+                                        <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex\">
+                                            <i class=\"fas fa-dot-circle mr-1 text-green-400\"></i>
                                             <h1 id=\"AP$idPlanaccion\">$actividad</h1>
                                         </div>
                                         <div class=\"self-start\">
-                                            <h1>$creadoPor - 2020-08-16 16:58:41</h1>
+                                            <h1>$creadoPor - $fecha</h1>
                                         </div>
                                     </div>
-                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\">
+                                    <div class=\"w-32 flex h-full items-center justify-center\" 
+                                    onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
                                         <h1>$responsable</h1>
                                     </div>
                                     <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
@@ -5164,9 +5171,38 @@ if (isset($_POST['action'])) {
                                         <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
                                     </div>
                                 </div>
-                        ";
-                        // Actividades PLANAACION
-
+                            ";
+                            // Actividades PLANAACION PENDIENTE
+                        }else{
+                            // Actividades PLANAACION SOLUCIONADO
+                            $dataProyectos .= "            
+                                <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded\">
+                                    <div class=\"w-3/4 flex flex-col items-center justify-center\">
+                                        <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex\">
+                                            <i class=\"fas fa-dot-circle mr-1 text-red-400\"></i>
+                                            <h1 id=\"AP$idPlanaccion\">$actividad</h1>
+                                        </div>
+                                        <div class=\"self-start\">
+                                            <h1>$creadoPor - $fecha</h1>
+                                        </div>
+                                    </div>
+                                    <div class=\"w-32 flex h-full items-center justify-center\" 
+                                    onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
+                                        <h1>$responsable</h1>
+                                    </div>
+                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
+                                        <h1>$totalComentarios</h1>
+                                    </div>
+                                    <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
+                                        <h1>$totalAdjuntos</h1>
+                                    </div>
+                                    <div class=\"w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                        <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                                    </div>
+                                </div>
+                            ";
+                        // Actividades PLANAACION SOLUCIONADO                            
+                        }
                     }
                 }
 
