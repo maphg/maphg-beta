@@ -785,9 +785,14 @@ class Planner
     {
         $conn = new Conexion();
         $conn->conectar();
-        $query = "UPDATE t_users SET DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0, ZHPGP = 0, ZHPTRS = 0,"
-            . "ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, OMA = 0, DEP = 0, AUTO = 0, "
-            . "ZHA = 0, ZHC = 0, ZHP = 0, SEG = 0, ZHH = 0 WHERE id = $idUsuario";
+
+        // $query = "UPDATE t_users SET DECC = 0, ZHAGP = 0, ZHATRS = 0, ZHCGP = 0, ZHCTRS = 0, ZHHGP = 0, ZHHTRS = 0, ZHPGP = 0, ZHPTRS = 0, ZIA = 0, ZIC = 0, ZIE = 0, ZIL = 0, OMA = 0, DEP = 0, AUTO = 0, ZHA = 0, ZHC = 0, ZHP = 0, SEG = 0, ZHH = 0 WHERE id = $idUsuario";
+        
+        // $query = "UPDATE t_users SET DECC = 1, ZHAGP = 1, ZHATRS = 1, ZHCGP = 1, ZHCTRS = 1, ZHHGP = 1, ZHHTRS = 1, ZHPGP = 1, ZHPTRS = 1, ZIA = 1, ZIC = 1, ZIE = 1, ZIL = 1, OMA = 1, DEP = 1, AUTO = 1, ZHA = 1, ZHC = 1, ZHP = 1, SEG = 1, ZHH = 1 WHERE id = 1";
+
+
+        $query = "";
+
         try {
             $resp = $conn->consulta($query);
         } catch (Exception $ex) {
