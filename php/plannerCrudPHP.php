@@ -4899,6 +4899,7 @@ if (isset($_POST['action'])) {
     }
 
 
+    // Obtiene los Proyectos.
     if ($action == "obtenerProyectos") {
         $data = array();
         $dataProyectos = "";
@@ -4937,7 +4938,9 @@ if (isset($_POST['action'])) {
         INNER JOIN t_users ON t_proyectos.responsable = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_proyectos.status = 'N' AND t_proyectos.activo = 1 
-        AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto";
+        AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto
+        ORDER BY t_proyectos.id DESC
+        ";
         if ($result = mysqli_query($conn_2020, $query)) {
 
             // Obtiene el Total de Proyectos.
@@ -4963,13 +4966,13 @@ if (isset($_POST['action'])) {
                 }
 
 
-                $queryPlanaccion = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto";
+                $queryPlanaccion = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
                 if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
                     foreach ($resultPlanaccion as $value) {
                         $totalPlanaccion = $value['count(id)'];
                     }
 
-                    if ($totalPlanaccion <= 0 and $totalPlanaccion == "") {
+                    if ($totalPlanaccion <= 0 or $totalPlanaccion == "") {
                         $PDA = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
                         $PDA = "<i class=\"fas fa-check\"></i>";
@@ -5084,7 +5087,7 @@ if (isset($_POST['action'])) {
                 FROM t_proyectos_planaccion
                 INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_proyectos_planaccion.activo AND t_proyectos_planaccion.id_proyecto = $idProyecto
+                WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
                 ORDER BY t_proyectos_planaccion.id DESC
                 ";
                 if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
@@ -5173,7 +5176,7 @@ if (isset($_POST['action'])) {
                                 </div>
                             ";
                             // Actividades PLANAACION PENDIENTE
-                        }else{
+                        } else {
                             // Actividades PLANAACION SOLUCIONADO
                             $dataProyectos .= "            
                                 <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded\">
@@ -5201,7 +5204,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                             ";
-                        // Actividades PLANAACION SOLUCIONADO                            
+                            // Actividades PLANAACION SOLUCIONADO                            
                         }
                     }
                 }
@@ -5219,6 +5222,58 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
+    // Agrega Proyectos
+    if ($action == "agregarProyecto") {
+        $idSubseccion = $_POST['idSubseccion'];
+        $idSeccion = $_POST['idSeccion'];
+        $titulo = $_POST['titulo'];
+        $tipo = $_POST['tipo'];
+        $rangoFecha = $_POST['fecha'];
+        $responsable = $_POST['responsable'];
+        $justificacion = $_POST['justificacion'];
+        $coste = $_POST['coste'];
+        $año = date('Y');
+
+        $query = "INSERT INTO t_proyectos(id_destino, id_seccion, id_subseccion, titulo, justificacion, fecha_creacion, rango_fecha, creado_por, responsable, status, tipo, coste, año, activo) 
+        VALUES($idDestino, $idSeccion, $idSubseccion, '$titulo', '$justificacion', '$fechaActual', '$rangoFecha', $idUsuario, $responsable, 'N', '$tipo', $coste, '$año', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+
+    // Obtines Responsables en SELECT
+    if ($action == "obtenerResponsables") {
+        $data = array();
+        $dataUsuarios = "";
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "AND (t_users.id_destino = 10 OR t_users.id_destino = $idDestino)";
+        }
+
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.status = 'A' AND t_users.id != 0 $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idUser = $value['id'];
+                $nombre = $value['nombre'];
+                $apellido = $value['apellido'];
+
+                $dataUsuarios .= "<option value=\"$idUser\">$nombre $apellido</option>";
+            }
+            $data['dataUsuarios'] = $dataUsuarios;
+        }
+        echo json_encode($data);
+    }
+
+
+    // Actualiza la información de los Proyectos
     if ($action == "actualizarProyectos") {
         $valor = $_POST['valor'];
         $columna = $_POST['columna'];
@@ -5285,11 +5340,18 @@ if (isset($_POST['action'])) {
                 foreach ($result as $value) {
                     $pendientes = $value['count(id)'];
                 }
-                if ($pendientes <= 0) {
-                    $query = "UPDATE t_proyectos SET status = 'F', finalizado_por = '$idUsuario', fecha_finalizado = '$fechaActual' 
-                    WHERE id = $idProyecto";
+                if ($pendientes >= 0) {
+                    $query = "UPDATE t_proyectos SET status = 'F', finalizado_por = '$idUsuario', 
+                    fecha_finalizado = '$fechaActual' WHERE id = $idProyecto";
                     if ($result = mysqli_query($conn_2020, $query)) {
-                        echo 7;
+
+                        $query = "UPDATE t_proyectos_planaccion SET status = 'F', realizado_por = $idUsuario 
+                        WHERE id_proyecto = $idProyecto AND activo = 1 AND status != 'F'";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 8;
+                        } else {
+                            echo 0;
+                        }
                     } else {
                         echo 0;
                     }

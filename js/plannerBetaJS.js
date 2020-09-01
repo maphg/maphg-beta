@@ -688,7 +688,6 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
 // rangoInicial y rangoFinal, ya no se necesita, solo se utilizaba para la paginación.
 function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
     // console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
-
     // Se agregan los filtros en las columnas de los equipos.
     document.getElementById("tipoOrdenamientoMCN").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"MCN")');
     document.getElementById("tipoOrdenamientoMCF").setAttribute('onclick', 'obtenerEquipos(' + idUsuario + ',' + idDestino + ',' + idSeccion + ',' + idSubseccion + ',' + rangoInicial + ',' + rangoFinal + ',"MCF")');
@@ -1651,9 +1650,12 @@ function obtenerProyectos() {
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
+
     document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectos()');
     document.getElementById("modalProyectos").classList.add('open');
+    document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
+    document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
 
     const action = "obtenerProyectos";
     $.ajax({
@@ -1696,6 +1698,84 @@ function paginacionProyectos() {
 
     $("#paginacionProyectos>a").addClass('-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150');
 
+}
+
+
+// Obtener Opciones de Responsables para Proyectos
+function datosAgregarProyecto() {
+    document.getElementById("responsableProyectoN").innerHTML = '';
+    document.getElementById("modalAgregarProyecto").classList.add('open');
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    const action = "obtenerResponsables";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("responsableProyectoN").innerHTML = data.dataUsuarios;
+        }
+    });
+}
+
+// Agregar Proyecto
+function agregarProyecto() {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = 200;
+    let titulo = document.getElementById("tituloProyectoN").value;
+    let tipo = document.getElementById("tipoProyectoN").value;
+    let fecha = document.getElementById("fechaProyectoN").value;
+    let responsable = document.getElementById("responsableProyectoN").value;
+    let justificacion = document.getElementById("justificacionProyectoN").value;
+    let coste = document.getElementById("costeProyectoN").value;
+    const action = "agregarProyecto";
+    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idSeccion: idSeccion,
+                idSubseccion: idSubseccion,
+                titulo: titulo,
+                tipo: tipo,
+                fecha: fecha,
+                responsable: responsable,
+                justificacion: justificacion,
+                coste: coste
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                // console.log(data);
+                if (data == 1) {
+                    obtenerProyectos();
+                    alertaImg('Proyecto Agregado', '', 'success', 2500);
+                    document.getElementById("tituloProyectoN").value = '';
+                    document.getElementById("tipoProyectoN").value = '';
+                    document.getElementById("fechaProyectoN").value = '';
+                    document.getElementById("responsableProyectoN").value = '';
+                    document.getElementById("justificacionProyectoN").value = '';
+                    document.getElementById("costeProyectoN").value = '';
+                    document.getElementById("modalAgregarProyecto").classList.remove('open');
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 3000);
+                }
+            }
+        });
+    } else {
+        alertaImg('Información NO Valida', '', 'warning', 3000);
+    }
 }
 
 
@@ -1757,31 +1837,38 @@ function actualizarProyectos(valor, columna, idProyecto) {
         },
         // dataType: "JSON",
         success: function (data) {
-            // console.log(data);
-            obtenerProyectos();
+            console.log(data);
             if (data == 1) {
+                obtenerProyectos();
                 alertaImg('Responsable Actualizado', '', 'success', 2000);
                 document.getElementById("modalUsuarios").classList.remove('open');
             } else if (data == 2) {
+                obtenerProyectos();
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Justifiacion Actualizado', '', 'success', 2000);
             } else if (data == 3) {
+                obtenerProyectos();
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Coste Actualizado', '', 'success', 2000);
             } else if (data == 4) {
+                obtenerProyectos();
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Tipo Actualizado', '', 'success', 2000);
             } else if (data == 5) {
+                obtenerProyectos();
                 document.getElementById("modalFechaProyectos").classList.remove('open');
                 alertaImg('Fecha Actualizada', '', 'success', 2000);
             } else if (data == 6) {
+                obtenerProyectos();
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 alertaImg('Proyecto Eliminado', '', 'success', 2000);
             } else if (data == 7) {
+                obtenerProyectos();
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 document.getElementById("modalEditarTitulo").classList.remove('open');
                 alertaImg('Título Actualizado', '', 'success', 2000);
             } else if (data == 8) {
+                obtenerProyectos();
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 alertaImg('Proyecto Finalizado', '', 'success', 2000);
             } else {
