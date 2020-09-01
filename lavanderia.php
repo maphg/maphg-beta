@@ -41,37 +41,40 @@
         </li>
     </ul>
 
-    <div id="graficos" class="grid grid-flow-col grid-cols-3 grid-rows-2 gap-4 p-4 h-screen">
+    <div id="graficos" class="grid grid-flow-col gap-2 p-2">
 
-        <div id="CMU" class="hidden h-screen">
-            <iframe width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="CMU" class="hidden border">
+            <iframe width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="RM" class="hidden h-screen">
-            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="RM" class="hidden border">
+            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="SSA" class="hidden h-screen">
-            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="SSA" class="hidden border">
+            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="MBJ" class="hidden h-screen">
-            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="MBJ" class="hidden border">
+            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="PVR" class="hidden h-screen">
-            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="PVR" class="hidden border">
+            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="PUJ" class="hidden h-screen">
-            <iframe id="" width="100%" class="h-screen" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+        <div id="PUJ" class="hidden border">
+            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
     </div>
 
 
-    <div id="camaras" class="p-4">
-        No Disponible
+    <div id="camaras" class="flex items-center content-center grid grid-cols-2 gap-1 text-center pt-5">
+        <div class="flex justify-end"><img src="https://i.gifer.com/757D.gif" width="45%" alt=""></div>
+        <div class="flex justify-left"><img src="https://i.gifer.com/757D.gif" width="45%" alt=""></div>
+        <div class="flex justify-end"><img src="https://i.gifer.com/757D.gif" width="45%" alt=""></div>
+        <div class="flex justify-left"><img src="https://i.gifer.com/757D.gif" width="45%" alt=""></div>
     </div>
 
     <div id="pendientes" class="grid grid-flow-col grid-cols-1 grid-rows-1 h-screen">
@@ -91,8 +94,14 @@
 
         // Función para mostrar la VISTA de GRAFICOS
         function graficos() {
-            console.log("Gráficos");
             let destino = localStorage.getItem('idDestino');
+
+            document.getElementById("CMU").classList.add('hidden');
+            document.getElementById("RM").classList.add('hidden');
+            document.getElementById("SSA").classList.add('hidden');
+            document.getElementById("MBJ").classList.add('hidden');
+            document.getElementById("PVR").classList.add('hidden');
+            document.getElementById("PUJ").classList.add('hidden');
 
             document.getElementById("graficos").classList.remove('hidden');
             document.getElementById("camaras").classList.add('hidden');
@@ -102,42 +111,51 @@
             document.getElementById("pestañaCamaras").classList.remove('bg-blue-200');
             document.getElementById("pestañaPendientes").classList.remove('bg-blue-200');
 
-            document.getElementById("CMU").classList.add('hidden');
-            document.getElementById("RM").classList.add('hidden');
-            document.getElementById("SSA").classList.add('hidden');
-            document.getElementById("MBJ").classList.add('hidden');
-            document.getElementById("PVR").classList.add('hidden');
-            document.getElementById("PUJ").classList.add('hidden');
+            document.getElementById("CMU").setAttribute('style', 'height:280px');
+            document.getElementById("RM").setAttribute('style', 'height:280px');
+            document.getElementById("SSA").setAttribute('style', 'height:280px');
+            document.getElementById("MBJ").setAttribute('style', 'height:280px');
+            document.getElementById("PVR").setAttribute('style', 'height:280px');
+            document.getElementById("PUJ").setAttribute('style', 'height:280px');
+
+
             if (destino == 10) {
+                document.getElementById("graficos").classList.remove('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficos").classList.add('grid-cols-3', 'grid-rows-2');
+
                 document.getElementById("CMU").classList.remove('hidden');
                 document.getElementById("RM").classList.remove('hidden');
                 document.getElementById("SSA").classList.remove('hidden');
                 document.getElementById("MBJ").classList.remove('hidden');
                 document.getElementById("PVR").classList.remove('hidden');
                 document.getElementById("PUJ").classList.remove('hidden');
-                document.getElementById("graficos").classList.add('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.remove('grid-cols-1', 'grid-rows-1');
             } else if (destino == 7) {
+                document.getElementById("CMU").setAttribute('style', 'height:650px');
                 document.getElementById("CMU").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 1) {
+                document.getElementById("RM").setAttribute('style', 'height:650px');
                 document.getElementById("RM").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 4) {
+                document.getElementById("SSA").setAttribute('style', 'height:650px');
                 document.getElementById("SSA").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 6) {
+                document.getElementById("MBJ").setAttribute('style', 'height:650px');
                 document.getElementById("MBJ").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 2) {
+                document.getElementById("PVR").setAttribute('style', 'height:650px');
                 document.getElementById("PVR").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 5) {
+                document.getElementById("PUJ").setAttribute('style', 'height:650px');
                 document.getElementById("PUJ").classList.remove('hidden');
                 document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
                 document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
@@ -163,6 +181,7 @@
 
             let idDestino = localStorage.getItem('idDestino');
             let idUsuario = localStorage.getItem('usuario');
+            localStorage.setItem('idSeccion', 11);
             console.log('Usuario:' + idUsuario, 'Desitno:' + idDestino)
 
             document.getElementById("graficos").classList.add('hidden');
