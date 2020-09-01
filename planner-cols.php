@@ -547,12 +547,15 @@
                             <i class="fad fa-search"></i>
                         </button>
                     </div>
-                    <div id="btnNuevoProyecto" class="text-xs ml-2">
-                        <button class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded">
+                    <div class="text-xs ml-2">
+                        <button id="btnNuevoProyecto" class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded">
                             Nuevo
                         </button>
-                        <button class=" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded">Ver
-                            solucionados
+                        <button id="btnSolucionadosProyectos" class="px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded">
+                            Ver Solucionados
+                        </button>
+                        <button id="btnPendientesProyectos" class="px-2 py-1 bg-red-300 text-red-500 font-bold uppercase ml-2 rounded">
+                            Ver Pendientes
                         </button>
                     </div>
                 </div>
@@ -595,7 +598,6 @@
             <div id="paginacionProyectos" class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6"></div>
         </div>
     </div>
-
 
     <!-- ********** MODALES SECUNDARIOS ********** -->
 
