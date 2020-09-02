@@ -11,11 +11,11 @@
     <meta http-equiv="Pragma" content="no-cache">
 
     <title>MAPHG</title>
-    <link rel=" shortcut icon" href="svg/logo6.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/tailwindproduccion.css">
-    <link rel="stylesheet" href="css/alertify.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+    <link rel=" shortcut icon" href="../svg/logo6.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/tailwindproduccion.css">
+    <link rel="stylesheet" href="../css/alertify.min.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../css/fontawesome/css/all.min.css">
 
 </head>
 
@@ -82,19 +82,38 @@
     </div>
 
 
-    <script src="js/jquery-3.3.1.js"></script>
-    <script src="js/complemento_menuJS.js"></script>
-    <script src="js/alertify.min.js"></script>
-    <script src="js/alertasSweet.js"></script>
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/complemento_menuJS.js"></script>
+    <script src="../js/alertify.min.js"></script>
+    <script src="../js/alertasSweet.js"></script>
 
     <script>
         document.getElementById("destinosSelecciona").setAttribute('onclick', 'graficos();');
         document.getElementById("camaras").setAttribute('onclick', 'graficos();');
         document.getElementById("pendientes").setAttribute('onclick', 'graficos();');
 
-        // Función para mostrar la VISTA de GRAFICOS
+        function botonMenu() {
+            alertaImg('ACCESO DENEGADO', '', 'warning', 2500);
+        }
+
+        let destino = 7;
+
+        if (destino == 7) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'CMU';
+        } else if (destino == 1) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'RM';
+        } else if (destino == 4) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'SSA';
+        } else if (destino == 6) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'MBJ';
+        } else if (destino == 2) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'PVR';
+        } else if (destino == 5) {
+            document.getElementById("destinoNavBarTop").innerHTML = 'PUJ';
+        }
+
+
         function graficos() {
-            let destino = localStorage.getItem('idDestino');
 
             document.getElementById("CMU").classList.add('hidden');
             document.getElementById("RM").classList.add('hidden');
@@ -165,7 +184,6 @@
 
         // Función para mostrar la VISTA de CAMARAS
         function camaras() {
-            console.log("camaras");
             document.getElementById("graficos").classList.add('hidden');
             document.getElementById("camaras").classList.remove('hidden');
             document.getElementById("pendientes").classList.add('hidden');
@@ -179,11 +197,6 @@
         // Función para mostrar la VISTA de PENDIENTES
         function pendientes() {
 
-            let idDestino = localStorage.getItem('idDestino');
-            let idUsuario = localStorage.getItem('usuario');
-            localStorage.setItem('idSeccion', 11);
-            console.log('Usuario:' + idUsuario, 'Desitno:' + idDestino)
-
             document.getElementById("graficos").classList.add('hidden');
             document.getElementById("camaras").classList.add('hidden');
             document.getElementById("pendientes").classList.remove('hidden');
@@ -192,7 +205,7 @@
             document.getElementById("pestañaCamaras").classList.remove('border-l', 'border-t', 'border-r', 'rounded-t');
             document.getElementById("pestañaPendientes").classList.add('border-l', 'border-t', 'border-r', 'rounded-t');
 
-            document.getElementById("iframPendientes").src = 'https://www.maphg.com/beta/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
+            document.getElementById("iframPendientes").src = 'https://www.maphg.com/beta/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=0&idDestino=' + destino;
         }
 
 
