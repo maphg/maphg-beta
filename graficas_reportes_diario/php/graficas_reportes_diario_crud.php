@@ -41,21 +41,49 @@ if ($action == "graficaSubsecciones") {
 
             $queryTotalSolucionadosF = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'F' AND activo = 1 AND id_destino = $idDestino AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND id_seccion = $idSeccion";
 
+            $queryTotalPendientesTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            WHERE t_equipos.id_subseccion = $idSubseccion 
+            AND t_mp_np.status !='F' AND t_mp_np.activo = 1 AND t_mp_np.id_destino = $idDestino 
+            AND t_mp_np.fecha BETWEEN '$fechaInicio' AND '$fechaFin' 
+            AND t_equipos.id_seccion = $idSeccion";
+
+            $queryTotalSolucionadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            WHERE t_equipos.id_subseccion = $idSubseccion 
+            AND t_mp_np.status ='F' AND t_mp_np.activo = 1 AND t_mp_np.id_destino = $idDestino 
+            AND t_mp_np.fecha BETWEEN '$fechaInicio' AND '$fechaFin' 
+            AND t_equipos.id_seccion = $idSeccion";
+
             if (
                 $resultTotalPendientesF = mysqli_query($conn_2020, $queryTotalPendientesF) and
-                $resultTotalSolucionadosF = mysqli_query($conn_2020, $queryTotalSolucionadosF)
+                $resultTotalSolucionadosF = mysqli_query($conn_2020, $queryTotalSolucionadosF) and
+                $resultTotalPendientesTareas = mysqli_query($conn_2020, $queryTotalPendientesTareas) and
+                $resultTotalSolucionadosTareas = mysqli_query($conn_2020, $queryTotalSolucionadosTareas)
             ) {
 
                 foreach ($resultTotalPendientesF as $total) {
-                    $totalPendientesF = $total['count(id)'];
+                    $totalPendientesF = intval($total['count(id)']);
                 }
 
                 foreach ($resultTotalSolucionadosF as $total) {
-                    $totalSolucionadosF = $total['count(id)'];
+                    $totalSolucionadosF = intval($total['count(id)']);
+                }
+
+                foreach ($resultTotalPendientesTareas as $total) {
+                    $totalPendientesTareas = intval($total['count(t_mp_np.id)']);
+                }
+
+                foreach ($resultTotalSolucionadosTareas as $total) {
+                    $totalSolucionadosTareas = intval($total['count(t_mp_np.id)']);
                 }
 
                 // Da formato para los arrays.
-                $arrayAux = array("Subseccion" => $subseccion, "Solucionado" => $totalSolucionadosF, "Pendientes" => $totalPendientesF);
+                $arrayAux = array(
+                    "Subseccion" => $subseccion,
+                    "Solucionado" => $totalSolucionadosF + $totalSolucionadosTareas,
+                    "Pendientes" => $totalPendientesF + $totalPendientesTareas
+                );
                 // Se almacenan los Arrays.
                 $dataArray[] = $arrayAux;
             }
@@ -67,8 +95,10 @@ if ($action == "graficaSubsecciones") {
 if ($action == "graficaResponsables") {
     // {"Responsable":"Responsable 1","Solucionado":23,"Pendientes":22}
     $fechaInicio = date('Y-m-d 23:59:59');
-    $filtroRangoFecha = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
+    $filtroRangoFechaFallas = "AND fecha_creacion BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
+    $filtroRangoFechaTareas = "AND t_mp_np.fecha BETWEEN '2020-01-01 00:00:00' AND '$fechaInicio'";
     $dataArray = array();
+
     $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
     FROM t_users 
     LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -82,23 +112,54 @@ if ($action == "graficaResponsables") {
             $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
             $queryPendientes = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status !='F' AND activo = 1 $filtroRangoFecha";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status !='F' AND activo = 1 $filtroRangoFechaFallas";
 
             $querySolucionados = "SELECT count(id) FROM t_mc 
-            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F' AND activo = 1 $filtroRangoFecha";
+            WHERE responsable = $idUsuario AND id_seccion = $idSeccion AND id_destino = $idDestino AND status = 'F' AND activo = 1 $filtroRangoFechaFallas";
 
-            if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes) and $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)) {
+            $queryPendientesTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            WHERE t_mp_np.responsable = $idUsuario AND .t_equipos.id_seccion = $idSeccion AND 
+            t_equipos.id_destino = $idDestino AND t_mp_np.status !='F' AND t_mp_np.activo = 1 $filtroRangoFechaTareas";
+
+            $querySolucionadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            WHERE t_mp_np.responsable = $idUsuario AND .t_equipos.id_seccion = $idSeccion AND 
+            t_equipos.id_destino = $idDestino AND t_mp_np.status ='F' AND t_mp_np.activo = 1 $filtroRangoFechaTareas";
+
+
+            if (
+                $resultPendientes = mysqli_query($conn_2020, $queryPendientes) and
+                $resultSolucionados = mysqli_query($conn_2020, $querySolucionados) and
+                $resultPendientesTareas = mysqli_query($conn_2020, $queryPendientesTareas) and $resultSolucionadosTareas = mysqli_query($conn_2020, $querySolucionadosTareas)
+            ) {
 
                 foreach ($resultSolucionados as $value) {
-                    $totalSolucionados = $value['count(id)'];
+                    $totalSolucionados = intval($value['count(id)']);
                 }
 
                 foreach ($resultPendientes as $value) {
-                    $totalPendientes = $value['count(id)'];
+                    $totalPendientes = intval($value['count(id)']);
                 }
-                if ($totalSolucionados > 0 or $totalPendientes > 0) {
 
-                    $arrayAux = array("Responsable" => $nombreCompleto, "Solucionado" => $totalSolucionados, "Pendientes" => $totalPendientes);
+                foreach ($resultPendientesTareas as $value) {
+                    $totalSolucionadosTareas = intval($value['count(t_mp_np.id)']);
+                }
+
+                foreach ($resultSolucionadosTareas as $value) {
+                    $totalPendientesTareas = intval($value['count(t_mp_np.id)']);
+                }
+
+                if (
+                    $totalSolucionados > 0 or $totalPendientes > 0 or
+                    $totalSolucionadosTareas > 0 or $totalPendientesTareas > 0
+                ) {
+
+                    $arrayAux = array(
+                        "Responsable" => $nombreCompleto,
+                        "Solucionado" => $totalSolucionados + $totalSolucionadosTareas,
+                        "Pendientes" => $totalPendientes + $totalPendientesTareas
+                    );
 
                     $dataArray[] = $arrayAux;
                 }
@@ -131,21 +192,42 @@ if ($action == "graficaUltimaSemana") {
         FROM t_mc WHERE id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND status = 'F' 
         AND fecha_creacion BETWEEN '$diaActual_inicio' AND '$diaActual_fin'";
 
+        $queryPendientesTareas = "SELECT count(t_mp_np.id) FROM t_mp_np
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.status != 'F' 
+        AND t_mp_np.fecha BETWEEN '$diaActual_inicio' AND '$diaActual_fin'";
+
+        $querySolucionadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.status = 'F' 
+        AND t_mp_np.fecha BETWEEN '$diaActual_inicio' AND '$diaActual_fin'";
+
         if (
             $resultPendientes = mysqli_query($conn_2020, $queryPendientes) and
-            $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)
+            $resultSolucionados = mysqli_query($conn_2020, $querySolucionados) and
+            $resultPendientesTareas = mysqli_query($conn_2020, $queryPendientesTareas) and
+            $resultSolucionadosTareas = mysqli_query($conn_2020, $querySolucionadosTareas)
         ) {
 
             foreach ($resultPendientes as $value) {
-                $totalPendientes = $value['count(id)'];
-                // echo $totalPendientes;
+                $totalPendientes = intval($value['count(id)']);
             }
             foreach ($resultSolucionados as $value) {
-                $totalSolucionados = $value['count(id)'];
-                // echo $totalSolucionados;
+                $totalSolucionados = intval($value['count(id)']);
             }
 
-            $arrayAux = array("date" => "new Date($diaActual)", "Creado" => $totalPendientes, "Solucionado" => $totalSolucionados);
+            foreach ($resultPendientesTareas as $value) {
+                $totalPendientesTareas = intval($value['count(t_mp_np.id)']);
+            }
+            foreach ($resultSolucionadosTareas as $value) {
+                $totalSolucionadosTareas = intval($value['count(t_mp_np.id)']);
+            }
+
+            $arrayAux = array(
+                "date" => "new Date($diaActual)",
+                "Creado" => $totalPendientes + $totalPendientesTareas,
+                "Solucionado" => $totalSolucionados + $totalSolucionadosTareas
+            );
 
             $dataArray[] = $arrayAux;
         }
@@ -184,27 +266,49 @@ if ($action == "graficaHistorico") {
 
         $querySolucionados = "SELECT count(id) FROM t_mc WHERE status ='F' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 AND fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'";
 
+        $queryPendientesTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.fecha BETWEEN '$fechaFin' AND '$fechaActual'";
+
+        $querySolucionadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE t_mp_np.status ='F' AND t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.fecha BETWEEN '$fechaFin' AND '$fechaActual'";
+
         if (
-            $resultPendientes = mysqli_query($conn_2020, $queryPendientes)
-            and $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)
+            $resultPendientes = mysqli_query($conn_2020, $queryPendientes) and
+            $resultSolucionados = mysqli_query($conn_2020, $querySolucionados) and
+            $resultPendientesTareas = mysqli_query($conn_2020, $queryPendientesTareas) and
+            $resultSolucionadosTareas = mysqli_query($conn_2020, $querySolucionadosTareas)
         ) {
 
             foreach ($resultPendientes as $value) {
-                $totalPendientes = $value['count(id)'];
+                $totalPendientes = intval($value['count(id)']);
             }
 
             foreach ($resultSolucionados as $value) {
-                $totalSolucionados = $value['count(id)'];
+                $totalSolucionados = intval($value['count(id)']);
+            }
+
+            foreach ($resultPendientesTareas as $value) {
+                $totalPendientesTareas = intval($value['count(t_mp_np.id)']);
+            }
+
+            foreach ($resultSolucionadosTareas as $value) {
+                $totalSolucionadosTareas = intval($value['count(t_mp_np.id)']);
             }
 
             // Acumulado
-            $acumuladoCreado = $acumuladoCreado + $totalPendientes;
-            $acumuladoSolucionado = $totalSolucionados + $acumuladoSolucionado;
+            $acumuladoCreado = $acumuladoCreado + ($totalPendientes + $totalPendientesTareas);
+            $acumuladoSolucionado = ($totalSolucionados + $totalSolucionadosTareas) + $acumuladoSolucionado;
             $acumulado = $acumuladoCreado - $acumuladoSolucionado;
-            // $acumulado = $aux + $acumulado;
 
             // {"date": new Date(2020, 0, 1), "Creado": 26, "Solucionado": 10, "Acumulado": 7}
-            $arrayAux = array("date" => "new Date($fecha)", "Creado" => $totalPendientes, "Solucionado" => $totalSolucionados, "Acumulado" => $acumulado);
+            $arrayAux = array(
+                "date" => "new Date($fecha)",
+                "Creado" => $totalPendientes + $totalPendientesTareas,
+                "Solucionado" => $totalSolucionados + $totalSolucionadosTareas,
+                "Acumulado" => $acumulado
+            );
 
             $dataArray[] = $arrayAux;
         }
@@ -246,18 +350,39 @@ if ($action == "CuadrosUltimaSemana") {
     AND id_seccion = $idSeccion AND activo = 1 AND status = 'F' 
     AND fecha_creacion BETWEEN '$diaActual_fin' AND '$diaActual_inicio'";
 
+    $queryCreadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+    INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+    WHERE t_mp_np.id_destino = $idDestino 
+    AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.status !='F'
+    AND t_mp_np.fecha BETWEEN '$diaActual_fin' AND '$diaActual_inicio'";
+
+    $querySolucionadosTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+    INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+    WHERE t_mp_np.id_destino = $idDestino 
+    AND t_equipos.id_seccion = $idSeccion AND t_mp_np.activo = 1 AND t_mp_np.status = 'F' 
+    AND t_mp_np.fecha BETWEEN '$diaActual_fin' AND '$diaActual_inicio'";
+
     if (
         $resultCreados = mysqli_query($conn_2020, $queryCreados) and
-        $resultSolucionados = mysqli_query($conn_2020, $querySolucionados)
+        $resultSolucionados = mysqli_query($conn_2020, $querySolucionados) and
+        $resultCreadosTareas = mysqli_query($conn_2020, $queryCreadosTareas) and
+        $resultSolucionadosTareas = mysqli_query($conn_2020, $querySolucionadosTareas)
     ) {
 
         foreach ($resultCreados as $value) {
-            $semanaCreados = $value['count(id)'];
-            // echo $totalPendientes;
+            $semanaCreados = intval($value['count(id)']);
         }
+
         foreach ($resultSolucionados as $value) {
-            $semanaSolucionados = $value['count(id)'];
-            // echo $totalSolucionados;
+            $semanaSolucionados = intval($value['count(id)']);
+        }
+
+        foreach ($resultCreadosTareas as $value) {
+            $semanaCreadosTareas = intval($value['count(t_mp_np.id)']);
+        }
+
+        foreach ($resultSolucionadosTareas as $value) {
+            $semanaSolucionadosTareas = intval($value['count(t_mp_np.id)']);
         }
     }
 
@@ -269,25 +394,48 @@ if ($action == "CuadrosUltimaSemana") {
     $querySinAsignar = "SELECT count(id) FROM t_mc WHERE status ='N' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 
     AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin' AND (responsable = 0 OR responsable = '')";
 
-    if ($resultSA = mysqli_query($conn_2020, $querySinAsignar)) {
-        foreach ($resultSA as $value) {
-            $totalSinResponsable = $value['count(id)'];
-        }
-    }
-
     $queryAcumulado = "SELECT count(id) FROM t_mc WHERE status !='F' AND id_destino = $idDestino AND id_seccion = $idSeccion AND activo = 1 
     AND fecha_creacion BETWEEN '$fechaInicio' AND '$fechaFin'";
 
-    if ($resultAcumulado = mysqli_query($conn_2020, $queryAcumulado)) {
-        foreach ($resultAcumulado as $value) {
-            $totalAcumulado = $value['count(id)'];
+    $querySinAsignarTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+    INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+    WHERE t_mp_np.status = 'N' AND t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion 
+    AND t_mp_np.activo = 1 AND t_mp_np.fecha BETWEEN '$fechaInicio' AND '$fechaFin' 
+    AND (t_mp_np.responsable = 0 OR t_mp_np.responsable = '')";
+
+    $queryAcumuladoTareas = "SELECT count(t_mp_np.id) FROM t_mp_np 
+    INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+    WHERE t_mp_np.status !='F' AND t_mp_np.id_destino = $idDestino AND t_equipos.id_seccion = $idSeccion 
+    AND t_mp_np.activo = 1 AND t_mp_np.fecha BETWEEN '$fechaInicio' AND '$fechaFin'";
+
+
+    if ($resultSA = mysqli_query($conn_2020, $querySinAsignar)) {
+        foreach ($resultSA as $value) {
+            $totalSinResponsable = intval($value['count(id)']);
         }
     }
 
+    if ($resultAcumulado = mysqli_query($conn_2020, $queryAcumulado)) {
+        foreach ($resultAcumulado as $value) {
+            $totalAcumulado = intval($value['count(id)']);
+        }
+    }
 
-    $dataArray['semanaCreados'] = $semanaCreados;
-    $dataArray['semanaSolucionados'] = $semanaSolucionados;
-    $dataArray['totalSinResponsable'] = $totalSinResponsable;
-    $dataArray['totalAcumulado'] = $totalAcumulado;
+    if ($resultSATarea = mysqli_query($conn_2020, $querySinAsignarTareas)) {
+        foreach ($resultSATarea as $value) {
+            $totalSinResponsableTareas = intval($value['count(t_mp_np.id)']);
+        }
+    }
+
+    if ($resultAcumuladoTarea = mysqli_query($conn_2020, $queryAcumuladoTareas)) {
+        foreach ($resultAcumuladoTarea as $value) {
+            $totalAcumuladoTareas = intval($value['count(t_mp_np.id)']);
+        }
+    }
+
+    $dataArray['semanaCreados'] = $semanaCreados + $semanaCreadosTareas;
+    $dataArray['semanaSolucionados'] = $semanaSolucionados + $semanaSolucionadosTareas;
+    $dataArray['totalSinResponsable'] = $totalSinResponsable + $totalSinResponsableTareas;
+    $dataArray['totalAcumulado'] = $totalAcumulado + $totalAcumuladoTareas;
     echo json_encode($dataArray);
 }
