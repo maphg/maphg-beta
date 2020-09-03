@@ -61,7 +61,7 @@
     <input type="hidden" id="idDestinoSeleccionado">
 
     <div class="flex flex-col justify-evenly items-center w-full h-screen pt-10">
-        <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex items-center pt-10">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10">
 
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
