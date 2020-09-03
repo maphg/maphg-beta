@@ -1731,7 +1731,7 @@ function obtenerProyectosS() {
 function paginacionProyectos() {
     $("#paginacionProyectos").jPages({
         containerID: 'dataProyectos',
-        perPage: 10,
+        perPage: 15,
         startPage: 1,
         endRange: 1,
         midRange: 1,
