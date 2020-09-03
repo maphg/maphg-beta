@@ -33,7 +33,16 @@
             </dav>
         </dav>
         <!-- Padre -->
-        <dav id="destinosSelecciona" class="">
+        <dav id="destinosSelecciona" class="hidden">
+            <a href="#" onclick="cambiarDestino(10)" class="hover:text-white d6 m-0 p-2 mb-2">AME</a>
+            <a href="#" onclick="cambiarDestino(11)" class="hover:text-white d6 m-0 p-2 mb-2"> CAP </a>
+            <a href="#" onclick="cambiarDestino(7)" class="hover:text-white d6 m-0 p-2 mb-2"> CMU </a>
+            <a href="#" onclick="cambiarDestino(6)" class="hover:text-white d6 m-0 p-2 mb-2"> MBJ </a>
+            <a href="#" onclick="cambiarDestino(5)" class="hover:text-white d6 m-0 p-2 mb-2"> PUJ </a>
+            <a href="#" onclick="cambiarDestino(2)" class="hover:text-white d6 m-0 p-2 mb-2"> PVR </a>
+            <a href="#" onclick="cambiarDestino(1)" class="hover:text-white d6 m-0 p-2 mb-2"> RM </a>
+            <a href="#" onclick="cambiarDestino(3)" class="hover:text-white d6 m-0 p-2 mb-2"> SDQ </a>
+            <a href="#" onclick="cambiarDestino(4)" class="hover:text-white d6 m-0 p-2 mb-2"> SSA </a>
         </dav>
     </dav>
 </dav>
