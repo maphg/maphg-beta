@@ -548,13 +548,13 @@
                         </button>
                     </div>
                     <div class="text-xs ml-2">
-                        <button id="btnNuevoProyecto" class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded">
+                        <button id="btnNuevoProyecto" class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold rounded">
                             Nuevo
                         </button>
-                        <button id="btnSolucionadosProyectos" class="px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded">
+                        <button id="btnSolucionadosProyectos" class="px-2 py-1 bg-teal-300 text-teal-500 font-bold ml-2 rounded">
                             Ver Solucionados
                         </button>
-                        <button id="btnPendientesProyectos" class="px-2 py-1 bg-red-300 text-red-500 font-bold uppercase ml-2 rounded">
+                        <button id="btnPendientesProyectos" class="px-2 py-1 bg-red-300 text-red-500 font-bold ml-2 rounded">
                             Ver Pendientes
                         </button>
                     </div>
@@ -563,28 +563,28 @@
                 <div class="mt-2 w-full flex flex-col justify-center items-center">
                     <!-- titulos -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xxs h-8 text-bluegray-500 divide-x">
-                        <div class="w-2/5 h-full flex items-center justify-center ">
+                        <div id="proyectoOrden" class="w-2/5 h-full flex items-center justify-center ">
                             <h1>PROYECTO</h1>
                         </div>
-                        <div class="w-24 h-full flex items-center justify-center">
+                        <div id="proyectoOrdenPDA" class="w-24 h-full flex items-center justify-center">
                             <h1>PDA</h1>
                         </div>
-                        <div class="w-32 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenRESP" class="w-32 flex h-full items-center justify-center">
                             <h1>RESP.</h1>
                         </div>
-                        <div class="w-24 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenFECHA" class="w-24 flex h-full items-center justify-center">
                             <h1>FECHA</h1>
                         </div>
-                        <div class="w-24 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenCOT" class="w-24 flex h-full items-center justify-center">
                             <h1>COT</h1>
                         </div>
-                        <div class="w-24 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenTIPO" class="w-24 flex h-full items-center justify-center">
                             <h1>TIPO</h1>
                         </div>
-                        <div class="w-24 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenJUST" class="w-24 flex h-full items-center justify-center">
                             <h1>JUST</h1>
                         </div>
-                        <div class="w-24 flex h-full items-center justify-center">
+                        <div id="proyectoOrdenCOSTE" class="w-24 flex h-full items-center justify-center">
                             <h1>COSTE</h1>
                         </div>
                         <div class="w-24 flex h-full items-center justify-center">
@@ -1211,6 +1211,7 @@
                         <h1 class="self-start mb-2">Tipo:</h1>
                         <div class="relative">
                             <select id="tipoProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                                <option value="">Seleccione</option>
                                 <option value="CAPEX">CAPEX</option>
                                 <option value="CAPIN">CAPIN</option>
                                 <option value="PROYECTO">PROYECTO</option>

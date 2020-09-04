@@ -235,7 +235,7 @@ if (isset($_POST['action'])) {
                             $dataZIL .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -378,7 +378,7 @@ if (isset($_POST['action'])) {
                             $dataZIE .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -521,7 +521,7 @@ if (isset($_POST['action'])) {
                             $dataAUTO .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -665,7 +665,7 @@ if (isset($_POST['action'])) {
                             $dataDEC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -809,7 +809,7 @@ if (isset($_POST['action'])) {
                             $dataDEP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -954,7 +954,7 @@ if (isset($_POST['action'])) {
                             $dataZHA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1098,7 +1098,7 @@ if (isset($_POST['action'])) {
                             $dataZHC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1242,7 +1242,7 @@ if (isset($_POST['action'])) {
                             $dataZHP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1386,7 +1386,7 @@ if (isset($_POST['action'])) {
                             $dataZIA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1530,7 +1530,7 @@ if (isset($_POST['action'])) {
                             $dataZIC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP();\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -4370,12 +4370,12 @@ if (isset($_POST['action'])) {
                         </div>
 
                         <!-- RESPONSABLE -->
-                        <div onclick=\"obtenerUsuarios('asignarTarea', $idTarea);\" class=\"w-48 flex h-full items-center justify-center hover:shadow-md\">
+                        <div onclick=\"obtenerUsuarios('asignarTarea', $idTarea);\" class=\"w-48 flex h-full items-center justify-center\">
                             <h1>$responsable</h1>
                         </div>
 
                         <!-- INICIO & FIN-->
-                        <div class=\"w-64 flex h-full items-center justify-center hover:shadow-md self-start\">
+                        <div class=\"w-64 flex h-full items-center justify-center self-start\">
                             <input id=\"fecha$idTarea\" onclick=\"obtenerFechaTareas($idTarea, '$fechaTarea');\"
                             id=\"fecha$idTarea\" class=\"appearance-none block w-full text-gray-700 rounded py-3 px-4 leading-tight mb-4\" type=\"text\" name=\"fecha$idTarea\" value=\"$fechaTarea\">
                         </div>
@@ -4906,15 +4906,9 @@ if (isset($_POST['action'])) {
         $idSeccion = $_POST['idSeccion'];
         $idSubseccion = $_POST['idSubseccion'];
         $palabraProyecto = $_POST['palabraProyecto'];
-
-        // Obtiene el nombre de la SECCION
-        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $value) {
-                $seccion = $value['seccion'];
-                $data['seccion'] = $seccion;
-            }
-        }
+        $tipoOrden = $_POST['tipoOrden'];
+        $idResult = array();
+        $total = array();
 
         // Filtro para Destinos
         if ($idDestino == 10) {
@@ -4930,506 +4924,646 @@ if (isset($_POST['action'])) {
             $filtroPalabreProyecto = "";
         }
 
+        $contador = 0;
+        if ($tipoOrden == "PROYECTO") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto 
+            ORDER BY titulo ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
 
-
-        $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
-        t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
-        FROM t_proyectos 
-        INNER JOIN t_users ON t_proyectos.responsable = t_users.id
-        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos.status = 'N' AND t_proyectos.activo = 1 
-        AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto
-        ORDER BY t_proyectos.id DESC
-        ";
-        if ($result = mysqli_query($conn_2020, $query)) {
-
-            // Obtiene el Total de Proyectos.
-            $totalProyectos = mysqli_num_rows($result);
-            $data['totalProyectos'] = $totalProyectos;
-
-            foreach ($result as $value) {
-                $idProyecto = 0;
-                $idProyecto = $value['id'];
-                $titulo = $value['titulo'];
-                $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
-                $rangoFecha = $value['rango_fecha'];
-                $tipo = $value['tipo'];
-                $justificacion = $value['justificacion'];
-                $coste = $value['coste'];
-
-
-                $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
-                if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
-                    foreach ($resultAdjuntos as $value) {
-                        $totalAdjuntos = $value['count(id)'];
-                    }
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
                 }
-
-
-                $queryPlanaccion = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
-                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
-                    foreach ($resultPlanaccion as $value) {
-                        $totalPlanaccion = $value['count(id)'];
-                    }
-
-                    if ($totalPlanaccion <= 0 or $totalPlanaccion == "") {
-                        $PDA = "<i class=\"fas fa-window-minimize\"></i>";
-                    } else {
-                        $PDA = "<i class=\"fas fa-check\"></i>";
-                    }
-                }
-
-                if ($totalAdjuntos <= 0 or $totalAdjuntos == "") {
-                    $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
-                }
-
-                if ($rangoFecha == "") {
-                    $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
-                }
-
-                if ($justificacion == "" or $justificacion == " ") {
-                    $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
-                } else {
-                    $justificacion = "<i class=\"fas fa-check\"></i>";
-                }
-
-                if ($coste < 0 or $coste == "") {
-                    $coste = "<i class=\"fas fa-window-minimize\"></i>";
-                }
-
-                if ($tipo == "") {
-                    $tipo = "<i class=\"fas fa-window-minimize\"></i>";
-                }
-
-                // PROYECTOS
-                $dataProyectos .= "
-                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                        <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
-                            <div class=\" flex flex-row items-center truncate\">
-                                <i class=\"fad fa-scrubber mx-2 text-red-500\"></i>
-                                <h1 id=\"tituloP$idProyecto\">$titulo</h1>
-                            </div>
-                            <div  class=\"mx-2\">
-                                <i id=\"icono$idProyecto\" class=\"fas fa-chevron-right\"></i>
-                            </div>
-                        </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
-                            $PDA
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
-                        onclick=\"obtenerResponsablesProyectos($idProyecto);\">
-                            <h1>$responsable</h1>
-                        </div>
-                        <div class=\"w-24 flex h-full items-center justify-center text-xxs text-center\" onclick=\"obtenerDatoProyectos($idProyecto,'rango_fecha');\">
-                            <h1>$rangoFecha</h1>
-                        </div>
-                        <div class=\"w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500\" onclick=\"cotizacionesProyectos($idProyecto);\">
-                            <h1>$totalAdjuntos</h1>
-                        </div>
-                        <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'tipo');\">
-                            <h1>$tipo</h1>
-                        </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
-                            $justificacion
-                        </div>
-                        <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
-                            <h1>$coste</h1>
-                        </div>
-                        <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\" onclick=\"statusProyecto($idProyecto);\">
-                            <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
-                        </div>
-                    </div>
-                ";
-                // PROYECTOS
-
-
-                // ENCABEZADO PRINCIPAL PLANACCION
-                $dataProyectos .= "
-                    <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-fondos-7 border-b border-r border-l rounded-b-md flex flex-col items-center justify-center my-1\">
-
-
-                        <div class=\"w-full flex py-1\">
-                            <input id=\"NA$idProyecto\" type=\"text\" name=\"\" placeholder=\"Añadir Actividad\" class=\"px-2 w-1/4 text-bluegray-900 uppercase text-xs leading-none font-semibold rounded-l py-1\" autocomplete=\"off\">
-                            <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded-r\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
-                            <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
-                                solucionados</button>
-                            <button class=\" px-2 py-1 bg-orange-300 text-orange-500 font-bold uppercase ml-2 rounded\">Generar
-                                OT</button>
-                        </div>
-                ";
-
-                // ENCABEZADO ACTIVIDADES PLANACCION
-                $dataProyectos .= "
-                    <div class=\"w-full\">
-                        <div class=\"flex items-center font-bold text-xxs text-bluegray-500 cursor-pointer w-full justify-start px-3 rounded\">
-                            <div class=\"w-3/4 h-full flex items-center justify-start \">
-                                <h1>ACTIVIDAD</h1>
-                            </div>
-                            <div class=\"w-32 flex h-full items-center justify-center\">
-                                <h1>RESPONSABLE</h1>
-                            </div>
-                            <div class=\"w-32 flex h-full items-center justify-center\">
-                                <h1>COMENTARIOS</h1>
-                            </div>
-                            <div class=\"w-24 h-full flex items-center justify-center\">
-                                <h1>ADJUNTOS</h1>
-                            </div>
-                            <div class=\"w-32 flex h-full items-center justify-center\">
-                                <h1>STATUS</h1>
-                            </div>
-                        </div>
-
-                        <div class=\"w-full flex flex-col rounded\">
-                ";
-
-                //ACTIVIDADES PLANACCION 
-                $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion,
-                t_proyectos_planaccion.status_urgente,
-                t_proyectos_planaccion.status_material,
-                t_proyectos_planaccion.status_trabajando,
-                t_proyectos_planaccion.energetico_electricidad,
-                t_proyectos_planaccion.energetico_agua,
-                t_proyectos_planaccion.energetico_diesel,
-                t_proyectos_planaccion.energetico_gas,
-                t_proyectos_planaccion.departamento_calidad,
-                t_proyectos_planaccion.departamento_compras,
-                t_proyectos_planaccion.departamento_direccion,
-                t_proyectos_planaccion.departamento_finanzas,
-                t_proyectos_planaccion.departamento_rrhh
-                FROM t_proyectos_planaccion
-                INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
-                ORDER BY t_proyectos_planaccion.id DESC
-                ";
-                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
-                    foreach ($resultPlanaccion as $value) {
-                        $idPlanaccion = $value['id'];
-                        $actividad = $value['actividad'];
-                        $creadoPor = $value['nombre'] . " " . $value['apellido'];
-                        $fecha = $value['fecha_creacion'];
-                        $idResponsable = $value['responsable'];
-                        $status = $value['status'];
-                        $sUrgente = $value['status_urgente'];
-                        $sMaterial = $value['status_material'];
-                        $sTrabajando = $value['status_trabajando'];
-                        $eElectricidad = $value['energetico_electricidad'];
-                        $eAgua = $value['energetico_agua'];
-                        $eDiesel = $value['energetico_diesel'];
-                        $eGas = $value['energetico_gas'];
-                        $dCalidad = $value['departamento_calidad'];
-                        $dCompras = $value['departamento_compras'];
-                        $dDireccion = $value['departamento_direccion'];
-                        $dFinanzas = $value['departamento_finanzas'];
-                        $dRRHH = $value['departamento_rrhh'];
-
-                        if ($fecha == "" or $fecha == " ") {
-                            $fecha = "-";
-                        }
-
-                        if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
-                            $solucionados = "actividades$idProyecto hidden";
-                        } else {
-                            $solucionados = "";
-                        }
-
-                        //Status, Energeticos y Departamentos. 
-                        if ($sUrgente == 1 or $sUrgente != "0") {
-                            $sUrgente = "";
-                        } else {
-                            $sUrgente = "hidden";
-                        }
-
-                        if ($sMaterial == 1 or $sMaterial != "0") {
-                            $sMaterial = "";
-                        } else {
-                            $sMaterial = "hidden";
-                        }
-
-                        if ($sTrabajando == 1 or $sTrabajando != "0") {
-                            $sTrabajando = "";
-                        } else {
-                            $sTrabajando = "hidden";
-                        }
-
-                        if ($eElectricidad == 1 or $eElectricidad != "0") {
-                            $eElectricidad = "";
-                        } else {
-                            $eElectricidad = "hidden";
-                        }
-
-                        if ($eAgua == 1 or $eAgua != "0") {
-                            $eAgua = "";
-                        } else {
-                            $eAgua = "hidden";
-                        }
-
-                        if ($eDiesel == 1 or $eDiesel != "0") {
-                            $eDiesel = "";
-                        } else {
-                            $eDiesel = "hidden";
-                        }
-
-                        if ($eGas == 1 or $eGas != "0") {
-                            $eGas = "";
-                        } else {
-                            $eGas = "hidden";
-                        }
-
-                        if ($dCalidad == 1 or $dCalidad != "0") {
-                            $dCalidad = "";
-                        } else {
-                            $dCalidad = "hidden";
-                        }
-
-                        if ($dCompras == 1 or $dCompras != "0") {
-                            $dCompras = "";
-                        } else {
-                            $dCompras = "hidden";
-                        }
-
-                        if ($dDireccion == 1 or $dDireccion != "0") {
-                            $dDireccion = "";
-                        } else {
-                            $dDireccion = "hidden";
-                        }
-
-                        if ($dFinanzas == 1 or $dFinanzas != "0") {
-                            $dFinanzas = "";
-                        } else {
-                            $dFinanzas = "hidden";
-                        }
-
-                        if ($dRRHH == 1 or $dRRHH != "0") {
-                            $dRRHH = "";
-                        } else {
-                            $dRRHH = "hidden";
-                        }
-
-                        // RESPONSABLE DE LA ACTIVIDAD
-                        $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
-                        FROM t_users
-                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                        WHERE t_users.id = $idResponsable
-                        ";
-                        if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
-                            foreach ($resultResponsable as $value) {
-                                $responsable = $value['nombre'] . " " . $value['apellido'];
-                            }
-                        } else {
-                            $responsable = "";
-                        }
-
-                        // TOTAL DE COMENTARIOS
-                        $queryComentarios = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion";
-                        if ($resultComentarios = mysqli_query($conn_2020, $queryComentarios)) {
-                            foreach ($resultComentarios as $value) {
-                                $totalComentarios = $value['count(id)'];
-                            }
-                            if ($totalComentarios <= 0) {
-                                $totalComentarios = "<i class=\"fas fa-window-minimize\"></i>";
-                            }
-                        }
-
-                        // TOTAL DE ADJUNTOS
-                        $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
-                        if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
-                            foreach ($resultAdjuntos as $value) {
-                                $totalAdjuntos = $value['count(id)'];
-                            }
-
-                            if ($totalAdjuntos <= 0) {
-                                $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
-                            }
-                        }
-
-
-                        if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
-                            // Actividades PLANAACION PENDIENTE
-                            $dataProyectos .= "     
-
-                                <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start my-1 rounded relative px-3\">
-
-                                    <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
-
-                                        <div class=\" hidden absolute\" style=\"left:0%;\">
-                                            <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
-                                        </div>
-
-                                        <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px; mr-5\">
-                                    
-                                            <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
-                                                <h1 class=\"\">M</h1>
-                                            </div>
-                                            
-                                            <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
-                                                <h1 class=\"\">T</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Electricidad</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Agua</h1>
-                                            </div>
-                                        
-                                            <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Gas</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Diesel</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Dirección</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">RRHH</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Finanzas</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Compras</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Calidad</h1>
-                                            </div>
-
-                                        </div>
-
-                                        <div class=\"w-3/4 flex flex-col items-center justify-center\">
-                                            <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex relative\">
-                                                <i class=\"fas fa-dot-circle mr-1 text-green-400\"></i>
-                                                <h1 id=\"AP$idPlanaccion\">$actividad</h1>
-                                            </div>
-                                            <div class=\"self-start\">
-                                                <h1>$creadoPor - $fecha</h1>
-                                            </div>
-                                        </div>                                       
-
-                                    </div>
-
-                                    <div class=\"w-32 flex h-full items-center justify-center\" 
-                                    onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
-                                        <h1>$responsable</h1>
-                                    </div>
-                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
-                                        <h1>$totalComentarios</h1>
-                                    </div>
-                                    <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
-                                        <h1>$totalAdjuntos</h1>
-                                    </div>
-                                    <div class=\"w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
-                                        <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
-                                    </div>
-                                </div>
-                            ";
-                            // Actividades PLANAACION PENDIENTE
-                        } else {
-                            // Actividades PLANAACION SOLUCIONADO
-                            $dataProyectos .= "            
-                                <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start px-3 my-1 rounded\">
-                                    <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
-
-                                        <div class=\" hidden absolute\" style=\"left:0%;\">
-                                            <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
-                                        </div>
-
-                                        <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px; mr-5\">
-                                    
-                                            <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
-                                                <h1 class=\"\">M</h1>
-                                            </div>
-                                            
-                                            <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
-                                                <h1 class=\"\">T</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Electricidad</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Agua</h1>
-                                            </div>
-                                        
-                                            <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Gas</h1>
-                                            </div>
-                                            
-                                            <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
-                                                <h1 class=\"\">Diesel</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Dirección</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">RRHH</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Finanzas</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Compras</h1>
-                                            </div>
-                                            
-                                            <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
-                                                <h1 class=\"\">Calidad</h1>
-                                            </div>
-
-                                        </div>
-
-                                        <div class=\"w-3/4 flex flex-col items-center justify-center\">
-                                            <div class=\"w-full leading-none pt-1 text-bluegray-900 uppercase text-xs truncate flex relative\">
-                                                <i class=\"fas fa-dot-circle mr-1 text-red-400\"></i>
-                                                <h1 id=\"AP$idPlanaccion\">$actividad</h1>
-                                            </div>
-                                            <div class=\"self-start\">
-                                                <h1>$creadoPor - $fecha</h1>
-                                            </div>
-                                        </div>                                       
-
-                                    </div>
-                                    <div class=\"w-32 flex h-full items-center justify-center\" 
-                                    onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
-                                        <h1>$responsable</h1>
-                                    </div>
-                                    <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
-                                        <h1>$totalComentarios</h1>
-                                    </div>
-                                    <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
-                                        <h1>$totalAdjuntos</h1>
-                                    </div>
-                                    <div class=\"w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
-                                        <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
-                                    </div>
-                                </div>
-                            ";
-                            // Actividades PLANAACION SOLUCIONADO                            
-                        }
-                    }
-                }
-
-                // CIERRE DE ENCABEZADOS
-                $dataProyectos .= "
-                            </div>
-                        </div>
-                    </div>
-                ";
             }
+        } elseif ($tipoOrden == "PDA") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $id = $i['id'];
+                    $queryTotalActividades = "SELECT count(id) FROM t_proyectos_planaccion 
+                    WHERE id_proyecto = $id and activo = 1";
+                    if ($resultTotalActividades = mysqli_query($conn_2020, $queryTotalActividades)) {
+                        foreach ($resultTotalActividades as $i) {
+                            $contador++;
+                            $totalActividades = $i['count(id)'];
+                            $total[] = $totalActividades;
+                        }
+                    }
+                    $idResult[] = $id;
+                }
+            }
+            array_multisort($total, SORT_DESC, $idResult);
+        } elseif ($tipoOrden == "COT") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $id = $i['id'];
+                    $queryTotalActividades = "SELECT count(id) FROM t_proyectos_adjuntos 
+                    WHERE id_proyecto = $id and status = 1";
+                    if ($resultTotalActividades = mysqli_query($conn_2020, $queryTotalActividades)) {
+                        foreach ($resultTotalActividades as $i) {
+                            $contador++;
+                            $totalActividades = $i['count(id)'];
+                            $total[] = $totalActividades;
+                        }
+                    }
+                    $idResult[] = $id;
+                }
+            }
+            array_multisort($total, SORT_DESC, $idResult);
+        } elseif ($tipoOrden == "RESP") {
+            $query = "SELECT t_proyectos.id 
+            FROM t_proyectos 
+            INNER JOIN t_users ON t_proyectos.responsable = t_users.id 
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE activo = 1 AND (t_proyectos.status = 'N' OR t_proyectos.status = 'PENDIENTE' OR 
+            t_proyectos.status = 'P' OR t_proyectos.status = '') and t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto ORDER BY t_colaboradores.nombre ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
 
-            $data['dataProyectos'] = $dataProyectos;
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "TIPO") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto ORDER BY tipo ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "JUST") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto ORDER BY justificacion DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "COSTE") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto ORDER BY coste DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "FECHA") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabreProyecto ORDER BY fecha_creacion DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        }
+
+        // Obtiene el Total de Proyectos.
+        $data['totalProyectos'] = $contador;
+
+
+        // Obtiene el nombre de la SECCION
+        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $seccion = $value['seccion'];
+                $data['seccion'] = $seccion;
+            }
+        }
+
+        // Convierte el Resultado en un arreglo
+
+        foreach ($idResult as $i) {
+            $idProyecto = $i;
+            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
+            t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
+            FROM t_proyectos 
+            INNER JOIN t_users ON t_proyectos.responsable = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_proyectos.id = $idProyecto
+            ";
+            if ($result = mysqli_query($conn_2020, $query)) {
+
+                foreach ($result as $value) {
+                    $idProyecto = 0;
+                    $idProyecto = $value['id'];
+                    $titulo = $value['titulo'];
+                    $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                    $rangoFecha = $value['rango_fecha'];
+                    $tipo = $value['tipo'];
+                    $justificacion = $value['justificacion'];
+                    $coste = $value['coste'];
+
+
+                    $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
+                    if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                        foreach ($resultAdjuntos as $value) {
+                            $totalAdjuntos = $value['count(id)'];
+                        }
+                    }
+
+
+                    $queryPlanaccionN = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'N'";
+
+                    $queryPlanaccionF = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'F'";
+
+                    if (
+                        $resultPlanaccionN = mysqli_query($conn_2020, $queryPlanaccionN) and
+                        $resultPlanaccionF = mysqli_query($conn_2020, $queryPlanaccionF)
+                    ) {
+
+                        foreach ($resultPlanaccionN as $value) {
+                            $totalPlanaccionN = $value['count(id)'];
+                        }
+
+                        foreach ($resultPlanaccionF as $value) {
+                            $totalPlanaccionF = $value['count(id)'];
+                        }
+
+                        if (($totalPlanaccionN <= 0 or $totalPlanaccionN == "") and
+                            ($totalPlanaccionF <= 0 or $totalPlanaccionF == "")
+                        ) {
+                            $PDA = "<i class=\"fas fa-window-minimize\"></i>";
+                            $bgTotalPlanaccion = "bg-white";
+                        } else {
+                            $PDA = "$totalPlanaccionN / $totalPlanaccionF";
+                            $bgTotalPlanaccion = "bg-green-200";
+                        }
+                    }
+
+                    if ($totalAdjuntos <= 0 or $totalAdjuntos == "") {
+                        $bgAdjuntos = "bg-white";
+                        $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                    } else {
+                        $bgAdjuntos = "bg-orange-200";
+                    }
+
+                    if ($rangoFecha == "") {
+                        $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
+
+                    if ($justificacion == "" or $justificacion == " ") {
+                        $bgJustificacion = "bg-white";
+                        $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
+                    } else {
+                        $bgJustificacion = "bg-green-200";
+                        $justificacion = "<i class=\"fas fa-check\"></i>";
+                    }
+
+                    if ($coste < 0 or $coste == "") {
+                        $coste = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
+
+                    if ($tipo == "") {
+                        $tipo = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
+
+                    // PROYECTOS
+                    $dataProyectos .= "
+                        <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
+                            <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
+                                <div class=\" flex flex-row items-center truncate\">
+                                    <i class=\"fad fa-scrubber mx-2 text-red-500\"></i>
+                                    <h1 id=\"tituloP$idProyecto\">$titulo</h1>
+                                </div>
+                                <div  class=\"mx-2\">
+                                    <i id=\"icono$idProyecto\" class=\"fas fa-chevron-right\"></i>
+                                </div>
+                            </div>
+                            <div class=\"w-24 h-full flex items-center justify-center $bgTotalPlanaccion text-green-500\" onclick=\"expandirProyectos('proyecto$idProyecto', $idProyecto)\">
+                                $PDA
+                            </div>
+                            <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
+                            onclick=\"obtenerResponsablesProyectos($idProyecto);\">
+                                <h1>$responsable</h1>
+                            </div>
+                            <div class=\"w-24 flex h-full items-center justify-center text-xxs text-center\" onclick=\"obtenerDatoProyectos($idProyecto,'rango_fecha');\">
+                                <h1>$rangoFecha</h1>
+                            </div>
+                            <div class=\"w-24 flex h-full items-center justify-center $bgAdjuntos text-orange-500\" onclick=\"cotizacionesProyectos($idProyecto);\">
+                                <h1>$totalAdjuntos</h1>
+                            </div>
+                            <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'tipo');\">
+                                <h1>$tipo</h1>
+                            </div>
+                            <div class=\"w-24 h-full flex items-center justify-center $bgJustificacion text-green-500\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
+                                $justificacion
+                            </div>
+                            <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
+                                <h1>$coste</h1>
+                            </div>
+                            <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\" onclick=\"statusProyecto($idProyecto);\">
+                                <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                            </div>
+                        </div>
+                    ";
+                    // PROYECTOS
+
+
+                    // ENCABEZADO PRINCIPAL PLANACCION
+                    $dataProyectos .= "
+                        <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-fondos-7 border-b border-r border-l rounded-b-md flex flex-col items-center justify-center my-1\">
+
+
+                            <div class=\"w-full flex py-1\">
+                                <input id=\"NA$idProyecto\" type=\"text\" name=\"\" placeholder=\"Añadir Actividad\" class=\"px-2 w-1/4 text-bluegray-900 text-xs leading-none font-semibold rounded-l py-1\" autocomplete=\"off\">
+                                <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold rounded-r\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
+                                <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold ml-2 rounded\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
+                                    solucionados</button>
+                                <button class=\" px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\">Generar
+                                    OT</button>
+                            </div>
+                    ";
+
+                    // ENCABEZADO ACTIVIDADES PLANACCION
+                    $dataProyectos .= "
+                        <div class=\"w-full\">
+                            <div class=\"flex items-center font-bold text-xxs text-bluegray-500 cursor-pointer w-full justify-start px-3 rounded\">
+                                <div class=\"w-3/4 h-full flex items-center justify-start \">
+                                    <h1>ACTIVIDAD</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>RESPONSABLE</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>COMENTARIOS</h1>
+                                </div>
+                                <div class=\"w-24 h-full flex items-center justify-center\">
+                                    <h1>ADJUNTOS</h1>
+                                </div>
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>STATUS</h1>
+                                </div>
+                            </div>
+
+                            <div class=\"w-full flex flex-col rounded\">
+                    ";
+
+                    //ACTIVIDADES PLANACCION 
+                    $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion,
+                    t_proyectos_planaccion.status_urgente,
+                    t_proyectos_planaccion.status_material,
+                    t_proyectos_planaccion.status_trabajando,
+                    t_proyectos_planaccion.energetico_electricidad,
+                    t_proyectos_planaccion.energetico_agua,
+                    t_proyectos_planaccion.energetico_diesel,
+                    t_proyectos_planaccion.energetico_gas,
+                    t_proyectos_planaccion.departamento_calidad,
+                    t_proyectos_planaccion.departamento_compras,
+                    t_proyectos_planaccion.departamento_direccion,
+                    t_proyectos_planaccion.departamento_finanzas,
+                    t_proyectos_planaccion.departamento_rrhh
+                    FROM t_proyectos_planaccion
+                    INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
+                    ORDER BY t_proyectos_planaccion.id DESC
+                    ";
+                    if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
+                        foreach ($resultPlanaccion as $value) {
+                            $idPlanaccion = $value['id'];
+                            $actividad = $value['actividad'];
+                            $creadoPor = $value['nombre'] . " " . $value['apellido'];
+                            $fecha = $value['fecha_creacion'];
+                            $idResponsable = $value['responsable'];
+                            $status = $value['status'];
+                            $sUrgente = $value['status_urgente'];
+                            $sMaterial = $value['status_material'];
+                            $sTrabajando = $value['status_trabajando'];
+                            $eElectricidad = $value['energetico_electricidad'];
+                            $eAgua = $value['energetico_agua'];
+                            $eDiesel = $value['energetico_diesel'];
+                            $eGas = $value['energetico_gas'];
+                            $dCalidad = $value['departamento_calidad'];
+                            $dCompras = $value['departamento_compras'];
+                            $dDireccion = $value['departamento_direccion'];
+                            $dFinanzas = $value['departamento_finanzas'];
+                            $dRRHH = $value['departamento_rrhh'];
+
+                            if ($fecha == "" or $fecha == " ") {
+                                $fecha = "-";
+                            }
+
+                            if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
+                                $solucionados = "actividades$idProyecto hidden";
+                            } else {
+                                $solucionados = "";
+                            }
+
+                            //Status, Energeticos y Departamentos. 
+                            if ($sUrgente == 1 or $sUrgente != "0") {
+                                $sUrgente = "";
+                            } else {
+                                $sUrgente = "hidden";
+                            }
+
+                            if ($sMaterial == 1 or $sMaterial != "0") {
+                                $sMaterial = "";
+                            } else {
+                                $sMaterial = "hidden";
+                            }
+
+                            if ($sTrabajando == 1 or $sTrabajando != "0") {
+                                $sTrabajando = "";
+                            } else {
+                                $sTrabajando = "hidden";
+                            }
+
+                            if ($eElectricidad == 1 or $eElectricidad != "0") {
+                                $eElectricidad = "";
+                            } else {
+                                $eElectricidad = "hidden";
+                            }
+
+                            if ($eAgua == 1 or $eAgua != "0") {
+                                $eAgua = "";
+                            } else {
+                                $eAgua = "hidden";
+                            }
+
+                            if ($eDiesel == 1 or $eDiesel != "0") {
+                                $eDiesel = "";
+                            } else {
+                                $eDiesel = "hidden";
+                            }
+
+                            if ($eGas == 1 or $eGas != "0") {
+                                $eGas = "";
+                            } else {
+                                $eGas = "hidden";
+                            }
+
+                            if ($dCalidad == 1 or $dCalidad != "0") {
+                                $dCalidad = "";
+                            } else {
+                                $dCalidad = "hidden";
+                            }
+
+                            if ($dCompras == 1 or $dCompras != "0") {
+                                $dCompras = "";
+                            } else {
+                                $dCompras = "hidden";
+                            }
+
+                            if ($dDireccion == 1 or $dDireccion != "0") {
+                                $dDireccion = "";
+                            } else {
+                                $dDireccion = "hidden";
+                            }
+
+                            if ($dFinanzas == 1 or $dFinanzas != "0") {
+                                $dFinanzas = "";
+                            } else {
+                                $dFinanzas = "hidden";
+                            }
+
+                            if ($dRRHH == 1 or $dRRHH != "0") {
+                                $dRRHH = "";
+                            } else {
+                                $dRRHH = "hidden";
+                            }
+
+                            // RESPONSABLE DE LA ACTIVIDAD
+                            $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                            FROM t_users
+                            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                            WHERE t_users.id = $idResponsable
+                            ";
+                            if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                                foreach ($resultResponsable as $value) {
+                                    $responsable = $value['nombre'] . " " . $value['apellido'];
+                                }
+                            } else {
+                                $responsable = "";
+                            }
+
+                            // TOTAL DE COMENTARIOS
+                            $queryComentarios = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion";
+                            if ($resultComentarios = mysqli_query($conn_2020, $queryComentarios)) {
+                                foreach ($resultComentarios as $value) {
+                                    $totalComentarios = $value['count(id)'];
+                                }
+                                if ($totalComentarios <= 0) {
+                                    $totalComentarios = "<i class=\"fas fa-window-minimize\"></i>";
+                                }
+                            }
+
+                            // TOTAL DE ADJUNTOS
+                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                            if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                                foreach ($resultAdjuntos as $value) {
+                                    $totalAdjuntos = $value['count(id)'];
+                                }
+
+                                if ($totalAdjuntos <= 0) {
+                                    $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                                }
+                            }
+
+                            if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
+                                // Actividades PLANAACION PENDIENTE
+                                $dataProyectos .= "     
+
+                                    <div class=\"$solucionados bg-bluegray-900 text-white flex items-center font-semibold text-xxs hover:bg-bluegray-600 cursor-pointer w-full justify-start my-1 rounded relative px-3\">
+
+                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
+
+                                            <div class=\" hidden absolute\" style=\"left:0%;\">
+                                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                                            </div>
+
+                                            <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px; mr-5\">
+                                        
+                                                <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                                    <h1 class=\"\">M</h1>
+                                                </div>
+                                                
+                                                <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                                    <h1 class=\"\">T</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Electricidad</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Agua</h1>
+                                                </div>
+                                            
+                                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Gas</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Diesel</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Dirección</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">RRHH</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Finanzas</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Compras</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Calidad</h1>
+                                                </div>
+
+                                            </div>
+
+                                            <div class=\"w-3/4 flex flex-col items-center justify-center\">
+                                                <div class=\"w-full leading-none pt-1 text-white uppercase text-xs truncate flex relative\">
+                                                    <i class=\"fas fa-dot-circle mr-1 text-green-400\"></i>
+                                                    <h1 id=\"AP$idPlanaccion\">$actividad</h1>
+                                                </div>
+                                                <div class=\"self-start\">
+                                                    <h1>$creadoPor - $fecha</h1>
+                                                </div>
+                                            </div>                                       
+
+                                        </div>
+
+                                        <div class=\"w-32 flex h-full items-center justify-center\" 
+                                        onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
+                                            <h1>$responsable</h1>
+                                        </div>
+                                        <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
+                                            <h1>$totalComentarios</h1>
+                                        </div>
+                                        <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
+                                            <h1>$totalAdjuntos</h1>
+                                        </div>
+                                        <div class=\"w-32 h-full flex items-center justify-center text-white rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                            <div><i class=\"fa fa-exclamation-circle fa-lg\"></i></div>
+                                        </div>
+                                    </div>
+                                ";
+                                // Actividades PLANAACION PENDIENTE
+                            } else {
+                                // Actividades PLANAACION SOLUCIONADO
+                                $dataProyectos .= "            
+                                    <div class=\"$solucionados bg-bluegray-900 text-white flex items-center font-semibold text-xxs  hover:bg-bluegray-600 cursor-pointer w-full justify-start px-3 my-1 rounded\">
+                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
+
+                                            <div class=\" hidden absolute\" style=\"left:0%;\">
+                                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
+                                            </div>
+
+                                            <div class=\"absolute flex hover:opacity-25\" style=\"right: 0%; font-size: 9px; mr-5\">
+                                        
+                                                <div class=\"$sMaterial bg-orange-400 text-orange-800 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                                    <h1 class=\"\">M</h1>
+                                                </div>
+                                                
+                                                <div class=\"$sTrabajando bg-blue-200 text-blue-500 w-4 h-4 rounded-sm flex items-center justify-center font-semibold mr-1\">
+                                                    <h1 class=\"\">T</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eElectricidad bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Electricidad</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eAgua bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Agua</h1>
+                                                </div>
+                                            
+                                                <div class=\"$eGas bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Gas</h1>
+                                                </div>
+                                                
+                                                <div class=\"$eDiesel bg-yellow-300 text-yellow-800 w-auto h-4 rounded-sm flex items-center justify-center font-semibold mr-1 px-1\">
+                                                    <h1 class=\"\">Diesel</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dDireccion bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Dirección</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dRRHH bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">RRHH</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dFinanzas bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Finanzas</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dCompras bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Compras</h1>
+                                                </div>
+                                                
+                                                <div class=\"$dCalidad bg-teal-100 text-teal-400 w-auto px-2 h-4 rounded-sm flex items-center justify-center font-medium px-1\">
+                                                    <h1 class=\"\">Calidad</h1>
+                                                </div>
+
+                                            </div>
+
+                                            <div class=\"w-3/4 flex flex-col items-center justify-center\">
+                                                <div class=\"w-full leading-none pt-1 text-white uppercase text-xs truncate flex relative\">
+                                                    <i class=\"fas fa-dot-circle mr-1 text-red-400\"></i>
+                                                    <h1 id=\"AP$idPlanaccion\">$actividad</h1>
+                                                </div>
+                                                <div class=\"self-start\">
+                                                    <h1>$creadoPor - $fecha</h1>
+                                                </div>
+                                            </div>                                       
+
+                                        </div>
+                                        <div class=\"w-32 flex h-full items-center justify-center\" 
+                                        onclick=\"obtenerResponsablesPlanaccion($idPlanaccion);\"> 
+                                            <h1>$responsable</h1>
+                                        </div>
+                                        <div class=\"w-32 flex h-full items-center justify-center\" onclick=\"comentariosPlanaccion($idPlanaccion);\">
+                                            <h1>$totalComentarios</h1>
+                                        </div>
+                                        <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
+                                            <h1>$totalAdjuntos</h1>
+                                        </div>
+                                        <div class=\"w-32 h-full flex items-center justify-center text-white rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                            <div><i class=\"fa fa-exclamation-circle fa-lg\"></i></div>
+                                        </div>
+                                    </div>
+                                ";
+                                // Actividades PLANAACION SOLUCIONADO                            
+                            }
+                        }
+                    }
+
+                    // CIERRE DE ENCABEZADOS
+                    $dataProyectos .= "
+                                </div>
+                            </div>
+                        </div>
+                    ";
+                }
+
+                $data['dataProyectos'] = $dataProyectos;
+            }
         }
         echo json_encode($data);
     }
@@ -5906,7 +6040,7 @@ if (isset($_POST['action'])) {
     // Obtines Responsables en SELECT
     if ($action == "obtenerResponsables") {
         $data = array();
-        $dataUsuarios = "";
+        $dataUsuarios = "<option value=\"\">Seleccione</option>";
 
         if ($idDestino == 10) {
             $filtroDestino = "";

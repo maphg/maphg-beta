@@ -1644,15 +1644,25 @@ function expandirProyectos(id, idProyecto) {
 
 
 // Obtiene los proyectos de las secciones
-function obtenerProyectosP() {
+function obtenerProyectosP(tipoOrden) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
 
+    // Agrega el tipo de orden en las columnas.
+    document.getElementById("proyectoOrden").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
+    document.getElementById("proyectoOrdenPDA").setAttribute('onclick', 'obtenerProyectosP("PDA")');
+    document.getElementById("proyectoOrdenRESP").setAttribute('onclick', 'obtenerProyectosP("RESP")');
+    document.getElementById("proyectoOrdenFECHA").setAttribute('onclick', 'obtenerProyectosP("FECHA")');
+    document.getElementById("proyectoOrdenCOT").setAttribute('onclick', 'obtenerProyectosP("COT")');
+    document.getElementById("proyectoOrdenTIPO").setAttribute('onclick', 'obtenerProyectosP("TIPO")');
+    document.getElementById("proyectoOrdenJUST").setAttribute('onclick', 'obtenerProyectosP("JUST")');
+    document.getElementById("proyectoOrdenCOSTE").setAttribute('onclick', 'obtenerProyectosP("COSTE")');
+
     document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectosP()');
+    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("modalProyectos").classList.add('open');
     document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
@@ -1670,11 +1680,11 @@ function obtenerProyectosP() {
             idDestino: idDestino,
             idSeccion: idSeccion,
             idSubseccion: idSubseccion,
-            palabraProyecto: palabraProyecto
+            palabraProyecto: palabraProyecto,
+            tipoOrden: tipoOrden
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             alertaImg('Proyectos Obtenidos: ' + data.totalProyectos, '', 'info', 4000);
             document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
             document.getElementById("seccionProyectos").innerHTML = data.seccion;
@@ -1698,7 +1708,7 @@ function obtenerProyectosS() {
     document.getElementById("modalProyectos").classList.add('open');
     document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
-    document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'obtenerProyectosP()');
+    document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("btnPendientesProyectos").classList.remove('hidden');
     document.getElementById("btnSolucionadosProyectos").classList.add('hidden');
 
@@ -1783,7 +1793,7 @@ function agregarProyecto() {
     let justificacion = document.getElementById("justificacionProyectoN").value;
     let coste = document.getElementById("costeProyectoN").value;
     const action = "agregarProyecto";
-    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0) {
+    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
         $.ajax({
             type: "POST",
             url: "php/plannerCrudPHP.php",
@@ -1804,7 +1814,7 @@ function agregarProyecto() {
             success: function (data) {
                 // console.log(data);
                 if (data == 1) {
-                    obtenerProyectosP();
+                    obtenerProyectosP('PROYECTO');
                     alertaImg('Proyecto Agregado', '', 'success', 2500);
                     document.getElementById("tituloProyectoN").value = '';
                     document.getElementById("tipoProyectoN").value = '';
@@ -1884,40 +1894,40 @@ function actualizarProyectos(valor, columna, idProyecto) {
         success: function (data) {
             console.log(data);
             if (data == 1) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 alertaImg('Responsable Actualizado', '', 'success', 2000);
                 document.getElementById("modalUsuarios").classList.remove('open');
             } else if (data == 2) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Justifiacion Actualizado', '', 'success', 2000);
             } else if (data == 3) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Coste Actualizado', '', 'success', 2000);
             } else if (data == 4) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalActualizarProyecto").classList.remove('open');
                 alertaImg('Tipo Actualizado', '', 'success', 2000);
             } else if (data == 5) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalFechaProyectos").classList.remove('open');
                 alertaImg('Fecha Actualizada', '', 'success', 2000);
             } else if (data == 6) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 alertaImg('Proyecto Eliminado', '', 'success', 2000);
             } else if (data == 7) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 document.getElementById("modalEditarTitulo").classList.remove('open');
                 alertaImg('Título Actualizado', '', 'success', 2000);
             } else if (data == 8) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 alertaImg('Proyecto Finalizado', '', 'success', 2000);
             } else if (data == 9) {
-                obtenerProyectosP();
+                obtenerProyectosP('PROYECTO');
                 document.getElementById("modalTituloEliminar").classList.remove('open');
                 alertaImg('Proyecto Restaurado', '', 'success', 2000);
             } else {
@@ -2050,7 +2060,7 @@ function agregarPlanaccion(idProyecto) {
             success: function (data) {
                 // console.log(data);
                 if (data.length > 1) {
-                    obtenerProyectosP();
+                    obtenerProyectosP('PROYECTO');
                     alertaImg('Actividad Agregada', '', 'success', 2500);
                     expandir('proyecto' + idProyecto);
                 } else {
@@ -2119,7 +2129,7 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         success: function (data) {
             // console.log(data);
 
-            obtenerProyectosP();
+            obtenerProyectosP('PROYECTO');
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove('open');
                 alertaImg('Responsable Actualizado', '', 'success', 2500);
@@ -2159,7 +2169,7 @@ function statusPlanaccion(idPlanaccion) {
 
     document.getElementById("statusFinalizar").
         setAttribute('onclick', 'actualizarPlanaccion("F","status",' + idPlanaccion + ')');
-    
+
     document.getElementById("statusMaterial").
         setAttribute('onclick', 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ')');
 
@@ -2274,7 +2284,7 @@ function agregarComentarioPlanaccion(idPlanaccion) {
             // dataType: "JSON",
             success: function (data) {
                 if (data == 1) {
-                    obtenerProyectosP();
+                    obtenerProyectosP('PROYECTO');
                     comentariosPlanaccion(idPlanaccion);
                     document.getElementById("inputComentario").value = '';
                     alertaImg('Comentario Agregado', '', 'success', 2500);
@@ -2326,13 +2336,13 @@ function subirImagenGeneral(idTabla, tabla) {
                     // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
                 } else if (data == 3) {
                     alertaImg('Cotización Agregada', '', 'success', 2500);
-                    obtenerProyectosP();
+                    obtenerProyectosP('PROYECTO');
                     cotizacionesProyectos(idTabla);
 
                     // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
                 } else if (data == 4) {
                     alertaImg('Adjunto Agregado', '', 'success', 2500);
-                    obtenerProyectosP();
+                    obtenerProyectosP('PROYECTO');
                     adjuntosPlanaccion(idTabla);
                 } else if (data == 5) {
                     alertaImg('Adjunto Agregado', '', 'success', 2500);
