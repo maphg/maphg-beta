@@ -41,30 +41,38 @@
         </li>
     </ul>
 
-    <div id="graficos" class="grid grid-flow-col gap-2 p-2">
 
-        <div id="CMU" class="hidden border">
-            <iframe width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+    <div id="graficos" class="">
+
+        <div id="AME" class="border p-2">
+            <iframe width="100%" height="600" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMTdiYWY0ZGMtNGUwNy00NTQ0LTllYzItMTU2ZGMxOWE0MjgyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
         </div>
 
-        <div id="RM" class="hidden border">
-            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-        </div>
+        <div id="graficosAME" class="grid grid-flow-col grid-cols-3 grid-rows-2 gap-2 p-2">
 
-        <div id="SSA" class="hidden border">
-            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-        </div>
+            <div id="CMU" class="hidden border">
+                <iframe width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzgzM2YzYWYtMGY4NC00MTIzLThjNmQtN2ZhN2YxMDE0MmI1IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
 
-        <div id="MBJ" class="hidden border">
-            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-        </div>
+            <div id="RM" class="hidden border">
+                <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiM2QwY2QxNmQtNDI1Ny00ZTc0LTlhYTYtYTkxNTI3ZWJhYjYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
 
-        <div id="PVR" class="hidden border">
-            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-        </div>
+            <div id="SSA" class="hidden border">
+                <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDlhODU1ODktMTE1Mi00YWZmLWIxMDItM2EzNmY3YzE3OWE2IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
 
-        <div id="PUJ" class="hidden border">
-            <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            <div id="MBJ" class="hidden border">
+                <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiZjNkN2Y2M2QtNjNhMC00ZWU0LTljMmUtMTA5MzE1MTMwOWY5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+
+            <div id="PVR" class="hidden border">
+                <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiNDhjYzE0MmEtMDViNi00YzVjLWE3MWQtYTM5ZDhkOGMxNjExIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+
+            <div id="PUJ" class="hidden border">
+                <iframe id="" width="100%" height="100%" class="border" src="https://app.powerbi.com/view?r=eyJrIjoiMzdhYjBmZjUtMDAzNi00ZWVkLWI3MjYtNGU2MGE1ODZiODk5IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
         </div>
 
     </div>
@@ -127,6 +135,7 @@
 
             let destino = localStorage.getItem('idDestinoInvitado');
 
+            document.getElementById("AME").classList.add('hidden');
             document.getElementById("CMU").classList.add('hidden');
             document.getElementById("RM").classList.add('hidden');
             document.getElementById("SSA").classList.add('hidden');
@@ -151,9 +160,10 @@
 
 
             if (destino == 10) {
-                document.getElementById("graficos").classList.remove('grid-cols-1', 'grid-rows-1');
-                document.getElementById("graficos").classList.add('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.remove('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.add('grid-cols-3', 'grid-rows-2');
 
+                document.getElementById("AME").classList.remove('hidden');
                 document.getElementById("CMU").classList.remove('hidden');
                 document.getElementById("RM").classList.remove('hidden');
                 document.getElementById("SSA").classList.remove('hidden');
@@ -163,33 +173,33 @@
             } else if (destino == 7) {
                 document.getElementById("CMU").setAttribute('style', 'height:650px');
                 document.getElementById("CMU").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 1) {
                 document.getElementById("RM").setAttribute('style', 'height:650px');
                 document.getElementById("RM").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 4) {
                 document.getElementById("SSA").setAttribute('style', 'height:650px');
                 document.getElementById("SSA").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 6) {
                 document.getElementById("MBJ").setAttribute('style', 'height:650px');
                 document.getElementById("MBJ").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 2) {
                 document.getElementById("PVR").setAttribute('style', 'height:650px');
                 document.getElementById("PVR").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             } else if (destino == 5) {
                 document.getElementById("PUJ").setAttribute('style', 'height:650px');
                 document.getElementById("PUJ").classList.remove('hidden');
-                document.getElementById("graficos").classList.remove('grid-cols-3', 'grid-rows-2');
-                document.getElementById("graficos").classList.add('grid-cols-1', 'grid-rows-1');
+                document.getElementById("graficosAME").classList.remove('grid-cols-3', 'grid-rows-2');
+                document.getElementById("graficosAME").classList.add('grid-cols-1', 'grid-rows-1');
             }
         }
 
