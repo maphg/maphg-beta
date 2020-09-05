@@ -5104,7 +5104,7 @@ if (isset($_POST['action'])) {
                             $bgTotalPlanaccion = "bg-white";
                         } else {
                             $PDA = "$totalPlanaccionN / $totalPlanaccionF";
-                            $bgTotalPlanaccion = "bg-green-200";
+                            $bgTotalPlanaccion = "text-green-500 bg-green-200";
                         }
                     }
 
@@ -5112,7 +5112,7 @@ if (isset($_POST['action'])) {
                         $bgAdjuntos = "bg-white";
                         $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
-                        $bgAdjuntos = "bg-orange-200";
+                        $bgAdjuntos = "bg-orange-200 text-orange-500";
                     }
 
                     if ($rangoFecha == "") {
@@ -5123,8 +5123,8 @@ if (isset($_POST['action'])) {
                         $bgJustificacion = "bg-white";
                         $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
-                        $bgJustificacion = "bg-green-200";
-                        $justificacion = "<i class=\"fas fa-check\"></i>";
+                        $bgJustificacion = "bg-green-200 text-orange-500";
+                        $justificacion = "<i class=\"fas as fa-check\"></i>";
                     }
 
                     if ($coste < 0 or $coste == "") {
@@ -5138,8 +5138,8 @@ if (isset($_POST['action'])) {
                     // PROYECTOS
                     $dataProyectos .= "
                         <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                            <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
-                                <div class=\" flex flex-row items-center truncate\">
+                            <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-purple-200 text-purple-700 rounded-l-md cursor-pointer\">
+                                <div class=\"flex flex-row items-center truncate\">
                                     <i class=\"fad fa-scrubber mx-2 text-red-500\"></i>
                                     <h1 id=\"tituloP$idProyecto\">$titulo</h1>
                                 </div>
@@ -5147,7 +5147,7 @@ if (isset($_POST['action'])) {
                                     <i id=\"icono$idProyecto\" class=\"fas fa-chevron-right\"></i>
                                 </div>
                             </div>
-                            <div class=\"w-24 h-full flex items-center justify-center $bgTotalPlanaccion text-green-500\" onclick=\"expandirProyectos('proyecto$idProyecto', $idProyecto)\">
+                            <div class=\"w-24 h-full flex items-center justify-center $bgTotalPlanaccion\" onclick=\"expandirProyectos('proyecto$idProyecto', $idProyecto)\">
                                 $PDA
                             </div>
                             <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
@@ -5157,13 +5157,13 @@ if (isset($_POST['action'])) {
                             <div class=\"w-24 flex h-full items-center justify-center text-xxs text-center\" onclick=\"obtenerDatoProyectos($idProyecto,'rango_fecha');\">
                                 <h1>$rangoFecha</h1>
                             </div>
-                            <div class=\"w-24 flex h-full items-center justify-center $bgAdjuntos text-orange-500\" onclick=\"cotizacionesProyectos($idProyecto);\">
+                            <div class=\"w-24 flex h-full items-center justify-center $bgAdjuntos\" onclick=\"cotizacionesProyectos($idProyecto);\">
                                 <h1>$totalAdjuntos</h1>
                             </div>
                             <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'tipo');\">
                                 <h1>$tipo</h1>
                             </div>
-                            <div class=\"w-24 h-full flex items-center justify-center $bgJustificacion text-green-500\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
+                            <div class=\"w-24 h-full flex items-center justify-center $bgJustificacion\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
                                 $justificacion
                             </div>
                             <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
@@ -5381,9 +5381,9 @@ if (isset($_POST['action'])) {
                                 // Actividades PLANAACION PENDIENTE
                                 $dataProyectos .= "     
 
-                                    <div class=\"$solucionados bg-bluegray-900 text-white flex items-center font-semibold text-xxs hover:bg-bluegray-600 cursor-pointer w-full justify-start my-1 rounded relative px-3\">
+                                    <div class=\"$solucionados bg-white text-bluegray-700 flex items-center font-semibold text-xxs cursor-pointer w-full justify-start my-1 rounded relative px-3\">
 
-                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
+                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer relative\">
 
                                             <div class=\" hidden absolute\" style=\"left:0%;\">
                                                 <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
@@ -5438,7 +5438,7 @@ if (isset($_POST['action'])) {
                                             </div>
 
                                             <div class=\"w-3/4 flex flex-col items-center justify-center\">
-                                                <div class=\"w-full leading-none pt-1 text-white uppercase text-xs truncate flex relative\">
+                                                <div class=\"w-full leading-none pt-1 uppercase text-xs truncate flex relative\">
                                                     <i class=\"fas fa-dot-circle mr-1 text-green-400\"></i>
                                                     <h1 id=\"AP$idPlanaccion\">$actividad</h1>
                                                 </div>
@@ -5459,7 +5459,7 @@ if (isset($_POST['action'])) {
                                         <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
                                             <h1>$totalAdjuntos</h1>
                                         </div>
-                                        <div class=\"w-32 h-full flex items-center justify-center text-white rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
                                             <div><i class=\"fa fa-exclamation-circle fa-lg\"></i></div>
                                         </div>
                                     </div>
@@ -5468,8 +5468,8 @@ if (isset($_POST['action'])) {
                             } else {
                                 // Actividades PLANAACION SOLUCIONADO
                                 $dataProyectos .= "            
-                                    <div class=\"$solucionados bg-bluegray-900 text-white flex items-center font-semibold text-xxs  hover:bg-bluegray-600 cursor-pointer w-full justify-start px-3 my-1 rounded\">
-                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer hover:shadow-md relative\">
+                                    <div class=\"$solucionados bg-white text-bluegray-700 flex items-center font-semibold text-xxs cursor-pointer w-full justify-start px-3 my-1 rounded\">
+                                        <div class=\"truncate w-3/4 flex flex-row items-center justify-between cursor-pointer relative\">
 
                                             <div class=\" hidden absolute\" style=\"left:0%;\">
                                                 <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
@@ -5524,7 +5524,7 @@ if (isset($_POST['action'])) {
                                             </div>
 
                                             <div class=\"w-3/4 flex flex-col items-center justify-center\">
-                                                <div class=\"w-full leading-none pt-1 text-white uppercase text-xs truncate flex relative\">
+                                                <div class=\"w-full leading-none pt-1 uppercase text-xs truncate flex relative\">
                                                     <i class=\"fas fa-dot-circle mr-1 text-red-400\"></i>
                                                     <h1 id=\"AP$idPlanaccion\">$actividad</h1>
                                                 </div>
@@ -5544,7 +5544,7 @@ if (isset($_POST['action'])) {
                                         <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
                                             <h1>$totalAdjuntos</h1>
                                         </div>
-                                        <div class=\"w-32 h-full flex items-center justify-center text-white rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
                                             <div><i class=\"fa fa-exclamation-circle fa-lg\"></i></div>
                                         </div>
                                     </div>

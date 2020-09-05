@@ -1660,15 +1660,17 @@ function obtenerProyectosP(tipoOrden) {
     document.getElementById("proyectoOrdenTIPO").setAttribute('onclick', 'obtenerProyectosP("TIPO")');
     document.getElementById("proyectoOrdenJUST").setAttribute('onclick', 'obtenerProyectosP("JUST")');
     document.getElementById("proyectoOrdenCOSTE").setAttribute('onclick', 'obtenerProyectosP("COSTE")');
-
+    
+    // Secciones de Botones.
     document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+    document.getElementById("btnProyecto").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("modalProyectos").classList.add('open');
     document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
     document.getElementById("btnSolucionadosProyectos").setAttribute('onclick', 'obtenerProyectosS()');
-    document.getElementById("btnSolucionadosProyectos").classList.remove('hidden');
-    document.getElementById("btnPendientesProyectos").classList.add('hidden');
+    // document.getElementById("btnSolucionadosProyectos").classList.remove('hidden');
+    // document.getElementById("btnPendientesProyectos").classList.add('hidden');
 
     const action = "obtenerProyectosP";
     $.ajax({
@@ -1710,7 +1712,7 @@ function obtenerProyectosS() {
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
     document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("btnPendientesProyectos").classList.remove('hidden');
-    document.getElementById("btnSolucionadosProyectos").classList.add('hidden');
+    // document.getElementById("btnSolucionadosProyectos").classList.add('hidden');
 
     const action = "obtenerProyectosS";
     $.ajax({

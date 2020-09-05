@@ -548,15 +548,18 @@
                         </button>
                     </div>
                     <div class="text-xs ml-2">
-                        <button id="btnNuevoProyecto" class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold rounded">
-                            Nuevo
+
+                        <button id="btnNuevoProyecto" class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold  rounded"> <i class="fas fa-plus"></i> Nuevo</button>
+
+                        <button id="btnProyecto" class=" px-2 py-1 hover:bg-blue-300 text-blue-500 border-blue-300 border-2 font-bold rounded ml-24"><i class="fas fa-tasks"></i> Proyectos</button>
+
+                        <button id="btnGanttProyecto" class=" px-2 py-1 hover:bg-blue-300 text-blue-500 border-blue-300 border-2 font-bold rounded"><i class="fas fa-stream"></i> Gantt</button>
+
+                        <button id="btnSolucionadosProyectos" class="px-2 py-1 hover:bg-green-300 text-green-500 border-green-300 border-2 font-bold ml-24 rounded"><i class="fas fa-check"></i> Solucionados
                         </button>
-                        <button id="btnSolucionadosProyectos" class="px-2 py-1 bg-teal-300 text-teal-500 font-bold ml-2 rounded">
-                            Ver Solucionados
-                        </button>
-                        <button id="btnPendientesProyectos" class="px-2 py-1 bg-red-300 text-red-500 font-bold ml-2 rounded">
-                            Ver Pendientes
-                        </button>
+
+                        <button id="btnPendientesProyectos" class=" px-2 py-1 hover:bg-red-300 text-red-500 border-red-300 border-2 font-bold rounded"><i class="fas fa-check"></i> Pendientes</button>
+
                     </div>
                 </div>
                 <!-- Contenedor de los equipos y locales(Tabla) -->
