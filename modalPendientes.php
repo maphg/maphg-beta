@@ -105,7 +105,7 @@ if ($result) {
         $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
         $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
         $exportarMisCreadosPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreadosPDF'";
-        
+
         $exportarSubseccion .= "
             <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
             onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
@@ -1007,7 +1007,7 @@ if ($result) {
                     </h1>
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
-                    <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
+                    <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer" onclick="mostrarOpcion('pendientesFallasTareas');">
                         <h1>Fallas y Tareas</h1>
                     </div>
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
@@ -1018,13 +1018,13 @@ if ($result) {
                     <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <h1>Preventivo</h1>
                     </div>
-                    <div class="py-1 px-2 rounded-r-md bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                    <div class="py-1 px-2 rounded-r-md bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" onclick="mostrarOpcion('diagramaGantt');">
                         <h1>Proyectos</h1>
                     </div>
                 </div>
             </div>
 
-            <div class="px-2 mt-12">
+            <div id="pendientesFallasTareas" class="px-2 mt-12">
                 <table class="table-auto text-xs text-center w-full">
                     <thead>
                         <tr class="cursor pointer">
@@ -1040,6 +1040,31 @@ if ($result) {
                     </tbody>
                 </table>
             </div>
+
+            <div id="diagramaGantt" class="p-2 mt-6 flex justify-center items-center flex-col hidden">
+                <div class="flex flex-row items-center w-full">
+                    <div class="ml-10 relative text-gray-600 w-2/6 self-start">
+                        <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                            <i class="fad fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="text-xs ml-2">
+
+                        <button id="btnSolucionadosProyectos" class="px-2 py-1 hover:bg-green-300 text-green-500 border-green-300 border-2 font-bold ml-24 rounded" onclick="ganttS();"><i class="fas fa-check"></i> Solucionados
+                        </button>
+
+                        <button id="btnPendientesProyectos" class=" px-2 py-1 hover:bg-red-300 text-red-500 border-red-300 border-2 font-bold rounded" onclick="ganttP();"><i class="fas fa-check"></i> Pendientes</button>
+
+                    </div>
+                </div>
+                <div id="contenidoGantt" class="mt-2 w-full flex flex-col justify-center items-center">
+                    <div class="mt-2 w-full  flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar" style="max-height: 80vh;">
+                        <div class="w-full h-full text-xxs uppercase mt-5" id="chartdiv"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -1110,8 +1135,13 @@ if ($result) {
     <script src="js/acordion.js"></script>
     <script src="js/sweetalert2@9.js"></script>
     <script src="js/alertasSweet.js"></script>
-    <!-- <script src="js/plannerBetaJS.js"></script> -->
-    <!-- <scriptpt src="js/calendarioBotones.js"></scriptpt> -->
+
+    <!-- DEPENDENCIAS DEL GRAFICO -->
+    <script src="js/am4core_core.js"></script>
+    <script src="js/am4core_charts.js"></script>
+    <script src="js/am4core_animated.js"></script>
+    <!-- DEPENDENCIAS DEL GRAFICO -->
+
     <script>
         function expandir(id) {
             idtoggle = id + 'toggle';
@@ -1276,6 +1306,182 @@ if ($result) {
             document.getElementById(idDos).classList.remove('hidden');
             document.getElementById(idTres).classList.add('hidden');
         }
+
+        // Diagrama Gantt
+        function ganttP() {
+            document.getElementById("palabraProyecto").setAttribute('onkeyup', 'ganttP()');
+            document.getElementById("btnSolucionadosProyectos").classList.remove('bg-green-300');
+            document.getElementById("btnPendientesProyectos").classList.add('bg-red-300');
+
+            // Data URL
+            const action = "ganttProyectosP";
+            let idUsuario = localStorage.getItem('usuario');
+            let idDestino = localStorage.getItem('idDestino');
+            let idSeccion = localStorage.getItem('idSeccion');
+            let idSubseccion = 200;
+            let palabraProyecto = document.getElementById("palabraProyecto").value;
+            let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion + '&palabraProyecto=' + palabraProyecto;
+
+            fetch(dataURL)
+                .then(res => res.json())
+                .then(dataGantt => {
+
+                    const arrayTratado = new Promise((resolve, recject) => {
+                        for (var i = 0; i < dataGantt.length; i++) {
+                            var colorSet = new am4core.ColorSet();
+                            dataGantt[i]['color'] = colorSet.getIndex(i);
+                        }
+                        resolve(dataGantt);
+                    });
+
+                    arrayTratado.then((response) => {
+                        generarGantt(response);
+                    }).catch((error) => {
+                        console.log('Error' + error);
+                    });
+
+                    let size = 100 + (dataGantt.length * 50);
+                    document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
+                });
+
+            function generarGantt(dataGantt) {
+
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                var chart = am4core.create("chartdiv", am4charts.XYChart);
+                chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                chart.paddingRight = 30;
+                chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+                var colorSet = new am4core.ColorSet();
+                colorSet.saturation = 0.4;
+
+                chart.data = dataGantt;
+                chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+                chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+                var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "category";
+                categoryAxis.renderer.grid.template.location = 0;
+                categoryAxis.renderer.inversed = true;
+
+                var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                dateAxis.renderer.minGridDistance = 70;
+                dateAxis.baseInterval = {
+                    count: 1,
+                    timeUnit: "day"
+                };
+                dateAxis.renderer.tooltipLocation = 0;
+
+                var series1 = chart.series.push(new am4charts.ColumnSeries());
+                series1.columns.template.height = am4core.percent(70);
+                series1.columns.template.tooltipText = "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+                series1.dataFields.openDateX = "start";
+                series1.dataFields.dateX = "end";
+                series1.dataFields.categoryY = "category";
+                series1.columns.template.propertyFields.fill = "color"; // get color from data
+                series1.columns.template.propertyFields.stroke = "color";
+                series1.columns.template.strokeOpacity = 1;
+
+                chart.scrollbarX = new am4core.Scrollbar();
+            }
+        }
+
+        function ganttS() {
+
+            document.getElementById("palabraProyecto").setAttribute('onkeyup', 'ganttS()');
+            document.getElementById("btnPendientesProyectos").classList.remove('bg-red-300');
+            document.getElementById("btnSolucionadosProyectos").classList.add('bg-green-300');
+
+            // Data URL
+            const action = "ganttProyectosS";
+            let idUsuario = localStorage.getItem('usuario');
+            let idDestino = localStorage.getItem('idDestino');
+            let idSeccion = localStorage.getItem('idSeccion');
+            let idSubseccion = 200;
+            let palabraProyecto = document.getElementById("palabraProyecto").value;
+            let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion + '&palabraProyecto=' + palabraProyecto;
+
+
+            fetch(dataURL)
+                .then(res => res.json())
+                .then(dataGantt => {
+
+                    const arrayTratado = new Promise((resolve, recject) => {
+                        for (var i = 0; i < dataGantt.length; i++) {
+                            var colorSet = new am4core.ColorSet();
+                            dataGantt[i]['color'] = colorSet.getIndex(i);
+                        }
+                        resolve(dataGantt);
+                    });
+
+                    arrayTratado.then((response) => {
+                        generarGantt(response);
+                    }).catch((error) => {
+                        console.log('Error' + error);
+                    });
+
+                    let size = 100 + (dataGantt.length * 50);
+                    document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
+                });
+
+            function generarGantt(dataGantt) {
+
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                var chart = am4core.create("chartdiv", am4charts.XYChart);
+                chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                chart.paddingRight = 30;
+                chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+                var colorSet = new am4core.ColorSet();
+                colorSet.saturation = 0.4;
+
+                chart.data = dataGantt;
+                chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+                chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+                var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "category";
+                categoryAxis.renderer.grid.template.location = 0;
+                categoryAxis.renderer.inversed = true;
+
+                var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                dateAxis.renderer.minGridDistance = 70;
+                dateAxis.baseInterval = {
+                    count: 1,
+                    timeUnit: "day"
+                };
+                dateAxis.renderer.tooltipLocation = 0;
+
+                var series1 = chart.series.push(new am4charts.ColumnSeries());
+                series1.columns.template.height = am4core.percent(70);
+                series1.columns.template.tooltipText = "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+                series1.dataFields.openDateX = "start";
+                series1.dataFields.dateX = "end";
+                series1.dataFields.categoryY = "category";
+                series1.columns.template.propertyFields.fill = "color"; // get color from data
+                series1.columns.template.propertyFields.stroke = "color";
+                series1.columns.template.strokeOpacity = 1;
+
+                chart.scrollbarX = new am4core.Scrollbar();
+            }
+        }
+
+        function mostrarOpcion(idOpcion) {
+            document.getElementById("pendientesFallasTareas").classList.add('hidden');
+            document.getElementById("diagramaGantt").classList.add('hidden');
+            document.getElementById(idOpcion).classList.remove('hidden');
+        }
+
+        // Funciones por Default
+        ganttP();
     </script>
 
 </body>
