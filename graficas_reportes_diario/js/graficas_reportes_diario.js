@@ -24,123 +24,133 @@ function cargarSeccionEstilosGraficas(idDestino, idSeccion) {
 
 
 function graficaHistorico(idDestino, idSeccion) {
-  // Themes begin
-  am4core.useTheme(am4themes_animated);
-  // Themes end
-
-  // Create chart instance
-  var chart = am4core.create("graficoManttos", am4charts.XYChart);
-
   // Add data
   let dataHistorial = "php/graficas_reportes_diario_crud.php?action=graficaHistorico&idDestino=" + idDestino + "&idSeccion=" + idSeccion;
-  chart.dataSource.url = dataHistorial;
 
-
-
-  // Create axes
-  var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-  dateAxis.renderer.grid.template.location = 0;
-  dateAxis.renderer.minGridDistance = 30;
-  dateAxis.renderer.grid.template.disabled = false;
-  dateAxis.renderer.labels.template.disabled = false;
-  dateAxis.dateFormats.setKey("day", "MMM dd");
-
-  //Poner un zoom inicial a las fechas
-  chart.events.on("ready", function () {
-    dateAxis.zoomToDates(
-      new Date(2020, 08, 01),
-      new Date(2020, 08, 08),
-      console.log(3)
-    );
-  });
-
-  var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.renderer.grid.template.disabled = true;
-  valueAxis.renderer.labels.template.disabled = true;
-
-
-  // Colores del chart
-  chart.colors.list = [
-    am4core.color("#FE3572"),
-    am4core.color("#68d391"),
-    am4core.color("#9C6BFF"),
-
-  ];
-  // Create series
-  function createSeries(field, name) {
-    var series = chart.series.push(new am4charts.LineSeries());
-    series.dataFields.valueY = field;
-    series.dataFields.dateX = "date";
-    series.name = name;
-    series.tooltipText = "{dateX}: [b]{valueY}[/]";
-    series.strokeWidth = 2;
-    series.tensionX = 0.7;
-    series.tensionY = 1;
-    //series.legendSettings.valueText = "{valueY.close}";
-    series.legendSettings.itemValueText = "[bold]{valueY}[/bold]";
-
-
-    //añadir un scrollbar
-    chart.scrollbarX = new am4charts.XYChartScrollbar();
-    chart.scrollbarX.series.push(series);
-    chart.scrollbarX.parent = chart.bottomAxesContainer;
-    chart.scrollbarX.minHeight = 40;
-    chart.scrollbarX.thumb.minWidth = 50;
-
-    chart.scrollbarX.background.fill = am4core.color("#F6F5FC");
-    chart.scrollbarX.background.fillOpacity = 0.2;
-
-    chart.scrollbarX.thumb.background.fill = am4core.color("#263238");
-    chart.scrollbarX.thumb.background.fillOpacity = 0.2;
-
-    chart.scrollbarX.unselectedOverlay.fill = am4core.color("#F6F5FC");
-    chart.scrollbarX.unselectedOverlay.fillOpacity = 0.2;
-    chart.scrollbarX.isHidden = true;
-    //chart.scrollbarX.start=1
-
-
-    chart.padding(0, 0, 0, 0);
-
-
-    // Set up tooltip
-    series.adapter.add("tooltipText", function (ev) {
-      var text = "[bold]{dateX}[/]\n"
-      chart.series.each(function (item) {
-        text += "[" + item.stroke.hex + "]●[/] " + item.name + ": {" + item.dataFields.valueY + "}\n";
-      });
-      return text;
+  fetch(dataHistorial)
+    .then(res => res.json())
+    .then(data => {
+      generarGrafico(idDestino, idSeccion, data)
     });
 
-    series.tooltip.getFillFromObject = false;
-    series.tooltip.background.fill = am4core.color("#fff");
-    series.tooltip.label.fill = am4core.color("#00");
-    series.fillOpacity = 0.1;
+  function generarGrafico(idDestino, idSeccion, data) {
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance
+    var chart = am4core.create("graficoManttos", am4charts.XYChart);
 
 
-    var bullet = series.bullets.push(new am4charts.CircleBullet());
-    bullet.circle.stroke = am4core.color("#fff");
-    bullet.circle.strokeWidth = 1;
+    chart.data = data;
 
-    return series;
+
+
+    // Create axes
+    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.renderer.grid.template.location = 0;
+    dateAxis.renderer.minGridDistance = 30;
+    dateAxis.renderer.grid.template.disabled = false;
+    dateAxis.renderer.labels.template.disabled = false;
+    dateAxis.dateFormats.setKey("day", "MMM dd");
+
+    //Poner un zoom inicial a las fechas
+    chart.events.on("ready", function () {
+      dateAxis.zoomToDates(
+        new Date(2020, 08, 01),
+        new Date(2020, 08, 08),
+        console.log(3)
+      );
+    });
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.grid.template.disabled = true;
+    valueAxis.renderer.labels.template.disabled = true;
+
+
+    // Colores del chart
+    chart.colors.list = [
+      am4core.color("#FE3572"),
+      am4core.color("#68d391"),
+      am4core.color("#9C6BFF"),
+
+    ];
+    // Create series
+    function createSeries(field, name) {
+      var series = chart.series.push(new am4charts.LineSeries());
+      series.dataFields.valueY = field;
+      series.dataFields.dateX = "date";
+      series.name = name;
+      series.tooltipText = "{dateX}: [b]{valueY}[/]";
+      series.strokeWidth = 2;
+      series.tensionX = 0.7;
+      series.tensionY = 1;
+      //series.legendSettings.valueText = "{valueY.close}";
+      series.legendSettings.itemValueText = "[bold]{valueY}[/bold]";
+
+
+      //añadir un scrollbar
+      chart.scrollbarX = new am4charts.XYChartScrollbar();
+      chart.scrollbarX.series.push(series);
+      chart.scrollbarX.parent = chart.bottomAxesContainer;
+      chart.scrollbarX.minHeight = 40;
+      chart.scrollbarX.thumb.minWidth = 50;
+
+      chart.scrollbarX.background.fill = am4core.color("#F6F5FC");
+      chart.scrollbarX.background.fillOpacity = 0.2;
+
+      chart.scrollbarX.thumb.background.fill = am4core.color("#263238");
+      chart.scrollbarX.thumb.background.fillOpacity = 0.2;
+
+      chart.scrollbarX.unselectedOverlay.fill = am4core.color("#F6F5FC");
+      chart.scrollbarX.unselectedOverlay.fillOpacity = 0.2;
+      chart.scrollbarX.isHidden = true;
+      //chart.scrollbarX.start=1
+
+
+      chart.padding(0, 0, 0, 0);
+
+
+      // Set up tooltip
+      series.adapter.add("tooltipText", function (ev) {
+        var text = "[bold]{dateX}[/]\n"
+        chart.series.each(function (item) {
+          text += "[" + item.stroke.hex + "]●[/] " + item.name + ": {" + item.dataFields.valueY + "}\n";
+        });
+        return text;
+      });
+
+      series.tooltip.getFillFromObject = false;
+      series.tooltip.background.fill = am4core.color("#fff");
+      series.tooltip.label.fill = am4core.color("#00");
+      series.fillOpacity = 0.1;
+
+
+      var bullet = series.bullets.push(new am4charts.CircleBullet());
+      bullet.circle.stroke = am4core.color("#fff");
+      bullet.circle.strokeWidth = 1;
+
+      return series;
+    }
+
+    createSeries("Creado", "Creado");
+    createSeries("Solucionado", "Solucionado");
+    createSeries("Acumulado", "Acumulado");
+
+    chart.legend = new am4charts.Legend();
+    chart.legend.position = "top";
+    chart.legend.useDefaultMarker = true;
+    var marker = chart.legend.markers.template.children.getIndex(0);
+    marker.cornerRadius(12, 12, 12, 12);
+    var markerTemplate = chart.legend.markers.template;
+    markerTemplate.width = 12;
+    markerTemplate.height = 12;
+
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.maxTooltipDistance = 0;
+
+    chart.exporting.menu = new am4core.ExportMenu();
   }
-
-  createSeries("Creado", "Creado");
-  createSeries("Solucionado", "Solucionado");
-  createSeries("Acumulado", "Acumulado");
-
-  chart.legend = new am4charts.Legend();
-  chart.legend.position = "top";
-  chart.legend.useDefaultMarker = true;
-  var marker = chart.legend.markers.template.children.getIndex(0);
-  marker.cornerRadius(12, 12, 12, 12);
-  var markerTemplate = chart.legend.markers.template;
-  markerTemplate.width = 12;
-  markerTemplate.height = 12;
-
-  chart.cursor = new am4charts.XYCursor();
-  chart.cursor.maxTooltipDistance = 0;
-
-  chart.exporting.menu = new am4core.ExportMenu();
 }
 
 

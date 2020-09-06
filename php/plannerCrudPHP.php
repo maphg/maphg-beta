@@ -5576,15 +5576,10 @@ if (isset($_POST['action'])) {
         $idSeccion = $_POST['idSeccion'];
         $idSubseccion = $_POST['idSubseccion'];
         $palabraProyecto = $_POST['palabraProyecto'];
+        $tipoOrden = $_POST['tipoOrden'];
+        $idResult = array();
+        $total = array();
 
-        // Obtiene el nombre de la SECCION
-        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $value) {
-                $seccion = $value['seccion'];
-                $data['seccion'] = $seccion;
-            }
-        }
 
         // Filtro para Destinos
         if ($idDestino == 10) {
@@ -5595,83 +5590,222 @@ if (isset($_POST['action'])) {
 
         //Filtro para Buscar Proyecto 
         if ($palabraProyecto != "") {
-            $filtroPalabreProyecto = "AND t_proyectos.titulo LIKE '%$palabraProyecto%'";
+            $filtroPalabraProyecto = "AND t_proyectos.titulo LIKE '%$palabraProyecto%'";
         } else {
-            $filtroPalabreProyecto = "";
+            $filtroPalabraProyecto = "";
         }
 
+        $contador = 0;
+        if ($tipoOrden == "PROYECTO") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND(t_proyectos.status = 'F' OR t_proyectos.status = 'FINALIZADO' OR t_proyectos.status = 'SOLUCIONADOS') AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto 
+            ORDER BY titulo ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
 
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "PDA") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $id = $i['id'];
+                    $queryTotalActividades = "SELECT count(id) FROM t_proyectos_planaccion 
+                    WHERE id_proyecto = $id and activo = 1";
+                    if ($resultTotalActividades = mysqli_query($conn_2020, $queryTotalActividades)) {
+                        foreach ($resultTotalActividades as $i) {
+                            $contador++;
+                            $totalActividades = $i['count(id)'];
+                            $total[] = $totalActividades;
+                        }
+                    }
+                    $idResult[] = $id;
+                }
+            }
+            array_multisort($total, SORT_DESC, $idResult);
+        } elseif ($tipoOrden == "COT") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $id = $i['id'];
+                    $queryTotalActividades = "SELECT count(id) FROM t_proyectos_adjuntos 
+                    WHERE id_proyecto = $id and status = 1";
+                    if ($resultTotalActividades = mysqli_query($conn_2020, $queryTotalActividades)) {
+                        foreach ($resultTotalActividades as $i) {
+                            $contador++;
+                            $totalActividades = $i['count(id)'];
+                            $total[] = $totalActividades;
+                        }
+                    }
+                    $idResult[] = $id;
+                }
+            }
+            array_multisort($total, SORT_DESC, $idResult);
+        } elseif ($tipoOrden == "RESP") {
+            $query = "SELECT t_proyectos.id 
+            FROM t_proyectos 
+            INNER JOIN t_users ON t_proyectos.responsable = t_users.id 
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE activo = 1 AND (t_proyectos.status = 'N' OR t_proyectos.status = 'PENDIENTE' OR 
+            t_proyectos.status = 'P' OR t_proyectos.status = '') and t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto ORDER BY t_colaboradores.nombre ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
 
-        $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
-        t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
-        FROM t_proyectos 
-        INNER JOIN t_users ON t_proyectos.responsable = t_users.id
-        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos.activo = 1 AND(t_proyectos.status = 'F' OR t_proyectos.status = 'FINALIZADO' OR t_proyectos.status = 'SOLUCIONADOS') AND t_proyectos.id_seccion = $idSeccion $filtroDestino $filtroPalabreProyecto
-        ORDER BY t_proyectos.id DESC
-        ";
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "TIPO") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto ORDER BY tipo ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "JUST") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto ORDER BY justificacion DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "COSTE") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto ORDER BY coste DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        } elseif ($tipoOrden == "FECHA") {
+            $query = "SELECT id FROM t_proyectos WHERE activo = 1 AND (status = 'N' OR status = 'PENDIENTE' OR status = 'P' OR status = '') and id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino $filtroPalabraProyecto ORDER BY fecha_creacion DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $contador++;
+                    $idProyecto = $i['id'];
+
+                    // Se agregan los ID en el arreglo
+                    $idResult[] = $idProyecto;
+                }
+            }
+        }
+
+        // Obtiene el Total de Proyectos.
+        $data['totalProyectos'] = $contador;
+
+        // Obtiene el nombre de la SECCION
+        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
         if ($result = mysqli_query($conn_2020, $query)) {
-
-            // Obtiene el Total de Proyectos.
-            $totalProyectos = mysqli_num_rows($result);
-            $data['totalProyectos'] = $totalProyectos;
-
             foreach ($result as $value) {
-                $idProyecto = 0;
-                $idProyecto = $value['id'];
-                $titulo = $value['titulo'];
-                $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
-                $rangoFecha = $value['rango_fecha'];
-                $tipo = $value['tipo'];
-                $justificacion = $value['justificacion'];
-                $coste = $value['coste'];
+                $seccion = $value['seccion'];
+                $data['seccion'] = $seccion;
+            }
+        }
+
+        foreach ($idResult as $i) {
+            $idProyecto = $i;
+            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
+            t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
+            FROM t_proyectos 
+            INNER JOIN t_users ON t_proyectos.responsable = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_proyectos.activo = 1 AND t_proyectos.id = $idProyecto
+            ";
+
+            if ($result = mysqli_query($conn_2020, $query)) {
+
+                foreach ($result as $value) {
+                    $idProyecto = 0;
+                    $idProyecto = $value['id'];
+                    $titulo = $value['titulo'];
+                    $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
+                    $rangoFecha = $value['rango_fecha'];
+                    $tipo = $value['tipo'];
+                    $justificacion = $value['justificacion'];
+                    $coste = $value['coste'];
 
 
-                $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
-                if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
-                    foreach ($resultAdjuntos as $value) {
-                        $totalAdjuntos = $value['count(id)'];
+                    $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
+                    if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                        foreach ($resultAdjuntos as $value) {
+                            $totalAdjuntos = $value['count(id)'];
+                        }
                     }
-                }
 
 
-                $queryPlanaccion = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
-                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
-                    foreach ($resultPlanaccion as $value) {
-                        $totalPlanaccion = $value['count(id)'];
+                    $queryPlanaccionN = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'N'";
+
+                    $queryPlanaccionF = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'F'";
+
+                    if (
+                        $resultPlanaccionN = mysqli_query($conn_2020, $queryPlanaccionN) and
+                        $resultPlanaccionF = mysqli_query($conn_2020, $queryPlanaccionF)
+                    ) {
+
+                        foreach ($resultPlanaccionN as $value) {
+                            $totalPlanaccionN = $value['count(id)'];
+                        }
+
+                        foreach ($resultPlanaccionF as $value) {
+                            $totalPlanaccionF = $value['count(id)'];
+                        }
+
+                        if (($totalPlanaccionN <= 0 or $totalPlanaccionN == "") and
+                            ($totalPlanaccionF <= 0 or $totalPlanaccionF == "")
+                        ) {
+                            $PDA = "<i class=\"fas fa-window-minimize\"></i>";
+                            $bgTotalPlanaccion = "bg-white";
+                        } else {
+                            $PDA = "$totalPlanaccionN / $totalPlanaccionF";
+                            $bgTotalPlanaccion = "text-green-500 bg-green-200";
+                        }
                     }
 
-                    if ($totalPlanaccion <= 0 or $totalPlanaccion == "") {
-                        $PDA = "<i class=\"fas fa-window-minimize\"></i>";
+                    if ($totalAdjuntos <= 0 or $totalAdjuntos == "") {
+                        $bgAdjuntos = "bg-white";
+                        $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
-                        $PDA = "<i class=\"fas fa-check\"></i>";
+                        $bgAdjuntos = "bg-orange-200 text-orange-500";
                     }
-                }
 
-                if ($totalAdjuntos <= 0 or $totalAdjuntos == "") {
-                    $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
-                }
+                    if ($rangoFecha == "") {
+                        $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
 
-                if ($rangoFecha == "") {
-                    $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
-                }
+                    if ($justificacion == "" or $justificacion == " ") {
+                        $bgJustificacion = "bg-white";
+                        $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
+                    } else {
+                        $bgJustificacion = "bg-green-200 text-orange-500";
+                        $justificacion = "<i class=\"fas as fa-check\"></i>";
+                    }
 
-                if ($justificacion == "" or $justificacion == " ") {
-                    $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
-                } else {
-                    $justificacion = "<i class=\"fas fa-check\"></i>";
-                }
+                    if ($coste < 0 or $coste == "") {
+                        $coste = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
 
-                if ($coste < 0 or $coste == "") {
-                    $coste = "<i class=\"fas fa-window-minimize\"></i>";
-                }
+                    if ($tipo == "") {
+                        $tipo = "<i class=\"fas fa-window-minimize\"></i>";
+                    }
 
-                if ($tipo == "") {
-                    $tipo = "<i class=\"fas fa-window-minimize\"></i>";
-                }
-
-                // PROYECTOS
-                $dataProyectos .= "
+                    // PROYECTOS
+                    $dataProyectos .= "
                     <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
                         <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
                             <div class=\" flex flex-row items-center truncate\">
@@ -5682,7 +5816,7 @@ if (isset($_POST['action'])) {
                                 <i id=\"icono$idProyecto\" class=\"fas fa-chevron-right\"></i>
                             </div>
                         </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\">
+                        <div class=\"$bgTotalPlanaccion w-24 h-full flex items-center justify-center\" onclick=\"expandirProyectos('proyecto$idProyecto', $idProyecto)\">
                             $PDA
                         </div>
                         <div class=\"w-32 flex h-full items-center justify-center leading-none text-center text-xxs font-bold\"
@@ -5692,13 +5826,13 @@ if (isset($_POST['action'])) {
                         <div class=\"w-24 flex h-full items-center justify-center text-xxs text-center\" onclick=\"obtenerDatoProyectos($idProyecto,'rango_fecha');\">
                             <h1>$rangoFecha</h1>
                         </div>
-                        <div class=\"w-24 flex h-full items-center justify-center bg-orange-200 text-orange-500\" onclick=\"cotizacionesProyectos($idProyecto);\">
+                        <div class=\"$bgAdjuntos w-24 flex h-full items-center justify-center\" onclick=\"cotizacionesProyectos($idProyecto);\">
                             <h1>$totalAdjuntos</h1>
                         </div>
                         <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'tipo');\">
                             <h1>$tipo</h1>
                         </div>
-                        <div class=\"w-24 h-full flex items-center justify-center bg-green-200 text-green-500\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
+                        <div class=\"$bgJustificacion w-24 h-full flex items-center justify-center\" onclick=\"obtenerDatoProyectos($idProyecto,'justificacion');\">
                             $justificacion
                         </div>
                         <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
@@ -5709,11 +5843,11 @@ if (isset($_POST['action'])) {
                         </div>
                     </div>
                 ";
-                // PROYECTOS
+                    // PROYECTOS
 
 
-                // ENCABEZADO PRINCIPAL PLANACCION
-                $dataProyectos .= "
+                    // ENCABEZADO PRINCIPAL PLANACCION
+                    $dataProyectos .= "
                     <div id=\"proyecto" . $idProyecto . "toggle\" class=\"hidden w-full mb-2 text-xxs px-6 py-2 bg-fondos-7 border-b border-r border-l rounded-b-md flex flex-col items-center justify-center my-1\">
 
                         <div class=\"w-full flex py-1\">
@@ -5726,8 +5860,8 @@ if (isset($_POST['action'])) {
                         </div>
                 ";
 
-                // ENCABEZADO ACTIVIDADES PLANACCION
-                $dataProyectos .= "
+                    // ENCABEZADO ACTIVIDADES PLANACCION
+                    $dataProyectos .= "
                     <div class=\"w-full\">
                         <div class=\"flex items-center font-bold text-xxs text-bluegray-500 cursor-pointer w-full justify-start px-3 rounded\">
                             <div class=\"w-3/4 h-full flex items-center justify-start \">
@@ -5750,8 +5884,8 @@ if (isset($_POST['action'])) {
                         <div class=\"w-full flex flex-col rounded\">
                 ";
 
-                //ACTIVIDADES PLANACCION 
-                $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion,
+                    //ACTIVIDADES PLANACCION 
+                    $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion,
                 t_proyectos_planaccion.status_urgente,
                 t_proyectos_planaccion.status_material,
                 t_proyectos_planaccion.status_trabajando,
@@ -5770,150 +5904,150 @@ if (isset($_POST['action'])) {
                 WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
                 ORDER BY t_proyectos_planaccion.id DESC
                 ";
-                if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
-                    foreach ($resultPlanaccion as $value) {
-                        $idPlanaccion = $value['id'];
-                        $actividad = $value['actividad'];
-                        $creadoPor = $value['nombre'] . " " . $value['apellido'];
-                        $fecha = $value['fecha_creacion'];
-                        $idResponsable = $value['responsable'];
-                        $status = $value['status'];
-                        $sUrgente = $value['status_urgente'];
-                        $sMaterial = $value['status_material'];
-                        $sTrabajando = $value['status_trabajando'];
-                        $eElectricidad = $value['energetico_electricidad'];
-                        $eAgua = $value['energetico_agua'];
-                        $eDiesel = $value['energetico_diesel'];
-                        $eGas = $value['energetico_gas'];
-                        $dCalidad = $value['departamento_calidad'];
-                        $dCompras = $value['departamento_compras'];
-                        $dDireccion = $value['departamento_direccion'];
-                        $dFinanzas = $value['departamento_finanzas'];
-                        $dRRHH = $value['departamento_rrhh'];
+                    if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
+                        foreach ($resultPlanaccion as $value) {
+                            $idPlanaccion = $value['id'];
+                            $actividad = $value['actividad'];
+                            $creadoPor = $value['nombre'] . " " . $value['apellido'];
+                            $fecha = $value['fecha_creacion'];
+                            $idResponsable = $value['responsable'];
+                            $status = $value['status'];
+                            $sUrgente = $value['status_urgente'];
+                            $sMaterial = $value['status_material'];
+                            $sTrabajando = $value['status_trabajando'];
+                            $eElectricidad = $value['energetico_electricidad'];
+                            $eAgua = $value['energetico_agua'];
+                            $eDiesel = $value['energetico_diesel'];
+                            $eGas = $value['energetico_gas'];
+                            $dCalidad = $value['departamento_calidad'];
+                            $dCompras = $value['departamento_compras'];
+                            $dDireccion = $value['departamento_direccion'];
+                            $dFinanzas = $value['departamento_finanzas'];
+                            $dRRHH = $value['departamento_rrhh'];
 
-                        if ($fecha == "" or $fecha == " ") {
-                            $fecha = "-";
-                        }
+                            if ($fecha == "" or $fecha == " ") {
+                                $fecha = "-";
+                            }
 
-                        if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
-                            $solucionados = "actividades$idProyecto hidden";
-                        } else {
-                            $solucionados = "";
-                        }
+                            if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
+                                $solucionados = "actividades$idProyecto hidden";
+                            } else {
+                                $solucionados = "";
+                            }
 
-                        //Status, Energeticos y Departamentos. 
-                        if ($sUrgente == 1 or $sUrgente != "0") {
-                            $sUrgente = "";
-                        } else {
-                            $sUrgente = "hidden";
-                        }
+                            //Status, Energeticos y Departamentos. 
+                            if ($sUrgente == 1 or $sUrgente != "0") {
+                                $sUrgente = "";
+                            } else {
+                                $sUrgente = "hidden";
+                            }
 
-                        if ($sMaterial == 1 or $sMaterial != "0") {
-                            $sMaterial = "";
-                        } else {
-                            $sMaterial = "hidden";
-                        }
+                            if ($sMaterial == 1 or $sMaterial != "0") {
+                                $sMaterial = "";
+                            } else {
+                                $sMaterial = "hidden";
+                            }
 
-                        if ($sTrabajando == 1 or $sTrabajando != "0") {
-                            $sTrabajando = "";
-                        } else {
-                            $sTrabajando = "hidden";
-                        }
+                            if ($sTrabajando == 1 or $sTrabajando != "0") {
+                                $sTrabajando = "";
+                            } else {
+                                $sTrabajando = "hidden";
+                            }
 
-                        if ($eElectricidad == 1 or $eElectricidad != "0") {
-                            $eElectricidad = "";
-                        } else {
-                            $eElectricidad = "hidden";
-                        }
+                            if ($eElectricidad == 1 or $eElectricidad != "0") {
+                                $eElectricidad = "";
+                            } else {
+                                $eElectricidad = "hidden";
+                            }
 
-                        if ($eAgua == 1 or $eAgua != "0") {
-                            $eAgua = "";
-                        } else {
-                            $eAgua = "hidden";
-                        }
+                            if ($eAgua == 1 or $eAgua != "0") {
+                                $eAgua = "";
+                            } else {
+                                $eAgua = "hidden";
+                            }
 
-                        if ($eDiesel == 1 or $eDiesel != "0") {
-                            $eDiesel = "";
-                        } else {
-                            $eDiesel = "hidden";
-                        }
+                            if ($eDiesel == 1 or $eDiesel != "0") {
+                                $eDiesel = "";
+                            } else {
+                                $eDiesel = "hidden";
+                            }
 
-                        if ($eGas == 1 or $eGas != "0") {
-                            $eGas = "";
-                        } else {
-                            $eGas = "hidden";
-                        }
+                            if ($eGas == 1 or $eGas != "0") {
+                                $eGas = "";
+                            } else {
+                                $eGas = "hidden";
+                            }
 
-                        if ($dCalidad == 1 or $dCalidad != "0") {
-                            $dCalidad = "";
-                        } else {
-                            $dCalidad = "hidden";
-                        }
+                            if ($dCalidad == 1 or $dCalidad != "0") {
+                                $dCalidad = "";
+                            } else {
+                                $dCalidad = "hidden";
+                            }
 
-                        if ($dCompras == 1 or $dCompras != "0") {
-                            $dCompras = "";
-                        } else {
-                            $dCompras = "hidden";
-                        }
+                            if ($dCompras == 1 or $dCompras != "0") {
+                                $dCompras = "";
+                            } else {
+                                $dCompras = "hidden";
+                            }
 
-                        if ($dDireccion == 1 or $dDireccion != "0") {
-                            $dDireccion = "";
-                        } else {
-                            $dDireccion = "hidden";
-                        }
+                            if ($dDireccion == 1 or $dDireccion != "0") {
+                                $dDireccion = "";
+                            } else {
+                                $dDireccion = "hidden";
+                            }
 
-                        if ($dFinanzas == 1 or $dFinanzas != "0") {
-                            $dFinanzas = "";
-                        } else {
-                            $dFinanzas = "hidden";
-                        }
+                            if ($dFinanzas == 1 or $dFinanzas != "0") {
+                                $dFinanzas = "";
+                            } else {
+                                $dFinanzas = "hidden";
+                            }
 
-                        if ($dRRHH == 1 or $dRRHH != "0") {
-                            $dRRHH = "";
-                        } else {
-                            $dRRHH = "hidden";
-                        }
+                            if ($dRRHH == 1 or $dRRHH != "0") {
+                                $dRRHH = "";
+                            } else {
+                                $dRRHH = "hidden";
+                            }
 
-                        // RESPONSABLE DE LA ACTIVIDAD
-                        $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                            // RESPONSABLE DE LA ACTIVIDAD
+                            $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                         FROM t_users
                         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                         WHERE t_users.id = $idResponsable
                         ";
-                        if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
-                            foreach ($resultResponsable as $value) {
-                                $responsable = $value['nombre'] . " " . $value['apellido'];
-                            }
-                        } else {
-                            $responsable = "";
-                        }
-
-                        // TOTAL DE COMENTARIOS
-                        $queryComentarios = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion";
-                        if ($resultComentarios = mysqli_query($conn_2020, $queryComentarios)) {
-                            foreach ($resultComentarios as $value) {
-                                $totalComentarios = $value['count(id)'];
-                            }
-                            if ($totalComentarios <= 0) {
-                                $totalComentarios = "<i class=\"fas fa-window-minimize\"></i>";
-                            }
-                        }
-
-                        // TOTAL DE ADJUNTOS
-                        $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
-                        if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
-                            foreach ($resultAdjuntos as $value) {
-                                $totalAdjuntos = $value['count(id)'];
+                            if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                                foreach ($resultResponsable as $value) {
+                                    $responsable = $value['nombre'] . " " . $value['apellido'];
+                                }
+                            } else {
+                                $responsable = "";
                             }
 
-                            if ($totalAdjuntos <= 0) {
-                                $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                            // TOTAL DE COMENTARIOS
+                            $queryComentarios = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion";
+                            if ($resultComentarios = mysqli_query($conn_2020, $queryComentarios)) {
+                                foreach ($resultComentarios as $value) {
+                                    $totalComentarios = $value['count(id)'];
+                                }
+                                if ($totalComentarios <= 0) {
+                                    $totalComentarios = "<i class=\"fas fa-window-minimize\"></i>";
+                                }
                             }
-                        }
+
+                            // TOTAL DE ADJUNTOS
+                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                            if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+                                foreach ($resultAdjuntos as $value) {
+                                    $totalAdjuntos = $value['count(id)'];
+                                }
+
+                                if ($totalAdjuntos <= 0) {
+                                    $totalAdjuntos = "<i class=\"fas fa-window-minimize\"></i>";
+                                }
+                            }
 
 
-                        // Actividades PLANAACION PENDIENTE
-                        $dataProyectos .= "     
+                            // Actividades PLANAACION PENDIENTE
+                            $dataProyectos .= "     
 
                             <div class=\"$solucionados flex bg-white items-center font-semibold text-xxs text-bluegray-500 hover:bg-teal-100 cursor-pointer w-full justify-start my-1 rounded relative px-3\">
 
@@ -5997,19 +6131,20 @@ if (isset($_POST['action'])) {
                                 </div>
                             </div>
                         ";
-                        // Actividades PLANAACION PENDIENTE
+                            // Actividades PLANAACION PENDIENTE
+                        }
                     }
-                }
 
-                // CIERRE DE ENCABEZADOS
-                $dataProyectos .= "
+                    // CIERRE DE ENCABEZADOS
+                    $dataProyectos .= "
                             </div>
                         </div>
                     </div>
                 ";
-            }
+                }
 
-            $data['dataProyectos'] = $dataProyectos;
+                $data['dataProyectos'] = $dataProyectos;
+            }
         }
         echo json_encode($data);
     }

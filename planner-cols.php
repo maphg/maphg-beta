@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" href="css/alertify.min.css">
 
+
+
     <style>
         .w-22rem {
             width: 265px;
@@ -61,7 +63,7 @@
     <input type="hidden" id="idDestinoSeleccionado">
 
     <div class="flex flex-col justify-evenly items-center w-full h-screen pt-10">
-        <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10 scrollbar pb-24">
 
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
                 <div class="flex flex-row justify-center items-center w-full">
@@ -538,7 +540,8 @@
                     <h1>PROYECTOS</h1>
                 </div>
             </div>
-            <!-- CONTENIDO -->
+
+            <!-- CONTENIDO PROYECTOS-->
             <div class="p-2 mt-6 flex justify-center items-center flex-col">
                 <div class="flex flex-row items-center w-full">
                     <div class="ml-10 relative text-gray-600 w-2/6 self-start">
@@ -563,7 +566,7 @@
                     </div>
                 </div>
                 <!-- Contenedor de los equipos y locales(Tabla) -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center">
+                <div id="contenidoProyectos" class="hidden mt-2 w-full flex flex-col justify-center items-center overflow-y-auto scrollbar" style="max-height: 80vh;">
                     <!-- titulos -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xxs h-8 text-bluegray-500 divide-x">
                         <div id="proyectoOrden" class="w-2/5 h-full flex items-center justify-center ">
@@ -599,6 +602,16 @@
                 </div>
             </div>
             <div id="paginacionProyectos" class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6"></div>
+            <!-- CONTENIDO PROYECTOS -->
+
+            <!-- CONTENIDO GANTT -->
+            <div id="contenidoGantt" class="mt-2 w-full flex flex-col justify-center items-center overflow-y-auto scrollbar" style="max-height: 80vh;">
+                <div class="mt-2 w-full  flex flex-row justify-center items-center font-semibold text-xs text-bluegray-500 cursor-pointer">
+                    <div class="w-full h-full" id="chartdiv"></div>
+                </div>
+            </div>
+            <!-- CONTENIDO GANTT -->
+
         </div>
     </div>
 
@@ -1270,6 +1283,13 @@
     <script src="js/jPages.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- Librerias -->
+
+    <!-- DEPENDENCIAS DEL GRAFICO -->
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <!-- DEPENDENCIAS DEL GRAFICO -->
+
 
 </body>
 

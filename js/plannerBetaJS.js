@@ -1651,6 +1651,9 @@ function obtenerProyectosP(tipoOrden) {
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
 
+    // Función para darle estilo a los botones
+    claseBotonesProyecto('proyectosPendientes');
+
     // Agrega el tipo de orden en las columnas.
     document.getElementById("proyectoOrden").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
     document.getElementById("proyectoOrdenPDA").setAttribute('onclick', 'obtenerProyectosP("PDA")');
@@ -1660,7 +1663,7 @@ function obtenerProyectosP(tipoOrden) {
     document.getElementById("proyectoOrdenTIPO").setAttribute('onclick', 'obtenerProyectosP("TIPO")');
     document.getElementById("proyectoOrdenJUST").setAttribute('onclick', 'obtenerProyectosP("JUST")');
     document.getElementById("proyectoOrdenCOSTE").setAttribute('onclick', 'obtenerProyectosP("COSTE")');
-    
+
     // Secciones de Botones.
     document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
     document.getElementById("btnProyecto").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
@@ -1668,9 +1671,13 @@ function obtenerProyectosP(tipoOrden) {
     document.getElementById("modalProyectos").classList.add('open');
     document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
-    document.getElementById("btnSolucionadosProyectos").setAttribute('onclick', 'obtenerProyectosS()');
-    // document.getElementById("btnSolucionadosProyectos").classList.remove('hidden');
-    // document.getElementById("btnPendientesProyectos").classList.add('hidden');
+    document.getElementById("btnSolucionadosProyectos").setAttribute('onclick', 'obtenerProyectosS("PROYECTO")');
+    document.getElementById("btnGanttProyecto").setAttribute('onclick', 'ganttP()');
+
+    // Oculta y Muestra contenido
+    document.getElementById("contenidoProyectos").classList.remove('hidden');
+    document.getElementById("paginacionProyectos").classList.remove('hidden');
+    document.getElementById("contenidoGantt").classList.add('hidden');
 
     const action = "obtenerProyectosP";
     $.ajax({
@@ -1687,32 +1694,52 @@ function obtenerProyectosP(tipoOrden) {
         },
         dataType: "JSON",
         success: function (data) {
-            alertaImg('Proyectos Obtenidos: ' + data.totalProyectos, '', 'info', 4000);
+            alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
+
             document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
             document.getElementById("seccionProyectos").innerHTML = data.seccion;
             estiloSeccionModal('estiloSeccionProyectos', data.seccion);
             paginacionProyectos();
+
         }
     });
 }
 
 
 // Obtiene los proyectos de las secciones
-function obtenerProyectosS() {
+function obtenerProyectosS(tipoOrden) {
+    // Obtiene datos
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let palabraProyecto = document.getElementById("palabraProyecto").value;
 
+    // Función para Botones
+    claseBotonesProyecto('proyectosSolucionados');
+
+    // Agrega el tipo de orden en las columnas.
+    document.getElementById("proyectoOrden").setAttribute('onclick', 'obtenerProyectosS("PROYECTO")');
+    document.getElementById("proyectoOrdenPDA").setAttribute('onclick', 'obtenerProyectosS("PDA")');
+    document.getElementById("proyectoOrdenRESP").setAttribute('onclick', 'obtenerProyectosS("RESP")');
+    document.getElementById("proyectoOrdenFECHA").setAttribute('onclick', 'obtenerProyectosS("FECHA")');
+    document.getElementById("proyectoOrdenCOT").setAttribute('onclick', 'obtenerProyectosS("COT")');
+    document.getElementById("proyectoOrdenTIPO").setAttribute('onclick', 'obtenerProyectosS("TIPO")');
+    document.getElementById("proyectoOrdenJUST").setAttribute('onclick', 'obtenerProyectosS("JUST")');
+    document.getElementById("proyectoOrdenCOSTE").setAttribute('onclick', 'obtenerProyectosS("COSTE")');
+
+
     document.getElementById("seccionProyectos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectosS()');
+    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'obtenerProyectosS("PROYECTO")');
     document.getElementById("modalProyectos").classList.add('open');
     document.getElementById("btnCrearProyecto").setAttribute('onclick', 'agregarProyecto()');
     document.getElementById("btnNuevoProyecto").setAttribute('onclick', 'datosAgregarProyecto()');
     document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'obtenerProyectosP("PROYECTO")');
-    document.getElementById("btnPendientesProyectos").classList.remove('hidden');
-    // document.getElementById("btnSolucionadosProyectos").classList.add('hidden');
+
+    // Oculta y Muestra contenido
+    document.getElementById("contenidoProyectos").classList.remove('hidden');
+    document.getElementById("paginacionProyectos").classList.remove('hidden');
+    document.getElementById("contenidoGantt").classList.add('hidden');
 
     const action = "obtenerProyectosS";
     $.ajax({
@@ -1724,12 +1751,12 @@ function obtenerProyectosS() {
             idDestino: idDestino,
             idSeccion: idSeccion,
             idSubseccion: idSubseccion,
-            palabraProyecto: palabraProyecto
+            palabraProyecto: palabraProyecto,
+            tipoOrden: tipoOrden
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
-            alertaImg('Proyectos Obtenidos: ' + data.totalProyectos, '', 'info', 4000);
+            alertaImg('Proyectos Finalizados: ' + data.totalProyectos, '', 'info', 4000);
             document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
             document.getElementById("seccionProyectos").innerHTML = data.seccion;
             estiloSeccionModal('estiloSeccionProyectos', data.seccion);
@@ -2359,6 +2386,178 @@ function subirImagenGeneral(idTabla, tabla) {
 }
 
 
+function ganttP() {
+    // Cambia diseño de Botones en Proyectos
+    claseBotonesProyecto('ganttPendientes');
+
+    // Oculta y Muestra contenido
+    document.getElementById("contenidoProyectos").classList.add('hidden');
+    document.getElementById("paginacionProyectos").classList.add('hidden');
+    document.getElementById("contenidoGantt").classList.remove('hidden');
+
+    document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'ganttP()');
+    document.getElementById("btnSolucionadosProyectos").setAttribute('onclick', 'ganttS()');
+
+    // Data URL
+    const action = "ganttProyectosP";
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = 200;
+    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion;
+
+
+    fetch(dataURL)
+        .then(res => res.json())
+        .then(dataGantt => {
+
+            const arrayTratado = new Promise((resolve, recject) => {
+                for (var i = 0; i < dataGantt.length; i++) {
+                    var colorSet = new am4core.ColorSet();
+                    dataGantt[i]['color'] = colorSet.getIndex(i);
+                }
+                resolve(dataGantt);
+            });
+
+            arrayTratado.then((response) => {
+                generarGantt(response);
+            }).catch((error) => {
+                console.log('Error' + error);
+            });
+
+            alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
+            let size = dataGantt.length * 50;
+            document.getElementById("contenidoGantt").childNodes[1].setAttribute('style', 'height:' + size + 'px');
+        });
+
+    function generarGantt(dataGantt) {
+
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.paddingRight = 30;
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+        var colorSet = new am4core.ColorSet();
+        colorSet.saturation = 0.4;
+
+        chart.data = dataGantt;
+        chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "category";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.inversed = true;
+
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 70;
+        dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+        dateAxis.renderer.tooltipLocation = 0;
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.height = am4core.percent(70);
+        series1.columns.template.tooltipText = "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+        series1.dataFields.openDateX = "start";
+        series1.dataFields.dateX = "end";
+        series1.dataFields.categoryY = "category";
+        series1.columns.template.propertyFields.fill = "color"; // get color from data
+        series1.columns.template.propertyFields.stroke = "color";
+        series1.columns.template.strokeOpacity = 1;
+
+        chart.scrollbarX = new am4core.Scrollbar();
+    }
+}
+
+function ganttS() {
+    // Cambia estilo de Botones en Proyectos
+    claseBotonesProyecto('ganttSolucionados');
+
+    // Oculta y Muestra contenido
+    document.getElementById("contenidoProyectos").classList.add('hidden');
+    document.getElementById("paginacionProyectos").classList.add('hidden');
+    document.getElementById("contenidoGantt").classList.remove('hidden');
+
+    document.getElementById("btnGanttProyecto").setAttribute('onclick', 'ganttS()');
+
+    // Data URL
+    const action = "ganttProyectosS";
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = 200;
+    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion;
+
+
+    fetch(dataURL)
+        .then(res => res.json())
+        .then(dataGantt => {
+
+            const arrayTratado = new Promise((resolve, recject) => {
+                for (var i = 0; i < dataGantt.length; i++) {
+                    var colorSet = new am4core.ColorSet();
+                    dataGantt[i]['color'] = colorSet.getIndex(i);
+                }
+                resolve(dataGantt);
+            });
+
+            arrayTratado.then((response) => {
+                generarGantt(response);
+            }).catch((error) => {
+                console.log('Error' + error);
+            });
+
+            alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
+            let size = dataGantt.length * 50;
+            document.getElementById("contenidoGantt").childNodes[1].setAttribute('style', 'height:' + size + 'px');
+        });
+
+    function generarGantt(dataGantt) {
+
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.paddingRight = 30;
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+        var colorSet = new am4core.ColorSet();
+        colorSet.saturation = 0.4;
+
+        chart.data = dataGantt;
+        chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "category";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.inversed = true;
+
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 70;
+        dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+        dateAxis.renderer.tooltipLocation = 0;
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.height = am4core.percent(70);
+        series1.columns.template.tooltipText = "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+        series1.dataFields.openDateX = "start";
+        series1.dataFields.dateX = "end";
+        series1.dataFields.categoryY = "category";
+        series1.columns.template.propertyFields.fill = "color"; // get color from data
+        series1.columns.template.propertyFields.stroke = "color";
+        series1.columns.template.strokeOpacity = 1;
+
+        chart.scrollbarX = new am4core.Scrollbar();
+    }
+}
 
 
 
@@ -2371,11 +2570,31 @@ function subirImagenGeneral(idTabla, tabla) {
 
 
 
-// Quitar estas variables en las funciones y volverlas Globales, al terminar esta versión. 
-//     let idUsuario = localStorage.getItem('usuario');
-//     let idDestino = localStorage.getItem('idDestino');
+
 
 // Mantener de Ultimo.
+
+//Funcion para los Botones de Proyectos (Gantt Proyectos)
+function claseBotonesProyecto(tipoSeleccion) {
+    document.getElementById("btnProyecto").classList.remove('bg-blue-300');
+    document.getElementById("btnGanttProyecto").classList.remove('bg-blue-300');
+    document.getElementById("btnSolucionadosProyectos").classList.remove('bg-green-300');
+    document.getElementById("btnPendientesProyectos").classList.remove('bg-red-300');
+
+    if (tipoSeleccion == "proyectosPendientes") {
+        document.getElementById("btnProyecto").classList.add('bg-blue-300');
+        document.getElementById("btnPendientesProyectos").classList.add('bg-red-300');
+    } else if (tipoSeleccion == "proyectosSolucionados") {
+        document.getElementById("btnProyecto").classList.add('bg-blue-300');
+        document.getElementById("btnSolucionadosProyectos").classList.add('bg-green-300');
+    } else if (tipoSeleccion == "ganttPendientes") {
+        document.getElementById("btnGanttProyecto").classList.add('bg-blue-300');
+        document.getElementById("btnPendientesProyectos").classList.add('bg-red-300');
+    } else if (tipoSeleccion == "ganttSolucionados") {
+        document.getElementById("btnGanttProyecto").classList.add('bg-blue-300');
+        document.getElementById("btnSolucionadosProyectos").classList.add('bg-green-300');
+    }
+}
 
 // Funcion toggle por CLASENAME 
 function classNameToggle(nameClass) {
