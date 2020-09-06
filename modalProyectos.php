@@ -1619,6 +1619,18 @@
             $("#" + idModal).toggleClass('open');
         }
 
+
+        // Funcion toggle por CLASENAME 
+        function classNameToggle(nameClass) {
+            var x = document.getElementsByClassName(nameClass);
+            var i;
+            for (i = 0; i < x.length; i++) {
+                document.getElementsByClassName(nameClass)[i].classList.toggle('hidden');
+                // console.log(nameClass, i);
+            }
+        }
+
+
         // Funcion Default.
         obtenerProyectosP('PROYECTO');
     </script>
