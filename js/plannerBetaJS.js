@@ -2397,6 +2397,7 @@ function ganttP() {
 
     document.getElementById("btnPendientesProyectos").setAttribute('onclick', 'ganttP()');
     document.getElementById("btnSolucionadosProyectos").setAttribute('onclick', 'ganttS()');
+    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'ganttP()');
 
     // Data URL
     const action = "ganttProyectosP";
@@ -2404,8 +2405,8 @@ function ganttP() {
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = 200;
-    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion;
-
+    let palabraProyecto = document.getElementById("palabraProyecto").value;
+    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion + '&palabraProyecto=' + palabraProyecto;
 
     fetch(dataURL)
         .then(res => res.json())
@@ -2426,8 +2427,8 @@ function ganttP() {
             });
 
             alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
-            let size = dataGantt.length * 50;
-            document.getElementById("contenidoGantt").childNodes[1].setAttribute('style', 'height:' + size + 'px');
+            let size = 100 +(dataGantt.length * 50);
+            document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
         });
 
     function generarGantt(dataGantt) {
@@ -2483,6 +2484,7 @@ function ganttS() {
     document.getElementById("contenidoGantt").classList.remove('hidden');
 
     document.getElementById("btnGanttProyecto").setAttribute('onclick', 'ganttS()');
+    document.getElementById("palabraProyecto").setAttribute('onkeyup', 'ganttS()');
 
     // Data URL
     const action = "ganttProyectosS";
@@ -2490,7 +2492,8 @@ function ganttS() {
     let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = 200;
-    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion;
+    let palabraProyecto = document.getElementById("palabraProyecto").value;
+    let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion + '&palabraProyecto=' + palabraProyecto;
 
 
     fetch(dataURL)
@@ -2512,8 +2515,8 @@ function ganttS() {
             });
 
             alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
-            let size = dataGantt.length * 50;
-            document.getElementById("contenidoGantt").childNodes[1].setAttribute('style', 'height:' + size + 'px');
+            let size = 100 + (dataGantt.length * 50);
+            document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
         });
 
     function generarGantt(dataGantt) {
