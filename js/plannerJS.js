@@ -4396,6 +4396,18 @@ function mostrarJustificacion(idProyecto) {
 }
 
 function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombreSeccion) {
+    // Nueva version
+    localStorage.setItem('usuario', idUsuario);
+    localStorage.setItem('idDestino', id_Destino);
+    localStorage.setItem('idSeccion', id_Seccion);
+    localStorage.setItem('idSubseccion', idSubseccion);
+
+    // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
+    page = 'modalProyectos.php';
+    window.open(page, "Proyectos",
+        "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=800px"
+    );
+
     document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
     document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
     document.getElementById("btnProyectosPendientes").classList.add('is-hidden');

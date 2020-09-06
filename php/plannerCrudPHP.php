@@ -5562,9 +5562,9 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-                $data['dataProyectos'] = $dataProyectos;
             }
         }
+        $data['dataProyectos'] = $dataProyectos;
         echo json_encode($data);
     }
 
@@ -6143,9 +6143,9 @@ if (isset($_POST['action'])) {
                 ";
                 }
 
-                $data['dataProyectos'] = $dataProyectos;
             }
         }
+        $data['dataProyectos'] = $dataProyectos;
         echo json_encode($data);
     }
 
