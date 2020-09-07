@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
                     "start" => "$fechaInicio",
                     "end" => "$fechaFin",
                     "color" => "colorSet.getIndex($contador)",
-                    "task" => "$titulo  $fechaInicio - $fechaFin"
+                    "task" => "$titulo"
                 );
 
 
