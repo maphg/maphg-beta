@@ -340,17 +340,17 @@
                     </div>
                 </div>
                 <div id="statusbitacoratoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2">
-                    <div class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div id="statusGP" class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
                         <div class="">
                             <h1>GP</h1>
                         </div>
                     </div>
-                    <div class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div id="statusTRS" class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
                         <div class="">
                             <h1>TRS</h1>
                         </div>
                     </div>
-                    <div class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div id="statusZI" class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
                         <div class="">
                             <h1>ZI</h1>
                         </div>
@@ -1256,50 +1256,201 @@
         // Status para Planaccion
         function statusPlanaccion(idPlanaccion) {
             let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
+
             document.getElementById("inputEditarTitulo").value = actividadActual;
-            document.getElementById("modalStatus").classList.add('open');
+            document.getElementById("modalStatus").classList.add("open");
 
-            document.getElementById("btnEditarTitulo").
-            setAttribute('onclick', 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ')');
+            // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
+            document
+                .getElementById("btnEditarTitulo")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusActivo").
-            setAttribute('onclick', 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ')');
+            document
+                .getElementById("statusActivo")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusFinalizar").
-            setAttribute('onclick', 'actualizarPlanaccion("F","status",' + idPlanaccion + ')');
+            document
+                .getElementById("statusFinalizar")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion("F","status",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusMaterial").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ')');
+            document
+                .getElementById("statusMaterial")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusTrabajare").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ')');
+            document
+                .getElementById("statusTrabajare")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusElectricidad").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ')');
+            document
+                .getElementById("statusElectricidad")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusAgua").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ')');
+            document
+                .getElementById("statusAgua")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusDiesel").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ')');
+            document
+                .getElementById("statusDiesel")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusGas").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ')');
+            document
+                .getElementById("statusGas")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusRRHH").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ')');
+            document
+                .getElementById("statusRRHH")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusCalidad").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ')');
+            document
+                .getElementById("statusCalidad")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusDireccion").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ')');
+            document
+                .getElementById("statusDireccion")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusFinanzas").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ')');
+            document
+                .getElementById("statusFinanzas")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")"
+                );
 
-            document.getElementById("statusCompras").
-            setAttribute('onclick', 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ')');
+            document
+                .getElementById("statusCompras")
+                .setAttribute(
+                    "onclick",
+                    'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")"
+                );
+
+            // Llama la función para formatear el Modal de Status
+            estiloDefectoModalStatus();
+
+            let idUsuario = localStorage.getItem("usuario");
+            let idDestino = localStorage.getItem("idDestino");
+            let idSeccion = localStorage.getItem("idSeccion");
+            const action = "statusPlanaccion";
+            console.log("statusPlanaccion");
+            $.ajax({
+                type: "POST",
+                url: "php/plannerCrudPHP.php",
+                data: {
+                    action: action,
+                    idUsuario: idUsuario,
+                    idDestino: idDestino,
+                    idSeccion: idSeccion,
+                    idPlanaccion: idPlanaccion,
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+
+                    if (data.sMaterial == 1) {
+                        document
+                            .getElementById("statusMaterial")
+                            .classList.add("bg-orange-200");
+                    }
+
+                    if (data.sTrabajando == 1) {
+                        document.getElementById("statusTrabajare").classList.add("bg-blue-200");
+                    }
+
+                    if (
+                        data.eElectricidad == 1 ||
+                        data.eAgua == 1 ||
+                        data.eDiesel == 1 ||
+                        data.eGas == 1
+                    ) {
+                        document
+                            .getElementById("statusenergeticos")
+                            .classList.add("bg-yellow-200");
+                    }
+
+                    if (data.eElectricidad == 1) {
+                        document
+                            .getElementById("statusElectricidad")
+                            .classList.add("bg-yellow-200");
+                    }
+
+                    if (data.eAgua == 1) {
+                        document.getElementById("statusAgua").classList.add("bg-yellow-200");
+                    }
+
+                    if (data.eDiesel == 1) {
+                        document.getElementById("statusDiesel").classList.add("bg-yellow-200");
+                    }
+
+                    if (data.eGas == 1) {
+                        document.getElementById("statusGas").classList.add("bg-yellow-200");
+                    }
+
+                    if (
+                        data.dCalidad == 1 ||
+                        data.dCompras == 1 ||
+                        data.dDireccion == 1 ||
+                        data.dFinanzas == 1 ||
+                        data.dRRHH == 1
+                    ) {
+                        document.getElementById("statusdep").classList.add("bg-teal-200");
+                    }
+
+                    if (data.dCalidad == 1) {
+                        document.getElementById("statusCalidad").classList.add("bg-teal-200");
+                    }
+
+                    if (data.dCompras == 1) {
+                        document.getElementById("statusCompras").classList.add("bg-teal-200");
+                    }
+
+                    if (data.dDireccion == 1) {
+                        document.getElementById("statusDireccion").classList.add("bg-teal-200");
+                    }
+
+                    if (data.dFinanzas == 1) {
+                        document.getElementById("statusFinanzas").classList.add("bg-teal-200");
+                    }
+
+                    if (data.dRRHH == 1) {
+                        document.getElementById("statusRRHH").classList.add("bg-teal-200");
+                    }
+                },
+            });
         }
 
 
@@ -1636,6 +1787,39 @@
                 chart.scrollbarX = new am4core.Scrollbar();
             }
         }
+
+
+        // Funcion para restablecer Estilo ModalStatus
+        function estiloDefectoModalStatus() {
+            document.getElementById("statusMaterial").classList.remove("bg-orange-200");
+            document.getElementById("statusTrabajare").classList.remove("bg-blue-200");
+
+            //Energeticos
+            document
+                .getElementById("statusenergeticos")
+                .classList.remove("bg-yellow-200");
+            document
+                .getElementById("statusElectricidad")
+                .classList.remove("bg-yellow-200");
+            document.getElementById("statusAgua").classList.remove("bg-yellow-200");
+            document.getElementById("statusDiesel").classList.remove("bg-yellow-200");
+            document.getElementById("statusGas").classList.remove("bg-yellow-200");
+
+            //Departamentos
+            document.getElementById("statusdep").classList.remove("bg-teal-200");
+            document.getElementById("statusRRHH").classList.remove("bg-teal-200");
+            document.getElementById("statusCalidad").classList.remove("bg-teal-200");
+            document.getElementById("statusDireccion").classList.remove("bg-teal-200");
+            document.getElementById("statusFinanzas").classList.remove("bg-teal-200");
+            document.getElementById("statusCompras").classList.remove("bg-teal-200");
+
+            //Bitacora
+            document.getElementById("statusbitacora").classList.remove("bg-lightblue-50");
+            document.getElementById("statusGP").classList.remove("bg-lightblue-50");
+            document.getElementById("statusTRS").classList.remove("bg-lightblue-50");
+            document.getElementById("statusZI").classList.remove("bg-lightblue-50");
+        }
+
 
         // Mantener de Ultimo.
 

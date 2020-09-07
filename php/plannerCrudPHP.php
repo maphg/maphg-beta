@@ -6348,6 +6348,10 @@ if (isset($_POST['action'])) {
                 $coste = $value['coste'];
                 $rangoFecha = $value['rango_fecha'];
 
+                if ($rangoFecha != "") {
+                    $rangoFecha = "$rangoFecha[3]$rangoFecha[4]/$rangoFecha[0]$rangoFecha[1]/$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9] - $rangoFecha[16]$rangoFecha[17]/$rangoFecha[13]$rangoFecha[14]/$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]";
+                }
+
                 $data['tipo'] = $tipo;
                 $data['justificacion'] = $justificacion;
                 $data['coste'] = $coste;
@@ -6516,6 +6520,61 @@ if (isset($_POST['action'])) {
             echo 0;
         }
     }
+
+
+    // Obtien los Status Marcados para dar diseño en el modal
+    if ($action == "statusPlanaccion") {
+        $data = array();
+        $idPlanaccion = $_POST['idPlanaccion'];
+
+        // Default
+        $data['sUrgente'] = 0;
+        $data['sMaterial'] = 0;
+        $data['sTrabajando'] = 0;
+        $data['eElectricidad'] = 0;
+        $data['eAgua'] = 0;
+        $data['eDiesel'] = 0;
+        $data['eGas'] = 0;
+        $data['dCalidad'] = 0;
+        $data['dCompras'] = 0;
+        $data['dDireccion'] = 0;
+        $data['dFinanzas'] = 0;
+        $data['dRRHH'] = 0; 
+
+        $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh 
+        FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $sUrgente = $i['status_urgente'];
+                $sMaterial = $i['status_material'];
+                $sTrabajando = $i['status_trabajando'];
+                $eElectricidad = $i['energetico_electricidad'];
+                $eAgua = $i['energetico_agua'];
+                $eDiesel = $i['energetico_diesel'];
+                $eGas = $i['energetico_gas'];
+                $dCalidad = $i['departamento_calidad'];
+                $dCompras = $i['departamento_compras'];
+                $dDireccion = $i['departamento_direccion'];
+                $dFinanzas = $i['departamento_finanzas'];
+                $dRRHH = $i['departamento_rrhh'];
+
+                $data['sUrgente']=$sUrgente;                
+                $data['sMaterial']=$sMaterial;                
+                $data['sTrabajando']=$sTrabajando;                
+                $data['eElectricidad']=$eElectricidad;                
+                $data['eAgua']=$eAgua;                
+                $data['eDiesel']=$eDiesel;                
+                $data['eGas']=$eGas;                
+                $data['dCalidad']=$dCalidad;                
+                $data['dCompras']=$dCompras;                
+                $data['dDireccion']=$dDireccion;                
+                $data['dFinanzas']=$dFinanzas;                
+                $data['dRRHH']=$dRRHH;                
+            }
+        }
+        echo json_encode($data);
+    }
+
 
     // Sube Adjuntos (TABLA, IDTABLA)
     if ($action == "subirImagenGeneral") {
