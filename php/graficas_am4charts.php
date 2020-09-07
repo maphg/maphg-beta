@@ -16,16 +16,16 @@ if (isset($_GET['action'])) {
         $dataArray = array();
         $contador = 0;
 
-        if ($idDestino == 10) {
+        if ($idDestino == "10") {
             $filtroDestino = "";
         } else {
-            $filtroDestino = "AND id_destino = $idDestino";
+            $filtroDestino = "and id_destino = $idDestino";
         }
 
-        if ($palabraProyecto != "") {
-            $filtroPalabra = "and titulo LIKE '%$palabraProyecto%'";
-        } else {
+        if ($palabraProyecto == "") {
             $filtroPalabra = "";
+        } else {
+            $filtroPalabra = "and titulo LIKE '%$palabraProyecto%'";
         }
 
         $query = "SELECT id, titulo, rango_fecha, fecha_creacion FROM t_proyectos 
@@ -35,23 +35,23 @@ if (isset($_GET['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idProyecto = $i['id'];
-                $titulo = $i['titulo'];
+                $titulo = preg_replace('([^A-Za-z0-9 .-])', '', $i['titulo']);
                 $rangoFecha = $i['rango_fecha'];
                 $fechaCreacion = $i['fecha_creacion'];
                 $contador++;
 
                 if (strlen($titulo) > 31) {
-                    // Entonces corta la cadena y ponle el sufijo
+                    // Se restringen caracteres a 30
                     $titulo = substr($titulo, 0, 30) . "...";
                 }
 
-                if ($rangoFecha != "" and strlen($rangoFecha) >= 23) {
+                if ($rangoFecha != "" and strlen($rangoFecha) >= 22) {
                     $fechaInicio = "$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9]-$rangoFecha[3]$rangoFecha[4]-$rangoFecha[0]$rangoFecha[1]";
 
                     $fechaFin = "$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[13]$rangoFecha[14]";
                 } else {
                     $fechaInicio = (new DateTime($fechaCreacion))->format('Y-m-d');
-                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 4 days"));
+                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 1 days"));
                 }
 
                 // Array Temportal
@@ -62,7 +62,6 @@ if (isset($_GET['action'])) {
                     "color" => "colorSet.getIndex($contador)",
                     "task" => "$titulo"
                 );
-
 
                 // Se almacenan los Arrays Temporales
                 $dataArray[] = $arrayAux;
@@ -95,7 +94,7 @@ if (isset($_GET['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idProyecto = $i['id'];
-                $titulo = $i['titulo'];
+                $titulo = preg_replace('([^A-Za-z0-9 .-])', '', $i['titulo']);
                 $rangoFecha = $i['rango_fecha'];
                 $fechaCreacion = $i['fecha_creacion'];
                 $contador++;
@@ -111,7 +110,7 @@ if (isset($_GET['action'])) {
                     $fechaFin = "$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[13]$rangoFecha[14]";
                 } else {
                     $fechaInicio = (new DateTime($fechaCreacion))->format('Y-m-d');
-                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 4 days"));
+                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 1 days"));
                 }
 
                 // Array Temportal

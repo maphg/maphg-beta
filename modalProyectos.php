@@ -626,6 +626,7 @@
 
     <script>
         // ---------- PROYECTOS ----------
+
         function expandir(id) {
             // console.log(id);
             let idtoggle = id + 'toggle';
@@ -635,7 +636,7 @@
             document.getElementById(idtitulo).classList.toggle('truncate');
         }
 
-        
+
         // Función para Input Fechas para Agregar MC.
         $(function() {
             $('input[name="datefilter"]').daterangepicker({
@@ -1493,7 +1494,7 @@
                         console.log('Error' + error);
                     });
 
-                    alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
+                    alertaImg('Gantt Pendientes: ' + dataGantt.length, '', 'info', 4000);
                     let size = 100 + (dataGantt.length * 50);
                     document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
                 });
@@ -1543,6 +1544,7 @@
                 chart.scrollbarX = new am4core.Scrollbar();
             }
         }
+
 
         function ganttS() {
             // Cambia estilo de Botones en Proyectos

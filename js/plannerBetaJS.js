@@ -339,7 +339,6 @@ function calendarioSecciones() {
     }
 }
 
-// Expande Hijos
 function expandir(id) {
     // console.log(id);
     let idtoggle = id + 'toggle';
@@ -1823,7 +1822,7 @@ function agregarProyecto() {
     let justificacion = document.getElementById("justificacionProyectoN").value;
     let coste = document.getElementById("costeProyectoN").value;
     const action = "agregarProyecto";
-    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 5 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
+    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
         $.ajax({
             type: "POST",
             url: "php/plannerCrudPHP.php",
@@ -2429,7 +2428,7 @@ function ganttP() {
                 console.log('Error' + error);
             });
 
-            alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
+            alertaImg('Gantt Pendientes: ' + dataGantt.length, '', 'info', 4000);
             let size = 100 + (dataGantt.length * 50);
             document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
         });
@@ -2497,7 +2496,6 @@ function ganttS() {
     let idSubseccion = 200;
     let palabraProyecto = document.getElementById("palabraProyecto").value;
     let dataURL = 'php/graficas_am4charts.php?action=' + action + '&idUsuario=' + idUsuario + '&idDestino=' + idDestino + '&idSeccion=' + idSeccion + '&idSubseccion=' + idSubseccion + '&palabraProyecto=' + palabraProyecto;
-
 
     fetch(dataURL)
         .then(res => res.json())
