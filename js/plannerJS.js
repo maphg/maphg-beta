@@ -4395,7 +4395,9 @@ function mostrarJustificacion(idProyecto) {
     });
 }
 
+
 function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombreSeccion) {
+    document.getElementById("modal-proyectos").setAttribute('style', 'display:none');
     // Nueva version
     localStorage.setItem('usuario', idUsuario);
     localStorage.setItem('idDestino', id_Destino);
@@ -4408,6 +4410,7 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombre
         "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=800px"
     );
 
+    // document.getElementById("modal-proyectos")
     // document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
     // document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
     // document.getElementById("btnProyectosPendientes").classList.add('is-hidden');
@@ -4513,7 +4516,6 @@ function btnEditarProyecto() {
 }
 
 function eliminarProyecto() {
-    // console.log(idProyecto);
     var action = "eliminarProyecto";
     Swal.fire({
         title: "¿Desea Eliminar el Proyecto?",
@@ -4549,7 +4551,6 @@ function eliminarProyecto() {
 function editarProyecto() {
     var idProyecto = $("#idProyectoStatus").val();
     var tituloProyecto = $("#editarTituloProyecto").val();
-    // console.log(idProyecto, tituloProyecto);
     var action = "editarProyecto";
     $.ajax({
         type: "post",
@@ -4902,7 +4903,6 @@ function finalizarMC(idMC) {
             } else {
                 obtCorrectivos(idEquipo, 'N');
             }
-            // console.log(datos);
         },
     });
 }
@@ -5049,7 +5049,6 @@ function subir_archivo(form) {
     //progreso
     peticion.upload.addEventListener("progress", (event) => {
         let porcentaje = Math.round((event.loaded / event.total) * 100);
-        // console.log(porcentaje);
         barra_estado.style.width = porcentaje + "%";
         span.innerHTML = porcentaje + "%";
     });
@@ -5275,7 +5274,6 @@ function btnEditarPlan() {
 function eliminarPlanAccion() {
     var idPlan = $("#statusIdPlanAccion").val();
     var action = "eliminarPlanAccion";
-    // console.log(idPlan);
 
     Swal.fire({
         title: "¿Desea Eliminar el Plan de Acción?",
@@ -5407,13 +5405,11 @@ function datosStatusProyecto(
     $("#statusIdTabla").val(idTabla);
     $("#statusIdPlanAccion").val(idPlanAccion);
     $("#statusTabla").val(tabla);
-    // console.log(idDestino, idSeccion, idSubseccion, idTabla, tabla);
 }
 
 
 function obtenerStatusPlanaccion(idPlanAccion) {
     // Tabla: reporte_status_proyecto
-    // console.log(idPlanAccion);
     const action = "obtenerStatusPlanaccion";
     $.ajax({
         type: "post",
@@ -5424,7 +5420,6 @@ function obtenerStatusPlanaccion(idPlanAccion) {
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data.dataStatus);
             document.getElementById("dataStatusDepartamento").innerHTML = data.dataStatus;
         },
     });
@@ -5432,7 +5427,6 @@ function obtenerStatusPlanaccion(idPlanAccion) {
 
 
 function eliminarStatusPlanAccion(idPlanAccion, status) {
-    console.log(idPlanAccion);
     const action = "eliminarStatusPlanAccion";
     $.ajax({
         type: "post",
@@ -5444,7 +5438,6 @@ function eliminarStatusPlanAccion(idPlanAccion, status) {
         },
         // dataType: 'json',
         success: function (data) {
-            console.log(data);
             $("#modalStatusPlanAccion").removeClass("is-active");
             $("#modalDepartamento").removeClass("is-active");
             refreshProyectos();
@@ -5533,7 +5526,6 @@ function aplicarStatus(statusProyecto) {
                 $("#modalDepartamento").removeClass("is-active");
                 refreshProyectos();
                 alertInformacionActualiza("Status Actualizado");
-                // console.log(datos);
             },
         });
     }
@@ -5588,7 +5580,6 @@ function aplicarStatus(statusProyecto) {
 //                 $("#modalStatusPlanAccion").addClass("modal");
 //                 refreshProyectos();
 //                 alertInformacionActualiza('Status Actualizado');
-//                 console.log(datos);
 //             }
 //         });
 //     }
@@ -5605,7 +5596,6 @@ function finalizarProyectoPlanAccion(idPlanAccion) {
             idPlanAccion: idPlanAccion
         },
         success: function (datos) {
-            // console.log(datos);
             $("#modalStatusPlanAccion").removeClass();
             $("#modalStatusPlanAccion").addClass("modal");
             refreshProyectos();
@@ -5632,7 +5622,6 @@ function reporteStatusDEP(
     $("#xlsIdSeccion").val(idSeccion);
 
     $("#seccionDEP").addClass("DEP");
-    // console.log( idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre, seccionNombre, grupo);
     $("#reporteStatusDEP").removeClass(" modal");
     $("#nombreSubseccionDEP").html(seccionNombre);
 
@@ -5649,7 +5638,6 @@ function reporteStatusDEP(
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             // refreshProyectos();
             $("#reporteStatusDEPData").html(datos);
         },
@@ -5659,10 +5647,8 @@ function reporteStatusDEP(
 function capturarCodigo(idMC, tipoCodigo) {
     if (tipoCodigo == "cod2bend") {
         var codigo = $("#cod2ben" + idMC).val();
-        // console.log(idMC, tipoCodigo, codigo);
     } else {
         var codigo = $("#codsap" + idMC).val();
-        // console.log(idMC, tipoCodigo, codigo);
     }
 
     var action = "capturarCodigo";
@@ -5677,7 +5663,6 @@ function capturarCodigo(idMC, tipoCodigo) {
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             if (datos == "ok") {
                 alertInformacionActualiza('Codigo Actualizado: ' + codigo);
             } else {
@@ -5710,7 +5695,6 @@ function aplicarStatusMC(departamento) {
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             alertInformacionActualiza(datos);
             show_hide_modal("modalDepartamentoMC", "hide");
             show_hide_modal("modalEnergeticoMC", "hide");
@@ -5735,7 +5719,6 @@ function consultaEDMC(statusConsulta) {
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             recargarMC();
             if ((statusConsulta = "energetico")) {
                 $("#consultaEnergeticoMC").html(datos);
@@ -5763,7 +5746,6 @@ function eliminarED(tabla, columna, idMC) {
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             recargarMC();
             alertInformacionActualiza(datos);
             show_hide_modal("modalEnergeticoMC", "hide");
@@ -5904,7 +5886,6 @@ function consultaDEP(idUsuario, idDestino, idSeccion, idSubseccion) {
         },
         // dataType:'json',
         success: function (datos) {
-            // console.log(datos);
             $("#data-proyectos-TG").html(datos);
             $("#textSeccion").html('DEP');
         },
@@ -6007,7 +5988,6 @@ function zonaMC(idMC, zona, idEquipo, statusMC, idSubseccion) {
 function consultaFaseProyectoDEP(idProyecto) {
     $("#dataOptionDEP").html('');
     const action = "consultaFaseProyectoDEP";
-    // console.log('NA', idProyecto);
     $.ajax({
         type: "post",
         url: "php/crud.php",
@@ -6037,7 +6017,6 @@ function agregarFaseProyectoDEP(fase) {
             fase: fase
         },
         success: function (datos) {
-            // console.log(datos);
             if (datos != "") {
                 alertInformacionActualiza(datos);
                 // consultaFaseProyectoDEP(idProyecto);

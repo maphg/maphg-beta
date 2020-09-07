@@ -1058,10 +1058,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1136,10 +1136,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -7739,11 +7739,11 @@ $tablaRanking .= "</div>";
         $("#seccion-bar").css('display', 'none');
     });
 
-    $(".btn-proyectos").click(function() {
-        $("#seccion-bar").css('display', 'none');
-        $("#seccionColumnas").css('display', 'none');
-        $("#modal-proyectos").css('display', 'block');
-    });
+    // $(".btn-proyectos").click(function() {
+    //     $("#seccion-bar").css('display', 'none');
+    //     $("#seccionColumnas").css('display', 'none');
+    //     $("#modal-proyectos").css('display', 'block');
+    // });
 
     $(".btn-regresar-subsecciones").click(function() {
         $("#sectionHeroListaEquipos").css('display', 'none');
