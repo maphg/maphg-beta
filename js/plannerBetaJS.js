@@ -1822,7 +1822,7 @@ function agregarProyecto() {
     let justificacion = document.getElementById("justificacionProyectoN").value;
     let coste = document.getElementById("costeProyectoN").value;
     const action = "agregarProyecto";
-    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
+    if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 5 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
         $.ajax({
             type: "POST",
             url: "php/plannerCrudPHP.php",

@@ -627,7 +627,32 @@
     <script>
         // ---------- PROYECTOS ----------
 
+        // Función para Input Fechas para Agregar MC.
+        $(function() {
+            $('input[name="datefilter"]').daterangepicker({
+                autoUpdateInput: false,
+                showWeekNumbers: true,
+                locale: {
+                    cancelLabel: 'Cancelar',
+                    applyLabel: "Aplicar",
+                    fromLabel: "De",
+                    toLabel: "A",
+                    customRangeLabel: "Personalizado",
+                    weekLabel: "S",
+                    daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                }
+            });
+            $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            });
+            $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+                // console.log(picker);
+                $(this).val('');
+            });
+        });
 
+        
         // Función para Input Fechas PROYECTOS
         $(function() {
             $('input[name="fechaProyecto"]').daterangepicker({
@@ -658,7 +683,7 @@
             });
         })
 
-        
+
         // Expande las actividades de los proyectos y Cambia el icono
         function expandirProyectos(id, idProyecto) {
             document.getElementById(id + "toggle").classList.toggle("hidden");
@@ -839,6 +864,7 @@
             });
         }
 
+
         // Agregar Proyecto
         function agregarProyecto() {
             let idUsuario = localStorage.getItem('usuario');
@@ -852,7 +878,7 @@
             let justificacion = document.getElementById("justificacionProyectoN").value;
             let coste = document.getElementById("costeProyectoN").value;
             const action = "agregarProyecto";
-            if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
+            if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 5 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
                 $.ajax({
                     type: "POST",
                     url: "php/plannerCrudPHP.php",
