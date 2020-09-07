@@ -4408,37 +4408,37 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombre
         "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=800px"
     );
 
-    document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
-    document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
-    document.getElementById("btnProyectosPendientes").classList.add('is-hidden');
+    // document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
+    // document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
+    // document.getElementById("btnProyectosPendientes").classList.add('is-hidden');
 
-    $("#data-proyectos-TG").html("");
-    var action = "listarProyectos";
-    let statusProyecto = "N";
+    // $("#data-proyectos-TG").html("");
+    // var action = "listarProyectos";
+    // let statusProyecto = "N";
 
-    $.ajax({
-        type: "post",
-        url: "php/crud.php",
-        data: {
-            action: action,
-            id_Destino: id_Destino,
-            id_Seccion: id_Seccion,
-            idSubseccion: idSubseccion,
-            idUsuario: idUsuario,
-            statusProyecto: statusProyecto
-        },
+    // $.ajax({
+    //     type: "post",
+    //     url: "php/crud.php",
+    //     data: {
+    //         action: action,
+    //         id_Destino: id_Destino,
+    //         id_Seccion: id_Seccion,
+    //         idSubseccion: idSubseccion,
+    //         idUsuario: idUsuario,
+    //         statusProyecto: statusProyecto
+    //     },
 
-        success: function (datos) {
-            $("#titulo_proyectos").html(datos);
+    //     success: function (datos) {
+    //         $("#titulo_proyectos").html(datos);
 
-            // Asignar valor a las variables de proyecto.
-            $("#idDestinoProyectos").val(id_Destino);
-            $("#idSeccionProyectos").val(id_Seccion);
-            $("#idUsuarioProyectos").val(idUsuario);
-            $("#idSubseccionProyectos").val(idSubseccion);
-            $("#data-proyectos").html(datos);
-        },
-    });
+    //         // Asignar valor a las variables de proyecto.
+    //         $("#idDestinoProyectos").val(id_Destino);
+    //         $("#idSeccionProyectos").val(id_Seccion);
+    //         $("#idUsuarioProyectos").val(idUsuario);
+    //         $("#idSubseccionProyectos").val(idSubseccion);
+    //         $("#data-proyectos").html(datos);
+    //     },
+    // });
 }
 
 function listarProyectosF(idUsuario, id_Destino, id_Seccion, idSubseccion) {
