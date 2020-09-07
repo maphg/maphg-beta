@@ -626,7 +626,16 @@
 
     <script>
         // ---------- PROYECTOS ----------
+        function expandir(id) {
+            // console.log(id);
+            let idtoggle = id + 'toggle';
+            let idtitulo = id + 'titulo';
+            var toggle = document.getElementById(idtoggle);
+            toggle.classList.toggle("hidden");
+            document.getElementById(idtitulo).classList.toggle('truncate');
+        }
 
+        
         // Función para Input Fechas para Agregar MC.
         $(function() {
             $('input[name="datefilter"]').daterangepicker({
@@ -652,7 +661,7 @@
             });
         });
 
-        
+
         // Función para Input Fechas PROYECTOS
         $(function() {
             $('input[name="fechaProyecto"]').daterangepicker({

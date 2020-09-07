@@ -46,11 +46,11 @@ if (isset($_GET['action'])) {
                 }
 
                 if ($rangoFecha != "" and strlen($rangoFecha) >= 23) {
-                    $fechaInicio = "$rangoFecha[0]$rangoFecha[1]-$rangoFecha[3]$rangoFecha[4]-$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9]";
+                    $fechaInicio = "$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9]-$rangoFecha[3]$rangoFecha[4]-$rangoFecha[0]$rangoFecha[1]";
 
-                    $fechaFin = "$rangoFecha[13]$rangoFecha[14]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]";
+                    $fechaFin = "$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[13]$rangoFecha[14]";
                 } else {
-                    $fechaInicio = (new DateTime($fechaCreacion))->format('d-m-Y');
+                    $fechaInicio = (new DateTime($fechaCreacion))->format('Y-m-d');
                     $fechaFin = date("d-m-Y", strtotime($fechaInicio . "+ 4 days"));
                 }
 
@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
                     "start" => "$fechaInicio",
                     "end" => "$fechaFin",
                     "color" => "colorSet.getIndex($contador)",
-                    "task" => "$titulo"
+                    "task" => "$titulo  $fechaInicio - $fechaFin"
                 );
 
 

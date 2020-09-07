@@ -339,6 +339,7 @@ function calendarioSecciones() {
     }
 }
 
+// Expande Hijos
 function expandir(id) {
     // console.log(id);
     let idtoggle = id + 'toggle';

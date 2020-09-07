@@ -1904,8 +1904,6 @@ if (isset($_POST['action'])) {
     }
 
 
-
-
     // Agregar
     if ($action == "agregarStatusProyectoPlanAccion") {
         $usuario = $_SESSION['usuario'];

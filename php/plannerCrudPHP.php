@@ -6196,7 +6196,7 @@ if (isset($_POST['action'])) {
         $año = date('Y');
 
         $query = "INSERT INTO t_proyectos(id_destino, id_seccion, id_subseccion, titulo, justificacion, fecha_creacion, rango_fecha, creado_por, responsable, status, tipo, coste, año, activo) 
-        VALUES($idDestino, $idSeccion, $idSubseccion, '$titulo', '$justificacion', '$fechaActual', '$rangoFecha', $idUsuario, $responsable, 'N', '$tipo', $coste, '$año', 1)";
+        VALUES($idDestino, $idSeccion, $idSubseccion, '$titulo', '$justificacion', '$fechaActual', '$rangoFecha', $idUsuario, $responsable, 'N', '$tipo', '$coste', '$año', 1)";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
