@@ -5052,7 +5052,7 @@ if (isset($_POST['action'])) {
 
         foreach ($idResult as $i) {
             $idProyecto = $i;
-            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
+            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion,
             t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
             FROM t_proyectos 
             INNER JOIN t_users ON t_proyectos.responsable = t_users.id
@@ -5067,9 +5067,27 @@ if (isset($_POST['action'])) {
                     $titulo = $value['titulo'];
                     $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
                     $rangoFecha = $value['rango_fecha'];
+                    $fechaCreacion = (new DateTime($value['fecha_creacion']))->format('d-m-Y');
                     $tipo = $value['tipo'];
                     $justificacion = $value['justificacion'];
                     $coste = $value['coste'];
+
+                    if ($responsable == "Sin Responsable") {
+                        $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                        FROM t_tareas_asignaciones 
+                        INNER JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        WHERE t_tareas_asignaciones.id_tarea = $idProyecto";
+                        if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                            $responsableTemp = "Sin Responsable";
+                            foreach ($resultResponsable as $i) {
+                                $responsableTemp = strtok($i['nombre'], ' ') . " " . strtok($i['apellido'], ' ');
+                            }
+                            if ($responsableTemp != "" or $responsableTemp == "Sin Responsable") {
+                                $responsable = $responsableTemp;
+                            }
+                        }
+                    }
 
 
                     $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
@@ -5116,14 +5134,14 @@ if (isset($_POST['action'])) {
                     }
 
                     if ($rangoFecha == "") {
-                        $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
+                        $rangoFecha = "$fechaCreacion - <br>$fechaCreacion";
                     }
 
                     if ($justificacion == "" or $justificacion == " ") {
                         $bgJustificacion = "bg-white";
                         $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
-                        $bgJustificacion = "bg-green-200 text-orange-500";
+                        $bgJustificacion = "bg-green-200 text-green-500";
                         $justificacion = "<i class=\"fas as fa-check\"></i>";
                     }
 
@@ -5138,8 +5156,8 @@ if (isset($_POST['action'])) {
                     // PROYECTOS
                     $dataProyectos .= "
                         <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                            <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-purple-200 text-purple-700 rounded-l-md cursor-pointer\">
-                                <div class=\"flex flex-row items-center truncate\">
+                            <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-purple-200 text-purple-700 rounded-l-md cursor-pointer truncate\">
+                                <div class=\"flex flex-row items-center\">
                                     <i class=\"fad fa-scrubber mx-2 text-red-500\"></i>
                                     <h1 id=\"tituloP$idProyecto\">$titulo</h1>
                                 </div>
@@ -5561,7 +5579,6 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-
             }
         }
         $data['dataProyectos'] = $dataProyectos;
@@ -5720,8 +5737,7 @@ if (isset($_POST['action'])) {
 
         foreach ($idResult as $i) {
             $idProyecto = $i;
-            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha,
-            t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
+            $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion, t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
             FROM t_proyectos 
             INNER JOIN t_users ON t_proyectos.responsable = t_users.id
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -5731,14 +5747,32 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
 
                 foreach ($result as $value) {
-                    $idProyecto = 0;
+                    // $idProyecto = 0;
                     $idProyecto = $value['id'];
                     $titulo = $value['titulo'];
                     $responsable = strtok($value['nombre'], ' ') . " " . strtok($value['apellido'], ' ');
                     $rangoFecha = $value['rango_fecha'];
+                    $fechaCreacion = (new DateTime($value['fecha_creacion']))->format('d-m-Y');
                     $tipo = $value['tipo'];
                     $justificacion = $value['justificacion'];
                     $coste = $value['coste'];
+
+                    if ($responsable == "Sin Responsable") {
+                        $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                        FROM t_tareas_asignaciones 
+                        INNER JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        WHERE t_tareas_asignaciones.id_tarea = $idProyecto";
+                        if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
+                            $responsableTemp = "Sin Responsable";
+                            foreach ($resultResponsable as $i) {
+                                $responsableTemp = strtok($i['nombre'], ' ') . " " . strtok($i['apellido'], ' ');
+                            }
+                            if ($responsableTemp != "" or $responsableTemp == "Sin Responsable") {
+                                $responsable = $responsableTemp;
+                            }
+                        }
+                    }
 
 
                     $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
@@ -5785,14 +5819,14 @@ if (isset($_POST['action'])) {
                     }
 
                     if ($rangoFecha == "") {
-                        $rangoFecha = "<i class=\"fas fa-window-minimize\"></i>";
+                        $rangoFecha = "$fechaCreacion - <br> $fechaCreacion";
                     }
 
                     if ($justificacion == "" or $justificacion == " ") {
                         $bgJustificacion = "bg-white";
                         $justificacion = "<i class=\"fas fa-window-minimize\"></i>";
                     } else {
-                        $bgJustificacion = "bg-green-200 text-orange-500";
+                        $bgJustificacion = "bg-green-200 text-green-500";
                         $justificacion = "<i class=\"fas as fa-check\"></i>";
                     }
 
@@ -5807,8 +5841,8 @@ if (isset($_POST['action'])) {
                     // PROYECTOS
                     $dataProyectos .= "
                     <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                        <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer\">
-                            <div class=\" flex flex-row items-center truncate\">
+                        <div id=\"proyecto$idProyecto\" onclick=\"expandirProyectos(this.id, $idProyecto)\" class=\"w-2/5 h-full flex flex-row items-center justify-between bg-teal-100 text-teal-500 rounded-l-md cursor-pointer truncate\">
+                            <div class=\" flex flex-row items-center\">
                                 <i class=\"fad fa-scrubber mx-2 text-green-500\"></i>
                                 <h1 id=\"tituloP$idProyecto\">$titulo</h1>
                             </div>
@@ -6142,7 +6176,6 @@ if (isset($_POST['action'])) {
                     </div>
                 ";
                 }
-
             }
         }
         $data['dataProyectos'] = $dataProyectos;
@@ -6212,7 +6245,7 @@ if (isset($_POST['action'])) {
 
         if ($columna == "asignarProyecto") {
             $columna = "responsable";
-            $query = "UPDATE t_proyectos SET $columna = '$valor' WHERE id = $idProyecto";
+            $query = "UPDATE t_proyectos SET responsable = '$valor' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
             } else {
@@ -6353,6 +6386,7 @@ if (isset($_POST['action'])) {
         $valor = $_POST['valor'];
         $idPlanaccion = $_POST['idPlanaccion'];
         $actividad = $_POST['actividad'];
+        $idSeccion = $_POST['idSeccion'];
 
         if ($columna == "asignarPlanaccion" and $valor > 0) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
@@ -6378,7 +6412,19 @@ if (isset($_POST['action'])) {
         } elseif ($columna == "status" and $valor == "F") {
             $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 4;
+
+                $query = "SELECT id_proyecto FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $idProyecto = $i['id_proyecto'];
+                    }
+                    $query = "INSERT INTO reporte_status_proyecto(id_usuario, id_destino, id_seccion, id_subseccion, id_proyecto, id_planaccion, status) VALUES($idUsuario, $idDestino, $idSeccion, 200, $idProyecto, $idPlanaccion, 'status_solucionado')";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        echo 4;
+                    } else {
+                        echo 0;
+                    }
+                }
             } else {
                 echo 0;
             }

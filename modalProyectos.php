@@ -20,12 +20,6 @@
 <body>
     <div id="modalProyectos" class="modal open">
         <div class="modal-window rounded-md pt-10" style="width: 1300px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalProyectos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div id="estiloSeccionProyectos" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
@@ -654,7 +648,6 @@
             let idSeccion = localStorage.getItem('idSeccion');
             let idSubseccion = localStorage.getItem('idSubseccion');
             let palabraProyecto = document.getElementById("palabraProyecto").value;
-            console.log('obtenerProyectosP');
             // Función para darle estilo a los botones
             claseBotonesProyecto('proyectosPendientes');
 
@@ -1142,8 +1135,10 @@
 
         // Actualizar PLANACCION
         function actualizarPlanaccion(valor, columna, idPlanaccion) {
+            console.log('OKKK');
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
+            let idSeccion = localStorage.getItem('idSeccion');
             let actividad = document.getElementById("inputEditarTitulo").value;
 
             const action = "actualizarPlanaccion";
@@ -1154,6 +1149,7 @@
                     action: action,
                     idUsuario: idUsuario,
                     idDestino: idDestino,
+                    idSeccion: idSeccion,
                     idPlanaccion: idPlanaccion,
                     valor: valor,
                     columna: columna,
@@ -1161,7 +1157,7 @@
                 },
                 // dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
 
                     obtenerProyectosP('PROYECTO');
                     if (data == 1) {

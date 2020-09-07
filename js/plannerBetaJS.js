@@ -2139,6 +2139,7 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
 function actualizarPlanaccion(valor, columna, idPlanaccion) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
     let actividad = document.getElementById("inputEditarTitulo").value;
 
     const action = "actualizarPlanaccion";
@@ -2149,6 +2150,7 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             action: action,
             idUsuario: idUsuario,
             idDestino: idDestino,
+            idSeccion: idSeccion,
             idPlanaccion: idPlanaccion,
             valor: valor,
             columna: columna,
@@ -2427,7 +2429,7 @@ function ganttP() {
             });
 
             alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
-            let size = 100 +(dataGantt.length * 50);
+            let size = 100 + (dataGantt.length * 50);
             document.getElementById("chartdiv").setAttribute('style', 'height:' + size + 'px');
         });
 
