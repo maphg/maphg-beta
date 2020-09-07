@@ -627,6 +627,38 @@
     <script>
         // ---------- PROYECTOS ----------
 
+
+        // Función para Input Fechas PROYECTOS
+        $(function() {
+            $('input[name="fechaProyecto"]').daterangepicker({
+                autoUpdateInput: false,
+                showWeekNumbers: true,
+                locale: {
+                    cancelLabel: 'Cancelar',
+                    applyLabel: "Aplicar",
+                    fromLabel: "De",
+                    toLabel: "A",
+                    customRangeLabel: "Personalizado",
+                    weekLabel: "S",
+                    daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                }
+            });
+            $('input[name="fechaProyecto"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+
+                // Actualiza fecha TAREAS cuando se Aplica el rango.
+                let rangoFecha = picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY');
+                let idProyecto = localStorage.getItem('idProyecto');
+                actualizarProyectos(rangoFecha, 'rango_fecha', idProyecto);
+            });
+            $('input[name="fechaProyecto"]').on('cancel.daterangepicker', function(ev, picker) {
+                // console.log(picker);
+                $(this).val('');
+            });
+        })
+
+        
         // Expande las actividades de los proyectos y Cambia el icono
         function expandirProyectos(id, idProyecto) {
             document.getElementById(id + "toggle").classList.toggle("hidden");
