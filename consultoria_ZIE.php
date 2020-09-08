@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
 </head>
 
 <body class="bg-yellow-400">
@@ -26,9 +27,11 @@
         </div>
         <iframe class="w-full md:w-1/2 h-screen" src="https://chatbro.com/66j9R" frameborder="0"></iframe>
     </div>
-    
+
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/complemento_menuJS.js"></script>
+    <script src="js/alertify.min.js"></script>
+    <script src="js/alertasSweet.js"></script>
 </body>
 
 </html>
