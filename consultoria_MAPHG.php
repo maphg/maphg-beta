@@ -26,7 +26,7 @@
             </div>
             <h1 class="font-bold text-3xl text-bluegray-100">SOPORTE</h1>
         </div>
-        <iframe class="w-full md:w-1/2 h-screen" src="https://chatbro.com/46j9D" frameborder="0"></iframe>
+        <iframe class="w-full md:w-1/2 h-screen pb-20" src="https://chatbro.com/46j9D" frameborder="0"></iframe>
     </div>
 
     <script src="js/jquery-3.3.1.js"></script>
