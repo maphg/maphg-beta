@@ -168,24 +168,31 @@
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo5" data-toggle="hijo" href="#" class="CA">Consultoria</o>
+                <o data-target="hijo5" data-toggle="hijo" href="#" class="CA">Consultoría</o>
+                <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
         <dav id="hijo5" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">DEC</o>
+                <a href="https://www.maphg.com/beta/consultoria_DEC.php" class="menu-hijo-3 CA">DEC</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">ZIA</o>
+                <a href="https://www.maphg.com/beta/consultoria_ZIA.php" class="menu-hijo-3 CA">ZIA</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">ZIC</o>
+                <a href="https://www.maphg.com/beta/consultoria_ZIC.php" class="menu-hijo-3 CA">ZIC</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">ZHA</o>
+                <a href="https://www.maphg.com/beta/consultoria_ZIE.php" class="menu-hijo-3 CA">ZIE</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">SOPORTE</o>
+                <a href="https://www.maphg.com/beta/consultoria_ZIL.php" class="menu-hijo-3 CA">ZIL</a>
+            </dav>
+            <dav class="menu-hijo-2">
+                <a href="https://www.maphg.com/beta/consultoria_ZH.php" class="menu-hijo-3 CA">ZH</a>
+            </dav>
+            <dav class="menu-hijo-2">
+                <a href="https://www.maphg.com/beta/consultoria_MAPHG.php" class="menu-hijo-3 CA">SOPORTE MAPHG</a>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">

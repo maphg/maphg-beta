@@ -168,7 +168,7 @@
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <o data-target="hijo5" data-toggle="hijo" href="#" class="CA">Consultoria</o>
+                <o data-target="hijo5" data-toggle="hijo" href="#" class="CA">Consultoría</o>
                 <i class="fal fa-angle-down"></i>
             </dav>
         </dav>
