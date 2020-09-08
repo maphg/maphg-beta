@@ -5477,8 +5477,8 @@ if (isset($_POST['action'])) {
                                         <div class=\"w-24 h-full flex items-center justify-center\" onclick=\"adjuntosPlanaccion($idPlanaccion);\">
                                             <h1>$totalAdjuntos</h1>
                                         </div>
-                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\" onclick=\"statusPlanaccion($idPlanaccion);\">
-                                            <div><i class=\"fa fa-exclamation-circle fa-lg\"></i></div>
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\" onclick=\"actualizarPlanaccion('N','status',$idPlanaccion)\">
+                                            <div><i class=\"fas fa-undo fa-lg text-red-500\"></i></div>
                                         </div>
                                     </div>
                                 ";
@@ -6539,7 +6539,7 @@ if (isset($_POST['action'])) {
         $data['dCompras'] = 0;
         $data['dDireccion'] = 0;
         $data['dFinanzas'] = 0;
-        $data['dRRHH'] = 0; 
+        $data['dRRHH'] = 0;
 
         $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh 
         FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
@@ -6558,18 +6558,18 @@ if (isset($_POST['action'])) {
                 $dFinanzas = $i['departamento_finanzas'];
                 $dRRHH = $i['departamento_rrhh'];
 
-                $data['sUrgente']=$sUrgente;                
-                $data['sMaterial']=$sMaterial;                
-                $data['sTrabajando']=$sTrabajando;                
-                $data['eElectricidad']=$eElectricidad;                
-                $data['eAgua']=$eAgua;                
-                $data['eDiesel']=$eDiesel;                
-                $data['eGas']=$eGas;                
-                $data['dCalidad']=$dCalidad;                
-                $data['dCompras']=$dCompras;                
-                $data['dDireccion']=$dDireccion;                
-                $data['dFinanzas']=$dFinanzas;                
-                $data['dRRHH']=$dRRHH;                
+                $data['sUrgente'] = $sUrgente;
+                $data['sMaterial'] = $sMaterial;
+                $data['sTrabajando'] = $sTrabajando;
+                $data['eElectricidad'] = $eElectricidad;
+                $data['eAgua'] = $eAgua;
+                $data['eDiesel'] = $eDiesel;
+                $data['eGas'] = $eGas;
+                $data['dCalidad'] = $dCalidad;
+                $data['dCompras'] = $dCompras;
+                $data['dDireccion'] = $dDireccion;
+                $data['dFinanzas'] = $dFinanzas;
+                $data['dRRHH'] = $dRRHH;
             }
         }
         echo json_encode($data);
