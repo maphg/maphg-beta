@@ -11,11 +11,14 @@
 </head>
 
 <body style="background-color: #68D391;">
+    <?php
+    include 'navbartopJS.php';
+    include 'menuJS.php';
+    ?>
     <div class="flex flex-col md:flex-row">
         <div class="w-1/2 h-0 md:h-screen flex flex-col items-center justify-center">
             <div class="bg-white w-40 h-40 rounded-full flex items-center justify-center">
-                <div
-                    class="text-green-700 bg-green-400 font-medium flex justify-center items-center shadow-md rounded-lg text-2xl w-20 h-20">
+                <div class="text-green-700 bg-green-400 font-medium flex justify-center items-center shadow-md rounded-lg text-2xl w-20 h-20">
                     <h1 class="">ZIL</h1>
                 </div>
             </div>
