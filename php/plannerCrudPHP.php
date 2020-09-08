@@ -6681,7 +6681,7 @@ if (isset($_POST['action'])) {
                     if (file_exists("../planner/proyectos/$url")) {
                         $adjuntoURL = "planner/proyectos/$url";
                     } else {
-                        $adjuntoURL = "planner/proyectos/$url";
+                        $adjuntoURL = "../planner/proyectos/$url";
                     }
 
                     // Admite solo Imagenes.
