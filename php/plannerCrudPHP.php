@@ -6711,8 +6711,8 @@ if (isset($_POST['action'])) {
             $query = "SELECT t_proyectos_planaccion_adjuntos.id, t_proyectos_planaccion_adjuntos.url_adjunto, 
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_proyectos_planaccion_adjuntos 
-            INNER JOIN t_users ON t_proyectos_planaccion_adjuntos.subido_por = t_users.id 
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_proyectos_planaccion_adjuntos.subido_por = t_users.id 
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE id_actividad = $idTabla AND t_proyectos_planaccion_adjuntos.status = 1
             ORDER BY t_proyectos_planaccion_adjuntos.fecha_creado DESC
             ";
@@ -6756,8 +6756,8 @@ if (isset($_POST['action'])) {
             $query = "SELECT t_equipos_adjuntos.id, t_equipos_adjuntos.url_archivo, 
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_equipos_adjuntos 
-            INNER JOIN t_users ON t_equipos_adjuntos.subido_por = t_users.id 
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_equipos_adjuntos.subido_por = t_users.id 
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE id_equipo = $idTabla AND t_equipos_adjuntos.activo = 1
             ORDER BY t_equipos_adjuntos.fecha_subida DESC";
             if ($result = mysqli_query($conn_2020, $query)) {
