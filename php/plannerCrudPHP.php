@@ -6669,7 +6669,7 @@ if (isset($_POST['action'])) {
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_proyectos_adjuntos 
             LEFT JOIN t_users ON t_proyectos_adjuntos.subido_por = t_users.id 
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE id_proyecto = $idTabla AND t_proyectos_adjuntos.status = 1
             ORDER BY t_proyectos_adjuntos.fecha DESC
             ";
@@ -6681,7 +6681,7 @@ if (isset($_POST['action'])) {
                     if (file_exists("../planner/proyectos/$url")) {
                         $adjuntoURL = "planner/proyectos/$url";
                     } else {
-                        $adjuntoURL = "";
+                        $adjuntoURL = "planner/proyectos/$url";
                     }
 
                     // Admite solo Imagenes.
