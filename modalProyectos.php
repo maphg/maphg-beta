@@ -168,18 +168,18 @@
                 <span id="cargandoAdjunto" class="text-center"></span>
                 <!-- Icon upload -->
 
-                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+                <div class="w-full px-1 font-medium text-sm text-gray-500">
                     <div class="font-bold divide-y">
                         <h1>IMÁGENES</h1>
                         <p> </p>
                     </div>
                     <!-- Data para las imagenes -->
-                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center overflow-y-auto scrollba" style="max-height:35vh"></div>
+                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height:35vh"></div>
                     <div class="font-bold divide-y mb-4">
                         <h1>DOCUMENTOS</h1>
                         <p> </p>
                     </div>
-                    <div id="dataAdjuntos" class="flex flex-col overflow-y-auto scrollba" style="max-height:35vh"></div>
+                    <div id="dataAdjuntos" class="flex flex-col overflow-y-auto scrollbar" style="max-height:35vh"></div>
                 </div>
             </div>
         </div>
