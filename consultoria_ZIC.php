@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/alertify.min.css">
 </head>
 
