@@ -174,12 +174,12 @@
                         <p> </p>
                     </div>
                     <!-- Data para las imagenes -->
-                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center"></div>
+                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center overflow-y-auto scrollba" style="max-height:35vh"></div>
                     <div class="font-bold divide-y mb-4">
                         <h1>DOCUMENTOS</h1>
                         <p> </p>
                     </div>
-                    <div id="dataAdjuntos" class="flex flex-col"></div>
+                    <div id="dataAdjuntos" class="flex flex-col overflow-y-auto scrollba" style="max-height:35vh"></div>
                 </div>
             </div>
         </div>
