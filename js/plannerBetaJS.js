@@ -2486,6 +2486,8 @@ function actualizarProyectos(valor, columna, idProyecto) {
         obtenerProyectosP("PROYECTO");
         document.getElementById("modalTituloEliminar").classList.remove("open");
         alertaImg("Proyecto Restaurado", "", "success", 2000);
+      } else if (data == 10) {
+        alertaImg("Solucione todas las actividades para poder Solucionar el Proyecto", "", "warning", 4000);
       } else {
         alertaImg("Intente de Nuevo", "", "info", 3000);
       }

@@ -6295,12 +6295,12 @@ if (isset($_POST['action'])) {
             }
         } elseif ($columna == "status" and $valor == "F") {
             $query = "SELECT count(id) FROM t_proyectos_planaccion 
-            WHERE id_proyecto = $idProyecto AND status = 'F'";
+            WHERE id_proyecto = $idProyecto AND status = 'N' and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
                     $pendientes = $value['count(id)'];
                 }
-                if ($pendientes >= 0) {
+                if ($pendientes == 0) {
                     $query = "UPDATE t_proyectos SET status = 'F', finalizado_por = '$idUsuario', 
                     fecha_finalizado = '$fechaActual' WHERE id = $idProyecto";
                     if ($result = mysqli_query($conn_2020, $query)) {
@@ -6316,7 +6316,7 @@ if (isset($_POST['action'])) {
                         echo 0;
                     }
                 } else {
-                    echo 0;
+                    echo 10;
                 }
             } else {
                 echo 0;
