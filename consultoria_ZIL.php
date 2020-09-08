@@ -26,6 +26,9 @@
         </div>
         <iframe class="w-full md:w-1/2 h-screen" src="https://www.chatbro.com/es/66j71/" frameborder="0"></iframe>
     </div>
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/complemento_menuJS.js"></script>
 </body>
 
 </html>
