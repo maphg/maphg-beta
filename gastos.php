@@ -327,30 +327,29 @@ try {
                                         <thead>
                                             <tr>
                                                 <th style="display:none;">idDocumento</th>
-                                                <th class="fs-12">Destino</th>
-                                                <th class="fs-12">CECO</th>
-                                                <th class="fs-12">Documento</th>
-                                                <th class="fs-12">Fecha Cont.</th>
-                                                <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignacion</th>
-                                                <th class="fs-12">Descripcion</th>
-                                                <th class="fs-12">Proveedor</th>
-                                                <th class="fs-12">Nombre</th>
-
+                                                <th class="w-1/2">Destino</th>
+                                                <th class="">CECO</th>
+                                                <th class="">Fecha Cont.</th>
+                                                <th class="">Importe (USD)</th>
+                                                <th class="">Asignación</th>
+                                                <th class="">Descripción</th>
+                                                <th class="">Proveedor</th>
+                                                <th class="">Nombre</th>
+                                                <th class="">Texto CECO</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th style="display:none;">idDocumento</th>
-                                                <th class="fs-12">Destino</th>
-                                                <th class="fs-12">CECO</th>
-                                                <th class="fs-12">Documento</th>
-                                                <th class="fs-12">Fecha Cont.</th>
-                                                <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignacion</th>
-                                                <th class="fs-12">Descripcion</th>
-                                                <th class="fs-12">Proveedor</th>
-                                                <th class="fs-12">Nombre</th>
+                                                <th class="w-1/2">Destino</th>
+                                                <th class="">CECO</th>
+                                                <th class="">Fecha Cont.</th>
+                                                <th class="">Importe (USD)</th>
+                                                <th class="">Asignación</th>
+                                                <th class="">Descripción</th>
+                                                <th class="">Proveedor</th>
+                                                <th class="">Nombre</th>
+                                                <th class="">Texto CECO</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="tableBodyServicios" class="fs-11">
@@ -374,6 +373,7 @@ try {
                                                         $nombreDocumento = $dts['NOMBRE1'];
                                                         $destinoCECO = $dts['DESTINOCECO'];
                                                         $nombreCECO = $dts['NOMBRECECO'];
+                                                        $textoCeco = $dts['texto_ceco'];
 
                                                         if (strpos($asignacion, 'OTRO CECO') !== false || strpos($asignacion, 'otro ceco') !== false || strpos($asignacion, 'CAPEX') !== false || strpos($asignacion, 'capex') !== false || strpos($asignacion, 'POBLADO') !== false || strpos($asignacion, 'poblado') !== false) {
                                                         } else {
@@ -388,29 +388,29 @@ try {
                                                                 if ($idDestino == 10) {
                                                                     echo "<tr>"
                                                                         . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                        . "<td>$destinoCECO</td>"
-                                                                        . "<td class=\"fs-9\">$nombreCECO</td>"
-                                                                        . "<td>$numDocumento</td>"
+                                                                        . "<td class=\"\">$destinoCECO</td>"
+                                                                        . "<td class=\"\">$nombreCECO</td>"
                                                                         . "<td>$fechaConta</td>"
                                                                         . "<td> $importe</td>"
                                                                         . "<td>$asignacion</td>"
                                                                         . "<td>$descripcion</td>"
                                                                         . "<td>$proveedor</td>"
                                                                         . "<td>$nombreDocumento</td>"
+                                                                        . "<td>$textoCeco</td>"
                                                                         . "</tr>";
                                                                 } else {
                                                                     if ($destino == $destinoCECO) {
                                                                         echo "<tr>"
                                                                             . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                            . "<td>$destinoCECO</td>"
-                                                                            . "<td class=\"fs-9\">$nombreCECO</td>"
-                                                                            . "<td>$numDocumento</td>"
+                                                                            . "<td class=\"w-2/2\">$destinoCECO</td>"
+                                                                            . "<td class=\"\">$nombreCECO</td>"
                                                                             . "<td>$fechaConta</td>"
                                                                             . "<td>" . money_format("%.0n", $importe) . "</td>"
                                                                             . "<td>$asignacion</td>"
                                                                             . "<td>$descripcion</td>"
                                                                             . "<td>$proveedor</td>"
                                                                             . "<td>$nombreDocumento</td>"
+                                                                            . "<td>$textoCeco</td>"
                                                                             . "</tr>";
                                                                     }
                                                                 }
@@ -433,7 +433,7 @@ try {
 
                 <div id="divMateriales" class="row mt-4" style="display:none;">
                     <div class="col-12">
-                        <?php
+                        <!-- <?php
                         if ($importarGastos == 1) :
                         ?>
                             <div class="row mt-4">
@@ -448,7 +448,7 @@ try {
                             </div>
                         <?php
                         endif;
-                        ?>
+                        ?> -->
 
                         <div class="row mt-4">
                             <div class="col">
@@ -462,10 +462,11 @@ try {
                                                 <th class="fs-12">Documento</th>
                                                 <th class="fs-12">Fecha Cont.</th>
                                                 <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignacion</th>
-                                                <th class="fs-12">Descripcion</th>
+                                                <th class="fs-12">Asignación</th>
+                                                <th class="fs-12">Descripción</th>
                                                 <th class="fs-12">Proveedor</th>
                                                 <th class="fs-12">Nombre</th>
+                                                <th class="fs-12">Texto CECO</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -476,10 +477,11 @@ try {
                                                 <th class="fs-12">Documento</th>
                                                 <th class="fs-12">Fecha Cont.</th>
                                                 <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignacion</th>
-                                                <th class="fs-12">Descripcion</th>
+                                                <th class="fs-12">Asignación</th>
+                                                <th class="fs-12">Descripción</th>
                                                 <th class="fs-12">Proveedor</th>
                                                 <th class="fs-12">Nombre</th>
+                                                <th class="fs-12">Texto CECO</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="tableBodyMateriales" class="fs-11">
@@ -504,6 +506,7 @@ try {
                                                         $nombreDocumento = $dts['NOMBRE1'];
                                                         $destinoCECO = $dts['DESTINOCECO'];
                                                         $nombreCECO = $dts['NOMBRECECO'];
+                                                        $textoCeco = $dts['texto_ceco'];
 
                                                         if (strpos($asignacion, 'OTRO CECO') !== false || strpos($asignacion, 'otro ceco') !== false || strpos($asignacion, 'CAPEX') !== false || strpos($asignacion, 'capex') !== false || strpos($asignacion, 'POBLADO') !== false || strpos($asignacion, 'poblado') !== false) {
                                                         } else {
@@ -527,6 +530,7 @@ try {
                                                                         . "<td>$descripcion</td>"
                                                                         . "<td>$proveedor</td>"
                                                                         . "<td>$nombreDocumento</td>"
+                                                                        . "<td>$textoCeco</td>"
                                                                         . "</tr>";
                                                                 } else {
                                                                     if ($destino == $destinoCECO) {
@@ -541,6 +545,7 @@ try {
                                                                             . "<td>$descripcion</td>"
                                                                             . "<td>$proveedor</td>"
                                                                             . "<td>$nombreDocumento</td>"
+                                                                            . "<td>$textoCeco</td>"
                                                                             . "</tr>";
                                                                     }
                                                                 }
@@ -563,8 +568,8 @@ try {
         </div>
     </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="../js/moment.js"></script>
+<script src="js/jquery-3.3.1.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="js/moment.js"></script>
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>

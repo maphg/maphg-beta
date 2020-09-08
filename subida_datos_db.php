@@ -475,7 +475,7 @@
                 document.getElementById("columna20").value = "nombre_proveedor_af";
                 document.getElementById("columna21").value = "indicador_impuestos";
                 document.getElementById("columna22").value = "nombre_1";
-                document.getElementById("columna23").value = '';
+                document.getElementById("columna23").value = 'texto_ceco';
                 document.getElementById("columna24").value = '';
                 document.getElementById("columna25").value = '';
                 document.getElementById("columna26").value = '';
@@ -507,7 +507,7 @@
                 document.getElementById("columna21").value = "indicador_impuestos";
                 document.getElementById("columna22").value = "nombre_1";
                 document.getElementById("columna23").value = "doc_compras";
-                document.getElementById("columna24").value = '';
+                document.getElementById("columna24").value = 'texto_ceco';
                 document.getElementById("columna25").value = '';
                 document.getElementById("columna26").value = '';
                 document.getElementById("columna27").value = '';
