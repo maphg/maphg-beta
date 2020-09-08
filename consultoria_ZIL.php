@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/alertify.min.css">
 </head>
 
 <body style="background-color: #68D391;">
@@ -29,6 +30,8 @@
 
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/complemento_menuJS.js"></script>
+    <script src="js/alertify.min.js"></script>
+    <script src="js/alertasSweet.js"></script>
 </body>
 
 </html>
