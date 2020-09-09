@@ -5098,30 +5098,30 @@ if (isset($_POST['action'])) {
                     }
 
 
-                    $queryPlanaccionN = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'N'";
+                    $queryPlanaccionTotal = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
 
                     $queryPlanaccionF = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'F'";
 
                     if (
-                        $resultPlanaccionN = mysqli_query($conn_2020, $queryPlanaccionN) and
+                        $resultPlanaccionTotal = mysqli_query($conn_2020, $queryPlanaccionTotal) and
                         $resultPlanaccionF = mysqli_query($conn_2020, $queryPlanaccionF)
                     ) {
 
-                        foreach ($resultPlanaccionN as $value) {
-                            $totalPlanaccionN = $value['count(id)'];
+                        foreach ($resultPlanaccionTotal as $value) {
+                            $totalPlanaccionTotal = $value['count(id)'];
                         }
 
                         foreach ($resultPlanaccionF as $value) {
                             $totalPlanaccionF = $value['count(id)'];
                         }
 
-                        if (($totalPlanaccionN <= 0 or $totalPlanaccionN == "") and
+                        if (($totalPlanaccionTotal <= 0 or $totalPlanaccionTotal == "") and
                             ($totalPlanaccionF <= 0 or $totalPlanaccionF == "")
                         ) {
                             $PDA = "<i class=\"fas fa-window-minimize\"></i>";
                             $bgTotalPlanaccion = "bg-white";
                         } else {
-                            $PDA = "$totalPlanaccionN / $totalPlanaccionF";
+                            $PDA = "$totalPlanaccionF / $totalPlanaccionTotal";
                             $bgTotalPlanaccion = "text-green-500 bg-green-200";
                         }
                     }
