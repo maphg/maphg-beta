@@ -1168,6 +1168,40 @@
                 Guardar Cambios
             </button>
 
+            <!-- CONTENIDO MEDIA -->
+            <div id="mediaProyectos" class="hidden mt-10 p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3">
+                    <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
+                        <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                        ADJUNTAR ARCHIVOS
+
+                        <!-- INPUT -->
+                        <input id="inputAdjuntosJP" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" name="inputAdjuntosJP[]" multiple>
+                        <!-- INPUT -->
+
+                    </button>
+                </div>
+
+                <!-- Icon upload -->
+                <span id="cargandoAdjuntoJP" class="text-center"></span>
+                <!-- Icon upload -->
+
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+                    <div class="font-bold divide-y">
+                        <h1>IMÁGENES</h1>
+                        <p> </p>
+                    </div>
+                    <!-- Data para las imagenes -->
+
+                    <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    <div class="font-bold divide-y mb-4">
+                        <h1>DOCUMENTOS</h1>
+                        <p> </p>
+                    </div>
+                    <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 

@@ -430,6 +430,40 @@
                 Guardar Cambios
             </button>
 
+            <!-- CONTENIDO MEDIA -->
+            <div id="mediaProyectos" class="hidden mt-10 p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3">
+                    <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
+                        <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                        ADJUNTAR ARCHIVOS
+
+                        <!-- INPUT -->
+                        <input id="inputAdjuntosJP" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" name="inputAdjuntosJP[]" multiple>
+                        <!-- INPUT -->
+
+                    </button>
+                </div>
+
+                <!-- Icon upload -->
+                <span id="cargandoAdjuntoJP" class="text-center"></span>
+                <!-- Icon upload -->
+
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+                    <div class="font-bold divide-y">
+                        <h1>IMÁGENES</h1>
+                        <p> </p>
+                    </div>
+                    <!-- Data para las imagenes -->
+
+                    <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    <div class="font-bold divide-y mb-4">
+                        <h1>DOCUMENTOS</h1>
+                        <p> </p>
+                    </div>
+                    <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -1037,29 +1071,47 @@
 
         // ACTUALIZA LA JUSTIFICACION DE LOS PROYECTOS
         function obtenerDatoProyectos(idProyecto, columna) {
-            localStorage.setItem('idProyecto', idProyecto);
+            localStorage.setItem("idProyecto", idProyecto);
 
-            let idUsuario = localStorage.getItem('usuario');
-            let idDestino = localStorage.getItem('idDestino');
+            let idUsuario = localStorage.getItem("usuario");
+            let idDestino = localStorage.getItem("idDestino");
 
-            document.getElementById("tipoProyectoDiv").classList.add('hidden');
-            document.getElementById("justificacionProyectoDiv").classList.add('hidden');
-            document.getElementById("costeProyectoDiv").classList.add('hidden');
+            // Oculta Media en Justificación
+            document.getElementById("mediaProyectos").classList.add('hidden');
+            document.getElementById("dataImagenesProyecto").innerHTML = '';
+            document.getElementById("dataAdjuntosProyecto").innerHTML = '';
+
+            document.getElementById("tipoProyectoDiv").classList.add("hidden");
+            document.getElementById("justificacionProyectoDiv").classList.add("hidden");
+            document.getElementById("costeProyectoDiv").classList.add("hidden");
 
             if (columna == "justificacion") {
-                document.getElementById("modalActualizarProyecto").classList.add('open');
-                document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFIACIÓN";
-                document.getElementById("justificacionProyectoDiv").classList.remove('hidden');
+                justificacionAdjuntosProyectos(idProyecto);
+                document.getElementById("modalActualizarProyecto").classList.add("open");
+                document.getElementById("tituloActualizarProyecto").innerHTML =
+                    "JUSTIFIACIÓN";
+
+                document
+                    .getElementById("justificacionProyectoDiv")
+                    .classList.remove("hidden");
+
+                document
+                    .getElementById("inputAdjuntosJP")
+                    .setAttribute(
+                        "onchange",
+                        "subirJustificacionProyectos(" + idProyecto + ', "t_proyectos_justificaciones")'
+                    );
+
             } else if (columna == "coste") {
-                document.getElementById("modalActualizarProyecto").classList.add('open');
+                document.getElementById("modalActualizarProyecto").classList.add("open");
                 document.getElementById("tituloActualizarProyecto").innerHTML = "COSTE";
-                document.getElementById("costeProyectoDiv").classList.remove('hidden');
+                document.getElementById("costeProyectoDiv").classList.remove("hidden");
             } else if (columna == "tipo") {
-                document.getElementById("modalActualizarProyecto").classList.add('open');
+                document.getElementById("modalActualizarProyecto").classList.add("open");
                 document.getElementById("tituloActualizarProyecto").innerHTML = "TIPO";
-                document.getElementById("tipoProyectoDiv").classList.remove('hidden');
+                document.getElementById("tipoProyectoDiv").classList.remove("hidden");
             } else if (columna == "rango_fecha") {
-                document.getElementById("modalFechaProyectos").classList.add('open');
+                document.getElementById("modalFechaProyectos").classList.add("open");
             }
 
             const action = "obtenerDatoProyectos";
@@ -1071,18 +1123,97 @@
                     idUsuario: idUsuario,
                     idDestino: idDestino,
                     idProyecto: idProyecto,
-                    columna: columna
+                    columna: columna,
                 },
                 dataType: "JSON",
                 success: function(data) {
-
                     document.getElementById("tipoProyecto").value = data.tipo;
-                    document.getElementById("justificacionProyecto").value = data.justificacion;
+                    document.getElementById("justificacionProyecto").value =
+                        data.justificacion;
                     document.getElementById("costeProyecto").value = data.coste;
                     document.getElementById("fechaProyecto").value = data.rangoFecha;
 
-                    document.getElementById("btnGuardarInformacion").
-                    setAttribute('onclick', 'actualizarProyectos(0, "' + columna + '",' + idProyecto + ')');
+                    document
+                        .getElementById("btnGuardarInformacion")
+                        .setAttribute(
+                            "onclick",
+                            'actualizarProyectos(0, "' + columna + '",' + idProyecto + ")"
+                        );
+                },
+            });
+        }
+
+
+        //Sube Justificacion de Proyectos
+        function subirJustificacionProyectos(idTabla, tabla) {
+            let idUsuario = localStorage.getItem("usuario");
+            let idDestino = localStorage.getItem("idDestino");
+            let img = document.getElementById("inputAdjuntosJP").files;
+
+            for (let index = 0; index < img.length; index++) {
+                let imgData = new FormData();
+                const action = "subirImagenGeneral";
+                document.getElementById("cargandoAdjuntoJP").innerHTML =
+                    '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+                imgData.append("adjuntoUrl", img[index]);
+                imgData.append("action", action);
+                imgData.append("idUsuario", idUsuario);
+                imgData.append("idDestino", idDestino);
+                imgData.append("tabla", tabla);
+                imgData.append("idTabla", idTabla);
+
+                $.ajax({
+                    data: imgData,
+                    type: "POST",
+                    url: "php/plannerCrudPHP.php",
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        console.log(data);
+                        if (data == 1) {
+                            alertaImg("Proceso Cancelado", "", "info", 3000);
+                        } else if (data == 6) {
+                            alertaImg("Adjunto Agregado", "", "success", 2500);
+                            obtenerDatoProyectos(idTabla, 'justificacion');
+                        } else {
+                            alertaImg("Intente de Nuevo", "", "info", 3000);
+                        }
+                        document.getElementById("cargandoAdjuntoJP").innerHTML = '';
+                    },
+                });
+            }
+        }
+
+
+        // Justificación Proyectos Adjuntos
+        function justificacionAdjuntosProyectos(idProyecto) {
+
+            document.getElementById("dataImagenesProyecto").innerHTML = '';
+            document.getElementById("dataAdjuntosProyecto").innerHTML = '';
+            document.getElementById("mediaProyectos").classList.remove('hidden');
+
+            let idUsuario = localStorage.getItem("usuario");
+            let idDestino = localStorage.getItem("idDestino");
+            let idTabla = idProyecto;
+            const tabla = "t_proyectos_justificaciones";
+            const action = "obtenerAdjuntos";
+
+            $.ajax({
+                type: "POST",
+                url: "php/plannerCrudPHP.php",
+                data: {
+                    action: action,
+                    idUsuario: idUsuario,
+                    idDestino: idDestino,
+                    idProyecto: idProyecto,
+                    idTabla: idTabla,
+                    tabla: tabla
+                },
+                dataType: "JSON",
+                success: function(data) {
+                    document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
+                    document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
                 }
             });
         }

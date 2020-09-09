@@ -95,8 +95,8 @@ $(function () {
   ) {
     $(this).val(
       picker.startDate.format("DD/MM/YYYY") +
-        " - " +
-        picker.endDate.format("DD/MM/YYYY")
+      " - " +
+      picker.endDate.format("DD/MM/YYYY")
     );
   });
   $('input[name="datefilter"]').on("cancel.daterangepicker", function (
@@ -143,8 +143,8 @@ $(function () {
   ) {
     $(this).val(
       picker.startDate.format("DD/MM/YYYY") +
-        " - " +
-        picker.endDate.format("DD/MM/YYYY")
+      " - " +
+      picker.endDate.format("DD/MM/YYYY")
     );
 
     // Actualiza fecha TAREAS cuando se Aplica el rango.
@@ -199,8 +199,8 @@ $(function () {
   ) {
     $(this).val(
       picker.startDate.format("DD/MM/YYYY") +
-        " - " +
-        picker.endDate.format("DD/MM/YYYY")
+      " - " +
+      picker.endDate.format("DD/MM/YYYY")
     );
 
     // Actualiza fecha TAREAS cuando se Aplica el rango.
@@ -252,8 +252,8 @@ $(function () {
   $('input[name="fechaMC"]').on("apply.daterangepicker", function (ev, picker) {
     $(this).val(
       picker.startDate.format("DD/MM/YYYY") +
-        " - " +
-        picker.endDate.format("DD/MM/YYYY")
+      " - " +
+      picker.endDate.format("DD/MM/YYYY")
     );
 
     // Actualiza fecha MC cuando se Aplica el rango.
@@ -707,16 +707,16 @@ function exportarPorUsuario(
     .setAttribute(
       "onkeyup",
       "exportarPorUsuario(" +
-        idUsuario +
-        ", " +
-        idDestino +
-        ", " +
-        idSeccion +
-        ", " +
-        idSubseccion +
-        ', "' +
-        tipoExportar +
-        '")'
+      idUsuario +
+      ", " +
+      idDestino +
+      ", " +
+      idSeccion +
+      ", " +
+      idSubseccion +
+      ', "' +
+      tipoExportar +
+      '")'
     );
   const action = "exportarPorUsuario";
   $.ajax({
@@ -976,54 +976,54 @@ function obtenerEquipos(
     .setAttribute(
       "onclick",
       "obtenerEquipos(" +
-        idUsuario +
-        "," +
-        idDestino +
-        "," +
-        idSeccion +
-        "," +
-        idSubseccion +
-        "," +
-        rangoInicial +
-        "," +
-        rangoFinal +
-        ',"MCN")'
+      idUsuario +
+      "," +
+      idDestino +
+      "," +
+      idSeccion +
+      "," +
+      idSubseccion +
+      "," +
+      rangoInicial +
+      "," +
+      rangoFinal +
+      ',"MCN")'
     );
   document
     .getElementById("tipoOrdenamientoMCF")
     .setAttribute(
       "onclick",
       "obtenerEquipos(" +
-        idUsuario +
-        "," +
-        idDestino +
-        "," +
-        idSeccion +
-        "," +
-        idSubseccion +
-        "," +
-        rangoInicial +
-        "," +
-        rangoFinal +
-        ',"MCF")'
+      idUsuario +
+      "," +
+      idDestino +
+      "," +
+      idSeccion +
+      "," +
+      idSubseccion +
+      "," +
+      rangoInicial +
+      "," +
+      rangoFinal +
+      ',"MCF")'
     );
   document
     .getElementById("tipoOrdenamientoNombreEquipo")
     .setAttribute(
       "onclick",
       "obtenerEquipos(" +
-        idUsuario +
-        "," +
-        idDestino +
-        "," +
-        idSeccion +
-        "," +
-        idSubseccion +
-        "," +
-        rangoInicial +
-        "," +
-        rangoFinal +
-        ',"nombreEquipo")'
+      idUsuario +
+      "," +
+      idDestino +
+      "," +
+      idSeccion +
+      "," +
+      idSubseccion +
+      "," +
+      rangoInicial +
+      "," +
+      rangoFinal +
+      ',"nombreEquipo")'
     );
 
   document.getElementById("dataEquipos").innerHTML = "";
@@ -2502,17 +2502,32 @@ function obtenerDatoProyectos(idProyecto, columna) {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
 
+  // Oculta Media en Justificación
+  document.getElementById("mediaProyectos").classList.add('hidden');
+  document.getElementById("dataImagenesProyecto").innerHTML = '';
+  document.getElementById("dataAdjuntosProyecto").innerHTML = '';
+
   document.getElementById("tipoProyectoDiv").classList.add("hidden");
   document.getElementById("justificacionProyectoDiv").classList.add("hidden");
   document.getElementById("costeProyectoDiv").classList.add("hidden");
 
   if (columna == "justificacion") {
+    justificacionAdjuntosProyectos(idProyecto);
     document.getElementById("modalActualizarProyecto").classList.add("open");
     document.getElementById("tituloActualizarProyecto").innerHTML =
       "JUSTIFIACIÓN";
+
     document
       .getElementById("justificacionProyectoDiv")
       .classList.remove("hidden");
+
+    document
+      .getElementById("inputAdjuntosJP")
+      .setAttribute(
+        "onchange",
+        "subirJustificacionProyectos(" + idProyecto + ', "t_proyectos_justificaciones")'
+      );
+
   } else if (columna == "coste") {
     document.getElementById("modalActualizarProyecto").classList.add("open");
     document.getElementById("tituloActualizarProyecto").innerHTML = "COSTE";
@@ -2553,6 +2568,82 @@ function obtenerDatoProyectos(idProyecto, columna) {
     },
   });
 }
+
+
+//Sube Justificacion de Proyectos
+function subirJustificacionProyectos(idTabla, tabla) {
+  let idUsuario = localStorage.getItem("usuario");
+  let idDestino = localStorage.getItem("idDestino");
+  let img = document.getElementById("inputAdjuntosJP").files;
+
+  for (let index = 0; index < img.length; index++) {
+    let imgData = new FormData();
+    const action = "subirImagenGeneral";
+    document.getElementById("cargandoAdjuntoJP").innerHTML =
+      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+    imgData.append("adjuntoUrl", img[index]);
+    imgData.append("action", action);
+    imgData.append("idUsuario", idUsuario);
+    imgData.append("idDestino", idDestino);
+    imgData.append("tabla", tabla);
+    imgData.append("idTabla", idTabla);
+
+    $.ajax({
+      data: imgData,
+      type: "POST",
+      url: "php/plannerCrudPHP.php",
+      contentType: false,
+      processData: false,
+      success: function (data) {
+        console.log(data);
+        if (data == 1) {
+          alertaImg("Proceso Cancelado", "", "info", 3000);
+        } else if (data == 6) {
+          alertaImg("Adjunto Agregado", "", "success", 2500);
+          obtenerDatoProyectos(idTabla, 'justificacion');
+        } else {
+          alertaImg("Intente de Nuevo", "", "info", 3000);
+        }
+        document.getElementById("cargandoAdjuntoJP").innerHTML = '';
+      },
+    });
+  }
+}
+
+
+// Justificación Proyectos Adjuntos
+function justificacionAdjuntosProyectos(idProyecto) {
+
+  document.getElementById("dataImagenesProyecto").innerHTML = '';
+  document.getElementById("dataAdjuntosProyecto").innerHTML = '';
+  document.getElementById("mediaProyectos").classList.remove('hidden');
+
+  let idUsuario = localStorage.getItem("usuario");
+  let idDestino = localStorage.getItem("idDestino");
+  let idTabla = idProyecto;
+  const tabla = "t_proyectos_justificaciones";
+  const action = "obtenerAdjuntos";
+
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idProyecto: idProyecto,
+      idTabla: idTabla,
+      tabla: tabla
+    },
+    dataType: "JSON",
+    success: function (data) {
+      document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
+      document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
+    }
+  });
+}
+
 
 // Obtener Status de proyectos
 function statusProyecto(idProyecto) {
@@ -2981,8 +3072,8 @@ function adjuntosPlanaccion(idPlanaccion) {
     .setAttribute(
       "onchange",
       "subirImagenGeneral(" +
-        idPlanaccion +
-        ', "t_proyectos_planaccion_adjuntos")'
+      idPlanaccion +
+      ', "t_proyectos_planaccion_adjuntos")'
     );
 
   const action = "obtenerAdjuntos";
