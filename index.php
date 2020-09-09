@@ -1111,7 +1111,7 @@ $tablaRanking .= "</div>";
 
                                 //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
                                 // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectos($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
                                     . "<div class=\"columns is-gapless my-1 is-mobile\">"
                                     . "<div class=\"column is-10\">"
                                     . "<p class=\"t-normal has-text-left px-4 xxx\">$nombreSubseccion</p>"
@@ -2039,7 +2039,7 @@ $tablaRanking .= "</div>";
 
                                 //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
                                 // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectos($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
                                     . "<div class=\"columns is-gapless my-1 is-mobile\">"
                                     . "<div class=\"column is-10\">"
                                     . "<p class=\"t-normal has-text-left px-4\">$nombreSubseccion</p>"
