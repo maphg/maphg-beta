@@ -3411,7 +3411,7 @@ if (isset($_POST['action'])) {
                                     <p class=\"t-normal\">$totalAdjuntos</p>
                                 </div>
 
-                                <div class=\"column is-small t-normal\" onclick=\"obtComentariosTarea($idEquipo, '$equipo', '$idTareaP', '$titulo');\">
+                                <div class=\"column is-small t-normal\" onclick=\"obtComentariosTarea($idEquipo, '$equipo', '$idTareaP', '" . preg_replace('([^A-Za-z0-9 ])', '', $titulo) . "');\">
                                     <p class=\"t-normal\">$totalComentario</p>
                                 </div>
 
