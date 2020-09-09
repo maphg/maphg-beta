@@ -3416,7 +3416,7 @@ if (isset($_POST['action'])) {
                                 </div>
 
                                 <div class=\"column is-small t-normal\" 
-                                onclick=\"obtStatusActvidadTareaP($idTareaP, '$titulo', $idEquipo, '$equipo');\">
+                                onclick=\"obtStatusActvidadTareaP($idTareaP,". preg_replace('([^A-Za-z0-9 ])', '', $titulo)." , $idEquipo, '$equipo');\">
                                     <p class=\"p-3\"> 
                                     $status $sMaterial $sTrabajando $statusEnergetico $statusDepartamento
                                     </p>

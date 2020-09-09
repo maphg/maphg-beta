@@ -737,17 +737,24 @@
                 <!-- Icon upload -->
 
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
-                    <div class="font-bold divide-y">
-                        <h1>IMÁGENES</h1>
-                        <p> </p>
+
+                    <div id="contenedorImagenes">
+                        <div class="font-bold divide-y">
+                            <h1>IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <!-- Data para las imagenes -->
+                        <div id="dataImagenes" class="flex flex-row flex-wrap text-center"></div>
                     </div>
-                    <!-- Data para las imagenes -->
-                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center"></div>
-                    <div class="font-bold divide-y mb-4">
-                        <h1>DOCUMENTOS</h1>
-                        <p> </p>
+
+                    <div id="contenedorDocumentos">
+                        <div class="font-bold divide-y mb-4">
+                            <h1>DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntos" class="flex flex-col"></div>
                     </div>
-                    <div id="dataAdjuntos" class="flex flex-col"></div>
+
                 </div>
             </div>
         </div>
@@ -1187,18 +1194,24 @@
                 <!-- Icon upload -->
 
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
-                    <div class="font-bold divide-y">
-                        <h1 class="text-left">IMÁGENES</h1>
-                        <p> </p>
-                    </div>
-                    <!-- Data para las imagenes -->
 
-                    <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
-                    <div class="font-bold divide-y mb-4">
-                        <h1 class="text-left">DOCUMENTOS</h1>
-                        <p> </p>
+                    <div id="contenedorImagenesJP">
+                        <div class="font-bold divide-y">
+                            <h1 class="text-left">IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
                     </div>
-                    <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+                    <div id="contenedorDocumentosJP">
+
+                        <div class="font-bold divide-y mb-4">
+                            <h1 class="text-left">DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    </div>
+
                 </div>
             </div>
 

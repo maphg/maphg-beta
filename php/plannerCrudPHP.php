@@ -2673,8 +2673,12 @@ if (isset($_POST['action'])) {
                 <div class=\"w-2/6 h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md\">
                     <div class=\" flex flex-row items-center truncate\">
                         <i class=\"fad fa-dot-circle mx-2\"></i>
-                        <h1>TAREAS GENERALES DEL AREA</h1>
+                        <h1>TAREAS GENERALES DEL ÁREA</h1>
                     </div>
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
+                </div>
+                <div class=\"w-16 flex h-full items-center justify-center relative\">
                 </div>
                 <!-- MC PENDIENTES -->
                 <div onclick=\"obtenerMCN(0);\" class=\"w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md\">
@@ -2683,10 +2687,6 @@ if (isset($_POST['action'])) {
                 <!-- MC SOLUCIONADOS -->
                 <div onclick=\"obtenerMCF(0);\" class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md rounded-r\">
                     <h1>$totalTGF</h1>
-                </div>
-                <div class=\"w-16 flex h-full items-center justify-center relative\">
-                </div>
-                <div class=\"w-16 flex h-full items-center justify-center relative\">
                 </div>
                 <div class=\"w-16 flex h-full items-center justify-center relative\">
                 </div>
@@ -2873,13 +2873,13 @@ if (isset($_POST['action'])) {
                         // Nombre de Equipo.
                         $dataEquipos .= "
                                 <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\" style=\"display:flex;\">
-                                    <div id=\"" . $idEquipo . "E\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md\">
-                                        <div class=\" flex flex-row items-center truncate\">
+                                    <div id=\"" . $idEquipo . "E\" onclick=\"expandir(this.id)\" class=\"w-2/6 h-full flex flex-row items-center justify-between bg-blue-100 text-blue-500 rounded-l-md cursor-pointer hover:shadow-md truncate relative\">
+                                        <div class=\" flex flex-row items-center w-full\">
                                             <i class=\"fas fa-cog mx-2\"></i>
-                                            <h1>$nombreEquipo</h1>
-                                        </div>
-                                        <div class=\"mx-2\">
-                                            <i class=\"fas fa-chevron-down\"></i>
+                                            <div class=\"mx-2 absolute right-0 mr-2\">
+                                                <i class=\"fas fa-chevron-down\"></i>
+                                            </div>
+                                            <h1 class=\"truncate mr-6\">$nombreEquipo</h1>
                                         </div>
                                     </div>
                             ";
@@ -3845,8 +3845,8 @@ if (isset($_POST['action'])) {
 
         // Variables Locales.
         $data = array();
-        $dataImagenes = "";
-        $dataAdjuntos = "";
+        $dataImagen = "";
+        $dataAdjunto = "";
 
         $queryAdjuntos = "SELECT t_mc_adjuntos.id, t_mc_adjuntos.url_adjunto, t_mc_adjuntos.fecha, t_mc_adjuntos.subido_por FROM t_mc_adjuntos 
         WHERE t_mc_adjuntos.id_mc = $idMC AND t_mc_adjuntos.activo = 1";
@@ -3861,12 +3861,12 @@ if (isset($_POST['action'])) {
                 } elseif (file_exists("../../planner/tareas/adjuntos/$url")) {
                     $adjuntoURL = "../planner/tareas/adjuntos/$url";
                 } else {
-                    $adjuntoURL = "";
+                    $adjuntoURL = "../planner/tareas/adjuntos/$url";
                 }
 
                 // Admite solo Imagenes.
                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                    $dataImagenes .= "
+                    $dataImagen .= "
                         <a href=\"$adjuntoURL\" target=\"_blank\">
                         <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                         </div>
@@ -3875,7 +3875,7 @@ if (isset($_POST['action'])) {
 
                     // Admite todo, menos lo anterior.
                 } else {
-                    $dataAdjuntos .= "
+                    $dataAdjunto .= "
                         <a href=\"$adjuntoURL\" target=\"_blank\">
                             <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
                                 <i class=\"fad fa-file-alt fa-3x\"></i>
@@ -3887,8 +3887,8 @@ if (isset($_POST['action'])) {
                 }
             }
         }
-        $data['dataImagenes'] = $dataImagenes;
-        $data['dataAdjuntos'] = $dataAdjuntos;
+        $data['imagen'] = $dataImagen;
+        $data['documento'] = $dataAdjunto;
         echo json_encode($data);
     }
 
@@ -5783,30 +5783,30 @@ if (isset($_POST['action'])) {
                     }
 
 
-                    $queryPlanaccionN = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'N'";
+                    $queryPlanaccionTotal = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
 
                     $queryPlanaccionF = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1 and status = 'F'";
 
                     if (
-                        $resultPlanaccionN = mysqli_query($conn_2020, $queryPlanaccionN) and
+                        $resultPlanaccionTotal = mysqli_query($conn_2020, $queryPlanaccionTotal) and
                         $resultPlanaccionF = mysqli_query($conn_2020, $queryPlanaccionF)
                     ) {
 
-                        foreach ($resultPlanaccionN as $value) {
-                            $totalPlanaccionN = $value['count(id)'];
+                        foreach ($resultPlanaccionTotal as $value) {
+                            $totalPlanaccionTotal = $value['count(id)'];
                         }
 
                         foreach ($resultPlanaccionF as $value) {
                             $totalPlanaccionF = $value['count(id)'];
                         }
 
-                        if (($totalPlanaccionN <= 0 or $totalPlanaccionN == "") and
+                        if (($totalPlanaccionTotal <= 0 or $totalPlanaccionTotal == "") and
                             ($totalPlanaccionF <= 0 or $totalPlanaccionF == "")
                         ) {
                             $PDA = "<i class=\"fas fa-window-minimize\"></i>";
                             $bgTotalPlanaccion = "bg-white";
                         } else {
-                            $PDA = "$totalPlanaccionN / $totalPlanaccionF";
+                            $PDA = "$totalPlanaccionF / $totalPlanaccionTotal";
                             $bgTotalPlanaccion = "text-green-500 bg-green-200";
                         }
                     }
