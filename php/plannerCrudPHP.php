@@ -2139,7 +2139,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                                 <button
-                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
                                     <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
                                 </button>
                             </div>
@@ -2272,7 +2272,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                                 <button
-                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
                                     <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
                                 </button>
                             </div>
@@ -2406,7 +2406,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                                 <button
-                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
                                     <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
                                 </button>
                             </div>
@@ -6674,6 +6674,50 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
+        } elseif ($tabla == "adjuntos_mp_np") {
+            $imgNombre = "TAREAS_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../img/equipos/mpnp/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO adjuntos_mp_np(id_usuario, id_mp_np, url, fecha, activo) VALUES($idUsuario, $idTabla, '$imgNombre', '$fechaActual', 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 7;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
+        } elseif ($tabla == "t_mc_adjuntos") {
+            $imgNombre = "FALLAS_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/tareas/adjuntos/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_mc_adjuntos(id_mc, url_adjunto, fecha, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 8;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
         } else {
             echo 0;
         }
@@ -6867,6 +6911,8 @@ if (isset($_POST['action'])) {
     }
 
 
+    #****************** VER EN PLANNER  ******************
+
     // Obtiene Datos (FALLAS, TAREAS) para Modal Ver en Planner.
     if ($action == "verEnPlanner") {
         $tipoPendiente = $_POST['tipoPendiente'];
@@ -6913,7 +6959,7 @@ if (isset($_POST['action'])) {
 
                     // AGREGAR STATUS MODALSTATUS
                     $status .= "                 
-                        <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
+                        <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\" onclick=\"obtenerstatusMC($idPendiente);\">
                             <h1 class=\"font-medium text-sm\"> <i class=\"fas fa-plus\"></i></h1>
                         </div>
                     ";
@@ -6930,7 +6976,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Trabajando</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'status_trabajare', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6941,7 +6987,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Material</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'status_material', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6952,7 +6998,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Electricidad</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'energetico_electricidad', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6963,7 +7009,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Agua</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'energetico_agua', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6974,7 +7020,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Gas</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'energetico_gas', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6985,7 +7031,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Diesel</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'energetico_diesel', 1)\"></i>
                             </div>
                         ";
                     }
@@ -6996,7 +7042,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Compras</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'departamento_compras', 1)\"></i>
                             </div>
                         ";
                     }
@@ -7007,7 +7053,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Finanzas</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'departamento_finanzas', 1)\"></i>
                             </div>
                         ";
                     }
@@ -7018,7 +7064,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">RRHH</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'departamento_rrhh', 1)\"></i>
                             </div>
                         ";
                     }
@@ -7029,7 +7075,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Calidad</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'departamento_calidad', 1)\"></i>
                             </div>
                         ";
                     }
@@ -7040,7 +7086,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Dirección</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarStatusMC($idPendiente, 'departamento_direccion', 1)\"></i>
                             </div>
                         ";
                     }
@@ -7068,7 +7114,8 @@ if (isset($_POST['action'])) {
                     FROM t_mc_comentarios
                     INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
                     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                    WHERE t_mc_comentarios.id_mc = $idFalla and t_mc_comentarios.activo = 1";
+                    WHERE t_mc_comentarios.id_mc = $idFalla and t_mc_comentarios.activo = 1 
+                    ORDER BY t_mc_comentarios.id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $i) {
                             $comentario = $i['comentario'];
@@ -7168,6 +7215,7 @@ if (isset($_POST['action'])) {
                     $creadoPor = $i['nombre'] . "" . $i['apellido'];
                     $rangoFecha = $i['rango_fecha'];
                     $responsable = $i['responsable'];
+                    $actividadCaracteres = preg_replace('([^A-Za-z0-9 ])', '', $actividad);
 
                     // Status
                     $statusUrgente = $i['status_urgente'];
@@ -7185,7 +7233,7 @@ if (isset($_POST['action'])) {
 
                     // AGREGAR STATUS MODALSTATUS
                     $status .= "                 
-                        <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
+                        <div onclick=\"obtenerInformacionTareas($idTarea,'$actividadCaracteres');\" class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
                             <h1 class=\"font-medium text-sm\"> <i class=\"fas fa-plus\"></i></h1>
                         </div>
                     ";
@@ -7202,7 +7250,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Trabajando</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'status_trabajando', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7213,7 +7261,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Material</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'status_material', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7224,7 +7272,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Electricidad</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'energetico_electricidad', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7235,7 +7283,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Agua</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'energetico_agua', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7246,7 +7294,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Gas</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'energetico_gas', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7257,7 +7305,7 @@ if (isset($_POST['action'])) {
                         $status .= "
                             <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Diesel</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'energetico_diesel', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7268,7 +7316,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Compras</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'departamento_compras', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7279,7 +7327,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Finanzas</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'departamento_finanzas', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7290,7 +7338,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">RRHH</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'departamento_rrhh', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7301,7 +7349,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Calidad</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'departamento_calidad', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7312,7 +7360,7 @@ if (isset($_POST['action'])) {
                         $status .= "                        
                             <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
                                 <h1 class=\"font-medium\">Dirección</h1>
-                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarTareas($idPendiente, 'departamento_direccion', 0)\"></i>
                             </div>
                         ";
                     }
@@ -7400,7 +7448,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // Admite solo Imagenes.
-                            if (strpos($url,"jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
                                 $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">
                                         <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
@@ -7438,6 +7486,28 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+    // Agrega comentario según el tipo de pendiente
+    if ($action == "comentarioVP") {
+        $idPendiente = $_POST['idPendiente'];
+        $tipoPendiente = $_POST['tipoPendiente'];
+        $comentario = $_POST['comentario'];
+
+        if ($tipoPendiente == "TAREA") {
+            $query = "INSERT INTO comentarios_mp_np(id_mp_np, comentario, id_usuario, fecha) VALUES($idPendiente, '$comentario', $idUsuario, '$fechaActual')";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+        } elseif ($tipoPendiente == "FALLA") {
+            $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idPendiente, '$comentario', $idUsuario, '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+        }
+    }
 
 
 

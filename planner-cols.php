@@ -648,7 +648,7 @@
                         <div class="flex flex-wrap w-full justify-start items-center">
 
                             <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
-                                <input id="fechaVP" type="date" name="" class="bg-purple-200" id="">
+                                <span id="fechaVP" class="bg-purple-200"></span>
                             </div>
                         </div>
                     </div>
@@ -657,7 +657,7 @@
                         <h1 class="mb-1">Responsables</h1>
                         <div class="flex flex-wrap w-full justify-start items-center">
 
-                            <div class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                            <div id="responsableVP" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                 <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
                             </div>
 
@@ -670,9 +670,7 @@
                 <div class="w-full text-sm px-2 flex flex-col mt-3">
                     <h1 class="mb-1">Status</h1>
                     <div class="flex flex-wrap w-full justify-start items-center">
-
                         <div id="dataStatusVP" class="flex flex-wrap w-full justify-start items-center"></div>
-
                     </div>
                 </div>
 
@@ -684,8 +682,8 @@
                             <div id="dataComentariosVP" class="flex justify-center items-center flex-col-reverse w-full"></div>
 
                             <div class="flex flex-row justify-center items-center w-full h-10 mt-4">
-                                <input type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none">
-                                <button class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                <input id="comentarioVP" type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                                <button id="btnComentarioVP" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                                     <i class="fad fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -695,7 +693,7 @@
                     <div class="w-1/2  mt-3">
                         <div class="flex items-center justify-start">
                             <h1 class="mr-2">Adjuntos</h1>
-                            <div class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                            <div id="adjuntosVP" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                 <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
                             </div>
                         </div>

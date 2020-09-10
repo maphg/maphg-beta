@@ -1209,7 +1209,6 @@ function obtenerstatusMC(idMC) {
 
 // Función para actualizar Status t_mc.
 function actualizarStatusMC(idMC, status, valorStatus) {
-  alertaImg("Procesando Cambios...", "", "info", 1000);
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
   let idEquipo = localStorage.getItem("idEquipo");
@@ -1453,12 +1452,14 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
   });
 }
 
+
 // Agregar Fecha MC.
 function obtenerFechaMC(idMC, rangoFecha) {
   document.getElementById("modalFechaMC").classList.add("open");
   document.getElementById("fechaMC").value = rangoFecha;
   localStorage.setItem("idMC", idMC);
 }
+
 
 // Funcion para Obtener Adjuntos.
 function obtenerAdjuntosMC(idMC) {
@@ -1481,6 +1482,9 @@ function obtenerAdjuntosMC(idMC) {
   document.getElementById("contenedorImagenes").classList.add('hidden');
   document.getElementById("contenedorDocumentos").classList.add('hidden');
 
+  document.getElementById("inputAdjuntos").
+    setAttribute("onchange", "subirImagenGeneral(" + idMC + ',"t_mc_adjuntos")');
+  
   const action = "obtenerAdjuntosMC";
   $.ajax({
     type: "POST",
@@ -1489,7 +1493,7 @@ function obtenerAdjuntosMC(idMC) {
       action: action,
       idUsuario: idUsuario,
       idDestino: idDestino,
-      idMC: idMC,
+      idMC: idMC
     },
     dataType: "JSON",
     success: function (data) {
@@ -1664,6 +1668,7 @@ function obtenerTareasS(idEquipo) {
   });
 }
 
+
 // Obtener Media para las TAREAS.
 function obtenerAdjuntosTareas(idTarea) {
   // Actualiza id TAREA seleccionado.
@@ -1682,6 +1687,9 @@ function obtenerAdjuntosTareas(idTarea) {
   document.getElementById("contenedorImagenes").classList.add('hidden');
   document.getElementById("contenedorDocumentos").classList.add('hidden');
 
+  document.getElementById("inputAdjuntos").
+    setAttribute("onchange", "subirImagenGeneral(" + idTarea + ',"adjuntos_mp_np")');
+
   const action = "obtenerAdjuntosTareas";
   $.ajax({
     type: "POST",
@@ -1695,14 +1703,15 @@ function obtenerAdjuntosTareas(idTarea) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      if (data.imagen != "") {
-        document.getElementById("dataImagenes").innerHTML = data.imagen;
+
+      if (data.dataImagenes != "") {
+        document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
         document.getElementById("dataImagenes").classList.remove("justify-center");
         document.getElementById("contenedorImagenes").classList.remove('hidden');
       }
 
-      if (data.documento != "") {
-        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+      if (data.dataAdjuntos != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
         document.getElementById("dataAdjuntos").classList.remove("justify-center");
         document.getElementById("contenedorDocumentos").classList.remove('hidden');
       }
@@ -1767,7 +1776,7 @@ function agregarComentarioTarea(idTarea) {
       // dataType: "JSON",
       success: function (data) {
         if (data == 1) {
-          obtenerComentariosTarea(idTarea);
+          obtenerComentariosTareas(idTarea);
           obtenerTareasP(idEquipo);
           document.getElementById("inputComentario").value = "";
           alertaImg("Comentario Agregado", "", "success", 2000);
@@ -1909,7 +1918,7 @@ function actualizarTareas(idTarea, columna, valor) {
     success: function (data) {
       if (data == 1) {
         obtenerTareasP(idEquipo);
-        alertaImg("Status Actualizada", "", "success", 2000);
+        alertaImg("Status Actualizado", "", "success", 2000);
         document.getElementById("modalStatus").classList.remove("open");
       } else if (data == 2) {
         obtenerDatosUsuario(idDestino);
@@ -2064,6 +2073,7 @@ function obtenerMediaEquipo(idEquipo) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
+
       if (data.imagen != "") {
         document.getElementById("dataImagenes").innerHTML = data.imagen;
         document.getElementById("contenedorImagenes").classList.remove('hidden');
@@ -3223,6 +3233,12 @@ function subirImagenGeneral(idTabla, tabla) {
         } else if (data == 5) {
           alertaImg("Adjunto Agregado", "", "success", 2500);
           obtenerMediaEquipo(idTabla);
+        } else if (data == 7) {
+          obtenerAdjuntosTareas(idTabla);
+          alertaImg("Adjunto Agregado", "", "success", 2500);
+        } else if (data == 8) {
+          obtenerAdjuntosMC(idTabla);
+          alertaImg("Adjunto Agregado", "", "success", 2500);
         } else {
           alertaImg("Intente de Nuevo", "", "info", 3000);
         }
@@ -3458,6 +3474,9 @@ function verEnPlanner(tipoPendiente, idPendiente) {
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
   const action = "verEnPlanner";
+  document.getElementById("dataStatusVP").
+    setAttribute('onclick', 'verEnPlanner("' + tipoPendiente + '",+' + idPendiente + ')');
+
 
   $.ajax({
     type: "POST",
@@ -3480,11 +3499,92 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       document.getElementById("dataStatusVP").innerHTML = data.status;
       document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
       document.getElementById("dataAdjuntosVP").innerHTML = data.adjuntos;
+
+      if (tipoPendiente == "FALLA") {
+
+        // FECHA
+        document.getElementById("fechaVP").
+          setAttribute('onclick', 'obtenerFechaMC(' + idPendiente + ', "' + data.fecha + '")');
+        document.getElementById("fechaVP").innerHTML = data.fecha;
+        document.getElementById("fechaTareas").value = data.fecha;
+
+
+        // RESPONSABLE
+        document.getElementById("responsableVP").
+          setAttribute('onclick', 'obtenerUsuarios("asignarMC",' + idPendiente + ')');
+
+
+        // ADJUNTOS
+        document.getElementById("adjuntosVP").
+          setAttribute('onclick', 'obtenerAdjuntosMC(' + idPendiente + ')');
+
+        // COMENTARIOS
+        document.getElementById("btnComentarioVP").
+          setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+        
+      } else if (tipoPendiente == "TAREA") {
+
+        // FECHA
+        document.getElementById("fechaVP").
+          setAttribute('onclick', 'obtenerFechaTareas(' + idPendiente + ', "' + data.fecha + '")');
+        document.getElementById("fechaVP").innerHTML = data.fecha;
+        document.getElementById("fechaTareas").value = data.fecha;
+
+
+        // RESPONSABLE
+        document.getElementById("responsableVP").
+          setAttribute('onclick', 'obtenerUsuarios("asignarTarea",' + idPendiente + ')');
+
+
+        // ADJUNTOS
+        document.getElementById("adjuntosVP").
+          setAttribute('onclick', 'obtenerAdjuntosTareas(' + idPendiente + ')');
+
+        // COMENTARIOS
+        document.getElementById("btnComentarioVP").
+          setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+      }
     }
   });
 }
 
 
+function agregarComentarioVP(tipoPendiente, idPendiente) {
+  let comentario = document.getElementById("comentarioVP").value;
+  let idUsuario = localStorage.getItem("usuario");
+  let idDestino = localStorage.getItem("idDestino");
+  const action = "comentarioVP";
+
+  if (comentario.length > 0) {
+    $.ajax({
+      type: "POST",
+      url: "php/plannerCrudPHP.php",
+      data: {
+        action: action,
+        idUsuario: idUsuario,
+        idDestino: idDestino,
+        idPendiente: idPendiente,
+        comentario: comentario,
+        tipoPendiente: tipoPendiente
+      },
+      // dataType: "JSON",
+      success: function (data) {
+
+        if (data == 1) {
+          verEnPlanner(tipoPendiente, idPendiente);
+          alertaImg("Comentario Agregado", "", "success", 2000);
+          document.getElementById("comentarioVP").value = "";
+        } else {
+          alertaImg("Intente de Nuevo", "", "question", 2000);
+        }
+
+      },
+    });
+
+  } else {
+    alertaImg("Comentario Vacio", "", "info", 2000);
+  }
+}
 
 
 
