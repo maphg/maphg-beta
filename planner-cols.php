@@ -698,7 +698,7 @@
                             </div>
                         </div>
                         <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
-                            <div id="dataAdjuntosVP" class="flex flex-col overflow-y-auto scrollbar px-1 mb-4 text-xs" style="max-height: 300px;"></div>
+                            <div id="dataAdjuntosVP" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 300px;"></div>
                         </div>
                     </div>
                 </div>
