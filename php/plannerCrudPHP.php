@@ -6957,6 +6957,11 @@ if (isset($_POST['action'])) {
                     $statusDireccion = $i['departamento_direccion'];
                     $statusCalidad = $i['departamento_calidad'];
 
+                    // COMPROVACIÓN RANGO FECHA
+                    if ($rangoFecha == "") {
+                        $rangoFecha = "--";
+                    }
+
                     // AGREGAR STATUS MODALSTATUS
                     $status .= "                 
                         <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\" onclick=\"obtenerstatusMC($idPendiente);\">
@@ -7230,6 +7235,11 @@ if (isset($_POST['action'])) {
                     $statusRRHH = $i['departamento_rrhh'];
                     $statusDireccion = $i['departamento_direccion'];
                     $statusCalidad = $i['departamento_calidad'];
+
+                    // COMPROVACIÓN RANGO FECHA
+                    if ($rangoFecha == "") {
+                        $rangoFecha = "--";
+                    }
 
                     // AGREGAR STATUS MODALSTATUS
                     $status .= "                 

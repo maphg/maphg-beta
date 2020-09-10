@@ -1532,28 +1532,6 @@ if ($result) {
     </div>
 
 
-    <!-- MODAL EDITAR FECHA EN FALLAS   -->
-    <div id="modalFechaMC" class="modal">
-        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalFechaMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <!-- INDICACION -->
-            <div class="absolute top-0 left-0 flex flex-row items-center">
-                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                    <h1>RANGO DE FECHA</h1>
-                </div>
-            </div>
-            <div class="flex flex-row items-center pt-10">
-                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="---">
-            </div>
-        </div>
-    </div>
-
-
     <!-- MODAL EDITAR INFORMACION -->
     <div id="modalActualizarProyecto" class="modal">
         <div class="modal-window rounded-md pb-2 px-5 py-3 text-center" style="width: 550px;">
@@ -1686,6 +1664,29 @@ if ($result) {
         </div>
     </div>
 
+
+
+    <!-- MODAL EDITAR FECHA EN FALLAS   -->
+    <div id="modalFechaMC" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="---">
+            </div>
+        </div>
+    </div>
+
     <!-- Modales -->
 
 
@@ -1695,6 +1696,7 @@ if ($result) {
     <script src="js/acordion.js"></script>
     <script src="js/sweetalert2@9.js"></script>
     <script src="js/alertasSweet.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
@@ -2133,8 +2135,8 @@ if ($result) {
                 },
                 // dataType: "JSON",
                 success: function(data) {
+                    verEnPlanner('FALLA', idMC);
                     if (data == 1) {
-                        verEnPlanner('FALLA', idMC);
                         alertaImg("Información Actualizada", "", "success", 2000);
                         if (status == "activo" || status == "status") {
                             obtenerDatosUsuario(idDestino);
@@ -2640,6 +2642,61 @@ if ($result) {
                 $(this).val("");
             });
         });
+
+
+        // Función para Input Fechas FALLAS
+        $(function() {
+            $('input[name="fechaMC"]').daterangepicker({
+                autoUpdateInput: false,
+                showWeekNumbers: true,
+                locale: {
+                    cancelLabel: "Cancelar",
+                    applyLabel: "Aplicar",
+                    fromLabel: "De",
+                    toLabel: "A",
+                    customRangeLabel: "Personalizado",
+                    weekLabel: "S",
+                    daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    monthNames: [
+                        "Enero",
+                        "Febreo",
+                        "Marzo",
+                        "Abril",
+                        "Mayo",
+                        "Junio",
+                        "Julio",
+                        "Agosto",
+                        "Septiembre",
+                        "Octubre",
+                        "Noviembre",
+                        "Diciembre",
+                    ],
+                },
+            });
+            $('input[name="fechaMC"]').on("apply.daterangepicker", function(ev, picker) {
+                $(this).val(
+                    picker.startDate.format("DD/MM/YYYY") +
+                    " - " +
+                    picker.endDate.format("DD/MM/YYYY")
+                );
+
+                // Actualiza fecha MC cuando se Aplica el rango.
+                let rangoFecha =
+                    picker.startDate.format("DD/MM/YYYY") +
+                    " - " +
+                    picker.endDate.format("DD/MM/YYYY");
+                let idMC = localStorage.getItem("idMC");
+                actualizarStatusMC(idMC, "rango_fecha", rangoFecha);
+            });
+            $('input[name="fechaMC"]').on("cancel.daterangepicker", function(
+                ev,
+                picker
+            ) {
+                // console.log(picker);
+                $(this).val("");
+            });
+        });
+
 
         // Agregar Fecha MC.
         function obtenerFechaMC(idMC, rangoFecha) {
