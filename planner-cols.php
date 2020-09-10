@@ -329,7 +329,6 @@
                     </div>
                 </div>
 
-
                 <div class="text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
                     <h1 id="estiloSeccion" class="font-medium text-md">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -465,8 +464,6 @@
                     <h1><span id="nombreEquipoMCF"></span> / <span id="tipoSolucionadosX"></span></h1>
                 </div>
             </div>
-
-
 
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
@@ -615,8 +612,106 @@
         </div>
     </div>
 
-    <!-- ********** MODALES SECUNDARIOS ********** -->
 
+    <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
+    <div id="modalVerEnPlanner" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlanner')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md">
+                    <h1>Detalles</h1>
+                </div>
+            </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded-b-md">
+                    <h1 id="tipoPendienteVP"></h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full pb-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 id="descripcionPendienteVP" class="px-2 py-1 w-full text-xl font-medium uppercase" style="color: #282B3B;"></h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium" style="color: #ABADB7;">Creado por:
+                        <span id="creadoPorVP" class="uppercase ml-1"></span>
+                    </h1>
+                </div>
+
+                <div class="w-full flex">
+                    <div class="w-1/2 text-sm px-2 flex flex-col">
+                        <h1 class="mb-1"></h1>
+                        <div class="flex flex-wrap w-full justify-start items-center">
+
+                            <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                <input id="fechaVP" type="date" name="" class="bg-purple-200" id="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 text-sm px-2 flex flex-col">
+                        <h1 class="mb-1">Responsables</h1>
+                        <div class="flex flex-wrap w-full justify-start items-center">
+
+                            <div class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                            </div>
+
+                            <div id="dataResponsablesVP"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full text-sm px-2 flex flex-col mt-3">
+                    <h1 class="mb-1">Status</h1>
+                    <div class="flex flex-wrap w-full justify-start items-center">
+
+                        <div id="dataStatusVP" class="flex flex-wrap w-full justify-start items-center"></div>
+
+                    </div>
+                </div>
+
+                <div class="w-full flex text-sm mt-5">
+                    <div class="w-1/2 mt-3">
+                        <h1 class="mb-6">Comentarios</h1>
+                        <div class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="min-height: 499px; max-height: 500px;">
+
+                            <div id="dataComentariosVP" class="flex justify-center items-center flex-col-reverse w-full"></div>
+
+                            <div class="flex flex-row justify-center items-center w-full h-10 mt-4">
+                                <input type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none">
+                                <button class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                    <i class="fad fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2  mt-3">
+                        <div class="flex items-center justify-start">
+                            <h1 class="mr-2">Adjuntos</h1>
+                            <div class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                            </div>
+                        </div>
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjuntosVP" class="flex flex-col overflow-y-auto scrollbar px-1 mb-4 text-xs" style="max-height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- ********** MODALES SECUNDARIOS ********** -->
 
     <!-- MODAL Exportar Secciones Usuarios -->
     <div id="modalExportarSeccionesUsuarios" class="modal">

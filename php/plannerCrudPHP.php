@@ -1830,7 +1830,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                                 <button
-                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC);\">
                                     <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
                                 </button>
                             </div>
@@ -1943,7 +1943,7 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </div>
                                 <button
-                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\">
+                                    class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('TAREA', $idTarea);\">
                                     <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
                                 </button>
                             </div>
@@ -6866,6 +6866,577 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
+    // Obtiene Datos (FALLAS, TAREAS) para Modal Ver en Planner.
+    if ($action == "verEnPlanner") {
+        $tipoPendiente = $_POST['tipoPendiente'];
+        $idPendiente = $_POST['idPendiente'];
+        $data = array();
+        $fecha = "--";
+        $status = "";
+        $dataComentariosVP = "";
+        $dataImagen = "";
+        $dataAdjunto = "";
+
+        if ($tipoPendiente == "FALLA") {
+            $query = "SELECT t_mc.id, t_mc.actividad, t_mc.rango_fecha, t_mc.responsable,
+            t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
+            t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
+            t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
+            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_mc 
+            INNER JOIN t_users ON t_mc.creado_por = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_mc.id = $idPendiente and t_mc.activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $idFalla = $i['id'];
+                    $actividad = $i['actividad'];
+                    $creadoPor = $i['nombre'] . "" . $i['apellido'];
+                    $rangoFecha = $i['rango_fecha'];
+                    $responsable = $i['responsable'];
+
+                    // Status
+                    $statusUrgente = $i['status_urgente'];
+                    $statusTrabajare = $i['status_trabajare'];
+                    $statusMaterial = $i['status_material'];
+                    $statusElectricidad = $i['energetico_electricidad'];
+                    $statusAgua = $i['energetico_agua'];
+                    $statusGas = $i['energetico_gas'];
+                    $statusDiesel = $i['energetico_diesel'];
+                    $statusCompras = $i['departamento_compras'];
+                    $statusFinanzas = $i['departamento_finanzas'];
+                    $statusRRHH = $i['departamento_rrhh'];
+                    $statusDireccion = $i['departamento_direccion'];
+                    $statusCalidad = $i['departamento_calidad'];
+
+                    // AGREGAR STATUS MODALSTATUS
+                    $status .= "                 
+                        <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
+                            <h1 class=\"font-medium text-sm\"> <i class=\"fas fa-plus\"></i></h1>
+                        </div>
+                    ";
+
+                    if ($statusUrgente == 0 or $statusUrgente == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "";
+                    }
+
+                    if ($statusTrabajare == 0 or $statusTrabajare == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Trabajando</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusMaterial == 0 or $statusMaterial == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Material</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusElectricidad == 0 or $statusElectricidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Electricidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusAgua == 0 or $statusAgua == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Agua</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusGas == 0 or $statusGas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Gas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDiesel == 0 or $statusDiesel == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Diesel</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCompras == 0 or $statusCompras == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Compras</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusFinanzas == 0 or $statusFinanzas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Finanzas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusRRHH == 0 or $statusRRHH == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">RRHH</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCalidad == 0 or $statusCalidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Calidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDireccion == 0 or $statusDireccion == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Dirección</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    // RESPONSABLE
+                    $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $responsable";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $responsable = $i['nombre'] . " " . $i['apellido'];
+
+                            $responsable = "
+                            <div class=\"bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">$responsable</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                            ";
+                        }
+                    }
+
+                    // COMENTARIOS
+                    $query = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_mc_comentarios
+                    INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_mc_comentarios.id_mc = $idFalla and t_mc_comentarios.activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $comentario = $i['comentario'];
+                            $usuarioComentario = $i['nombre'] . " " . $i['apellido'];
+                            $fechaComentario = $i['fecha'];
+
+                            $dataComentariosVP .= "
+                                <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative\">
+                                        <div class=\"flex items-center justify-center\" style=\"width: 30px;\">
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$usuarioComentario\" width=\"30\" height=\"30\" alt=\"\">
+                                        </div>
+                                        <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                                            <div class=\"font-bold flex flex-row justify-between w-full text-xxs\">
+                                                <div>
+                                                    <h1>$usuarioComentario</h1>
+                                                </div>
+                                                <div class=\"absolute bottom-0 right-0 mr-1 mb-1\">
+                                                    <p class=\"font-mono ml-2 text-teal-400\">$fechaComentario</p>
+                                                </div>
+                                            </div>
+                                            <div class=\"w-full text-xs text-justify\">
+                                                <p>$comentario</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
+                    // ADJUNTOS
+                    $queryAdjuntos = "SELECT t_mc_adjuntos.id, t_mc_adjuntos.url_adjunto, t_mc_adjuntos.fecha, t_mc_adjuntos.subido_por FROM t_mc_adjuntos 
+                    WHERE t_mc_adjuntos.id_mc = $idFalla AND t_mc_adjuntos.activo = 1";
+
+                    if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+
+                        foreach ($resultAdjuntos as $value) {
+                            $url = $value['url_adjunto'];
+
+                            if (file_exists("../planner/tareas/adjuntos/$url")) {
+                                $adjuntoURL = "planner/tareas/adjuntos/$url";
+                            } elseif (file_exists("../../planner/tareas/adjuntos/$url")) {
+                                $adjuntoURL = "../planner/tareas/adjuntos/$url";
+                            } else {
+                                $adjuntoURL = "../planner/tareas/adjuntos/$url";
+                            }
+
+                            // Admite solo Imagenes.
+                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                                $dataImagen .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                    </a>
+                                ";
+
+                                // Admite todo, menos lo anterior.
+                            } else {
+                                $dataAdjunto .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                            <i class=\"fad fa-file-alt fa-3x\"></i>
+                                            <p class=\"text-sm font-normal ml-2\">$url
+                                            </p>
+                                        </div>
+                                    </a>                    
+                                ";
+                            }
+                        }
+                    }
+
+                    $data['idPendiente'] = $idFalla;
+                    $data['actividad'] = $actividad;
+                    $data['fecha'] = $rangoFecha;
+                    $data['responsable'] = $responsable;
+                    $data['creadoPor'] = $creadoPor;
+                    $data['status'] = $status;
+                    $data['dataComentariosVP'] = $dataComentariosVP;
+                    $data['adjuntos'] = $dataImagen . $dataAdjunto;
+                }
+            }
+        } elseif ($tipoPendiente == "TAREA") {
+            $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.rango_fecha, t_mp_np.responsable,
+            t_mp_np.status_material, t_mp_np.status_trabajando, t_mp_np.status_urgente,
+            t_mp_np.energetico_electricidad, t_mp_np.energetico_agua, t_mp_np.energetico_diesel, t_mp_np.energetico_gas,
+            t_mp_np.departamento_calidad, t_mp_np.departamento_compras, t_mp_np.departamento_direccion, 
+            t_mp_np.departamento_finanzas, t_mp_np.departamento_rrhh,
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_mp_np 
+            INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_mp_np.id = $idPendiente and t_mp_np.activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $idTarea = $i['id'];
+                    $actividad = $i['titulo'];
+                    $creadoPor = $i['nombre'] . "" . $i['apellido'];
+                    $rangoFecha = $i['rango_fecha'];
+                    $responsable = $i['responsable'];
+
+                    // Status
+                    $statusUrgente = $i['status_urgente'];
+                    $statusTrabajare = $i['status_trabajando'];
+                    $statusMaterial = $i['status_material'];
+                    $statusElectricidad = $i['energetico_electricidad'];
+                    $statusAgua = $i['energetico_agua'];
+                    $statusGas = $i['energetico_gas'];
+                    $statusDiesel = $i['energetico_diesel'];
+                    $statusCompras = $i['departamento_compras'];
+                    $statusFinanzas = $i['departamento_finanzas'];
+                    $statusRRHH = $i['departamento_rrhh'];
+                    $statusDireccion = $i['departamento_direccion'];
+                    $statusCalidad = $i['departamento_calidad'];
+
+                    // AGREGAR STATUS MODALSTATUS
+                    $status .= "                 
+                        <div class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
+                            <h1 class=\"font-medium text-sm\"> <i class=\"fas fa-plus\"></i></h1>
+                        </div>
+                    ";
+
+                    if ($statusUrgente == 0 or $statusUrgente == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "";
+                    }
+
+                    if ($statusTrabajare == 0 or $statusTrabajare == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Trabajando</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusMaterial == 0 or $statusMaterial == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Material</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusElectricidad == 0 or $statusElectricidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Electricidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusAgua == 0 or $statusAgua == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Agua</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusGas == 0 or $statusGas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Gas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDiesel == 0 or $statusDiesel == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Diesel</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCompras == 0 or $statusCompras == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Compras</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusFinanzas == 0 or $statusFinanzas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Finanzas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusRRHH == 0 or $statusRRHH == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">RRHH</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCalidad == 0 or $statusCalidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Calidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDireccion == 0 or $statusDireccion == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Dirección</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                        ";
+                    }
+
+                    // RESPONSABLE
+                    $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $responsable";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $responsable = $i['nombre'] . " " . $i['apellido'];
+
+                            $responsable = "
+                            <div class=\"bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">$responsable</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\"></i>
+                            </div>
+                            ";
+                        }
+                    }
+
+
+                    // COMENTARIOS
+                    $queryComentario = "SELECT comentarios_mp_np.comentario, comentarios_mp_np.fecha, 
+                    t_colaboradores.nombre, t_colaboradores.apellido
+                    FROM comentarios_mp_np
+                    INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE comentarios_mp_np.id_mp_np = $idTarea AND comentarios_mp_np.activo = 1
+                    ORDER BY comentarios_mp_np.id DESC
+                    ";
+                    if ($resultComentario = mysqli_query($conn_2020, $queryComentario)) {
+                        foreach ($resultComentario as $value) {
+                            $comentario = $value['comentario'];
+                            $nombre = $value['nombre'];
+                            $apellido = $value['apellido'];
+                            $nombreCompleto = $value['nombre'] . " " . $value['apellido'];
+                            $fecha = $value['fecha'];
+
+                            if ($fecha != "") {
+                                $fecha = (new DateTime($fecha))->format('d-m-Y H:m:s');
+                            } else {
+                                $fecha = "";
+                            }
+
+                            $dataComentariosVP .= "
+                                <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
+                                    <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"48\" height=\"48\" alt=\"\">
+                                    </div>
+                                    <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                                        <div class=\"text-xs font-bold flex flex-row justify-between w-full\">
+                                            <div>
+                                                <h1>$nombreCompleto</h1>
+                                            </div>
+                                            <div>
+                                                <p class=\"font-mono ml-2 text-gray-600\">$fecha</p>
+                                            </div>
+                                        </div>
+                                        <div class=\"text-xs w-full\">
+                                            <p>$comentario</p>
+                                        </div>
+                                    </div>
+                                </div>                
+                            ";
+                        }
+                    }
+
+
+                    // ADJUNTOS
+                    $queryAdjuntos = "SELECT adjuntos_mp_np.id, adjuntos_mp_np.url, adjuntos_mp_np.fecha, 
+                    adjuntos_mp_np.id_usuario FROM adjuntos_mp_np 
+                    WHERE adjuntos_mp_np.id_mp_np = $idTarea AND adjuntos_mp_np.activo = 1";
+
+                    if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+
+                        foreach ($resultAdjuntos as $value) {
+                            $url = $value['url'];
+
+                            if (file_exists("../img/equipos/mpnp/$url")) {
+                                $adjuntoURL = "img/equipos/mpnp/$url";
+                            } else {
+                                $adjuntoURL = "";
+                            }
+
+                            // Admite solo Imagenes.
+                            if (strpos($url,"jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                                $dataImagen .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                        </div>
+                                    </a>
+                                ";
+
+                                // Admite todo, menos lo anterior.
+                            } else {
+
+                                $dataAdjunto .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                            <i class=\"fad fa-file-alt fa-3x\"></i>
+                                            <p class=\"text-sm font-normal ml-2\">$url
+                                            </p>
+                                        </div>
+                                    </a>                    
+                                ";
+                            }
+                        }
+                    }
+
+                    $data['idPendiente'] = $idTarea;
+                    $data['actividad'] = $actividad;
+                    $data['fecha'] = $rangoFecha;
+                    $data['responsable'] = $responsable;
+                    $data['creadoPor'] = $creadoPor;
+                    $data['status'] = $status;
+                    $data['dataComentariosVP'] = $dataComentariosVP;
+                    $data['adjuntos'] = $dataImagen . $dataAdjunto;
+                }
+            }
+        }
+        echo json_encode($data);
+    }
 
 
 

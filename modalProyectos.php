@@ -168,18 +168,25 @@
                 <span id="cargandoAdjunto" class="text-center"></span>
                 <!-- Icon upload -->
 
-                <div class="w-full px-1 font-medium text-sm text-gray-500">
-                    <div class="font-bold divide-y">
-                        <h1>IMÁGENES</h1>
-                        <p> </p>
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+
+                    <div id="contenedorImagenes">
+                        <div class="font-bold divide-y">
+                            <h1>IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <!-- Data para las imagenes -->
+                        <div id="dataImagenes" class="flex flex-row flex-wrap text-center"></div>
                     </div>
-                    <!-- Data para las imagenes -->
-                    <div id="dataImagenes" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height:35vh"></div>
-                    <div class="font-bold divide-y mb-4">
-                        <h1>DOCUMENTOS</h1>
-                        <p> </p>
+
+                    <div id="contenedorDocumentos">
+                        <div class="font-bold divide-y mb-4">
+                            <h1>DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntos" class="flex flex-col"></div>
                     </div>
-                    <div id="dataAdjuntos" class="flex flex-col overflow-y-auto scrollbar" style="max-height:35vh"></div>
+
                 </div>
             </div>
         </div>
@@ -449,18 +456,24 @@
                 <!-- Icon upload -->
 
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
-                    <div class="font-bold divide-y">
-                        <h1 class="text-left">IMÁGENES</h1>
-                        <p> </p>
-                    </div>
-                    <!-- Data para las imagenes -->
 
-                    <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
-                    <div class="font-bold divide-y mb-4">
-                        <h1 class="text-left">DOCUMENTOS</h1>
-                        <p> </p>
+                    <div id="contenedorImagenesJP">
+                        <div class="font-bold divide-y">
+                            <h1 class="text-left">IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
                     </div>
-                    <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+                    <div id="contenedorDocumentosJP">
+
+                        <div class="font-bold divide-y mb-4">
+                            <h1 class="text-left">DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1192,6 +1205,9 @@
             document.getElementById("dataImagenesProyecto").innerHTML = '';
             document.getElementById("dataAdjuntosProyecto").innerHTML = '';
             document.getElementById("mediaProyectos").classList.remove('hidden');
+            document.getElementById("contenedorImagenesJP").classList.add('hidden');
+            document.getElementById("contenedorDocumentosJP").classList.add('hidden');
+
 
             let idUsuario = localStorage.getItem("usuario");
             let idDestino = localStorage.getItem("idDestino");
@@ -1212,8 +1228,16 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
-                    document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
+                    if (data.imagen != "") {
+                        document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
+                        document.getElementById("contenedorImagenesJP").classList.remove('hidden');
+                    }
+
+                    if (data.documento != "") {
+                        document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
+                        document.getElementById("contenedorDocumentosJP").classList.remove('hidden');
+                    }
+
                 }
             });
         }
@@ -1238,14 +1262,21 @@
 
         // Obtienes las Cotizaciones de PROYECTOS
         function cotizacionesProyectos(idProyecto) {
-            let idUsuario = localStorage.getItem('usuario');
-            let idDestino = localStorage.getItem('idDestino');
+            let idUsuario = localStorage.getItem("usuario");
+            let idDestino = localStorage.getItem("idDestino");
             let idTabla = idProyecto;
             let tabla = "t_proyectos_adjuntos";
 
-            document.getElementById("modalMedia").classList.add('open');
-            document.getElementById("inputAdjuntos").
-            setAttribute('onchange', 'subirImagenGeneral(' + idProyecto + ', "t_proyectos_adjuntos")');
+            document.getElementById("contenedorImagenes").classList.add('hidden');
+            document.getElementById("contenedorDocumentos").classList.add('hidden');
+
+            document.getElementById("modalMedia").classList.add("open");
+            document
+                .getElementById("inputAdjuntos")
+                .setAttribute(
+                    "onchange",
+                    "subirImagenGeneral(" + idProyecto + ', "t_proyectos_adjuntos")'
+                );
 
             const action = "obtenerAdjuntos";
             $.ajax({
@@ -1256,13 +1287,21 @@
                     idUsuario: idUsuario,
                     idDestino: idDestino,
                     idTabla: idTabla,
-                    tabla: tabla
+                    tabla: tabla,
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    document.getElementById("dataImagenes").innerHTML = data.imagen;
-                    document.getElementById("dataAdjuntos").innerHTML = data.documento;
-                }
+
+                    if (data.imagen != "") {
+                        document.getElementById("dataImagenes").innerHTML = data.imagen;
+                        document.getElementById("contenedorImagenes").classList.remove('hidden');
+                    }
+
+                    if (data.documento != "") {
+                        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+                        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+                    }
+                },
             });
         }
 

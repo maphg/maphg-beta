@@ -1478,6 +1478,8 @@ function obtenerAdjuntosMC(idMC) {
     '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
   document.getElementById("dataImagenes").classList.add("justify-center");
   document.getElementById("modalMedia").classList.add("open");
+  document.getElementById("contenedorImagenes").classList.add('hidden');
+  document.getElementById("contenedorDocumentos").classList.add('hidden');
 
   const action = "obtenerAdjuntosMC";
   $.ajax({
@@ -1492,17 +1494,19 @@ function obtenerAdjuntosMC(idMC) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      document
-        .getElementById("dataImagenes")
-        .classList.remove("justify-center");
-      document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
-      document
-        .getElementById("dataAdjuntos")
-        .classList.remove("justify-center");
-      document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
-      document
-        .getElementById("statusActivo")
-        .setAttribute("onclick", data.dataAdjuntos);
+
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+        document.getElementById("dataImagenes").classList.remove("justify-center");
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+        document.getElementById("dataAdjuntos").classList.remove("justify-center");
+      }
+
     },
   });
 }
@@ -1592,12 +1596,8 @@ function obtenerTareasP(idEquipo) {
   document.getElementById("dataPendientes").innerHTML = "";
   document.getElementById("tipoPendiente").innerHTML = "TAREAS";
   document.getElementById("agregarPendiente").innerHTML = "Agregar Tarea";
-  document
-    .getElementById("btnAgregarPendiente")
-    .setAttribute("onclick", "datosAgregarTarea()");
-  document
-    .getElementById("btnAgregarMC")
-    .setAttribute("onclick", "agregarTarea()");
+  document.getElementById("btnAgregarPendiente").setAttribute("onclick", "datosAgregarTarea()");
+  document.getElementById("btnAgregarMC").setAttribute("onclick", "agregarTarea()");
   const action = "obtenerTareasP";
 
   $.ajax({
@@ -1673,14 +1673,14 @@ function obtenerAdjuntosTareas(idTarea) {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
 
-  document.getElementById("dataImagenes").innerHTML =
-    '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+  document.getElementById("dataImagenes").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
   document.getElementById("dataAdjuntos").classList.add("justify-center");
 
-  document.getElementById("dataAdjuntos").innerHTML =
-    '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+  document.getElementById("dataAdjuntos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
   document.getElementById("dataImagenes").classList.add("justify-center");
   document.getElementById("modalMedia").classList.add("open");
+  document.getElementById("contenedorImagenes").classList.add('hidden');
+  document.getElementById("contenedorDocumentos").classList.add('hidden');
 
   const action = "obtenerAdjuntosTareas";
   $.ajax({
@@ -1695,17 +1695,17 @@ function obtenerAdjuntosTareas(idTarea) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      document
-        .getElementById("dataImagenes")
-        .classList.remove("justify-center");
-      document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
-      document
-        .getElementById("dataAdjuntos")
-        .classList.remove("justify-center");
-      document.getElementById("dataAdjuntos").innerHTML = data.dataAdjuntos;
-      document
-        .getElementById("statusActivo")
-        .setAttribute("onclick", data.dataAdjuntos);
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("dataImagenes").classList.remove("justify-center");
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("dataAdjuntos").classList.remove("justify-center");
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+      }
     },
   });
 }
@@ -1780,6 +1780,7 @@ function agregarComentarioTarea(idTarea) {
     alertaImg("Comentario Vacio", "", "info", 2000);
   }
 }
+
 
 // Modifica Status o alguna Columna(titulo, activo, status) en TAREAS
 function obtenerInformacionTareas(idTarea, tituloTarea) {
@@ -1884,6 +1885,7 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
   document.getElementById("inputEditarTitulo").value = tituloTarea;
 }
 
+
 // Actualiza Datos de las Tareas
 function actualizarTareas(idTarea, columna, valor) {
   let tituloNuevo = document.getElementById("inputEditarTitulo").value;
@@ -1942,6 +1944,7 @@ function actualizarTareas(idTarea, columna, valor) {
   });
 }
 
+
 // Agregar Fecha MC.
 function obtenerFechaTareas(idTarea, rangoFecha) {
   document.getElementById("modalFechaTareas").classList.add("open");
@@ -1949,8 +1952,10 @@ function obtenerFechaTareas(idTarea, rangoFecha) {
   localStorage.setItem("idTarea", idTarea);
 }
 
+
 // Opciones Responsable para Agregar Tarea.
 function datosAgregarTarea() {
+  // console.log('datosAgregarTarea');
   document.getElementById("responsableMC").innerHTML = "";
   document.getElementById("modalAgregarMC").classList.add("open");
   let idUsuario = localStorage.getItem("usuario");
@@ -1974,6 +1979,7 @@ function datosAgregarTarea() {
     },
   });
 }
+
 
 // Agregar TAREA
 function agregarTarea() {
@@ -2032,15 +2038,14 @@ function agregarTarea() {
   }
 }
 
+
 // Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
 function obtenerMediaEquipo(idEquipo) {
   document.getElementById("modalMedia").classList.add("open");
-  document
-    .getElementById("inputAdjuntos")
-    .setAttribute(
-      "onchange",
-      "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos")'
-    );
+  document.getElementById("inputAdjuntos").
+    setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos")');
+  document.getElementById("contenedorImagenes").classList.add('hidden');
+  document.getElementById("contenedorDocumentos").classList.add('hidden');
 
   let idTabla = idEquipo;
   let tabla = "t_equipos_adjuntos";
@@ -2059,8 +2064,16 @@ function obtenerMediaEquipo(idEquipo) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      document.getElementById("dataImagenes").innerHTML = data.imagen;
-      document.getElementById("dataAdjuntos").innerHTML = data.documento;
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+      }
+
     },
   });
 }
@@ -2090,6 +2103,7 @@ function expandirProyectos(id, idProyecto) {
       .classList.remove("fa-chevron-right");
   }
 }
+
 
 // Obtiene los proyectos de las secciones
 function obtenerProyectosP(tipoOrden) {
@@ -2186,6 +2200,7 @@ function obtenerProyectosP(tipoOrden) {
   });
 }
 
+
 // Obtiene los proyectos de las secciones
 function obtenerProyectosS(tipoOrden) {
   // Obtiene datos
@@ -2274,6 +2289,7 @@ function obtenerProyectosS(tipoOrden) {
   });
 }
 
+
 // Función para Paginar los resultados de los Equipos Obtenidos.
 function paginacionProyectos() {
   $("#paginacionProyectos").jPages({
@@ -2292,6 +2308,7 @@ function paginacionProyectos() {
     "-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
   );
 }
+
 
 // Obtener Opciones de Responsables para Proyectos
 function datosAgregarProyecto() {
@@ -2317,6 +2334,7 @@ function datosAgregarProyecto() {
     },
   });
 }
+
 
 // Agregar Proyecto
 function agregarProyecto() {
@@ -2380,6 +2398,7 @@ function agregarProyecto() {
   }
 }
 
+
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
   document
@@ -2416,6 +2435,7 @@ function obtenerResponsablesProyectos(idProyecto) {
   });
 }
 
+
 // Función para  Actualizar Información de un proyecto en la tabla t_proyectos
 function actualizarProyectos(valor, columna, idProyecto) {
   let idUsuario = localStorage.getItem("usuario");
@@ -2442,7 +2462,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
     },
     // dataType: "JSON",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
       if (data == 1) {
         obtenerProyectosP("PROYECTO");
         alertaImg("Responsable Actualizado", "", "success", 2000);
@@ -2495,6 +2515,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
   });
 }
 
+
 // ACTUALIZA LA JUSTIFICACION DE LOS PROYECTOS
 function obtenerDatoProyectos(idProyecto, columna) {
   localStorage.setItem("idProyecto", idProyecto);
@@ -2506,6 +2527,7 @@ function obtenerDatoProyectos(idProyecto, columna) {
   document.getElementById("mediaProyectos").classList.add('hidden');
   document.getElementById("dataImagenesProyecto").innerHTML = '';
   document.getElementById("dataAdjuntosProyecto").innerHTML = '';
+
 
   document.getElementById("tipoProyectoDiv").classList.add("hidden");
   document.getElementById("justificacionProyectoDiv").classList.add("hidden");
@@ -2596,7 +2618,7 @@ function subirJustificacionProyectos(idTabla, tabla) {
       contentType: false,
       processData: false,
       success: function (data) {
-        console.log(data);
+        // console.log(data);
         if (data == 1) {
           alertaImg("Proceso Cancelado", "", "info", 3000);
         } else if (data == 6) {
@@ -2618,6 +2640,9 @@ function justificacionAdjuntosProyectos(idProyecto) {
   document.getElementById("dataImagenesProyecto").innerHTML = '';
   document.getElementById("dataAdjuntosProyecto").innerHTML = '';
   document.getElementById("mediaProyectos").classList.remove('hidden');
+  document.getElementById("contenedorImagenesJP").classList.add('hidden');
+  document.getElementById("contenedorDocumentosJP").classList.add('hidden');
+
 
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
@@ -2638,8 +2663,16 @@ function justificacionAdjuntosProyectos(idProyecto) {
     },
     dataType: "JSON",
     success: function (data) {
-      document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
-      document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
+      if (data.imagen != "") {
+        document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenesJP").classList.remove('hidden');
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntosProyecto").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentosJP").classList.remove('hidden');
+      }
+
     }
   });
 }
@@ -2651,26 +2684,14 @@ function statusProyecto(idProyecto) {
   let tituloActual = document.getElementById("tituloP" + idProyecto).innerHTML;
   document.getElementById("inputEditarTitulo").value = tituloActual;
 
-  document
-    .getElementById("btnEditarTitulo")
-    .setAttribute(
-      "onclick",
-      'actualizarProyectos(0, "titulo",' + idProyecto + ")"
-    );
+  document.getElementById("btnEditarTitulo")
+    .setAttribute("onclick", 'actualizarProyectos(0, "titulo",' + idProyecto + ")");
 
-  document
-    .getElementById("eliminar")
-    .setAttribute(
-      "onclick",
-      'actualizarProyectos(0, "eliminar",' + idProyecto + ")"
-    );
+  document.getElementById("eliminar").
+    setAttribute("onclick", 'actualizarProyectos(0, "eliminar",' + idProyecto + ")");
 
-  document
-    .getElementById("finalizar")
-    .setAttribute(
-      "onclick",
-      'actualizarProyectos("F", "status",' + idProyecto + ")"
-    );
+  document.getElementById("finalizar").
+    setAttribute("onclick", 'actualizarProyectos("F", "status",' + idProyecto + ")");
 }
 
 // Obtienes las Cotizaciones de PROYECTOS
@@ -2679,6 +2700,9 @@ function cotizacionesProyectos(idProyecto) {
   let idDestino = localStorage.getItem("idDestino");
   let idTabla = idProyecto;
   let tabla = "t_proyectos_adjuntos";
+
+  document.getElementById("contenedorImagenes").classList.add('hidden');
+  document.getElementById("contenedorDocumentos").classList.add('hidden');
 
   document.getElementById("modalMedia").classList.add("open");
   document
@@ -2701,8 +2725,16 @@ function cotizacionesProyectos(idProyecto) {
     },
     dataType: "JSON",
     success: function (data) {
-      document.getElementById("dataImagenes").innerHTML = data.imagen;
-      document.getElementById("dataAdjuntos").innerHTML = data.documento;
+
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+      }
     },
   });
 }
@@ -2941,7 +2973,7 @@ function statusPlanaccion(idPlanaccion) {
   let idDestino = localStorage.getItem("idDestino");
   let idSeccion = localStorage.getItem("idSeccion");
   const action = "statusPlanaccion";
-  console.log("statusPlanaccion");
+  // console.log("statusPlanaccion");
   $.ajax({
     type: "POST",
     url: "php/plannerCrudPHP.php",
@@ -2954,7 +2986,7 @@ function statusPlanaccion(idPlanaccion) {
     },
     dataType: "JSON",
     success: function (data) {
-      console.log(data);
+      // console.log(data);
 
       if (data.sMaterial == 1) {
         document
@@ -3059,9 +3091,13 @@ function comentariosPlanaccion(idPlanaccion) {
   });
 }
 
+
 // Muestra los adjuntos de Planaccion
 function adjuntosPlanaccion(idPlanaccion) {
   document.getElementById("modalMedia").classList.add("open");
+  document.getElementById("contenedorImagenes").classList.add('hidden');
+  document.getElementById("contenedorDocumentos").classList.add('hidden');
+
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
   let idTabla = idPlanaccion;
@@ -3089,11 +3125,20 @@ function adjuntosPlanaccion(idPlanaccion) {
     },
     dataType: "JSON",
     success: function (data) {
-      document.getElementById("dataImagenes").innerHTML = data.imagen;
-      document.getElementById("dataAdjuntos").innerHTML = data.documento;
+
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+      }
     },
   });
 }
+
 
 // Agrega Comentario en Planaccion
 function agregarComentarioPlanaccion(idPlanaccion) {
@@ -3129,6 +3174,7 @@ function agregarComentarioPlanaccion(idPlanaccion) {
     alertaImg("Comentario NO Valido", "", "info", 2500);
   }
 }
+
 
 // Sube imagenes con dos parametros, con el formulario #inputAdjuntos
 function subirImagenGeneral(idTabla, tabla) {
@@ -3180,12 +3226,15 @@ function subirImagenGeneral(idTabla, tabla) {
         } else {
           alertaImg("Intente de Nuevo", "", "info", 3000);
         }
-        console.log(data);
+        // console.log(data);
       },
     });
   }
 }
 
+
+
+//Función para Generar Grafica GANTT de PROYECTOS PENDIENTES 
 function ganttP() {
   // Cambia diseño de Botones en Proyectos
   claseBotonesProyecto("ganttPendientes");
@@ -3242,7 +3291,7 @@ function ganttP() {
           generarGantt(response);
         })
         .catch((error) => {
-          console.log("Error" + error);
+          // console.log("Error" + error);
         });
 
       alertaImg("Gantt Pendientes: " + dataGantt.length, "", "info", 4000);
@@ -3295,6 +3344,8 @@ function ganttP() {
   }
 }
 
+
+//Función para Generar Grafica GANTT de PROYECTOS SOLUCIONADOS 
 function ganttS() {
   // Cambia estilo de Botones en Proyectos
   claseBotonesProyecto("ganttSolucionados");
@@ -3348,7 +3399,7 @@ function ganttS() {
           generarGantt(response);
         })
         .catch((error) => {
-          console.log("Error" + error);
+          // console.log("Error" + error);
         });
 
       alertaImg("Gantt Solucionados: " + dataGantt.length, "", "info", 4000);
@@ -3401,7 +3452,52 @@ function ganttS() {
   }
 }
 
-// Mantener de Ultimo.
+
+function verEnPlanner(tipoPendiente, idPendiente) {
+  document.getElementById("modalVerEnPlanner").classList.add('open');
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  const action = "verEnPlanner";
+
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      tipoPendiente: tipoPendiente,
+      idPendiente: idPendiente
+    },
+    dataType: "JSON",
+    success: function (data) {
+      console.log(data);
+      document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
+      document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
+      document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
+      document.getElementById("fechaVP").value = data.fecha;
+      document.getElementById("dataResponsablesVP").innerHTML = data.responsable;
+      document.getElementById("dataStatusVP").innerHTML = data.status;
+      document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
+      document.getElementById("dataAdjuntosVP").innerHTML = data.adjuntos;
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* FUNCIONES PARA CAMBIO DE DISEÑOS GENERICOS */
 
 //Funcion para los Botones de Proyectos (Gantt Proyectos)
 function claseBotonesProyecto(tipoSeleccion) {
@@ -3437,6 +3533,7 @@ function claseBotonesProyecto(tipoSeleccion) {
   }
 }
 
+
 // Funcion para restablecer Estilo ModalStatus
 function estiloDefectoModalStatus() {
   document.getElementById("statusMaterial").classList.remove("bg-orange-200");
@@ -3468,6 +3565,7 @@ function estiloDefectoModalStatus() {
   document.getElementById("statusZI").classList.remove("bg-lightblue-50");
 }
 
+
 // Funcion toggle por CLASSNAME
 function classNameToggle(nameClass) {
   var x = document.getElementsByClassName(nameClass);
@@ -3478,21 +3576,25 @@ function classNameToggle(nameClass) {
   }
 }
 
+
 // Funciones para actualizar idSeccion y idSubseccion en localstorage..
 function actualizarSeccionSubseccion(idSeccion, idSubseccion) {
   localStorage.setItem("idSeccion", idSeccion);
   localStorage.setItem("idSubseccion", idSubseccion);
 }
 
+
 // Funciones para actualizar idSeccion en localstorage.
 function actualizarSeccion(idSeccion) {
   localStorage.SetItem("idSeccion", idSeccion);
 }
 
+
 // Funciones para actualizar idSeccion en localstorage.
 function actualizarSubseccion(idSubseccion) {
   localStorage.SetItem("idSubseccion", idSubseccion);
 }
+
 
 function llamarFuncionX(nombreFuncion) {
   // Obtiene Datos Generales de la SESSION(LOCALSTORAGE.GETITEM)
@@ -3520,6 +3622,9 @@ function llamarFuncionX(nombreFuncion) {
       break;
   }
 }
+
+
+
 
 // Función para comprobar session.
 comprobarSession();
