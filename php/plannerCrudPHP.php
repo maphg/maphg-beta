@@ -7172,7 +7172,7 @@ if (isset($_POST['action'])) {
                             if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
                                 $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">
-                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                                     </div>
                                     </a>
                                 ";
@@ -7461,7 +7461,7 @@ if (isset($_POST['action'])) {
                             if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
                                 $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">
-                                        <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                        <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                                         </div>
                                     </a>
                                 ";
