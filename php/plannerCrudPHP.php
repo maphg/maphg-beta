@@ -7171,7 +7171,7 @@ if (isset($_POST['action'])) {
                             // Admite solo Imagenes.
                             if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
 
-                                if (strpos($url, " ")) {
+                                if (strpbrk($url, " ")) {
                                     $dataImagen .= "
                                         <a href=\"$adjuntoURL\" target=\"_blank\">
                                         <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
