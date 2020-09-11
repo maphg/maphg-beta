@@ -221,7 +221,7 @@ try {
                         ?>
                                 <!-- CAP -->
                                 <div class="flex flex-wrap">
-                                    <div class="column is-4">
+                                    <div class="w-2/6">
                                         <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNTUxM2E4MjktZWUxZS00ZWRlLTg0NTAtZDZmNTZjNTIxYzFiIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
                                     </div>
 
