@@ -3866,12 +3866,22 @@ if (isset($_POST['action'])) {
 
                 // Admite solo Imagenes.
                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                    $dataImagen .= "
-                        <a href=\"$adjuntoURL\" target=\"_blank\">
-                        <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                        </div>
-                        </a>
-                    ";
+                    if (strpbrk($adjuntoURL, ' ')) {
+                        $dataImagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                </div>
+                            </a>
+                        ";
+                    } else {
+                        $dataImagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                </div>
+                            </a>
+                        ";
+                    }
 
                     // Admite todo, menos lo anterior.
                 } else {
@@ -6754,12 +6764,23 @@ if (isset($_POST['action'])) {
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                        $imagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                            </div>
-                            </a>
-                        ";
+
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $dataImagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                        <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+                            ";
+                        } else {
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                </div>
+                                </a>
+                            ";
+                        }
                     } else {
                         $documento .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -6799,12 +6820,24 @@ if (isset($_POST['action'])) {
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                        $imagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                            </div>
-                            </a>
-                        ";
+
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $dataImagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                        <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+                            ";
+                        } else {
+
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                </div>
+                                </a>
+                            ";
+                        }
                     } else {
                         $documento .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -6842,12 +6875,22 @@ if (isset($_POST['action'])) {
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                        $imagen .= "
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
-                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                            </div>
+                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                </div>
                             </a>
                         ";
+                        } else {
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+                            ";
+                        }
                     } else {
                         $documento .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -6884,12 +6927,22 @@ if (isset($_POST['action'])) {
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                        $imagen .= "
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
-                            <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                            </div>
+                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                </div>
                             </a>
                         ";
+                        } else {
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+                            ";
+                        }
                     } else {
                         $documento .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -6929,7 +6982,7 @@ if (isset($_POST['action'])) {
             t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
             t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
             t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
-            t_mc.departamento_finanzas, t_mc.departamento_rrhh,
+            t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.fecha_inicio,
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_mc 
             INNER JOIN t_users ON t_mc.creado_por = t_users.id
@@ -6941,6 +6994,7 @@ if (isset($_POST['action'])) {
                     $actividad = $i['actividad'];
                     $creadoPor = $i['nombre'] . "" . $i['apellido'];
                     $rangoFecha = $i['rango_fecha'];
+                    $fechaInicio = $i['fecha_inicio'];
                     $responsable = $i['responsable'];
 
                     // Status
@@ -6959,7 +7013,7 @@ if (isset($_POST['action'])) {
 
                     // COMPROVACIÓN RANGO FECHA
                     if ($rangoFecha == "") {
-                        $rangoFecha = "--";
+                        $rangoFecha = (new DateTime($fechaInicio))->format('Y-m-d');
                     }
 
                     // AGREGAR STATUS MODALSTATUS
