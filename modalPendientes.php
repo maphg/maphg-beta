@@ -264,7 +264,7 @@ if ($result) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC);\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -376,7 +376,7 @@ if ($result) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('TAREA', $idTarea);\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -571,7 +571,7 @@ if ($result) {
                             </div>
                             <button
                                 class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
-                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                             </button>
                         </div>
                     </div>
@@ -704,7 +704,7 @@ if ($result) {
                             </div>
                             <button
                                 class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
-                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                             </button>
                         </div>
                     </div>
@@ -842,7 +842,7 @@ if ($result) {
                             </div>
                             <button
                                 class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC);\">
-                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                             </button>
                         </div>
                     </div>

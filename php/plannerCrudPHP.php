@@ -1831,7 +1831,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC);\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -1944,7 +1944,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('TAREA', $idTarea);\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -2140,7 +2140,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -2273,7 +2273,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -2407,7 +2407,7 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <button
                                     class=\"py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold\" onclick=\"verEnPlanner('FALLA', $idMC)\">
-                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver en Planner
+                                    <i class=\"fas fa-eye mr-1  text-sm\"></i>Ver más
                                 </button>
                             </div>
                         </div>
@@ -7170,12 +7170,23 @@ if (isset($_POST['action'])) {
 
                             // Admite solo Imagenes.
                             if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                                $dataImagen .= "
+
+                                if (strpos($url, " ")) {
+                                    $dataImagen .= "
+                                        <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                        </div>
+                                        </a>
+                                    ";
+                                } else {
+                                    $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">
-                                    <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                                    </div>
+                                        <div class=\"m-2 cursor-pointer overflow-hidden w-20 h-20 rounded-md\">
+                                            <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                        </div>
                                     </a>
-                                ";
+                                    ";
+                                }
 
                                 // Admite todo, menos lo anterior.
                             } else {
