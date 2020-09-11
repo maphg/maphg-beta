@@ -7162,8 +7162,6 @@ if (isset($_POST['action'])) {
 
                             if (file_exists("../planner/tareas/adjuntos/$url")) {
                                 $adjuntoURL = "planner/tareas/adjuntos/$url";
-                            } elseif (file_exists("../../planner/tareas/adjuntos/$url")) {
-                                $adjuntoURL = "../planner/tareas/adjuntos/$url";
                             } else {
                                 $adjuntoURL = "../planner/tareas/adjuntos/$url";
                             }
@@ -7465,17 +7463,27 @@ if (isset($_POST['action'])) {
                             if (file_exists("../img/equipos/mpnp/$url")) {
                                 $adjuntoURL = "img/equipos/mpnp/$url";
                             } else {
-                                $adjuntoURL = "";
+                                $adjuntoURL = "../img/equipos/mpnp/$url";
                             }
 
                             // Admite solo Imagenes.
                             if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
-                                $dataImagen .= "
+                                if (strpbrk($adjuntoURL, ' ')) {
+                                    $dataImagen .= "
+                                        <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer op1\" style=\"background-image: url($adjuntoURL)\">
+                                        </div>
+                                        </a>
+                                    ";
+                                } else {
+                                    $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">
-                                        <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                        <div class=\"m-2 cursor-pointer overflow-hidden w-20 h-20 rounded-md op2\">
+                                            <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
                                         </div>
                                     </a>
-                                ";
+                                    ";
+                                }
 
                                 // Admite todo, menos lo anterior.
                             } else {
