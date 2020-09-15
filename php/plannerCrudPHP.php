@@ -5412,7 +5412,6 @@ if (isset($_POST['action'])) {
                             }
 
                             // TOTAL DE ADJUNTOS
-                            $totalAdjuntos = 0;
                             $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
                             if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                                 foreach ($resultAdjuntos as $value) {
