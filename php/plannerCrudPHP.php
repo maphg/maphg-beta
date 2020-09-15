@@ -5412,6 +5412,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // TOTAL DE ADJUNTOS
+                            $totalAdjuntos = 0;
                             $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and activo =1";
                             if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                                 foreach ($resultAdjuntos as $value) {
@@ -6854,8 +6855,12 @@ if (isset($_POST['action'])) {
 
                     if (file_exists("../planner/proyectos/$url")) {
                         $adjuntoURL = "planner/proyectos/$url";
-                    } else {
+                    } elseif(file_exists("../planner/proyectos/planaccion/$url")) {
                         $adjuntoURL = "planner/proyectos/planaccion/$url";
+                    }elseif(file_exists("../../planner/proyectos/$url")){
+                        $adjuntoURL = "../planner/proyectos/$url";
+                    }else{
+                        $adjuntoURL = "../planner/proyectos/planaccion/$url";
                     }
 
                     // Admite solo Imagenes.
