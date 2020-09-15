@@ -1,7 +1,8 @@
-// VARIABLES GLOBALES, REQUERIDA PARA CADA CONSULTA AJAX
+// VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
 let idUsuario = localStorage.getItem("usuario");
 let idDestino = localStorage.getItem("idDestino");
-// VARIABLES GLOBALES, REQUERIDA PARA CADA CONSULTA AJAX
+// VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
+
 
 // Función principal.
 function comprobarSession() {
@@ -17,6 +18,8 @@ function comprobarSession() {
   }
 }
 
+
+// Obtiene información del usuario, para mostrarlo en el menú 
 function obtenerDatosUsuario(idDestino) {
   localStorage.setItem("idDestino", idDestino);
   let idUsuario = localStorage.getItem("usuario");
@@ -47,18 +50,20 @@ function obtenerDatosUsuario(idDestino) {
       document.getElementById("destinosSelecciona").innerHTML =
         data.destinosOpcion;
 
-      alertaImg("Destino Seleccionado: " + data.destino, "", "success", 2000);
+      alertaImg("Destino: " + data.destino, "", "success", 2000);
 
       comprobarSession();
     },
   });
 }
 
+
 // Función autoCall.
 (() => {
   let idDestino = localStorage.getItem("idDestino");
   obtenerDatosUsuario(idDestino);
 })();
+
 
 // Función para Input Fechas para Agregar MC.
 $(function () {
@@ -107,6 +112,7 @@ $(function () {
     $(this).val("");
   });
 });
+
 
 // Función para Input Fechas PROYECTOS
 $(function () {
@@ -164,6 +170,7 @@ $(function () {
   });
 });
 
+
 // Función para Input Fechas TAREAS
 $(function () {
   $('input[name="fechaTareas"]').daterangepicker({
@@ -220,6 +227,7 @@ $(function () {
   });
 });
 
+
 // Función para Input Fechas FALLAS
 $(function () {
   $('input[name="fechaMC"]').daterangepicker({
@@ -273,6 +281,7 @@ $(function () {
   });
 });
 
+
 // Funcion para los Botones de los Calendario
 function botones(idd) {
   let nombreCol = idd.toUpperCase();
@@ -323,6 +332,7 @@ function botones(idd) {
     alertaImg("Acceso Denegado en: " + nombreCol, "", "warning", 4000);
   }
 }
+
 
 // Función para el calendario de Secciones.
 function calendarioSecciones() {
@@ -445,6 +455,7 @@ function calendarioSecciones() {
   }
 }
 
+
 function expandir(id) {
   // console.log(id);
   let idtoggle = id + "toggle";
@@ -454,10 +465,12 @@ function expandir(id) {
   document.getElementById(idtitulo).classList.toggle("truncate");
 }
 
+
 function expandirpapa(idpapa) {
   var expandeapapa = document.getElementById(idpapa);
   expandeapapa.classList.toggle("h-40");
 }
+
 
 // Función para actualizar la Hora.
 function hora() {
@@ -481,6 +494,8 @@ function hora() {
   document.getElementById("nombreDestino").innerHTML = nombreDestinoArray;
   // console.log(hora, nombreDestinoArray);
 }
+
+
 // Desde aquí se habla a la función hora(), cada 1min.
 setInterval("hora()", 70000);
 
@@ -489,16 +504,19 @@ function toggleModalTailwind(idModal) {
   $("#" + idModal).toggleClass("open");
 }
 
+
 // Funcion para ocultar y mostrar con clases.
 function mostrarOcultar(claseMostrar, claseOcultar) {
   $("." + claseMostrar).removeClass("hidden invisible");
   $("." + claseOcultar).addClass("hidden invisible");
 }
 
+
 // toggle Inivisible Generico.
 function toggleInivisble(id) {
   $("#" + id).toggleClass("modal");
 }
+
 
 // Obtiene las subsecciones para la pagina principal de Planner, mediante el idDestino.
 function consultaSubsecciones(idDestino, idUsuario) {
@@ -531,6 +549,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
     },
   });
 }
+
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(
@@ -681,15 +700,27 @@ function pendientesSubsecciones(
           "onclick",
           "exportarPorUsuario(" + data.exportarMisCreadosPDF + ")"
         );
+
+      // Resultado Contador
+      document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[3].innerHTML = 'Pendientes ' + '(' + data.contadorTyF + ')';
+
+      document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[5].innerHTML = 'Pendientes DEP ' + '(' + data.contadorDEP + ')';
+
+      document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[7].innerHTML = 'Trabajando ' + '(' + data.contadorT + ')';
+
+      document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[9].innerHTML = 'Solucionados ' + '(' + data.contadorS + ')';
+
     },
   });
 }
+
 
 function toggleSubseccionesTipo(mostrar, ocultar) {
   document.getElementById("modalExportarSubsecciones").classList.add("open");
   document.getElementById(mostrar).classList.remove("hidden");
   document.getElementById(ocultar).classList.add("hidden");
 }
+
 
 // Muestra Usuario para Exportar sus pendientes o Creados.
 function exportarPorUsuario(
@@ -742,6 +773,7 @@ function exportarPorUsuario(
   });
 }
 
+
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccionModal(padreSeccion, seccion) {
   let seccionClase = seccion.toLowerCase() + "-logo-modal";
@@ -758,6 +790,7 @@ function estiloSeccionModal(padreSeccion, seccion) {
 
   document.getElementById(padreSeccion).classList.add(seccionClase);
 }
+
 
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccion(padreSeccion, seccion) {
@@ -777,6 +810,7 @@ function estiloSeccion(padreSeccion, seccion) {
   document.getElementById(padreSeccion).classList.add(seccionClase);
 }
 
+
 // Función para buscar usuarios para Exportar.
 function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
   const action = "exportarListarUsuarios";
@@ -795,6 +829,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
     },
   });
 }
+
 
 // Funcion para Ver y Exportar los pendientes de las secciones.
 function exportarPendientes(
@@ -958,6 +993,7 @@ function exportarPendientes(
   });
 }
 
+
 // Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
 // rangoInicial y rangoFinal, ya no se necesita, solo se utilizaba para la paginación.
 function obtenerEquipos(
@@ -1065,6 +1101,7 @@ function obtenerEquipos(
   });
 }
 
+
 // Función para Paginar los resultados de los Equipos Obtenidos.
 function paginacionEquipos() {
   $("div.holder").jPages({
@@ -1083,6 +1120,7 @@ function paginacionEquipos() {
     "-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
   );
 }
+
 
 // Obtiene todos los MC-N por Equipo.
 function obtenerMCN(idEquipo) {
@@ -1128,6 +1166,7 @@ function obtenerMCN(idEquipo) {
     },
   });
 }
+
 
 // Función para Obtener el Status y agregar la funcion para poder actualizarlo.
 function obtenerstatusMC(idMC) {
@@ -1207,6 +1246,7 @@ function obtenerstatusMC(idMC) {
   });
 }
 
+
 // Función para actualizar Status t_mc.
 function actualizarStatusMC(idMC, status, valorStatus) {
   let idUsuario = localStorage.getItem("usuario");
@@ -1251,6 +1291,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
   });
 }
 
+
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
   // console.log(idEquipo);
@@ -1286,6 +1327,7 @@ function obtenerMCF(idEquipo) {
   });
 }
 
+
 function datosModalAgregarMC() {
   document.getElementById("responsableMC").innerHTML = "";
   document.getElementById("modalAgregarMC").classList.add("open");
@@ -1315,6 +1357,7 @@ function datosModalAgregarMC() {
     },
   });
 }
+
 
 function agregarMC(idMC) {
   let idUsuario = localStorage.getItem("usuario");
@@ -1375,6 +1418,7 @@ function agregarMC(idMC) {
   }
 }
 
+
 // Obtener usuario recibe 2 parametros especificos, donde tipoAsignación se refiere a la tabla donde se va a utilizar el usuario y idItem es el identificador del registro que se le va asignar.
 function obtenerUsuarios(tipoAsginacion, idItem) {
   let idUsuario = localStorage.getItem("usuario");
@@ -1411,6 +1455,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
     },
   });
 }
+
 
 // Función para Asignar usuario.
 function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
@@ -1484,7 +1529,7 @@ function obtenerAdjuntosMC(idMC) {
 
   document.getElementById("inputAdjuntos").
     setAttribute("onchange", "subirImagenGeneral(" + idMC + ',"t_mc_adjuntos")');
-  
+
   const action = "obtenerAdjuntosMC";
   $.ajax({
     type: "POST",
@@ -1514,6 +1559,7 @@ function obtenerAdjuntosMC(idMC) {
     },
   });
 }
+
 
 // Funcion para Obtener Comentarios MC.
 function obtenerComentariosMC(idMC) {
@@ -1586,6 +1632,7 @@ function agregarComentarioMC(idMC) {
   }
 }
 
+
 // Se obtienen las Tareas Pendientes.
 function obtenerTareasP(idEquipo) {
   document.getElementById("tipoPendientesX").innerHTML = "TAREAS PENDIENTES";
@@ -1625,6 +1672,7 @@ function obtenerTareasP(idEquipo) {
     },
   });
 }
+
 
 //Se obtienen las Tareas Finaizadas.
 function obtenerTareasS(idEquipo) {
@@ -1719,6 +1767,7 @@ function obtenerAdjuntosTareas(idTarea) {
   });
 }
 
+
 // Funcion para Obtener Comentarios TAREAS
 function obtenerComentariosTareas(idTarea) {
   let idUsuario = localStorage.getItem("usuario");
@@ -1754,6 +1803,7 @@ function obtenerComentariosTareas(idTarea) {
     },
   });
 }
+
 
 // Agregar Comentario TAREA.
 function agregarComentarioTarea(idTarea) {
@@ -2087,6 +2137,7 @@ function obtenerMediaEquipo(idEquipo) {
     },
   });
 }
+
 
 // ---------- PROYECTOS ----------
 
@@ -2704,6 +2755,7 @@ function statusProyecto(idProyecto) {
     setAttribute("onclick", 'actualizarProyectos("F", "status",' + idProyecto + ")");
 }
 
+
 // Obtienes las Cotizaciones de PROYECTOS
 function cotizacionesProyectos(idProyecto) {
   let idUsuario = localStorage.getItem("usuario");
@@ -2749,6 +2801,7 @@ function cotizacionesProyectos(idProyecto) {
   });
 }
 
+
 // Agrega una Actividad en PROYECTOS.
 function agregarPlanaccion(idProyecto) {
   let idUsuario = localStorage.getItem("usuario");
@@ -2782,6 +2835,7 @@ function agregarPlanaccion(idProyecto) {
     alertaImg("Intente de Nuevo", "", "info", 3000);
   }
 }
+
 
 // Obtener posibles RESPONSABLES para PLANACCION
 function obtenerResponsablesPlanaccion(idPlanaccion) {
@@ -2818,6 +2872,7 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
     },
   });
 }
+
 
 // Actualizar PLANACCION
 function actualizarPlanaccion(valor, columna, idPlanaccion) {
@@ -3214,11 +3269,12 @@ function subirImagenGeneral(idTabla, tabla) {
       success: function (data) {
         document.getElementById("cargandoAdjunto").innerHTML = "";
         document.getElementById("inputAdjuntos").value = "";
-        if (data == 1) {
+        if (data == -1) {
+          alertaImg("Archivo NO Permitido", "", "warning", 2500);
+        } else if (data == 1) {
           alertaImg("Proceso Cancelado", "", "info", 3000);
         } else if (data == 2) {
           alertaImg("Archivo Pesado (MAX:99MB)", "", "info", 3000);
-
           // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
         } else if (data == 3) {
           alertaImg("Cotización Agregada", "", "success", 2500);
@@ -3238,6 +3294,9 @@ function subirImagenGeneral(idTabla, tabla) {
           alertaImg("Adjunto Agregado", "", "success", 2500);
         } else if (data == 8) {
           obtenerAdjuntosMC(idTabla);
+          alertaImg("Adjunto Agregado", "", "success", 2500);
+        } else if (data == 9) {
+          obtenerImagenesEquipo(idTabla);
           alertaImg("Adjunto Agregado", "", "success", 2500);
         } else {
           alertaImg("Intente de Nuevo", "", "info", 3000);
@@ -3469,6 +3528,7 @@ function ganttS() {
 }
 
 
+// Funcion para buscar pendiente Ver en Planner
 function verEnPlanner(tipoPendiente, idPendiente) {
   document.getElementById("modalVerEnPlanner").classList.add('open');
   let idUsuario = localStorage.getItem('usuario');
@@ -3521,7 +3581,7 @@ function verEnPlanner(tipoPendiente, idPendiente) {
         // COMENTARIOS
         document.getElementById("btnComentarioVP").
           setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
-        
+
       } else if (tipoPendiente == "TAREA") {
 
         // FECHA
@@ -3548,7 +3608,7 @@ function verEnPlanner(tipoPendiente, idPendiente) {
   });
 }
 
-
+// Comentaio Ver en Planner
 function agregarComentarioVP(tipoPendiente, idPendiente) {
   let comentario = document.getElementById("comentarioVP").value;
   let idUsuario = localStorage.getItem("usuario");
@@ -3587,8 +3647,385 @@ function agregarComentarioVP(tipoPendiente, idPendiente) {
 }
 
 
+/* ********** PLANES PREVENTIVOS DE EQUIPOS */
+
+// Función para activar o desactivar Inputs de información de los equipos
+function toggleInputsEquipo(estadoInputs) {
+  let idEquipo = localStorage.getItem('idEquipo');
+  const arrayBtnEquipo =
+    [
+      'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo'
+    ]
+
+  arrayBtnEquipo.forEach(element => {
+    if (estadoInputs == 1) {
+      document.getElementById(element).removeAttribute('disabled');
+    } else {
+      document.getElementById(element).setAttribute('disabled', false);
+    }
+  });
+
+  if (estadoInputs == 1) {
+    alertaImg('Editar Equipo, Habilitado', '', 'info', 1500);
+    document.getElementById("btnEditarEquipo").classList.remove('hidden');
+    document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
+
+    document.getElementById("btnGuardarEquipo").classList.remove('hidden');
+    document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
+
+    document.getElementById("btnCancelarEquipo").classList.remove('hidden');
+    document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+  } else if (estadoInputs == 0) {
+    document.getElementById("btnEditarEquipo").classList.remove('hidden');
+    document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
+
+    document.getElementById("btnGuardarEquipo").classList.add('hidden');
+    document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
+
+    document.getElementById("btnCancelarEquipo").classList.add('hidden');
+    document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+  } else {
+    let idEquipo = localStorage.getItem('idEquipo');
+    informacionEquipo(idEquipo)
+    alertaImg('Editar Equipo, Cancelado', '', 'error', 500);
+    document.getElementById("btnEditarEquipo").classList.remove('hidden');
+    document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
+
+    document.getElementById("btnGuardarEquipo").classList.add('hidden');
+    document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
+
+    document.getElementById("btnCancelarEquipo").classList.add('hidden');
+    document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+  }
+}
 
 
+// Función para Obtener información de los equipos.
+function informacionEquipo(idEquipo) {
+  localStorage.setItem('idEquipo', idEquipo);
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  document.getElementById("modalMPEquipo").classList.add('open');
+
+  toggleInputsEquipo(0);
+
+  const action = "informacionEquipo";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idEquipo: idEquipo
+    },
+    dataType: "JSON",
+    success: function (data) {
+      document.getElementById("btnAdjuntosEquipo").setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
+
+      obtenerImagenesEquipo(idEquipo);
+      consultarPlanEquipo(idEquipo);
+      document.getElementById("inputAdjuntos").
+        setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
+
+      document.getElementById("QREquipo").
+        setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/equipos?id=" + idEquipo);
+
+      document.getElementById("nombreEquipo").value = data.equipo;
+      document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+      document.getElementById("modeloEquipo").value = data.modelo;
+      document.getElementById("serieEquipo").value = data.numero_serie;
+      document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
+      document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
+      document.getElementById("largoEquipo").value = data.largo_cm;
+      document.getElementById("anchoEquipo").value = data.ancho_cm;
+      document.getElementById("altoEquipo").value = data.alto_cm;
+      document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
+      document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
+      document.getElementById("voltajeEquipo").value = data.voltaje_v;
+      document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
+      document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
+      document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
+      document.getElementById("cargaMCAEquipo").value = data.carga_mca;
+      document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
+      document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
+      document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
+      document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
+      document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
+      document.getElementById("estadoEquipo").innerHTML = data.status;
+    }
+  });
+}
+
+
+function obtenerImagenesEquipo(idEquipo) {
+  let idUsuario = localStorage.getItem("usuario");
+  let idDestino = localStorage.getItem("idDestino");
+  let tabla = "t_equipos_adjuntos_america";
+  let idTabla = idEquipo;
+
+  document.getElementById("inputAdjuntos").
+    setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
+
+  const action = "obtenerAdjuntos";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      tabla: tabla,
+      idTabla: idTabla
+    },
+    dataType: "JSON",
+    success: function (data) {
+      if (data.imagen != "") {
+        document.getElementById("dataImagenes").innerHTML = data.imagen;
+        document.getElementById("dataImagenesEquipo").innerHTML = data.imagen;
+        document.getElementById("contenedorImagenes").classList.remove('hidden');
+        document.getElementById("dataImagenes").classList.remove("justify-center");
+      }
+
+      if (data.documento != "") {
+        document.getElementById("dataAdjuntos").innerHTML = data.documento;
+        document.getElementById("contenedorDocumentos").classList.remove('hidden');
+        document.getElementById("dataAdjuntos").classList.remove("justify-center");
+      }
+    },
+  });
+}
+
+
+function actualizarEquipo(idEquipo) {
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  let nombreEquipo = document.getElementById("nombreEquipo").value;
+  let seccionEquipo = document.getElementById("seccionEquipo").value;
+  let subseccionEquipo = document.getElementById("subseccionEquipo").value;
+  let tipoEquipo = document.getElementById("tipoEquipo").value;
+  let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
+  let marcaEquipo = document.getElementById("marcaEquipo").value;
+  let modeloEquipo = document.getElementById("modeloEquipo").value;
+  let serieEquipo = document.getElementById("serieEquipo").value;
+  let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo").value;
+  let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo").value;
+  let largoEquipo = document.getElementById("largoEquipo").value;
+  let anchoEquipo = document.getElementById("anchoEquipo").value;
+  let altoEquipo = document.getElementById("altoEquipo").value;
+  let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo").value;
+  let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo").value;
+  let voltajeEquipo = document.getElementById("voltajeEquipo").value;
+  let frecuenciaEquipo = document.getElementById("frecuenciaEquipo").value;
+  let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo").value;
+  let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo").value;
+  let cargaMCAEquipo = document.getElementById("cargaMCAEquipo").value;
+  let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo").value;
+  let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo").value;
+  let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
+  let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
+  let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
+  const action = "actualizarEquipo";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idEquipo: idEquipo,
+      nombreEquipo: nombreEquipo,
+      seccionEquipo: seccionEquipo,
+      subseccionEquipo: subseccionEquipo,
+      tipoEquipo: tipoEquipo,
+      jerarquiaEquipo: jerarquiaEquipo,
+      marcaEquipo: marcaEquipo,
+      modeloEquipo: modeloEquipo,
+      serieEquipo: serieEquipo,
+      codigoFabricanteEquipo: codigoFabricanteEquipo,
+      codigoInternoComprasEquipo: codigoInternoComprasEquipo,
+      largoEquipo: largoEquipo,
+      anchoEquipo: anchoEquipo,
+      altoEquipo: altoEquipo,
+      potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
+      potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
+      voltajeEquipo: voltajeEquipo,
+      frecuenciaEquipo: frecuenciaEquipo,
+      caudalAguaM3HEquipo: caudalAguaM3HEquipo,
+      caudalAguaGPHEquipo: caudalAguaGPHEquipo,
+      cargaMCAEquipo: cargaMCAEquipo,
+      PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
+      potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
+      potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
+      caudalAireM3HEquipo: caudalAireM3HEquipo,
+      caudalAireCFMEquipo: caudalAireCFMEquipo
+    },
+    // dataType: "JSON",
+    success: function (data) {
+      if (data = 1) {
+        informacionEquipo(idEquipo);
+        alertaImg('Equipo Actualizado', '', 'success', 2500);
+      } else {
+        alertaImg('Intente de Nuevo', '', 'info', 3000);
+      }
+    }
+  });
+}
+
+
+function consultarPlanEquipo(idEquipo) {
+  document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  const action = "consultarPlanEquipo";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idEquipo: idEquipo
+    },
+    dataType: "JSON",
+    success: function (data) {
+      // console.log(data);
+      if (data.length > 0) {
+        for (let index = 0; index < data.length; index++) {
+
+          $ContenedorPlanesEquipos.innerHTML += datosPlanEquipo({
+
+            idPlaneacion: data[index].idPlaneacion,
+            idEquipo: data[index].idEquipo,
+            periodicidad: data[index].periodicidad,
+            tipoPlan: data[index].tipoPlan,
+            semana_1: data[index].semana_1,
+            semana_2: data[index].semana_2,
+            semana_3: data[index].semana_3,
+            semana_4: data[index].semana_4,
+            semana_5: data[index].semana_5,
+            semana_6: data[index].semana_6,
+            semana_7: data[index].semana_7,
+            semana_8: data[index].semana_8,
+            semana_9: data[index].semana_9,
+            semana_10: data[index].semana_10,
+            semana_11: data[index].semana_11,
+            semana_12: data[index].semana_12,
+            semana_13: data[index].semana_13,
+            semana_14: data[index].semana_14,
+            semana_15: data[index].semana_15,
+            semana_16: data[index].semana_16,
+            semana_17: data[index].semana_17,
+            semana_18: data[index].semana_18,
+            semana_19: data[index].semana_19,
+            semana_20: data[index].semana_20,
+            semana_21: data[index].semana_21,
+            semana_22: data[index].semana_22,
+            semana_23: data[index].semana_23,
+            semana_24: data[index].semana_24,
+            semana_25: data[index].semana_25,
+            semana_26: data[index].semana_26,
+            semana_27: data[index].semana_27,
+            semana_28: data[index].semana_28,
+            semana_29: data[index].semana_29,
+            semana_30: data[index].semana_30,
+            semana_31: data[index].semana_31,
+            semana_32: data[index].semana_32,
+            semana_33: data[index].semana_33,
+            semana_34: data[index].semana_34,
+            semana_35: data[index].semana_35,
+            semana_36: data[index].semana_36,
+            semana_37: data[index].semana_37,
+            semana_38: data[index].semana_38,
+            semana_39: data[index].semana_39,
+            semana_40: data[index].semana_40,
+            semana_41: data[index].semana_41,
+            semana_42: data[index].semana_42,
+            semana_43: data[index].semana_43,
+            semana_44: data[index].semana_44,
+            semana_45: data[index].semana_45,
+            semana_46: data[index].semana_46,
+            semana_47: data[index].semana_47,
+            semana_48: data[index].semana_48,
+            semana_49: data[index].semana_49,
+            semana_50: data[index].semana_50,
+            semana_51: data[index].semana_51,
+            semana_52: data[index].semana_52
+          });
+
+        }
+      } else {
+        console.log('Error');
+      }
+
+    }
+  });
+}
+
+
+function programarMP(idPlaneacion, idEquipo, semanaX, accionMP) {
+  console.log(idPlaneacion, idEquipo, semanaX, accionMP);
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  let numeroSemanas = 0;
+
+  if (accionMP == "PROGRAMARPERSONALIZADO") {
+    numeroSemanas = document.getElementById("numeroSemanasPersonalizadasMP").value;
+  }
+
+  const action = "programarMP";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idPlaneacion: idPlaneacion,
+      idEquipo: idEquipo,
+      semanaX: semanaX,
+      accionMP: accionMP,
+      numeroSemanas: numeroSemanas
+    },
+    // dataType: "JSON",
+    success: function (data) {
+      console.log(data);
+      if (data == 1) {
+        alertaImg(`Programación Existente, SEMANA ${semanaX} `, '', 'error', 3000);
+      } else if (data == 2) {
+        alertaImg(`Programado en SEMANA ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 3) {
+        alertaImg(`Reprogramado Desde, SEMANA ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 4) {
+        alertaImg(`Personalizado Desde, SEMANA ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 5) {
+        alertaImg(`Eliminada, SEMANA ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 6) {
+        alertaImg(`Eliminada Desde, SEMANA ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 7) {
+        alertaImg(`SEMANA ${semanaX}, Solucionada`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 8) {
+        alertaImg(`SEMANA ${semanaX}, Cancelada`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else {
+        alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+      }
+    }
+  });
+}
 
 
 
@@ -3722,6 +4159,8 @@ function llamarFuncionX(nombreFuncion) {
       break;
   }
 }
+
+
 
 
 

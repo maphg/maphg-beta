@@ -47,20 +47,103 @@
         .btn-inactivo {
             background-color: #e2e8f0;
         }
+
+        .whc-1:hover {
+            font-weight: 900;
+            color: #ac66e6;
+            background-color: #d49fff;
+            ;
+            border: solid 1px #ac66e6 !important;
+        }
+
+        .programado-0 {
+            margin: 2px;
+            border: solid 1px #EDEDEE;
+            color: #263238;
+            background-color: #EDEDEE;
+        }
+
+        .programado-PLANIFICADO {
+            border: solid 2px #03a9f4 !important;
+            margin: 2px;
+            background-color: #bee3f8;
+            color: #03a9f4;
+            border-radius: 18% !important;
+        }
+
+        .status-PROCESO {
+            border: solid 2px #d69e2e;
+            background-color: #fefcbf;
+            color: #d69e2e;
+            margin: 2px;
+        }
+
+        .status-SOLUCIONADO {
+            border: solid 2px #48bb78;
+            background-color: #c6f6d5;
+            color: #48bb78;
+            margin: 2px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .whc-1 {
+            width: 32px;
+            height: 32px;
+            border-radius: 100%;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .whc-2 {
+            width: 32px;
+            height: 32px;
+            border-radius: 100%;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .contextmenu-menu {
+            border-radius: 0.275rem;
+            font-weight: 600;
+            line-height: 1.5;
+            width: 13rem;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 400;
+            padding: .4rem;
+        }
+
+        .contextmenu-item {
+            background-color: #414646;
+            padding: 0.25rem;
+            cursor: pointer;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+            padding-right: .5rem;
+            padding-left: .5rem;
+        }
+
+        .contextmenu-item:hover {
+            background-color: #5b5f5f;
+            border-radius: 0.2rem;
+            font-weight: 600;
+            color: #fff;
+        }
     </style>
 </head>
 
 <body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
-
+    <!-- MENÚ -->
     <div class="w-full absolute top-0">
         <?php
         include 'navbartopJS.php';
         include 'menuJS.php';
         ?>
     </div>
-
-    <!-- Inputs Temporales -->
-    <input type="hidden" id="idDestinoSeleccionado">
+    <!-- MENÚ -->
 
     <div class="flex flex-col justify-evenly items-center w-full h-screen pt-10">
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10 scrollbar pb-24">
@@ -161,7 +244,7 @@
         <div class="modal-window rounded-md pt-10" style="width: 1200px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalEquipos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalEquipos');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -252,7 +335,277 @@
         </div>
     </div>
 
+    <!-- MODAL EQUIPO PARA LOS MP-->
+    <div id="modalMPEquipo" class="modal relative">
+        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg " style="width: 1000px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalMPEquipo')" class="cursor-pointer text-md  text-red-500 bg-red-200 px-2 rounded-bl-lg rounded-tr-lg font-normal shadow-md">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-lg rounded-tl-lg">
+                    <h1>INFORMACIÓN DEL EQUIPO</h1>
+                </div>
+            </div>
 
+            <!-- ENCABEZADO -->
+            <div class="flex flex-row w-full justify-start px-4 relative">
+                <div class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center">
+                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="Maquina de hielo edificio 1226 grand palladium">
+                    <div class="flex mt-1">
+
+                        <div class="flex items-center text-xs font-bold text-green-400 px-1 bg-green-100 rounded-full w-auto cursor-pointer mr-4">
+                            <i class="fad fa-circle mr-1 fa-lg text-green-300"></i>
+                            <h2 id="estadoEquipo"></h2>
+                        </div>
+                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4">
+                            <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
+                            <h2>EQUIPO PRINCIPAL</h2>
+                        </div>
+                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
+                            <i class="mr-1 text-blue-400">BITÁCORAS:</i>
+                            <h2>ZI</h2>
+                        </div>
+                        <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer">
+                            <i class="mr-1 text-red-300">R</i>
+                            <h2>REEMPLAZADO</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOTOS -->
+            <div class="w-full h-32 mt-2 px-4 overflow-x-auto scrollbar flex items-center">
+                <div id="btnAdjuntosEquipo" class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
+                    <i class="fas fa-plus ga-lg"></i>
+                </div>
+                <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
+                    <img id="QREquipo" class="" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/equipos?0">
+                </div>
+                <div id="dataImagenesEquipo" class="w-full h-32 overflow-x-auto scrollbar flex items-center"></div>
+            </div>
+
+            <!-- CARACTRISTICAS -->
+            <div class="text-xs uppercase font-bold w-full px-2 my-2 flex">
+                <h1>INFORMACIÓN</h1>
+
+                <button id="btnEditarEquipo" class="text-xxs px-2 bg-yellow-300 ml-3 rounded font-semibold hover:shadow">Editar</button>
+
+                <button id="btnGuardarEquipo" class="text-xxs px-2 bg-green-300 ml-3 rounded font-semibold hover:shadow">Guardar</button>
+
+                <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 ml-3 rounded font-semibold hover:shadow">Cancelar</button>
+            </div>
+
+            <div class="flex flex-row w-full bg-fondos-4">
+                <div class="w-9/12 flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 ">
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
+                            <input type="text" name="" value="ZIC" id="seccionEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
+                            <input type="text" name="" value="REFRIGERACION MAQUINAS DE HIELO" id="subseccionEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
+                            <input type="text" name="" value="MAQUINA DE HIELO" id="tipoEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
+                            <input type="text" name="" value="EQUIPO PRINCIPAL" id="jerarquiaEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                    </div>
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
+                            <input type="text" name="" value="FAGOR" id="marcaEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">modelo</h1>
+                            <input type="text" name="modelo" value="34234234" id="modeloEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">numero de serie</h1>
+                            <input type="text" name="" value="23423423423423" id="serieEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">Código Fabricante</h1>
+                            <input type="text" name="" value="234542345365" id="codigoFabricanteEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">Código Interno compras</h1>
+                            <input type="text" name="" value="234542345365" id="codigoInternoComprasEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                    </div>
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">LARGO</h1>
+                            <input type="text" name="" value="234542345365" id="largoEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">ANCHO</h1>
+                            <input type="text" name="" value="234542345365" id="anchoEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">ALTO</h1>
+                            <input type="text" name="" value="234542345365" id="altoEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
+                            <input type="text" name="" value="234542345365" id="potenciaElectricaHPEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (KW)</h1>
+                            <input type="text" name="" value="234542345365" id="potenciaElectricaKWEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">VOLTAJE (V)</h1>
+                            <input type="text" name="" value="234542345365" id="voltajeEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">FRECUENCIA (HZ)</h1>
+                            <input type="text" name="" value="234542345365" id="frecuenciaEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                    </div>
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
+                            <input type="text" name="" value="234542345365" id="caudalAguaM3HEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (GPH)</h1>
+                            <input type="text" name="" value="234542345365" id="caudalAguaGPHEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">CARGA (M.C.A)</h1>
+                            <input type="text" name="" value="234542345365" id="cargaMCAEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                    </div>
+                    <div class="flex-none w-1/6">
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
+                            <input type="text" name="" value="234542345365" id="PotenciaEnergeticaFrioKWEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(TR)</h1>
+                            <input type="text" name="" value="234542345365" id="potenciaEnergeticaFrioTREquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA CALOR (KCAL)</h1>
+                            <input type="text" name="" value="234542345365" id="potenciaEnergeticaCalorKCALEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(M3/H)</h1>
+                            <input type="text" name="" value="234542345365" id="caudalAireM3HEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(CFM)</h1>
+                            <input type="text" name="" value="234542345365" id="caudalAireCFMEquipo" class="bg-fondos-4 font-semibold">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="flex-none flex flex-col items-start justify-start border-l w-3/12 text-xs uppercase font-bold px-2">
+
+                    <h1 class="my-2">DESPIECE</h1>
+
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="max-height: 200px;">
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- CARACTRISTICAS -->
+
+            <!-- PLANES MP -->
+            <div class="text-xs uppercase font-bold w-full px-2 my-2">
+                <h1>Planes Preventivos</h1>
+            </div>
+
+            <div id="contenedorPlanesEquipo" class="flex flex-row w-full justify-start px-4  overflow-x-auto scrollbar py-4">
+            </div>
+            <!-- PLANES MP -->
+        </div>
+    </div>
+
+
+    <!-- MODAL PARA PENDIENTES POR SECCIONES -->
     <div id="modalPendientes" class="modal">
         <div class="modal-window py-10 rounded-md" style="width: 1300px;">
             <div class=" flex flex-col items-center justify-center">
@@ -355,7 +708,7 @@
             </div>
 
             <div class="px-2 mt-12">
-                <table class="table-auto text-xs text-center w-full">
+                <table id="tablaPendientes" class="table-auto text-xs text-center w-full">
                     <thead>
                         <tr class="cursor pointer">
                             <th class="px-4 py-2">Subsección</th>
@@ -1410,7 +1763,120 @@
 
     <!-- Modales -->
 
-    <!-- Librerias -->
+
+    <!-- ***** TOOLTIPS ***** -->
+
+    <!-- MENÚ OPCIONES MP -->
+    <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
+        <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646;">
+
+            <h1 class="mr-1 text-right" style="color: #ffff;" onclick="cerrarTooltip('tooltipMP')">
+                <i class="fas fa-times-square fa-lg"></i>
+            </h1>
+
+            <h1 class="my-2" style="color: #a9aaaa; background-color: #454A4A;">Programación <span id="semanaProgramacionMP"></span></h1>
+
+            <h1 id="programarMPIndividual" class="contextmenu-item"><i class="fas fa-long-arrow-down mr-2 text-blue-400"></i>Programar (Individual)</h1>
+
+            <h1 id="programarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-random mr-2 text-blue-400"></i>Reprogramar desde aquí</h1>
+
+            <h1 id="opcionMPPersonalizado" class="contextmenu-item" onclick="expandir(this.id)">
+                <i class="fas fa-random mr-2 text-blue-400"></i>Program. Personalizada
+            </h1>
+
+            <div id="opcionMPPersonalizadotoggle" class="flex flex-row items-center justify-center mb-3 hidden">
+                <input id="numeroSemanasPersonalizadasMP" class="w-1/4 text-center shadow appearance-none border border-red-500 rounded w-full py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="1" max="52" pattern="[0-9]" autocomplete="off">
+                <button id="programarMPPersonalizado" class="w-3/4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded">Programar</button>
+            </div>
+
+            <h1 id="eliminarMPIndividual" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar (individual)</h1>
+
+            <h1 id="eliminarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar desde aquí</h1>
+
+            <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
+
+            <h1 class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
+
+            <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
+
+            <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar OT</h1>
+
+            <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
+
+        </div>
+        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px;"></i>
+    </div>
+    <!-- MENÚ OPCIONES MP -->
+
+
+    <!-- MENÚ OPCIONES MP -->
+    <div class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="max-width: 350px; max-height: 400px;" style="z-index:100">
+        <h1 class="my-2 self-start" style="color: #a9aaaa;">Actividades</h1>
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi eligendi, nemo eveniet vel praesentium voluptatum placeat officiis excepturi asperiores natus, temporibus nostrum ipsam nihil, laudantium eius animi? Id, cumque? Eum?</h1>
+        </div>
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+
+        <div class="flex items-center mb-2">
+            <i class="fad fa-circle mr-2 text-bluegray-500"></i>
+            <h1>Lorem ipsum dolor, sit amet consectetur adi</h1>
+        </div>
+    </div>
+    <!-- MENÚ OPCIONES MP -->
+
+
+    <!-- ***** TOOLTIPS ***** -->
+
+    <!-- Librerias JS -->
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -1422,14 +1888,20 @@
     <script src="js/plannerBetaJS.js"></script>
     <script src="js/jPages.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <!-- Librerias -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
 
-    <!-- DEPENDENCIAS DEL GRAFICO -->
+
+    <!-- JS para los planes de los equipos -->
+    <script src="js/planes_equipo.js"></script>
+    <!-- JS para los planes de los equipos -->
+
+    <!-- Librerias JS -->
+
+    <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
     <script src="js/am4core_core.js"></script>
     <script src="js/am4core_charts.js"></script>
     <script src="js/am4core_animated.js"></script>
-    <!-- DEPENDENCIAS DEL GRAFICO -->
-
+    <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
 
 </body>
 

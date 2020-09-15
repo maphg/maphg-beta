@@ -703,7 +703,7 @@ if (isset($_POST['action'])) {
 
             if ($sTrabajando == 1) {
                 $bitacoraMC .= "
-                    <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
+                    <div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
                     <h1 class=\"font-bold\">$nombreDestino</h1>
                     <P class=\"font-black mx-1\">/</P>
                     <h1 class=\" \"> <h1 class=\"font-black text-lg text-blue-600 mx-1 bg-blue-300 px-2 rounded-md\"> T </h1> $seccion</h1><!-- SECION -->
@@ -719,7 +719,7 @@ if (isset($_POST['action'])) {
                 ";
             } else {
                 $bitacoraMC .= "
-                <div class=\"flex justify-left items-center w-full bg-green-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
+                <div class=\"flex justify-left items-center w-full bg-red-200 rounded mb-2 text-green-700 cursor-pointer py-2 text-xs px-1\" onclick=\"toggleModal('modalMCMPProyectos'); consultaMPMCPROYECTOS($id,'$nombreDestino', '$seccion', '$subseccion', 'Equipo($equipo) $titulo ', '$comentario_mp_np', '$tag_statusT', '$tag_statusF');\">
                 <h1 class=\"font-bold\">$nombreDestino</h1>
                 <P class=\"font-black mx-1\">/</P>
                 <h1 class=\" \">$seccion</h1><!-- SECION -->
