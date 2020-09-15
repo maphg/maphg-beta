@@ -1591,6 +1591,12 @@ if (isset($_POST['action'])) {
         $exportarSeccion = "";
         $exportarMisPendientes = "";
 
+        // Contadores
+        $contadorTyF = 0;
+        $contadorDEP = 0;
+        $contadorT = 0;
+        $contadorS = 0;
+
         // Identifica si el filtro es en General, Usuario o Seccion.
         $filtroSeccion = "";
         $filtroUsuario = "";
@@ -1723,6 +1729,8 @@ if (isset($_POST['action'])) {
 
                 $resultMCP = mysqli_query($conn_2020, $queryMCP);
                 foreach ($resultMCP as $pendiente) {
+                    $contadorTyF++;
+
                     $idMC = "";
                     $actividad = "";
                     $nombre = "";
@@ -1850,6 +1858,7 @@ if (isset($_POST['action'])) {
                 // echo $queryTareas;
                 if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                     foreach ($resultTareas as $value) {
+                        $contadorTyF++;
                         $tarea = "";
                         $idTarea = $value['id'];
                         $tarea = $value['titulo'];
@@ -1982,6 +1991,7 @@ if (isset($_POST['action'])) {
                 ORDER BY t_mc.id DESC";
                 $resultDEP = mysqli_query($conn_2020, $queryDEP);
                 foreach ($resultDEP as $dep) {
+                    $contadorDEP++;
                     $idMC = $dep['id'];
                     $actividad = $dep['actividad'];
                     $nombre = $dep['nombre'];
@@ -2171,6 +2181,7 @@ if (isset($_POST['action'])) {
                 $resultT = mysqli_query($conn_2020, $queryT);
 
                 foreach ($resultT as $t) {
+                    $contadorT++;
                     $idMC = $t['id'];
                     $actidad = $t['actividad'];
                     $nombre = $t['nombre'];
@@ -2304,6 +2315,7 @@ if (isset($_POST['action'])) {
                 $resultT = mysqli_query($conn_2020, $queryT);
 
                 foreach ($resultT as $t) {
+                    $contadorS++;
                     $idMC = $t['id'];
                     $actidad = $t['actividad'];
                     $nombre = $t['nombre'];
@@ -2445,6 +2457,12 @@ if (isset($_POST['action'])) {
             $arrayData['exportarMisCreadosPDF'] = $exportarMisCreadosPDF;
             $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
             $arrayData['exportarSubseccionPDF'] = $exportarSubseccionPDF;
+
+            // Resultado Contadores
+            $arrayData['contadorTyF'] = $contadorTyF;
+            $arrayData['contadorDEP'] = $contadorDEP;
+            $arrayData['contadorT'] = $contadorT;
+            $arrayData['contadorS'] = $contadorS;
         }
         echo json_encode($arrayData);
     }
@@ -2914,7 +2932,7 @@ if (isset($_POST['action'])) {
 
                         // MP Planificados.
                         $dataEquipos .= "
-                                <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
+                                <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\" onclick=\"\">
                                     <h1>$totalMPN</h1>
                                 </div>
                             ";
@@ -2956,7 +2974,7 @@ if (isset($_POST['action'])) {
 
                         // Info Equipos.
                         $dataEquipos .= "
-                                <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md\">
+                                <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md\" onclick=\"informacionEquipo($idEquipo);\">
                                     <h1><i class=\"fas fa-eye fa-lg\"></i></h1>
                                 </div>
                             ";
@@ -5394,7 +5412,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // TOTAL DE ADJUNTOS
-                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and activo =1";
                             if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                                 foreach ($resultAdjuntos as $value) {
                                     $totalAdjuntos = $value['count(id)'];
@@ -6078,7 +6096,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // TOTAL DE ADJUNTOS
-                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                            $queryAdjuntos = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and activo = 1";
                             if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                                 foreach ($resultAdjuntos as $value) {
                                     $totalAdjuntos = $value['count(id)'];
@@ -6709,7 +6727,6 @@ if (isset($_POST['action'])) {
         } elseif ($tabla == "t_mc_adjuntos") {
             $imgNombre = "FALLAS_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
             $ruta = "../planner/tareas/adjuntos/";
-
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
                     if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
@@ -6727,6 +6744,31 @@ if (isset($_POST['action'])) {
                 }
             } else {
                 echo 1;
+            }
+        } elseif ($tabla == "t_equipos_adjuntos_america") {
+            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/equipos/";
+            if ($extension == "png" || $extension == "jpg" || $extension == "jpeg" || $extension == "gif" || $extension == "PNG" || $extension == "JPG" || $extension == "JPEG" || $extension == "GIF") {
+                if ($img['name'] != "") {
+                    if (($img['size'] / 1000) < 100000) {
+                        if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                            $query = "INSERT INTO t_equipos_america_adjuntos(id_equipo, url_adjunto, fecha, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                echo 9;
+                            } else {
+                                echo 0;
+                            }
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 2;
+                    }
+                } else {
+                    echo 1;
+                }
+            } else {
+                echo -1;
             }
         } else {
             echo 0;
@@ -6812,10 +6854,8 @@ if (isset($_POST['action'])) {
 
                     if (file_exists("../planner/proyectos/$url")) {
                         $adjuntoURL = "planner/proyectos/$url";
-                    } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
-                        $adjuntoURL = "planner/proyectos/planaccion/$url";
                     } else {
-                        $adjuntoURL = "";
+                        $adjuntoURL = "planner/proyectos/planaccion/$url";
                     }
 
                     // Admite solo Imagenes.
@@ -6939,6 +6979,58 @@ if (isset($_POST['action'])) {
                             $imagen .= "
                                 <a href=\"$adjuntoURL\" target=\"_blank\">
                                     <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+                            ";
+                        }
+                    } else {
+                        $documento .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>                    
+                        ";
+                    }
+                }
+                $data['imagen'] = $imagen;
+                $data['documento'] = $documento;
+            }
+        } elseif ($tabla == "t_equipos_adjuntos_america") {
+            $query = "SELECT t_equipos_america_adjuntos.id, t_equipos_america_adjuntos.url_adjunto, 
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_equipos_america_adjuntos 
+            LEFT JOIN t_users ON t_equipos_america_adjuntos.subido_por = t_users.id 
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_equipos_america_adjuntos.id_equipo = $idTabla AND t_equipos_america_adjuntos.activo = 1
+            ORDER BY t_equipos_america_adjuntos.id DESC";
+
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $url = $value['url_adjunto'];
+
+                    if (file_exists("../planner/equipos/$url")) {
+                        $adjuntoURL = "planner/equipos/$url";
+                    } else {
+                        $adjuntoURL = "../planner/equipos/$url";
+                    }
+
+                    // Admite solo Imagenes.
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "gif") || strpos($url, "PNG")) {
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $imagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg overflow-hidden\">
+                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                </div>
+                            </a>
+                        ";
+                        } else {
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg\" style=\"background-image: url($adjuntoURL)\">
                                     </div>
                                 </a>
                             ";
@@ -7591,6 +7683,467 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
+    // Obtiene información del Equipo
+    if ($action == "informacionEquipo") {
+        $idEquipo = $_POST['idEquipo'];
+        $data = array();
+
+        // Valores por DEFAULT
+        $data['equipo'] = "- -";
+
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
+        t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.status
+        FROM t_equipos_america WHERE id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $equipo = $i['equipo'];
+                $jerarquia = $i['jerarquia'];
+                $modelo = $i['modelo'];
+                $numero_serie = $i['numero_serie'];
+                $codigo_fabricante = $i['codigo_fabricante'];
+                $codigo_interno_compras = $i['codigo_interno_compras'];
+                $largo_cm = $i['largo_cm'];
+                $ancho_cm = $i['ancho_cm'];
+                $alto_cm = $i['alto_cm'];
+                $potencia_electrica_hp = $i['potencia_electrica_hp'];
+                $potencia_electrica_kw = $i['potencia_electrica_kw'];
+                $voltaje_v = $i['voltaje_v'];
+                $frecuencia_hz = $i['frecuencia_hz'];
+                $caudal_agua_m3h = $i['caudal_agua_m3h'];
+                $caudal_agua_gph = $i['caudal_agua_gph'];
+                $carga_mca = $i['carga_mca'];
+                $potencia_energetica_frio_kw = $i['potencia_energetica_frio_kw'];
+                $potencia_energetica_frio_tr = $i['potencia_energetica_frio_tr'];
+                $potencia_energetica_calor_kcal = $i['potencia_energetica_calor_kcal'];
+                $caudal_aire_m3h = $i['caudal_aire_m3h'];
+                $coste = $i['coste'];
+                $caudal_aire_cfm = $i['caudal_aire_cfm'];
+                $status = $i['status'];
+
+                $data['idEquipo'] = $id;
+                $data['equipo'] = $equipo;
+                $data['jerarquia'] = $jerarquia;
+                $data['modelo'] = $modelo;
+                $data['numero_serie'] = $numero_serie;
+                $data['codigo_fabricante'] = $codigo_fabricante;
+                $data['codigo_interno_compras'] = $codigo_interno_compras;
+                $data['largo_cm'] = $largo_cm;
+                $data['ancho_cm'] = $ancho_cm;
+                $data['alto_cm'] = $alto_cm;
+                $data['potencia_electrica_hp'] = $potencia_electrica_hp;
+                $data['potencia_electrica_kw'] = $potencia_electrica_kw;
+                $data['voltaje_v'] = $voltaje_v;
+                $data['frecuencia_hz'] = $frecuencia_hz;
+                $data['caudal_agua_m3h'] = $caudal_agua_m3h;
+                $data['caudal_agua_gph'] = $caudal_agua_gph;
+                $data['carga_mca'] = $carga_mca;
+                $data['potencia_energetica_frio_kw'] = $potencia_energetica_frio_kw;
+                $data['potencia_energetica_frio_tr'] = $potencia_energetica_frio_tr;
+                $data['potencia_energetica_calor_kcal'] = $potencia_energetica_calor_kcal;
+                $data['caudal_aire_m3h'] = $caudal_aire_m3h;
+                $data['coste'] = $coste;
+                $data['caudal_aire_cfm'] = $caudal_aire_cfm;
+                $data['status'] = $status;
+            }
+        }
+        echo json_encode($data);
+    }
+
+
+    if ($action == "actualizarEquipo") {
+        $idEquipo = $_POST['idEquipo'];
+        $nombreEquipo = $_POST['nombreEquipo'];
+        $seccionEquipo = $_POST['seccionEquipo'];
+        $subseccionEquipo = $_POST['subseccionEquipo'];
+        $tipoEquipo = $_POST['tipoEquipo'];
+        $jerarquiaEquipo = $_POST['jerarquiaEquipo'];
+        $marcaEquipo = $_POST['marcaEquipo'];
+        $modeloEquipo = $_POST['modeloEquipo'];
+        $serieEquipo = $_POST['serieEquipo'];
+        $codigoFabricanteEquipo = $_POST['codigoFabricanteEquipo'];
+        $codigoInternoComprasEquipo = $_POST['codigoInternoComprasEquipo'];
+        $largoEquipo = $_POST['largoEquipo'];
+        $anchoEquipo = $_POST['anchoEquipo'];
+        $altoEquipo = $_POST['altoEquipo'];
+        $potenciaElectricaHPEquipo = $_POST['potenciaElectricaHPEquipo'];
+        $potenciaElectricaKWEquipo = $_POST['potenciaElectricaKWEquipo'];
+        $voltajeEquipo = $_POST['voltajeEquipo'];
+        $frecuenciaEquipo = $_POST['frecuenciaEquipo'];
+        $caudalAguaM3HEquipo = $_POST['caudalAguaM3HEquipo'];
+        $caudalAguaGPHEquipo = $_POST['caudalAguaGPHEquipo'];
+        $cargaMCAEquipo = $_POST['cargaMCAEquipo'];
+        $PotenciaEnergeticaFrioKWEquipo = $_POST['PotenciaEnergeticaFrioKWEquipo'];
+        $potenciaEnergeticaFrioTREquipo = $_POST['potenciaEnergeticaFrioTREquipo'];
+        $potenciaEnergeticaCalorKCALEquipo = $_POST['potenciaEnergeticaCalorKCALEquipo'];
+        $caudalAireM3HEquipo = $_POST['caudalAireM3HEquipo'];
+        $caudalAireCFMEquipo = $_POST['caudalAireCFMEquipo'];
+
+        $query = "UPDATE t_equipos_america SET equipo = '$nombreEquipo' WHERE id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+
+    if ($action == "consultarPlanEquipo") {
+        $idEquipo = $_POST['idEquipo'];
+        $año = date('Y');
+        $data = array();
+
+        $query = "SELECT t_equipos_america.id 'idEquipo', t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
+        c_frecuencias_mp.frecuencia, t_mp_planes_mantenimiento.grado
+        FROM t_equipos_america 
+        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo
+        INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
+        WHERE t_equipos_america.id = $idEquipo AND t_equipos_america.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idEquipo = $i['idEquipo'];
+                $idPlan = $i['idPlan'];
+                $idTipo = $i['tipo_local_equipo'];
+                $tipoPlan = $i['tipo_plan'];
+                $grado = $i['grado'];
+                $periodicidad = $i['frecuencia'];
+
+                $queryPlaneacion = "SELECT * 
+                FROM t_mp_planeacion_semana 
+                WHERE id_plan = $idPlan AND id_equipo = $idEquipo";
+
+                if ($resultPlaneacion = mysqli_query($conn_2020, $queryPlaneacion)) {
+
+                    if (mysqli_num_rows($resultPlaneacion) > 0) {
+                        foreach ($resultPlaneacion as $i) {
+                            $idPlaneacion = $i['id'];
+                            $idEquipo = $i['id_equipo'];
+                            $semana_1 = $i['semana_1'];
+                            $semana_2 = $i['semana_2'];
+                            $semana_3 = $i['semana_3'];
+                            $semana_4 = $i['semana_4'];
+                            $semana_5 = $i['semana_5'];
+                            $semana_6 = $i['semana_6'];
+                            $semana_7 = $i['semana_7'];
+                            $semana_8 = $i['semana_8'];
+                            $semana_9 = $i['semana_9'];
+                            $semana_10 = $i['semana_10'];
+                            $semana_11 = $i['semana_11'];
+                            $semana_12 = $i['semana_12'];
+                            $semana_13 = $i['semana_13'];
+                            $semana_14 = $i['semana_14'];
+                            $semana_15 = $i['semana_15'];
+                            $semana_16 = $i['semana_16'];
+                            $semana_17 = $i['semana_17'];
+                            $semana_18 = $i['semana_18'];
+                            $semana_19 = $i['semana_19'];
+                            $semana_20 = $i['semana_20'];
+                            $semana_21 = $i['semana_21'];
+                            $semana_22 = $i['semana_22'];
+                            $semana_23 = $i['semana_23'];
+                            $semana_24 = $i['semana_24'];
+                            $semana_25 = $i['semana_25'];
+                            $semana_26 = $i['semana_26'];
+                            $semana_27 = $i['semana_27'];
+                            $semana_28 = $i['semana_28'];
+                            $semana_29 = $i['semana_29'];
+                            $semana_30 = $i['semana_30'];
+                            $semana_31 = $i['semana_31'];
+                            $semana_32 = $i['semana_32'];
+                            $semana_33 = $i['semana_33'];
+                            $semana_34 = $i['semana_34'];
+                            $semana_35 = $i['semana_35'];
+                            $semana_36 = $i['semana_36'];
+                            $semana_37 = $i['semana_37'];
+                            $semana_38 = $i['semana_38'];
+                            $semana_39 = $i['semana_39'];
+                            $semana_40 = $i['semana_40'];
+                            $semana_41 = $i['semana_41'];
+                            $semana_42 = $i['semana_42'];
+                            $semana_43 = $i['semana_43'];
+                            $semana_44 = $i['semana_44'];
+                            $semana_45 = $i['semana_45'];
+                            $semana_46 = $i['semana_46'];
+                            $semana_47 = $i['semana_47'];
+                            $semana_48 = $i['semana_48'];
+                            $semana_49 = $i['semana_49'];
+                            $semana_50 = $i['semana_50'];
+                            $semana_51 = $i['semana_51'];
+                            $semana_52 = $i['semana_52'];
+
+                            $arrayTemp =
+                                array(
+                                    "idPlaneacion" => $idPlaneacion,
+                                    "idEquipo" => $idEquipo,
+                                    "periodicidad" => $periodicidad,
+                                    "tipoPlan" => $tipoPlan,
+                                    "semana_1" => $semana_1,
+                                    "semana_2" => $semana_2,
+                                    "semana_3" => $semana_3,
+                                    "semana_4" => $semana_4,
+                                    "semana_5" => $semana_5,
+                                    "semana_6" => $semana_6,
+                                    "semana_7" => $semana_7,
+                                    "semana_8" => $semana_8,
+                                    "semana_9" => $semana_9,
+                                    "semana_10" => $semana_10,
+                                    "semana_11" => $semana_11,
+                                    "semana_12" => $semana_12,
+                                    "semana_13" => $semana_13,
+                                    "semana_14" => $semana_14,
+                                    "semana_15" => $semana_15,
+                                    "semana_16" => $semana_16,
+                                    "semana_17" => $semana_17,
+                                    "semana_18" => $semana_18,
+                                    "semana_19" => $semana_19,
+                                    "semana_20" => $semana_20,
+                                    "semana_21" => $semana_21,
+                                    "semana_22" => $semana_22,
+                                    "semana_23" => $semana_23,
+                                    "semana_24" => $semana_24,
+                                    "semana_25" => $semana_25,
+                                    "semana_26" => $semana_26,
+                                    "semana_27" => $semana_27,
+                                    "semana_28" => $semana_28,
+                                    "semana_29" => $semana_29,
+                                    "semana_30" => $semana_30,
+                                    "semana_31" => $semana_31,
+                                    "semana_32" => $semana_32,
+                                    "semana_33" => $semana_33,
+                                    "semana_34" => $semana_34,
+                                    "semana_35" => $semana_35,
+                                    "semana_36" => $semana_36,
+                                    "semana_37" => $semana_37,
+                                    "semana_38" => $semana_38,
+                                    "semana_39" => $semana_39,
+                                    "semana_40" => $semana_40,
+                                    "semana_41" => $semana_41,
+                                    "semana_42" => $semana_42,
+                                    "semana_43" => $semana_43,
+                                    "semana_44" => $semana_44,
+                                    "semana_45" => $semana_45,
+                                    "semana_46" => $semana_46,
+                                    "semana_47" => $semana_47,
+                                    "semana_48" => $semana_48,
+                                    "semana_49" => $semana_49,
+                                    "semana_50" => $semana_50,
+                                    "semana_51" => $semana_51,
+                                    "semana_52" => $semana_52
+                                );
+
+                            $data[] = $arrayTemp;
+                        }
+                    } else {
+                        $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo "SI";
+                        } else {
+                            echo "NO";
+                        }
+                    }
+                }
+            }
+            echo json_encode($data);
+        }
+    }
+
+    if ($action == "programarMP") {
+        $idEquipo = $_POST['idEquipo'];
+        $idPlaneacion = $_POST['idPlaneacion'];
+        $semanaX = $_POST['semanaX'];
+        $accionMP = $_POST['accionMP'];
+        $semana = array();
+        $resultado = 0;
+        $numeroSemanas = $_POST['numeroSemanas'];
+
+        $query = "SELECT* 
+        FROM t_mp_planeacion_semana 
+        INNER JOIN t_mp_planes_mantenimiento ON t_mp_planeacion_semana.id_plan = t_mp_planes_mantenimiento.id
+        INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
+        WHERE t_mp_planeacion_semana.id = $idPlaneacion and t_mp_planeacion_semana.id_equipo = $idEquipo and t_mp_planeacion_semana.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $valoSemanaX = $i["semana_" . $semanaX];
+                $semanas = $i["semanas"];
+                $saltos = $i["saltos"];
+
+                // Lista de Semanas
+                $semana[1] = $i['semana_1'];
+                $semana[2] = $i['semana_2'];
+                $semana[3] = $i['semana_3'];
+                $semana[4] = $i['semana_4'];
+                $semana[5] = $i['semana_5'];
+                $semana[6] = $i['semana_6'];
+                $semana[7] = $i['semana_7'];
+                $semana[8] = $i['semana_8'];
+                $semana[9] = $i['semana_9'];
+                $semana[10] = $i['semana_10'];
+                $semana[11] = $i['semana_11'];
+                $semana[12] = $i['semana_12'];
+                $semana[13] = $i['semana_13'];
+                $semana[14] = $i['semana_14'];
+                $semana[15] = $i['semana_15'];
+                $semana[16] = $i['semana_16'];
+                $semana[17] = $i['semana_17'];
+                $semana[18] = $i['semana_18'];
+                $semana[19] = $i['semana_19'];
+                $semana[20] = $i['semana_20'];
+                $semana[21] = $i['semana_21'];
+                $semana[22] = $i['semana_22'];
+                $semana[23] = $i['semana_23'];
+                $semana[24] = $i['semana_24'];
+                $semana[25] = $i['semana_25'];
+                $semana[26] = $i['semana_26'];
+                $semana[27] = $i['semana_27'];
+                $semana[28] = $i['semana_28'];
+                $semana[29] = $i['semana_29'];
+                $semana[30] = $i['semana_30'];
+                $semana[31] = $i['semana_31'];
+                $semana[32] = $i['semana_32'];
+                $semana[33] = $i['semana_33'];
+                $semana[34] = $i['semana_34'];
+                $semana[35] = $i['semana_35'];
+                $semana[36] = $i['semana_36'];
+                $semana[37] = $i['semana_37'];
+                $semana[38] = $i['semana_38'];
+                $semana[39] = $i['semana_39'];
+                $semana[40] = $i['semana_40'];
+                $semana[41] = $i['semana_41'];
+                $semana[42] = $i['semana_42'];
+                $semana[43] = $i['semana_43'];
+                $semana[44] = $i['semana_44'];
+                $semana[45] = $i['semana_45'];
+                $semana[46] = $i['semana_46'];
+                $semana[47] = $i['semana_47'];
+                $semana[48] = $i['semana_48'];
+                $semana[49] = $i['semana_49'];
+                $semana[50] = $i['semana_50'];
+                $semana[51] = $i['semana_51'];
+                $semana[52] = $i['semana_52'];
+
+                if ($accionMP == "PROGRAMARINDIVIDUAL" and ($valoSemanaX == 0 || $valoSemanaX == "PLANIFICADO")) {
+                    $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$semanaX = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                    if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                        $resultado = 2;
+                    } else {
+                        $resultado = 0;
+                    }
+                } elseif ($accionMP == "PROGRAMARDESDEAQUI") {
+
+                    if ($saltos == 52) {
+                        for ($i = $semanaX; $i <= 52; $i++) {
+                            $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                            if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                $resultado = 3;
+                            } else {
+                                $resultado = 0;
+                            }
+                        }
+                    } else {
+                        // echo ": $semanas $saltos :";
+                        $contador = -1;
+                        for ($i = $semanaX; $i <= 52; ++$i) {
+                            $contador++;
+                            if ($i == $semanaX) {
+                                $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                                if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                    $resultado = 3;
+                                } else {
+                                    $resultado = 0;
+                                }
+                            } elseif ($semanas == $contador) {
+
+                                $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                                if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                    $resultado = 3;
+                                } else {
+                                    $resultado = 0;
+                                }
+                                $contador = 0;
+                            } else {
+                                $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = '0' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                                if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                    $resultado = 3;
+                                } else {
+                                    $resultado = 0;
+                                }
+                            }
+                        }
+                    }
+                } elseif ($accionMP == "PROGRAMARPERSONALIZADO") {
+
+                    $contador = -1;
+                    for ($i = $semanaX; $i <= 52; ++$i) {
+                        $contador++;
+
+                        if ($i == $semanaX) {
+                            $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                            if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                $resultado = 4;
+                            } else {
+                                $resultado = 0;
+                            }
+                        } elseif ($numeroSemanas == $contador) {
+
+                            $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = 'PLANIFICADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                            if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                $resultado = 4;
+                            } else {
+                                $resultado = 0;
+                            }
+                            $contador = 0;
+                        } else {
+                            $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = '0' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                            if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                                $resultado = 4;
+                            } else {
+                                $resultado = 0;
+                            }
+                        }
+                    }
+                } elseif ($accionMP == "ELIMINARINDIVIDUAL") {
+                    $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$semanaX = '0' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                    if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                        $resultado = 5;
+                    } else {
+                        $resultado = 0;
+                    }
+                } elseif ($accionMP == "ELIMINARDESDEAQUI") {
+                    for ($i = $semanaX; $i <= 52; $i++) {
+
+                        $programarMP = "UPDATE t_mp_planeacion_semana SET semana_$i = '0' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                        if ($resultProgramacion = mysqli_query($conn_2020, $programarMP)) {
+                            $resultado = 6;
+                        } else {
+                            $resultado = 0;
+                        }
+                    }
+                } elseif ($accionMP == "SOLUCIONAROT") {
+
+                    $OTMP = "UPDATE t_mp_planeacion_semana SET semana_$semanaX = 'SOLUCIONADO' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                    if ($resultProgramacion = mysqli_query($conn_2020, $OTMP)) {
+                        $resultado = 7;
+                    } else {
+                        $resultado = 0;
+                    }
+                } elseif ($accionMP == "CANCELAROT") {
+
+                    $OTMP = "UPDATE t_mp_planeacion_semana SET semana_$semanaX = '0' WHERE id = $idPlaneacion and id_equipo = $idEquipo and activo = 1";
+                    if ($resultProgramacion = mysqli_query($conn_2020, $OTMP)) {
+                        $resultado = 8;
+                    } else {
+                        $resultado = 0;
+                    }
+                }
+            }
+        } else {
+            $resultado = 0;
+        }
+        echo $resultado;
+    }
+
 
 
 
