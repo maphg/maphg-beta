@@ -466,7 +466,6 @@ try {
                                                 <th class="fs-12">Descripción</th>
                                                 <th class="fs-12">Proveedor</th>
                                                 <th class="fs-12">Nombre</th>
-                                                <th class="fs-12">Texto CECO</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -481,7 +480,6 @@ try {
                                                 <th class="fs-12">Descripción</th>
                                                 <th class="fs-12">Proveedor</th>
                                                 <th class="fs-12">Nombre</th>
-                                                <th class="fs-12">Texto CECO</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="tableBodyMateriales" class="fs-11">
@@ -507,6 +505,8 @@ try {
                                                         $destinoCECO = $dts['DESTINOCECO'];
                                                         $nombreCECO = $dts['NOMBRECECO'];
                                                         $textoCeco = $dts['texto_ceco'];
+                                                        $NOMBRE1 = $dts['NOMBRE1'];
+                                                        $DOCCOMPRAS = $dts['DOCCOMPRAS'];
 
                                                         if (strpos($asignacion, 'OTRO CECO') !== false || strpos($asignacion, 'otro ceco') !== false || strpos($asignacion, 'CAPEX') !== false || strpos($asignacion, 'capex') !== false || strpos($asignacion, 'POBLADO') !== false || strpos($asignacion, 'poblado') !== false) {
                                                         } else {
@@ -522,30 +522,28 @@ try {
                                                                     echo "<tr>"
                                                                         . "<td style=\"display: none;\">$idDocumento</td>"
                                                                         . "<td>$destinoCECO</td>"
-                                                                        . "<td class=\"fs-9\">$nombreCECO</td>"
-                                                                        . "<td>$numDocumento</td>"
+                                                                        . "<td class=\"fs-9\">$textoCeco</td>"
+                                                                        . "<td>$DOCCOMPRAS</td>"
                                                                         . "<td>$fechaConta</td>"
                                                                         . "<td>" . money_format("%.0n", $importe) . "</td>"
                                                                         . "<td>$asignacion</td>"
                                                                         . "<td>$descripcion</td>"
                                                                         . "<td>$proveedor</td>"
-                                                                        . "<td>$nombreDocumento</td>"
-                                                                        . "<td>$textoCeco</td>"
+                                                                        . "<td>$NOMBRE1</td>"
                                                                         . "</tr>";
                                                                 } else {
                                                                     if ($destino == $destinoCECO) {
                                                                         echo "<tr>"
                                                                             . "<td style=\"display: none;\">$idDocumento</td>"
                                                                             . "<td>$destinoCECO</td>"
-                                                                            . "<td class=\"fs-9\">$nombreCECO</td>"
-                                                                            . "<td>$numDocumento</td>"
+                                                                            . "<td class=\"fs-9\">$textoCeco</td>"
+                                                                            . "<td>$DOCCOMPRAS</td>"
                                                                             . "<td>$fechaConta</td>"
                                                                             . "<td>" . money_format("%.0n", $importe) . "</td>"
                                                                             . "<td>$asignacion</td>"
                                                                             . "<td>$descripcion</td>"
                                                                             . "<td>$proveedor</td>"
-                                                                            . "<td>$nombreDocumento</td>"
-                                                                            . "<td>$textoCeco</td>"
+                                                                            . "<td>$NOMBRE1</td>"
                                                                             . "</tr>";
                                                                     }
                                                                 }
