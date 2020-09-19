@@ -335,7 +335,6 @@ try {
                                                 <th class="">Descripción</th>
                                                 <th class="">Proveedor</th>
                                                 <th class="">Nombre</th>
-                                                <th class="">Texto CECO</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -349,7 +348,6 @@ try {
                                                 <th class="">Descripción</th>
                                                 <th class="">Proveedor</th>
                                                 <th class="">Nombre</th>
-                                                <th class="">Texto CECO</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="tableBodyServicios" class="fs-11">
@@ -389,28 +387,26 @@ try {
                                                                     echo "<tr>"
                                                                         . "<td style=\"display: none;\">$idDocumento</td>"
                                                                         . "<td class=\"\">$destinoCECO</td>"
-                                                                        . "<td class=\"\">$nombreCECO</td>"
+                                                                        . "<td class=\"\">$textoCeco</td>"
                                                                         . "<td>$fechaConta</td>"
                                                                         . "<td> $importe</td>"
                                                                         . "<td>$asignacion</td>"
                                                                         . "<td>$descripcion</td>"
                                                                         . "<td>$proveedor</td>"
                                                                         . "<td>$nombreDocumento</td>"
-                                                                        . "<td>$textoCeco</td>"
                                                                         . "</tr>";
                                                                 } else {
                                                                     if ($destino == $destinoCECO) {
                                                                         echo "<tr>"
                                                                             . "<td style=\"display: none;\">$idDocumento</td>"
                                                                             . "<td class=\"w-2/2\">$destinoCECO</td>"
-                                                                            . "<td class=\"\">$nombreCECO</td>"
+                                                                            . "<td class=\"\">$textoCeco</td>"
                                                                             . "<td>$fechaConta</td>"
                                                                             . "<td>" . money_format("%.0n", $importe) . "</td>"
                                                                             . "<td>$asignacion</td>"
                                                                             . "<td>$descripcion</td>"
                                                                             . "<td>$proveedor</td>"
                                                                             . "<td>$nombreDocumento</td>"
-                                                                            . "<td>$textoCeco</td>"
                                                                             . "</tr>";
                                                                     }
                                                                 }
