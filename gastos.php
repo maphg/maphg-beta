@@ -323,11 +323,11 @@ try {
                         <div class="row mt-4">
                             <div class="col">
                                 <div class="table-responsive">
-                                    <table id="tablaGastosServicios" class="table table-bordered table-striped compact table-sm" style="width: 100%;">
+                                    <table id="tablaGastosServicios" class="table table-bordered table-striped compact table-sm" style="width: 800px;">
                                         <thead>
                                             <tr>
                                                 <th style="display:none;">idDocumento</th>
-                                                <th class="w-1/2">Destino</th>
+                                                <th class="">Destino</th>
                                                 <th class="">CECO</th>
                                                 <th class="">Fecha Cont.</th>
                                                 <th class="">Importe (USD)</th>
@@ -500,7 +500,7 @@ try {
                                                         $nombreDocumento = $dts['NOMBRE1'];
                                                         $destinoCECO = $dts['DESTINOCECO'];
                                                         $nombreCECO = $dts['NOMBRECECO'];
-                                                        $textoCeco = $dts['texto_ceco'];
+                                                        $textoCeco = $dts['TEXTCECO'];
                                                         $NOMBRE1 = $dts['NOMBRE1'];
                                                         $DOCCOMPRAS = $dts['DOCCOMPRAS'];
 
