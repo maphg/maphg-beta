@@ -179,12 +179,11 @@ try {
     <title>MAPHG</title>
 
     <link rel="icon" href="svg/logo6.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.css">
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
-
     <link rel="stylesheet" href="../css/animate.css">
 
     <style>
@@ -449,33 +448,33 @@ try {
                         <div class="row mt-4">
                             <div class="col">
                                 <div class="table-responsive">
-                                    <table id="tablaGastosMateriales" class="table table-bordered table-striped compact table-sm" style="width: 100%;">
+                                    <table id="tablaGastosMateriales" class="table table-bordered table-striped compact table-sm" style="width: 800px;">
                                         <thead>
                                             <tr>
                                                 <th style="display:none;">idDocumento</th>
-                                                <th class="fs-12">Destino</th>
-                                                <th class="fs-12">CECO</th>
-                                                <th class="fs-12">Documento</th>
-                                                <th class="fs-12">Fecha Cont.</th>
-                                                <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignación</th>
-                                                <th class="fs-12">Descripción</th>
-                                                <th class="fs-12">Proveedor</th>
-                                                <th class="fs-12">Nombre</th>
+                                                <th>Destino</th>
+                                                <th>CECO</th>
+                                                <th>Documento</th>
+                                                <th>Fecha Cont.</th>
+                                                <th>Importe (USD)</th>
+                                                <th>Asignación</th>
+                                                <th>Descripción</th>
+                                                <th>Proveedor</th>
+                                                <th>Nombre</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th style="display:none;">idDocumento</th>
-                                                <th class="fs-12">Destino</th>
-                                                <th class="fs-12">CECO</th>
-                                                <th class="fs-12">Documento</th>
-                                                <th class="fs-12">Fecha Cont.</th>
-                                                <th class="fs-12">Importe (USD)</th>
-                                                <th class="fs-12">Asignación</th>
-                                                <th class="fs-12">Descripción</th>
-                                                <th class="fs-12">Proveedor</th>
-                                                <th class="fs-12">Nombre</th>
+                                                <th>Destino</th>
+                                                <th>CECO</th>
+                                                <th>Documento</th>
+                                                <th>Fecha Cont.</th>
+                                                <th>Importe (USD)</th>
+                                                <th>Asignación</th>
+                                                <th>Descripción</th>
+                                                <th>Proveedor</th>
+                                                <th>Nombre</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="tableBodyMateriales" class="fs-11">

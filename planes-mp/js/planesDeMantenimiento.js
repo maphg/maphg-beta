@@ -315,9 +315,21 @@ function ocultarContenidoActividadMP() {
     document.getElementById("actualizarActividadPlanMP").innerHTML = "AGREGAR ACTIVIDAD";
     document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'agregarActividadPlanMP();');
     document.getElementById("desactivarActividadPlanMP").classList.add('invisible');
-
 }
 
+document.getElementById("tipoActividadPlanMP").setAttribute("onchange", "tipoActividadTest()");
+
+// Funcion para tipo de actividad
+
+function tipoActividadTest() {
+    let tipoActividadPlan = document.getElementById("tipoActividadPlanMP").value;
+
+    if (tipoActividadPlan == "test") {
+        document.getElementById("medicionTest").classList.remove('hidden');
+    } else {
+        document.getElementById("medicionTest").classList.add('hidden');
+    }
+}
 
 // Función para Agregar Activiades a Plan Accion Seleccionado localstorage('idPlanMP').
 function agregarActividadPlanMP() {
@@ -327,6 +339,7 @@ function agregarActividadPlanMP() {
     let actividadPlan = document.getElementById("actividadPlanMP").value;
     let tipoActividadPlan = document.getElementById("tipoActividadPlanMP").value;
     let tiempoActividad = document.getElementById("dataTiempoActividadPlanMP").value;
+    let tipoMedicion = document.getElementById("dataMedicionActividadPlanMP").value;
 
     if (actividadPlan.length > 0 && tipoActividadPlan.length > 0) {
         const action = "agregarActividadPlanMP";
@@ -340,7 +353,8 @@ function agregarActividadPlanMP() {
                 idPlanMP: idPlanMP,
                 actividadPlan: actividadPlan,
                 tipoActividadPlan: tipoActividadPlan,
-                tiempoActividad: tiempoActividad
+                tiempoActividad: tiempoActividad,
+                tipoMedicion: tipoMedicion
             },
             dataType: "JSON",
             success: function (data) {
@@ -389,6 +403,13 @@ function obtenerActividadesPlanMP() {
 
 // Obtiene la información por Actividad segun el plan.
 function obtenerActividadPlanMP(idActividadMP, tipoActividad) {
+    console.log(tipoActividad)
+    if (tipoActividad == "t_mp_planes_actividades_test") {
+        document.getElementById("medicionTest").classList.remove('hidden');
+    } else {
+        document.getElementById("medicionTest").classList.add('hidden');
+    }
+
     document.getElementById("modalAgregarActividadMP").classList.add('open');
     document.getElementById("actualizarActividadPlanMP").innerHTML = "ACTUALIZAR CAMBIOS";
     document.getElementById("desactivarActividadPlanMP").classList.remove('invisible');
@@ -415,6 +436,7 @@ function obtenerActividadPlanMP(idActividadMP, tipoActividad) {
             document.getElementById("dataTiempoActividadPlanMP").value = data.promedio;
             document.getElementById("actualizarActividadPlanMP").setAttribute('onclick', 'actualizarActividadPlanMP("ACTIVO",' + data.idPlanMP + ', ' + data.idActividad + ', "' + data.tipoActividad + '");');
             document.getElementById("desactivarActividadPlanMP").setAttribute('onclick', 'actualizarActividadPlanMP("BAJA",' + data.idPlanMP + ', ' + data.idActividad + ', "' + data.tipoActividad + '");');
+            document.getElementById("dataMedicionActividadPlanMP").value = data.tipoMedicion;
         }
     });
 }
@@ -428,6 +450,7 @@ function actualizarActividadPlanMP(tipoActualizacion, idPlanMP, idActividadPlanM
     let actividadPlan = document.getElementById("actividadPlanMP").value;
     let tipoActividadNuevo = document.getElementById("tipoActividadPlanMP").value;
     let tiempoActividad = document.getElementById("dataTiempoActividadPlanMP").value;
+    let tipoMedicion = document.getElementById("dataMedicionActividadPlanMP").value;
     const action = "actualizarActividadPlanMP";
 
     $.ajax({
@@ -443,7 +466,8 @@ function actualizarActividadPlanMP(tipoActualizacion, idPlanMP, idActividadPlanM
             tipoActividad: tipoActividad,
             actividadPlan: actividadPlan,
             tipoActividadNuevo: tipoActividadNuevo,
-            tiempoActividad: tiempoActividad
+            tiempoActividad: tiempoActividad,
+            tipoMedicion: tipoMedicion
         },
         // dataType: "JSON",
         success: function (data) {
@@ -533,6 +557,7 @@ function agregarMaterialesPlanMP(idMaterial) {
 
 
 function obtenerMaterialPlanMP() {
+    document.getElementById("dataMaterialesPlanMP").innerHTML = '';
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     let idPlanMP = localStorage.getItem("idPlanMP");
@@ -548,7 +573,6 @@ function obtenerMaterialPlanMP() {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             document.getElementById("dataMaterialesPlanMP").innerHTML = data.dataMateriales;
         }
     });

@@ -3707,6 +3707,7 @@ function informacionEquipo(idEquipo) {
   let idDestino = localStorage.getItem('idDestino');
   document.getElementById("modalMPEquipo").classList.add('open');
 
+  consultarOpcionesEquipo();
   toggleInputsEquipo(0);
 
   const action = "informacionEquipo";
@@ -3721,6 +3722,7 @@ function informacionEquipo(idEquipo) {
     },
     dataType: "JSON",
     success: function (data) {
+      // console.log(data);
       document.getElementById("btnAdjuntosEquipo").setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
 
       obtenerImagenesEquipo(idEquipo);
@@ -3732,7 +3734,10 @@ function informacionEquipo(idEquipo) {
         setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/equipos?id=" + idEquipo);
 
       document.getElementById("nombreEquipo").value = data.equipo;
+      document.getElementById("seccionEquipo").value = data.idSeccion;
+      document.getElementById("subseccionEquipo").value = data.idSubseccion;
       document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+      document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
       document.getElementById("modeloEquipo").value = data.modelo;
       document.getElementById("serieEquipo").value = data.numero_serie;
       document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
@@ -3889,14 +3894,18 @@ function consultarPlanEquipo(idEquipo) {
     },
     dataType: "JSON",
     success: function (data) {
-      // console.log(data);
       if (data.length > 0) {
         for (let index = 0; index < data.length; index++) {
+          console.log('Array: ' + data[index].idPlan);
 
           $ContenedorPlanesEquipos.innerHTML += datosPlanEquipo({
-
-            idPlaneacion: data[index].idPlaneacion,
+            solucionado: data[index].solucionado,
+            proceso: data[index].proceso,
+            planificado: data[index].planificado,
+            idSemana: data[index].idSemana,
+            idProceso: data[index].idProceso,
             idEquipo: data[index].idEquipo,
+            idPlan: data[index].idPlan,
             periodicidad: data[index].periodicidad,
             tipoPlan: data[index].tipoPlan,
             semana_1: data[index].semana_1,
@@ -3950,12 +3959,63 @@ function consultarPlanEquipo(idEquipo) {
             semana_49: data[index].semana_49,
             semana_50: data[index].semana_50,
             semana_51: data[index].semana_51,
-            semana_52: data[index].semana_52
+            semana_52: data[index].semana_52,
+            proceso_1: data[index].proceso_1,
+            proceso_2: data[index].proceso_2,
+            proceso_3: data[index].proceso_3,
+            proceso_4: data[index].proceso_4,
+            proceso_5: data[index].proceso_5,
+            proceso_6: data[index].proceso_6,
+            proceso_7: data[index].proceso_7,
+            proceso_8: data[index].proceso_8,
+            proceso_9: data[index].proceso_9,
+            proceso_10: data[index].proceso_10,
+            proceso_11: data[index].proceso_11,
+            proceso_12: data[index].proceso_12,
+            proceso_13: data[index].proceso_13,
+            proceso_14: data[index].proceso_14,
+            proceso_15: data[index].proceso_15,
+            proceso_16: data[index].proceso_16,
+            proceso_17: data[index].proceso_17,
+            proceso_18: data[index].proceso_18,
+            proceso_19: data[index].proceso_19,
+            proceso_20: data[index].proceso_20,
+            proceso_21: data[index].proceso_21,
+            proceso_22: data[index].proceso_22,
+            proceso_23: data[index].proceso_23,
+            proceso_24: data[index].proceso_24,
+            proceso_25: data[index].proceso_25,
+            proceso_26: data[index].proceso_26,
+            proceso_27: data[index].proceso_27,
+            proceso_28: data[index].proceso_28,
+            proceso_29: data[index].proceso_29,
+            proceso_30: data[index].proceso_30,
+            proceso_31: data[index].proceso_31,
+            proceso_32: data[index].proceso_32,
+            proceso_33: data[index].proceso_33,
+            proceso_34: data[index].proceso_34,
+            proceso_35: data[index].proceso_35,
+            proceso_36: data[index].proceso_36,
+            proceso_37: data[index].proceso_37,
+            proceso_38: data[index].proceso_38,
+            proceso_39: data[index].proceso_39,
+            proceso_40: data[index].proceso_40,
+            proceso_41: data[index].proceso_41,
+            proceso_42: data[index].proceso_42,
+            proceso_43: data[index].proceso_43,
+            proceso_44: data[index].proceso_44,
+            proceso_45: data[index].proceso_45,
+            proceso_46: data[index].proceso_46,
+            proceso_47: data[index].proceso_47,
+            proceso_48: data[index].proceso_48,
+            proceso_49: data[index].proceso_49,
+            proceso_50: data[index].proceso_50,
+            proceso_51: data[index].proceso_51,
+            proceso_52: data[index].proceso_52
           });
-
         }
       } else {
-        console.log('Error');
+        alertaImg('Sin Planes MP', '', 'info', 3000)
       }
 
     }
@@ -3963,8 +4023,9 @@ function consultarPlanEquipo(idEquipo) {
 }
 
 
-function programarMP(idPlaneacion, idEquipo, semanaX, accionMP) {
-  console.log(idPlaneacion, idEquipo, semanaX, accionMP);
+function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
+  console.log(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
+
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
   let numeroSemanas = 0;
@@ -3981,7 +4042,155 @@ function programarMP(idPlaneacion, idEquipo, semanaX, accionMP) {
       action: action,
       idUsuario: idUsuario,
       idDestino: idDestino,
-      idPlaneacion: idPlaneacion,
+      idSemana: idSemana,
+      idProceso: idProceso,
+      idEquipo: idEquipo,
+      semanaX: semanaX,
+      accionMP: accionMP,
+      idPlan: idPlan,
+      numeroSemanas: numeroSemanas
+    },
+    // dataType: "JSON",
+    success: function (data) {
+      console.log(data);
+      if (data == 1) {
+        alertaImg(`Programación Existente, Semana ${semanaX} `, '', 'error', 3000);
+      } else if (data == 2) {
+        alertaImg(`Programado en Semana ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 3) {
+        alertaImg(`Reprogramado Desde, Semana ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 4) {
+        alertaImg(`Personalizado Desde, Semana ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 5) {
+        alertaImg(`Eliminada, Semana ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 6) {
+        alertaImg(`Eliminada Desde, Semana ${semanaX}`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 7) {
+        alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 8) {
+        alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 9) {
+        alertaImg(`Semana ${semanaX}, Cancelada`, '', 'success', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 10) {
+        alertaImg(`Semana ${semanaX}, en Proceso Iniciado`, '', 'error', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 11) {
+        alertaImg(`Semana ${semanaX}, Sin Proceso Iniciado`, '', 'error', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else if (data == 12) {
+        alertaImg(`Semana ${semanaX}, Sin Proceso Iniciado`, '', 'error', 3500);
+        consultarPlanEquipo(idEquipo);
+        cerrarTooltip('tooltipMP');
+      } else {
+        alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+      }
+      // consultarPlanEquipo(idEquipo);
+    }
+  });
+}
+
+
+function consultarActividadesMP(idPlan) {
+
+  document.getElementById('tooltipActividadesMP').classList.remove('hidden');
+
+  window.addEventListener('click', function (e) {
+    if (document.getElementById(idPlan + 'Actividades').contains(e.target)) {
+      document.getElementById('tooltipActividadesMP').classList.remove('hidden');
+    } else {
+      document.getElementById('tooltipActividadesMP').classList.add('hidden');
+    }
+  });
+
+  // Propiedades para el tooltip
+  const button = document.getElementById(idPlan + 'Actividades');
+  const tooltip = document.getElementById('tooltipActividadesMP');
+  Popper.createPopper(button, tooltip, {
+    placement: 'top',
+  });
+
+
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  const action = "consultarActividadesMP";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idPlan: idPlan
+    },
+    dataType: "JSON",
+    success: function (data) {
+      // console.log(data);
+      document.getElementById("tooltipActividadesMP").innerHTML = data.actividades;
+    }
+  });
+}
+
+
+function consultarOpcionesEquipo() {
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  const action = "consultarOpcionesEquipo";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino
+    },
+    dataType: "JSON",
+    success: function (data) {
+      // console.log(data);
+      document.getElementById("seccionEquipo").innerHTML = data.secciones;
+      document.getElementById("subseccionEquipo").innerHTML = data.subsecciones;
+      document.getElementById("tipoEquipo").innerHTML = data.tipos;
+      document.getElementById("marcaEquipo").innerHTML = data.marcas;
+    }
+  });
+}
+
+
+// Proceso para Ver OT
+function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
+
+  let idUsuario = localStorage.getItem('usuario');
+  let idDestino = localStorage.getItem('idDestino');
+  let numeroSemanas = 0;
+
+
+  const action = "programarMP";
+  $.ajax({
+    type: "POST",
+    url: "php/plannerCrudPHP.php",
+    data: {
+      action: action,
+      idUsuario: idUsuario,
+      idDestino: idDestino,
+      idSemana: idSemana,
+      idProceso: idProceso,
       idEquipo: idEquipo,
       semanaX: semanaX,
       accionMP: accionMP,
@@ -3990,48 +4199,38 @@ function programarMP(idPlaneacion, idEquipo, semanaX, accionMP) {
     // dataType: "JSON",
     success: function (data) {
       console.log(data);
-      if (data == 1) {
-        alertaImg(`Programación Existente, SEMANA ${semanaX} `, '', 'error', 3000);
-      } else if (data == 2) {
-        alertaImg(`Programado en SEMANA ${semanaX}`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 3) {
-        alertaImg(`Reprogramado Desde, SEMANA ${semanaX}`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 4) {
-        alertaImg(`Personalizado Desde, SEMANA ${semanaX}`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 5) {
-        alertaImg(`Eliminada, SEMANA ${semanaX}`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 6) {
-        alertaImg(`Eliminada Desde, SEMANA ${semanaX}`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 7) {
-        alertaImg(`SEMANA ${semanaX}, Solucionada`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
-      } else if (data == 8) {
-        alertaImg(`SEMANA ${semanaX}, Cancelada`, '', 'success', 3500);
-        consultarPlanEquipo(idEquipo);
-        cerrarTooltip('tooltipMP');
+      if (data == 13) {
+        console.log(idSemana, idProceso, idEquipo, semanaX, idPlan);
+        localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
+        window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
       } else {
-        alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+        alertaImg(`Semana ${semanaX}, Sin Proceso`, '', 'error', 3000);
+
       }
     }
   });
+
+
+
 }
 
 
 
-
-
-
+function botonesMenuMP(x) {
+  console.log(x);
+  document.getElementById("VerOTMP").classList.add('hidden');
+  document.getElementById("generarOTMP").classList.add('hidden');
+  document.getElementById("solucionarOTMP").classList.add('hidden');
+  document.getElementById("cancelarOTMP").classList.add('hidden');
+  if (x == "PROCESO") {
+    document.getElementById("VerOTMP").classList.remove('hidden');
+    document.getElementById("solucionarOTMP").classList.remove('hidden');
+    document.getElementById("cancelarOTMP").classList.remove('hidden');
+  } else if (x == "0") {
+    document.getElementById("generarOTMP").classList.remove('hidden');
+  } else if (x == "SOLUCIONADO")
+    document.getElementById("VerOTMP").classList.remove('hidden');
+}
 
 
 /* FUNCIONES PARA CAMBIO DE DISEÑOS GENERICOS */

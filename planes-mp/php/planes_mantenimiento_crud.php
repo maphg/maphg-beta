@@ -308,20 +308,45 @@ if (isset($_POST['action'])) {
         $data = array();
         $idActividadMP = $_POST['idActividadMP'];
         $tipoActividad = $_POST['tipoActividad'];
-        $query = "SELECT id, id_plan, descripcion_actividad, tipo_actividad, promedio_ejecucion FROM $tipoActividad WHERE id = $idActividadMP AND status = 'ACTIVO'";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $value) {
-                $idActividad = $value['id'];
-                $idPlanMP = $value['id_plan'];
-                $actividad = $value['descripcion_actividad'];
-                $tipoActividad = $value['tipo_actividad'];
-                $promedio = $value['promedio_ejecucion'];
 
-                $data['idActividad'] = $idActividad;
-                $data['idPlanMP'] = $idPlanMP;
-                $data['actividad'] = $actividad;
-                $data['tipoActividad'] = $tipoActividad;
-                $data['promedio'] = $promedio;
+        if ($tipoActividad == "t_mp_planes_actividades_test") {
+
+            $query = "SELECT id, id_plan, descripcion_actividad, tipo_medicion, tipo_actividad, promedio_ejecucion FROM t_mp_planes_actividades_test WHERE id = $idActividadMP AND status = 'ACTIVO'";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $idActividad = $value['id'];
+                    $idPlanMP = $value['id_plan'];
+                    $actividad = $value['descripcion_actividad'];
+                    $tipoActividad = $value['tipo_actividad'];
+                    $promedio = $value['promedio_ejecucion'];
+                    $tipoMedicion = $value['tipo_medicion'];
+
+                    $data['idActividad'] = $idActividad;
+                    $data['idPlanMP'] = $idPlanMP;
+                    $data['actividad'] = $actividad;
+                    $data['tipoMedicion'] = $tipoMedicion;
+                    $data['tipoActividad'] = $tipoActividad;
+                    $data['promedio'] = $promedio;
+                }
+            }
+        } else {
+
+            $query = "SELECT id, id_plan, descripcion_actividad, tipo_actividad, promedio_ejecucion FROM $tipoActividad WHERE id = $idActividadMP AND status = 'ACTIVO'";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $idActividad = $value['id'];
+                    $idPlanMP = $value['id_plan'];
+                    $actividad = $value['descripcion_actividad'];
+                    $tipoActividad = $value['tipo_actividad'];
+                    $promedio = $value['promedio_ejecucion'];
+
+                    $data['idActividad'] = $idActividad;
+                    $data['idPlanMP'] = $idPlanMP;
+                    $data['actividad'] = $actividad;
+                    $data['tipoActividad'] = $tipoActividad;
+                    $data['promedio'] = $promedio;
+                    $data['tipoMedicion'] = "";
+                }
             }
         }
         echo json_encode($data);
@@ -335,6 +360,7 @@ if (isset($_POST['action'])) {
         $actividadPlan = $_POST['actividadPlan'];
         $tipoActividadPlan = $_POST['tipoActividadPlan'];
         $tiempoActividad = $_POST['tiempoActividad'];
+        $tipoMedicion = $_POST['tipoMedicion'];
 
         if ($tipoActividadPlan == "actividad") {
             $tabla = "t_mp_planes_actividades_preventivos";
@@ -350,8 +376,14 @@ if (isset($_POST['action'])) {
             if (mysqli_num_rows($result) > 0) {
                 $data['resultado'] = 2;
             } else {
-                $query = "INSERT INTO $tabla (id_plan, tipo_actividad, descripcion_actividad, creado_por, fecha_creado, promedio_ejecucion, status) 
-                VALUES($idPlanMP, '$tipoActividadPlan', '$actividadPlan', $idUsuario, '$fechaActual', $tiempoActividad, 'ACTIVO')";
+                if ($tabla == "t_mp_planes_actividades_test") {
+                    $query = "INSERT INTO t_mp_planes_actividades_test(id_plan, tipo_actividad, descripcion_actividad, tipo_medicion, creado_por, fecha_creado, promedio_ejecucion, status) 
+                    VALUES($idPlanMP, '$tipoActividadPlan', '$actividadPlan', '$tipoMedicion', $idUsuario, '$fechaActual', $tiempoActividad, 'ACTIVO')";
+                } else {
+                    $query = "INSERT INTO $tabla (id_plan, tipo_actividad, descripcion_actividad, creado_por, fecha_creado, promedio_ejecucion, status) 
+                    VALUES($idPlanMP, '$tipoActividadPlan', '$actividadPlan', $idUsuario, '$fechaActual', $tiempoActividad, 'ACTIVO')";
+                }
+
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $data['resultado'] = 1;
                 } else {
@@ -374,6 +406,7 @@ if (isset($_POST['action'])) {
         $tiempoActividad = $_POST['tiempoActividad'];
         $tipoActividadNuevoAux = $tipoActividadNuevo;
         $tipoActualizacion = $_POST['tipoActualizacion'];
+        $tipoMedicion = $_POST['tipoMedicion'];
 
         if ($tipoActividad == "actividad") {
             $tipoActividad = "t_mp_planes_actividades_preventivos";
@@ -392,16 +425,28 @@ if (isset($_POST['action'])) {
         }
 
         if ($tipoActividad == $tipoActividadNuevo) {
-            $query = "UPDATE $tipoActividad SET descripcion_actividad = '$actividadPlan', promedio_ejecucion = $tiempoActividad, status = '$tipoActualizacion' WHERE id = $idActividadPlanMP";
+
+            if ($tipoActividad == "t_mp_planes_actividades_test") {
+                $query = "UPDATE t_mp_planes_actividades_test SET descripcion_actividad = '$actividadPlan', promedio_ejecucion = $tiempoActividad, status = '$tipoActualizacion', tipo_medicion = '$tipoMedicion' WHERE id = $idActividadPlanMP";
+            } else {
+                $query = "UPDATE $tipoActividad SET descripcion_actividad = '$actividadPlan', promedio_ejecucion = $tiempoActividad, status = '$tipoActualizacion' WHERE id = $idActividadPlanMP";
+            }
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
             } else {
                 echo 0;
             }
         } elseif ($tipoActividad != $tipoActividadNuevo) {
+
             $query = "UPDATE $tipoActividad SET status='BAJA', activo = 0 WHERE id = $idActividadPlanMP";
+
             if ($result = mysqli_query($conn_2020, $query)) {
-                $query = "INSERT INTO $tipoActividadNuevo(id_plan, tipo_actividad, descripcion_actividad, promedio_ejecucion, creado_por, fecha_creado, status) VALUES($idPlanMP, '$tipoActividadNuevoAux', '$actividadPlan', $tiempoActividad, $idUsuario, '$fechaActual', 'ACTIVO')";
+                if ($tipoActividadNuevo == "t_mp_planes_actividades_test") {
+                    $query = "INSERT INTO t_mp_planes_actividades_test(id_plan, tipo_actividad, descripcion_actividad, tipo_medicion, promedio_ejecucion, creado_por, fecha_creado, status) 
+                    VALUES($idPlanMP, '$tipoActividadNuevoAux', '$actividadPlan', '$tipoMedicion', $idUsuario, '$fechaActual', $tiempoActividad, 'ACTIVO')";
+                } else {
+                    $query = "INSERT INTO $tipoActividadNuevo(id_plan, tipo_actividad, descripcion_actividad, promedio_ejecucion, creado_por, fecha_creado, status) VALUES($idPlanMP, '$tipoActividadNuevoAux', '$actividadPlan', $idUsuario, '$fechaActual', $tiempoActividad, 'ACTIVO')";
+                }
                 if ($result = mysqli_query($conn_2020, $query)) {
                     echo 2;
                 } else {

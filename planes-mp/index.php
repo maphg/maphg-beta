@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/modales.css">
     <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
     <link rel="alternate" href="../css/animate.css" type="application/rss+xml" title="RSS">
+    <link rel="stylesheet" href="../css/alertify.min.css">
 </head>
 
 <body class="bg-fondos-7 text-bluegray-800">
@@ -278,7 +279,7 @@
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-start flex-row w-full flex-wrap">
 
-                <div class="w-1/4 px-3 mb-6">
+                <div class="w-1/5 px-3 mb-6">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                         Actividad
                     </label>
@@ -286,7 +287,7 @@
 
                 </div>
 
-                <div class="w-1/4 px-3 mb-4">
+                <div class="w-1/5 px-3 mb-4">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
                         ¿Qué tipo de actividad será?
                     </label>
@@ -304,7 +305,7 @@
                     </div>
                 </div>
 
-                <div class="w-1/4 px-3 mb-4">
+                <div class="w-1/5 px-3 mb-4">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
                         Tiempo estimado de ejecucion
                     </label>
@@ -316,7 +317,24 @@
                     </div>
                 </div>
 
-                <div class="w-1/4 mt-5 px-3 mb-6 flex items-center justify-center">
+                <div id="medicionTest" class="w-1/5 px-3 mb-4 hidden">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+                        Tipo Medición Test
+                    </label>
+                    <div class="relative">
+                        <div class="relative">
+                            <select id="dataMedicionActividadPlanMP" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                <option value="">Seleccione...</option>
+                                <option value="VOLTAJE">Voltaje</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="w-1/5 mt-5 px-3 mb-6 flex items-center justify-center">
                     <button id="actualizarActividadPlanMP" class="btn btn-indigo mr-10" onclick="agregarActividadPlanMP();">
                         GUARDAR CAMBIOS
                     </button>
@@ -452,6 +470,7 @@
 
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/sweetalert2@9.js"></script>
+    <script src="../js/alertify.min.js"></script>
     <script src="../js/alertasSweet.js"></script>
     <script src="js/planesDeMantenimiento.js"></script>
 </body>
