@@ -4429,6 +4429,7 @@ if (isset($_POST['action'])) {
             $data['dataTareas'] = $dataTareas;
             $data['contadorTareas'] = $contadorTareas;
         }
+        $data['query'] = $query;
         echo json_encode($data);
     }
 

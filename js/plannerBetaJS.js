@@ -8,12 +8,12 @@ let idDestino = localStorage.getItem("idDestino");
 function comprobarSession() {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
-
-  // Comprueba que exista la session.
-  if (idUsuario != "" && idDestino != "") {
+  // Comprueba que exista la sessión
+  if (idUsuario > 0 || idDestino > 0) {
     llamarFuncionX("consultaSubsecciones");
     hora();
   } else {
+    alertaImg('Sesseion Eliminada', '', 'info', 3000);
     location.replace("login.php");
   }
 }
@@ -591,115 +591,58 @@ function pendientesSubsecciones(
 
       // Función para darle diseño del Logo según la Sección.
       estiloSeccion("estiloSeccion", data.estiloSeccion);
-      document.getElementById("dataSubseccionesPendientes").innerHTML =
-        data.resultData;
-
-      document.getElementById("dataExportarSubseccionesEXCEL").innerHTML =
-        data.exportarSubseccion;
-      document.getElementById("dataExportarSubseccionesPDF").innerHTML =
-        data.exportarSubseccionPDF;
+      document.getElementById("dataSubseccionesPendientes").innerHTML = data.resultData;
+      document.getElementById("dataExportarSubseccionesEXCEL").innerHTML = data.exportarSubseccion;
+      document.getElementById("dataExportarSubseccionesPDF").innerHTML = data.exportarSubseccionPDF;
 
       // Pestañas para Mostrar Pendientes.
-      document
-        .getElementById("misPendientesUsuario")
-        .setAttribute(
-          "onclick",
-          "pendientesSubsecciones(" + data.misPendientesUsuario + ")"
-        );
+      document.getElementById("misPendientesUsuario")
+        .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesUsuario + ")");
 
-      document
-        .getElementById("misPendientesCreados")
-        .setAttribute(
-          "onclick",
-          "pendientesSubsecciones(" + data.misPendientesCreados + ")"
-        );
+      document.getElementById("misPendientesCreados")
+        .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesCreados + ")");
 
-      document
-        .getElementById("misPendientesSinUsuario")
-        .setAttribute(
-          "onclick",
-          "pendientesSubsecciones(" + data.misPendientesSinUsuario + ")"
-        );
+      document.getElementById("misPendientesSinUsuario")
+        .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesSinUsuario + ")");
 
-      document
-        .getElementById("misPendientesSeccion")
-        .setAttribute(
-          "onclick",
-          "pendientesSubsecciones(" + data.misPendientesSeccion + ")"
-        );
+      document.getElementById("misPendientesSeccion")
+        .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesSeccion + ")");
 
       // Pestaña Exportar
-      document
-        .getElementById("exportarMisPendientes")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarMisPendientes + ")"
-        );
+      document.getElementById("exportarMisPendientes")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarMisPendientes + ")");
 
-      document
-        .getElementById("exportarSeccion")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarSeccion + ")"
-        );
+      document.getElementById("exportarSeccion")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarSeccion + ")");
 
       // Subseccion EXCEL
-      document
-        .getElementById("exportarSeccion")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarSeccion + ")"
-        );
+      document.getElementById("exportarSeccion")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarSeccion + ")");
 
       // Responsable EXCEL
-      document
-        .getElementById("responsableUsuario")
-        .setAttribute(
-          "onclick",
-          "exportarPorUsuario(" + data.exportarPorResponsable + ")"
-        );
+      document.getElementById("responsableUsuario")
+        .setAttribute("onclick", "exportarPorUsuario(" + data.exportarPorResponsable + ")");
 
-      document
-        .getElementById("exportarMisCreados")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarMisCreados + ")"
-        );
+      document.getElementById("exportarMisCreados")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarMisCreados + ")");
 
       // Creados Por
-      document
-        .getElementById("exportarCreadosPorEXCEL")
-        .setAttribute(
-          "onclick",
-          "exportarPorUsuario(" + data.exportarMisCreados + ")"
-        );
+      document.getElementById("exportarCreadosPorEXCEL")
+        .setAttribute("onclick", "exportarPorUsuario(" + data.exportarMisCreados + ")");
 
-      document
-        .getElementById("exportarMisPendientesPDF")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarMisPendientesPDF + ")"
-        );
+      document.getElementById("exportarMisPendientesPDF")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarMisPendientesPDF + ")");
 
-      document
-        .getElementById("exportarMisCreadosPDF")
-        .setAttribute(
-          "onclick",
-          "exportarPendientes(" + data.exportarMisCreadosPDF + ")"
-        );
+      document.getElementById("exportarMisCreadosPDF")
+        .setAttribute("onclick", "exportarPendientes(" + data.exportarMisCreadosPDF + ")");
 
       // Subsección PDF
-      document
-        .getElementById("exportarMisCreadosPDF")
+      document.getElementById("exportarMisCreadosPDF")
         .setAttribute("onclick", "exportarPendientes(" + data + ")");
 
       // Colaborador PDF
-      document
-        .getElementById("exportarCreadosPorPDF")
-        .setAttribute(
-          "onclick",
-          "exportarPorUsuario(" + data.exportarMisCreadosPDF + ")"
-        );
+      document.getElementById("exportarCreadosPorPDF")
+        .setAttribute("onclick", "exportarPorUsuario(" + data.exportarMisCreadosPDF + ")");
 
       // Resultado Contador
       document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[3].innerHTML = 'Pendientes ' + '(' + data.contadorTyF + ')';
@@ -1639,6 +1582,7 @@ function obtenerTareasP(idEquipo) {
   localStorage.setItem("idEquipo", idEquipo);
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
+  let idSeccion = localStorage.getItem('idSeccion');
   let idSubseccion = localStorage.getItem("idSubseccion");
 
   document.getElementById("modalPendientesX").classList.add("open");
@@ -1657,18 +1601,19 @@ function obtenerTareasP(idEquipo) {
     data: {
       action: action,
       idUsuario: idUsuario,
+      idSeccion: idSeccion,
       idSubseccion: idSubseccion,
       idDestino: idDestino,
       idEquipo: idEquipo,
     },
     dataType: "JSON",
     success: function (data) {
-      // console.log(data);
-      estiloSeccionModal("estiloSeccionMCN", data.seccion);
+      console.log(data);
       document.getElementById("seccionMCN").innerHTML = data.seccion;
       document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
       document.getElementById("dataPendientes").innerHTML = data.dataTareas;
       alertaImg("Tareas Pendientes: " + data.contadorTareas, "", "info", 3000);
+      estiloSeccionModal("estiloSeccionMCN", data.seccion);
     },
   });
 }
@@ -3896,7 +3841,6 @@ function consultarPlanEquipo(idEquipo) {
     success: function (data) {
       if (data.length > 0) {
         for (let index = 0; index < data.length; index++) {
-          console.log('Array: ' + data[index].idPlan);
 
           $ContenedorPlanesEquipos.innerHTML += datosPlanEquipo({
             solucionado: data[index].solucionado,
@@ -4015,7 +3959,7 @@ function consultarPlanEquipo(idEquipo) {
           });
         }
       } else {
-        alertaImg('Sin Planes MP', '', 'info', 3000)
+        alertaImg('Sin Planes MP', '', 'info', 3000);
       }
 
     }
@@ -4024,7 +3968,7 @@ function consultarPlanEquipo(idEquipo) {
 
 
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-  console.log(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
+  // console.log(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
 
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
@@ -4346,15 +4290,7 @@ function llamarFuncionX(nombreFuncion) {
       break;
 
     case (nombreFuncion = "obtenerEquipos"):
-      obtenerEquipos(
-        idUsuario,
-        idDestino,
-        idSeccion,
-        idSubseccion,
-        0,
-        49,
-        "MCN"
-      );
+      obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, "MCN");
       break;
   }
 }

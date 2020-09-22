@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" href="css/alertify.min.css">
 
-
-
     <style>
         .w-22rem {
             width: 265px;
