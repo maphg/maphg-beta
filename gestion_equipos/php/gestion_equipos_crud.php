@@ -91,7 +91,7 @@ if (isset($_GET['action'])) {
                     }
                 }
  
-                $fase = "n ";
+                $fase = "";
                 $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
                 if ($result = mysqli_query($conn_2020, $fases)) {
                     foreach ($result as $i) {
