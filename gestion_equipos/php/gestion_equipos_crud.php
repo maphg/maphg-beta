@@ -55,28 +55,65 @@ if (isset($_GET['action'])) {
             $filtroPalabra = "and (t_equipos_america.equipo LIKE '%$filtroPalabra%')";
         }
 
-        $query = "SELECT* FROM t_equipos_america WHERE t_equipos_america.activo = 1 
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
+        c_secciones.seccion, c_subsecciones.grupo, c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
+        c_destinos.destino
+        FROM t_equipos_america
+        LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        LEFT JOIN c_tipos ON t_equipos_america.id_tipo = c_tipos.id
+        LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
+        LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
+        LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        WHERE t_equipos_america.activo = 1 
         $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
+
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $id = $i['id'];
                 $equipo = $i['equipo'];
                 $local_equipo = $i['local_equipo'];
+                $status = $i['status'];
+                $seccion = $i['seccion'];
+                $subseccion = $i['grupo'];
+                $tipo = $i['tipo'];
+                $marca = $i['marca'];
+                $ubicacion = $i['ubicacion'];
+                $modelo = $i['modelo'];
+                $idFases = $i['id_fases'];
+                $destino = $i['destino'];
+
+                $semana = "";
+                $mp = "SELECT semana FROM t_mp_planificacion_iniciada WHERE id_equipo = $id ORDER BY id ASC LIMIT 1";
+                if ($result = mysqli_query($conn_2020, $mp)) {
+                    foreach ($result as $i) {
+                        $semana = $i['semana'];
+                    }
+                }
+ 
+                $fase = "n ";
+                $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
+                if ($result = mysqli_query($conn_2020, $fases)) {
+                    foreach ($result as $i) {
+                        $fase .= $i['fase'] . " ";
+                    }
+                }
+
 
                 $arrayTemp = array(
                     "id" => "$id",
-                    "destino" => "rm",
+                    "destino" => "$destino",
                     "equipo" => "$equipo",
-                    "seccion" => "ZIC",
-                    "subseccion" => "FAN&COILS",
-                    "marca" => "TRS",
-                    "tipoEquipo" => "Junnior Suite",
-                    "status" => "OPERATIVO",
-                    "marcaEquipo" => "MARCA",
-                    "modelo" => "MODELO",
+                    "seccion" => "$seccion",
+                    "subseccion" => "$subseccion",
+                    "marca" => "$fase",
+                    "tipoEquipo" => "$tipo",
+                    "status" => "$status",
+                    "marcaEquipo" => "$marca",
+                    "modelo" => "$modelo",
                     "equipoLocal" => "$local_equipo",
-                    "ubicacion" => "Habitacion 1104",
-                    "ultimoMP" => "2(X)"
+                    "ubicacion" => "$ubicacion",
+                    "ultimoMP" => "$semana"
                 );
 
                 $array[] = $arrayTemp;

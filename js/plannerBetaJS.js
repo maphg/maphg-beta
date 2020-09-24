@@ -3708,6 +3708,7 @@ function informacionEquipo(idEquipo) {
 }
 
 
+// Obtiene Images de los Equipos
 function obtenerImagenesEquipo(idEquipo) {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
@@ -3747,6 +3748,7 @@ function obtenerImagenesEquipo(idEquipo) {
 }
 
 
+// Actualiza la información de los Equipos
 function actualizarEquipo(idEquipo) {
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
@@ -3967,6 +3969,7 @@ function consultarPlanEquipo(idEquipo) {
 }
 
 
+// Genera la Programación de los MP
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
   // console.log(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
 
@@ -4093,6 +4096,7 @@ function consultarActividadesMP(idPlan) {
 }
 
 
+// Obtiene las posibles opciones del Equipo para Actualizarlo
 function consultarOpcionesEquipo() {
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
@@ -4160,6 +4164,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 
 
 
+// Habilita los Botones del Menu
 function botonesMenuMP(x) {
   console.log(x);
   document.getElementById("VerOTMP").classList.add('hidden');
