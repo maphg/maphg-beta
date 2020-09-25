@@ -1021,6 +1021,13 @@ function expandir(id) {
     var toggle = document.getElementById(idtoggle);
     toggle.classList.toggle("hidden");
 }
+
+
+// toggleClass Modal TailWind con la clase OPEN.
+function toggleModalTailwind(idModal) {
+    $("#" + idModal).toggleClass("open");
+}
+
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
 
 
