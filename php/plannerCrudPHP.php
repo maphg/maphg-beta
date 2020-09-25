@@ -8423,7 +8423,7 @@ if (isset($_POST['action'])) {
 
                         if (mysqli_num_rows($result) > 0) {
                             $query = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = '0' WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and semana_$semanaX ='PROCESO')";
-                            if ($resultProgramacion = mysqli_query($conn_2020, $query)) {
+                            if ($result = mysqli_query($conn_2020, $query)) {
                                 $query = "UPDATE t_mp_planificacion_iniciada SET status ='SOLUCIONADO' 
                                 WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and status ='PROCESO')";
                                 if ($result = mysqli_query($conn_2020, $query)) {
