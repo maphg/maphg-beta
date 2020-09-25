@@ -6301,8 +6301,12 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "rango_fecha" and $valor != "") {
-            $query = "UPDATE t_proyectos SET rango_fecha = '$valor' WHERE id = $idProyecto";
+            // Obtiene el año apartir del rengo de fecha
+            $año = $valor[6].$valor[7].$valor[8].$valor[9];
+
+            $query = "UPDATE t_proyectos SET rango_fecha = '$valor', año = '$año' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
+                
                 echo 5;
             } else {
                 echo 0;
@@ -7725,7 +7729,7 @@ if (isset($_POST['action'])) {
         // Valores por DEFAULT
         $data['equipo'] = "- -";
 
-        $query = "SELECT t_equipos_america.id, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        $query = "SELECT t_equipos_america.id, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
         t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.status
         FROM t_equipos_america 
@@ -7761,6 +7765,7 @@ if (isset($_POST['action'])) {
                 $coste = $i['coste'];
                 $caudal_aire_cfm = $i['caudal_aire_cfm'];
                 $status = $i['status'];
+                $tipo = $i['id_tipo'];
 
                 $data['idEquipo'] = $id;
                 $data['equipo'] = $equipo;
@@ -7788,6 +7793,7 @@ if (isset($_POST['action'])) {
                 $data['coste'] = $coste;
                 $data['caudal_aire_cfm'] = $caudal_aire_cfm;
                 $data['status'] = $status;
+                $data['tipo'] = $tipo;
             }
         }
         echo json_encode($data);

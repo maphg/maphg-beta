@@ -492,6 +492,7 @@ function informacionEquipo(idEquipo) {
             document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
             document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
             document.getElementById("estadoEquipo").innerHTML = data.status;
+            document.getElementById("tipoEquipo").value = data.tipo;
         }
     });
 }
@@ -503,6 +504,11 @@ function obtenerImagenesEquipo(idEquipo) {
     let idDestino = localStorage.getItem("idDestino");
     let tabla = "t_equipos_adjuntos_america";
     let idTabla = idEquipo;
+
+    // Limpia contendor de Adjuntos
+    document.getElementById("dataImagenes").innerHTML = '';
+    document.getElementById("dataImagenesEquipo").innerHTML = '';
+    document.getElementById("dataAdjuntos").innerHTML = '';
 
     document.getElementById("inputAdjuntos").
         setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
@@ -525,11 +531,16 @@ function obtenerImagenesEquipo(idEquipo) {
                 document.getElementById("dataImagenesEquipo").innerHTML = data.imagenAux;
                 document.getElementById("contenedorImagenes").classList.remove('hidden');
                 document.getElementById("dataImagenes").classList.remove("justify-center");
+            } else {
+                document.getElementById("contenedorImagenes").classList.add('hidden');
             }
 
             if (data.documento != "") {
                 document.getElementById("dataAdjuntos").innerHTML = data.documento;
                 document.getElementById("contenedorDocumentos").classList.remove('hidden');
+                document.getElementById("dataAdjuntos").classList.remove("justify-center");
+            } else {
+                document.getElementById("contenedorDocumentos").classList.add('hidden');
                 document.getElementById("dataAdjuntos").classList.remove("justify-center");
             }
         },

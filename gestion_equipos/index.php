@@ -187,25 +187,25 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
-                            <select id="seccionEquipo" class="bg-fondos-4 font-semibold truncate">
+                            <select id="seccionEquipo" class="bg-fondos-4 font-semibold truncate w-24">
                             </select>
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
-                            <select id="subseccionEquipo" class="bg-fondos-4 font-semibold truncate" disabled>
+                            <select id="subseccionEquipo" class="bg-fondos-4 font-semibold truncate w-24">
                             </select>
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
-                            <select id="tipoEquipo" class="bg-fondos-4 font-semibold truncate" disabled>
+                            <select id="tipoEquipo" class="bg-fondos-4 font-semibold truncate w-24">
                             </select>
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
-                            <select id="jerarquiaEquipo" class="bg-fondos-4 font-semibold truncate" disabled>
+                            <select id="jerarquiaEquipo" class="bg-fondos-4 font-semibold truncate w-24">
                                 <option value="PRINCIPAL">PRINCIPAL</option>
                                 <option value="SECUNDARIO">SECUNDARIO</option>
                             </select>
@@ -216,7 +216,7 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
-                            <select id="marcaEquipo" class="bg-fondos-4 font-semibold truncate" disabled>
+                            <select id="marcaEquipo" class="bg-fondos-4 font-semibold truncate w-24">
                             </select>
 
                         </div>

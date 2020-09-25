@@ -324,7 +324,7 @@ try {
                     }
 
 
-                    $query = "SELECT t_proyectos.status, t_proyectos.tipo, t_proyectos.año, t_proyectos.titulo, t_proyectos.coste, t_proyectos.justificacion, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo
+                    $query = "SELECT t_proyectos.status, t_proyectos.tipo, t_proyectos.año, t_proyectos.titulo, t_proyectos.coste, t_proyectos.justificacion, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_proyectos.rango_fecha
                     FROM t_proyectos
                     INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
                     INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id 
@@ -337,10 +337,16 @@ try {
                             $seccion = $row['seccion'];
                             $subseccion = $row['grupo'];
                             $año = $row['año'];
+                            $rango_fecha = $row['rango_fecha'];
                             $titulo = $row['titulo'];
                             $status = $row['status'];
                             $coste = $row['coste'];
                             $justificacion = $row['justificacion'];
+
+                            if($rango_fecha != ""){
+                                $año = $rango_fecha[6].$rango_fecha[7].$rango_fecha[8].$rango_fecha[9];
+                            }
+
                             if ($status == 'N' or $status == '') {
                                 $status = "EN PROCESO";
                             } else {

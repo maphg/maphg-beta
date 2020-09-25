@@ -2468,7 +2468,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
     },
     // dataType: "JSON",
     success: function (data) {
-      // console.log(data);
+      console.log(data);
       if (data == 1) {
         obtenerProyectosP("PROYECTO");
         alertaImg("Responsable Actualizado", "", "success", 2000);
