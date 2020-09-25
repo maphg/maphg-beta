@@ -1015,6 +1015,72 @@ function consultarActividadesMP(idPlan) {
 }
 
 
+// Sube imagenes con dos parametros, con el formulario #inputAdjuntos
+function subirImagenGeneral(idTabla, tabla) {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let img = document.getElementById("inputAdjuntos").files;
+
+    for (let index = 0; index < img.length; index++) {
+        let imgData = new FormData();
+        const action = "subirImagenGeneral";
+        document.getElementById("cargandoAdjunto").innerHTML =
+            '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+        imgData.append("adjuntoUrl", img[index]);
+        imgData.append("action", action);
+        imgData.append("idUsuario", idUsuario);
+        imgData.append("idDestino", idDestino);
+        imgData.append("tabla", tabla);
+        imgData.append("idTabla", idTabla);
+
+        $.ajax({
+            data: imgData,
+            type: "POST",
+            url: "../php/plannerCrudPHP.php",
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                document.getElementById("cargandoAdjunto").innerHTML = "";
+                document.getElementById("inputAdjuntos").value = "";
+                if (data == -1) {
+                    alertaImg("Archivo NO Permitido", "", "warning", 2500);
+                } else if (data == 1) {
+                    alertaImg("Proceso Cancelado", "", "info", 3000);
+                } else if (data == 2) {
+                    alertaImg("Archivo Pesado (MAX:99MB)", "", "info", 3000);
+                    // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
+                } else if (data == 3) {
+                    alertaImg("Cotización Agregada", "", "success", 2500);
+                    obtenerProyectosP("PROYECTO");
+                    cotizacionesProyectos(idTabla);
+
+                    // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
+                } else if (data == 4) {
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                    obtenerProyectosP("PROYECTO");
+                    adjuntosPlanaccion(idTabla);
+                } else if (data == 5) {
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                    obtenerMediaEquipo(idTabla);
+                } else if (data == 7) {
+                    obtenerAdjuntosTareas(idTabla);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 8) {
+                    obtenerAdjuntosMC(idTabla);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 9) {
+                    obtenerImagenesEquipo(idTabla);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else {
+                    alertaImg("Intente de Nuevo", "", "info", 3000);
+                }
+                // console.log(data);
+            },
+        });
+    }
+}
+
 function expandir(id) {
     let idtoggle = id + "toggle";
     let idtitulo = id + "titulo";
