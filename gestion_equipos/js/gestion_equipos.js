@@ -973,6 +973,48 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 }
 
 
+
+function consultarActividadesMP(idPlan) {
+
+    document.getElementById('tooltipActividadesMP').classList.remove('hidden');
+
+    window.addEventListener('click', function (e) {
+        if (document.getElementById(idPlan + 'Actividades').contains(e.target)) {
+            document.getElementById('tooltipActividadesMP').classList.remove('hidden');
+        } else {
+            document.getElementById('tooltipActividadesMP').classList.add('hidden');
+        }
+    });
+
+    // Propiedades para el tooltip
+    const button = document.getElementById(idPlan + 'Actividades');
+    const tooltip = document.getElementById('tooltipActividadesMP');
+    Popper.createPopper(button, tooltip, {
+        placement: 'top',
+    });
+
+
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "consultarActividadesMP";
+    $.ajax({
+        type: "POST",
+        url: "../php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlan: idPlan
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            document.getElementById("tooltipActividadesMP").innerHTML = data.actividades;
+        }
+    });
+}
+
+
 function expandir(id) {
     let idtoggle = id + "toggle";
     let idtitulo = id + "titulo";
