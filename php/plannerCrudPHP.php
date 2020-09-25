@@ -7013,6 +7013,19 @@ if (isset($_POST['action'])) {
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_equipos_america_adjuntos.id_equipo = $idTabla AND t_equipos_america_adjuntos.activo = 1
             ORDER BY t_equipos_america_adjuntos.id DESC";
+            
+            $imagen .= "
+                <a href=\"$adjuntoURL\" target=\"_blank\">
+                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                        <img src=\"https://http2.mlstatic.com/D_NQ_NP_915628-MLM31944750963_082019-O.webp\" class=\"w-full\" alt=\"\">
+                    </div>
+                </a>";
+            $imagen .= "
+                <a href=\"$adjuntoURL\" target=\"_blank\">
+                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                        <img src=\"https://http2.mlstatic.com/D_NQ_NP_622994-MLM31214936228_062019-O.webp\" class=\"w-full\" alt=\"\">
+                    </div>
+                </a>";
 
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
