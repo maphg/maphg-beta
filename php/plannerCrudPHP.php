@@ -2858,34 +2858,43 @@ if (isset($_POST['action'])) {
                             }
                         }
 
-                        //PLANES 
-                        $queryMPN = "SELECT COUNT(id) FROM t_mp_planeacion 
-                            WHERE id_equipo = $idEquipo AND (status ='N' OR status = 'P') AND tipoplan = 'MP' AND activo = 1";
+                         //MP PLANIFICADOS PROCESO. 
+                        $queryMPN = "SELECT COUNT(id) FROM t_mp_planificacion_iniciada 
+                        WHERE id_equipo = $idEquipo AND status = 'PROCESO' AND activo = 1";
                         if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
                             if ($rowMPN = mysqli_fetch_array($resultMPN)) {
                                 $totalMPN = $rowMPN['COUNT(id)'];
                             } else {
                                 $totalMPN = "0";
                             }
-                        } else {
-                            $totalMPN = "0";
                         }
 
-                        //MP PLANIFICADOS Finalizados F. 
-                        $queryMPF = "SELECT fecha_registro, COUNT(id) FROM t_mp_planeacion 
-                            WHERE id_equipo = $idEquipo AND status ='F' AND tipoplan = 'MP' AND activo = 1 ORDER BY fecha_registro DESC";
-                        if ($resultMPF = mysqli_query($conn_2020, $queryMPF)) {
-                            if ($rowMPF = mysqli_fetch_array($resultMPF)) {
+                         //MP PLANIFICADOS SOLUCIONADO. 
+                        $queryMPN = "SELECT COUNT(id) FROM t_mp_planificacion_iniciada 
+                        WHERE id_equipo = $idEquipo AND status = 'SOLUCIONADO' AND activo = 1";
+                        if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
+                            if ($rowMPF = mysqli_fetch_array($resultMPN)) {
                                 $totalMPF = $rowMPF['COUNT(id)'];
-                                $fechaMPF = $rowMPF['fecha_registro'];
-                                $fechaMPF = (new DateTime($fechaMPF))->format('d-m-Y');
                             } else {
                                 $totalMPF = "0";
-                                $fechaMPF = "NA";
                             }
-                        } else {
-                            $totalMPF = "0";
-                            $fechaMPF = "NA";
+                        }
+
+                        //MP PLANIFICADOS FECHA ULTIMO. 
+                        $queryMPFecha = "SELECT fecha_creacion FROM t_mp_planificacion_iniciada 
+                        WHERE id_equipo = $idEquipo AND status ='SOLUCIONADO' AND activo = 1 ORDER BY id ASC LIMIT 1";
+                        if ($resultMPFecha = mysqli_query($conn_2020, $queryMPFecha)) {
+                            if ($rowMPFecha = mysqli_fetch_array($resultMPFecha)) {
+                                $fechaMPFecha = $rowMPFecha['fecha_creacion'];
+
+                                if($fechaMPFecha ==""){
+                                    $fechaMPFecha = "NA";
+                                }else{
+                                    $fechaMPFecha = (new DateTime($fechaMPFecha))->format('d-m-Y');
+                                }
+                            } else {
+                                $fechaMPFecha = "NA";
+                            }
                         }
 
                         // Nombre de Equipo.
@@ -2947,14 +2956,14 @@ if (isset($_POST['action'])) {
                         // MP Ultimo.
                         $dataEquipos .= "
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
-                                    <h1 class=\"font-xs\">$fechaMPF</h1>
+                                    <h1 class=\"font-xs\">$fechaMPFecha</h1>
                                 </div>
                             ";
 
                         // Test Equipo.
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md\">
-                                    <h1>22</h1>
+                                    <h1>0</h1>
                                 </div>
                             ";
 
@@ -2968,7 +2977,7 @@ if (isset($_POST['action'])) {
                         // Cotizaciones Equipos.
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
-                                    <h1>22</h1>
+                                    <h1>0</h1>
                                 </div>
                             ";
 

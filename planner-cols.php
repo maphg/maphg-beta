@@ -263,7 +263,7 @@
 
             <!-- FOTOS -->
             <div class="w-full h-32 mt-2 px-4 overflow-x-auto scrollbar flex items-center">
-                <div id="btnAdjuntosEquipo" class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
+                <div id="btnAdjuntosEquipo" class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated" data-anijs="if: mouseover, do: tada animated">
                     <i class="fas fa-plus ga-lg"></i>
                 </div>
                 <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">

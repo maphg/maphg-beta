@@ -3674,8 +3674,12 @@ function informacionEquipo(idEquipo) {
       document.getElementById("inputAdjuntos").
         setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
+      let URLQR = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo;
+      console.log(URLQR);
       document.getElementById("QREquipo").
-        setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/equipos?id=" + idEquipo);
+        setAttribute("src", URLQR);
+      // document.getElementById("QREquipo").
+        // setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/planner-cols.php?id=" + idEquipo);
 
       document.getElementById("nombreEquipo").value = data.equipo;
       document.getElementById("seccionEquipo").value = data.idSeccion;

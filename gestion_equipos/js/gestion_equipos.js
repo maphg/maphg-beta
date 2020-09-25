@@ -1235,3 +1235,11 @@ document.getElementById("filtroTipo").addEventListener("change", consultaEquipos
 document.getElementById("filtroStatus").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroPalabra").addEventListener("keydown", consultaEquiposLocales);
 
+
+(function () {
+    let URLactual = window.location.search;
+    let arr = URLactual.split("?");
+    if (arr[1] > 0) {
+        informacionEquipo(arr[1]);
+    }
+}());
