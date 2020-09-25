@@ -3135,7 +3135,6 @@ function adjuntosPlanaccion(idPlanaccion) {
     },
     dataType: "JSON",
     success: function (data) {
-
       if (data.imagen != "") {
         document.getElementById("dataImagenes").innerHTML = data.imagen;
         document.getElementById("contenedorImagenes").classList.remove('hidden');
@@ -3731,6 +3730,8 @@ function obtenerImagenesEquipo(idEquipo) {
     },
     dataType: "JSON",
     success: function (data) {
+      console.log(data);
+
       if (data.imagen != "") {
         document.getElementById("dataImagenes").innerHTML = data.imagen;
         document.getElementById("dataImagenesEquipo").innerHTML = data.imagen;

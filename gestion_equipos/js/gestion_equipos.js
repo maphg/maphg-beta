@@ -521,8 +521,8 @@ function obtenerImagenesEquipo(idEquipo) {
         dataType: "JSON",
         success: function (data) {
             if (data.imagen != "") {
-                document.getElementById("dataImagenes").innerHTML = data.imagen;
-                document.getElementById("dataImagenesEquipo").innerHTML = data.imagen;
+                document.getElementById("dataImagenes").innerHTML = data.imagenAux;
+                document.getElementById("dataImagenesEquipo").innerHTML = data.imagenAux;
                 document.getElementById("contenedorImagenes").classList.remove('hidden');
                 document.getElementById("dataImagenes").classList.remove("justify-center");
             }

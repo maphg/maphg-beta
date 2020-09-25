@@ -6784,9 +6784,13 @@ if (isset($_POST['action'])) {
         $idTabla = $_POST['idTabla'];
         $data = array();
         $imagen = "";
+        $imagenAux = "";
         $documento = "";
+        
+        $data['imagenAux'] = $imagenAux;
         $data['imagen'] = $imagen;
         $data['documento'] = $documento;
+
         if ($tabla == "t_proyectos_adjuntos") {
             $query = "SELECT t_proyectos_adjuntos.id, t_proyectos_adjuntos.url_adjunto, 
             t_colaboradores.nombre, t_colaboradores.apellido
@@ -7013,19 +7017,6 @@ if (isset($_POST['action'])) {
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_equipos_america_adjuntos.id_equipo = $idTabla AND t_equipos_america_adjuntos.activo = 1
             ORDER BY t_equipos_america_adjuntos.id DESC";
-            
-            $imagen .= "
-                <a href=\"$adjuntoURL\" target=\"_blank\">
-                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
-                        <img src=\"https://http2.mlstatic.com/D_NQ_NP_915628-MLM31944750963_082019-O.webp\" class=\"w-full\" alt=\"\">
-                    </div>
-                </a>";
-            $imagen .= "
-                <a href=\"$adjuntoURL\" target=\"_blank\">
-                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
-                        <img src=\"https://http2.mlstatic.com/D_NQ_NP_622994-MLM31214936228_062019-O.webp\" class=\"w-full\" alt=\"\">
-                    </div>
-                </a>";
 
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
@@ -7033,24 +7024,43 @@ if (isset($_POST['action'])) {
 
                     if (file_exists("../planner/equipos/$url")) {
                         $adjuntoURL = "planner/equipos/$url";
+                        $adjuntoURL_beta = "../planner/equipos/$url";
                     } else {
                         $adjuntoURL = "../planner/equipos/$url";
+                        $adjuntoURL_beta = "../../planner/equipos/$url";
                     }
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "gif") || strpos($url, "PNG")) {
                         if (strpbrk($adjuntoURL, ' ')) {
                             $imagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                                <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg overflow-hidden\">
-                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
-                                </div>
-                            </a>
-                        ";
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg overflow-hidden\">
+                                        <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+                            ";
+
+                            $imagenAux .= "
+                                <a href=\"$adjuntoURL_beta\" target=\"_blank\">
+                                    <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg overflow-hidden\">
+                                        <img src=\"$adjuntoURL_beta\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+                            ";
+
                         } else {
+
                             $imagen .= "
                                 <a href=\"$adjuntoURL\" target=\"_blank\">
                                     <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+                            ";
+
+                            $imagenAux .= "
+                                <a href=\"$adjuntoURL_beta\" target=\"_blank\">
+                                    <div class=\"bg-cover bg-center w-24 h-24 rounded cursor-pointer flex-none mr-2 hover:shadow-lg\" style=\"background-image: url($adjuntoURL_beta)\">
                                     </div>
                                 </a>
                             ";
@@ -7067,9 +7077,10 @@ if (isset($_POST['action'])) {
                         ";
                     }
                 }
+                $data['imagen'] = $imagen;
+                $data['imagenAux'] = $imagenAux;
+                $data['documento'] = $documento;
             }
-            $data['imagen'] = $imagen;
-            $data['documento'] = $documento;
         }
 
         echo json_encode($data);
