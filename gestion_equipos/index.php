@@ -462,6 +462,11 @@
     <!-- MENÚ OPCIONES MP -->
 
 
+    <!-- ACTIVIDADES MP -->
+    <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
+    </div>
+    <!-- ACTIVIDADES MP -->
+
 
 
     <!-- LIBRERIAS JS -->
