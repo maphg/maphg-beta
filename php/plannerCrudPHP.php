@@ -6785,8 +6785,8 @@ if (isset($_POST['action'])) {
         $data = array();
         $imagen = "";
         $documento = "";
-        $documento = "";
-
+        $data['imagen'] = $imagen;
+        $data['documento'] = $documento;
         if ($tabla == "t_proyectos_adjuntos") {
             $query = "SELECT t_proyectos_adjuntos.id, t_proyectos_adjuntos.url_adjunto, 
             t_colaboradores.nombre, t_colaboradores.apellido
