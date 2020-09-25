@@ -7067,9 +7067,9 @@ if (isset($_POST['action'])) {
                         ";
                     }
                 }
-                $data['imagen'] = $imagen;
-                $data['documento'] = $documento;
             }
+            $data['imagen'] = $imagen;
+            $data['documento'] = $documento;
         }
 
         echo json_encode($data);
