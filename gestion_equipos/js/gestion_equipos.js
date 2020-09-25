@@ -753,7 +753,6 @@ function botonesMenuMP(x) {
 
 // Proceso para Ver OT
 function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let numeroSemanas = 0;
@@ -944,6 +943,7 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
                 alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
                 consultarPlanEquipo(idEquipo);
                 cerrarTooltip('tooltipMP');
+                VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
             } else if (data == 8) {
                 alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
                 consultarPlanEquipo(idEquipo);
