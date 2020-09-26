@@ -117,7 +117,7 @@
     <!-- MODALES -->
 
     <!-- MODAL EQUIPO PARA LOS MP-->
-    <div id="modalMPEquipo" class="modal relative">
+    <div id="modalMPEquipo" class="modal relative" onclick="registroEventos(this.id);">
         <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg " style="width: 1000px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -336,10 +336,15 @@
 
                     <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="max-height: 200px;">
 
-                        <!-- <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
                             <i class="fad fa-cog mr-1"></i>
                             <h1>MOTOR NO SE QUE VEGAS</h1>
-                        </div> -->
+                        </div>
+
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6">
+                            <i class="fad fa-cogs mr-1"></i>
+                            <h1>MOTOR NO SE QUE VEGAS</h1>
+                        </div>
 
                     </div>
 
@@ -466,6 +471,13 @@
     <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
     </div>
     <!-- ACTIVIDADES MP -->
+
+
+    <!-- Opciones para Jerarquia de Equipos -->
+    <div id="tooltipOpcionesEquipos" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
+    <select id="dataOpcionesEquipos"></select>
+    </div>
+    <!-- Opciones para Jerarquia de Equipos -->
 
 
 

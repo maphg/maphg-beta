@@ -177,4 +177,52 @@ if (isset($_GET['action'])) {
             echo json_encode($array);
         }
     }
+
+
+    // Consulta el despiece de Equipos incluyendo el Equipo Padre
+    if($action == "despieceEquipos"){
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.jerarquia FROM t_equipos_america WHERE t_equipos_america.activo = 1 and (t_equipos_america.id = $idEquipo OR t_equipos_america.id_equipo_principal = $idEquipo)";
+
+        if($result = mysqli_query($conn_2020, $query)){
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $equipo = $i['equipo'];
+                $jerarquia = $i['jerarquia'];
+
+                $arrayTemp = array("id" => "$id", "equipo" => "$equipo", "jerarquia"=>"$jerarquia");
+                $array[] = $arrayTemp;
+            }
+            echo json_encode($array);
+        }
+    }
+
+
+    // Consulta posibles Equipos Jerarquicos
+    if($action == "opcionesJerarquiaEquipo"){
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT t_equipos_america.id, t_equipos_america.id_destino, t_equipos_america.id_subseccion FROM t_equipos_america WHERE t_equipos_america.activo = 1 AND t_equipos_america.id = $idEquipo";
+
+        if($result = mysqli_query($conn_2020, $query)){
+            foreach ($result as $i) {
+                $idDestino = $i['id_destino'];
+                $idSubseccion= $i['id_subseccion'];
+
+                $query ="SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino AND id_subseccion = $idSubseccion";
+                if($result = mysqli_query($conn_2020, $query)){
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $equipo = $i['equipo'];
+
+                        $arrayTemp = array("id" => "$id", "equipo" => "$equipo");
+                        $array[] = $arrayTemp;
+                    }
+                }
+            }
+            echo json_encode($array);
+        }
+    }
 }

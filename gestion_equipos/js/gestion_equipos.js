@@ -41,7 +41,7 @@ const datosPlanes = params => {
 
     return `
         <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
-        onclick="informacionEquipo(${params.id});">
+        onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id});">
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
                 <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
                 <div class=" leading-5 text-gray-500">${params.marca}</div>
@@ -459,8 +459,10 @@ function informacionEquipo(idEquipo) {
             document.getElementById("btnAdjuntosEquipo").
                 setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
 
+            // Funciones Complementarias
             obtenerImagenesEquipo(idEquipo);
             consultarPlanEquipo(idEquipo);
+
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
@@ -493,8 +495,51 @@ function informacionEquipo(idEquipo) {
             document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
             document.getElementById("estadoEquipo").innerHTML = data.status;
             document.getElementById("tipoEquipo").value = data.tipo;
+
+            // Eventos
+            document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+
         }
     });
+}
+
+
+function opcionesJerarquiaEquipo(idEquipo) {
+    let jerarquia = document.getElementById("jerarquiaEquipo").value;
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    const action = "opcionesJerarquiaEquipo";
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+    console.log(URL);
+
+    if (jerarquia == "SECUNDARIO") {
+        fetch(URL)
+            .then(res => res.json())
+            .then(array => {
+                let opcionesEquipo = `<option value="0">Semanas </option>`;
+                if (array.length > 0) {
+                    for (let index = 0; index < array.length; index++) {
+                        console.log(array[index].id, array[index].equipo);
+                        var id = array[index].id;
+                        var equipo = array[index].equipo;
+                        opcionesEquipo += `<option value="${id}">${equipo} </option>`;
+                    }
+                    return opcionesEquipo;
+                }
+            }).then(opcionesEquipo => {
+                document.getElementById("dataOpcionesEquipos").innerHTML = opcionesEquipo;
+                // Propiedades para el tooltip
+                document.getElementById("tooltipOpcionesEquipos").classList.remove('hidden');
+                const button = document.getElementById('jerarquiaEquipo');
+                const tooltip = document.getElementById('tooltipOpcionesEquipos');
+                Popper.createPopper(button, tooltip, {
+                    placement: 'top',
+                });
+            });
+
+    } else {
+        document.getElementById("tooltipOpcionesEquipos").classList.add('hidden');
+    }
 }
 
 
@@ -685,13 +730,12 @@ function consultarPlanEquipo(idEquipo) {
                     });
                 }
             } else {
-                alertaImg('Sin Planes MP', '', 'info', 3000);
+                // alertaImg('Equipo Sin Plan Asignado', '', 'info', 3000);
             }
 
         }
     });
 }
-
 
 
 // Muestra el Menú de los Planes
@@ -984,7 +1028,6 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 }
 
 
-
 function consultarActividadesMP(idPlan) {
 
     document.getElementById('tooltipActividadesMP').classList.remove('hidden');
@@ -1092,6 +1135,7 @@ function subirImagenGeneral(idTabla, tabla) {
     }
 }
 
+
 function expandir(id) {
     let idtoggle = id + "toggle";
     let idtitulo = id + "titulo";
@@ -1108,8 +1152,56 @@ function toggleModalTailwind(idModal) {
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
 
 
+// Obtiene el despiece de los equipos
+function despieceEquipos(idEquipo) {
+    document.getElementById("dataDespieceEquipo").innerHTML = '';
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    const action = "despieceEquipos";
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+
+    // Fetch ASYC
+    fetch(URL)
+        .then(res => res.json())
+        .then(array => {
+            console.log(array);
+            let despiece = "";
+            for (let index = 0; index < array.length; index++) {
+
+                var id = array[index].id;
+                var equipo = array[index].equipo;
+                var jerarquia = array[index].jerarquia;
+
+                if (jerarquia == "PRINCIPAL") {
+                    despiece += `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b" onclick="informacionEquipo(${id});">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>${equipo}</h1>
+                        </div>`
+                        ;
+                } else {
+                    despiece += `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6" onclick="informacionEquipo(${id});">
+                            <i class="fad fa-cogs mr-1"></i>
+                            <h1>${equipo}</h1>
+                        </div>`
+                        ;
+                }
+            }
+            return despiece;
+        }).then(despiece => {
+            document.getElementById("dataDespieceEquipo").innerHTML = despiece;
+        });
+
+}
 
 
+// Captura Eventos
+function registroEventos(params) {
+    if (params == "modalMPEquipo") {
+        console.log('Trabajando en Equipos');
+    }
+}
 
 
 // ********** FILTROS PARA EQUIPOS **********
@@ -1237,9 +1329,11 @@ document.getElementById("filtroPalabra").addEventListener("keydown", consultaEqu
 
 
 (function () {
+    // alertaImg('QR Valido', '', 'success', 1800);
     let URLactual = window.location.search;
     let arr = URLactual.split("?");
     if (arr[1] > 0) {
         informacionEquipo(arr[1]);
+        despieceEquipos(arr[1]);
     }
 }());
