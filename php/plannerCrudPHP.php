@@ -5096,8 +5096,8 @@ if (isset($_POST['action'])) {
             $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion,
             t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
             FROM t_proyectos 
-            INNER JOIN t_users ON t_proyectos.responsable = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_proyectos.id = $idProyecto";
 
             if ($result = mysqli_query($conn_2020, $query)) {
@@ -5116,8 +5116,8 @@ if (isset($_POST['action'])) {
                     if ($responsable == "Sin Responsable") {
                         $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                         FROM t_tareas_asignaciones 
-                        INNER JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
-                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        LEFT JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
+                        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                         WHERE t_tareas_asignaciones.id_tarea = $idProyecto";
                         if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
                             $responsableTemp = "Sin Responsable";
@@ -5290,8 +5290,8 @@ if (isset($_POST['action'])) {
                     t_proyectos_planaccion.departamento_finanzas,
                     t_proyectos_planaccion.departamento_rrhh
                     FROM t_proyectos_planaccion
-                    INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
-                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    LEFT JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+                    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                     WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
                     ORDER BY t_proyectos_planaccion.id DESC
                     ";
@@ -5402,7 +5402,7 @@ if (isset($_POST['action'])) {
                             // RESPONSABLE DE LA ACTIVIDAD
                             $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                             FROM t_users
-                            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                             WHERE t_users.id = $idResponsable
                             ";
                             if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
