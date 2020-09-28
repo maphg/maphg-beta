@@ -5085,6 +5085,8 @@ if (isset($_POST['action'])) {
             }
         }
 
+        $data['idResult'] = $idResult;
+        
         // Convierte el Resultado en un arreglo
 
         foreach ($idResult as $i) {
@@ -5094,8 +5096,8 @@ if (isset($_POST['action'])) {
             FROM t_proyectos 
             INNER JOIN t_users ON t_proyectos.responsable = t_users.id
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_proyectos.id = $idProyecto
-            ";
+            WHERE t_proyectos.id = $idProyecto";
+
             if ($result = mysqli_query($conn_2020, $query)) {
 
                 foreach ($result as $value) {
