@@ -807,6 +807,7 @@
                 success: function(data) {
                     console.log(data);
                     console.log(data.idResult);
+                    console.log(data.x);
                     alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
 
                     document.getElementById("dataProyectos").innerHTML = data.dataProyectos;

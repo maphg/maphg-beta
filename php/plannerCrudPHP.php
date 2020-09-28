@@ -5086,10 +5086,12 @@ if (isset($_POST['action'])) {
         }
 
         $data['idResult'] = $idResult;
-        
+        $x ="";
+
         // Convierte el Resultado en un arreglo
 
         foreach ($idResult as $i) {
+            $x .= $i; 
             $idProyecto = $i;
             $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion,
             t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
@@ -5621,6 +5623,7 @@ if (isset($_POST['action'])) {
             }
         }
         $data['dataProyectos'] = $dataProyectos;
+        $data['x'] = $x;
         echo json_encode($data);
     }
 
