@@ -1700,15 +1700,15 @@ if ($result) {
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
+
         function expandir(id) {
-            idtoggle = id + 'toggle';
+            // console.log(id);
+            let idtoggle = id + "toggle";
+            let idtitulo = id + "titulo";
             var toggle = document.getElementById(idtoggle);
             toggle.classList.toggle("hidden");
-
-            var titulox = document.getElementById(idtitulo);
-            titulox.classList.remove("truncate");
+            document.getElementById(idtitulo).classList.toggle("truncate");
         }
-
 
         function expandirpapa(idpapa) {
             var expandeapapa = document.getElementById(idpapa);
