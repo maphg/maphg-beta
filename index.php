@@ -6709,9 +6709,9 @@ $tablaRanking .= "</div>";
                             <div class="column">
                                 <p class="barratitulos">Cod. Seguimiento</p>
                             </div>
-                            <div class="column">
+                            <!-- <div class="column">
                                 <p class="barratitulos">CodSap</p>
-                            </div>
+                            </div> -->
 
                         </div>
                     </div>
@@ -6984,7 +6984,11 @@ $tablaRanking .= "</div>";
                             <div class="column mb-0">
                                 <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
                                     urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusMC('material');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="toggleHiden('codigoSeguimientoMC');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                                <div id="codigoSeguimientoMC" class="columns is-fullwidth is-centered mt-2 is-hidden">
+                                    <input id="codigoSeguimiento" class="column button is-6 mt-2" type="text" placeholder="Código Seguimiento" autocomplete="off">
+                                    <button class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
+                                </div>
                                 <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
                                 <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalDepartamentoMC', 'show'); consultaEDMC('departamento');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
                                 <button class="button is-info is-fullwidth mt-2" onclick="statusMC('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>

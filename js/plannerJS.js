@@ -4445,9 +4445,9 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombre
 }
 
 function listarProyectosDEP(idUsuario, id_Destino, id_Seccion, idSubseccion, nombreSeccion) {
-        $("#seccion-bar").css('display', 'none');
-        $("#seccionColumnas").css('display', 'none');
-        $("#modal-proyectos").css('display', 'block');
+    $("#seccion-bar").css('display', 'none');
+    $("#seccionColumnas").css('display', 'none');
+    $("#modal-proyectos").css('display', 'block');
     document.getElementById("modal-proyectos")
     document.getElementById("btnProyectosFinalizados").setAttribute('onclick', 'listarProyectosF(' + idUsuario + ',' + id_Destino + ',' + id_Seccion + ',' + idSubseccion + ',"' + nombreSeccion + '")');
     document.getElementById("btnProyectosFinalizados").classList.remove('is-hidden');
@@ -4918,7 +4918,43 @@ function statusMC(statusMC) {
             },
         });
     }
+}
 
+function statusMateriales() {
+    var action = "agregarStatusMC";
+    var idMC = $("#idMC").val();
+    var idUsuarioMC = $("#idUsuarioMC").val();
+    var tipoMCMCG = $("#tipoMCMCG").val();
+    var statusMC = "material";
+    var idEquipo = $("#hddIdEquipo").val();
+    var codigoSeguimiento = $("#codigoSeguimiento").val();
+
+    if (codigoSeguimiento != "") {
+        $.ajax({
+            type: "post",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idMC: idMC,
+                idUsuarioMC: idUsuarioMC,
+                statusMC: statusMC,
+                codigoSeguimiento: codigoSeguimiento
+            },
+            success: function (datos) {
+                document.getElementById("codigoSeguimiento").val = '';
+                alertInformacionActualiza("Status Material, Actualizado");
+                if (tipoMCMCG == "MCG") {
+                    recargarMC();
+                } else {
+                    obtCorrectivos(idEquipo, 'N');
+                }
+                $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
+            },
+        });
+    } else {
+        // alertInformacionActualiza("Código Seguimiento Requerido");
+        alertInformacionVacia();
+    }
 }
 
 function finalizarMC(idMC) {
@@ -6061,4 +6097,9 @@ function agregarFaseProyectoDEP(fase) {
             }
         },
     });
+}
+
+
+function toggleHiden(idElement) {
+    document.getElementById(idElement).classList.toggle('is-hidden');
 }

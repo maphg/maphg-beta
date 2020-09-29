@@ -1443,6 +1443,13 @@ if (isset($_POST['action'])) {
         $statusMC = $_POST['statusMC'];
         $fecha_captura = date('Y-m-d G:m:s');
 
+        if ($statusMC == "material") {
+            $codigoSeguimiento = $_POST['codigoSeguimiento'];
+            $statusMaterialSeguimiento = ", cod2bend = '$codigoSeguimiento'";
+        } else {
+            $statusMaterialSeguimiento = "";
+        }
+
         switch ($statusMC) {
 
             case "urgente":
@@ -1475,7 +1482,7 @@ if (isset($_POST['action'])) {
                 echo "Ok!";
             }
         } else {
-            $query = "UPDATE t_mc SET status_$statusMC='$status' WHERE id=$idMC";
+            $query = "UPDATE t_mc SET status_$statusMC='$status' $statusMaterialSeguimiento WHERE id=$idMC";
             $result = mysqli_query($conn_2020, $query);
             if ($result) {
                 if ($result_status) {
@@ -2110,45 +2117,47 @@ if (isset($_POST['action'])) {
             }
 
             echo "
-            <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
-                <div class=\"column is-half\">
-                    <div class=\"columns\">
-                        <div class=\"column\">
-                            <div class=\"message is-small is-danger\">
-                                <p class=\"message-body\"><strong>$actividad</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creadoNombre $creadoApellido</span></p>
+                <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+                    <div class=\"column is-half\">
+                        <div class=\"columns\">
+                            <div class=\"column\">
+                                <div class=\"message is-small is-danger\">
+                                    <p class=\"message-body\"><strong>$actividad</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creadoNombre $creadoApellido</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class=\"column\">
-                    <div class=\"columns is-gapless\">
-                        <div class=\"column\">
-                            <p class=\"t-normal truncate\">$responsableN</p>
-                        </div>
-                        <div class=\"column\">
-                            <p class=\"t-normal\">$fechaCreacionDEP</p>
-                        </div>
-                        <div class=\"column\">
-                            <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
-                        </div>
-                        <div class=\"column\">
-                            <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
-                        </div>
-                        <div class=\"column\">
-                            <p class=\"t-normal\">
-                             $departamento
-                            $status_material $status_trabajare
-                            </p>
-                        </div>
-                        <div class=\"column\">
-                            $cod2bendInput
-                        </div>
-                        <div class=\"column\">
-                            $codsapInput
+                    <div class=\"column\">
+                        <div class=\"columns is-gapless\">
+                            <div class=\"column\">
+                                <p class=\"t-normal truncate\">$responsableN</p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-normal\">$fechaCreacionDEP</p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
+                            </div>
+                            <div class=\"column\">
+                                <p class=\"t-normal\">
+                                $departamento
+                                $status_material $status_trabajare
+                                </p>
+                            </div>
+                            <div class=\"column\">
+                                $cod2bendInput
+                            </div>
+            ";
+                // <div class=\"column\">
+                // $codsapInput
+                // </div>
+            echo "
                         </div>
                     </div>
                 </div>
-            </div>
             ";
             $responsableN = "";
         }
@@ -3416,7 +3425,7 @@ if (isset($_POST['action'])) {
                                 </div>
 
                                 <div class=\"column is-small t-normal\" 
-                                onclick=\"obtStatusActvidadTareaP($idTareaP, '". preg_replace('([^A-Za-z0-9 ])', '', $titulo)."' , $idEquipo, '$equipo');\">
+                                onclick=\"obtStatusActvidadTareaP($idTareaP, '" . preg_replace('([^A-Za-z0-9 ])', '', $titulo) . "' , $idEquipo, '$equipo');\">
                                     <p class=\"p-3\"> 
                                     $status $sMaterial $sTrabajando $statusEnergetico $statusDepartamento
                                     </p>

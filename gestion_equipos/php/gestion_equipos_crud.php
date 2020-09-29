@@ -133,8 +133,6 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-
-
                 $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1";
                 if ($result = mysqli_query($conn_2020, $mp)) {
                     foreach ($result as $x) {
