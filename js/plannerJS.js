@@ -4874,7 +4874,7 @@ function modalStatusMC(idMC, idUsuario, tipoMCMCG) {
     $("#modalStatusMC").addClass("modal-fx-superScaled is-active");
     $("#tipoMCMCG").val(tipoMCMCG);
     $("#codigoSeguimientoMC").addClass("is-hidden");
-    
+
 }
 
 function statusMC(statusMC) {
@@ -4926,7 +4926,7 @@ function consultaCodigoSeguimientoMC() {
     var action = "consultaCodigoSeguimientoMC";
     var idMC = $("#idMC").val();
     document.getElementById("codigoSeguimiento").value = '';
-    document.getElementById("codigoSeguimientoMC").classList.remove('is-hidden');
+    document.getElementById("codigoSeguimientoMC").classList.toggle('is-hidden');
 
     $.ajax({
         type: "post",
@@ -4942,7 +4942,7 @@ function consultaCodigoSeguimientoMC() {
 }
 
 function statusMateriales() {
-    var action = "agregarStatusMC";
+    var action = "statusMaterialesMC";
     var idMC = $("#idMC").val();
     var idUsuarioMC = $("#idUsuarioMC").val();
     var tipoMCMCG = $("#tipoMCMCG").val();
@@ -4950,32 +4950,33 @@ function statusMateriales() {
     var idEquipo = $("#hddIdEquipo").val();
     var codigoSeguimiento = $("#codigoSeguimiento").val();
 
-    if (codigoSeguimiento != "") {
-        $.ajax({
-            type: "post",
-            url: "php/crud.php",
-            data: {
-                action: action,
-                idMC: idMC,
-                idUsuarioMC: idUsuarioMC,
-                statusMC: statusMC,
-                codigoSeguimiento: codigoSeguimiento
-            },
-            success: function (datos) {
-                document.getElementById("codigoSeguimiento").val = '';
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idMC: idMC,
+            idUsuarioMC: idUsuarioMC,
+            statusMC: statusMC,
+            codigoSeguimiento: codigoSeguimiento
+        },
+        success: function (datos) {
+            document.getElementById("codigoSeguimiento").val = '';
+            if (tipoMCMCG == "MCG") {
+                recargarMC();
+            } else {
+                obtCorrectivos(idEquipo, 'N');
+            }
+            $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
+
+            if (datos == 1) {
+                alertInformacion("Status Material, Sin Código Seguimiento", "info");
+            } else {
                 alertInformacionActualiza("Status Material, Actualizado");
-                if (tipoMCMCG == "MCG") {
-                    recargarMC();
-                } else {
-                    obtCorrectivos(idEquipo, 'N');
-                }
-                $("#modalStatusMC").removeClass("modal-fx-superScaled is-active");
-            },
-        });
-    } else {
-        // alertInformacionActualiza("Código Seguimiento Requerido");
-        alertInformacionVacia();
-    }
+            }
+        },
+    });
+
 }
 
 function finalizarMC(idMC) {
