@@ -2858,7 +2858,7 @@ if (isset($_POST['action'])) {
                             }
                         }
 
-                         //MP PLANIFICADOS PROCESO. 
+                        //MP PLANIFICADOS PROCESO. 
                         $queryMPN = "SELECT COUNT(id) FROM t_mp_planificacion_iniciada 
                         WHERE id_equipo = $idEquipo AND status = 'PROCESO' AND activo = 1";
                         if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
@@ -2869,7 +2869,7 @@ if (isset($_POST['action'])) {
                             }
                         }
 
-                         //MP PLANIFICADOS SOLUCIONADO. 
+                        //MP PLANIFICADOS SOLUCIONADO. 
                         $queryMPN = "SELECT COUNT(id) FROM t_mp_planificacion_iniciada 
                         WHERE id_equipo = $idEquipo AND status = 'SOLUCIONADO' AND activo = 1";
                         if ($resultMPN = mysqli_query($conn_2020, $queryMPN)) {
@@ -2887,9 +2887,9 @@ if (isset($_POST['action'])) {
                             if ($rowMPFecha = mysqli_fetch_array($resultMPFecha)) {
                                 $fechaMPFecha = $rowMPFecha['fecha_creacion'];
 
-                                if($fechaMPFecha ==""){
+                                if ($fechaMPFecha == "") {
                                     $fechaMPFecha = "NA";
-                                }else{
+                                } else {
                                     $fechaMPFecha = (new DateTime($fechaMPFecha))->format('d-m-Y');
                                 }
                             } else {
@@ -5086,12 +5086,12 @@ if (isset($_POST['action'])) {
         }
 
         $data['idResult'] = $idResult;
-        $x ="";
+        $x = "";
 
         // Convierte el Resultado en un arreglo
 
         foreach ($idResult as $i) {
-            $x .= $i; 
+            $x .= $i;
             $idProyecto = $i;
             $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion,
             t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
@@ -6316,11 +6316,11 @@ if (isset($_POST['action'])) {
             }
         } elseif ($columna == "rango_fecha" and $valor != "") {
             // Obtiene el año apartir del rengo de fecha
-            $año = $valor[6].$valor[7].$valor[8].$valor[9];
+            $año = $valor[6] . $valor[7] . $valor[8] . $valor[9];
 
             $query = "UPDATE t_proyectos SET rango_fecha = '$valor', año = '$año' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                
+
                 echo 5;
             } else {
                 echo 0;
@@ -6804,7 +6804,7 @@ if (isset($_POST['action'])) {
         $imagen = "";
         $imagenAux = "";
         $documento = "";
-        
+
         $data['imagenAux'] = $imagenAux;
         $data['imagen'] = $imagen;
         $data['documento'] = $documento;
@@ -7066,7 +7066,6 @@ if (isset($_POST['action'])) {
                                     </div>
                                 </a>
                             ";
-
                         } else {
 
                             $imagen .= "
@@ -7743,7 +7742,7 @@ if (isset($_POST['action'])) {
         // Valores por DEFAULT
         $data['equipo'] = "- -";
 
-        $query = "SELECT t_equipos_america.id, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
         t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.status
         FROM t_equipos_america 
@@ -7754,6 +7753,7 @@ if (isset($_POST['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $id = $i['id'];
+                $idEquipoPrincipal = $i['id_equipo_principal'];
                 $equipo = $i['equipo'];
                 $idSeccion = $i['id_seccion'];
                 $idSubseccion = $i['id_subseccion'];
@@ -7782,6 +7782,7 @@ if (isset($_POST['action'])) {
                 $tipo = $i['id_tipo'];
 
                 $data['idEquipo'] = $id;
+                $data['idEquipoPrincipal'] = $idEquipoPrincipal;
                 $data['equipo'] = $equipo;
                 $data['idSeccion'] = $idSeccion;
                 $data['idSubseccion'] = $idSubseccion;
@@ -7821,6 +7822,7 @@ if (isset($_POST['action'])) {
         $subseccionEquipo = $_POST['subseccionEquipo'];
         $tipoEquipo = $_POST['tipoEquipo'];
         $jerarquiaEquipo = $_POST['jerarquiaEquipo'];
+        $equipoPrincipal = $_POST['equipoPrincipal'];
         $marcaEquipo = $_POST['marcaEquipo'];
         $modeloEquipo = $_POST['modeloEquipo'];
         $serieEquipo = $_POST['serieEquipo'];
@@ -7842,7 +7844,12 @@ if (isset($_POST['action'])) {
         $caudalAireM3HEquipo = $_POST['caudalAireM3HEquipo'];
         $caudalAireCFMEquipo = $_POST['caudalAireCFMEquipo'];
 
+        if ($jerarquiaEquipo == "PRIMARIO") {
+            $equipoPrincipal = 0;
+        }
+
         $query = "UPDATE t_equipos_america SET 
+        id_equipo_principal = '$equipoPrincipal',
         equipo = '$nombreEquipo', 
         id_seccion = $seccionEquipo, 
         id_subseccion = $subseccionEquipo,
@@ -7870,7 +7877,6 @@ if (isset($_POST['action'])) {
         caudal_aire_cfm = $caudalAireCFMEquipo
         -- coste = $,
         -- id_fases = $ 
-
 
         WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {

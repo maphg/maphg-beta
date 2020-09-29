@@ -20,8 +20,10 @@ if (isset($_GET['action'])) {
         $filtroSubseccion = intval($_GET['filtroSubseccion']);
         $filtroTipo = $_GET['filtroTipo'];
         $filtroStatus = $_GET['filtroStatus'];
+        $filtroSemana = $_GET['filtroSemana'];
         $filtroPalabra = $_GET['filtroPalabra'];
         $array = array();
+        $semanaActual = date('W');
 
         if ($filtroDestino > 0) {
             $filtroDestino = "and t_equipos_america.id_destino = $filtroDestino";
@@ -41,12 +43,22 @@ if (isset($_GET['action'])) {
             $filtroStatus = "and t_equipos_america.status = '$filtroStatus'";
         }
 
-        if ($filtroSeccion > 0 and $filtroSubseccion > 0) {
-            $filtroSeccion = "and t_equipos_america.id_destino = $filtroSeccion";
-            $filtroSubseccion = "and t_equipos_america.id_destino = $filtroSubseccion";
+        if ($filtroSeccion > 0) {
+            $filtroSeccion = "and t_equipos_america.id_seccion = $filtroSeccion";
         } else {
             $filtroSeccion = "";
+        }
+
+        if ($filtroSubseccion > 0) {
+            $filtroSubseccion = "and t_equipos_america.id_subseccion = $filtroSubseccion";
+        } else {
             $filtroSubseccion = "";
+        }
+
+        if ($filtroSemana > 0) {
+            $filtroSemana = "INNER JOIN t_mp_planeacion_proceso ON t_equipos_america.id = t_mp_planeacion_proceso.id_equipo AND semana_$filtroSemana = 'PROCESO'";
+        } else {
+            $filtroSemana = "";
         }
 
         if ($filtroPalabra == "") {
@@ -65,6 +77,7 @@ if (isset($_GET['action'])) {
         LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
         LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
         LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        $filtroSemana
         WHERE t_equipos_america.activo = 1 
         $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
 
@@ -82,15 +95,67 @@ if (isset($_GET['action'])) {
                 $modelo = $i['modelo'];
                 $idFases = $i['id_fases'];
                 $destino = $i['destino'];
+                $resultx = array();
 
-                $semana = "";
-                $mp = "SELECT semana FROM t_mp_planificacion_iniciada WHERE id_equipo = $id ORDER BY id ASC LIMIT 1";
+                $mp = "SELECT* FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1";
+
+                // Proximo MP
                 if ($result = mysqli_query($conn_2020, $mp)) {
-                    foreach ($result as $i) {
-                        $semana = $i['semana'];
+                    // Contadores para Resumen MP
+                    $contadorPlanificado = 0;
+                    $contadorProceso = 0;
+                    $contadorSolucionado = 0;
+
+                    foreach ($result as $x) {
+
+                        for ($i = $semanaActual; $i < 52; $i++) {
+                            $semana = $x['semana_' . $i];
+
+                            if ($semana == "PROCESO") {
+                                $proximoMP = $i;
+                                $resultx[] = $proximoMP;
+                                $i = 52;
+                            }
+                        }
+
+                        // Resumen MP
+                        for ($i = 1; $i < 52; $i++) {
+                            $semana = $x['semana_' . $i];
+
+                            if ($semana == "PROCESO") {
+                                $contadorProceso++;
+                            }
+
+                            if ($semana == "SOLUCIONADO") {
+                                $contadorSolucionado++;
+                            }
+                        }
                     }
                 }
- 
+
+
+
+                $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1";
+                if ($result = mysqli_query($conn_2020, $mp)) {
+                    foreach ($result as $x) {
+                        for ($i = $semanaActual; $i < 52; $i++) {
+                            $semana = $x['semana_' . $i];
+                            if ($semana == "PLANIFICADO") {
+                                $proximoMP = $i;
+                                $resultx[] = $proximoMP;
+                                $i = 52;
+                            }
+                        }
+
+                        for ($i = 1; $i < 52; $i++) {
+                            $semana = $x['semana_' . $i];
+                            if ($semana == "PLANIFICADO") {
+                                $contadorPlanificado++;
+                            }
+                        }
+                    }
+                }
+
                 $fase = "";
                 $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
                 if ($result = mysqli_query($conn_2020, $fases)) {
@@ -99,6 +164,16 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                $resuly = array_count_values($resultx);
+
+                $xc = "";
+                foreach ($resuly as $key => $value) {
+                    if ($value > 1) {
+                        $xc .= " " . $key . "(" . $value . ") ";
+                    } else {
+                        $xc .= " " . $key;
+                    }
+                }
 
                 $arrayTemp = array(
                     "id" => "$id",
@@ -113,7 +188,10 @@ if (isset($_GET['action'])) {
                     "modelo" => "$modelo",
                     "equipoLocal" => "$local_equipo",
                     "ubicacion" => "$ubicacion",
-                    "ultimoMP" => "$semana"
+                    "proximoMP" => $xc,
+                    "proceso" => $contadorProceso,
+                    "solucionado" => $contadorSolucionado,
+                    "planificado" => $contadorPlanificado
                 );
 
                 $array[] = $arrayTemp;
@@ -180,18 +258,18 @@ if (isset($_GET['action'])) {
 
 
     // Consulta el despiece de Equipos incluyendo el Equipo Padre
-    if($action == "despieceEquipos"){
+    if ($action == "despieceEquipos") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.jerarquia FROM t_equipos_america WHERE t_equipos_america.activo = 1 and (t_equipos_america.id = $idEquipo OR t_equipos_america.id_equipo_principal = $idEquipo)";
 
-        if($result = mysqli_query($conn_2020, $query)){
+        if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $id = $i['id'];
                 $equipo = $i['equipo'];
                 $jerarquia = $i['jerarquia'];
 
-                $arrayTemp = array("id" => "$id", "equipo" => "$equipo", "jerarquia"=>"$jerarquia");
+                $arrayTemp = array("id" => "$id", "equipo" => "$equipo", "jerarquia" => "$jerarquia");
                 $array[] = $arrayTemp;
             }
             echo json_encode($array);
@@ -200,19 +278,19 @@ if (isset($_GET['action'])) {
 
 
     // Consulta posibles Equipos Jerarquicos
-    if($action == "opcionesJerarquiaEquipo"){
+    if ($action == "opcionesJerarquiaEquipo") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
 
         $query = "SELECT t_equipos_america.id, t_equipos_america.id_destino, t_equipos_america.id_subseccion FROM t_equipos_america WHERE t_equipos_america.activo = 1 AND t_equipos_america.id = $idEquipo";
 
-        if($result = mysqli_query($conn_2020, $query)){
+        if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idDestino = $i['id_destino'];
-                $idSubseccion= $i['id_subseccion'];
+                $idSubseccion = $i['id_subseccion'];
 
-                $query ="SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino AND id_subseccion = $idSubseccion";
-                if($result = mysqli_query($conn_2020, $query)){
+                $query = "SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino AND id_subseccion = $idSubseccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $i) {
                         $id = $i['id'];
                         $equipo = $i['equipo'];

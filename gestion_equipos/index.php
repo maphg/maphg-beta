@@ -20,48 +20,86 @@
 
 
     <div class="flex flex-row container mx-auto text-base mb-6">
-        <input id="filtroPalabra" type="search" name="" placeholder="Buscar Equipo o local" class="w-1/4 px-3 bg-white focus:outline-none py-2 rounded-lg shadow-md">
+        <input id="filtroPalabra" type="search" name="" placeholder="Buscar Equipo o local" class="w-1/4 px-3 mr-6 bg-white focus:outline-none py-2 rounded-lg shadow-md">
 
         <!-- <button class="btn btn-indigo shadow-md mx-4">
             <i class="fas fa-plus"></i>
             Crear Equipo o Local
         </button> -->
 
-
-        <div class="w-3/4 px-3 flex flex-row">
-
-            <select id="filtroDestino" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Destino</option>
-            </select>
-
-            <select id="filtroSeccion" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Sección</option>
-            </select>
-
-            <select id="filtroSubseccion" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Subsección</option>
-            </select>
-
-            <select id="filtroTipo" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Tipo</option>
-                <option value="EQUIPO">EQUIPO</option>
-                <option value="LOCAL">LOCAL</option>
-            </select>
-
-            <select id="filtroStatus" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Status</option>
-                <option value="OPERATIVO">OPERATIVO</option>
-                <option value="BAJA">BAJA</option>
-                <option value="TALLER">TALLER</option>
-            </select>
-
-            <select id="filtroSemana" class="border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white w-1/6">
-                <option value="0">Semana</option>
-            </select>
-
+        <div id="verGANTT" class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+            <h1>
+                <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
+            </h1>
+        </div>
+        <div id="exportarPendientes" class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+            <h1>
+                <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
+            </h1>
         </div>
     </div>
 
+    <div class="flex flex-row container mx-auto text-base mb-6">
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Destinos</h1>
+            <div class="relative ">
+                <select id="filtroDestino" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Secciones</h1>
+            <div class="relative">
+                <select id="filtroSeccion" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="0">Sección</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Subsecciones</h1>
+            <div class="relative">
+                <select id="filtroSubseccion" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="0">Subsección</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Tipo</h1>
+            <div class="relative">
+                <select id="filtroTipo" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="0">Tipo</option>
+                    <option value="EQUIPO">EQUIPO</option>
+                    <option value="LOCAL">LOCAL</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Status</h1>
+            <div class="relative">
+                <select id="filtroStatus" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="0">Status</option>
+                    <option value="OPERATIVO">OPERATIVO</option>
+                    <option value="BAJA">BAJA</option>
+                    <option value="TALLER">TALLER</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Semana</h1>
+            <div class="relative">
+                <select id="filtroSemana" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="0">Semana</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
 
     <div class="flex flex-col container mx-auto scrollbar">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
@@ -100,7 +138,11 @@
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Prox. MP
+                                Proximo MP
+                            </th>
+
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                Resumen MP
                             </th>
 
                         </tr>
@@ -211,7 +253,13 @@
                             </select>
                         </div>
 
+                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4 hidden">
+                            <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
+                            <select id="dataOpcionesEquipos" class="bg-fondos-4 font-semibold truncate w-24"></select>
+                        </div>
+
                     </div>
+
                     <div class="flex-none w-1/6">
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
@@ -471,14 +519,6 @@
     <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
     </div>
     <!-- ACTIVIDADES MP -->
-
-
-    <!-- Opciones para Jerarquia de Equipos -->
-    <div id="tooltipOpcionesEquipos" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
-    <select id="dataOpcionesEquipos"></select>
-    </div>
-    <!-- Opciones para Jerarquia de Equipos -->
-
 
 
     <!-- LIBRERIAS JS -->

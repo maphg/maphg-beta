@@ -74,21 +74,38 @@ const datosPlanes = params => {
                 </span>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="px-2 inline-flex  leading-5 font-bold rounded-full ${claseStatus} uppercase">
-                    ${params.ultimoMP}
+                <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
+                    ${params.proximoMP}
+                </span>
+            </td>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
+                
+                <div class="programado-PLANIFICADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                        <h1>${params.planificado}</h1>
+                </div>
+                
+                <div class="status-PROCESO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                        <h1>${params.proceso}</h1>
+                </div>
+                
+                <div class="status-SOLUCIONADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                    <h1>${params.solucionado}</h1>
+                </div>
+                       
                 </span>
             </td>
         </tr>
         `;
 };
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', ultimoMP: '2(X)' });
+$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '76856', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'FS', tipoEquipo: 'Junnior Suite', status: 'TALLER', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', ultimoMP: '2(X)' });
+$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '76856', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'FS', tipoEquipo: 'Junnior Suite', status: 'TALLER', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '234', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'GP', tipoEquipo: 'Fan&coil', status: 'BAJA', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', ultimoMP: '2(X)' });
+$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '234', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'GP', tipoEquipo: 'Fan&coil', status: 'BAJA', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '3425', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'TRS', tipoEquipo: 'Junnior Suite', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'LOCAL', ubicacion: 'Habitacion 1104', ultimoMP: '2(X)' });
+$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '3425', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'TRS', tipoEquipo: 'Junnior Suite', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'LOCAL', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
 
 const $ContenedorPlanesEquipos = document.getElementById('contenedorPlanesEquipo');
@@ -345,17 +362,19 @@ function consultaEquiposLocales() {
     let filtroSubseccion = document.getElementById("filtroSubseccion").value;
     let filtroTipo = document.getElementById("filtroTipo").value;
     let filtroStatus = document.getElementById("filtroStatus").value;
+    let filtroSemana = document.getElementById("filtroSemana").value;
     let filtroPalabra = document.getElementById("filtroPalabra").value;
     const action = "consultaEquiposLocales";
 
-    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroPalabra=${filtroPalabra}`;
-
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
+    console.log(URL);
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDePlanes').innerHTML = '';
     fetch(URL)
-        .then(res => res.json())
-        .then(array => {
-            if (array.length > 0) {
+    .then(res => res.json())
+    .then(array => {
+        if (array.length > 0) {
+            console.log(array);
                 alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
                 for (let index = 0; index < array.length; index++) {
@@ -372,7 +391,10 @@ function consultaEquiposLocales() {
                         modelo: array[index].modelo,
                         equipoLocal: array[index].equipoLocal,
                         ubicacion: array[index].ubicacion,
-                        ultimoMP: array[index].ultimoMP
+                        proximoMP: array[index].proximoMP,
+                        proceso: array[index].proceso,
+                        solucionado: array[index].solucionado,
+                        planificado: array[index].planificado
                     });
                 }
             } else {
@@ -441,9 +463,6 @@ function informacionEquipo(idEquipo) {
     let idDestino = localStorage.getItem('idDestino');
     document.getElementById("modalMPEquipo").classList.add('open');
 
-    consultarOpcionesEquipo();
-    toggleInputsEquipo(0);
-
     const action = "informacionEquipo";
     $.ajax({
         type: "POST",
@@ -456,12 +475,9 @@ function informacionEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
+            console.log(':::: ' + data.idEquipoPrincipal);
             document.getElementById("btnAdjuntosEquipo").
                 setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
-
-            // Funciones Complementarias
-            obtenerImagenesEquipo(idEquipo);
-            consultarPlanEquipo(idEquipo);
 
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
@@ -473,6 +489,7 @@ function informacionEquipo(idEquipo) {
             document.getElementById("seccionEquipo").value = data.idSeccion;
             document.getElementById("subseccionEquipo").value = data.idSubseccion;
             document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+            document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
             document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
             document.getElementById("modeloEquipo").value = data.modelo;
             document.getElementById("serieEquipo").value = data.numero_serie;
@@ -499,24 +516,30 @@ function informacionEquipo(idEquipo) {
             // Eventos
             document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
 
+            // Funciones Complementarias
+            consultarOpcionesEquipo();
+            toggleInputsEquipo(0);
+            obtenerImagenesEquipo(idEquipo);
+            consultarPlanEquipo(idEquipo);
+            opcionesJerarquiaEquipo(idEquipo);
         }
     });
 }
 
 
 function opcionesJerarquiaEquipo(idEquipo) {
+
     let jerarquia = document.getElementById("jerarquiaEquipo").value;
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     const action = "opcionesJerarquiaEquipo";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
-    console.log(URL);
 
     if (jerarquia == "SECUNDARIO") {
         fetch(URL)
             .then(res => res.json())
             .then(array => {
-                let opcionesEquipo = `<option value="0">Semanas </option>`;
+                let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
                 if (array.length > 0) {
                     for (let index = 0; index < array.length; index++) {
                         console.log(array[index].id, array[index].equipo);
@@ -528,17 +551,12 @@ function opcionesJerarquiaEquipo(idEquipo) {
                 }
             }).then(opcionesEquipo => {
                 document.getElementById("dataOpcionesEquipos").innerHTML = opcionesEquipo;
-                // Propiedades para el tooltip
-                document.getElementById("tooltipOpcionesEquipos").classList.remove('hidden');
-                const button = document.getElementById('jerarquiaEquipo');
-                const tooltip = document.getElementById('tooltipOpcionesEquipos');
-                Popper.createPopper(button, tooltip, {
-                    placement: 'top',
-                });
+                document.getElementById("contenedorDataOpcionesEquipos").classList.remove('hidden');
             });
 
     } else {
-        document.getElementById("tooltipOpcionesEquipos").classList.add('hidden');
+        document.getElementById("contenedorDataOpcionesEquipos").classList.add('hidden');
+        document.getElementById("dataOpcionesEquipos").value = 0;
     }
 }
 
@@ -875,6 +893,7 @@ function actualizarEquipo(idEquipo) {
     let subseccionEquipo = document.getElementById("subseccionEquipo").value;
     let tipoEquipo = document.getElementById("tipoEquipo").value;
     let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
+    let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
     let marcaEquipo = document.getElementById("marcaEquipo").value;
     let modeloEquipo = document.getElementById("modeloEquipo").value;
     let serieEquipo = document.getElementById("serieEquipo").value;
@@ -909,6 +928,7 @@ function actualizarEquipo(idEquipo) {
             subseccionEquipo: subseccionEquipo,
             tipoEquipo: tipoEquipo,
             jerarquiaEquipo: jerarquiaEquipo,
+            equipoPrincipal: equipoPrincipal,
             marcaEquipo: marcaEquipo,
             modeloEquipo: modeloEquipo,
             serieEquipo: serieEquipo,
@@ -1325,6 +1345,8 @@ document.getElementById("filtroDestino").addEventListener("change", consultaEqui
 document.getElementById("filtroSubseccion").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroTipo").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroStatus").addEventListener("change", consultaEquiposLocales);
+document.getElementById("filtroSemana").addEventListener("change", consultaEquiposLocales);
+document.getElementById("filtroSeccion").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroPalabra").addEventListener("keydown", consultaEquiposLocales);
 
 
