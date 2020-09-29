@@ -1058,7 +1058,7 @@ if ($result) {
             <!-- INDICACION -->
             <div class="absolute top-0 flex flex-row items-center justify-start w-full">
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md">
-                    <h1>Detalles</h1>
+                    <h1 id="equipoFalla">Detalles</h1>
                 </div>
             </div>
             <div class="absolute top-0 flex flex-row items-center justify-center w-full">
@@ -1886,7 +1886,6 @@ if ($result) {
             document.getElementById("dataStatusVP").
             setAttribute('onclick', 'verEnPlanner("' + tipoPendiente + '",+' + idPendiente + ')');
 
-
             $.ajax({
                 type: "POST",
                 url: "php/plannerCrudPHP.php",
@@ -1909,6 +1908,7 @@ if ($result) {
                     document.getElementById("dataStatusVP").innerHTML = data.status;
                     document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
                     document.getElementById("dataAdjuntosVP").innerHTML = data.adjuntos;
+                    document.getElementById("equipoFalla").innerHTML = data.equipo;
 
                     if (tipoPendiente == "FALLA") {
 

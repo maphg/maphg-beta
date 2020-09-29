@@ -2014,31 +2014,37 @@ if (isset($_POST['action'])) {
         $idDestino = $_POST['idDestino'];
         $idSubseccion = $_POST['idGrupo'];
         $idSeccion = $_POST['idSeccion'];
+        $data = "";
 
         if ($idSubseccion == 213) {
             $status = "AND (t_mc.status_material != '' OR t_mc.departamento_compras != '')";
-            $status_P = "AND reporte_status_proyecto.status = 'status_material'";
-        }
-        if ($idSubseccion == 62) {
+            $status_P = "AND t_proyectos_planaccion.status_material != 0";
+            $columnaProyectos = "status_material";
+        } elseif ($idSubseccion == 62) {
             $status = "AND t_mc.departamento_rrhh != ''";
-            $status_P = "AND reporte_status_proyecto.status = 'status_departamento_rrhh'";
-        }
-        if ($idSubseccion == 211) {
+            $status_P = "AND t_proyectos_planaccion.departamento_rrhh != 0";
+            $columnaProyectos = "departamento_rrhh";
+        } elseif ($idSubseccion == 211) {
             $status = "AND t_mc.departamento_finanzas != ''";
-            $status_P = "AND reporte_status_proyecto.status = 'status_departamento_finanzas'";
-        }
-        if ($idSubseccion == 212) {
+            $status_P = "AND t_proyectos_planaccion.departamento_finanzas != 0";
+            $columnaProyectos = "departamento_finanzas";
+        } elseif ($idSubseccion == 212) {
             $status = "AND t_mc.departamento_direccion != ''";
-            $status_P = "AND reporte_status_proyecto.status = 'status_departamento_direccion'";
-        }
-        if ($idSubseccion == 214) {
+            $status_P = "AND t_proyectos_planaccion.departamento_direccion != 0";
+            $columnaProyectos = "departamento_direccion";
+        } elseif ($idSubseccion == 214) {
             $status = "AND t_mc.departamento_calidad != ''";
-            $status_P = "AND reporte_status_proyecto.status = 'status_departamento_calidad'";
+            $status_P = "AND t_proyectos_planaccion.departamento_calidad != 0";
+            $columnaProyectos = "departamento_calidad";
+        } else {
+            $status = "AND t_mc.departamento_calidad != '-'";
+            $status_P = "AND t_proyectos_planaccion.departamento_calidad != '-'";
+            $columnaProyectos = "";
         }
 
         if ($idDestino != 10) {
             $destino = "AND t_mc.id_destino = $idDestino";
-            $destino_P = "AND reporte_status_proyecto.id_destino = $idDestino";
+            $destino_P = "AND t_proyectos.id_destino = $idDestino";
         } else {
             $destino = "";
             $destino_P = "";
@@ -2116,7 +2122,7 @@ if (isset($_POST['action'])) {
                 $departamento = "";
             }
 
-            echo "
+            $data .= "
                 <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
                     <div class=\"column is-half\">
                         <div class=\"columns\">
@@ -2147,11 +2153,6 @@ if (isset($_POST['action'])) {
                                 $status_material $status_trabajare
                                 </p>
                             </div>
-                            ";
-                            // <div class=\"column\">
-                            //     $cod2bendInput
-                            // </div>
-                            echo "
                             <div class=\"column\">
                             $codsapInput
                             </div>
@@ -2163,8 +2164,125 @@ if (isset($_POST['action'])) {
         }
 
 
+        // $query_P = "SELECT
+        // reporte_status_proyecto.status,
+        // t_proyectos_planaccion.actividad,
+        // t_proyectos_planaccion.creado_por,
+        // t_proyectos_planaccion.fecha_creacion,
+        // t_proyectos_planaccion.responsable,
+        // t_proyectos.titulo,
+        // t_colaboradores.nombre,
+        // t_colaboradores.apellido
+
+        // FROM reporte_status_proyecto
+
+        // INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id
+        // INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+        // INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+        // INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+
+
+        // WHERE reporte_status_proyecto.fecha_inicio !='' $status_P $destino_P";
+        // $result = mysqli_query($conn_2020, $query_P);
+        // if ($result) {
+
+        //     while ($row_P = mysqli_fetch_array($result)) {
+        //         $proyecto =  $row_P['titulo'];
+        //         $planaccion =  $row_P['actividad'];
+        //         $creado_por  = $row_P['nombre'] . " " . $row_P['apellido'];
+        //         $responsable = $row_P['responsable'];
+        //         $status = $row_P['status'];
+
+        //         $fecha_creacion = $row_P['fecha_creacion'];
+        //         $fecha_creacion = new DateTime($fecha_creacion);
+        //         $fecha_creacion = $fecha_creacion->format("d-m-Y");
+
+
+        //         $query_responsable = "SELECT
+        //         t_colaboradores.nombre,
+        //         t_colaboradores.apellido
+        //         FROM t_users
+        //         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        //         WHERE t_users.id=$responsable
+        //         ";
+
+        //         // Comprobación de Resultados, si tiene información le asigna segun el resultado, sino, le agrega uno por defecto.
+        //         $result_responsable = mysqli_query($conn_2020, $query_responsable);
+
+        //         if ($row_responsable = mysqli_fetch_array($result_responsable)) {
+        //             $responsablePlanaccion = $row_responsable['nombre'] . " " . $row_responsable['apellido'];
+        //         } else {
+        //             $responsablePlanaccion = "-";
+        //         }
+
+        //         if ($status == "status_departamento_finanzas" || $status == "status_departamento_rrhh" || $status == "status_departamento_direccion" || $status == "status_departamento_calidad") {
+        //             $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
+        //         } else {
+        //             $departamento = "";
+        //         }
+
+        //         if ($status == "status_material") {
+        //             $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
+        //         } else {
+        //             $status_material = "";
+        //         }
+
+        //         if ($status == "status_trabajare") {
+        //             $status_trabajare = "<span class=\"tag is-primary fa-lg\">T</span>";
+        //         } else {
+        //             $status_trabajare = "";
+        //         }
+
+
+        //         echo "
+        //         <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+        //             <div class=\"column is-half\">
+        //                 <div class=\"columns\">
+        //                     <div class=\"column\">
+        //                         <div class=\"message is-small is-danger\">
+        //                             <p class=\"message-body\"><strong>$planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //             <div class=\"column\">
+        //                 <div class=\"columns is-gapless\">
+        //                     <div class=\"column\">
+        //                         <p class=\"t-normal truncate\">$responsablePlanaccion</p>
+        //                     </div>
+        //                     <div class=\"column\">
+        //                         <p class=\"t-normal\">$fecha_creacion</p>
+        //                     </div>
+        //                     <div class=\"column\">
+        //                         <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+        //                     </div>
+        //                     <div class=\"column\">
+        //                         <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
+        //                     </div>
+        //                     <div class=\"column\">
+        //                         <p class=\"t-normal\">
+        //                         $departamento
+        //                         $status_material
+        //                         $status_trabajare</p>
+        //                     </div>
+        //                     <div class=\"column\">
+        //                         <p class=\"t-normal\">
+        //                         NA</p>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //         ";
+        //     }
+        // }
+
+
         $query_P = "SELECT
-        reporte_status_proyecto.status,
+        t_proyectos_planaccion.status_material,
+        t_proyectos_planaccion.departamento_rrhh,
+        t_proyectos_planaccion.departamento_finanzas,
+        t_proyectos_planaccion.departamento_direccion,
+        t_proyectos_planaccion.departamento_calidad,
         t_proyectos_planaccion.actividad,
         t_proyectos_planaccion.creado_por,
         t_proyectos_planaccion.fecha_creacion,
@@ -2172,16 +2290,12 @@ if (isset($_POST['action'])) {
         t_proyectos.titulo,
         t_colaboradores.nombre,
         t_colaboradores.apellido
-
-        FROM reporte_status_proyecto
-
-        INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id
+        FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos_planaccion.activo = 1 and t_proyectos_planaccion.status = 'N' $status_P $destino_P";
 
-
-        WHERE reporte_status_proyecto.fecha_inicio !='' $status_P $destino_P";
         $result = mysqli_query($conn_2020, $query_P);
         if ($result) {
 
@@ -2190,7 +2304,7 @@ if (isset($_POST['action'])) {
                 $planaccion =  $row_P['actividad'];
                 $creado_por  = $row_P['nombre'] . " " . $row_P['apellido'];
                 $responsable = $row_P['responsable'];
-                $status = $row_P['status'];
+                $status = $row_P[$columnaProyectos];
 
                 $fecha_creacion = $row_P['fecha_creacion'];
                 $fecha_creacion = new DateTime($fecha_creacion);
@@ -2214,66 +2328,67 @@ if (isset($_POST['action'])) {
                     $responsablePlanaccion = "-";
                 }
 
-                if ($status == "status_departamento_finanzas" || $status == "status_departamento_rrhh" || $status == "status_departamento_direccion" || $status == "status_departamento_calidad") {
+                if ($columnaProyectos == "departamento_finanzas" || $status == "departamento_rrhh" || $status == "departamento_direccion" || $status == "departamento_calidad") {
                     $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
                 } else {
                     $departamento = "";
                 }
 
-                if ($status == "status_material") {
+                if ($columnaProyectos == "status_material") {
                     $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
                 } else {
                     $status_material = "";
                 }
 
-                if ($status == "status_trabajare") {
+                if ($columnaProyectos == "status_trabajare") {
                     $status_trabajare = "<span class=\"tag is-primary fa-lg\">T</span>";
                 } else {
                     $status_trabajare = "";
                 }
 
-
-                echo "
-                <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
-                    <div class=\"column is-half\">
-                        <div class=\"columns\">
-                            <div class=\"column\">
-                                <div class=\"message is-small is-danger\">
-                                    <p class=\"message-body\"><strong>$planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
+                $data .= "
+                    <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+                        <div class=\"column is-half\">
+                            <div class=\"columns\">
+                                <div class=\"column\">
+                                    <div class=\"message is-small is-danger\">
+                                        <p class=\"message-body\"><strong>Proyecto: $planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=\"column\">
+                            <div class=\"columns is-gapless\">
+                                <div class=\"column\">
+                                    <p class=\"t-normal truncate\">$responsablePlanaccion</p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-normal\">$fecha_creacion</p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-normal\">
+                                        $departamento
+                                        $status_material
+                                        $status_trabajare
+                                    </p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-normal\">
+                                    NA</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=\"column\">
-                        <div class=\"columns is-gapless\">
-                            <div class=\"column\">
-                                <p class=\"t-normal truncate\">$responsablePlanaccion</p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-normal\">$fecha_creacion</p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-normal\">
-                                $departamento
-                                $status_material
-                                $status_trabajare</p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-normal\">
-                                NA</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 ";
             }
         }
+        echo $data;
     }
 
 

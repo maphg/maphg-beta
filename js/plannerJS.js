@@ -4407,7 +4407,7 @@ function listarProyectos(idUsuario, id_Destino, id_Seccion, idSubseccion, nombre
     // idSeccion = 1 & idDestino = 1 & tipoPendiente = MCS & idUsuario = 1#
     page = 'modalProyectos.php';
     window.open(page, "Proyectos",
-        "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=800px"
+        "directories=no, toolbar=no,location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1323px, height=844px"
     );
 
     // document.getElementById("modal-proyectos")
@@ -5726,6 +5726,7 @@ function reporteStatusDEP(idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre
         success: function (datos) {
             // refreshProyectos();
             $("#reporteStatusDEPData").html(datos);
+            console.log(datos);
         },
     });
 }

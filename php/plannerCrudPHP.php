@@ -1846,8 +1846,6 @@ if (isset($_POST['action'])) {
                     ";
                 }
 
-
-
                 $queryTareas = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha_finalizado, t_colaboradores.nombre, t_colaboradores.apellido 
                 FROM t_mp_np 
                 INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
@@ -1961,8 +1959,6 @@ if (isset($_POST['action'])) {
                         }
                     }
                 }
-
-
 
                 $data .= "
                         </div>
@@ -7118,15 +7114,17 @@ if (isset($_POST['action'])) {
         $dataAdjunto = "";
 
         if ($tipoPendiente == "FALLA") {
-            $query = "SELECT t_mc.id, t_mc.actividad, t_mc.rango_fecha, t_mc.responsable,
+            $query = "SELECT t_mc.id, t_equipos.equipo, t_mc.actividad, t_mc.rango_fecha, t_mc.responsable,
             t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
             t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
             t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, 
             t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.fecha_inicio,
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_mc 
-            INNER JOIN t_users ON t_mc.creado_por = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_equipos ON t_mc.id_equipo = t_equipos.id
+
             WHERE t_mc.id = $idPendiente and t_mc.activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $i) {
@@ -7136,6 +7134,11 @@ if (isset($_POST['action'])) {
                     $rangoFecha = $i['rango_fecha'];
                     $fechaInicio = $i['fecha_inicio'];
                     $responsable = $i['responsable'];
+                    $equipo = $i['equipo'];
+
+                    if ($equipo == ""){
+                        $equipo = "FALLA GENERAL";
+                    }
 
                     // Status
                     $statusUrgente = $i['status_urgente'];
@@ -7403,6 +7406,7 @@ if (isset($_POST['action'])) {
                     $data['status'] = $status;
                     $data['dataComentariosVP'] = $dataComentariosVP;
                     $data['adjuntos'] = $dataImagen . $dataAdjunto;
+                    $data['equipo'] = $equipo;
                 }
             }
         } elseif ($tipoPendiente == "TAREA") {
