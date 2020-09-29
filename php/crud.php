@@ -2147,14 +2147,14 @@ if (isset($_POST['action'])) {
                                 $status_material $status_trabajare
                                 </p>
                             </div>
+                            ";
+                            // <div class=\"column\">
+                            //     $cod2bendInput
+                            // </div>
+                            echo "
                             <div class=\"column\">
-                                $cod2bendInput
+                            $codsapInput
                             </div>
-            ";
-            // <div class=\"column\">
-            // $codsapInput
-            // </div>
-            echo "
                         </div>
                     </div>
                 </div>
@@ -3813,10 +3813,10 @@ if (isset($_POST['action'])) {
         $idMC = $_POST['idMC'];
         $codigoSeguimiento = "";
 
-        $query = "SELECT cod2bend FROM t_mc WHERE id = $idMC LIMIT 1";
+        $query = "SELECT codsap FROM t_mc WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
-                $codigoSeguimiento = $i['cod2bend'];
+                $codigoSeguimiento = $i['codsap'];
             }
             echo $codigoSeguimiento;
         }
@@ -3827,12 +3827,12 @@ if (isset($_POST['action'])) {
         $codigoSeguimiento = $_POST['codigoSeguimiento'];
 
         if ($codigoSeguimiento == "") {
-            $query = "UPDATE t_mc SET status_material = '', cod2bend = '' WHERE id = $idMC";
+            $query = "UPDATE t_mc SET status_material = '', codsap = '' WHERE id = $idMC";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
             }
         } else {
-            $query = "UPDATE t_mc SET status_material = '<span class=\"tag is-dark fa-lg\">M</span>', cod2bend = '$codigoSeguimiento' WHERE id = $idMC";
+            $query = "UPDATE t_mc SET status_material = '<span class=\"tag is-dark fa-lg\">M</span>', codsap = '$codigoSeguimiento' WHERE id = $idMC";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 2;
             }

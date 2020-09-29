@@ -6707,7 +6707,7 @@ $tablaRanking .= "</div>";
                                 <p class="barratitulos">Status</p>
                             </div>
                             <div class="column">
-                                <p class="barratitulos">Cod. Seguimiento</p>
+                                <p class="barratitulos">CODSAP</p>
                             </div>
                             <!-- <div class="column">
                                 <p class="barratitulos">CodSap</p>
