@@ -1880,11 +1880,12 @@ if ($result) {
 
         function verEnPlanner(tipoPendiente, idPendiente) {
             document.getElementById("modalVerEnPlanner").classList.add('open');
+            document.getElementById("equipoFalla").innerHTML = 'Detalles';
+            document.getElementById("dataStatusVP").
+            setAttribute('onclick', 'verEnPlanner("' + tipoPendiente + '",+' + idPendiente + ')');
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
             const action = "verEnPlanner";
-            document.getElementById("dataStatusVP").
-            setAttribute('onclick', 'verEnPlanner("' + tipoPendiente + '",+' + idPendiente + ')');
 
             $.ajax({
                 type: "POST",
