@@ -2151,9 +2151,9 @@ if (isset($_POST['action'])) {
                                 $cod2bendInput
                             </div>
             ";
-                // <div class=\"column\">
-                // $codsapInput
-                // </div>
+            // <div class=\"column\">
+            // $codsapInput
+            // </div>
             echo "
                         </div>
                     </div>
@@ -2263,10 +2263,6 @@ if (isset($_POST['action'])) {
                                 $departamento
                                 $status_material
                                 $status_trabajare</p>
-                            </div>
-                            <div class=\"column\">
-                                <p class=\"t-normal\">
-                                NA</p>
                             </div>
                             <div class=\"column\">
                                 <p class=\"t-normal\">
@@ -3810,6 +3806,37 @@ if (isset($_POST['action'])) {
             $data['dataComentarios'] = $dataComentarios;
         }
         echo json_encode($data);
+    }
+
+
+    if ($action == "consultaCodigoSeguimientoMC") {
+        $idMC = $_POST['idMC'];
+        $codigoSeguimiento = "";
+
+        $query = "SELECT cod2bend FROM t_mc WHERE id = $idMC LIMIT 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $codigoSeguimiento = $i['cod2bend'];
+            }
+            echo $codigoSeguimiento;
+        }
+    }
+
+    if ($action == "statusMaterialesMC") {
+        $idMC = $_POST['idMC'];
+        $codigoSeguimiento = $_POST['codigoSeguimiento'];
+
+        if ($codigoSeguimiento == "") {
+            $query = "UPDATE t_mc SET status_material = '', cod2bend = '' WHERE id = $idMC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 1;
+            }
+        } else {
+            $query = "UPDATE t_mc SET status_material = '<span class=\"tag is-dark fa-lg\">M</span>', cod2bend = '$codigoSeguimiento' WHERE id = $idMC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo 2;
+            }
+        }
     }
 
 

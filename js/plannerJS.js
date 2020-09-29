@@ -4873,6 +4873,8 @@ function modalStatusMC(idMC, idUsuario, tipoMCMCG) {
     $("#idUsuarioMC").val(idUsuario);
     $("#modalStatusMC").addClass("modal-fx-superScaled is-active");
     $("#tipoMCMCG").val(tipoMCMCG);
+    $("#codigoSeguimientoMC").addClass("is-hidden");
+    
 }
 
 function statusMC(statusMC) {
@@ -4918,6 +4920,25 @@ function statusMC(statusMC) {
             },
         });
     }
+}
+
+function consultaCodigoSeguimientoMC() {
+    var action = "consultaCodigoSeguimientoMC";
+    var idMC = $("#idMC").val();
+    document.getElementById("codigoSeguimiento").value = '';
+    document.getElementById("codigoSeguimientoMC").classList.remove('is-hidden');
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idMC: idMC
+        },
+        success: function (datos) {
+            document.getElementById("codigoSeguimiento").value = datos;
+        },
+    });
 }
 
 function statusMateriales() {
@@ -5679,17 +5700,7 @@ function finalizarProyectoPlanAccion(idPlanAccion) {
 }
 
 //funcion para Status de los Departamentos.
-function reporteStatusDEP(
-    idGrupo,
-    idDestino,
-    idSeccion,
-    b,
-    c,
-    d,
-    destinoTNombre,
-    seccionNombre,
-    grupo
-) {
+function reporteStatusDEP(idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre, seccionNombre, grupo) {
     //Inputs para generar Reporte
     $("#xlsIdGrupo").val(idGrupo);
     $("#xlsIdDestino").val(idDestino);

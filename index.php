@@ -6984,7 +6984,7 @@ $tablaRanking .= "</div>";
                             <div class="column mb-0">
                                 <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
                                     urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="toggleHiden('codigoSeguimientoMC');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="consultaCodigoSeguimientoMC()"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
                                 <div id="codigoSeguimientoMC" class="columns is-fullwidth is-centered mt-2 is-hidden">
                                     <input id="codigoSeguimiento" class="column button is-6 mt-2" type="text" placeholder="Código Seguimiento" autocomplete="off">
                                     <button class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
