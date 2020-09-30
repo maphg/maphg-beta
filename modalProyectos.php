@@ -252,16 +252,25 @@
                     </div>
                 </div>
 
-                <div id="statusMaterial" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs">
-                    <div class="">
-                        <h1>NO HAY MATERIAL</h1>
+                <div id="statusMaterial" class="w-full hover:shadow-md hover:shadow-md hover:text-orange-500 hover:bg-orange-200 bg-gray-200 rounded-md">
+
+                    <div onclick="expandir('statusMaterial');" class="w-full text-center h-8 cursor-pointer relative flex items-center justify-center text-gray-500 text-xs">
+                        <div class="">
+                            <h1>NO HAY MATERIAL</h1>
+                        </div>
+                        <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                            <h1>M</h1>
+                        </div>
                     </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>M</h1>
+
+                    <div id="statusMaterialtoggle" class="w-full text-center h-10 cursor-pointer relative flex items-center justify-center text-gray-500 text-xs hidden" style="margin-top:-6px;">
+                        <input id="codigoSeguimiento" class="py-1 rounded ml-1 font-bold text-center" type="text" placeholder="Código Seguimiento" autocomplete="off">
+                        <button id="statusMaterialBtn" class="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-1 rounded">Aplicar</button>
                     </div>
+
                 </div>
 
-                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
+                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer my-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
                     <div class="">
                         <h1>TRABAJANDO</h1>
                     </div>
@@ -675,7 +684,6 @@
         // ---------- PROYECTOS ----------
 
         function expandir(id) {
-            // console.log(id);
             let idtoggle = id + 'toggle';
             let idtitulo = id + 'titulo';
             var toggle = document.getElementById(idtoggle);
@@ -704,7 +712,6 @@
                 $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
             });
             $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-                // console.log(picker);
                 $(this).val('');
             });
         });
@@ -735,7 +742,6 @@
                 actualizarProyectos(rangoFecha, 'rango_fecha', idProyecto);
             });
             $('input[name="fechaProyecto"]').on('cancel.daterangepicker', function(ev, picker) {
-                // console.log(picker);
                 $(this).val('');
             });
         })
@@ -805,11 +811,7 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
-                    // console.log(data.idResult);
-                    // console.log(data.x);
                     alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
-
                     document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
                     document.getElementById("seccionProyectos").innerHTML = data.seccion;
                     estiloSeccionModal('estiloSeccionProyectos', data.seccion);
@@ -891,8 +893,6 @@
                 next: 'siguiente',
                 animation: false,
             });
-            // console.log('Paginación');
-
             $("#paginacionProyectos>a").addClass('-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150');
 
         }
@@ -916,7 +916,6 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
                     document.getElementById("responsableProyectoN").innerHTML = data.dataUsuarios;
                 }
             });
@@ -955,7 +954,6 @@
                     },
                     // dataType: "JSON",
                     success: function(data) {
-                        // console.log(data);
                         if (data == 1) {
                             obtenerProyectosP('PROYECTO');
                             alertaImg('Proyecto Agregado', '', 'success', 2500);
@@ -1001,7 +999,6 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
                     document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
                     alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 200);
                 }
@@ -1035,7 +1032,6 @@
                 },
                 // dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
                     if (data == 1) {
                         obtenerProyectosP('PROYECTO');
                         alertaImg('Responsable Actualizado', '', 'success', 2000);
@@ -1184,7 +1180,6 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        console.log(data);
                         if (data == 1) {
                             alertaImg("Proceso Cancelado", "", "info", 3000);
                         } else if (data == 6) {
@@ -1326,7 +1321,6 @@
                     },
                     // dataType: "JSON",
                     success: function(data) {
-                        // console.log(data);
                         if (data.length > 1) {
                             obtenerProyectosP('PROYECTO');
                             alertaImg('Actividad Agregada', '', 'success', 2500);
@@ -1366,7 +1360,6 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
                     document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
                     alertaImg('Usuarios Obtenidos: ' + data.totalUsuarios, '', 'info', 200);
                 }
@@ -1376,11 +1369,11 @@
 
         // Actualizar PLANACCION
         function actualizarPlanaccion(valor, columna, idPlanaccion) {
-            console.log('OKKK');
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
             let idSeccion = localStorage.getItem('idSeccion');
             let actividad = document.getElementById("inputEditarTitulo").value;
+            let codigoSeguimiento = document.getElementById("codigoSeguimiento").value;
 
             const action = "actualizarPlanaccion";
             $.ajax({
@@ -1394,12 +1387,12 @@
                     idPlanaccion: idPlanaccion,
                     valor: valor,
                     columna: columna,
-                    actividad: actividad
+                    actividad: actividad,
+                    codigoSeguimiento: codigoSeguimiento
+
                 },
                 // dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
-
                     obtenerProyectosP('PROYECTO');
                     if (data == 1) {
                         document.getElementById("modalUsuarios").classList.remove('open');
@@ -1420,6 +1413,12 @@
                     } else if (data == 6) {
                         document.getElementById("modalStatus").classList.remove('open');
                         alertaImg('Actividad Restaurada', '', 'success', 2500);
+                    } else if (data == 7) {
+                        document.getElementById("modalStatus").classList.remove('open');
+                        alertaImg('Status Material, Activado', '', 'success', 2500);
+                    } else if (data == 8) {
+                        document.getElementById("modalStatus").classList.remove('open');
+                        alertaImg('Status Material, Desactivado', '', 'success', 2500);
                     }
                 }
             });
@@ -1432,105 +1431,36 @@
 
             document.getElementById("inputEditarTitulo").value = actividadActual;
             document.getElementById("modalStatus").classList.add("open");
+            document.getElementById("statusMaterialtoggle").classList.add("hidden");
 
             // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
-            document
-                .getElementById("btnEditarTitulo")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")"
-                );
+            document.getElementById("btnEditarTitulo").setAttribute("onclick", 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusActivo")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusActivo").setAttribute("onclick", 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusFinalizar")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion("F","status",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusFinalizar").setAttribute("onclick", 'actualizarPlanaccion("F","status",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusMaterial")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusMaterialBtn").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusTrabajare")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusTrabajare").setAttribute("onclick", 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusElectricidad")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusElectricidad").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusAgua")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusAgua").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusDiesel")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusDiesel").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusGas")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusGas").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusRRHH")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusRRHH").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusCalidad")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusCalidad").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusDireccion")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusDireccion").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusFinanzas")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusFinanzas").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")");
 
-            document
-                .getElementById("statusCompras")
-                .setAttribute(
-                    "onclick",
-                    'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")"
-                );
+            document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
 
             // Llama la función para formatear el Modal de Status
             estiloDefectoModalStatus();
@@ -1539,7 +1469,6 @@
             let idDestino = localStorage.getItem("idDestino");
             let idSeccion = localStorage.getItem("idSeccion");
             const action = "statusPlanaccion";
-            console.log("statusPlanaccion");
             $.ajax({
                 type: "POST",
                 url: "php/plannerCrudPHP.php",
@@ -1552,12 +1481,10 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
+                    document.getElementById("codigoSeguimiento").value = data.codsap;
 
                     if (data.sMaterial == 1) {
-                        document
-                            .getElementById("statusMaterial")
-                            .classList.add("bg-orange-200");
+                        document.getElementById("statusMaterial").classList.add("bg-orange-200");
                     }
 
                     if (data.sTrabajando == 1) {
@@ -1771,7 +1698,6 @@
                         } else {
                             alertaImg('Intente de Nuevo', '', 'info', 3000);
                         }
-                        console.log(data);
                     }
                 });
             }
@@ -1814,9 +1740,7 @@
 
                     arrayTratado.then((response) => {
                         generarGantt(response);
-                    }).catch((error) => {
-                        console.log('Error' + error);
-                    });
+                    }).catch((error) => {});
 
                     alertaImg('Gantt Pendientes: ' + dataGantt.length, '', 'info', 4000);
                     let size = 100 + (dataGantt.length * 50);
@@ -1906,9 +1830,7 @@
 
                     arrayTratado.then((response) => {
                         generarGantt(response);
-                    }).catch((error) => {
-                        console.log('Error' + error);
-                    });
+                    }).catch((error) => {});
 
                     alertaImg('Gantt Solucionados: ' + dataGantt.length, '', 'info', 4000);
                     let size = 100 + (dataGantt.length * 50);
@@ -2048,7 +1970,6 @@
             var i;
             for (i = 0; i < x.length; i++) {
                 document.getElementsByClassName(nameClass)[i].classList.toggle('hidden');
-                // console.log(nameClass, i);
             }
         }
 

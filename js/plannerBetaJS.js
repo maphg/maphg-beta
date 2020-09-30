@@ -2873,117 +2873,47 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
 // Status para Planaccion
 function statusPlanaccion(idPlanaccion) {
   let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
-
+  let idUsuario = localStorage.getItem("usuario");
+  let idDestino = localStorage.getItem("idDestino");
+  let idSeccion = localStorage.getItem("idSeccion")
+  
   document.getElementById("inputEditarTitulo").value = actividadActual;
   document.getElementById("modalStatus").classList.add("open");
 
   // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
-  document
-    .getElementById("btnEditarTitulo")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")"
-    );
+  document.getElementById("btnEditarTitulo").setAttribute("onclick", 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusActivo")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusActivo").setAttribute("onclick", 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusFinalizar")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion("F","status",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusFinalizar").setAttribute("onclick", 'actualizarPlanaccion("F","status",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusMaterial")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusMaterial").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusTrabajare")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusTrabajare").setAttribute("onclick", 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusElectricidad")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusElectricidad").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusAgua")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusAgua").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusDiesel")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusDiesel").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusGas")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusGas").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusRRHH")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusRRHH").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusCalidad")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusCalidad").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusDireccion")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusDireccion").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusFinanzas")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusFinanzas").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")");
 
-  document
-    .getElementById("statusCompras")
-    .setAttribute(
-      "onclick",
-      'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")"
-    );
+  document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
 
   // Llama la función para formatear el Modal de Status
   estiloDefectoModalStatus();
 
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-  let idSeccion = localStorage.getItem("idSeccion");
+;
   const action = "statusPlanaccion";
-  // console.log("statusPlanaccion");
   $.ajax({
     type: "POST",
     url: "php/plannerCrudPHP.php",
@@ -3679,7 +3609,7 @@ function informacionEquipo(idEquipo) {
       document.getElementById("QREquipo").
         setAttribute("src", URLQR);
       // document.getElementById("QREquipo").
-        // setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/planner-cols.php?id=" + idEquipo);
+      // setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/planner-cols.php?id=" + idEquipo);
 
       document.getElementById("nombreEquipo").value = data.equipo;
       document.getElementById("seccionEquipo").value = data.idSeccion;

@@ -5726,16 +5726,15 @@ function reporteStatusDEP(idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre
         success: function (datos) {
             // refreshProyectos();
             $("#reporteStatusDEPData").html(datos);
-            console.log(datos);
         },
     });
 }
 
-function capturarCodigo(idMC, tipoCodigo) {
-    if (tipoCodigo == "cod2bend") {
-        var codigo = $("#cod2ben" + idMC).val();
-    } else {
-        var codigo = $("#codsap" + idMC).val();
+function capturarCodigo(id, tipoCodigo, tabla) {
+    if (tabla == "t_mc") {
+        var codigo = document.getElementById('codsapMC' + id).value;
+    }else{
+        var codigo = document.getElementById('codsapPlanaccion' + id).value;
     }
 
     var action = "capturarCodigo";
@@ -5744,9 +5743,10 @@ function capturarCodigo(idMC, tipoCodigo) {
         url: "php/crud.php",
         data: {
             action: action,
-            idMC: idMC,
+            id: id,
             tipoCodigo: tipoCodigo,
-            codigo: codigo
+            codigo: codigo,
+            tabla: tabla
         },
         // dataType:'json',
         success: function (datos) {

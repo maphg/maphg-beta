@@ -6434,6 +6434,7 @@ if (isset($_POST['action'])) {
         $idPlanaccion = $_POST['idPlanaccion'];
         $actividad = $_POST['actividad'];
         $idSeccion = $_POST['idSeccion'];
+        $codigoSeguimiento = $_POST['codigoSeguimiento'];
 
         if ($columna == "asignarPlanaccion" and $valor > 0) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
@@ -6475,7 +6476,7 @@ if (isset($_POST['action'])) {
             } else {
                 echo 0;
             }
-        } elseif ($columna == "status_urgente" or $columna == "status_material" or $columna == "status_trabajando" or $columna == "energetico_electricidad" or $columna == "energetico_agua" or $columna == "energetico_diesel" or $columna == "energetico_gas" or $columna == "departamento_calidad" or $columna == "departamento_compras" or $columna == "departamento_direccion" or $columna == "departamento_finanzas" or $columna == "departamento_rrhh") {
+        } elseif ($columna == "status_urgente" or $columna == "status_trabajando" or $columna == "energetico_electricidad" or $columna == "energetico_agua" or $columna == "energetico_diesel" or $columna == "energetico_gas" or $columna == "departamento_calidad" or $columna == "departamento_compras" or $columna == "departamento_direccion" or $columna == "departamento_finanzas" or $columna == "departamento_rrhh") {
             $select = "SELECT $columna FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $select)) {
                 foreach ($result as $value) {
@@ -6500,6 +6501,36 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos_planaccion SET status = 'N' WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 6;
+            } else {
+                echo 0;
+            }
+        } elseif ($columna == "status_material") {
+            $select = "SELECT status_material FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+            if ($result = mysqli_query($conn_2020, $select)) {
+                foreach ($result as $value) {
+                    $dato = $value['status_material'];
+                    if ($dato == 1) {
+                        $valor = 0;
+                    } else {
+                        $valor = 1;
+                    }
+
+                    if ($codigoSeguimiento != "") {
+                        $query = "UPDATE t_proyectos_planaccion SET status_material = '1', codsap = '$codigoSeguimiento' WHERE id = $idPlanaccion";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 7;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        $query = "UPDATE t_proyectos_planaccion SET status_material = '0' WHERE id = $idPlanaccion";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 8;
+                        } else {
+                            echo 0;
+                        }
+                    }
+                }
             } else {
                 echo 0;
             }
@@ -6584,8 +6615,9 @@ if (isset($_POST['action'])) {
         $data['dDireccion'] = 0;
         $data['dFinanzas'] = 0;
         $data['dRRHH'] = 0;
+        $data['codsap'] = "";
 
-        $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh 
+        $query = "SELECT codsap, status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh 
         FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
@@ -6601,6 +6633,7 @@ if (isset($_POST['action'])) {
                 $dDireccion = $i['departamento_direccion'];
                 $dFinanzas = $i['departamento_finanzas'];
                 $dRRHH = $i['departamento_rrhh'];
+                $codsap = $i['codsap'];
 
                 $data['sUrgente'] = $sUrgente;
                 $data['sMaterial'] = $sMaterial;
@@ -6614,6 +6647,7 @@ if (isset($_POST['action'])) {
                 $data['dDireccion'] = $dDireccion;
                 $data['dFinanzas'] = $dFinanzas;
                 $data['dRRHH'] = $dRRHH;
+                $data['codsap'] = $codsap;
             }
         }
         echo json_encode($data);
@@ -7136,7 +7170,7 @@ if (isset($_POST['action'])) {
                     $responsable = $i['responsable'];
                     $equipo = $i['equipo'];
 
-                    if ($equipo == ""){
+                    if ($equipo == "") {
                         $equipo = "FALLA GENERAL";
                     }
 

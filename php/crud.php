@@ -2085,7 +2085,7 @@ if (isset($_POST['action'])) {
                 </p>";
                 $codsapInput = "
                 <p class=\"t-normal p-1\">
-                    <input id=\"codsap$idMC\" class=\"input\" type=\"text\" value=\"$codsap\" placeholder=\"#\" onkeyup=\"capturarCodigo($idMC, 'codsap');\" >
+                    <input id=\"codsapMC$idMC\" class=\"input\" type=\"text\" value=\"$codsap\" placeholder=\"#\" onkeyup=\"capturarCodigo($idMC, 'codsap', 't_mc');\" >
                 </p>";
             } else {
                 $cod2bendInput = "<p class=\"t-normal\">NA</p>";
@@ -2278,6 +2278,8 @@ if (isset($_POST['action'])) {
 
 
         $query_P = "SELECT
+        t_proyectos_planaccion.id,
+        t_proyectos_planaccion.codsap,
         t_proyectos_planaccion.status_material,
         t_proyectos_planaccion.departamento_rrhh,
         t_proyectos_planaccion.departamento_finanzas,
@@ -2300,11 +2302,13 @@ if (isset($_POST['action'])) {
         if ($result) {
 
             while ($row_P = mysqli_fetch_array($result)) {
+                $idPlanaccion =  $row_P['id'];
                 $proyecto =  $row_P['titulo'];
                 $planaccion =  $row_P['actividad'];
                 $creado_por  = $row_P['nombre'] . " " . $row_P['apellido'];
                 $responsable = $row_P['responsable'];
                 $status = $row_P[$columnaProyectos];
+                $codsap = $row_P['codsap'];
 
                 $fecha_creacion = $row_P['fecha_creacion'];
                 $fecha_creacion = new DateTime($fecha_creacion);
@@ -2346,8 +2350,17 @@ if (isset($_POST['action'])) {
                     $status_trabajare = "";
                 }
 
+                if ($idSubseccion == 213) {
+
+                    $codsapInput = "
+                        <input id=\"codsapPlanaccion$idPlanaccion\" class=\"input\" type=\"text\" value=\"$codsap\" placeholder=\"#\" onkeyup=\"capturarCodigo($idPlanaccion, 'codsap', 't_proyectos_planaccion');\">
+                    ";
+                } else {
+                    $codsapInput = "NA";
+                }
+
                 $data .= "
-                    <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+                    <div class=\"columns is-gapless my-0 is-mobile hvr-grow-sm manita mx-2\">
                         <div class=\"column is-half\">
                             <div class=\"columns\">
                                 <div class=\"column\">
@@ -2379,8 +2392,9 @@ if (isset($_POST['action'])) {
                                     </p>
                                 </div>
                                 <div class=\"column\">
-                                    <p class=\"t-normal\">
-                                    NA</p>
+                                    <p class=\"t-normal p-1\">
+                                        $codsapInput
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -2393,23 +2407,20 @@ if (isset($_POST['action'])) {
 
 
     if ($action == "capturarCodigo") {
-        $idMC = $_POST['idMC'];
+        $id = $_POST['id'];
         $tipoCodigo = $_POST['tipoCodigo'];
+        $tabla = $_POST['tabla'];
         $codigo = $_POST['codigo'];
 
-        if ($codigo == "" or $codigo == 0) {
-            $codigo = "";
-        }
-
-        if ($tipoCodigo == "cod2bend") {
-            $query = "UPDATE t_mc set cod2bend = '$codigo' WHERE id = $idMC";
-        } elseif ($tipoCodigo == "codsap") {
-            $query = "UPDATE t_mc set codsap = '$codigo' WHERE id = $idMC";
-        }
-
-        if ($result = mysqli_query($conn_2020, $query)) {
-            echo "ok";
-        } else {
+if($codigo !=""){
+            $query = "UPDATE $tabla set $tipoCodigo = '$codigo' WHERE id = $id";
+       
+            if ($result = mysqli_query($conn_2020, $query)) {
+                echo "ok";
+            } else {
+                echo "error";
+            }
+        }else{
             echo "error";
         }
     }
