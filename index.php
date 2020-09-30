@@ -6439,6 +6439,11 @@ $tablaRanking .= "</div>";
                                         </strong></span> No hay material
                                 </button>
 
+                                <div id="codigoSeguimientoTareas" class="columns is-fullwidth is-centered mt-2 is-hidden">
+                                    <input id="inputCodigoSeguimientoTareas" class="column button is-6 mt-2" type="text" placeholder="Código Seguimiento" autocomplete="off">
+                                    <button id="statusMaterialTareas" class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
+                                </div>
+
                                 <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
                                     <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
                                 </button>

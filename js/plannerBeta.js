@@ -710,13 +710,16 @@ function asignarResponsableTareasP(idTarea, idUsuario, idEquipo, equipo) {
 
 function obtStatusActvidadTareaP(idTareaP, titulo, idEquipo, equipo) {
     document.getElementById("modalStatusTareasP").classList.add('modal-fx-superScaled', 'is-active');
-
+    document.getElementById("codigoSeguimientoTareas").classList.add('is-hidden');
     document.getElementById("nuevoTituloATP").value = titulo;
 
     document.getElementById("statusUrgenteATP").setAttribute('onclick',
         'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_urgente")');
 
     document.getElementById("statusMaterialATP").setAttribute('onclick',
+        'consultarCodigoSeguimientoTareaas(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_material")');
+
+    document.getElementById("statusMaterialTareas").setAttribute('onclick',
         'aplicarCambioActividad(' + idTareaP + ',' + idEquipo + ',"' + equipo + '", "status_material")');
 
     document.getElementById("statusTrabajandoATP").setAttribute('onclick',
@@ -771,6 +774,7 @@ function obtStatusActvidadTareaP(idTareaP, titulo, idEquipo, equipo) {
 
 function aplicarCambioActividad(idTareaP, idEquipo, equipo, columna) {
     let nuevoTitulo = document.getElementById("nuevoTituloATP").value;
+    let codigoSeguimiento = document.getElementById("inputCodigoSeguimientoTareas").value;
     const action = "aplicarCambioActividad";
 
     $.ajax({
@@ -780,7 +784,8 @@ function aplicarCambioActividad(idTareaP, idEquipo, equipo, columna) {
             action: action,
             idTareaP: idTareaP,
             columna: columna,
-            nuevoTitulo: nuevoTitulo
+            nuevoTitulo: nuevoTitulo,
+            codigoSeguimiento: codigoSeguimiento
         },
         // dataType: "JSON",
         success: function (data) {
@@ -812,10 +817,35 @@ function aplicarCambioActividad(idTareaP, idEquipo, equipo, columna) {
                 document.getElementById("modalStatusTareasP").
                     classList.remove('modal-fx-superScaled', 'is-active');
                 obtTareasP(idEquipo, equipo);
-            } else if (data == 0) {
+            } else if (data == 6) {
+                alertInformacion('Status Material, Activado', 'success');
+                obtTareasP(idEquipo, equipo);
+            } else if (data == 7) {
+                alertInformacion('Status Material, Desactivado', 'success');
+                obtTareasP(idEquipo, equipo);
+            } else {
                 alertInformacion('Intente de Nuevo', 'question');
                 obtTareasP(idEquipo, equipo);
             }
+        }
+    });
+}
+
+
+function consultarCodigoSeguimientoTareaas(idTareaP, idEquipo, equipo, columna) {
+    document.getElementById("codigoSeguimientoTareas").classList.remove('is-hidden');
+    const action = "consultarCodigoSeguimientoTareaas";
+    $.ajax({
+        type: "POST",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idTareaP: idTareaP
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            document.getElementById("inputCodigoSeguimientoTareas").value = data;
         }
     });
 }

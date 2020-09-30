@@ -2020,6 +2020,7 @@ if (isset($_POST['action'])) {
             $status = "AND (t_mc.status_material != '' OR t_mc.departamento_compras != '')";
             $status_P = "AND t_proyectos_planaccion.status_material != 0";
             $columnaProyectos = "status_material";
+            $status_T = "AND t_mp_np.status_material != '0'";
         } elseif ($idSubseccion == 62) {
             $status = "AND t_mc.departamento_rrhh != ''";
             $status_P = "AND t_proyectos_planaccion.departamento_rrhh != 0";
@@ -2045,11 +2046,14 @@ if (isset($_POST['action'])) {
         if ($idDestino != 10) {
             $destino = "AND t_mc.id_destino = $idDestino";
             $destino_P = "AND t_proyectos.id_destino = $idDestino";
+            $destino_T = "AND t_mp_np.id_destino = $idDestino";
         } else {
             $destino = "";
             $destino_P = "";
+            $destino_T = "";
         }
 
+        // FALLAS
         $query = "SELECT
         t_mc.id, t_mc.actividad, t_mc.fecha_creacion, t_mc.status_material, t_mc.status_trabajare, t_mc.responsable, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.departamento_direccion, t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.cod2bend, t_mc.codsap
         FROM t_mc
@@ -2163,120 +2167,122 @@ if (isset($_POST['action'])) {
             $responsableN = "";
         }
 
+        // TAREAS
+        $query = "SELECT
+        t_mp_np.id, t_mp_np.titulo, t_mp_np.rango_fecha, t_mp_np.fecha, t_mp_np.status_material, t_mp_np.status_trabajando, t_mp_np.responsable, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.departamento_finanzas, t_mp_np.departamento_rrhh, t_mp_np.departamento_direccion, t_mp_np.departamento_calidad, t_mp_np.departamento_compras, t_mp_np.codsap
+        FROM t_mp_np
+        LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_mp_np.activo = 1 AND (t_mp_np.status='N' OR t_mp_np.status='P') $status_T $destino_T ORDER BY t_mp_np.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            while ($row = mysqli_fetch_array($result)) {
+                $idTarea = $row['id'];
+                $titulo = $row['titulo'];
+                $responsable = $row['responsable'];
+                $rangoFechaCreacionDEP = $row['rango_fecha'];
+                $fechaCreacionDEP = (new DateTime($row['fecha']))->format('Y-m-d');
+                $creadoNombre = $row['nombre'];
+                $creadoApellido = $row['apellido'];
+                $status_material = $row['status_material'];
+                $status_trabajare = $row['status_trabajando'];
+                $status_compras = $row['departamento_compras'];
+                $status_finanzas = $row['departamento_finanzas'];
+                $status_rrhh = $row['departamento_rrhh'];
+                $status_direccion = $row['departamento_direccion'];
+                $status_calidad = $row['departamento_calidad'];
+                $codsap = $row['codsap'];
 
-        // $query_P = "SELECT
-        // reporte_status_proyecto.status,
-        // t_proyectos_planaccion.actividad,
-        // t_proyectos_planaccion.creado_por,
-        // t_proyectos_planaccion.fecha_creacion,
-        // t_proyectos_planaccion.responsable,
-        // t_proyectos.titulo,
-        // t_colaboradores.nombre,
-        // t_colaboradores.apellido
+                if ($idSubseccion == 213) {
+                    $codsapInput = "
+                    <p class=\"t-normal p-1\">
+                        <input id=\"codsapTAREA$idTarea\" class=\"input\" type=\"text\" value=\"$codsap\" placeholder=\"#\" onkeyup=\"capturarCodigo($idTarea, 'codsap', 't_mp_np');\" >
+                    </p>";
+                } else {
+                    $codsapInput = "<p class=\"t-normal\">NA</p>";
+                }
 
-        // FROM reporte_status_proyecto
+                // Busca el Responsable.
+                $query_responsable = "SELECT
+                t_colaboradores.nombre, t_colaboradores.apellido
+                FROM t_users
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = 0";
 
-        // INNER JOIN t_proyectos_planaccion ON reporte_status_proyecto.id_planaccion = t_proyectos_planaccion.id
-        // INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-        // INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
-        // INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                $result_responsable = mysqli_query($conn_2020, $query_responsable);
+                if ($row_responsable = mysqli_fetch_array($result_responsable)) {
 
+                    $responsableN  = $row_responsable['nombre'] . " " . $row_responsable['apellido'];
+                } else {
+                    $responsableN = "-";
+                }
 
-        // WHERE reporte_status_proyecto.fecha_inicio !='' $status_P $destino_P";
-        // $result = mysqli_query($conn_2020, $query_P);
-        // if ($result) {
+                // Comprube si tiene información las variables, sino, le asigna uno por defecto.
 
-        //     while ($row_P = mysqli_fetch_array($result)) {
-        //         $proyecto =  $row_P['titulo'];
-        //         $planaccion =  $row_P['actividad'];
-        //         $creado_por  = $row_P['nombre'] . " " . $row_P['apellido'];
-        //         $responsable = $row_P['responsable'];
-        //         $status = $row_P['status'];
+                if ($rangoFechaCreacionDEP == "") {
+                    $fechaCreacionDEP = $fechaCreacionDEP;
+                } else {
+                    $fechaCreacionDEP = $rangoFechaCreacionDEP;
+                }
 
-        //         $fecha_creacion = $row_P['fecha_creacion'];
-        //         $fecha_creacion = new DateTime($fecha_creacion);
-        //         $fecha_creacion = $fecha_creacion->format("d-m-Y");
+                if ($responsableN == "") {
+                    $responsableN = "<p class=\"t-normal\">-</p>";
+                }
 
+                if ($status_compras != "" || $status_finanzas != "" || $status_rrhh != "" || $status_direccion != "" || $status_calidad != '') {
+                    $departamento = "<span class=\"fa-lg p-0\"><strong class=\"has-text-primary\">D</strong></span> ";
+                } else {
+                    $departamento = "";
+                }
 
-        //         $query_responsable = "SELECT
-        //         t_colaboradores.nombre,
-        //         t_colaboradores.apellido
-        //         FROM t_users
-        //         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        //         WHERE t_users.id=$responsable
-        //         ";
+                if ($status_material == "1") {
+                    $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
+                } else {
+                    $status_material = "";
+                }
 
-        //         // Comprobación de Resultados, si tiene información le asigna segun el resultado, sino, le agrega uno por defecto.
-        //         $result_responsable = mysqli_query($conn_2020, $query_responsable);
+                $data .= "
+                    <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
+                        <div class=\"column is-half\">
+                            <div class=\"columns\">
+                                <div class=\"column\">
+                                    <div class=\"message is-small is-danger\">
+                                        <p class=\"message-body\"><strong>TAREA: $titulo</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creadoNombre $creadoApellido</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=\"column\">
+                            <div class=\"columns is-gapless\">
+                                <div class=\"column\">
+                                    <p class=\"t-normal truncate\">$responsableN</p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-normal\">$fechaCreacionDEP</p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
+                                </div>
+                                <div class=\"column\">
+                                    <p class=\"t-normal\">
+                                    $departamento
+                                    $status_material $status_trabajare
+                                    </p>
+                                </div>
+                                <div class=\"column\">
+                                $codsapInput
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+                $responsableN = "";
+            }
+        }
 
-        //         if ($row_responsable = mysqli_fetch_array($result_responsable)) {
-        //             $responsablePlanaccion = $row_responsable['nombre'] . " " . $row_responsable['apellido'];
-        //         } else {
-        //             $responsablePlanaccion = "-";
-        //         }
-
-        //         if ($status == "status_departamento_finanzas" || $status == "status_departamento_rrhh" || $status == "status_departamento_direccion" || $status == "status_departamento_calidad") {
-        //             $departamento = "<span class=\"mr-4 fa-lg \"><strong class=\"has-text-primary\">D</strong></span> ";
-        //         } else {
-        //             $departamento = "";
-        //         }
-
-        //         if ($status == "status_material") {
-        //             $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
-        //         } else {
-        //             $status_material = "";
-        //         }
-
-        //         if ($status == "status_trabajare") {
-        //             $status_trabajare = "<span class=\"tag is-primary fa-lg\">T</span>";
-        //         } else {
-        //             $status_trabajare = "";
-        //         }
-
-
-        //         echo "
-        //         <div class=\"columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2\">
-        //             <div class=\"column is-half\">
-        //                 <div class=\"columns\">
-        //                     <div class=\"column\">
-        //                         <div class=\"message is-small is-danger\">
-        //                             <p class=\"message-body\"><strong>$planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //             <div class=\"column\">
-        //                 <div class=\"columns is-gapless\">
-        //                     <div class=\"column\">
-        //                         <p class=\"t-normal truncate\">$responsablePlanaccion</p>
-        //                     </div>
-        //                     <div class=\"column\">
-        //                         <p class=\"t-normal\">$fecha_creacion</p>
-        //                     </div>
-        //                     <div class=\"column\">
-        //                         <p class=\"t-icono-rojo\"><i class=\"fad fa-file-minus\"></i></p>
-        //                     </div>
-        //                     <div class=\"column\">
-        //                         <p class=\"t-icono-rojo\"><i class=\"fad fa-comment-alt-times\"></i></p>
-        //                     </div>
-        //                     <div class=\"column\">
-        //                         <p class=\"t-normal\">
-        //                         $departamento
-        //                         $status_material
-        //                         $status_trabajare</p>
-        //                     </div>
-        //                     <div class=\"column\">
-        //                         <p class=\"t-normal\">
-        //                         NA</p>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         ";
-        //     }
-        // }
-
-
+        // PROYECTOS
         $query_P = "SELECT
         t_proyectos_planaccion.id,
         t_proyectos_planaccion.codsap,
@@ -2412,15 +2418,15 @@ if (isset($_POST['action'])) {
         $tabla = $_POST['tabla'];
         $codigo = $_POST['codigo'];
 
-if($codigo !=""){
+        if ($codigo != "") {
             $query = "UPDATE $tabla set $tipoCodigo = '$codigo' WHERE id = $id";
-       
+
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo "ok";
             } else {
                 echo "error";
             }
-        }else{
+        } else {
             echo "error";
         }
     }
@@ -3693,8 +3699,9 @@ if($codigo !=""){
         $columna = $_POST['columna'];
         $nuevoTitulo = $_POST['nuevoTitulo'];
         $fechaActual = date('Y-m-d H:m:s');
+        $codigoSeguimiento = $_POST['codigoSeguimiento'];
 
-        if ($columna == "status_urgente" || $columna == "status_material" || $columna == "status_trabajando" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
+        if ($columna == "status_urgente" || $columna == "status_trabajando" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
             $query = "SELECT $columna FROM t_mp_np WHERE id = $idTareaP";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $i) {
@@ -3742,6 +3749,31 @@ if($codigo !=""){
             } else {
                 echo 0;
             }
+        } elseif ($columna == "status_material") {
+            if ($codigoSeguimiento != "") {
+                $query = "UPDATE t_mp_np SET status_material ='1', codsap = '$codigoSeguimiento' WHERE id = $idTareaP";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    echo 6;
+                }
+            } else {
+                $query = "UPDATE t_mp_np SET status_material ='0' WHERE id = $idTareaP";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    echo 7;
+                }
+            }
+        }
+    }
+
+
+    if ($action == "consultarCodigoSeguimientoTareaas") {
+        $idTareaP = $_POST['idTareaP'];
+        $codsap = "";
+        $query = "SELECT codsap FROM t_mp_np WHERE id = $idTareaP";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $codsap = $i['codsap'];
+            }
+            echo $codsap;
         }
     }
 

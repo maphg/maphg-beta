@@ -5733,6 +5733,8 @@ function reporteStatusDEP(idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre
 function capturarCodigo(id, tipoCodigo, tabla) {
     if (tabla == "t_mc") {
         var codigo = document.getElementById('codsapMC' + id).value;
+    }else if (tabla == "t_mp_np") {
+        var codigo = document.getElementById('codsapTAREA' + id).value;
     }else{
         var codigo = document.getElementById('codsapPlanaccion' + id).value;
     }
