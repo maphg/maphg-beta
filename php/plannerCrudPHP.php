@@ -5126,14 +5126,12 @@ if (isset($_POST['action'])) {
                         }
                     }
 
-
                     $queryAdjuntos = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto AND status = 1";
                     if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
                         foreach ($resultAdjuntos as $value) {
                             $totalAdjuntos = $value['count(id)'];
                         }
                     }
-
 
                     $queryPlanaccionTotal = "SELECT count(id) FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto AND activo = 1";
 
@@ -5777,8 +5775,8 @@ if (isset($_POST['action'])) {
             $idProyecto = $i;
             $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.rango_fecha, t_proyectos.fecha_creacion, t_proyectos.tipo, t_proyectos.justificacion, t_proyectos.coste
             FROM t_proyectos 
-            INNER JOIN t_users ON t_proyectos.responsable = t_users.id
-            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_proyectos.activo = 1 AND t_proyectos.id = $idProyecto
             ";
 
@@ -5798,8 +5796,8 @@ if (isset($_POST['action'])) {
                     if ($responsable == "Sin Responsable") {
                         $queryResponsable = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                         FROM t_tareas_asignaciones 
-                        INNER JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
-                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        LEFT JOIN t_users ON t_tareas_asignaciones.id_usuario = t_users.id 
+                        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                         WHERE t_tareas_asignaciones.id_tarea = $idProyecto";
                         if ($resultResponsable = mysqli_query($conn_2020, $queryResponsable)) {
                             $responsableTemp = "Sin Responsable";
