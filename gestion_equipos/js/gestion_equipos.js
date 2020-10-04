@@ -483,6 +483,9 @@ function informacionEquipo(idEquipo) {
     let idDestino = localStorage.getItem('idDestino');
     document.getElementById("modalMPEquipo").classList.add('open');
 
+    // Funciones principales
+    consultarOpcionesEquipo();
+
     const action = "informacionEquipo";
     $.ajax({
         type: "POST",
@@ -495,12 +498,12 @@ function informacionEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-
+            console.log(data);
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
             document.getElementById("QREquipo").
-                setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/equipos?id=" + idEquipo);
+                setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
 
             document.getElementById("nombreEquipo").value = data.equipo;
             document.getElementById("seccionEquipo").value = data.idSeccion;
@@ -535,8 +538,7 @@ function informacionEquipo(idEquipo) {
             document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () { obtenerImagenesEquipo(idEquipo) });
             document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () { toggleModalTailwind('modalMedia') });
 
-            // Funciones Complementarias
-            consultarOpcionesEquipo();
+            // Funciones Secundarias
             toggleInputsEquipo(0);
             obtenerImagenesEquipo(idEquipo);
             consultarPlanEquipo(idEquipo);

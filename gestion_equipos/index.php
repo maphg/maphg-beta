@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Gestion de Equipos</title>
+    <title>MAPHG Gestion Equipos</title>
     <link rel="stylesheet" href="../css/tailwindproduccion.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="../css/modales.css">

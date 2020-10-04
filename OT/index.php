@@ -244,8 +244,7 @@
                     document.getElementById("semanaOT").innerHTML = 'Semana ' + data.semana;
                     document.getElementById("añoOT").innerHTML = data.año;
                     document.getElementById("equipoOT").innerHTML = data.equipo;
-                    document.getElementById("fechaOT").innerHTML = 'GENERADA EL ' +
-                        data.fecha_creacion;
+                    document.getElementById("fechaOT").innerHTML = 'GENERADA EL ' + data.fecha_creacion;
                     document.getElementById("logoClassOT").classList.remove();
                     document.getElementById("logoClassOT").classList.add(data.seccion.toLowerCase() + '-logo');
                     document.getElementById("dataMaterialesOT").innerHTML = data.materiales;
