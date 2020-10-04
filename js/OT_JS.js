@@ -6,6 +6,7 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
     let idUsuario = localStorage.getItem('usuario');
     const action = "obtenerOTDigital";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
+    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {
