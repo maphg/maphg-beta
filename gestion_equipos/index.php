@@ -40,7 +40,6 @@
     </div>
 
     <div class="flex flex-row container mx-auto text-base mb-6">
-
         <div class="flex flex-col pl-4 w-1/6">
             <h1 class="self-start mb-2">Destinos</h1>
             <div class="relative ">
@@ -101,7 +100,7 @@
 
     </div>
 
-    <div class="flex flex-col container mx-auto scrollbar">
+    <div class="flex flex-col items-star lg:items-center mx-auto scrollbar">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
             <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -156,10 +155,12 @@
     </div>
 
 
-    <!-- MODALES -->
+
+
+    <!-- ***** MODALES PRINCIPALES ***** -->
 
     <!-- MODAL EQUIPO PARA LOS MP-->
-    <div id="modalMPEquipo" class="modal relative" onclick="registroEventos(this.id);">
+    <div id="modalMPEquipo" class="modal relative">
         <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg " style="width: 1000px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -411,7 +412,123 @@
             <!-- PLANES MP -->
         </div>
     </div>
+    <!-- MODAL EQUIPO PARA LOS MP-->
 
+
+    <!-- MODAL PARA FINALIZAR OT -->
+    <div id="modalSolucionarOT" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1000px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalSolucionarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex flex-col leading-none justify-center items-center bg-bluegray-900 rounded-b-md w-16 h-10">
+                    <h1 class="font-bold text-sm text-white">OT</h1>
+                    <h1 id="numeroOT" class="font-bold text-xs text-bluegray-100">234</h1>
+                </div>
+                <div id="tipoOT" class="ml-4 font-bold bg-purple-200 text-purple-500 text-xs py-1 px-2 rounded">
+                    <h1>OT PREVENTIVA</h1>
+                </div>
+                <div id="statusOT" class="ml-4 font-bold text-xs py-1 px-2 rounded">
+                    <h1>EN PROCESO</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+
+                <div class="flex items-center justify-center w-full">
+                    <div class="w-full flex">
+                        <div class="w-1/2 text-sm px-2 flex flex-col">
+                            <h1 class="mb-1">Fecha</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                    <h1 id="semanaOT">Semana 8</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-1/2 text-sm px-2 flex flex-col">
+                            <h1 class="mb-1">Responsables</h1>
+                            <div id="responsablesOT" class="flex flex-wrap w-full justify-start items-center"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="w-full text-sm px-2 flex flex-col mt-3">
+                    <h1 class="mb-1">Status</h1>
+                    <div id="dataStatusOT" class="flex flex-wrap w-full justify-start items-center"></div>
+                </div>
+
+                <div class="flex w-full text-sm mt-4">
+                    <div class="w-1/2 flex flex-col items-start justify-start">
+                        <div class="flex flex-col w-full ">
+                            <h1 class="mb-2">Actividades Predefinidas</h1>
+
+                            <div id="actividadesOT" class="flex flex-col w-full border-2 border-gray-300 text-xs rounded  p-1"></div>
+                        </div>
+
+                        <div class="flex flex-col w-full p-2 mt-2 text-xs">
+                            <h1 class="mb-2">Actividades Extra</h1>
+                            <div class="w-full">
+                                <input id="inputActividadesExtra" type="text" placeholder="Añadir Actividad Extra..." class="w-full p-2 border border-gray-200 rounded mb-1" autocomplete="off">
+                            </div>
+
+                            <div id="actividadesExtraOT" class="w-full overflow-y-auto scrollbar" style="max-height: 300px;"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 flex flex-col items-start justify-start px-4">
+                        <div class="flex flex-col w-full mb-2">
+                            <h1 class="">Observaciones / Comentarios</h1>
+                        </div>
+
+                        <div class="w-full">
+                            <textarea id="comentarioOT" cols="30" rows="5" class="w-full  border-2 border-gray-300 rounded leading-none"></textarea>
+                        </div>
+
+                        <div class="flex w-full mb-2">
+                            <h1 class="mr-2">Archivos Adjuntos</h1>
+                            <div id="btnAdjuntosOT" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="toggleModalTailwind('modalMedia');">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar border-2 border-gray-300 rounded">
+                                <div id="imagenesOT" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 300px;"></div>
+                                <div id="documentosOT" class="flex flex-col overflow-y-auto scrollbar px-1 mb-4 text-xs" style="max-height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex justify-center items-center my-4">
+                    <div id="btnGuardarOT" class="btn btn-blue mr-4">
+                        <h1>Guardar Cambios</h1>
+                    </div>
+                    <div id="btnFinalizarOT" class="btn btn-green mr-4">
+                        <h1>Finalizar esta OT</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA FINALIZAR OT -->
+
+    <!-- ***** MODALES PRINCIPALES ***** -->
+
+
+
+
+    <!-- ***** MODALES SECUNDARIO ***** -->
 
     <!-- MODAL MEDIA -->
     <div id="modalMedia" class="modal">
@@ -472,6 +589,176 @@
     <!-- MODALES -->
 
 
+    <!-- MODAL STATUS   -->
+    <div id="modalStatus" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalStatus')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center flex-col w-full font-bold text-sm">
+
+                <div id="statusUrgente" class="hidden w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
+                    <div class="">
+                        <h1>ES URGENTE</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-siren-on animated flash infinite"></i>
+                    </div>
+                </div>
+
+                <div id="statusMaterial" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs">
+                    <div class="">
+                        <h1>NO HAY MATERIAL</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>M</h1>
+                    </div>
+                </div>
+
+                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
+                    <div class="">
+                        <h1>TRABAJANDO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>T</h1>
+                    </div>
+                </div>
+
+                <div id="statusenergeticos" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                    <div class="">
+                        <h1>ENERGÉTICOS</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>E</h1>
+                    </div>
+                </div>
+                <div id="statusenergeticostoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusElectricidad" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>ELECTRICIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusAgua" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>AGUA</h1>
+                        </div>
+                    </div>
+                    <div id="statusDiesel" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>DIESEL</h1>
+                        </div>
+                    </div>
+                    <div id="statusGas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>GAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusdep" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                    <div class="">
+                        <h1>DEPARTAMENTO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>D</h1>
+                    </div>
+                </div>
+                <div id="statusdeptoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusRRHH" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>RRHH</h1>
+                        </div>
+                    </div>
+                    <div id="statusCalidad" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>CALIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusDireccion" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>DIRECCION</h1>
+                        </div>
+                    </div>
+                    <div id="statusFinanzas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>FINANZAS</h1>
+                        </div>
+                    </div>
+                    <div id="statusCompras" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>COMPRAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusbitacora" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div class="">
+                        <h1>BITACORA</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>B</h1>
+                    </div>
+                </div>
+                <div id="statusbitacoratoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2">
+                    <div id="statusGP" class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>GP</h1>
+                        </div>
+                    </div>
+                    <div id="statusTRS" class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>TRS</h1>
+                        </div>
+                    </div>
+                    <div id="statusZI" class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>ZI</h1>
+                        </div>
+                    </div>
+                </div>
+                <div id="statusFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                    <div class="">
+                        <h1>SOLUCIONAR</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+                        <div class="">
+                            <i class="fas fa-pen fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-random fa-lg"></i>
+                        </div>
+                    </div>
+                    <div id="statusActivo" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-trash fa-lg"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL STATUS   -->
+
+
     <!-- MENÚ OPCIONES MP -->
     <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
         <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646;">
@@ -510,15 +797,51 @@
             <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
 
         </div>
-        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px;"></i>
+        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:99;"></i>
     </div>
     <!-- MENÚ OPCIONES MP -->
+
+
+    <!-- MODAL RESPONSABLE -->
+    <div id="modalUsuarios" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 450px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalUsuarios')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RESPONSABLE</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3 w-full">
+                    <input id="palabraUsuario" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                </div>
+
+                <div class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="height: 400px;">
+                    <div id="dataUsuarios"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- ACTIVIDADES MP -->
     <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
     </div>
     <!-- ACTIVIDADES MP -->
+
+    <!-- ***** MODALES SECUNDARIO ***** -->
+
+
+
+
 
 
     <!-- LIBRERIAS JS -->
@@ -527,6 +850,7 @@
     <script src="../js/alertasSweet.js"></script>
     <script src="js/gestion_equipos.js"></script>
     <script src="../js/popper.min.js"></script>
+    <script src="../js/OT_JS.js"></script>
 </body>
 
 </html>

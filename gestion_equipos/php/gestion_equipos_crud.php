@@ -13,6 +13,8 @@ if (isset($_GET['action'])) {
     $idUsuario = $_GET['idUsuario'];
     $idDestino = $_GET['idDestino'];
     $fechaActual = date('Y-m-d H:m:s');
+    $añoActual = date('Y');
+    $semanaActual = date('W');
 
     if ($action == "consultaEquiposLocales") {
         $filtroDestino = intval($_GET['filtroDestino']);
@@ -23,7 +25,6 @@ if (isset($_GET['action'])) {
         $filtroSemana = $_GET['filtroSemana'];
         $filtroPalabra = $_GET['filtroPalabra'];
         $array = array();
-        $semanaActual = date('W');
 
         if ($filtroDestino > 0) {
             $filtroDestino = "and t_equipos_america.id_destino = $filtroDestino";
@@ -55,11 +56,7 @@ if (isset($_GET['action'])) {
             $filtroSubseccion = "";
         }
 
-        if ($filtroSemana > 0) {
-            $filtroSemana = "INNER JOIN t_mp_planeacion_proceso ON t_equipos_america.id = t_mp_planeacion_proceso.id_equipo AND semana_$filtroSemana = 'PROCESO'";
-        } else {
-            $filtroSemana = "";
-        }
+
 
         if ($filtroPalabra == "") {
             $filtroPalabra = "";
@@ -77,7 +74,6 @@ if (isset($_GET['action'])) {
         LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
         LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
         LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        $filtroSemana
         WHERE t_equipos_america.activo = 1 
         $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
 
@@ -97,56 +93,97 @@ if (isset($_GET['action'])) {
                 $destino = $i['destino'];
                 $resultx = array();
 
-                $mp = "SELECT* FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1";
+                // Contadores para Resumen MP
+                $contadorPlanificado = 0;
+                $contadorProceso = 0;
+                $contadorSolucionado = 0;
 
-                // Proximo MP
-                if ($result = mysqli_query($conn_2020, $mp)) {
-                    // Contadores para Resumen MP
-                    $contadorPlanificado = 0;
-                    $contadorProceso = 0;
-                    $contadorSolucionado = 0;
+                if ($filtroSemana <= 0 || $filtroSemana == "") {
+                    $mp = "SELECT* FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
 
-                    foreach ($result as $x) {
-
-                        for ($i = $semanaActual; $i < 52; $i++) {
-                            $semana = $x['semana_' . $i];
-
-                            if ($semana == "PROCESO") {
-                                $proximoMP = $i;
-                                $resultx[] = $proximoMP;
-                                $i = 52;
+                        foreach ($result as $x) {
+                            for ($i = $semanaActual; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PROCESO") {
+                                    $proximoMP = $i;
+                                    $resultx[] = $proximoMP;
+                                    $i = 52;
+                                }
                             }
                         }
 
-                        // Resumen MP
-                        for ($i = 1; $i < 52; $i++) {
-                            $semana = $x['semana_' . $i];
+                        foreach ($result as $x) {
+                            // Resumen MP
+                            for ($i = 1; $i < 52; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PROCESO") {
+                                    $contadorProceso++;
+                                }
+                                if ($semana == "SOLUCIONADO") {
+                                    $contadorSolucionado++;
+                                }
+                            }
+                        }
+                    }
 
+                    $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+                        foreach ($result as $x) {
+                            for ($i = $semanaActual; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PLANIFICADO") {
+                                    $proximoMP = $i;
+                                    $resultx[] = $proximoMP;
+                                    $i = 52;
+                                }
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            for ($i = 1; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PLANIFICADO") {
+                                    $contadorPlanificado++;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $filtroSemana = intval($filtroSemana);
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
+                            if ($semana == "PROCESO") {
+                                $resultx[] = $filtroSemana;
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            // Resumen MP
+                            $semana = $x['semana_' . $filtroSemana];
                             if ($semana == "PROCESO") {
                                 $contadorProceso++;
                             }
-
                             if ($semana == "SOLUCIONADO") {
                                 $contadorSolucionado++;
                             }
                         }
                     }
-                }
 
-                $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1";
-                if ($result = mysqli_query($conn_2020, $mp)) {
-                    foreach ($result as $x) {
-                        for ($i = $semanaActual; $i < 52; $i++) {
-                            $semana = $x['semana_' . $i];
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
                             if ($semana == "PLANIFICADO") {
-                                $proximoMP = $i;
-                                $resultx[] = $proximoMP;
-                                $i = 52;
+                                $resultx[] = $filtroSemana;
                             }
                         }
 
-                        for ($i = 1; $i < 52; $i++) {
-                            $semana = $x['semana_' . $i];
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
                             if ($semana == "PLANIFICADO") {
                                 $contadorPlanificado++;
                             }
@@ -154,22 +191,22 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $fase = "";
-                $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
-                if ($result = mysqli_query($conn_2020, $fases)) {
-                    foreach ($result as $i) {
-                        $fase .= $i['fase'] . " ";
-                    }
-                }
-
                 $resuly = array_count_values($resultx);
-
                 $xc = "";
                 foreach ($resuly as $key => $value) {
                     if ($value > 1) {
                         $xc .= " " . $key . "(" . $value . ") ";
                     } else {
                         $xc .= " " . $key;
+                    }
+                }
+
+
+                $fase = "";
+                $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
+                if ($result = mysqli_query($conn_2020, $fases)) {
+                    foreach ($result as $i) {
+                        $fase .= $i['fase'] . " ";
                     }
                 }
 
@@ -189,7 +226,8 @@ if (isset($_GET['action'])) {
                     "proximoMP" => $xc,
                     "proceso" => $contadorProceso,
                     "solucionado" => $contadorSolucionado,
-                    "planificado" => $contadorPlanificado
+                    "planificado" => $contadorPlanificado,
+                    "semanaActual" => $semanaActual
                 );
 
                 $array[] = $arrayTemp;

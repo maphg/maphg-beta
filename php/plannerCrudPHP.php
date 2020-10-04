@@ -13,6 +13,7 @@ if (isset($_POST['action'])) {
     $idUsuario = $_POST['idUsuario'];
     $idDestino = $_POST['idDestino'];
     $fechaActual = date("Y-m-d H:m:s");
+    $semanaActual = date('W');
 
     // Array para Secciones.
     $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC", 0 => "");
@@ -3828,6 +3829,26 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
+            }elseif($tipoAsginacion == "asignarOT"){
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"eliminarResponsbleOT($idItem, $idUsuario);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
+                }
+
             }
 
             $data['totalUsuarios'] = $totalUsuarios;
@@ -6818,6 +6839,28 @@ if (isset($_POST['action'])) {
             } else {
                 echo -1;
             }
+        } elseif ($tabla == "t_mp_planificacion_iniciada_adjuntos") {
+            $imgNombre = "OT_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/mp_ot/";
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_mp_planificacion_iniciada_adjuntos(id_planificacion_iniciada, id_usuario, url, fecha_subida, activo) 
+                        VALUES($idTabla, $idUsuario, '$imgNombre', '$fechaActual', 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 10;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
         } else {
             echo 0;
         }
@@ -7845,6 +7888,7 @@ if (isset($_POST['action'])) {
                 $data['caudal_aire_cfm'] = $caudal_aire_cfm;
                 $data['status'] = $status;
                 $data['tipo'] = $tipo;
+                $data['semanaActual'] = $semanaActual;
             }
         }
         echo json_encode($data);
@@ -7928,15 +7972,17 @@ if (isset($_POST['action'])) {
         $año = date('Y');
         $data = array();
 
-        $query = "SELECT t_equipos_america.id 'idEquipo', t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
+        $query = "SELECT t_equipos_america.id 'idEquipo', t_equipos_america.id_destino, t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
         c_frecuencias_mp.frecuencia, t_mp_planes_mantenimiento.grado
         FROM t_equipos_america 
-        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo
+        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo and 
+        t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
-        WHERE t_equipos_america.id = $idEquipo AND t_equipos_america.activo = 1 and t_mp_planes_mantenimiento.status = 'ACTIVO'";
+        WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and t_mp_planes_mantenimiento.status = 'ACTIVO'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idEquipo = $i['idEquipo'];
+                $idDestino = $i['id_destino'];
                 $idPlan = $i['idPlan'];
                 $idTipo = $i['tipo_local_equipo'];
                 $tipoPlan = $i['tipo_plan'];
@@ -8210,7 +8256,8 @@ if (isset($_POST['action'])) {
                                     "proceso_49" => $semana_proceso_49,
                                     "proceso_50" => $semana_proceso_50,
                                     "proceso_51" => $semana_proceso_51,
-                                    "proceso_52" => $semana_proceso_52
+                                    "proceso_52" => $semana_proceso_52,
+                                    "semanaActual" => $semanaActual
                                 );
 
                             $data[] = $arrayTemp;

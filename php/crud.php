@@ -2008,7 +2008,6 @@ if (isset($_POST['action'])) {
         }
     }
 
-
     //Proceso para Status de los Departamentos.
     if ($action == "reporteStatusDEP") {
         $idDestino = $_POST['idDestino'];
@@ -2025,22 +2024,27 @@ if (isset($_POST['action'])) {
             $status = "AND t_mc.departamento_rrhh != ''";
             $status_P = "AND t_proyectos_planaccion.departamento_rrhh != 0";
             $columnaProyectos = "departamento_rrhh";
+            $status_T = "AND t_mp_np.departamento_rrhh != '0'";
         } elseif ($idSubseccion == 211) {
             $status = "AND t_mc.departamento_finanzas != ''";
             $status_P = "AND t_proyectos_planaccion.departamento_finanzas != 0";
             $columnaProyectos = "departamento_finanzas";
+            $status_T = "AND t_mp_np.departamento_finanzas != '0'";
         } elseif ($idSubseccion == 212) {
             $status = "AND t_mc.departamento_direccion != ''";
             $status_P = "AND t_proyectos_planaccion.departamento_direccion != 0";
             $columnaProyectos = "departamento_direccion";
+            $status_T = "AND t_mp_np.departamento_direccion != '0'";
         } elseif ($idSubseccion == 214) {
             $status = "AND t_mc.departamento_calidad != ''";
             $status_P = "AND t_proyectos_planaccion.departamento_calidad != 0";
             $columnaProyectos = "departamento_calidad";
+            $status_T = "AND t_mp_np.departamento_calidad != '0'";
         } else {
             $status = "AND t_mc.departamento_calidad != '-'";
             $status_P = "AND t_proyectos_planaccion.departamento_calidad != '-'";
             $columnaProyectos = "";
+            $status_T = "";
         }
 
         if ($idDestino != 10) {
@@ -2234,10 +2238,16 @@ if (isset($_POST['action'])) {
                     $departamento = "";
                 }
 
-                if ($status_material == "1") {
+                if ($status_material != "0") {
                     $status_material = "<span class=\"tag is-dark fa-lg\">M</span>";
                 } else {
                     $status_material = "";
+                }
+
+                if ($status_trabajare != "0") {
+                    $status_trabajare = "<span class=\"tag is-info fa-lg mr-2\">T</span>";
+                } else {
+                    $status_trabajare = "";
                 }
 
                 $data .= "
@@ -2246,7 +2256,7 @@ if (isset($_POST['action'])) {
                             <div class=\"columns\">
                                 <div class=\"column\">
                                     <div class=\"message is-small is-danger\">
-                                        <p class=\"message-body\"><strong>TAREA: $titulo</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creadoNombre $creadoApellido</span></p>
+                                        <p class=\"message-body\"><strong>$titulo</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creadoNombre $creadoApellido</span><span class=\"has-text-grey-light\"> Tarea</span></p>
                                     </div>
                                 </div>
                             </div>
@@ -2268,7 +2278,8 @@ if (isset($_POST['action'])) {
                                 <div class=\"column\">
                                     <p class=\"t-normal\">
                                     $departamento
-                                    $status_material $status_trabajare
+                                    $status_material 
+                                    $status_trabajare
                                     </p>
                                 </div>
                                 <div class=\"column\">
@@ -2371,7 +2382,7 @@ if (isset($_POST['action'])) {
                             <div class=\"columns\">
                                 <div class=\"column\">
                                     <div class=\"message is-small is-danger\">
-                                        <p class=\"message-body\"><strong>Proyecto: $planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
+                                        <p class=\"message-body\"><strong>$planaccion</strong><span><i class=\"fad fa-user-circle mx-2 fa-lg\"></i>$creado_por </span><span class=\"has-text-grey-light\"> Proyecto</span></p>
                                     </div>
                                 </div>
                             </div>

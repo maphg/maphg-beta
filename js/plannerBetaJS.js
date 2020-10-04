@@ -1389,11 +1389,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
       // console.log(data);
       alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
       document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-      document
-        .getElementById("palabraUsuario")
-        .setAttribute(
-          "onkeydown",
-          'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
+      document.getElementById("palabraUsuario").setAttribute("onkeydown",'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
         );
     },
   });
@@ -2335,8 +2331,7 @@ function datosAgregarProyecto() {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      document.getElementById("responsableProyectoN").innerHTML =
-        data.dataUsuarios;
+      document.getElementById("responsableProyectoN").innerHTML = data.dataUsuarios;
     },
   });
 }
@@ -2407,12 +2402,7 @@ function agregarProyecto() {
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
-  document
-    .getElementById("palabraUsuario")
-    .setAttribute(
-      "onkeyup",
-      "obtenerResponsablesProyectos(" + idProyecto + ")"
-    );
+  document.getElementById("palabraUsuario").setAttribute("onkeyup", "obtenerResponsablesProyectos(" + idProyecto + ")");
   document.getElementById("modalUsuarios").classList.add("open");
   let idItem = idProyecto;
   let idUsuario = localStorage.getItem("usuario");
@@ -2876,7 +2866,7 @@ function statusPlanaccion(idPlanaccion) {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
   let idSeccion = localStorage.getItem("idSeccion")
-  
+
   document.getElementById("inputEditarTitulo").value = actividadActual;
   document.getElementById("modalStatus").classList.add("open");
 
@@ -2909,10 +2899,7 @@ function statusPlanaccion(idPlanaccion) {
 
   document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
 
-  // Llama la función para formatear el Modal de Status
-  estiloDefectoModalStatus();
 
-;
   const action = "statusPlanaccion";
   $.ajax({
     type: "POST",
@@ -2927,74 +2914,59 @@ function statusPlanaccion(idPlanaccion) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
+      // Llama la función para formatear el Modal de Status
+      estiloDefectoModalStatus();
 
       if (data.sMaterial == 1) {
-        document
-          .getElementById("statusMaterial")
-          .classList.add("bg-orange-200");
+        estiloStatusActivoModalStatus("statusMaterial");
       }
 
       if (data.sTrabajando == 1) {
-        document.getElementById("statusTrabajare").classList.add("bg-blue-200");
+        estiloStatusActivoModalStatus("statusTrabajare");
       }
 
-      if (
-        data.eElectricidad == 1 ||
-        data.eAgua == 1 ||
-        data.eDiesel == 1 ||
-        data.eGas == 1
-      ) {
-        document
-          .getElementById("statusenergeticos")
-          .classList.add("bg-yellow-200");
+      if (data.eElectricidad == 1 || data.eAgua == 1 || data.eDiesel == 1 || data.eGas == 1) {
+        estiloStatusActivoModalStatus("statusenergeticos");
       }
 
       if (data.eElectricidad == 1) {
-        document
-          .getElementById("statusElectricidad")
-          .classList.add("bg-yellow-200");
+        estiloStatusActivoModalStatus("statusElectricidad");
       }
 
       if (data.eAgua == 1) {
-        document.getElementById("statusAgua").classList.add("bg-yellow-200");
+        estiloStatusActivoModalStatus("statusAgua");
       }
 
       if (data.eDiesel == 1) {
-        document.getElementById("statusDiesel").classList.add("bg-yellow-200");
+        estiloStatusActivoModalStatus("statusDiesel");
       }
 
       if (data.eGas == 1) {
-        document.getElementById("statusGas").classList.add("bg-yellow-200");
+        estiloStatusActivoModalStatus("statusGas");
       }
 
-      if (
-        data.dCalidad == 1 ||
-        data.dCompras == 1 ||
-        data.dDireccion == 1 ||
-        data.dFinanzas == 1 ||
-        data.dRRHH == 1
-      ) {
-        document.getElementById("statusdep").classList.add("bg-teal-200");
+      if (data.dCalidad == 1 || data.dCompras == 1 || data.dDireccion == 1 || data.dFinanzas == 1 || data.dRRHH == 1) {
+        estiloStatusActivoModalStatus("statusdep");
       }
 
       if (data.dCalidad == 1) {
-        document.getElementById("statusCalidad").classList.add("bg-teal-200");
+        estiloStatusActivoModalStatus("statusCalidad");
       }
 
       if (data.dCompras == 1) {
-        document.getElementById("statusCompras").classList.add("bg-teal-200");
+        estiloStatusActivoModalStatus("statusCompras");
       }
 
       if (data.dDireccion == 1) {
-        document.getElementById("statusDireccion").classList.add("bg-teal-200");
+        estiloStatusActivoModalStatus("statusDireccion");
       }
 
       if (data.dFinanzas == 1) {
-        document.getElementById("statusFinanzas").classList.add("bg-teal-200");
+        estiloStatusActivoModalStatus("statusFinanzas");
       }
 
       if (data.dRRHH == 1) {
-        document.getElementById("statusRRHH").classList.add("bg-teal-200");
+        estiloStatusActivoModalStatus("statusRRHH");
       }
     },
   });
@@ -3906,7 +3878,6 @@ function consultarPlanEquipo(idEquipo) {
 
 // Genera la Programación de los MP
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-  // console.log(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
 
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
@@ -4009,7 +3980,6 @@ function consultarActividadesMP(idPlan) {
     placement: 'top',
   });
 
-
   let idUsuario = localStorage.getItem('usuario');
   let idDestino = localStorage.getItem('idDestino');
   const action = "consultarActividadesMP";
@@ -4063,7 +4033,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
   let idDestino = localStorage.getItem('idDestino');
   let numeroSemanas = 0;
 
-
   const action = "programarMP";
   $.ajax({
     type: "POST",
@@ -4098,7 +4067,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 }
 
 
-
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {
   console.log(x);
@@ -4123,33 +4091,21 @@ function botonesMenuMP(x) {
 function claseBotonesProyecto(tipoSeleccion) {
   document.getElementById("btnProyecto").classList.remove("bg-blue-300");
   document.getElementById("btnGanttProyecto").classList.remove("bg-blue-300");
-  document
-    .getElementById("btnSolucionadosProyectos")
-    .classList.remove("bg-green-300");
-  document
-    .getElementById("btnPendientesProyectos")
-    .classList.remove("bg-red-300");
+  document.getElementById("btnSolucionadosProyectos").classList.remove("bg-green-300");
+  document.getElementById("btnPendientesProyectos").classList.remove("bg-red-300");
 
   if (tipoSeleccion == "proyectosPendientes") {
     document.getElementById("btnProyecto").classList.add("bg-blue-300");
-    document
-      .getElementById("btnPendientesProyectos")
-      .classList.add("bg-red-300");
+    document.getElementById("btnPendientesProyectos").classList.add("bg-red-300");
   } else if (tipoSeleccion == "proyectosSolucionados") {
     document.getElementById("btnProyecto").classList.add("bg-blue-300");
-    document
-      .getElementById("btnSolucionadosProyectos")
-      .classList.add("bg-green-300");
+    document.getElementById("btnSolucionadosProyectos").classList.add("bg-green-300");
   } else if (tipoSeleccion == "ganttPendientes") {
     document.getElementById("btnGanttProyecto").classList.add("bg-blue-300");
-    document
-      .getElementById("btnPendientesProyectos")
-      .classList.add("bg-red-300");
+    document.getElementById("btnPendientesProyectos").classList.add("bg-red-300");
   } else if (tipoSeleccion == "ganttSolucionados") {
     document.getElementById("btnGanttProyecto").classList.add("bg-blue-300");
-    document
-      .getElementById("btnSolucionadosProyectos")
-      .classList.add("bg-green-300");
+    document.getElementById("btnSolucionadosProyectos").classList.add("bg-green-300");
   }
 }
 
@@ -4160,12 +4116,8 @@ function estiloDefectoModalStatus() {
   document.getElementById("statusTrabajare").classList.remove("bg-blue-200");
 
   //Energeticos
-  document
-    .getElementById("statusenergeticos")
-    .classList.remove("bg-yellow-200");
-  document
-    .getElementById("statusElectricidad")
-    .classList.remove("bg-yellow-200");
+  document.getElementById("statusenergeticos").classList.remove("bg-yellow-200");
+  document.getElementById("statusElectricidad").classList.remove("bg-yellow-200");
   document.getElementById("statusAgua").classList.remove("bg-yellow-200");
   document.getElementById("statusDiesel").classList.remove("bg-yellow-200");
   document.getElementById("statusGas").classList.remove("bg-yellow-200");
@@ -4183,6 +4135,50 @@ function estiloDefectoModalStatus() {
   document.getElementById("statusGP").classList.remove("bg-lightblue-50");
   document.getElementById("statusTRS").classList.remove("bg-lightblue-50");
   document.getElementById("statusZI").classList.remove("bg-lightblue-50");
+}
+
+
+// Función para Aplicar Estilo a los Status activos
+function estiloStatusActivoModalStatus(status) {
+  if (status == "statusMaterial") {
+    document.getElementById("statusMaterial").classList.add("bg-orange-200");
+  }
+  if (status == "statusTrabajare") {
+    document.getElementById("statusTrabajare").classList.add("bg-blue-200");
+  }
+  if (status == "statusenergeticos") {
+    document.getElementById("statusenergeticos").classList.add("bg-yellow-200");
+  }
+  if (status == "statusElectricidad") {
+    document.getElementById("statusElectricidad").classList.add("bg-yellow-200");
+  }
+  if (status == "statusAgua") {
+    document.getElementById("statusAgua").classList.add("bg-yellow-200");
+  }
+  if (status == "statusDiesel") {
+    document.getElementById("statusDiesel").classList.add("bg-yellow-200");
+  }
+  if (status == "statusGas") {
+    document.getElementById("statusGas").classList.add("bg-yellow-200");
+  }
+  if (status == "statusdep") {
+    document.getElementById("statusdep").classList.add("bg-teal-200");
+  }
+  if (status == "statusCalidad") {
+    document.getElementById("statusCalidad").classList.add("bg-teal-200");
+  }
+  if (status == "statusCompras") {
+    document.getElementById("statusCompras").classList.add("bg-teal-200");
+  }
+  if (status == "statusDireccion") {
+    document.getElementById("statusDireccion").classList.add("bg-teal-200");
+  }
+  if (status == "statusFinanzas") {
+    document.getElementById("statusFinanzas").classList.add("bg-teal-200");
+  }
+  if (status == "statusRRHH") {
+    document.getElementById("statusRRHH").classList.add("bg-teal-200");
+  }
 }
 
 
@@ -4234,9 +4230,6 @@ function llamarFuncionX(nombreFuncion) {
       break;
   }
 }
-
-
-
 
 
 

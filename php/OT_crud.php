@@ -1,0 +1,505 @@
+<?php
+// Se establece la Zona Horaria.
+date_default_timezone_set('America/Cancun');
+setlocale(LC_MONETARY, 'es_ES');
+
+// Modulo para importar la Conxión a la DB.
+include 'conexion.php';
+
+if (isset($_GET['action'])) {
+
+    //Variables Globales 
+    $action = $_GET['action'];
+    $idUsuario = $_GET['idUsuario'];
+    $idDestino = $_GET['idDestino'];
+    $fechaActual = date('Y-m-d H:m:s');
+    $añoActual = date('Y');
+    $semanaActual = date('W');
+
+    if ($action == "obtenerOTDigital") {
+        $idEquipo = $_GET['idEquipo'];
+        $idPlan = $_GET['idPlan'];
+        $semanaX = $_GET['semanaX'];
+        $array = array();
+        $responsables = array();
+        $actividades = array();
+        $adjuntos = array();
+
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.id_responsables, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.semana, 
+        t_mp_planificacion_iniciada.comentario, t_mp_planes_mantenimiento.id 'id_plan', t_mp_planes_mantenimiento.tipo_plan, t_mp_planificacion_iniciada.actividades_extra
+        FROM t_mp_planificacion_iniciada 
+        INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+        WHERE t_mp_planificacion_iniciada.id_plan = $idPlan and t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.semana = $semanaX and t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.año = $añoActual";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idOT = $i['id'];
+                $idPlan = $i['id_plan'];
+                $statusOT = $i['status'];
+                $semana = $i['semana'];
+                $comentario = $i['comentario'];
+                $tipoPlan = $i['tipo_plan'];
+                $idResponsables = $i['id_responsables'];
+                $actividadesExtra = $i['actividades_extra'];
+                $actividadesExtra = explode(";", $actividadesExtra);
+
+                if ($statusOT == "PROCESO") {
+                    $statusOT = "EN PROCESO";
+                } elseif ($statusOT == "SOLUCIONADO") {
+                    $statusOT = "SOLUCIONADO";
+                }
+
+                // ACTIVIDADES NORMALES
+                $query = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_preventivos WHERE id_plan = $idPlan and status = 'ACTIVO' and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+
+                        $actividadesTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => "");
+                        $actividades[] = $actividadesTemp;
+                    }
+                }
+
+                // ACTIVIDADES CHECK
+                $query = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_checklist WHERE id_plan = $idPlan and status = 'ACTIVO' and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+
+                        $actividadesTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => "");
+                        $actividades[] = $actividadesTemp;
+                    }
+                }
+
+                // ACTIVIDADES LIST
+                $query = "SELECT id, tipo_actividad, descripcion_actividad, tipo_medicion FROM t_mp_planes_actividades_test WHERE id_plan = $idPlan and status = 'ACTIVO' and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+                        $medicion = $i['tipo_medicion'];
+
+                        $actividadesTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => $medicion);
+                        $actividades[] = $actividadesTemp;
+                    }
+                }
+
+                // Array Temporal para cada iteración
+                $arrayTemp = array("OT" => "$idOT", "statusOT" => "$statusOT", "semana" => "Semana $semana", "observacion" => "$idOT", "comentario" => "$comentario", "tipoPlan" => "OT $tipoPlan", "actividades" => $actividades, "actividadesExtra" => $actividadesExtra);
+
+                // Array para almacenar resultados de las iteraciones
+                $array[] = $arrayTemp;
+            }
+            echo json_encode($array);
+        }
+    }
+
+    if ($action == "agregarActividadesExtra") {
+        $actividad = $_GET['actividadesExtra'];
+        $idOT = $_GET['idOT'];
+        $array = array();
+
+        $query = "SELECT actividades_extra FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $actividades = $i['actividades_extra'];
+                $actividadesTemp = explode(";", $actividades);
+                $totalActividades = count($actividadesTemp);
+                if ($totalActividades > 0) {
+                    $actividades = "$actividades" . ";$actividad";
+                    $query = "UPDATE t_mp_planificacion_iniciada SET actividades_extra = '$actividades' WHERE id = $idOT";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $respuesta = "Agregada";
+                    }
+                }
+            }
+        }
+        echo json_encode($respuesta);
+    }
+
+
+    if ($action == "consultarActividadesExtraOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+
+        $query = "SELECT actividades_extra FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $actividadesExtra = $i['actividades_extra'];
+                $actividadesExtra = explode(";", $actividadesExtra);
+                $arrayTemp = array("actividadesExtra" => $actividadesExtra);
+                $array[] = $arrayTemp;
+            }
+            echo json_encode($array);
+        }
+    }
+
+
+    if ($action == "eliminarActividadesExtra") {
+        $idOT = $_GET['idOT'];
+        $posicionItem = $_GET['posicionItem'];
+        $array = array();
+
+        $query = "SELECT actividades_extra FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $actividadesExtra = $i['actividades_extra'];
+                $actividadesExtra = explode(";", $actividadesExtra);
+                if ($posicionItem >= 0) {
+                    unset($actividadesExtra[$posicionItem]);
+                    $actividadesExtra = implode(";", $actividadesExtra);
+                    $query = "UPDATE t_mp_planificacion_iniciada SET actividades_extra = '$actividadesExtra' WHERE id = $idOT";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $respuesta = "Eliminada";
+                    } else {
+                        $respuesta = "NoEliminada";
+                    }
+                }
+            }
+            echo json_encode($respuesta);
+        }
+    }
+
+
+    if ($action == "consultarAdjuntosOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+
+        $query = "SELECT t_mp_planificacion_iniciada_adjuntos.id, t_mp_planificacion_iniciada_adjuntos.url, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_mp_planificacion_iniciada_adjuntos 
+        LEFT JOIN t_users ON t_mp_planificacion_iniciada_adjuntos.id_usuario = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_mp_planificacion_iniciada_adjuntos.id_planificacion_iniciada = $idOT and t_mp_planificacion_iniciada_adjuntos.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $nombre  = $i['nombre'] . " " . $i['apellido'];
+                $url = $i['url'];
+
+                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "gif")) {
+                    $tipo = "imagenes";
+                } else {
+                    $tipo = "documentos";
+                }
+
+                $adjuntosTemp = array("id" => $id, "nombre" => $nombre, "url" => $url, "tipo" => $tipo);
+                $array[] = $adjuntosTemp;
+            }
+            echo json_encode($array);
+        }
+    }
+
+
+    if ($action == "consultarStatusOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+        $query = "SELECT* FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $statusUrgente = $i['status_urgente'];
+                $statusTrabajare = $i['status_trabajando'];
+                $statusMaterial = $i['status_material'];
+                $statusElectricidad = $i['energetico_electricidad'];
+                $statusAgua = $i['energetico_agua'];
+                $statusGas = $i['energetico_gas'];
+                $statusDiesel = $i['energetico_diesel'];
+                $statusCompras = $i['departamento_compras'];
+                $statusFinanzas = $i['departamento_finanzas'];
+                $statusRRHH = $i['departamento_rrhh'];
+                $statusDireccion = $i['departamento_direccion'];
+                $statusCalidad = $i['departamento_calidad'];
+
+                $array['statusUrgente'] = $statusUrgente;
+                $array['statusTrabajare'] = $statusTrabajare;
+                $array['statusMaterial'] = $statusMaterial;
+                $array['statusElectricidad'] = $statusElectricidad;
+                $array['statusAgua'] = $statusAgua;
+                $array['statusGas'] = $statusGas;
+                $array['statusDiesel'] = $statusDiesel;
+                $array['statusCompras'] = $statusCompras;
+                $array['statusFinanzas'] = $statusFinanzas;
+                $array['statusRRHH'] = $statusRRHH;
+                $array['statusDireccion'] = $statusDireccion;
+                $array['statusCalidad'] = $statusCalidad;
+            }
+            echo  json_encode($array);
+        }
+    }
+
+    if ($action == "actualizaStatusOT") {
+        $idOT = $_GET['idOT'];
+        $status = $_GET['status'];
+        $array = array();
+
+        if (
+            $status == "status_material" || $status == "status_trabajando" || $status == "energetico_electricidad" || $status == "energetico_agua" ||
+            $status == "energetico_diesel" || $status == "energetico_gas" || $status == "departamento_rrhh" || $status == "departamento_direccion" ||
+            $status == "departamento_finanzas" || $status == "departamento_calidad" || $status == "departamento_compras"
+        ) {
+            $query = "SELECT $status FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $valorStatus = $i[$status];
+                    $array['status'] = $valorStatus;
+                }
+                if ($valorStatus == 1) {
+                    $query = "UPDATE t_mp_planificacion_iniciada SET $status = '0' WHERE id = $idOT and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $array['respuesta'] = "ACTIVADO";
+                    }
+                } else {
+                    $query = "UPDATE t_mp_planificacion_iniciada SET $status = '1' WHERE id = $idOT and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $array['respuesta'] = "DESACTIVADO";
+                    }
+                }
+            }
+        } elseif ($status == "status") {
+            $query = "SELECT id, semana, id_plan, id_equipo, año FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $i) {
+                    $idOT = $i['id'];
+                    $semana = $i['semana'];
+                    $idPlan = $i['id_plan'];
+                    $idEquipo = $i['id_equipo'];
+                    $año = $i['año'];
+                }
+                $query = "UPDATE t_mp_planificacion_iniciada SET status = 'SOLUCIONADO' WHERE id = $idOT and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+
+                    $query = "UPDATE t_mp_planeacion_proceso SET semana_$semana = 'SOLUCIONADO' 
+                    WHERE id_plan = $idPlan and id_equipo = $idEquipo and año = $año and semana_$semana ='PROCESO'";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $array['respuesta'] = "SOLUCIONADO";
+                        $array['idOT'] = $idOT;
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "actividadRealizadaOT") {
+        $idOT = $_GET['idOT'];
+        $idActividad = intval($_GET['idActividad']);
+        $tipoActividadTemp = $_GET['tipoActividad'];
+        $valor = $_GET['valor'];
+        $actividades = "";
+        $array = array();
+        $contador = 0;
+
+        if ($tipoActividadTemp == "actividad") {
+            $tipoActividad = "actividades_preventivo_realizadas";
+        } elseif ($tipoActividadTemp == "checkList") {
+            $tipoActividad = "actividades_check_realizadas";
+        } elseif ($tipoActividadTemp == "test") {
+            $tipoActividad = "actividades_test_realizadas";
+        }
+
+
+        $query = "SELECT $tipoActividad FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+
+            if ($tipoActividadTemp == "test") {
+                foreach ($result as $i) {
+
+                    $actividades = $i[$tipoActividad];
+                    if ($actividades != "") {
+                        $actividades = explode(';', $actividades);
+
+                        foreach ($actividades as $x => $value) {
+                            $actividades_2 = explode("=", $value);
+                            if ($actividades_2[0] == $idActividad) {
+                                $key = $x;
+                            }
+                        }
+
+                        if ($key >= 0) {
+                            unset($actividades[$key]);
+                            $actividades[] = "$idActividad=$valor";
+                            $actividades = implode(";", $actividades);
+                            $query = "UPDATE t_mp_planificacion_iniciada SET actividades_test_realizadas = '$actividades' WHERE id = $idOT and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $array[] = "Actualizado";
+                            }
+                        }
+                    } else {
+                        $query = "UPDATE t_mp_planificacion_iniciada SET actividades_test_realizadas = '$idActividad=$valor' WHERE id = $idOT and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array[] = "Actualizado";
+                        }
+                    }
+                }
+            } elseif ($tipoActividadTemp == "checkList") {
+                foreach ($result as $i) {
+
+                    $actividades = $i[$tipoActividad];
+                    if ($actividades != "") {
+                        $actividades = explode(';', $actividades);
+
+                        foreach ($actividades as $x => $value) {
+                            $actividades_2 = explode("=", $value);
+                            if ($actividades_2[0] == $idActividad) {
+                                $key = $x;
+                            }
+                        }
+
+                        if ($key >= 0) {
+                            unset($actividades[$key]);
+                            $actividades[] = "$idActividad=$valor";
+                            $actividades = implode(";", $actividades);
+                            $query = "UPDATE t_mp_planificacion_iniciada SET actividades_check_realizadas = '$actividades' WHERE id = $idOT and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $array[] = "Actualizado";
+                            }
+                        }
+                    } else {
+                        $query = "UPDATE t_mp_planificacion_iniciada SET actividades_check_realizadas = '$idActividad=$valor' WHERE id = $idOT and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array[] = "Actualizado";
+                        }
+                    }
+                }
+            } elseif ($tipoActividadTemp == "actividad") {
+                foreach ($result as $i) {
+                    $actividades = $i[$tipoActividad];
+
+                    if ($actividades != "") {
+                        $actividades = explode(';', $actividades);
+
+                        foreach ($actividades as $x => $value) {
+                            if ($value == $idActividad) {
+                                $contador++;
+                                $key = $x;
+                            }
+                        }
+
+                        if ($contador > 0) {
+                            unset($actividades[$key]);
+                            $actividades = implode(";", $actividades);
+                            $query = "UPDATE t_mp_planificacion_iniciada SET actividades_preventivo_realizadas = '$actividades' WHERE id = $idOT and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $array[] = "Actualizado";
+                            }
+                        } else {
+                            $actividades[] = "$idActividad";
+                            $actividades = implode(";", $actividades);
+                            $query = "UPDATE t_mp_planificacion_iniciada SET actividades_preventivo_realizadas = '$actividades' WHERE id = $idOT and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $array[] = "Actualizado";
+                            }
+                        }
+                    } else {
+                        $query = "UPDATE t_mp_planificacion_iniciada SET actividades_preventivo_realizadas = '$idActividad' WHERE id = $idOT and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array[] = "Actualizado";
+                        }
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "consultarActividadRealizadaOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+
+        $query = "SELECT actividades_preventivo_realizadas, actividades_check_realizadas, actividades_test_realizadas  
+        FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $actividades = $i['actividades_preventivo_realizadas'];
+                $check = $i['actividades_check_realizadas'];
+                $test = $i['actividades_test_realizadas'];
+
+                $array['actividades'] = $actividades;
+                $array['check'] = $check;
+                $array['test'] = $test;
+            }
+            echo json_encode($array);
+        }
+    }
+
+
+    // Obtiene responsables asignados
+    if ($action == "consultaResponsablesOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+
+        $query = "SELECT id_responsables FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idResponsables = $i['id_responsables'];
+                $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
+                FROM t_users
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id IN($idResponsables)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $idUsuario = $i['id'];
+                        $nombre = $i['nombre'];
+                        $apellido = $i['apellido'];
+
+                        $responsablesTemp = array("idUsuario" => $idUsuario, "nombre" => $nombre, "apellido" => $apellido);
+                        $array[] = $responsablesTemp;
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "eliminarResponsbleOT") {
+        $idOT = $_GET['idOT'];
+        $idResponsable = $_GET['idResponsable'];
+        $array = array();
+        $contador = 0;
+
+        $query = "SELECT id_responsables FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $responsables = $i['id_responsables'];
+
+                if ($responsables != "") {
+                    $responsables = explode(',', $responsables);
+
+                    foreach ($responsables as $x => $value) {
+                        if ($value == $idResponsable) {
+                            $contador++;
+                            $key = $x;
+                        }
+                    }
+
+                    if ($contador > 0) {
+                        unset($responsables[$key]);
+                        $responsables = implode(",", $responsables);
+                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' WHERE id = $idOT and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array[] = "Eliminado";
+                        }
+                    } else {
+                        $responsables[] = "$idResponsable";
+                        $responsables = implode(",", $responsables);
+                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' WHERE id = $idOT and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array[] = "Agregado";
+                        }
+                    }
+                } else {
+                    $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$idResponsable' WHERE id = $idOT and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $array[] = "Agregado";
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+}

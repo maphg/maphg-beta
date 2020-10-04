@@ -39,64 +39,83 @@ const datosPlanes = params => {
             icono = "fad fa-dot-circle";
     }
 
-    return `
-        <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
-        onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id});">
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
-                <div class=" leading-5 text-gray-500">${params.marca}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                ${params.seccion}
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                ${params.subseccion}
-            </td>
-            
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                <div class=" leading-5 text-gray-900">${params.equipo}</div>
-                <div class=" leading-5 text-gray-500">ID ${params.id}</div>
-            </td> 
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                <div class=" leading-5 text-gray-900">${params.tipoEquipo}</div>
-                <div class=" leading-5 ${claseequipoLocal}"><i class="${icono} mr-2"></i>${params.equipoLocal}</div>
-            </td>           
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                <div class=" leading-5 text-gray-900">${params.marcaEquipo}</div>
-                <div class=" leading-5 text-gray-500">MOD ${params.modelo}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                ${params.ubicacion}
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="px-2 inline-flex  leading-5 font-bold rounded-full ${claseStatus} uppercase">
-                    ${params.status}
-                </span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
-                    ${params.proximoMP}
-                </span>
-            </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
-                
-                <div class="programado-PLANIFICADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
-                        <h1>${params.planificado}</h1>
-                </div>
-                
-                <div class="status-PROCESO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
-                        <h1>${params.proceso}</h1>
-                </div>
-                
-                <div class="status-SOLUCIONADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
-                    <h1>${params.solucionado}</h1>
-                </div>
-                       
-                </span>
-            </td>
-        </tr>
+    if (params.planificado > 0) {
+        var planificado = `
+            <div class="programado-PLANIFICADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                <h1>${params.planificado}</h1>
+            </div>
         `;
+    } else {
+        var planificado = "";
+    }
+
+    if (params.proceso > 0) {
+        var proceso = `
+            <div class="status-PROCESO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                    <h1>${params.proceso}</h1>
+            </div>
+        `;
+    } else {
+        var proceso = "";
+    }
+
+    if (params.solucionado > 0) {
+        var solucionado = `
+            <div class="status-SOLUCIONADO w-6 h-6 rounded-full mr-1 flex justify-center items-center">
+                <h1>${params.solucionado}</h1>
+            </div>
+        `;
+    } else {
+        var solucionado = "";
+    }
+
+    var result = `
+            <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
+            onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id});">
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
+                    <div class=" leading-5 text-gray-500">${params.marca}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    ${params.seccion}
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    ${params.subseccion}
+                </td>
+                
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    <div class=" leading-5 text-gray-900">${params.equipo}</div>
+                    <div class=" leading-5 text-gray-500">ID ${params.id}</div>
+                </td> 
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    <div class=" leading-5 text-gray-900">${params.tipoEquipo}</div>
+                    <div class=" leading-5 ${claseequipoLocal}"><i class="${icono} mr-2"></i>${params.equipoLocal}</div>
+                </td>           
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    <div class=" leading-5 text-gray-900">${params.marcaEquipo}</div>
+                    <div class=" leading-5 text-gray-500">MOD ${params.modelo}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    ${params.ubicacion}
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <span class="px-2 inline-flex  leading-5 font-bold rounded-full ${claseStatus} uppercase">
+                        ${params.status}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
+                        ${params.proximoMP}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">                   
+                        ${planificado + proceso + solucionado} 
+                    </span>
+                </td>
+            </tr>
+        `;
+    return result;
 };
 
 $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
@@ -139,211 +158,211 @@ const datosPlanEquipo = params => {
 
             <div id="${params.idSemana + '_semana_1'}" aria-describedby="tooltip" class="flex items-center justify-center whc-1 programado-${params.semana_1} status-${params.proceso_1}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 1); 
             botonesMenuMP('${params.proceso_1}');">
-                <h1 class="">01</h1>
+                <h1 class="semana_1">01</h1>
             </div>  
 
             <div id="${params.idSemana + '_semana_2'}" class="flex items-center justify-center whc-1 programado-${params.semana_2} status-${params.proceso_2}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 2); botonesMenuMP('${params.proceso_2}');">
-                <h1 class="">02</h1>
+                <h1 class="semana_2">02</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_3'}" class="flex items-center justify-center whc-1 programado-${params.semana_3} status-${params.proceso_3}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 3); botonesMenuMP('${params.proceso_3}');">
-                <h1 class="">03</h1>
+                <h1 class="semana_3">03</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_4'}" class="flex items-center justify-center whc-1 programado-${params.semana_4} status-${params.proceso_4}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 4); botonesMenuMP('${params.proceso_4}');">
-                <h1 class="">04</h1>
+                <h1 class="semana_4">04</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_5'}" class="flex items-center justify-center whc-1 programado-${params.semana_5} status-${params.proceso_5}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 5); botonesMenuMP('${params.proceso_5}');">
-                <h1 class="">05</h1>
+                <h1 class="semana_5">05</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_6'}" class="flex items-center justify-center whc-1 programado-${params.semana_6} status-${params.proceso_6}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 6); botonesMenuMP('${params.proceso_6}');">
-                <h1 class="">06</h1>
+                <h1 class="semana_6">06</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_7'}" class="flex items-center justify-center whc-1 programado-${params.semana_7} status-${params.proceso_7}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 7); botonesMenuMP('${params.proceso_7}');">
-                <h1 class="">07</h1>
+                <h1 class="semana_7">07</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_8'}" class="flex items-center justify-center whc-1 programado-${params.semana_8} status-${params.proceso_8}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 8); botonesMenuMP('${params.proceso_8}');">
-                <h1 class="">08</h1>
+                <h1 class="semana_8">08</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_9'}" class="flex items-center justify-center whc-1 programado-${params.semana_9} status-${params.proceso_9}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 9); botonesMenuMP('${params.proceso_9}');">
-                <h1 class="">09</h1>
+                <h1 class="semana_9">09</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_10'}" class="flex items-center justify-center whc-1 programado-${params.semana_10} status-${params.proceso_10}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 10); botonesMenuMP('${params.proceso_10}');">
-                <h1 class="">10</h1>
+                <h1 class="semana_10">10</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_11'}" class="flex items-center justify-center whc-1 programado-${params.semana_11} status-${params.proceso_11}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 11); botonesMenuMP('${params.proceso_11}');">
-                <h1 class="">11</h1>
+                <h1 class="semana_11">11</h1>
             </div> 
             
             <div id="${params.idSemana + '_semana_12'}" class="flex items-center justify-center whc-1 programado-${params.semana_12} status-${params.proceso_12}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 12); botonesMenuMP('${params.proceso_12}');">
-                <h1 class="">12</h1>
+                <h1 class="semana_12">12</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_13'}" class="flex items-center justify-center whc-1 programado-${params.semana_13} status-${params.proceso_13}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 13); botonesMenuMP('${params.proceso_13}');">
-                <h1 class="">13</h1>
+                <h1 class="semana_13">13</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_14'}" class="flex items-center justify-center whc-1 programado-${params.semana_14} status-${params.proceso_14}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 14); botonesMenuMP('${params.proceso_14}');">
-                <h1 class="">14</h1>
+                <h1 class="semana_14">14</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_15'}" class="flex items-center justify-center whc-1 programado-${params.semana_15} status-${params.proceso_15}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 15); botonesMenuMP('${params.proceso_15}');">
-                <h1 class="">15</h1>
+                <h1 class="semana_15">15</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_16'}" class="flex items-center justify-center whc-1 programado-${params.semana_16} status-${params.proceso_16}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 16); botonesMenuMP('${params.proceso_16}');">
-                <h1 class="">16</h1>
+                <h1 class="semana_16">16</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_17'}" class="flex items-center justify-center whc-1 programado-${params.semana_17} status-${params.proceso_17}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 17); botonesMenuMP('${params.proceso_17}');">
-                <h1 class="">17</h1>
+                <h1 class="semana_17">17</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_18'}" class="flex items-center justify-center whc-1 programado-${params.semana_18} status-${params.proceso_18}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 18); botonesMenuMP('${params.proceso_18}');">
-                <h1 class="">18</h1>
+                <h1 class="semana_18">18</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_19'}" class="flex items-center justify-center whc-1 programado-${params.semana_19} status-${params.proceso_19}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 19); botonesMenuMP('${params.proceso_19}');">
-                <h1 class="">19</h1>
+                <h1 class="semana_19">19</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_20'}" class="flex items-center justify-center whc-1 programado-${params.semana_20} status-${params.proceso_20}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 20); botonesMenuMP('${params.proceso_20}');">
-                <h1 class="">20</h1>
+                <h1 class="semana_20">20</h1>
             </div>  
 
             <div id="${params.idSemana + '_semana_21'}" class="flex items-center justify-center whc-1 programado-${params.semana_21} status-${params.proceso_21}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 21); botonesMenuMP('${params.proceso_21}');">
-                <h1 class="">21</h1>
+                <h1 class="semana_21">21</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_22'}" class="flex items-center justify-center whc-1 programado-${params.semana_22} status-${params.proceso_22}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 22); botonesMenuMP('${params.proceso_22}');">
-                <h1 class="">22</h1>
+                <h1 class="semana_22">22</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_23'}" class="flex items-center justify-center whc-1 programado-${params.semana_23} status-${params.proceso_23}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 23); botonesMenuMP('${params.proceso_23}');">
-                <h1 class="">23</h1>
+                <h1 class="semana_23">23</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_24'}" class="flex items-center justify-center whc-1 programado-${params.semana_24} status-${params.proceso_24}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 24); botonesMenuMP('${params.proceso_24}');">
-                <h1 class="">24</h1>
+                <h1 class="semana_24">24</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_25'}" class="flex items-center justify-center whc-1 programado-${params.semana_25} status-${params.proceso_25}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 25); botonesMenuMP('${params.proceso_25}');">
-                <h1 class="">25</h1>
+                <h1 class="semana_25">25</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_26'}" class="flex items-center justify-center whc-1 programado-${params.semana_26} status-${params.proceso_26}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 26); botonesMenuMP('${params.proceso_26}');">
-                <h1 class="">26</h1>
+                <h1 class="semana_26">26</h1>
             </div> 
 
             <div id="${params.idSemana + '_semana_27'}" class="flex items-center justify-center whc-1 programado-${params.semana_27} status-${params.proceso_27}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 27); botonesMenuMP('${params.proceso_27}');">
-                <h1 class="">27</h1>
+                <h1 class="semana_27">27</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_28'}" class="flex items-center justify-center whc-1 programado-${params.semana_28} status-${params.proceso_28}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 28); botonesMenuMP('${params.proceso_28}');">
-                <h1 class="">28</h1>
+                <h1 class="semana_28">28</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_29'}" class="flex items-center justify-center whc-1 programado-${params.semana_29} status-${params.proceso_29}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 29); botonesMenuMP('${params.proceso_29}');">
-                <h1 class="">29</h1>
+                <h1 class="semana_29">29</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_30'}" class="flex items-center justify-center whc-1 programado-${params.semana_30} status-${params.proceso_30}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 30); botonesMenuMP('${params.proceso_30}');">
-                <h1 class="">30</h1>
+                <h1 class="semana_30">30</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_31'}" class="flex items-center justify-center whc-1 programado-${params.semana_31} status-${params.proceso_31}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 31); botonesMenuMP('${params.proceso_31}');">
-                <h1 class="">31</h1>
+                <h1 class="semana_31">31</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_32'}" class="flex items-center justify-center whc-1 programado-${params.semana_32} status-${params.proceso_32}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 32); botonesMenuMP('${params.proceso_32}');">
-                <h1 class="">32</h1>
+                <h1 class="semana_32">32</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_33'}" class="flex items-center justify-center whc-1 programado-${params.semana_33} status-${params.proceso_33}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 33); botonesMenuMP('${params.proceso_33}');">
-                <h1 class="">33</h1>
+                <h1 class="semana_33">33</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_34'}" class="flex items-center justify-center whc-1 programado-${params.semana_34} status-${params.proceso_34}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 34); botonesMenuMP('${params.proceso_34}');">
-                <h1 class="">34</h1>
+                <h1 class="semana_34">34</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_35'}" class="flex items-center justify-center whc-1 programado-${params.semana_35} status-${params.proceso_35}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 35); botonesMenuMP('${params.proceso_35}');">
-                <h1 class="">35</h1>
+                <h1 class="semana_35">35</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_36'}" class="flex items-center justify-center whc-1 programado-${params.semana_36} status-${params.proceso_36}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 36); botonesMenuMP('${params.proceso_36}');">
-                <h1 class="">36</h1>
+                <h1 class="semana_36">36</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_37'}" class="flex items-center justify-center whc-1 programado-${params.semana_37} status-${params.proceso_37}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 37); botonesMenuMP('${params.proceso_37}');">
-                <h1 class="">37</h1>
+                <h1 class="semana_37">37</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_38'}" class="flex items-center justify-center whc-1 programado-${params.semana_38} status-${params.proceso_38}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 38); botonesMenuMP('${params.proceso_38}');">
-                <h1 class="">38</h1>
+                <h1 class="semana_38">38</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_39'}" class="flex items-center justify-center whc-1 programado-${params.semana_39} status-${params.proceso_39}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 39); botonesMenuMP('${params.proceso_39}');">
-                <h1 class="">39</h1>
+                <h1 class="semana_39">39</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_40'}" class="flex items-center justify-center whc-1 programado-${params.semana_40} status-${params.proceso_40}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 40); botonesMenuMP('${params.proceso_40}');">
-                <h1 class="">40</h1>
+                <h1 class="semana_40">40</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_41'}" class="flex items-center justify-center whc-1 programado-${params.semana_41} status-${params.proceso_41}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 41); botonesMenuMP('${params.proceso_41}');">
-                <h1 class="">41</h1>
+                <h1 class="semana_41">41</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_42'}" class="flex items-center justify-center whc-1 programado-${params.semana_42} status-${params.proceso_42}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 42); botonesMenuMP('${params.proceso_42}');">
-                <h1 class="">42</h1>
+                <h1 class="semana_42">42</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_43'}" class="flex items-center justify-center whc-1 programado-${params.semana_43} status-${params.proceso_43}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 43); botonesMenuMP('${params.proceso_43}');">
-                <h1 class="">43</h1>
+                <h1 class="semana_43">43</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_44'}" class="flex items-center justify-center whc-1 programado-${params.semana_44} status-${params.proceso_44}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 44); botonesMenuMP('${params.proceso_44}');">
-                <h1 class="">44</h1>
+                <h1 class="semana_44">44</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_45'}" class="flex items-center justify-center whc-1 programado-${params.semana_45} status-${params.proceso_45}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 45); botonesMenuMP('${params.proceso_45}');">
-                <h1 class="">45</h1>
+                <h1 class="semana_45">45</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_46'}" class="flex items-center justify-center whc-1 programado-${params.semana_46} status-${params.proceso_46}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 46); botonesMenuMP('${params.proceso_46}');">
-                <h1 class="">46</h1>
+                <h1 class="semana_46">46</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_47'}" class="flex items-center justify-center whc-1 programado-${params.semana_47} status-${params.proceso_47}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 47); botonesMenuMP('${params.proceso_47}');">
-                <h1 class="">47</h1>
+                <h1 class="semana_47">47</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_48'}" class="flex items-center justify-center whc-1 programado-${params.semana_48} status-${params.proceso_48}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 48); botonesMenuMP('${params.proceso_48}');">
-                <h1 class="">48</h1>
+                <h1 class="semana_48">48</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_49'}" class="flex items-center justify-center whc-1 programado-${params.semana_49} status-${params.proceso_49}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 49); botonesMenuMP('${params.proceso_49}');">
-                <h1 class="">49</h1>
+                <h1 class="semana_49">49</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_50'}" class="flex items-center justify-center whc-1 programado-${params.semana_50} status-${params.proceso_50}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 50); botonesMenuMP('${params.proceso_50}');">
-                <h1 class="">50</h1>
+                <h1 class="semana_50">50</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_51'}" class="flex items-center justify-center whc-1 programado-${params.semana_51} status-${params.proceso_51}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 51); botonesMenuMP('${params.proceso_51}');">
-                <h1 class="">51</h1>
+                <h1 class="semana_51">51</h1>
             </div>
 
             <div id="${params.idSemana + '_semana_52'}" class="flex items-center justify-center whc-1 programado-${params.semana_52} status-${params.proceso_52}" onclick="opcionesMenuMP(this.id, ${params.idSemana}, ${params.idProceso}, ${params.idEquipo}, ${params.idPlan}, 52); botonesMenuMP('${params.proceso_52}');">
-                <h1 class="">52</h1>
+                <h1 class="semana_52">52</h1>
             </div>
 
         </div>
@@ -371,10 +390,10 @@ function consultaEquiposLocales() {
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDePlanes').innerHTML = '';
     fetch(URL)
-    .then(res => res.json())
-    .then(array => {
-        if (array.length > 0) {
+        .then(res => res.json())
+        .then(array => {
             console.log(array);
+            if (array.length > 0) {
                 alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
                 for (let index = 0; index < array.length; index++) {
@@ -400,6 +419,7 @@ function consultaEquiposLocales() {
             } else {
                 alertaImg('Equipos Obtenidos: 0', '', 'info', 3000)
             }
+            return array[0].semanaActual;
         });
 }
 
@@ -475,9 +495,6 @@ function informacionEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(':::: ' + data.idEquipoPrincipal);
-            document.getElementById("btnAdjuntosEquipo").
-                setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
 
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
@@ -515,6 +532,8 @@ function informacionEquipo(idEquipo) {
 
             // Eventos
             document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+            document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () { obtenerImagenesEquipo(idEquipo) });
+            document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () { toggleModalTailwind('modalMedia') });
 
             // Funciones Complementarias
             consultarOpcionesEquipo();
@@ -522,6 +541,7 @@ function informacionEquipo(idEquipo) {
             obtenerImagenesEquipo(idEquipo);
             consultarPlanEquipo(idEquipo);
             opcionesJerarquiaEquipo(idEquipo);
+
         }
     });
 }
@@ -542,7 +562,6 @@ function opcionesJerarquiaEquipo(idEquipo) {
                 let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
                 if (array.length > 0) {
                     for (let index = 0; index < array.length; index++) {
-                        console.log(array[index].id, array[index].equipo);
                         var id = array[index].id;
                         var equipo = array[index].equipo;
                         opcionesEquipo += `<option value="${id}">${equipo} </option>`;
@@ -568,11 +587,6 @@ function obtenerImagenesEquipo(idEquipo) {
     let tabla = "t_equipos_adjuntos_america";
     let idTabla = idEquipo;
 
-    // Limpia contendor de Adjuntos
-    document.getElementById("dataImagenes").innerHTML = '';
-    document.getElementById("dataImagenesEquipo").innerHTML = '';
-    document.getElementById("dataAdjuntos").innerHTML = '';
-
     document.getElementById("inputAdjuntos").
         setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
@@ -589,6 +603,11 @@ function obtenerImagenesEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
+            // Limpia contendor de Adjuntos
+            document.getElementById("dataImagenes").innerHTML = '';
+            document.getElementById("dataImagenesEquipo").innerHTML = '';
+            document.getElementById("dataAdjuntos").innerHTML = '';
+
             if (data.imagen != "") {
                 document.getElementById("dataImagenes").innerHTML = data.imagenAux;
                 document.getElementById("dataImagenesEquipo").innerHTML = data.imagenAux;
@@ -613,7 +632,6 @@ function obtenerImagenesEquipo(idEquipo) {
 
 // Obtiene el Calendario de MP de los Equipos
 function consultarPlanEquipo(idEquipo) {
-    document.getElementById("contenedorPlanesEquipo").innerHTML = '';
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     const action = "consultarPlanEquipo";
@@ -628,6 +646,8 @@ function consultarPlanEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
+            document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+            console.log(data);
             if (data.length > 0) {
                 for (let index = 0; index < data.length; index++) {
 
@@ -747,10 +767,10 @@ function consultarPlanEquipo(idEquipo) {
                         proceso_52: data[index].proceso_52
                     });
                 }
+                indicadorSemanaActual(data[0].semanaActual);
             } else {
-                // alertaImg('Equipo Sin Plan Asignado', '', 'info', 3000);
+                document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
             }
-
         }
     });
 }
@@ -792,7 +812,7 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
         setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
 
     document.getElementById("solucionarOTMP").
-        setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "SOLUCIONAROT")`);
+        setAttribute('onclick', `obtenerOTDigital(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "SOLUCIONAROT")`);
 
     document.getElementById("cancelarOTMP").
         setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
@@ -1043,6 +1063,7 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
                 alertaImg(`Intente de Nuevo`, '', 'info', 3000);
             }
             // consultarPlanEquipo(idEquipo);
+            consultaEquiposLocales();
         }
     });
 }
@@ -1082,7 +1103,6 @@ function consultarActividadesMP(idPlan) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             document.getElementById("tooltipActividadesMP").innerHTML = data.actividades;
         }
     });
@@ -1115,6 +1135,7 @@ function subirImagenGeneral(idTabla, tabla) {
             contentType: false,
             processData: false,
             success: function (data) {
+                console.log(data);
                 document.getElementById("cargandoAdjunto").innerHTML = "";
                 document.getElementById("inputAdjuntos").value = "";
                 if (data == -1) {
@@ -1128,7 +1149,6 @@ function subirImagenGeneral(idTabla, tabla) {
                     alertaImg("Cotización Agregada", "", "success", 2500);
                     obtenerProyectosP("PROYECTO");
                     cotizacionesProyectos(idTabla);
-
                     // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
                 } else if (data == 4) {
                     alertaImg("Adjunto Agregado", "", "success", 2500);
@@ -1146,10 +1166,12 @@ function subirImagenGeneral(idTabla, tabla) {
                 } else if (data == 9) {
                     obtenerImagenesEquipo(idTabla);
                     alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 10) {
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                    consultaAdjuntosOT(idTabla);
                 } else {
                     alertaImg("Intente de Nuevo", "", "info", 3000);
                 }
-                // console.log(data);
             },
         });
     }
@@ -1184,7 +1206,6 @@ function despieceEquipos(idEquipo) {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             let despiece = "";
             for (let index = 0; index < array.length; index++) {
 
@@ -1215,14 +1236,11 @@ function despieceEquipos(idEquipo) {
 
 }
 
-
-// Captura Eventos
+// Captura Eventos (Prueba)
 function registroEventos(params) {
     if (params == "modalMPEquipo") {
-        console.log('Trabajando en Equipos');
     }
 }
-
 
 // ********** FILTROS PARA EQUIPOS **********
 
@@ -1316,31 +1334,27 @@ function consultarSubsecciones() {
 // ********** FILTROS PARA EQUIPOS **********
 
 
-
-// Funciones Generales
+// Funciones Generales, para Abrir MODAL
 function openmodal(modal) {
     var abrirmodal = document.getElementById(modal);
     abrirmodal.classList.add("open");
 }
 
+// Funciones Generales, para Cerrar MODAL
 function cerrarmodal(idmodal) {
     var cerrarr = document.getElementById(idmodal);
     cerrarr.classList.remove('open');
 };
 
 
-
-// Función inicial para mostrar información de Equipos (t_equipos_america).
-consultaEquiposLocales();
-
+// FUNCIONES INICIALES
 // Funciones para los Filtros
 generar52Semnas();
 consultarDestinos();
 consultarSecciones();
-document.getElementById("filtroSeccion").addEventListener("change", consultarSubsecciones);
-
 
 // Aplica Filtros Seleccionados
+document.getElementById("filtroSeccion").addEventListener("change", consultarSubsecciones);
 document.getElementById("filtroDestino").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSubseccion").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroTipo").addEventListener("change", consultaEquiposLocales);
@@ -1349,13 +1363,31 @@ document.getElementById("filtroSemana").addEventListener("change", consultaEquip
 document.getElementById("filtroSeccion").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroPalabra").addEventListener("keydown", consultaEquiposLocales);
 
+// Función inicial para mostrar información de Equipos (t_equipos_america).
+consultaEquiposLocales();
 
+// Función para 
 (function () {
     // alertaImg('QR Valido', '', 'success', 1800);
     let URLactual = window.location.search;
     let arr = URLactual.split("?");
     if (arr[1] > 0) {
-        informacionEquipo(arr[1]);
-        despieceEquipos(arr[1]);
+        let idEquipo = arra[1];
+        informacionEquipo(idEquipo);
+        despieceEquipos(idEquipo);
+        document.getElementById("filtroPalabra").value = idEquipo;
     }
 }());
+
+function indicadorSemanaActual(semana) {
+    let totalClase = document.getElementsByClassName("semana_" + semana);
+    console.log(semana, totalClase);
+    let codigo = `
+            ${semana}
+            <i class="text-red-500 fas fa-circle absolute" style="left: 1px; bottom: -8px;"></i>
+        `;
+
+    for (let i = 0; i < totalClase.length; i++) {
+
+    }
+}
