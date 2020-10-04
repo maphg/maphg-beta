@@ -762,7 +762,7 @@
 
     <!-- MENÚ OPCIONES MP -->
     <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
-        <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646;">
+        <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646; z-index:90;">
 
             <h1 class="mr-1 text-right absolute right-0" style="color: #ffff;" onclick="cerrarTooltip('tooltipMP')">
                 <i class="fas fa-times fa-lg"></i>
@@ -798,7 +798,7 @@
             <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
 
         </div>
-        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:99;"></i>
+        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
     </div>
     <!-- MENÚ OPCIONES MP -->
 
@@ -852,6 +852,6 @@
     <script src="js/gestion_equipos.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/OT_JS.js"></script>
-    </body>
+</body>
 
 </html>
