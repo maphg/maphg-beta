@@ -472,7 +472,7 @@
                         <div class="flex flex-col w-full ">
                             <h1 class="mb-2">Actividades Predefinidas</h1>
 
-                            <div id="actividadesOT" class="flex flex-col w-full border-2 border-gray-300 text-xs rounded  p-1"></div>
+                            <div id="actividadesOT" class="flex flex-col w-full border-2 border-gray-300 text-xs rounded p-1 overflow-y-auto scrollbar" style="max-height: 251px; height: 250px;"></div>
                         </div>
 
                         <div class="flex flex-col w-full p-2 mt-2 text-xs">
@@ -481,7 +481,7 @@
                                 <input id="inputActividadesExtra" type="text" placeholder="Añadir Actividad Extra..." class="w-full p-2 border border-gray-200 rounded mb-1" autocomplete="off">
                             </div>
 
-                            <div id="actividadesExtraOT" class="w-full overflow-y-auto scrollbar" style="max-height: 300px;"></div>
+                            <div id="actividadesExtraOT" class="w-full overflow-y-auto scrollbar" style="max-height: 200px; height: 199px;"></div>
 
                         </div>
                     </div>

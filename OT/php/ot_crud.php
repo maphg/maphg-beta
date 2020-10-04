@@ -28,7 +28,7 @@ if (isset($_POST['action'])) {
         $materiales = "";
 
         $query = "SELECT t_mp_planificacion_iniciada.id, t_equipos_america.equipo, 
-        t_mp_planificacion_iniciada.semana, t_mp_planificacion_iniciada.año, t_mp_planificacion_iniciada.fecha_creacion,
+        t_mp_planificacion_iniciada.semana, t_mp_planificacion_iniciada.año, t_mp_planificacion_iniciada.fecha_creacion, t_mp_planificacion_iniciada.comentario,
         c_secciones.seccion,
         c_subsecciones.grupo, 
         c_destinos.destino, 
@@ -56,6 +56,7 @@ if (isset($_POST['action'])) {
                 $seccion = $i['seccion'];
                 $grupo = $i['grupo'];
                 $destino = $i['destino'];
+                $comentario = $i['comentario'];
                 $tipo_plan = $i['tipo_plan'];
                 $grado = $i['grado'];
                 $semana = $i['semana'];
@@ -73,6 +74,7 @@ if (isset($_POST['action'])) {
                 $data['seccion'] = $seccion;
                 $data['grupo'] = $grupo;
                 $data['destino'] = $destino;
+                $data['comentario'] = $comentario;
                 $data['tipo_plan'] = $tipo_plan;
                 $data['grado'] = $grado;
                 $data['semana'] = $semana;
@@ -217,4 +219,7 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
+
+
+
 }

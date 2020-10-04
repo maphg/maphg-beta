@@ -502,4 +502,89 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+    if ($action == "guardarCambiosOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+        $comentario = $_GET['comentario'];
+
+        $query = "UPDATE t_mp_planificacion_iniciada SET comentario = '$comentario' WHERE id = $idOT and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $array[] = "Actualizado";
+        } else {
+            $array[] = "NOActualizado";
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "consultaActividadesOT") {
+        $idOT = $_GET['idOT'];
+        $array = array();
+        $actividades = array();
+        $check = array();
+        $test = array();
+
+        // ACTIVIDADES NORMALES
+        $query = "SELECT actividades_preventivo, actividades_test, actividades_check, actividades_extra FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo =1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+
+                $idActividades = $i['actividades_preventivo'];
+                $idTest = $i['actividades_test'];
+                $idCheck = $i['actividades_check'];
+                $actividadesExtra = $i['actividades_extra'];
+                $actividadesExtra = explode(";", $actividadesExtra);
+
+                // Actividades Extra
+                $array['actividadesExtra'] = $actividadesExtra;
+
+
+
+                // ACTIVIDADES CHECK
+                $query = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_checklist WHERE id IN($idCheck)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+
+                        $checkTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => "");
+                        $check[] = $checkTemp;
+                    }
+                    $array['check'] = $check;
+                }
+
+                // ACTIVIDADES TEST
+                $query = "SELECT id, tipo_actividad, descripcion_actividad, tipo_medicion FROM t_mp_planes_actividades_test WHERE id IN($idTest)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+                        $medicion = $i['tipo_medicion'];
+
+                        $testTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => $medicion);
+                        $test[] = $testTemp;
+                    }
+                    $array['test'] = $test;
+                }
+
+                // ACTIVIDADES PREVENTIVO
+                $query = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_preventivos WHERE id IN($idActividades)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $i) {
+                        $id = $i['id'];
+                        $tipoActividad = $i['tipo_actividad'];
+                        $actividad = $i['descripcion_actividad'];
+
+                        $actividadesTemp = array("id" => $id, "tipoActividad" => $tipoActividad, "actividad" => $actividad, "medicion" => "");
+                        $actividades[] = $actividadesTemp;
+                    }
+                    $array['actividades'] = $actividades;
+                }
+            }
+            echo json_encode($array);
+        }
+    }
 }

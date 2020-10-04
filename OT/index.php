@@ -15,13 +15,16 @@
 
 <body class="flex flex-col justify-start items-start md:items-center h-auto bg-bluegray-900" style="font-family: 'Roboto', sans-serif;">
     <div class="w-full h-auto py-2 bg-white mb-6 flex items-center justify-center" id="boton" style="z-index: 9878;">
+
         <button onclick="screenShot()" class="py-2 px-3 bg-red-200 shadow-sm font-bold uppercase text-red-500 text-xs rounded mr-4">
             <i class="fas fa-download font-normal"></i> Descargar PDF
         </button>
-        <button onclick="favoritos()" class="py-2 px-3 bg-yellow-200 shadow-sm font-bold uppercase text-yellow-500 text-xs rounded mr-4">
+
+        <button onclick="favoritos()" class="py-2 px-3 bg-yellow-200 shadow-sm font-bold uppercase text-yellow-500 text-xs rounded mr-4 hidden">
             <i class="fas fa-star font-normal"></i> Favoritos
         </button>
-        <button onclick="telegram()" class="py-2 px-3 bg-indigo-200 shadow-sm font-bold uppercase text-indigo-500 text-xs rounded">
+
+        <button onclick="telegram()" class="py-2 px-3 bg-indigo-200 shadow-sm font-bold uppercase text-indigo-500 text-xs rounded hidden">
             <i class="fab fa-telegram-plane font-normal"></i> Telegram Alerts
         </button>
     </div>
@@ -138,25 +141,12 @@
                             <div class="font-bold text-base w-auto px-3 rounded-b-lg text-center mb-2 uppercase text-gray-600 bg-gray-200 absolute top-0">
                                 <h1>Media</h1>
                             </div>
-                            <div class="w-full flex flex-row flex-wrap justify-evenly">
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo1.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo2.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo3.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo1.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo2.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo3.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo1.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo2.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo3.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo1.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo2.jpg);"></div>
-                                <div class="w-24 h-24 bg-cover bg-center m-1 rounded" style="background-image: url(img/equipo3.jpg);"></div>
-                            </div>
+                            <div id="mediaOT" class="w-full flex flex-row flex-wrap justify-evenly"></div>
                         </div>
                     </div>
                 </div>
                 <div class="text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full h-32 mt-4">
-                    <textarea name="" id="" class="text-xs font-semibold p-2 text-gray-700 focus:outline-none focus:shadow-outline-none uppercase w-full h-full" placeholder="Observaciones / Comentarios"></textarea>
+                    <textarea id="comentarioOT" class="text-xs font-semibold p-2 text-gray-700 focus:outline-none focus:shadow-outline-none uppercase w-full h-full" placeholder="Observaciones / Comentarios"></textarea>
                 </div>
                 <div class="w-full flex justify-evenly">
                     <div class="text-bluegray-900 rounded-md w-64 h-32 mt-4 flex flex-col justify-center items-center px-2">
@@ -187,80 +177,7 @@
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/html2canvas.js"></script>
     <script src="../js/exportarPdf.js"></script>
-    <script>
-        function tachar(id) {
-            idactividad = id + 'actividad';
-            var toggle = document.getElementById(idactividad);
-            toggle.classList.toggle("line-through");
-            toggle.classList.toggle("text-gray-600");
-            toggle.classList.toggle("italic");
-
-            idcheck1 = id + 'check1';
-            var toggle = document.getElementById(idcheck1);
-            toggle.classList.toggle("bg-lightblue-500");
-            toggle.classList.toggle("border-lightblue-500");
-
-            idcheck2 = id + 'check2';
-            var toggle = document.getElementById(idcheck2);
-            toggle.classList.toggle("invisible");
-        }
-
-        function verOT() {
-            let idUsuario = localStorage.getItem('usuario');
-            let idDestino = localStorage.getItem('idDestino');
-            let url = localStorage.getItem('URL').split(';');
-            let idSemana = url[0];
-            let idProceso = url[1];
-            let idEquipo = url[2];
-            let semanaX = url[3];
-            let idPlan = url[4];
-            const action = "GENERAROT";
-
-            $.ajax({
-                type: "POST",
-                url: "php/ot_crud.php",
-                data: {
-                    action: action,
-                    idUsuario: idUsuario,
-                    idDestino: idDestino,
-                    idSemana: idSemana,
-                    idProceso: idProceso,
-                    idEquipo: idEquipo,
-                    semanaX: semanaX,
-                    idPlan: idPlan
-                },
-                dataType: "JSON",
-                success: function(data) {
-                    console.log(data);
-                    document.getElementById("dataActividades").innerHTML = data.actividades;
-                    document.getElementById("idOTQR").innerHTML = data.id;
-                    document.getElementById("seccionOT").innerHTML = data.seccion;
-                    document.getElementById("destinoOT").innerHTML = data.destino;
-                    document.getElementById("subseccionOT").innerHTML = data.grupo;
-                    document.getElementById("tipoMantenimientoOT").innerHTML = 'Mantenimiento ' + data.tipo_plan;
-                    document.getElementById("numeroOT").innerHTML = 'OT NÚMERO ' + data.id;
-                    document.getElementById("tipoMatenimiento2OT").innerHTML = 'Mantenimiento ' + data.grado;
-                    document.getElementById("periodicidadOT").innerHTML = data.frecuencia;
-                    document.getElementById("semanaOT").innerHTML = 'Semana ' + data.semana;
-                    document.getElementById("añoOT").innerHTML = data.año;
-                    document.getElementById("equipoOT").innerHTML = data.equipo;
-                    document.getElementById("fechaOT").innerHTML = 'GENERADA EL ' + data.fecha_creacion;
-                    document.getElementById("logoClassOT").classList.remove();
-                    document.getElementById("logoClassOT").classList.add(data.seccion.toLowerCase() + '-logo');
-                    document.getElementById("dataMaterialesOT").innerHTML = data.materiales;
-                    document.getElementById("indicacionesAdicionalesOT").innerHTML = data.descripcion;
-                    if (data.status = "PROCESO") {
-                        document.getElementById("statusOT").innerHTML = 'EN ' + data.status;
-                    } else {
-                        document.getElementById("statusOT").innerHTML = data.status;
-                    }
-
-
-                }
-            });
-        }
-        verOT();
-    </script>
+    <script src="js/OT_JS.js"></script>
 </body>
 
 </html>

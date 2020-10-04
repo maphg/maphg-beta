@@ -623,11 +623,156 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
 }
 
 
+function consultaActividadesOT(idOT) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "consultaActividadesOT";
+    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+    console.log(URL);
+    fetch(URL)
+        .then(res => res.json())
+        .then(array => {
+            console.log(array);
+            // Actividades OT
+            var actividades = '';
+
+            for (let i = 0; i < array.actividades.length; i++) {
+                var id = array.actividades[i].id;
+                var actividad = array.actividades[i].actividad;
+                var tipoActividad = array.actividades[i].tipoActividad;
+                var medicion = array.actividades[i].medicion;
+
+                if (tipoActividad == "actividad") {
+
+                    actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                            <label class="mx-2 inline-flex items-center">
+                                <input id="actividad_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="checkbox" class="form-checkbox w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600">
+                                <div class="ml-2 text-justify">
+                                    <h1>${actividad}</h1>
+                                </div>
+                            </label>
+                        </div>
+                    `;
+                }
+            }
+
+            for (let i = 0; i < array.test.length; i++) {
+                var id = array.test[i].id;
+                var actividad = array.test[i].actividad;
+                var tipoActividad = array.test[i].tipoActividad;
+                var medicion = array.test[i].medicion;
+
+                if (tipoActividad == "test") {
+
+                    actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                            <div class="mr-2 flex flex-col leading-none">
+                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura">
+                                <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
+                            </div>
+                            <div class=" text-justify flex items-center">
+                                <h1>${actividad}</h1>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            for (let i = 0; i < array.check.length; i++) {
+                var id = array.check[i].id;
+                var actividad = array.check[i].actividad;
+                var tipoActividad = array.check[i].tipoActividad;
+                var medicion = array.check[i].medicion;
+
+                if (tipoActividad == "checkList") {
+                    actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start cursor-pointer mb-1 leading-none  hover:bg-green-100 hover:text-green-500">
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_si_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="SI">
+                                <div class=" text-justify">
+                                    <h1>SI</h1>
+                                </div>
+                            </div>
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_no_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="NO">
+                                <div class=" text-justify">
+                                    <h1>NO</h1>
+                                </div>
+                            </div>
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_na_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="NA">
+                                <div class=" text-justify">
+                                    <h1>N/A</h1>
+                                </div>
+                            </div>
+
+                            <div class=" text-justify flex items-center">
+                                <h1>${actividad}</h1>
+                            </div>
+                        </div>                    
+                    `;
+                }
+            }
+
+            // ACTIVIDADES EXTRA
+            var actividadesExtra = '';
+            for (let i = 0; i < array.actividadesExtra.length; i++) {
+                const actividad = array.actividadesExtra[i];
+                if (actividad == "0") {
+                    document.getElementById("actividadesExtraOT").innerHTML = '';
+                } else {
+                    actividadesExtra += `
+                        <div class="p-2 rounded font-semibold flex items-center justify-start bg-green-100 text-green-500 cursor-pointer mb-1">
+                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-green-600">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="w-full text-justify">
+                                <h1>${actividad}</h1>
+                            </div>
+                            <div class="text-justify text-gray-500" onclick="eliminarActividadesExtra(${idOT}, ${i})";>
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>                   
+                    `;
+                }
+
+            }
+
+            // Retorna los resultados a los Contenedores HTML
+            document.getElementById("actividadesExtraOT").innerHTML = actividadesExtra;
+            document.getElementById("actividadesOT").innerHTML = actividades;
+        });
+}
+
+
+function guardarCambiosOT() {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let comentario = document.getElementById("comentarioOT").value;
+    let idOT = localStorage.getItem('idOT');
+    const action = "guardarCambiosOT";
+    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&comentario=${comentario}`;
+    console.log(URL);
+    fetch(URL)
+        .then(res => res.json())
+        .then(array => {
+            if (array == "Actualizado") {
+                alertaImg(`OT #${idOT} Actualizada`, '', 'success', 3000);
+            } else {
+                alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+            }
+        });
+}
+
+
 // toggleClass Modal TailWind con la clase OPEN.
 function toggleModalTailwind(idModal) {
     $("#" + idModal).toggleClass("open");
 }
-
 
 // Función para Agregar Evento ENTER y agregar alguna Actividad Extra
 document.getElementById("inputActividadesExtra").addEventListener("keyup", function (event) {
@@ -636,6 +781,9 @@ document.getElementById("inputActividadesExtra").addEventListener("keyup", funct
         agregarActividadesExtra(idOT);
     }
 });
+
+// Eventos
+document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
 
 
 // Función para Limpiar estilos aplicados en las opciones de modalStatus
