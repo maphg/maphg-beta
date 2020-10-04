@@ -4,16 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>MAPHG Gestion Equipos</title>
+    <title>MAPHG Gestión Equipos</title>
     <link rel="stylesheet" href="../css/tailwindproduccion.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="../css/modales.css">
     <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/alertify.min.css">
     <link rel="stylesheet" href="../css/planner_cols.css">
+    <link rel="stylesheet" href="../css/animate.css">
 </head>
 
-<body class="bg-fondos-7 text-bluegray-800">
+<body class=" bg-fondos-7 text-bluegray-800">
     <div class="flex flex-col container mx-auto py-10 font-light text-3xl">
         <h1>Equipos y Locales</h1>
     </div>
@@ -851,6 +852,6 @@
     <script src="js/gestion_equipos.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/OT_JS.js"></script>
-</body>
+    </body>
 
 </html>
