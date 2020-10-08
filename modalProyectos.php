@@ -1975,6 +1975,42 @@
         }
 
 
+        // Actualiza el Coste de Planacción de Proyecto.
+        function actualizarCostePlanaccion(idPlanaccion) {
+            let coste = document.getElementById("costePlanaccion" + idPlanaccion).value;
+            console.log(coste);
+            let idUsuario = localStorage.getItem('usuario');
+            let idDestino = localStorage.getItem('idDestino');
+
+            const action = "actualizarCostePlanaccion";
+            if (coste >= 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "php/plannerCrudPHP.php",
+                    data: {
+                        action: action,
+                        idUsuario: idUsuario,
+                        idDestino: idDestino,
+                        idPlanaccion: idPlanaccion,
+                        coste: coste
+                    },
+                    // dataType: "JSON",
+                    success: function(data) {
+                        console.log(data);
+                        if (data == 1) {
+                            alertaImg('Coste Actualizado', '', 'success', 2500);
+                        } else {
+                            alertaImg('Coste NO Valido', '', 'info', 2500);
+                        }
+                    }
+                });
+            } else {
+                alertaImg('Coste NO Valido', '', 'info', 2500);
+            }
+        }
+
+
+
         // Funcion Default.
         obtenerProyectosP('PROYECTO');
     </script>

@@ -3829,7 +3829,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            }elseif($tipoAsginacion == "asignarOT"){
+            } elseif ($tipoAsginacion == "asignarOT") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -3848,7 +3848,6 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-
             }
 
             $data['totalUsuarios'] = $totalUsuarios;
@@ -5544,7 +5543,7 @@ if (isset($_POST['action'])) {
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion);\">
                                             </h1>
                                         </div>
 
@@ -5636,7 +5635,7 @@ if (isset($_POST['action'])) {
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion);\">
                                             </h1>
                                         </div>
 
@@ -8710,6 +8709,18 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
+    if($action == "actualizarCostePlanaccion"){
+        $coste = $_POST['coste'];
+        $idPlanaccion = $_POST['idPlanaccion']; 
+
+        $query = "UPDATE t_proyectos_planaccion SET coste = $coste WHERE id = $idPlanaccion";
+        if($result = mysqli_query($conn_2020, $query)){
+            echo 1;
+        }else{
+            echo 0;
+        }
+    }
 
 
 
