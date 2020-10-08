@@ -5260,8 +5260,15 @@ if (isset($_POST['action'])) {
                                 <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold rounded-r\" onclick=\"agregarPlanaccion($idProyecto);\">Añadir</button>
                                 <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold ml-2 rounded\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
                                     solucionados</button>
-                                <button class=\" px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\">Generar
-                                    OT</button>
+
+                                <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                                    Generar Excel
+                                </button>
+
+                                <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                                    Generar PDF
+                                </button>
+
                             </div>
                     ";
 
@@ -5947,6 +5954,7 @@ if (isset($_POST['action'])) {
                         <div class=\"w-24 flex h-full items-center justify-center font-bold\" onclick=\"obtenerDatoProyectos($idProyecto,'coste');\">
                             <h1>$coste</h1>
                         </div>
+                        
                         <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\" onclick=\"actualizarProyectos('N', 'status', $idProyecto);\">
                             <div><i class=\"fas fa-undo fa-lg text-red-500\"></i></div>
                         </div>
@@ -5964,8 +5972,15 @@ if (isset($_POST['action'])) {
                             <button class=\" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold uppercase rounded-r\">Añadir</button>
                             <button class=\" px-2 py-1 bg-teal-300 text-teal-500 font-bold uppercase ml-2 rounded\" onclick=\"classNameToggle('actividades$idProyecto');\">Ver
                                 solucionados</button>
-                            <button class=\" px-2 py-1 bg-orange-300 text-orange-500 font-bold uppercase ml-2 rounded\">Generar
-                                OT</button>
+                            
+                            <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                                Generar Excel
+                            </button>
+
+                            <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                                Generar PDF
+                            </button>
+
                         </div>
                 ";
 
@@ -5988,6 +6003,9 @@ if (isset($_POST['action'])) {
                             <div class=\"w-32 flex h-full items-center justify-center\">
                                 <h1>STATUS</h1>
                             </div>
+                            <div class=\"w-32 flex h-full items-center justify-center\">
+                                <h1>COSTE</h1>
+                            </div>
                         </div>
 
                         <div class=\"w-full flex flex-col rounded\">
@@ -6006,7 +6024,8 @@ if (isset($_POST['action'])) {
                 t_proyectos_planaccion.departamento_compras,
                 t_proyectos_planaccion.departamento_direccion,
                 t_proyectos_planaccion.departamento_finanzas,
-                t_proyectos_planaccion.departamento_rrhh
+                t_proyectos_planaccion.departamento_rrhh,
+                t_proyectos_planaccion.coste
                 FROM t_proyectos_planaccion
                 INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -6033,13 +6052,14 @@ if (isset($_POST['action'])) {
                             $dDireccion = $value['departamento_direccion'];
                             $dFinanzas = $value['departamento_finanzas'];
                             $dRRHH = $value['departamento_rrhh'];
+                            $coste = $value['coste'];
 
                             if ($fecha == "" or $fecha == " ") {
                                 $fecha = "-";
                             }
 
                             if ($status == "F" or $status == "FINALIZADO" or $status == "SOLUCIONADO") {
-                                $solucionados = "actividades$idProyecto hidden";
+                                $solucionados = "actividades$idProyecto";
                             } else {
                                 $solucionados = "";
                             }
@@ -6237,6 +6257,12 @@ if (isset($_POST['action'])) {
                                 </div>
                                 <div class=\"w-32 h-full flex items-center justify-center text-teal-500 rounded-r-md\">
                                     <div><i class=\"fad fa-exclamation-circle fa-lg\"></i></div>
+                                </div>
+                                
+                                <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md hover:bg-teal-200 text-teal-500 rounded-r-md\">
+                                    <h1>
+                                        <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion);\">
+                                    </h1>
                                 </div>
                             </div>
                         ";

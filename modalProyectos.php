@@ -1978,7 +1978,7 @@
         // Actualiza el Coste de Planacción de Proyecto.
         function actualizarCostePlanaccion(idPlanaccion) {
             let coste = document.getElementById("costePlanaccion" + idPlanaccion).value;
-            console.log(coste);
+            // console.log(coste);
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
 
@@ -1996,7 +1996,7 @@
                     },
                     // dataType: "JSON",
                     success: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         if (data == 1) {
                             alertaImg('Coste Actualizado', '', 'success', 2500);
                         } else {
@@ -2006,6 +2006,15 @@
                 });
             } else {
                 alertaImg('Coste NO Valido', '', 'info', 2500);
+            }
+        }
+
+
+        function generarReporteProyecto(tipoReporte, idProyecto) {
+            if (tipoReporte == "excel") {
+                location.href = `php/generar_reporte_proyecto.php?idProyecto=`;
+            } else if (tipoReporte == "pdf") {
+                location.href = "php/generar_reporte_proyecto.php";
             }
         }
 
