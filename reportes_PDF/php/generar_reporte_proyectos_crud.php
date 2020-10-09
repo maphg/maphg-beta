@@ -21,7 +21,7 @@ if (isset($_GET['action'])) {
         $contador = 0;
         $array = array();
         $actividades = array();
-        $imagenes = array();
+
 
         $query = "
             SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.justificacion, t_proyectos.fecha_creacion, t_proyectos.rango_fecha, t_proyectos.status, 
@@ -98,7 +98,7 @@ if (isset($_GET['action'])) {
                             $statusP = "SOLUCIONADO";
                         }
 
-                        $imagenes = "";
+                        $imagenes = array();
 
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
