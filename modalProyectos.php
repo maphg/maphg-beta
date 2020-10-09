@@ -1980,7 +1980,6 @@
             let valor = document.getElementById(input).value;
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
-            console.log(valor);
 
             const action = "actualizarPlanaccionReporte";
             $.ajax({
@@ -1997,9 +1996,8 @@
                 // dataType: "JSON",
                 success: function(data) {
                     // console.log(data);
-                    if (data == 1) {
-                        alertaImg('Coste Actualizado', '', 'success', 2500);
-                    } else {
+                    
+                    if (data != 1) {
                         alertaImg('Coste NO Valido', '', 'info', 2500);
                     }
                 }
