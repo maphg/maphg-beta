@@ -58,8 +58,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $statusP = "SOLUCIONADO";
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(80);
-        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(80);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(120);
+        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(120);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
