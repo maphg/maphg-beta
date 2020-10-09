@@ -103,8 +103,6 @@ if (isset($_GET['action'])) {
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $a) {
-                                $idImagen = $a['id'];
-                                $url = $a['url_adjunto'];
 
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                                     if (file_exists("../../planner/proyectos/planaccion/$url")) {
@@ -117,6 +115,7 @@ if (isset($_GET['action'])) {
 
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url2);
                                     $imagenes[] = $imagenesTemp;
+                                    $imagenesTemp = "";
                                 }
                             }
                         }
