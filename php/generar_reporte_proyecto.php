@@ -58,8 +58,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $statusP = "SOLUCIONADO";
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(60);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
@@ -86,7 +86,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 }
 
                 if ($contador == 1) {
-                    $gdImage = imagecreatefromjpeg('$url2');
+                    $gdImage = imagecreatefromjpeg($url2);
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
@@ -98,7 +98,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('D' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } elseif ($contador == 2) {
-                    $gdImage = imagecreatefromjpeg('$url2');
+                    $gdImage = imagecreatefromjpeg($url2);
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
@@ -110,7 +110,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('E' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } else {
-                    $gdImage = imagecreatefromjpeg('$url2');
+                    $gdImage = imagecreatefromjpeg($url2);
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
@@ -122,8 +122,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('F' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 }
-                
-                $gdImage = imagecreatefromjpeg('../svg/B0E3C0DE.jpg');
+
+                $gdImage = imagecreatefromjpeg('../svg/Image20200716135445.png');
                 // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                 $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                 $objDrawing->setName('Sample image');
