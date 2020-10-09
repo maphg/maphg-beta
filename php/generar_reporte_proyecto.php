@@ -81,7 +81,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $url2 = "../planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
                     $url2 = "../planner/proyectos/planaccion/$url";
-                } else {
+                }else{
                     $url2 = "../svg/B0E3C0DE.jpg";
                 }
 
@@ -95,7 +95,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
                     $objDrawing->setHeight(50);
-                    $objDrawing->setCoordinates('C' . $fila);
+                    $objDrawing->setCoordinates('D' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } elseif ($contador == 2) {
                     $gdImage = imagecreatefromjpeg('$url2');
@@ -107,7 +107,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
                     $objDrawing->setHeight(50);
-                    $objDrawing->setCoordinates('D' . $fila);
+                    $objDrawing->setCoordinates('E' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } else {
                     $gdImage = imagecreatefromjpeg('$url2');
@@ -119,7 +119,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
                     $objDrawing->setHeight(50);
-                    $objDrawing->setCoordinates('E' . $fila);
+                    $objDrawing->setCoordinates('F' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 }
             }
