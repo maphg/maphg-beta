@@ -81,6 +81,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $url2 = "../planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
                     $url2 = "../planner/proyectos/planaccion/$url";
+                } else {
+                    $url2 = "../svg/B0E3C0DE.jpg";
                 }
 
                 if ($contador == 1) {
