@@ -2011,7 +2011,8 @@
 
         function generarReporteProyecto(tipoReporte, idProyecto) {
             if (tipoReporte == "excel") {
-                location.href = `php/generar_reporte_proyecto.php?idProyecto=${idProyecto}`;
+                // location.href = `php/generar_reporte_proyecto.php?idProyecto=${idProyecto}`;
+                window.open(`php/generar_reporte_proyecto.php?idProyecto=${idProyecto}`, "Reporte Excel", "width=300, height=200")
             } else if (tipoReporte == "pdf") {
                 location.href = `reportes_PDF/generar_reporte_proyectos.php?idProyecto=${idProyecto}`;
             }
