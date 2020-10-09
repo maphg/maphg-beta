@@ -71,10 +71,10 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $unidadP);
-        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
-        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
-        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $unidadP);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $cantidadP);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $costeP);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $totalP);
 
         $contador = 0;
         $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1 ORDER BY id ASC LIMIT 3";
