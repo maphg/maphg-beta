@@ -97,7 +97,7 @@ if (isset($_GET['action'])) {
                         } else {
                             $statusP = "SOLUCIONADO";
                         }
-                        
+
                         $idImagen = "";
                         $url = "";
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
@@ -108,14 +108,14 @@ if (isset($_GET['action'])) {
 
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                                     if (file_exists("../../planner/proyectos/planaccion/$url")) {
-                                        $url = "https://www.maphg.com/beta/planner/proyectos/planaccion/$url";
+                                        $url2 = "https://www.maphg.com/beta/planner/proyectos/planaccion/$url";
                                     } elseif (file_exists("../../planner/proyectos/$url")) {
-                                        $url = "https://www.maphg.com/planner/proyectos/$url";
+                                        $url2 = "https://www.maphg.com/planner/proyectos/$url";
                                     } elseif (file_exists("../../../planner/proyectos/$url")) {
-                                        $url = "https://www.maphg.com/planner/proyectos/$url";
+                                        $url2 = "https://www.maphg.com/planner/proyectos/$url";
                                     }
 
-                                    $imagenesTemp = array("id" => $idImagen, "url" => $url);
+                                    $imagenesTemp = array("id" => $idImagen, "url" => $url2);
                                     $imagenes[] = $imagenesTemp;
                                 }
                             }
