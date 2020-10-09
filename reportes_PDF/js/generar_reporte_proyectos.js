@@ -43,48 +43,14 @@ function obtenerProyecto(idProyecto) {
 
                 for (let x = 0; x < array.actividades[i].imagenes.length; x++) {
                     const url = array.actividades[i].imagenes[x].url;
-                    const url1 = "https://www.maphg.com/beta/planner/proyectos/planaccion/${url}";
-                    const url2 = "https://www.maphg.com/beta/planner/proyectos/${url}";
-                    const url3 = "https://www.maphg.com/planner/proyectos/${url}";
 
-                    fetch(url1)
-                        .then(res => {
-                            code += `
-                            <div class="flex flex-wrap">
-                                <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                    <img src="${url1}" class="h-full" alt="">
+                    code += `
+                        <div class="flex flex-wrap">
+                            <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
+                                <img src="${url}" class="h-full" alt="">
                                 </div>
-                            </div>
+                        </div>
                     `;
-                        })
-                        .catch(error => {
-                            fetch(url2)
-                                .then(res => {
-                                    code += `
-                            <div class="flex flex-wrap">
-                                <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                    <img src="${url2}" class="h-full" alt="">
-                                </div>
-                            </div>
-                    `;
-                                })
-                                .catch(error => {
-                                    fetch(url3)
-                                        .then(res => {
-                                            code += `
-                            <div class="flex flex-wrap">
-                                <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                    <img src="${url3}" class="h-full" alt="">
-                                </div>
-                            </div>
-                    `;
-                                        })
-                                        .catch(error => {
-                                        });
-                                });
-                        });
-
-
                 }
 
                 code += `

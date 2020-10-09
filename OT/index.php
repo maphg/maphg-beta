@@ -45,7 +45,7 @@
                     <!-- BADGE DEL LOGO -->
                     <div class=" flex flex-col items-center justify-center">
                         <div class="w-12">
-                            <img src="svg/logo-maphg.png" alt="">
+                            <img src="../svg/logo-maphg.png" alt="">
                         </div>
                     </div>
                     <!-- BADGE DEL LOGO -->

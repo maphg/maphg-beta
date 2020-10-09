@@ -104,6 +104,15 @@ if (isset($_GET['action'])) {
                                 $url = $a['url_adjunto'];
                                 $idImagen = $a['id'];
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+
+                                    if (file_exists("../../../proyectos/$url")) {
+                                        $url = "../../proyectos/$url";
+                                    } elseif (file_exists("../../proyectos/$url")) {
+                                        $url = "../proyectos/$url";
+                                    } elseif (file_exists("../../proyectos/planaccion/$url")) {
+                                        $url = "../proyectos/planaccion/$url";
+                                    }
+                            
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
                                     $imagenes[] = $imagenesTemp;
                                 }
