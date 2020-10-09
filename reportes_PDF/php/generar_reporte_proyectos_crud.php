@@ -106,11 +106,11 @@ if (isset($_GET['action'])) {
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
 
                                     if (file_exists("../../../planner/proyectos/$url")) {
-                                        $url = "../../proyectos/$url";
+                                        $url = "../../planner/proyectos/$url";
                                     } elseif (file_exists("../../planner/proyectos/$url")) {
-                                        $url = "../proyectos/$url";
+                                        $url = "../planner/proyectos/$url";
                                     } elseif (file_exists("../../planner/proyectos/planaccion/$url")) {
-                                        $url = "../proyectos/planaccion/$url";
+                                        $url = "../planner/proyectos/planaccion/$url";
                                     }
                             
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
