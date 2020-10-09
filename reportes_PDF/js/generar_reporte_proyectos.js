@@ -39,21 +39,21 @@ function obtenerProyecto(idProyecto) {
                         <div class="p-2 text-justify font-medium text-bluegray-700">
                             <h1>${comentario}</h1>
                         </div>
+                        <div class="flex flex-wrap">
                 `;
 
                 for (let x = 0; x < array.actividades[i].imagenes.length; x++) {
                     const url = array.actividades[i].imagenes[x].url;
 
                     code += `
-                        <div class="flex flex-wrap">
                             <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
                                 <img src="${url}" class="h-full" alt="">
                                 </div>
-                        </div>
                     `;
                 }
 
                 code += `
+                            </div>
                     </div>
                 `;
             }
