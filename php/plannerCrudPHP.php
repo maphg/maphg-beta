@@ -5265,7 +5265,7 @@ if (isset($_POST['action'])) {
                                     Generar Excel
                                 </button>
 
-                                <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                                <button onclick=\"generarReporteProyecto('pdf', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
                                     Generar PDF
                                 </button>
 
@@ -5977,7 +5977,7 @@ if (isset($_POST['action'])) {
                                 Generar Excel
                             </button>
 
-                            <button onclick=\"generarReporteProyecto('excel', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
+                            <button onclick=\"generarReporteProyecto('pdf', $idProyecto)\" class=\"px-2 py-1 bg-orange-300 text-orange-500 font-bold ml-2 rounded\"> 
                                 Generar PDF
                             </button>
 

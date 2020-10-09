@@ -2014,7 +2014,7 @@
             if (tipoReporte == "excel") {
                 location.href = `php/generar_reporte_proyecto.php?idProyecto=${idProyecto}`;
             } else if (tipoReporte == "pdf") {
-                location.href = "php/generar_reporte_proyecto.php";
+                location.href = `reportes_PDF/generar_reporte_proyectos.php?idProyecto=${idProyecto}`;
             }
         }
 
