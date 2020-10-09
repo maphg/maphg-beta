@@ -57,6 +57,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $statusP = "SOLUCIONADO";
         }
 
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         // $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
@@ -66,8 +68,6 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
-        $objWorksheet->getActiveSheet()->getColumnDimension('A')->setWidth(100);
-        $objWorksheet->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
 
         $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
         // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
