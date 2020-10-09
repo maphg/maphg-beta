@@ -98,12 +98,11 @@ if (isset($_GET['action'])) {
                             $statusP = "SOLUCIONADO";
                         }
 
-                        $idImagen = "";
-                        $url = "";
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $a) {
-
+                                $url = $a['url_adjunto'];
+                                $idImagen = $a['id'];
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
                                     $imagenes[] = $imagenesTemp;
