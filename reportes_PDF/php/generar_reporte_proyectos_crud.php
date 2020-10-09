@@ -129,7 +129,7 @@ if (isset($_GET['action'])) {
 
                         $actividadesTemp = array("idActividad" => $idP, "actividad" => $actividadP, "coste" => $costeP, "comentario" => $comentarios, "imagenes" => $imagenes);
                         $actividades[] = $actividadesTemp;
-                        $imagenes = "";
+                        unset($imagenes);
                     }
                 }
                 // Obtiene datos del Proyecto
