@@ -43,9 +43,9 @@ function obtenerProyecto(idProyecto) {
 
                 for (let x = 0; x < array.actividades[i].imagenes.length; x++) {
                     const url = array.actividades[i].imagenes[x].url;
-                    const url1 = "localhost/beta/planner/proyectos/planaccion/${url}";
-                    const url2 = "localhost/beta/planner/proyectos/${url}";
-                    const url3 = "localhost/planner/proyectos/${url}";
+                    const url1 = "https://www.maphg.com/beta/planner/proyectos/planaccion/${url}";
+                    const url2 = "https://www.maphg.com/beta/planner/proyectos/${url}";
+                    const url3 = "https://www.maphg.com/planner/proyectos/${url}";
 
                     fetch(url1)
                         .then(res => {
