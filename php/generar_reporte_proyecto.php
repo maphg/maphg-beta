@@ -20,6 +20,20 @@ $objPHPExcel->getActiveSheet()->setCellValue('G1', 'CANTIDAD2');
 $objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE UNITARIO USD');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE TOTAL USD');
 
+$gdImage = imagecreatefromjpeg('../svg/logo6.png');
+// Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+$objDrawing->setName('Sample image');
+$objDrawing->setDescription('Sample image');
+$objDrawing->setImageResource($gdImage);
+$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+$objDrawing->setHeight(150);
+$objDrawing->setCoordinates('C1');
+$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+
 $fila = 2;
 $query = "
     SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
