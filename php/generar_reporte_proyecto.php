@@ -79,14 +79,14 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objDrawing->setHeight(150);
         $objDrawing->setCoordinates('C' . $fila);
         $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
     }
 }
 
 
 
 
+// $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+// $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 $fecha = date('d-m-Y H:m:s');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header('Content-Disposition: attachment;filename="Reporte_' . $fecha . '.xlsx"');
