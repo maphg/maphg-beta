@@ -66,7 +66,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
-
+        $objWorksheet->getActiveSheet()->getColumnDimension('A')->setWidth(100);
+        $objWorksheet->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
 
         $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
         // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
@@ -76,7 +77,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objDrawing->setImageResource($gdImage);
         $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
         $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-        $objDrawing->setHeight(150);
+        $objDrawing->setHeight(50);
         $objDrawing->setCoordinates('C' . $fila);
         $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
     }
