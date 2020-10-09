@@ -47,7 +47,7 @@ function obtenerProyecto(idProyecto) {
 
                     code += `
                             <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                <img src="${url}" class="h-full" alt="">
+                                <img src="${url}" class="w-full" alt="">
                                 </div>
                     `;
                 }
