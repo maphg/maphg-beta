@@ -2000,7 +2000,7 @@
                     let cantidad = document.getElementById("cantidad" + idPlanaccion).value;
                     let coste = document.getElementById("coste" + idPlanaccion).value;
                     document.getElementById("costeTotal" + idPlanaccion).value = cantidad * coste;
-                    
+
                     if (data != 1) {
                         alertaImg('Coste NO Valido', '', 'info', 2500);
                     }

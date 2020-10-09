@@ -13,12 +13,13 @@ $objPHPExcel->getActiveSheet()->setTitle("Reporte Proyecto");
 $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID');
 $objPHPExcel->getActiveSheet()->setCellValue('B1', 'ÁREA');
 $objPHPExcel->getActiveSheet()->setCellValue('C1', 'INCIDENCIA');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', 'FOTO ANTES');
-$objPHPExcel->getActiveSheet()->setCellValue('E1', 'FOTO DESPUÉS');
-$objPHPExcel->getActiveSheet()->setCellValue('F1', 'UND');
-$objPHPExcel->getActiveSheet()->setCellValue('G1', 'CANTIDAD2');
-$objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE UNITARIO USD');
-$objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE TOTAL USD');
+$objPHPExcel->getActiveSheet()->setCellValue('D1', 'FOTO 1');
+$objPHPExcel->getActiveSheet()->setCellValue('E1', 'FOTO 2');
+$objPHPExcel->getActiveSheet()->setCellValue('F1', 'FOTO 3');
+$objPHPExcel->getActiveSheet()->setCellValue('G1', 'UND');
+$objPHPExcel->getActiveSheet()->setCellValue('H1', 'CANTIDAD2');
+$objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE UNITARIO USD');
+$objPHPExcel->getActiveSheet()->setCellValue('J1', 'COSTE TOTAL USD');
 
 
 $fila = 2;
@@ -61,53 +62,65 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(50);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
-        // $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, '');
-        $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, '');
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $unidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
 
-        $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
-        // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-        $objDrawing->setName('Sample image');
-        $objDrawing->setDescription('Sample image');
-        $objDrawing->setImageResource($gdImage);
-        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-        $objDrawing->setHeight(50);
-        $objDrawing->setCoordinates('C' . $fila);
-        $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+        $contador = 0;
+        $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad ORDER BY id ASC LIMIT 3";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $z => $z) {
+                $url = $z['url_adjunto'];
 
-        echo "\r";
+                if (file_exists("../../../planner/proyectos/$url")) {
+                    $url = "../../planner/proyectos/$url";
+                } elseif (file_exists("../../planner/proyectos/$url")) {
+                    $url = "../planner/proyectos/$url";
+                } elseif (file_exists("../../planner/proyectos/planaccion/$url")) {
+                    $url = "../planner/proyectos/planaccion/$url";
+                }
 
-        $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
-        // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-        $objDrawing->setName('Sample image');
-        $objDrawing->setDescription('Sample image');
-        $objDrawing->setImageResource($gdImage);
-        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-        $objDrawing->setHeight(50);
-        $objDrawing->setCoordinates('C' . $fila);
-        $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-
-        echo "\n";
-
-        $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
-        // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-        $objDrawing->setName('Sample image');
-        $objDrawing->setDescription('Sample image');
-        $objDrawing->setImageResource($gdImage);
-        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-        $objDrawing->setHeight(50);
-        $objDrawing->setCoordinates('C' . $fila);
-        $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                if ($contador == 1) {
+                    $gdImage = imagecreatefromjpeg('$url');
+                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+                    $objDrawing->setName('Sample image');
+                    $objDrawing->setDescription('Sample image');
+                    $objDrawing->setImageResource($gdImage);
+                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+                    $objDrawing->setHeight(50);
+                    $objDrawing->setCoordinates('C' . $fila);
+                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                } elseif ($contador == 2) {
+                    $gdImage = imagecreatefromjpeg('$url');
+                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+                    $objDrawing->setName('Sample image');
+                    $objDrawing->setDescription('Sample image');
+                    $objDrawing->setImageResource($gdImage);
+                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+                    $objDrawing->setHeight(50);
+                    $objDrawing->setCoordinates('D' . $fila);
+                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                } else {
+                    $gdImage = imagecreatefromjpeg('$url');
+                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+                    $objDrawing->setName('Sample image');
+                    $objDrawing->setDescription('Sample image');
+                    $objDrawing->setImageResource($gdImage);
+                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+                    $objDrawing->setHeight(50);
+                    $objDrawing->setCoordinates('E' . $fila);
+                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                }
+            }
+        }
     }
 }
 
