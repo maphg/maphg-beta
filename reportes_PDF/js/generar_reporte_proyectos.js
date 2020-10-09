@@ -8,7 +8,6 @@ function obtenerProyecto(idProyecto) {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array.actividades[0].imagenes);
             let destino = array.proyecto.destino;
             let seccion = array.proyecto.seccion;
             let proyecto = array.proyecto.proyecto;
