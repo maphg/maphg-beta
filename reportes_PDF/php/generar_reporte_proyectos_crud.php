@@ -105,13 +105,21 @@ if (isset($_GET['action'])) {
                                 $url = $a['url_adjunto'];
 
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+                                    if (file_exists("../../planner/proyectos/planaccion/$url")) {
+                                        $url = "https://www.maphg.com/beta/planner/proyectos/planaccion/$url";
+                                    } elseif (file_exists("../../planner/proyectos/$url")) {
+                                        $url = "https://www.maphg.com/planner/proyectos/$url";
+                                    } elseif (file_exists("../../../planner/proyectos/$url")) {
+                                        $url = "https://www.maphg.com/planner/proyectos/$url";
+                                    }
+
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
                                     $imagenes[] = $imagenesTemp;
                                 }
                             }
                         }
 
-                        $comentarios="";
+                        $comentarios = "";
                         $comentario = "SELECT comentario FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idP ORDER BY id ASC LIMIT 1";
                         if ($result = mysqli_query($conn_2020, $comentario)) {
                             foreach ($result as $x) {
