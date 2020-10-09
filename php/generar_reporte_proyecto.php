@@ -46,7 +46,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $subseccion = $i['grupo'];
         $responsable = $i['nombre'] . " " . $i['apellido'];
         $coste = $i['coste'];
-        $justifiacion = $i['justifiacion'];
+        $justifiacion = $i['justificacion'];
         $status = $i['status'];
         $tipo = $i['tipo'];
         $rangoFecha = $i['rango_fecha'];
@@ -62,7 +62,11 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $responsable = "Sin Responsable";
         }
 
-
+        if ($status == "N") {
+            $status = "PENDIENTE";
+        } else {
+            $status = "SOLUCIONADO";
+        }
 
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
@@ -78,6 +82,48 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
         //Contador de Celdas
         $fila++;
+
+        $query = "
+            SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
+            t_proyectos_planaccion.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_proyectos_planaccion 
+            INNER JOIN t_users ON t_proyectos_planaccion.responsable = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1
+        ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $e) {
+                $fila++;
+                $idP = $e['id'];
+                $actividadP = $e['actividad'];
+                $statusP = $e['status'];
+                $fechaCreacionP = $e['fecha_creacion'];
+                $responsableP = $e['nombre'] . " " . $e['apellido'];
+                $costeP = $e['coste'];
+
+                if ($responsableP == "") {
+                    $responsableP = "Sin Responsable";
+                }
+
+                if ($statusP == "N") {
+                    $statusP = "PENDIENTE";
+                } else {
+                    $statusP = "SOLUCIONADO";
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $actividadP);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsableP);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $coste);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $fechaCreacionP);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $statusP);
+            }
+        }
     }
 }
 
