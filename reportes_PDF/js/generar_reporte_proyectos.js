@@ -52,7 +52,7 @@ function obtenerProyecto(idProyecto) {
                             </div>
                     `;
                 }
-
+ 
                 code += `
                     </div>
                 `;
