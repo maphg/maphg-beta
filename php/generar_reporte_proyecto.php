@@ -81,6 +81,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objDrawing->setCoordinates('C' . $fila);
         $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
+        echo "\r";
+
         $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
         // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
         $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
@@ -92,6 +94,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objDrawing->setHeight(50);
         $objDrawing->setCoordinates('C' . $fila);
         $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
+        echo "\n";
 
         $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
         // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
