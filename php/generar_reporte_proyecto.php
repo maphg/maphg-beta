@@ -21,8 +21,6 @@ $objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE UNITARIO USD');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE TOTAL USD');
 
 $fila = 2;
-$objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PROYECTO');
-
 $query = "
     SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
     t_proyectos_planaccion.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, 
@@ -31,8 +29,8 @@ $query = "
     t_proyectos_planaccion.cantidad,
     t_proyectos_planaccion.coste
     FROM t_proyectos_planaccion 
-    INNER JOIN t_users ON t_proyectos_planaccion.responsable = t_users.id
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+    LEFT JOIN t_users ON t_proyectos_planaccion.responsable = t_users.id
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
     WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1
 ";
 if ($result = mysqli_query($conn_2020, $query)) {
