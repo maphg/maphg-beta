@@ -97,7 +97,9 @@ if (isset($_GET['action'])) {
                         } else {
                             $statusP = "SOLUCIONADO";
                         }
-                        $imagenes['imagenes'] = "";
+
+                        $imagenes = "";
+
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $a) {
@@ -114,7 +116,7 @@ if (isset($_GET['action'])) {
                                     }
 
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
-                                    $imagenes['imagenes'] = $imagenesTemp;
+                                    $imagenes[] = $imagenesTemp;
                                 }
                             }
                         }
