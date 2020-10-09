@@ -46,7 +46,9 @@ function obtenerProyecto(idProyecto) {
                     code += `
                             <div class="flex flex-wrap">
                                 <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                    <img src="${url}" class="h-full" alt="">
+                                    <img src="https://www.maphg.com/beta/planner/proyectos/planaccion/${url}" class="h-full" alt="">
+                                    <img src="https://www.maphg.com/beta/planner/proyectos/${url}" class="h-full" alt="">
+                                    <img src="https://www.maphg.com/planner/proyectos/${url}" class="h-full" alt="">
                                 </div>
                             </div>
                     `;

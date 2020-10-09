@@ -61,24 +61,6 @@
 
                 <!-- LISTA DE ACTIVIDADES A REALIZAR -->
                 <div id="dataActividades" class="w-full">
-                    <div class="text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full h-auto mt-4 flex flex-col">
-                        <div class="font font-semibold text-bluegray-700 p-2 flex uppercase text-justify justify-center">
-                            <div class="flex justify-center items-center">
-                                <h1>VIDRIOS-SUMINISTRO DE PIEZA EN FORMA DE DIAMETRO DE.CRISTAL TEMPLADO 10MM PARA A </h1>
-                            </div>
-                            <div class="bg-red-200 text-red-500 flex justify-center items-center p-2 rounded-md ml-2">
-                                <h1>$12312234</h1>
-                            </div>
-                        </div>
-                        <div class="p-2 text-justify font-medium text-bluegray-700">
-                            <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iste error debitis autem sapiente laudantium odit recusandae, adipisci ipsa voluptas tempore, beatae placeat veniam, harum maxime delectus ex. Vitae, officiis quam.</h1>
-                        </div>
-                        <div class="flex flex-wrap">
-                            <div class="w-40 h-40 rounded-md overflow-hidden flex-none m-2">
-                                <img src="https://www.maphg.com/beta/planner/proyectos/planaccion/PLANACCION_ID_2883_358flamingariocol2.jpg" class="h-full" alt="">
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
