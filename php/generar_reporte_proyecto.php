@@ -122,6 +122,18 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('F' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 }
+                
+                $gdImage = imagecreatefromjpeg('../svg/B0E3C0DE.jpg');
+                // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+                $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+                $objDrawing->setName('Sample image');
+                $objDrawing->setDescription('Sample image');
+                $objDrawing->setImageResource($gdImage);
+                $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+                $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+                $objDrawing->setHeight(50);
+                $objDrawing->setCoordinates('F' . $fila);
+                $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
             }
         }
     }
