@@ -72,18 +72,19 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1 ORDER BY id ASC LIMIT 3";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $z) {
+                $contador++;
                 $url = $z['url_adjunto'];
 
                 if (file_exists("../../planner/proyectos/$url")) {
-                    $url = "../../planner/proyectos/$url";
+                    $url2 = "../../planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/$url")) {
-                    $url = "../planner/proyectos/$url";
+                    $url2 = "../planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
-                    $url = "../planner/proyectos/planaccion/$url";
+                    $url2 = "../planner/proyectos/planaccion/$url";
                 }
 
                 if ($contador == 1) {
-                    $gdImage = imagecreatefromjpeg('$url');
+                    $gdImage = imagecreatefromjpeg('$url2');
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
@@ -95,7 +96,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('C' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } elseif ($contador == 2) {
-                    $gdImage = imagecreatefromjpeg('$url');
+                    $gdImage = imagecreatefromjpeg('$url2');
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
@@ -107,7 +108,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('D' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } else {
-                    $gdImage = imagecreatefromjpeg('$url');
+                    $gdImage = imagecreatefromjpeg('$url2');
                     // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
                     $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                     $objDrawing->setName('Sample image');
