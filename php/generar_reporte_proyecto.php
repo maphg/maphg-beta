@@ -22,23 +22,25 @@ $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Fecha');
 $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo');
 $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Status');
 
-
 $fila = 2;
+$objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PROYECTO');
+
 $query = "
-    SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.justificacion, t_proyectos.fecha_creacion, t_proyectos.rango_fecha, t_proyectos.status, 
-    t_proyectos.tipo, t_proyectos.coste, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino, c_secciones.seccion, 
-    c_subsecciones.grupo
-    FROM t_proyectos
-    LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
-    LEFT JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
-    LEFT JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
-    LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
-    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_proyectos.id = $idProyecto
+SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.justificacion, t_proyectos.fecha_creacion, t_proyectos.rango_fecha, t_proyectos.status, 
+t_proyectos.tipo, t_proyectos.coste, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino, c_secciones.seccion, 
+c_subsecciones.grupo
+FROM t_proyectos
+LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
+LEFT JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
+LEFT JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
+LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
+LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+WHERE t_proyectos.id = $idProyecto
 ";
 
 if ($result = mysqli_query($conn_2020, $query)) {
     foreach ($result as $i) {
+        $fila = 3;
         $id = $i['id'];
         $titulo = $i['titulo'];
         $destino = $i['destino'];
@@ -81,7 +83,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $status);
 
         //Contador de Celdas
-        $fila++;
+        $fila = 4;
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PLANES ACCIÓN');
 
         $query = "
             SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
