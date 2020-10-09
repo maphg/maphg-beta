@@ -41,10 +41,10 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $statusP = $e['status'];
         $fechaCreacionP = $e['fecha_creacion'];
         $responsableP = $e['nombre'] . " " . $e['apellido'];
-        $areaP = $i['area'];
-        $unidadP = $i['unidad_medida'];
-        $cantidadP = $i['cantidad'];
-        $costeP = $i['coste'];
+        $areaP = $e['area'];
+        $unidadP = $e['unidad_medida'];
+        $cantidadP = $e['cantidad'];
+        $costeP = $e['coste'];
         $totalP = $cantidad * $coste;
         if ($responsableP == "") {
             $responsableP = "Sin Responsable";
