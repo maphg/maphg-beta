@@ -25,14 +25,12 @@ $objPHPExcel->getActiveSheet()->setCellValue('J1', 'COSTE TOTAL USD');
 $fila = 2;
 $query = "
     SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
-    t_proyectos_planaccion.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, 
+    t_proyectos_planaccion.fecha_creacion,
     t_proyectos_planaccion.area,
     t_proyectos_planaccion.unidad_medida,
     t_proyectos_planaccion.cantidad,
     t_proyectos_planaccion.coste
     FROM t_proyectos_planaccion 
-    LEFT JOIN t_users ON t_proyectos_planaccion.responsable = t_users.id
-    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
     WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1
 ";
 if ($result = mysqli_query($conn_2020, $query)) {
@@ -42,21 +40,12 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $actividadP = $e['actividad'];
         $statusP = $e['status'];
         $fechaCreacionP = $e['fecha_creacion'];
-        $responsableP = $e['nombre'] . " " . $e['apellido'];
         $areaP = $e['area'];
         $unidadP = $e['unidad_medida'];
         $cantidadP = $e['cantidad'];
         $costeP = $e['coste'];
         $totalP = $cantidadP * $costeP;
-        if ($responsableP == "") {
-            $responsableP = "Sin Responsable";
-        }
 
-        if ($statusP == "N") {
-            $statusP = "PENDIENTE";
-        } else {
-            $statusP = "SOLUCIONADO";
-        }
 
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -90,7 +79,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
                     $url2 = "../planner/proyectos/planaccion/$url";
                 } else {
-                    $url2 = "../svg/B0E3C0DE.jpg";
+                    $url2 = "";
                 }
 
                 if ($contador == 1) {
@@ -102,7 +91,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setImageResource($gdImage);
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(50);
+                    $objDrawing->setHeight(20);
                     $objDrawing->setCoordinates('D' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } elseif ($contador == 2) {
@@ -114,7 +103,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setImageResource($gdImage);
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(50);
+                    $objDrawing->setHeight(20);
                     $objDrawing->setCoordinates('E' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 } else {
@@ -126,7 +115,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setImageResource($gdImage);
                     $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
                     $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(50);
+                    $objDrawing->setHeight(20);
                     $objDrawing->setCoordinates('F' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 }
@@ -134,8 +123,6 @@ if ($result = mysqli_query($conn_2020, $query)) {
         }
     }
 }
-
-
 
 
 // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
