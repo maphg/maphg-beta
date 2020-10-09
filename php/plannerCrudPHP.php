@@ -5579,31 +5579,31 @@ if (isset($_POST['action'])) {
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"area$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$area\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'area$idPlanaccion', 'area');\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"area$idPlanaccion\" type=\"text\" placeholder=\"Área\" value=\"$area\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'area$idPlanaccion', 'area');\">
                                             </h1>
                                         </div>
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"unidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$unidad\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'unidad$idPlanaccion', 'unidad');\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"unidad$idPlanaccion\" type=\"text\" placeholder=\"Unidad\" value=\"$unidad\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'unidad$idPlanaccion', 'unidad');\">
                                             </h1>
                                         </div>
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"cantidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$cantidad\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'cantidad$idPlanaccion', 'cantidad');\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"cantidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$cantidad\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'cantidad$idPlanaccion', 'cantidad');\">
                                             </h1>
                                         </div>
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"coste$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'coste$idPlanaccion', 'coste');\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"coste$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'coste$idPlanaccion', 'coste');\">
                                             </h1>
                                         </div>
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costeTotal$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$total\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'costeTotal$idPlanaccion', 'costeTotal');\" disabled>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costeTotal$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$total\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'costeTotal$idPlanaccion', 'costeTotal');\" disabled>
                                             </h1>
                                         </div>
 
