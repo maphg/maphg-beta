@@ -105,6 +105,7 @@ if (isset($_GET['action'])) {
                             foreach ($result as $a) {
 
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+
                                     if (file_exists("../../planner/proyectos/planaccion/$url")) {
                                         $url2 = "https://www.maphg.com/beta/planner/proyectos/planaccion/$url";
                                     } elseif (file_exists("../../planner/proyectos/$url")) {
@@ -113,9 +114,9 @@ if (isset($_GET['action'])) {
                                         $url2 = "https://www.maphg.com/planner/proyectos/$url";
                                     }
 
+                                    $imagenesTemp = "";
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url2);
                                     $imagenes[] = $imagenesTemp;
-                                    $imagenesTemp = "";
                                 }
                             }
                         }
