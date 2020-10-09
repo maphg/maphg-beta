@@ -5279,21 +5279,43 @@ if (isset($_POST['action'])) {
                                 <div class=\"w-3/4 h-full flex items-center justify-start \">
                                     <h1>ACTIVIDAD</h1>
                                 </div>
+
                                 <div class=\"w-32 flex h-full items-center justify-center\">
                                     <h1>RESPONSABLE</h1>
                                 </div>
+
                                 <div class=\"w-32 flex h-full items-center justify-center\">
                                     <h1>COMENTARIOS</h1>
                                 </div>
+
                                 <div class=\"w-24 h-full flex items-center justify-center\">
                                     <h1>ADJUNTOS</h1>
                                 </div>
+
                                 <div class=\"w-32 flex h-full items-center justify-center\">
                                     <h1>STATUS</h1>
                                 </div>
+
                                 <div class=\"w-32 flex h-full items-center justify-center\">
-                                    <h1>COSTE</h1>
+                                    <h1>ÁREA</h1>
                                 </div>
+
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>UND</h1>
+                                </div>
+
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>CANTIDAD</h1>
+                                </div>
+
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>COSTE UNIT USD</h1>
+                                </div>
+
+                                <div class=\"w-32 flex h-full items-center justify-center\">
+                                    <h1>COSTE TOTAL USD</h1>
+                                </div>
+
                             </div>
 
                             <div class=\"w-full flex flex-col rounded\">
@@ -5313,6 +5335,9 @@ if (isset($_POST['action'])) {
                     t_proyectos_planaccion.departamento_direccion,
                     t_proyectos_planaccion.departamento_finanzas,
                     t_proyectos_planaccion.departamento_rrhh,
+                    t_proyectos_planaccion.area,
+                    t_proyectos_planaccion.unidad_medida,
+                    t_proyectos_planaccion.cantidad,
                     t_proyectos_planaccion.coste
                     FROM t_proyectos_planaccion
                     LEFT JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
@@ -5340,7 +5365,11 @@ if (isset($_POST['action'])) {
                             $dDireccion = $value['departamento_direccion'];
                             $dFinanzas = $value['departamento_finanzas'];
                             $dRRHH = $value['departamento_rrhh'];
+                            $area = $value['area'];
+                            $unidad = $value['unidad_medida'];
+                            $cantidad = $value['cantidad'];
                             $coste = $value['coste'];
+                            $total = $cantidad * $coste;
 
                             if ($fecha == "" or $fecha == " ") {
                                 $fecha = "-";
@@ -5550,7 +5579,31 @@ if (isset($_POST['action'])) {
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion);\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"area$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$area\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'area$idPlanaccion', 'area');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"unidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$unidad\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'unidad$idPlanaccion', 'unidad');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"cantidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$cantidad\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'cantidad$idPlanaccion', 'cantidad');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"coste$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'coste$idPlanaccion', 'coste');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costeTotal$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$total\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion, 'costeTotal$idPlanaccion', 'costeTotal');\" disabled>
                                             </h1>
                                         </div>
 
@@ -5642,7 +5695,31 @@ if (isset($_POST['action'])) {
 
                                         <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
                                             <h1>
-                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costePlanaccion$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarCostePlanaccion($idPlanaccion);\">
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"area$idPlanaccion\" type=\"text\" placeholder=\"Área\" value=\"$area\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'area$idPlanaccion', 'area');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"unidad$idPlanaccion\" type=\"text\" placeholder=\"Unidad\" value=\"$unidad\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'unidad$idPlanaccion', 'unidad');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"cantidad$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$cantidad\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'cantidad$idPlanaccion', 'cantidad');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"coste$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$coste\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'coste$idPlanaccion', 'coste');\">
+                                            </h1>
+                                        </div>
+
+                                        <div class=\"w-32 h-full flex items-center justify-center rounded-r-md\">
+                                            <h1>
+                                                <input class=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight fcus:outline-none focus:shadow-outline text-center p-1\" id=\"costeTotal$idPlanaccion\" type=\"text\" placeholder=\"Coste\" value=\"$total\" onkeyup=\"actualizarPlanaccionReporte($idPlanaccion, 'costeTotal$idPlanaccion', 'costeTotal');\" disabled>
                                             </h1>
                                         </div>
 
@@ -8736,14 +8813,25 @@ if (isset($_POST['action'])) {
     }
 
 
-    if($action == "actualizarCostePlanaccion"){
-        $coste = $_POST['coste'];
-        $idPlanaccion = $_POST['idPlanaccion']; 
+    if ($action == "actualizarPlanaccionReporte") {
+        $valor = $_POST['valor'];
+        $idPlanaccion = $_POST['idPlanaccion'];
+        $columna = $_POST['columna'];
 
-        $query = "UPDATE t_proyectos_planaccion SET coste = $coste WHERE id = $idPlanaccion";
-        if($result = mysqli_query($conn_2020, $query)){
+        if($columna =="area"){
+            $columna ="area";
+        }elseif($columna =="unidad"){
+            $columna ="unidad_medida";
+        }elseif($columna =="cantidad"){
+            $columna ="cantidad";
+        }elseif($columna =="coste"){
+            $columna ="coste";
+        }
+
+        $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
-        }else{
+        } else {
             echo 0;
         }
     }

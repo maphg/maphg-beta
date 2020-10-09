@@ -11,16 +11,14 @@ $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
 $objPHPExcel->setActiveSheetIndex(0);
 $objPHPExcel->getActiveSheet()->setTitle("Reporte Proyecto");
 $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID');
-$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Destino');
-$objPHPExcel->getActiveSheet()->setCellValue('C1', 'Sección');
-$objPHPExcel->getActiveSheet()->setCellValue('D1', 'Subsección');
-$objPHPExcel->getActiveSheet()->setCellValue('E1', 'Titulo');
-$objPHPExcel->getActiveSheet()->setCellValue('F1', 'Responsable');
-$objPHPExcel->getActiveSheet()->setCellValue('G1', 'Coste');
-$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Justificación');
-$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Fecha');
-$objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo');
-$objPHPExcel->getActiveSheet()->setCellValue('K1', 'Status');
+$objPHPExcel->getActiveSheet()->setCellValue('B1', 'ÁREA');
+$objPHPExcel->getActiveSheet()->setCellValue('C1', 'INCIDENCIA');
+$objPHPExcel->getActiveSheet()->setCellValue('D1', 'FOTO ANTES');
+$objPHPExcel->getActiveSheet()->setCellValue('E1', 'FOTO DESPUÉS');
+$objPHPExcel->getActiveSheet()->setCellValue('F1', 'UND');
+$objPHPExcel->getActiveSheet()->setCellValue('G1', 'CANTIDAD2');
+$objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE UNITARIO USD');
+$objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE TOTAL USD');
 
 $fila = 2;
 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PROYECTO');
@@ -54,6 +52,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $rangoFecha = $i['rango_fecha'];
         $fechaCreacion = $i['fecha_creacion'];
 
+
         if ($rangoFecha != "") {
             $fecha = $rangoFecha;
         } else {
@@ -70,25 +69,29 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $status = "SOLUCIONADO";
         }
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
-        $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
-        $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
-        $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
-        $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $titulo);
-        $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsable);
-        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $coste);
-        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $justifiacion);
-        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $fecha);
-        $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipo);
-        $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $status);
+        // $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
+        // $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
+        // $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $titulo);
+        // $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
+        // $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $titulo);
+        // $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsable);
+        // $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $coste);
+        // $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $justifiacion);
+        // $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $fecha);
+        // $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipo);
+        // $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $status);
 
-        //Contador de Celdas
-        $fila = 4;
-        $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PLANES ACCIÓN');
+        // //Contador de Celdas
+        // $fila = 4;
+        // $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PLANES ACCIÓN');
 
         $query = "
             SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.coste, 
-            t_proyectos_planaccion.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido
+            t_proyectos_planaccion.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, 
+            t_proyectos_planaccion.area,
+            t_proyectos_planaccion.unidad_medida,
+            t_proyectos_planaccion.cantidad,
+            t_proyectos_planaccion.coste
             FROM t_proyectos_planaccion 
             INNER JOIN t_users ON t_proyectos_planaccion.responsable = t_users.id
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -102,8 +105,11 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 $statusP = $e['status'];
                 $fechaCreacionP = $e['fecha_creacion'];
                 $responsableP = $e['nombre'] . " " . $e['apellido'];
-                $costeP = $e['coste'];
-
+                $areaP = $i['area'];
+                $unidadP = $i['unidad_medida'];
+                $cantidadP = $i['cantidad_medida'];
+                $costeP = $i['coste'];
+                $totalP = $cantidad * $coste;
                 if ($responsableP == "") {
                     $responsableP = "Sin Responsable";
                 }
@@ -115,16 +121,14 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 }
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
-                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
-                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $actividadP);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsableP);
-                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $coste);
-                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, '');
-                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $fechaCreacionP);
-                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $statusP);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $unidadP);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
             }
         }
     }

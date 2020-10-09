@@ -812,7 +812,7 @@
                 dataType: "JSON",
                 success: function(data) {
                     // console.log(data);
-                    alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
+                    // alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
                     document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
                     document.getElementById("seccionProyectos").innerHTML = data.seccion;
                     estiloSeccionModal('estiloSeccionProyectos', data.seccion);
@@ -1976,37 +1976,34 @@
 
 
         // Actualiza el Coste de Planacción de Proyecto.
-        function actualizarCostePlanaccion(idPlanaccion) {
-            let coste = document.getElementById("costePlanaccion" + idPlanaccion).value;
-            // console.log(coste);
+        function actualizarPlanaccionReporte(idPlanaccion, input, columna) {
+            let valor = document.getElementById(input).value;
             let idUsuario = localStorage.getItem('usuario');
             let idDestino = localStorage.getItem('idDestino');
+            console.log(valor);
 
-            const action = "actualizarCostePlanaccion";
-            if (coste >= 0) {
-                $.ajax({
-                    type: "POST",
-                    url: "php/plannerCrudPHP.php",
-                    data: {
-                        action: action,
-                        idUsuario: idUsuario,
-                        idDestino: idDestino,
-                        idPlanaccion: idPlanaccion,
-                        coste: coste
-                    },
-                    // dataType: "JSON",
-                    success: function(data) {
-                        // console.log(data);
-                        if (data == 1) {
-                            alertaImg('Coste Actualizado', '', 'success', 2500);
-                        } else {
-                            alertaImg('Coste NO Valido', '', 'info', 2500);
-                        }
+            const action = "actualizarPlanaccionReporte";
+            $.ajax({
+                type: "POST",
+                url: "php/plannerCrudPHP.php",
+                data: {
+                    action: action,
+                    idUsuario: idUsuario,
+                    idDestino: idDestino,
+                    idPlanaccion: idPlanaccion,
+                    valor: valor,
+                    columna: columna
+                },
+                // dataType: "JSON",
+                success: function(data) {
+                    // console.log(data);
+                    if (data == 1) {
+                        alertaImg('Coste Actualizado', '', 'success', 2500);
+                    } else {
+                        alertaImg('Coste NO Valido', '', 'info', 2500);
                     }
-                });
-            } else {
-                alertaImg('Coste NO Valido', '', 'info', 2500);
-            }
+                }
+            });
         }
 
 
