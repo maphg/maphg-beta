@@ -105,9 +105,9 @@ if (isset($_GET['action'])) {
                                 $url = $a['url_adjunto'];
 
                                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
-                                    if (file_exists("../planner/proyectos/planaccion/$url")) {
+                                    if (file_exists("../../planner/proyectos/planaccion/$url")) {
                                         $url = "https://www.maphg.com/beta/planner/proyectos/planaccion/$url";
-                                    } elseif (file_exists("../planner/proyectos/$url")) {
+                                    } elseif (file_exists("../../planner/proyectos/$url")) {
                                         $url = "https://www.maphg.com/planner/proyectos/$url";
                                     } elseif (file_exists("../../../planner/proyectos/$url")) {
                                         $url = "https://www.maphg.com/planner/proyectos/$url";
