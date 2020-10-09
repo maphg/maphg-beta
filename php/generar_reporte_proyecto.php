@@ -29,7 +29,7 @@ $objDrawing->setImageResource($gdImage);
 $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
 $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
 $objDrawing->setHeight(150);
-$objDrawing->setCoordinates('C1');
+$objDrawing->setCoordinates('C2');
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
