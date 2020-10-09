@@ -69,7 +69,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
 
         $contador = 0;
-        $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad ORDER BY id ASC LIMIT 3";
+        $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1 ORDER BY id ASC LIMIT 3";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $z => $z) {
                 $url = $z['url_adjunto'];
