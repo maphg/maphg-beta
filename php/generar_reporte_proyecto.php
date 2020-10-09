@@ -45,7 +45,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $unidadP = $e['unidad_medida'];
         $cantidadP = $e['cantidad'];
         $costeP = $e['coste'];
-        $totalP = $cantidad * $coste;
+        $totalP = $cantidadP * $costeP;
         if ($responsableP == "") {
             $responsableP = "Sin Responsable";
         }
