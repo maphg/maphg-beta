@@ -69,7 +69,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(45);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
-        $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $areaP);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
         $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $unidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $cantidadP);
