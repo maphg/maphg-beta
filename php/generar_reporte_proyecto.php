@@ -58,8 +58,16 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $statusP = "SOLUCIONADO";
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(120);
-        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(120);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(60);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
