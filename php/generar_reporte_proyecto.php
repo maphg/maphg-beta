@@ -22,31 +22,20 @@ $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Fecha');
 $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo');
 $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Status');
 
-$objDrawing = new PHPExcel_Worksheet_Drawing();
-$objDrawing->setName('Logo');
-$objDrawing->setDescription('Logo');
-$objDrawing->setPath('../svg/logo6.png');
-$objDrawing->setCoordinates('L1'); 
-//setOffsetX works properly 
-$objDrawing->setOffsetX(5); $objDrawing->setOffsetY(5); 
-//set width, height 
-$objDrawing->setWidth(100); $objDrawing->setHeight(35); $objDrawing->setWorksheet($objPHPExcel->getActiveSheet()); 
-
-
 $fila = 2;
 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PROYECTO');
 
 $query = "
-SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.justificacion, t_proyectos.fecha_creacion, t_proyectos.rango_fecha, t_proyectos.status, 
-t_proyectos.tipo, t_proyectos.coste, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino, c_secciones.seccion, 
-c_subsecciones.grupo
-FROM t_proyectos
-LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
-LEFT JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
-LEFT JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
-LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
-LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-WHERE t_proyectos.id = $idProyecto
+    SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.justificacion, t_proyectos.fecha_creacion, t_proyectos.rango_fecha, t_proyectos.status, 
+    t_proyectos.tipo, t_proyectos.coste, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino, c_secciones.seccion, 
+    c_subsecciones.grupo
+    FROM t_proyectos
+    LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
+    LEFT JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
+    LEFT JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
+    LEFT JOIN t_users ON t_proyectos.responsable = t_users.id
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+    WHERE t_proyectos.id = $idProyecto
 ";
 
 if ($result = mysqli_query($conn_2020, $query)) {
