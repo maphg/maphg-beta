@@ -74,11 +74,11 @@ if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $z => $z) {
                 $url = $z['url_adjunto'];
 
-                if (file_exists("../../../planner/proyectos/$url")) {
+                if (file_exists("../../planner/proyectos/$url")) {
                     $url = "../../planner/proyectos/$url";
-                } elseif (file_exists("../../planner/proyectos/$url")) {
+                } elseif (file_exists("../planner/proyectos/$url")) {
                     $url = "../planner/proyectos/$url";
-                } elseif (file_exists("../../planner/proyectos/planaccion/$url")) {
+                } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
                     $url = "../planner/proyectos/planaccion/$url";
                 }
 
