@@ -98,6 +98,8 @@ if (isset($_GET['action'])) {
                             $statusP = "SOLUCIONADO";
                         }
 
+                        $url = "";
+                        $idImagen = "";
                         $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idP and status = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $a) {
@@ -112,7 +114,7 @@ if (isset($_GET['action'])) {
                                     } elseif (file_exists("../../planner/proyectos/planaccion/$url")) {
                                         $url = "../planner/proyectos/planaccion/$url";
                                     }
-                            
+
                                     $imagenesTemp = array("id" => $idImagen, "url" => $url);
                                     $imagenes[] = $imagenesTemp;
                                 }
