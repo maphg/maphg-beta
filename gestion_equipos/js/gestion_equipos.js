@@ -1372,7 +1372,6 @@ consultaEquiposLocales();
 onload = QREquipo();
 
 function QREquipo() {
-    alertaImg('QR Detectado', '', 'success', 1500);
     let URLactual = window.location.search;
     let arr = URLactual.split("?");
     if (arr[1] > 0) {
@@ -1380,6 +1379,7 @@ function QREquipo() {
         informacionEquipo(idEquipo);
         despieceEquipos(idEquipo);
         document.getElementById("filtroPalabra").value = idEquipo;
+        alertaImg('QR Detectado', '', 'success', 1500);
     }
 }
 
