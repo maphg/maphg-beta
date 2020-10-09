@@ -58,8 +58,8 @@ if ($result = mysqli_query($conn_2020, $query)) {
             $statusP = "SOLUCIONADO";
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(60);
-        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(60);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(80);
+        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(80);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
@@ -81,7 +81,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $url2 = "../planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
                     $url2 = "../planner/proyectos/planaccion/$url";
-                }else{
+                } else {
                     $url2 = "../svg/B0E3C0DE.jpg";
                 }
 
@@ -122,18 +122,6 @@ if ($result = mysqli_query($conn_2020, $query)) {
                     $objDrawing->setCoordinates('F' . $fila);
                     $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                 }
-
-                $gdImage = imagecreatefromjpeg('../svg/Image20200716135445.png');
-                // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-                $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-                $objDrawing->setName('Sample image');
-                $objDrawing->setDescription('Sample image');
-                $objDrawing->setImageResource($gdImage);
-                $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-                $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                $objDrawing->setHeight(50);
-                $objDrawing->setCoordinates('F' . $fila);
-                $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
             }
         }
     }
