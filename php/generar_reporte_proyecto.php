@@ -20,19 +20,6 @@ $objPHPExcel->getActiveSheet()->setCellValue('G1', 'CANTIDAD2');
 $objPHPExcel->getActiveSheet()->setCellValue('H1', 'COSTE UNITARIO USD');
 $objPHPExcel->getActiveSheet()->setCellValue('I1', 'COSTE TOTAL USD');
 
-$gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
-// Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-$objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-$objDrawing->setName('Sample image');
-$objDrawing->setDescription('Sample image');
-$objDrawing->setImageResource($gdImage);
-$objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-$objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-$objDrawing->setHeight(150);
-$objDrawing->setCoordinates('C2');
-$objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 
 $fila = 2;
 $query = "
@@ -72,13 +59,28 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $area);
-        $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
+        // $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, '');
         $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, '');
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $unidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $cantidadP);
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $costeP);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $totalP);
+
+
+        $gdImage = imagecreatefromjpeg('../svg/banners/597FA7F0.jpg');
+        // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
+        $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+        $objDrawing->setName('Sample image');
+        $objDrawing->setDescription('Sample image');
+        $objDrawing->setImageResource($gdImage);
+        $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
+        $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+        $objDrawing->setHeight(150);
+        $objDrawing->setCoordinates('C' . $fila);
+        $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
     }
 }
 
