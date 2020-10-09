@@ -22,6 +22,17 @@ $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Fecha');
 $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo');
 $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Status');
 
+$objDrawing = new PHPExcel_Worksheet_Drawing();
+$objDrawing->setName('Logo');
+$objDrawing->setDescription('Logo');
+$objDrawing->setPath('../svg/logo6.png');
+$objDrawing->setCoordinates('L1'); 
+//setOffsetX works properly 
+$objDrawing->setOffsetX(5); $objDrawing->setOffsetY(5); 
+//set width, height 
+$objDrawing->setWidth(100); $objDrawing->setHeight(35); $objDrawing->setWorksheet($objPHPExcel->getActiveSheet()); 
+
+
 $fila = 2;
 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, 'PROYECTO');
 
