@@ -8,8 +8,6 @@ const datosPlanes = params => {
     var equipoLocal = params.equipoLocal;
     var icono = "fad fa-dot-circle"
 
-
-
     switch (status) {
         case 'OPERATIVO':
             claseStatus = 'bg-green-200 text-green-500';
@@ -1391,12 +1389,12 @@ function indicadorSemanaActual(semana) {
     if (semana < 10) {
         codigo = `
             0${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -8px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
         `;
     } else {
         codigo = `
             ${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -8px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
         `;
     }
 
