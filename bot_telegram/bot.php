@@ -10,17 +10,17 @@ $message = $update["message"]["text"];
 switch ($message) {
     case 'ayuda':
         $response = "Pendiente 1";
-        sendMessage($chatId, $response);
+        sendMessageX($chatId, $response);
         break;
     case 'pendientes':
         $response = "Pendiente 2";
-        sendMessage($chatId, $response);
+        sendMessageX($chatId, $response);
         break;
 }
 
 
 
-function sendMessage($chatId, $response)
+function sendMessageX($chatId, $response)
 {
     // $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&text=' . urlencode($response);
     $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=spoifsdffdsf";
