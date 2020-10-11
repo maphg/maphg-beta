@@ -3004,7 +3004,7 @@ if (isset($_POST['action'])) {
             // Datos almacenados.
             $data['dataEquipos'] = $dataTG . $dataEquipos;
             $data['opcionBuscarEquipo'] = $opcionBuscarEquipo;
-            $data['totalEquipos'] = "Total Equipos: $totalEquipos";
+            $data['totalEquipos'] = $totalEquipos;
             $data['seccionEquipos'] = $seccionEquipos;
             $data['paginacionEquipos'] = $paginacionEquipos;
             unset($ordenMCEquipos, $ordenIdEquipos);
@@ -7942,13 +7942,13 @@ if (isset($_POST['action'])) {
         // Valores por DEFAULT
         $data['equipo'] = "- -";
 
-        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
-        t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.status
+        t_equipos_america.coste, t_equipos_america.caudal_aire_cfm
         FROM t_equipos_america 
         LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
         LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
-        WHERE t_equipos_america.id = $idEquipo";
+        WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
@@ -8044,6 +8044,7 @@ if (isset($_POST['action'])) {
         $potenciaEnergeticaCalorKCALEquipo = $_POST['potenciaEnergeticaCalorKCALEquipo'];
         $caudalAireM3HEquipo = $_POST['caudalAireM3HEquipo'];
         $caudalAireCFMEquipo = $_POST['caudalAireCFMEquipo'];
+        $estadoEquipo = $_POST['estadoEquipo'];
 
         if ($jerarquiaEquipo == "PRIMARIO") {
             $equipoPrincipal = 0;
@@ -8075,7 +8076,7 @@ if (isset($_POST['action'])) {
         potencia_energetica_frio_tr = $potenciaEnergeticaFrioTREquipo,
         potencia_energetica_calor_kcal = $potenciaEnergeticaCalorKCALEquipo,
         caudal_aire_m3h = $caudalAireM3HEquipo,
-        caudal_aire_cfm = $caudalAireCFMEquipo
+        status = '$estadoEquipo' 
         -- coste = $,
         -- id_fases = $ 
 
@@ -8818,14 +8819,14 @@ if (isset($_POST['action'])) {
         $idPlanaccion = $_POST['idPlanaccion'];
         $columna = $_POST['columna'];
 
-        if($columna =="area"){
-            $columna ="area";
-        }elseif($columna =="unidad"){
-            $columna ="unidad_medida";
-        }elseif($columna =="cantidad"){
-            $columna ="cantidad";
-        }elseif($columna =="coste"){
-            $columna ="coste";
+        if ($columna == "area") {
+            $columna = "area";
+        } elseif ($columna == "unidad") {
+            $columna = "unidad_medida";
+        } elseif ($columna == "cantidad") {
+            $columna = "cantidad";
+        } elseif ($columna == "coste") {
+            $columna = "coste";
         }
 
         $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";

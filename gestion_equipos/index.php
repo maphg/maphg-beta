@@ -179,12 +179,17 @@
             <!-- ENCABEZADO -->
             <div class="flex flex-row w-full justify-start px-4 relative">
                 <div class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center">
-                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="Maquina de hielo edificio 1226 grand palladium">
+                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="Maquina de hielo edificio 1226 grand palladium" autocomplete="off">
                     <div class="flex mt-1">
+                        <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4">
+                            <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg"></i>
 
-                        <div class="flex items-center text-xs font-bold text-green-400 px-1 bg-green-100 rounded-full w-auto cursor-pointer mr-4">
-                            <i class="fad fa-circle mr-1 fa-lg text-green-300"></i>
-                            <h2 id="estadoEquipo"></h2>
+                            <select id="estadoEquipo" class="text-xs font-bold">
+                                <option value="OPERATIVO">OPERATIVO</option>
+                                <option value="BAJA">BAJA</option>
+                                <option value="TALLER">TALLER</option>
+                            </select>
+
                         </div>
                         <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
@@ -272,12 +277,12 @@
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">modelo</h1>
+                            <h1 class="font-bold text-bluegray-900 uppercase">Modelo</h1>
                             <input type="text" delo" value="-" id="modeloEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">numero de serie</h1>
+                            <h1 class="font-bold text-bluegray-900 uppercase">Número de Serie</h1>
                             <input type="text" value="-" id="serieEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
@@ -287,7 +292,7 @@
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Código Interno compras</h1>
+                            <h1 class="font-bold text-bluegray-900 uppercase">Código Interno Compras</h1>
                             <input type="text" value="-" id="codigoInternoComprasEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
@@ -384,20 +389,7 @@
 
                     <h1 class="my-2">DESPIECE</h1>
 
-                    <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="max-height: 200px;">
-
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b">
-                            <i class="fad fa-cog mr-1"></i>
-                            <h1>MOTOR NO SE QUE VEGAS</h1>
-                        </div>
-
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6">
-                            <i class="fad fa-cogs mr-1"></i>
-                            <h1>MOTOR NO SE QUE VEGAS</h1>
-                        </div>
-
-                    </div>
-
+                    <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="max-height: 200px;"></div>
                 </div>
 
             </div>

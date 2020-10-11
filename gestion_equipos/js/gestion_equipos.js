@@ -384,15 +384,13 @@ function consultaEquiposLocales() {
     const action = "consultaEquiposLocales";
 
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
-    console.log(URL);
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDePlanes').innerHTML = '';
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             if (array.length > 0) {
-                alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
+                // alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
                 for (let index = 0; index < array.length; index++) {
                     $tablaPlanesDeMantto.innerHTML += datosPlanes({
@@ -428,7 +426,7 @@ function toggleInputsEquipo(estadoInputs) {
     let idEquipo = localStorage.getItem('idEquipo');
     const arrayBtnEquipo =
         [
-            'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo'
+            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo'
         ]
 
     arrayBtnEquipo.forEach(element => {
@@ -496,7 +494,6 @@ function informacionEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
@@ -528,8 +525,29 @@ function informacionEquipo(idEquipo) {
             document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
             document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
             document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
-            document.getElementById("estadoEquipo").innerHTML = data.status;
+            document.getElementById("estadoEquipo").value = data.status;
             document.getElementById("tipoEquipo").value = data.tipo;
+
+            document.getElementById("contenedorEstadoEquipo").classList.
+                remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
+            document.getElementById("iconEstadoEquipo").classList.
+                remove('text-red-400', 'text-green-400', 'text-orange-400');
+            document.getElementById("estadoEquipo").classList.
+                remove('text-red-400', 'text-green-400', 'text-orange-400');
+
+            if (data.status == "TALLER") {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
+                document.getElementById("estadoEquipo").classList.add('text-orange-400');
+            } else if (data.status == "BAJA") {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
+                document.getElementById("estadoEquipo").classList.add('text-red-400');
+            } else {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
+                document.getElementById("estadoEquipo").classList.add('text-green-400');
+            }
 
             // Eventos
             document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
@@ -542,6 +560,88 @@ function informacionEquipo(idEquipo) {
             consultarPlanEquipo(idEquipo);
             opcionesJerarquiaEquipo(idEquipo);
 
+        }
+    });
+}
+
+
+// Actualiza la información de los Equipos
+function actualizarEquipo(idEquipo) {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let nombreEquipo = document.getElementById("nombreEquipo").value;
+    let seccionEquipo = document.getElementById("seccionEquipo").value;
+    let subseccionEquipo = document.getElementById("subseccionEquipo").value;
+    let tipoEquipo = document.getElementById("tipoEquipo").value;
+    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
+    let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
+    let marcaEquipo = document.getElementById("marcaEquipo").value;
+    let modeloEquipo = document.getElementById("modeloEquipo").value;
+    let serieEquipo = document.getElementById("serieEquipo").value;
+    let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo").value;
+    let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo").value;
+    let largoEquipo = document.getElementById("largoEquipo").value;
+    let anchoEquipo = document.getElementById("anchoEquipo").value;
+    let altoEquipo = document.getElementById("altoEquipo").value;
+    let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo").value;
+    let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo").value;
+    let voltajeEquipo = document.getElementById("voltajeEquipo").value;
+    let frecuenciaEquipo = document.getElementById("frecuenciaEquipo").value;
+    let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo").value;
+    let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo").value;
+    let cargaMCAEquipo = document.getElementById("cargaMCAEquipo").value;
+    let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo").value;
+    let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo").value;
+    let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
+    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
+    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
+    let estadoEquipo = document.getElementById("estadoEquipo").value;
+    const action = "actualizarEquipo";
+    $.ajax({
+        type: "POST",
+        url: "../php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo,
+            nombreEquipo: nombreEquipo,
+            seccionEquipo: seccionEquipo,
+            subseccionEquipo: subseccionEquipo,
+            tipoEquipo: tipoEquipo,
+            jerarquiaEquipo: jerarquiaEquipo,
+            equipoPrincipal: equipoPrincipal,
+            marcaEquipo: marcaEquipo,
+            modeloEquipo: modeloEquipo,
+            serieEquipo: serieEquipo,
+            codigoFabricanteEquipo: codigoFabricanteEquipo,
+            codigoInternoComprasEquipo: codigoInternoComprasEquipo,
+            largoEquipo: largoEquipo,
+            anchoEquipo: anchoEquipo,
+            altoEquipo: altoEquipo,
+            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
+            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
+            voltajeEquipo: voltajeEquipo,
+            frecuenciaEquipo: frecuenciaEquipo,
+            caudalAguaM3HEquipo: caudalAguaM3HEquipo,
+            caudalAguaGPHEquipo: caudalAguaGPHEquipo,
+            cargaMCAEquipo: cargaMCAEquipo,
+            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
+            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
+            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
+            caudalAireM3HEquipo: caudalAireM3HEquipo,
+            caudalAireCFMEquipo: caudalAireCFMEquipo,
+            estadoEquipo: estadoEquipo
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            if (data = 1) {
+                informacionEquipo(idEquipo);
+                alertaImg('Equipo Actualizado', '', 'success', 2500);
+                consultaEquiposLocales();
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 3000);
+            }
         }
     });
 }
@@ -647,7 +747,6 @@ function consultarPlanEquipo(idEquipo) {
         dataType: "JSON",
         success: function (data) {
             document.getElementById("contenedorPlanesEquipo").innerHTML = '';
-            console.log(data);
             if (data.length > 0) {
                 for (let index = 0; index < data.length; index++) {
 
@@ -904,85 +1003,6 @@ function consultarOpcionesEquipo() {
 }
 
 
-// Actualiza la información de los Equipos
-function actualizarEquipo(idEquipo) {
-    let idUsuario = localStorage.getItem('usuario');
-    let idDestino = localStorage.getItem('idDestino');
-    let nombreEquipo = document.getElementById("nombreEquipo").value;
-    let seccionEquipo = document.getElementById("seccionEquipo").value;
-    let subseccionEquipo = document.getElementById("subseccionEquipo").value;
-    let tipoEquipo = document.getElementById("tipoEquipo").value;
-    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
-    let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
-    let marcaEquipo = document.getElementById("marcaEquipo").value;
-    let modeloEquipo = document.getElementById("modeloEquipo").value;
-    let serieEquipo = document.getElementById("serieEquipo").value;
-    let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo").value;
-    let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo").value;
-    let largoEquipo = document.getElementById("largoEquipo").value;
-    let anchoEquipo = document.getElementById("anchoEquipo").value;
-    let altoEquipo = document.getElementById("altoEquipo").value;
-    let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo").value;
-    let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo").value;
-    let voltajeEquipo = document.getElementById("voltajeEquipo").value;
-    let frecuenciaEquipo = document.getElementById("frecuenciaEquipo").value;
-    let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo").value;
-    let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo").value;
-    let cargaMCAEquipo = document.getElementById("cargaMCAEquipo").value;
-    let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo").value;
-    let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo").value;
-    let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
-    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
-    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
-    const action = "actualizarEquipo";
-    $.ajax({
-        type: "POST",
-        url: "../php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idEquipo: idEquipo,
-            nombreEquipo: nombreEquipo,
-            seccionEquipo: seccionEquipo,
-            subseccionEquipo: subseccionEquipo,
-            tipoEquipo: tipoEquipo,
-            jerarquiaEquipo: jerarquiaEquipo,
-            equipoPrincipal: equipoPrincipal,
-            marcaEquipo: marcaEquipo,
-            modeloEquipo: modeloEquipo,
-            serieEquipo: serieEquipo,
-            codigoFabricanteEquipo: codigoFabricanteEquipo,
-            codigoInternoComprasEquipo: codigoInternoComprasEquipo,
-            largoEquipo: largoEquipo,
-            anchoEquipo: anchoEquipo,
-            altoEquipo: altoEquipo,
-            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
-            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
-            voltajeEquipo: voltajeEquipo,
-            frecuenciaEquipo: frecuenciaEquipo,
-            caudalAguaM3HEquipo: caudalAguaM3HEquipo,
-            caudalAguaGPHEquipo: caudalAguaGPHEquipo,
-            cargaMCAEquipo: cargaMCAEquipo,
-            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
-            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
-            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
-            caudalAireM3HEquipo: caudalAireM3HEquipo,
-            caudalAireCFMEquipo: caudalAireCFMEquipo
-        },
-        // dataType: "JSON",
-        success: function (data) {
-            if (data = 1) {
-                informacionEquipo(idEquipo);
-                alertaImg('Equipo Actualizado', '', 'success', 2500);
-                consultaEquiposLocales();
-            } else {
-                alertaImg('Intente de Nuevo', '', 'info', 3000);
-            }
-        }
-    });
-}
-
 
 // Genera la Programación de los MP
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
@@ -1135,7 +1155,6 @@ function subirImagenGeneral(idTabla, tabla) {
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log(data);
                 document.getElementById("cargandoAdjunto").innerHTML = "";
                 document.getElementById("inputAdjuntos").value = "";
                 if (data == -1) {

@@ -8,12 +8,13 @@ let idDestino = localStorage.getItem("idDestino");
 function comprobarSession() {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
+
   // Comprueba que exista la sessión
   if (idUsuario > 0 || idDestino > 0) {
     llamarFuncionX("consultaSubsecciones");
     hora();
   } else {
-    alertaImg('Sesseion Eliminada', '', 'info', 3000);
+    alertaImg('Sessión No Iniciada', '', 'info', 3000);
     location.replace("login.php");
   }
 }
@@ -35,11 +36,7 @@ function obtenerDatosUsuario(idDestino) {
     dataType: "JSON",
     success: function (data) {
       document.getElementById("avatarUsuario").innerHTML =
-        '<img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=' +
-        data.nombre +
-        " % " +
-        data.apellido +
-        '"' +
+        '<img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=' + data.nombre + " % " + data.apellido + '"' +
         'alt="avatar" class="menu-contenedor-6">';
       document.getElementById("nombreUsuarioNavBarTop").innerHTML =
         data.nombre + " " + data.apellido;
@@ -49,9 +46,7 @@ function obtenerDatosUsuario(idDestino) {
       document.getElementById("destinoNavBarTop").innerHTML = data.destino;
       document.getElementById("destinosSelecciona").innerHTML =
         data.destinosOpcion;
-
-      alertaImg("Destino: " + data.destino, "", "success", 2000);
-
+      // alertaImg("Destino: " + data.destino, "", "success", 2000);
       comprobarSession();
     },
   });
@@ -78,20 +73,7 @@ $(function () {
       customRangeLabel: "Personalizado",
       weekLabel: "S",
       daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-      monthNames: [
-        "Enero",
-        "Febreo",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-      ],
+      monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
     },
   });
   $('input[name="datefilter"]').on("apply.daterangepicker", function (
@@ -127,20 +109,7 @@ $(function () {
       customRangeLabel: "Personalizado",
       weekLabel: "S",
       daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-      monthNames: [
-        "Enero",
-        "Febreo",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-      ],
+      monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
     },
   });
   $('input[name="fechaProyecto"]').on("apply.daterangepicker", function (
@@ -184,19 +153,7 @@ $(function () {
       customRangeLabel: "Personalizado",
       weekLabel: "S",
       daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-      monthNames: [
-        "Enero",
-        "Febreo",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
+      monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
       ],
     },
   });
@@ -241,20 +198,7 @@ $(function () {
       customRangeLabel: "Personalizado",
       weekLabel: "S",
       daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-      monthNames: [
-        "Enero",
-        "Febreo",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-      ],
+      monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
     },
   });
   $('input[name="fechaMC"]').on("apply.daterangepicker", function (ev, picker) {
@@ -329,7 +273,7 @@ function botones(idd) {
         break;
     }
   } else {
-    alertaImg("Acceso Denegado en: " + nombreCol, "", "warning", 4000);
+    alertaImg("Acceso Denegado en: " + nombreCol, "", "warning", 2000);
   }
 }
 
@@ -337,15 +281,7 @@ function botones(idd) {
 // Función para el calendario de Secciones.
 function calendarioSecciones() {
   var numSem = new Date().getDay();
-  var diasSem = [
-    "domingo",
-    "lunes",
-    "martes",
-    "miercoles",
-    "jueves",
-    "viernes",
-    "sabado",
-  ];
+  var diasSem = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
   var hoydia = diasSem[numSem];
   var horas = new Date().getHours();
   var minutos = new Date().getMinutes();
@@ -533,18 +469,18 @@ function consultaSubsecciones(idDestino, idUsuario) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      $("#columnasSeccionesZIL").html(data.dataZIL);
-      $("#columnasSeccionesZIE").html(data.dataZIE);
-      $("#columnasSeccionesAUTO").html(data.dataAUTO);
-      $("#columnasSeccionesDEC").html(data.dataDEC);
-      $("#columnasSeccionesDEP").html(data.dataDEP);
-      $("#columnasSeccionesOMA").html(data.dataOMA);
-      $("#columnasSeccionesZHA").html(data.dataZHA);
-      $("#columnasSeccionesZHC").html(data.dataZHC);
-      $("#columnasSeccionesZHH").html(data.dataZHH);
-      $("#columnasSeccionesZHP").html(data.dataZHP);
-      $("#columnasSeccionesZIA").html(data.dataZIA);
-      $("#columnasSeccionesZIC").html(data.dataZIC);
+      document.getElementById("columnasSeccionesZIL").innerHTML = data.dataZIL;
+      document.getElementById("columnasSeccionesZIE").innerHTML = data.dataZIE;
+      document.getElementById("columnasSeccionesAUTO").innerHTML = data.dataAUTO;
+      document.getElementById("columnasSeccionesDEC").innerHTML = data.dataDEC;
+      document.getElementById("columnasSeccionesDEP").innerHTML = data.dataDEP;
+      document.getElementById("columnasSeccionesOMA").innerHTML = data.dataOMA;
+      document.getElementById("columnasSeccionesZHA").innerHTML = data.dataZHA;
+      document.getElementById("columnasSeccionesZHC").innerHTML = data.dataZHC;
+      document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
+      document.getElementById("columnasSeccionesZHP").innerHTML = data.dataZHP;
+      document.getElementById("columnasSeccionesZIA").innerHTML = data.dataZIA;
+      document.getElementById("columnasSeccionesZIC").innerHTML = data.dataZIC;
       calendarioSecciones();
     },
   });
@@ -939,71 +875,16 @@ function exportarPendientes(
 
 // Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
 // rangoInicial y rangoFinal, ya no se necesita, solo se utilizaba para la paginación.
-function obtenerEquipos(
-  idUsuario,
-  idDestino,
-  idSeccion,
-  idSubseccion,
-  rangoInicial,
-  rangoFinal,
-  tipoOrdenamiento
-) {
+function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
   // console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
   // Se agregan los filtros en las columnas de los equipos.
-  document
-    .getElementById("tipoOrdenamientoMCN")
-    .setAttribute(
-      "onclick",
-      "obtenerEquipos(" +
-      idUsuario +
-      "," +
-      idDestino +
-      "," +
-      idSeccion +
-      "," +
-      idSubseccion +
-      "," +
-      rangoInicial +
-      "," +
-      rangoFinal +
-      ',"MCN")'
-    );
-  document
-    .getElementById("tipoOrdenamientoMCF")
-    .setAttribute(
-      "onclick",
-      "obtenerEquipos(" +
-      idUsuario +
-      "," +
-      idDestino +
-      "," +
-      idSeccion +
-      "," +
-      idSubseccion +
-      "," +
-      rangoInicial +
-      "," +
-      rangoFinal +
-      ',"MCF")'
-    );
-  document
-    .getElementById("tipoOrdenamientoNombreEquipo")
-    .setAttribute(
-      "onclick",
-      "obtenerEquipos(" +
-      idUsuario +
-      "," +
-      idDestino +
-      "," +
-      idSeccion +
-      "," +
-      idSubseccion +
-      "," +
-      rangoInicial +
-      "," +
-      rangoFinal +
-      ',"nombreEquipo")'
-    );
+  document.getElementById("tipoOrdenamientoMCN")
+    .setAttribute("onclick", "obtenerEquipos(" + idUsuario + "," + idDestino + "," + idSeccion + "," + idSubseccion + "," + rangoInicial + "," + rangoFinal + ',"MCN")');
+  document.getElementById("tipoOrdenamientoMCF")
+    .setAttribute("onclick", "obtenerEquipos(" + idUsuario + "," + idDestino + "," + idSeccion + "," + idSubseccion + "," + rangoInicial + "," + rangoFinal + ',"MCF")');
+
+  document.getElementById("tipoOrdenamientoNombreEquipo")
+    .setAttribute("onclick", "obtenerEquipos(" + idUsuario + "," + idDestino + "," + idSeccion + "," + idSubseccion + "," + rangoInicial + "," + rangoFinal + ',"nombreEquipo")');
 
   document.getElementById("dataEquipos").innerHTML = "";
   document.getElementById("seccionEquipos").innerHTML =
@@ -1014,7 +895,7 @@ function obtenerEquipos(
   const action = "obtenerEquipos";
 
   // Alerta para Notificar el tipo de ordenamiento.
-  alertaImg("Ordenando Equipos", "", "info", 3000);
+  // alertaImg("Ordenando Equipos", "", "info", 3000);
   $.ajax({
     type: "POST",
     url: "php/plannerCrudPHP.php",
@@ -1039,7 +920,9 @@ function obtenerEquipos(
       paginacionEquipos();
 
       // alerta para mostrar información de los Equipos obtenidos.
-      alertaImg(data.totalEquipos, "", "success", 3000);
+      if (data.totalEquipos <= 0) {
+        alertaImg("Sin Equipos/Locales", "", "success", 3000);
+      }
     },
   });
 }
@@ -1389,8 +1272,8 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
       // console.log(data);
       alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
       document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-      document.getElementById("palabraUsuario").setAttribute("onkeydown",'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
-        );
+      document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
+      );
     },
   });
 }
@@ -2119,52 +2002,38 @@ function obtenerProyectosP(tipoOrden) {
   claseBotonesProyecto("proyectosPendientes");
 
   // Agrega el tipo de orden en las columnas.
-  document
-    .getElementById("proyectoOrden")
-    .setAttribute("onclick", 'obtenerProyectosP("PROYECTO")');
-  document
-    .getElementById("proyectoOrdenPDA")
-    .setAttribute("onclick", 'obtenerProyectosP("PDA")');
-  document
-    .getElementById("proyectoOrdenRESP")
-    .setAttribute("onclick", 'obtenerProyectosP("RESP")');
-  document
-    .getElementById("proyectoOrdenFECHA")
-    .setAttribute("onclick", 'obtenerProyectosP("FECHA")');
-  document
-    .getElementById("proyectoOrdenCOT")
-    .setAttribute("onclick", 'obtenerProyectosP("COT")');
-  document
-    .getElementById("proyectoOrdenTIPO")
-    .setAttribute("onclick", 'obtenerProyectosP("TIPO")');
-  document
-    .getElementById("proyectoOrdenJUST")
-    .setAttribute("onclick", 'obtenerProyectosP("JUST")');
-  document
-    .getElementById("proyectoOrdenCOSTE")
-    .setAttribute("onclick", 'obtenerProyectosP("COSTE")');
+  document.getElementById("proyectoOrden").
+    setAttribute("onclick", 'obtenerProyectosP("PROYECTO")');
+  document.getElementById("proyectoOrdenPDA").
+    setAttribute("onclick", 'obtenerProyectosP("PDA")');
+  document.getElementById("proyectoOrdenRESP").
+    setAttribute("onclick", 'obtenerProyectosP("RESP")');
+  document.getElementById("proyectoOrdenFECHA").
+    setAttribute("onclick", 'obtenerProyectosP("FECHA")');
+  document.getElementById("proyectoOrdenCOT").
+    setAttribute("onclick", 'obtenerProyectosP("COT")');
+  document.getElementById("proyectoOrdenTIPO").
+    setAttribute("onclick", 'obtenerProyectosP("TIPO")');
+  document.getElementById("proyectoOrdenJUST").
+    setAttribute("onclick", 'obtenerProyectosP("JUST")');
+  document.getElementById("proyectoOrdenCOSTE").
+    setAttribute("onclick", 'obtenerProyectosP("COSTE")');
 
   // Secciones de Botones.
   document.getElementById("seccionProyectos").innerHTML =
     '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-  document
-    .getElementById("btnProyecto")
+  document.getElementById("btnProyecto")
     .setAttribute("onclick", 'obtenerProyectosP("PROYECTO")');
-  document
-    .getElementById("palabraProyecto")
+  document.getElementById("palabraProyecto")
     .setAttribute("onkeyup", 'obtenerProyectosP("PROYECTO")');
   document.getElementById("modalProyectos").classList.add("open");
-  document
-    .getElementById("btnCrearProyecto")
+  document.getElementById("btnCrearProyecto")
     .setAttribute("onclick", "agregarProyecto()");
-  document
-    .getElementById("btnNuevoProyecto")
+  document.getElementById("btnNuevoProyecto")
     .setAttribute("onclick", "datosAgregarProyecto()");
-  document
-    .getElementById("btnSolucionadosProyectos")
+  document.getElementById("btnSolucionadosProyectos")
     .setAttribute("onclick", 'obtenerProyectosS("PROYECTO")');
-  document
-    .getElementById("btnGanttProyecto")
+  document.getElementById("btnGanttProyecto")
     .setAttribute("onclick", "ganttP()");
 
   // Oculta y Muestra contenido
@@ -2187,17 +2056,15 @@ function obtenerProyectosP(tipoOrden) {
     },
     dataType: "JSON",
     success: function (data) {
-      alertaImg(
-        "Proyectos Pendientes: " + data.totalProyectos,
-        "",
-        "info",
-        4000
-      );
-
+      // alertaImg("Proyectos Pendientes: " + data.totalProyectos, "", "info", 4000);
       document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
       document.getElementById("seccionProyectos").innerHTML = data.seccion;
       estiloSeccionModal("estiloSeccionProyectos", data.seccion);
       paginacionProyectos();
+
+      if (data.totalProyectos <= 0) {
+        alertaImg("Sin Proyectos", "", "info", 4000);
+      }
     },
   });
 }
@@ -2216,45 +2083,32 @@ function obtenerProyectosS(tipoOrden) {
   claseBotonesProyecto("proyectosSolucionados");
 
   // Agrega el tipo de orden en las columnas.
-  document
-    .getElementById("proyectoOrden")
+  document.getElementById("proyectoOrden")
     .setAttribute("onclick", 'obtenerProyectosS("PROYECTO")');
-  document
-    .getElementById("proyectoOrdenPDA")
+  document.getElementById("proyectoOrdenPDA")
     .setAttribute("onclick", 'obtenerProyectosS("PDA")');
-  document
-    .getElementById("proyectoOrdenRESP")
+  document.getElementById("proyectoOrdenRESP")
     .setAttribute("onclick", 'obtenerProyectosS("RESP")');
-  document
-    .getElementById("proyectoOrdenFECHA")
+  document.getElementById("proyectoOrdenFECHA")
     .setAttribute("onclick", 'obtenerProyectosS("FECHA")');
-  document
-    .getElementById("proyectoOrdenCOT")
+  document.getElementById("proyectoOrdenCOT")
     .setAttribute("onclick", 'obtenerProyectosS("COT")');
-  document
-    .getElementById("proyectoOrdenTIPO")
+  document.getElementById("proyectoOrdenTIPO")
     .setAttribute("onclick", 'obtenerProyectosS("TIPO")');
-  document
-    .getElementById("proyectoOrdenJUST")
+  document.getElementById("proyectoOrdenJUST")
     .setAttribute("onclick", 'obtenerProyectosS("JUST")');
-  document
-    .getElementById("proyectoOrdenCOSTE")
+  document.getElementById("proyectoOrdenCOSTE")
     .setAttribute("onclick", 'obtenerProyectosS("COSTE")');
-
   document.getElementById("seccionProyectos").innerHTML =
     '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-  document
-    .getElementById("palabraProyecto")
+  document.getElementById("palabraProyecto")
     .setAttribute("onkeyup", 'obtenerProyectosS("PROYECTO")');
   document.getElementById("modalProyectos").classList.add("open");
-  document
-    .getElementById("btnCrearProyecto")
+  document.getElementById("btnCrearProyecto")
     .setAttribute("onclick", "agregarProyecto()");
-  document
-    .getElementById("btnNuevoProyecto")
+  document.getElementById("btnNuevoProyecto")
     .setAttribute("onclick", "datosAgregarProyecto()");
-  document
-    .getElementById("btnPendientesProyectos")
+  document.getElementById("btnPendientesProyectos")
     .setAttribute("onclick", 'obtenerProyectosP("PROYECTO")');
 
   // Oculta y Muestra contenido
@@ -2277,16 +2131,15 @@ function obtenerProyectosS(tipoOrden) {
     },
     dataType: "JSON",
     success: function (data) {
-      alertaImg(
-        "Proyectos Finalizados: " + data.totalProyectos,
-        "",
-        "info",
-        4000
-      );
+      // alertaImg("Proyectos Solucionados: " + data.totalProyectos, "", "info", 3000);
       document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
       document.getElementById("seccionProyectos").innerHTML = data.seccion;
       estiloSeccionModal("estiloSeccionProyectos", data.seccion);
       paginacionProyectos();
+
+      if (data.totalProyectos <= 0) {
+        alertaImg("Sin Proyectos", "", "info", 4000);
+      }
     },
   });
 }
@@ -2304,7 +2157,6 @@ function paginacionProyectos() {
     next: "siguiente",
     animation: false,
   });
-  // console.log('Paginación');
 
   $("#paginacionProyectos>a").addClass(
     "-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
@@ -2350,14 +2202,7 @@ function agregarProyecto() {
   let justificacion = document.getElementById("justificacionProyectoN").value;
   let coste = document.getElementById("costeProyectoN").value;
   const action = "agregarProyecto";
-  if (
-    titulo.length >= 1 &&
-    tipo.length >= 1 &&
-    fecha.length >= 1 &&
-    justificacion.length >= 1 &&
-    coste >= 0 &&
-    responsable > 0
-  ) {
+  if (titulo.length >= 1 && tipo.length >= 1 && fecha.length >= 1 && justificacion.length >= 1 && coste >= 0 && responsable > 0) {
     $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -2379,6 +2224,7 @@ function agregarProyecto() {
         // console.log(data);
         if (data == 1) {
           obtenerProyectosP("PROYECTO");
+          obtenerDatosUsuario(idDestino);
           alertaImg("Proyecto Agregado", "", "success", 2500);
           document.getElementById("tituloProyectoN").value = "";
           document.getElementById("tipoProyectoN").value = "";
@@ -2386,9 +2232,7 @@ function agregarProyecto() {
           document.getElementById("responsableProyectoN").value = "";
           document.getElementById("justificacionProyectoN").value = "";
           document.getElementById("costeProyectoN").value = "";
-          document
-            .getElementById("modalAgregarProyecto")
-            .classList.remove("open");
+          document.getElementById("modalAgregarProyecto").classList.remove("open");
         } else {
           alertaImg("Intente de Nuevo", "", "info", 3000);
         }
@@ -2465,20 +2309,17 @@ function actualizarProyectos(valor, columna, idProyecto) {
         document.getElementById("modalUsuarios").classList.remove("open");
       } else if (data == 2) {
         obtenerProyectosP("PROYECTO");
-        document
-          .getElementById("modalActualizarProyecto")
+        document.getElementById("modalActualizarProyecto")
           .classList.remove("open");
         alertaImg("Justifiacion Actualizado", "", "success", 2000);
       } else if (data == 3) {
         obtenerProyectosP("PROYECTO");
-        document
-          .getElementById("modalActualizarProyecto")
+        document.getElementById("modalActualizarProyecto")
           .classList.remove("open");
         alertaImg("Coste Actualizado", "", "success", 2000);
       } else if (data == 4) {
         obtenerProyectosP("PROYECTO");
-        document
-          .getElementById("modalActualizarProyecto")
+        document.getElementById("modalActualizarProyecto")
           .classList.remove("open");
         alertaImg("Tipo Actualizado", "", "success", 2000);
       } else if (data == 5) {
@@ -2532,19 +2373,13 @@ function obtenerDatoProyectos(idProyecto, columna) {
   if (columna == "justificacion") {
     justificacionAdjuntosProyectos(idProyecto);
     document.getElementById("modalActualizarProyecto").classList.add("open");
-    document.getElementById("tituloActualizarProyecto").innerHTML =
-      "JUSTIFIACIÓN";
+    document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFIACIÓN";
 
-    document
-      .getElementById("justificacionProyectoDiv")
-      .classList.remove("hidden");
+    document.getElementById("justificacionProyectoDiv").classList.remove("hidden");
 
-    document
-      .getElementById("inputAdjuntosJP")
-      .setAttribute(
-        "onchange",
-        "subirJustificacionProyectos(" + idProyecto + ', "t_proyectos_justificaciones")'
-      );
+    document.getElementById("inputAdjuntosJP")
+      .setAttribute("onchange",
+        "subirJustificacionProyectos(" + idProyecto + ', "t_proyectos_justificaciones")');
 
   } else if (columna == "coste") {
     document.getElementById("modalActualizarProyecto").classList.add("open");
@@ -2572,17 +2407,12 @@ function obtenerDatoProyectos(idProyecto, columna) {
     dataType: "JSON",
     success: function (data) {
       document.getElementById("tipoProyecto").value = data.tipo;
-      document.getElementById("justificacionProyecto").value =
-        data.justificacion;
+      document.getElementById("justificacionProyecto").value = data.justificacion;
       document.getElementById("costeProyecto").value = data.coste;
       document.getElementById("fechaProyecto").value = data.rangoFecha;
 
-      document
-        .getElementById("btnGuardarInformacion")
-        .setAttribute(
-          "onclick",
-          'actualizarProyectos(0, "' + columna + '",' + idProyecto + ")"
-        );
+      document.getElementById("btnGuardarInformacion")
+        .setAttribute("onclick", 'actualizarProyectos(0, "' + columna + '",' + idProyecto + ")");
     },
   });
 }
@@ -4231,6 +4061,14 @@ function llamarFuncionX(nombreFuncion) {
   }
 }
 
+
+
+// Cierra Sesión
+async function cerrarSession() {
+  alertaImg("Sessión Cerrada", "", "success", 1200);
+  await localStorage.clear();
+  await comprobarSession();
+}
 
 
 // Función para comprobar session.

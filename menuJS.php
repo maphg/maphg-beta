@@ -233,7 +233,7 @@
         <dav class="menu-contenedor-7">
             <h99 id="nombreUsuarioMenu" class="menu-contenedor-8">nombreUsuario</h99>
             <pe id="cargoUsuarioMeu" class="menu-contenedor-10">cargo</pe>
-            <o class="menu-contenedor-9" href="" onclick="logout();"><i class="fas fa-cog "></i></o>
+            <a id="cerrarSession" onclick="cerrarSession();" class="menu-contenedor-9" href=""><i class="fas fa-cog "></i></a>
         </dav>
     </dav>
 
