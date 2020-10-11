@@ -26,6 +26,6 @@ switch ($message) {
 
 function sendMessage($chatId, $response)
 {
-    $url = $GLOBALS["botApi"] . '/sendMessage?chat_id=' . $chatId . '&parse_mode=HTML&text=' . urlencode($response);
+    $url = $GLOBALS[botApi] . '/sendMessage?chat_id=' . $chatId . '&parse_mode=HTML&text=' . urlencode($response);
     file_get_contents($url);
 }
