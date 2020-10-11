@@ -1,41 +1,27 @@
 <?php
-
-$BOT_TOKEN = "1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E";
-
+$botToken = "1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E";
+$website = "https://api.telegram.org/bot" . $botToken;
 $update = file_get_contents('php://input');
-$update = json_decode($update, true);
-$userChatId = $update["message"]["from"]["id"] ? $update["message"]["from"]["id"] : null;
+$update = json_decode($update);
+$chatId = "989320528";
+$chatType = $update["message"]["chat"]["type"];
+$message = $update["message"]["text"];
 
-if ($userChatId) {
-    $userMessage = $update["message"]["text"] ? $update["message"]["text"] : "Nothing";
-    $firstName = $update["message"]["from"]["first_name"] ? $update["message"]["from"]["first_name"] : "N/A";
-    $lastName = $update["message"]["from"]["last_name"] ? $update["message"]["from"]["last_name"] : "N/A";
-    $fullName = $firstName . " " . $lastName;
-    $replyMsg = "Hello " . $fullName . "\nYou said: " . $userMessage;
-
-
-    $parameters = array(
-        "chat_id" => $userChatId,
-        "text" => $replyMsg,
-        "parseMode" => "html"
-    );
-
-    send("sendMessage", $parameters);
+switch ($message) {
+    case 'ayuda':
+        $response = "Pendiente 1";
+        sendMessage($chatId, $response);
+        break;
+    case 'pendientes':
+        $response = "Pendiente 2";
+        sendMessage($chatId, $response);
+        break;
 }
 
-function send($method, $data)
-{
-    global $BOT_TOKEN;
-    $url = "https://api.telegram.org/bot$BOT_TOKEN/$method";
 
-    if (!$curld = curl_init()) {
-        exit;
-    }
-    curl_setopt($curld, CURLOPT_POST, true);
-    curl_setopt($curld, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($curld, CURLOPT_URL, $url);
-    curl_setopt($curld, CURLOPT_RETURNTRANSFER, true);
-    $output = curl_exec($curld);
-    curl_close($curld);
-    return $output;
+
+function sendMessage($chatId, $response)
+{
+    $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&text=' . $response;
+    file_get_contents($url);
 }
