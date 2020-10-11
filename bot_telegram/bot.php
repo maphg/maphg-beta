@@ -18,8 +18,7 @@ switch ($message) {
         break;
     case '/pendientes':
         $response = "Tranquilo, estoy contigo.";
-        $keyboard = '["Gracias"],["Pos Ok"]';
-        sendMessage($chatId, $response, $keyboard);
+        sendMessage($chatId, $response);
         break;
 }
 
