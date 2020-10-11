@@ -9,11 +9,11 @@ $message = $update["message"]["text"];
 $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=spoifsdffdsf";
 
 switch ($message) {
-    case 'ayuda':
+    case '/ayuda':
         $response = "Pendiente 1";
         sendMessageX($chatId, $response);
         break;
-    case 'pendientes':
+    case '/pendientes':
         $response = "Pendiente 2";
         sendMessageX($chatId, $response);
         break;
