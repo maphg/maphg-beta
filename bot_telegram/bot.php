@@ -6,11 +6,8 @@ $update = json_decode($update, TRUE);
 
 $chatId = $update["message"]["chat"]["id"];
 $chatType = $update["message"]["chat"]["type"];
-$userId = $update["message"]['from']['id'];
-$firstname = $update["message"]['from']['username'];
 $message = $update["message"]["text"];
 
-//No requieren variables del usuario.
 switch ($message) {
     case '/ayuda':
         $response = "Tranquilo, estoy contigo.";
@@ -26,6 +23,6 @@ switch ($message) {
 
 function sendMessage($chatId, $response)
 {
-    $url = $GLOBALS[botApi] . '/sendMessage?chat_id=' . $chatId . '&parse_mode=HTML&text=' . urlencode($response);
+    $url = $GLOBALS["botApi"] . '/sendMessage?chat_id=' . $chatId . '&parse_mode=HTML&text=' . urlencode($response);
     file_get_contents($url);
 }
