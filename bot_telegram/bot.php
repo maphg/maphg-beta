@@ -1,11 +1,9 @@
 <?php
-echo "Bot";
 $botToken = "1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E";
 $website = "https://api.telegram.org/bot" . $botToken;
 $update = file_get_contents('php://input');
 $update = json_decode($update, true);
-echo $update;
-$chatId = $update["message"]["chat"]["id"];
+$chatId = "989320528";
 $chatType = $update["message"]["chat"]["type"];
 $message = $update["message"]["text"];
 
@@ -24,6 +22,6 @@ switch ($message) {
 
 function sendMessage($chatId, $response)
 {
-    $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&parse_mode=HTML&text=' . urlencode($response);
+    $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&text=' . $response;
     file_get_contents($url);
 }
