@@ -65,7 +65,7 @@ if (isset($_GET['listaIdF'])) {
 
 
     //Fallas
-    $query = "SELECT t_mc.id, t_mc.status_material, t_mc.codsap, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.fecha_creacion 
+    $query = "SELECT t_mc.id, t_mc.status_material, t_mc.codsap, t_mc.cod2bend, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.fecha_creacion 
     FROM t_mc 
     INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
     INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
@@ -89,11 +89,14 @@ if (isset($_GET['listaIdF'])) {
             $fecha = $row['fecha_creacion'];
             $materialF = $row['status_material'];
             $codsapF = $row['codsap'];
+            $cod2bendF = $row['cod2bend'];
 
             if ($materialF != 0) {
                 $codsapF = "<h1 class=\"\">CODSAP: <span class=\"font-bold\">$codsapF</span>";
+                $cod2bendF = "<h1 class=\"\">COD2BEND: <span class=\"font-bold\">$cod2bend</span>";
             } else {
                 $codsapF = "";
+                $cod2bendF = "";
             }
 
             if ($fecha != "") {
@@ -142,6 +145,7 @@ if (isset($_GET['listaIdF'])) {
                             <h1 class=\"font-bold\">$equipo</h1>
                             <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
                             $codsapF
+                            $cod2bendF
                             </h1>
                         </div>
                     </div>
@@ -151,7 +155,7 @@ if (isset($_GET['listaIdF'])) {
     }
 
     //Tareas
-    $query = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.fecha 
+    $query = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.fecha 
     FROM t_mp_np 
     LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
@@ -175,11 +179,14 @@ if (isset($_GET['listaIdF'])) {
             $fecha = $row['fecha'];
             $materialT = $row['status_material'];
             $codsapT = $row['codsap'];
+            $cod2bendT = $row['cod2bend'];
 
             if ($materialT != 0) {
                 $codsapT = "<h1 class=\"\">CODSAP: <span class=\"font-bold\">$codsapT</span>";
+                $cod2bendT = "<h1 class=\"\">COD2BEND: <span class=\"font-bold\">$cod2bendT</span>";
             } else {
                 $codsapT = "";
+                $cod2bendT = "";
             }
 
             if ($fecha != "") {
@@ -226,9 +233,11 @@ if (isset($_GET['listaIdF'])) {
                             <h1>Creado el: <span class=\"font-bold\">$fecha</span></h1>
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>
-                            <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
+                            <h1 class=\"\">Responsable: 
+                                <span class=\"font-bold\">$responsable</span>
                             </h1>
                             $codsapT
+                            $cod2bendT
                         </div>
                     </div>
                 </div>
@@ -251,7 +260,8 @@ if (isset($_GET['listaIdF'])) {
 <body class="flex flex-col justify-start items-start h-auto bg-gray-900">
 
     <div id="33">
-        <div class="flex flex-col items-start justify-start bg-white pt-4 px-4 overflow-hidden mt-1 relative" style="width: 1223px; height: 1576px;">
+        <div class="flex flex-col items-start justify-start bg-white pt-4 px-4 overflow-hidden mt-1 relative"
+            style="width: 1223px; height: 1576px;">
 
             <div class="w-12 flex items-center justify-center absolute w-full h-full">
                 <div class="p-20">
@@ -269,7 +279,8 @@ if (isset($_GET['listaIdF'])) {
 
                     <div class="<?= strtolower($seccion); ?>-logo relative">
                         <h1 class=""><?= $seccion; ?></h1>
-                        <div class="font-semibold text-xs px-1 rounded bg-red-300 text-red-600 absolute" style="bottom: -20%; right: -30%;">
+                        <div class="font-semibold text-xs px-1 rounded bg-red-300 text-red-600 absolute"
+                            style="bottom: -20%; right: -30%;">
                             <h1 class="font-bold"><?= $nombreDestino; ?></h1>
                         </div>
                     </div>

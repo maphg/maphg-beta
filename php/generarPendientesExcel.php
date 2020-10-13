@@ -21,7 +21,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
     //FALLAS Generales
     $queryF = "
-        SELECT t_mc.id, t_mc.status_material, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
+        SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_mc 
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
@@ -41,7 +41,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     }
 
     //TAREAS Generales
-    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.id_usuario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
+    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
     FROM t_mp_np
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
     INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
@@ -74,6 +74,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo Pendiente');
         $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Material');
         $objPHPExcel->getActiveSheet()->setCellValue('L1', 'CODSAP');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'COD2BEND');
 
         $fila = 2;
         while ($row = mysqli_fetch_array($resultF)) {
@@ -87,13 +88,16 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $creadoPorF = $row['creado_por'];
             $materialF = $row['status_material'];
             $codsapF = $row['codsap'];
+            $cod2bendF = $row['cod2bend'];
 
             if ($materialF != 0) {
                 $materialF = "SI";
                 $codsapF = "$codsapF";
+                $cod2bendF = "$codsapF";
             } else {
                 $materialF = "";
                 $codsapF = "";
+                $cod2bendF = "";
             }
 
             $queryComentario = "SELECT t_mc_comentarios.comentario, t_colaboradores.nombre, 
@@ -144,6 +148,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Fallas');
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialF);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapF);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $codsapF);
 
             //Contador de Celdas
             $fila++;
@@ -160,13 +165,16 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $creadoPorT = $rowT['id_usuario'];
             $materialT = $row['status_material'];
             $codsapT = $row['codsap'];
+            $cod2bendT = $row['cod2bend'];
 
             if ($materialT != 0) {
                 $materialT = "SI";
                 $codsapT = "$codsapT";
+                $cod2bendT = "$cod2bendT";
             } else {
                 $materialT = "";
                 $codsapT = "";
+                $cod2bendT = "";
             }
 
             $queryComentarioT = "SELECT comentario.comentarios_mp_np, 
@@ -214,6 +222,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Tareas');
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialT);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapT);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendT);
 
             //Contador de Celdas
             $fila++;
