@@ -41,7 +41,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     }
 
     //TAREAS Generales
-    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mc.codsap, t_mp_np.id_usuario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
+    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.id_usuario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
     FROM t_mp_np
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
     INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
