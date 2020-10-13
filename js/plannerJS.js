@@ -4976,7 +4976,6 @@ function statusMateriales() {
             }
         },
     });
-
 }
 
 function finalizarMC(idMC) {
@@ -5732,11 +5731,23 @@ function reporteStatusDEP(idGrupo, idDestino, idSeccion, b, c, d, destinoTNombre
 
 function capturarCodigo(id, tipoCodigo, tabla) {
     if (tabla == "t_mc") {
-        var codigo = document.getElementById('codsapMC' + id).value;
-    }else if (tabla == "t_mp_np") {
-        var codigo = document.getElementById('codsapTAREA' + id).value;
-    }else{
-        var codigo = document.getElementById('codsapPlanaccion' + id).value;
+        if (tipoCodigo == "cod2bend") {
+            var codigo = document.getElementById('cod2bendMC' + id).value;
+        } else {
+            var codigo = document.getElementById('codsapMC' + id).value;
+        }
+    } else if (tabla == "t_mp_np") {
+        if (tipoCodigo == "cod2bend") {
+            var codigo = document.getElementById('cod2bendTAREA' + id).value;
+        } else {
+            var codigo = document.getElementById('codsapTAREA' + id).value;
+        }
+    } else {
+        if (tipoCodigo == "codsap") {
+            var codigo = document.getElementById('codsapPlanaccion' + id).value;
+        } else {
+            var codigo = document.getElementById('cod2bendPlanaccion' + id).value;
+        }
     }
 
     var action = "capturarCodigo";

@@ -264,7 +264,7 @@
                     </div>
 
                     <div id="statusMaterialtoggle" class="w-full text-center h-10 cursor-pointer relative flex items-center justify-center text-gray-500 text-xs hidden" style="margin-top:-6px;">
-                        <input id="codigoSeguimiento" class="py-1 rounded ml-1 font-bold text-center" type="text" placeholder="Código Seguimiento" autocomplete="off">
+                        <input id="codigoSeguimiento" class="py-1 rounded ml-1 font-bold text-center" type="text" placeholder="COD2BEND" autocomplete="off">
                         <button id="statusMaterialBtn" class="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-1 rounded">Aplicar</button>
                     </div>
 

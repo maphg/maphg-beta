@@ -6656,7 +6656,7 @@ if (isset($_POST['action'])) {
                     }
 
                     if ($codigoSeguimiento != "") {
-                        $query = "UPDATE t_proyectos_planaccion SET status_material = '1', codsap = '$codigoSeguimiento' WHERE id = $idPlanaccion";
+                        $query = "UPDATE t_proyectos_planaccion SET status_material = '1', cod2bend = '$codigoSeguimiento' WHERE id = $idPlanaccion";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             echo 7;
                         } else {
