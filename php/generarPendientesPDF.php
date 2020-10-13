@@ -65,7 +65,7 @@ if (isset($_GET['listaIdF'])) {
 
 
     //Fallas
-    $query = "SELECT t_mc.id, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.fecha_creacion 
+    $query = "SELECT t_mc.id, t_mc.status_material, t_mc.codsap, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.fecha_creacion 
     FROM t_mc 
     INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
     INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
@@ -87,6 +87,17 @@ if (isset($_GET['listaIdF'])) {
             $actividad = $row['actividad'];
             $responsable = $row['nombre'] . " " . $row['apellido'];
             $fecha = $row['fecha_creacion'];
+            $materialF = $row['status_material'];
+            $codsapF = $row['codsap'];
+
+            if ($materialF != 0) {
+                $materialF = "SI";
+                $codsapF = "$codsapF";
+            } else {
+                $materialF = "";
+                $codsapF = "";
+            }
+
             if ($fecha != "") {
                 $fecha = (new DateTime($fecha))->format('d-m-Y');
             } else {
@@ -132,6 +143,7 @@ if (isset($_GET['listaIdF'])) {
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>
                             <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
+                            <h1 class=\"\">Material: <span class=\"font-bold\">$codsapF</span>
                             </h1>
                         </div>
                     </div>
@@ -141,7 +153,7 @@ if (isset($_GET['listaIdF'])) {
     }
 
     //Tareas
-    $query = "SELECT t_mp_np.id, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.fecha 
+    $query = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido, t_mp_np.fecha 
     FROM t_mp_np 
     LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
@@ -163,6 +175,17 @@ if (isset($_GET['listaIdF'])) {
             $actividad = $row['titulo'];
             $responsable = $row['nombre'] . " " . $row['apellido'];
             $fecha = $row['fecha'];
+            $materialT = $row['status_material'];
+            $codsapT = $row['codsap'];
+
+            if ($materialT != 0) {
+                $materialT = "SI";
+                $codsapT = "$codsapT";
+            } else {
+                $materialT = "";
+                $codsapT = "";
+            }
+
             if ($fecha != "") {
                 $fecha = (new DateTime($fecha))->format('d-m-Y');
             } else {
@@ -208,6 +231,7 @@ if (isset($_GET['listaIdF'])) {
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>
                             <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
+                            <h1 class=\"\">Material: <span class=\"font-bold\">$codsapT</span>
                             </h1>
                         </div>
                     </div>
