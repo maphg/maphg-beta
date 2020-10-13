@@ -91,11 +91,9 @@ if (isset($_GET['listaIdF'])) {
             $codsapF = $row['codsap'];
 
             if ($materialF != 0) {
-                $materialF = "SI";
-                $codsapF = "$codsapF";
+                $codsapF = "<h1 class=\"\">CODSAP: <span class=\"font-bold\">$codsapF</span>";
             } else {
-                $materialF = "";
-                $codsapF = "-";
+                $codsapF = "";
             }
 
             if ($fecha != "") {
@@ -143,7 +141,7 @@ if (isset($_GET['listaIdF'])) {
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>
                             <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
-                            <h1 class=\"\">Material: <span class=\"font-bold\">$codsapF</span>
+                            $codsapF
                             </h1>
                         </div>
                     </div>
@@ -179,11 +177,9 @@ if (isset($_GET['listaIdF'])) {
             $codsapT = $row['codsap'];
 
             if ($materialT != 0) {
-                $materialT = "SI";
-                $codsapT = "$codsapT";
+                $codsapT = "<h1 class=\"\">CODSAP: <span class=\"font-bold\">$codsapT</span>";
             } else {
-                $materialT = "";
-                $codsapT = "-";
+                $codsapT = "";
             }
 
             if ($fecha != "") {
@@ -231,8 +227,8 @@ if (isset($_GET['listaIdF'])) {
                             <h1>Subsección: <span class=\"font-bold\">$subseccion</span></h1>
                             <h1 class=\"font-bold\">$equipo</h1>
                             <h1 class=\"\">Responsable: <span class=\"font-bold\">$responsable</span>
-                            <h1 class=\"\">Material: <span class=\"font-bold\">$codsapT</span>
                             </h1>
+                            $codsapT
                         </div>
                     </div>
                 </div>
