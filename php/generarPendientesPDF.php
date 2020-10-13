@@ -95,7 +95,7 @@ if (isset($_GET['listaIdF'])) {
                 $codsapF = "$codsapF";
             } else {
                 $materialF = "";
-                $codsapF = "";
+                $codsapF = "-";
             }
 
             if ($fecha != "") {
@@ -183,7 +183,7 @@ if (isset($_GET['listaIdF'])) {
                 $codsapT = "$codsapT";
             } else {
                 $materialT = "";
-                $codsapT = "";
+                $codsapT = "-";
             }
 
             if ($fecha != "") {
