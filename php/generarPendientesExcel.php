@@ -93,7 +93,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             if ($materialF != 0) {
                 $materialF = "SI";
                 $codsapF = "$codsapF";
-                $cod2bendF = "$codsapF";
+                $cod2bendF = "$cod2bendF";
             } else {
                 $materialF = "";
                 $codsapF = "";
@@ -148,7 +148,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Fallas');
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialF);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapF);
-            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $codsapF);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendF);
 
             //Contador de Celdas
             $fila++;
