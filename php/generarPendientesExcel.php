@@ -90,7 +90,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
             if ($materialF != "" and $materialF != "0") {
                 $materialF = "SI";
-                $codsapF = $codsap;
+                $codsapF = $codsapF;
             } else {
                 $materialF = "";
                 $codsapF = "";
@@ -163,7 +163,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
             if ($materialT != "" and $materialT != "0") {
                 $materialT = "SI";
-                $codsapT = $codsap;
+                $codsapT = $codsapT;
             } else {
                 $materialT = "";
                 $codsapT = "";
