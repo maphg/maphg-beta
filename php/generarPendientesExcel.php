@@ -143,7 +143,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $realizoComentario);
             $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Fallas');
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialF);
-            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapF);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, '$codsapF');
 
             //Contador de Celdas
             $fila++;
@@ -213,7 +213,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentarioDeT);
             $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Tareas');
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialT);
-            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapT);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, '$codsapT');
 
             //Contador de Celdas
             $fila++;
