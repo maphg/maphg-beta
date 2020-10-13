@@ -73,6 +73,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Comentario de:');
         $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo Pendiente');
         $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Material');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'CODSAP');
 
         $fila = 2;
         while ($row = mysqli_fetch_array($resultF)) {
