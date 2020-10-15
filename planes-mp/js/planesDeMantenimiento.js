@@ -102,7 +102,6 @@ function showInfoPlanMP() {
 
 function obtenerPlanesMP() {
 
-    document.getElementById('contenedorDePlanes').innerHTML = '';
     let palabraBuscar = document.getElementById("buscarPlanMP").value;
     // console.log(palabraBuscar);
     const action = "obtenerPlanesMP";
@@ -118,9 +117,11 @@ function obtenerPlanesMP() {
         dataType: "JSON",
         success: function (data) {
             // console.log(data);
+            document.getElementById('contenedorDePlanes').innerHTML = '';
             data.forEach(element => {
                 // console.log(element);
-                setTimeout(function () { $tablaPlanesDeMantto.innerHTML += datosPlanes(element); }, 90);
+                // setTimeout(function () { $tablaPlanesDeMantto.innerHTML += datosPlanes(element); }, 90);
+                $tablaPlanesDeMantto.innerHTML += datosPlanes(element);
             });
         }
     });
@@ -579,3 +580,4 @@ function obtenerMaterialPlanMP() {
 
 // Funciones Iniciales:
 obtenerPlanesMP();
+document.getElementById("buscarPlanMP").addEventListener('keyup', obtenerPlanesMP);
