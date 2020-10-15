@@ -100,7 +100,7 @@ function showInfoPlanMP() {
 }
 
 
-function obtenerPlanesMP(tipoOrden) {
+function obtenerPlanesMP() {
 
     document.getElementById('contenedorDePlanes').innerHTML = '';
     let palabraBuscar = document.getElementById("buscarPlanMP").value;
@@ -113,8 +113,7 @@ function obtenerPlanesMP(tipoOrden) {
             action: action,
             idDestino: idDestino,
             idUsuario: idUsuario,
-            palabraBuscar: palabraBuscar,
-            tipoOrden: tipoOrden
+            palabraBuscar: palabraBuscar
         },
         dataType: "JSON",
         success: function (data) {
@@ -291,12 +290,12 @@ function guardarCambiosPlanMP(status) {
                     alertaImg('Plan Actualizado', '', 'success', 2500);
                     localStorage.setItem('idPlanMP', 0);
                     await limpiarCamposPlanMP();
-                    await obtenerPlanesMP('ORDENID');
+                    await obtenerPlanesMP();
                 } else if (data.respuesta == 2) {
                     alertaImg('Plan Desactivado', '', 'info', 2500);
                     await localStorage.setItem('idPlanMP', 0);
                     await limpiarCamposPlanMP();
-                    obtenerPlanesMP('ORDENID');
+                    obtenerPlanesMP();
                 } else if (data.respuesta == 0) {
                     alertaImg('Intente de Nuevo', '', 'error', 2500);
                 }
@@ -579,4 +578,4 @@ function obtenerMaterialPlanMP() {
 }
 
 // Funciones Iniciales:
-obtenerPlanesMP('SINORDEN');
+obtenerPlanesMP();

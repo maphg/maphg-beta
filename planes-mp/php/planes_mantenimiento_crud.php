@@ -18,7 +18,6 @@ if (isset($_POST['action'])) {
         // { idPlanMP: 1, destino: 'rm', marca: 'ZI', tipoEquipo: 'Fan&coil', tipoPlan: 'PREVENTIVO', grado: 'MAYOR', periodicidad: 'Semestral' }
         $data = array();
         $palabraBuscar = $_POST['palabraBuscar'];
-        $tipoOrden = $_POST['tipoOrden'];
 
         if ($idDestino == 10) {
             $filtroDestino = "";
@@ -30,24 +29,6 @@ if (isset($_POST['action'])) {
             $filtroPalabraBuscar = "";
         } else {
             $filtroPalabraBuscar = "AND(c_destinos.destino LIKE '%$palabraBuscar%' OR c_fases.fase LIKE '%$palabraBuscar%' OR c_tipos.tipo LIKE '%$palabraBuscar%' OR t_mp_planes_mantenimiento.tipo_plan LIKE '%$palabraBuscar%' OR c_frecuencias_mp.frecuencia LIKE '%$palabraBuscar%')";
-        }
-
-        if ($tipoOrden == "ORDENID") {
-            $filtroOrdenar = "ORDER BY t_mp_planes_mantenimiento.id ASC";
-        } elseif ($tipoOrden == "ORDENARDESTINO") {
-            $filtroOrdenar = "ORDER BY c_destinos.destino ASC";
-        } elseif ($tipoOrden == "ORDENARMARCA") {
-            $filtroOrdenar = "ORDER BY c_fases.fase ASC";
-        } elseif ($tipoOrden == "ORDENARTIPO") {
-            $filtroOrdenar = "ORDER BY c_tipos.tipo ASC";
-        } elseif ($tipoOrden == "ORDENARPLAN") {
-            $filtroOrdenar = "ORDER BY t_mp_planes_mantenimiento.tipo_plan ASC";
-        } elseif ($tipoOrden == "ORDENARGRADO") {
-            $filtroOrdenar = "ORDER BY t_mp_planes_mantenimiento.grado ASC";
-        } elseif ($tipoOrden == "ORDENARPERIODICIDAD") {
-            $filtroOrdenar = "ORDER BY c_frecuencias_mp.id ASC";
-        } else {
-            $filtroOrdenar = "ORDER BY c_destinos.destino ASC";
         }
 
         $query  = "SELECT 
@@ -65,7 +46,6 @@ if (isset($_POST['action'])) {
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
         WHERE t_mp_planes_mantenimiento.status = 'ACTIVO' AND t_mp_planes_mantenimiento.activo = 1 $filtroDestino 
         $filtroPalabraBuscar 
-        $filtroOrdenar 
         ";
 
         if ($result = mysqli_query($conn_2020, $query)) {
