@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../css/animate.css">
 </head>
 
-<body class=" bg-fondos-7 text-bluegray-800">
+<body class=" bg-fondos-7 text-bluegray-800 scrollbar">
     <div class="flex flex-col container mx-auto py-10 font-light text-3xl">
         <h1>Equipos y Locales</h1>
     </div>
@@ -34,7 +34,7 @@
                 <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
             </h1>
         </div>
-        <div id="exportarPendientes"
+        <div id="exportarPendientes" onclick="tableToExcel('tablaGestionEquipos', 'equipos_locales_excel')"
             class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
             <h1>
                 <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
@@ -112,7 +112,7 @@
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
             <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar"
                 style="max-height: 70vh;">
-                <table class="min-w-full divide-y divide-gray-200 sortable">
+                <table id="tablaGestionEquipos" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead style="position: sticky; top:0;">
                         <tr class="cursor-pointer">
                             <th
@@ -954,6 +954,7 @@
     <script src="../js/popper.min.js"></script>
     <script src="../js/OT_JS.js"></script>
     <script src="../js/sorttable.js"></script>
+    <script src="../js/exportar_tabla_html.js"></script>
 </body>
 
 </html>
