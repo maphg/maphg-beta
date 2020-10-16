@@ -580,4 +580,7 @@ function obtenerMaterialPlanMP() {
 
 // Funciones Iniciales:
 obtenerPlanesMP();
-document.getElementById("buscarPlanMP").addEventListener('keyup', obtenerPlanesMP);
+document.getElementById("buscarPlanMP").
+    addEventListener("keyup", function () {
+        buscadorEquipo('tablaGestionPlanes', 'buscarPlanMP', 2);
+    });

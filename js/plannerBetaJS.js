@@ -112,14 +112,9 @@ $(function () {
       monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
     },
   });
-  $('input[name="fechaProyecto"]').on("apply.daterangepicker", function (
-    ev,
-    picker
-  ) {
-    $(this).val(
-      picker.startDate.format("DD/MM/YYYY") +
-      " - " +
-      picker.endDate.format("DD/MM/YYYY")
+
+  $('input[name="fechaProyecto"]').on("apply.daterangepicker", function (ev, picker) {
+    $(this).val(picker.startDate.format("DD/MM/YYYY") + " - " + picker.endDate.format("DD/MM/YYYY")
     );
 
     // Actualiza fecha TAREAS cuando se Aplica el rango.
@@ -896,6 +891,19 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
 
   // Alerta para Notificar el tipo de ordenamiento.
   // alertaImg("Ordenando Equipos", "", "info", 3000);
+  const ruta = "php/equipos_locales.php?";
+  // const url = `${ruta}&action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&
+  // idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&palabraEquipo=${palabraEquipo}`;
+  const url = 'php/equipos_locales.php?&action=obtenerEquipos&idDestino=1&idUsuario=1&idSeccion=9&idSubseccion=12&palabraEquipo=1';
+  console.log(url);
+  console.time('Inicio');
+  fetch(url)
+    .then(res => res.json())
+    .then(array => {
+      console.log(array);
+      console.timeEnd('Inicio');
+    });
+
   $.ajax({
     type: "POST",
     url: "php/plannerCrudPHP.php",

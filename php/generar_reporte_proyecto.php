@@ -73,51 +73,21 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 $url = $z['url_adjunto'];
 
                 if (file_exists("../../planner/proyectos/$url")) {
-                    $url2 = "../../planner/proyectos/$url";
+                    $url2 = "http://www.maphg.com/planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/$url")) {
-                    $url2 = "../planner/proyectos/$url";
+                    $url2 = "http://www.maphg.com/beta/planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
-                    $url2 = "../planner/proyectos/planaccion/$url";
+                    $url2 = "http://www.maphg.com/beta/planner/proyectos/planaccion/$url";
                 } else {
                     $url2 = "";
                 }
 
                 if ($contador == 1) {
-                    $gdImage = imagecreatefromjpeg($url2);
-                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-                    $objDrawing->setName('Sample image');
-                    $objDrawing->setDescription('Sample image');
-                    $objDrawing->setImageResource($gdImage);
-                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(20);
-                    $objDrawing->setCoordinates('D' . $fila);
-                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                    $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, '=Hyperlink("' . $url2 . '","Imagen 1")');
                 } elseif ($contador == 2) {
-                    $gdImage = imagecreatefromjpeg($url2);
-                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-                    $objDrawing->setName('Sample image');
-                    $objDrawing->setDescription('Sample image');
-                    $objDrawing->setImageResource($gdImage);
-                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(20);
-                    $objDrawing->setCoordinates('E' . $fila);
-                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                    $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, '=Hyperlink("' . $url2 . '","Imagen 2")');
                 } else {
-                    $gdImage = imagecreatefromjpeg($url2);
-                    // Add a drawing to the worksheetecho date('H:i:s') . " Add a drawing to the worksheet\n";
-                    $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
-                    $objDrawing->setName('Sample image');
-                    $objDrawing->setDescription('Sample image');
-                    $objDrawing->setImageResource($gdImage);
-                    $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_JPEG);
-                    $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
-                    $objDrawing->setHeight(20);
-                    $objDrawing->setCoordinates('F' . $fila);
-                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                    $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, '=Hyperlink("' . $url2 . '","Imagen 3")');
                 }
             }
         }
@@ -129,7 +99,7 @@ if ($result = mysqli_query($conn_2020, $query)) {
 // $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
 $fecha = date('d-m-Y H:m:s');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header('Content-Disposition: attachment;filename="Reporte_' . $fecha . '.xlsx"');
+header('Content-Disposition: attachment;filename="Reporte Proyectos_' . $fecha . '.xlsx"');
 header('Cache-Control: max-age=0');
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 $objWriter->save('PHP://output');

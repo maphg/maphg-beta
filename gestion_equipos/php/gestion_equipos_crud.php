@@ -56,8 +56,6 @@ if (isset($_GET['action'])) {
             $filtroSubseccion = "";
         }
 
-
-
         if ($filtroPalabra == "") {
             $filtroPalabra = "";
         } else {

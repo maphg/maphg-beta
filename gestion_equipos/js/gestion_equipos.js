@@ -1255,11 +1255,13 @@ function despieceEquipos(idEquipo) {
 
 }
 
+
 // Captura Eventos (Prueba)
 function registroEventos(params) {
     if (params == "modalMPEquipo") {
     }
 }
+
 
 // ********** FILTROS PARA EQUIPOS **********
 
@@ -1380,7 +1382,10 @@ document.getElementById("filtroTipo").addEventListener("change", consultaEquipos
 document.getElementById("filtroStatus").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSemana").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSeccion").addEventListener("change", consultaEquiposLocales);
-document.getElementById("filtroPalabra").addEventListener("keydown", consultaEquiposLocales);
+document.getElementById("filtroPalabra").
+    addEventListener("keyup", function () {
+        buscadorEquipo('tablaGestionEquipos', 'filtroPalabra', 3);
+    });
 
 // Función inicial para mostrar información de Equipos (t_equipos_america).
 consultaEquiposLocales();

@@ -7593,17 +7593,16 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
-
-                    $data['idPendiente'] = $idFalla;
-                    $data['actividad'] = $actividad;
-                    $data['fecha'] = $rangoFecha;
-                    $data['responsable'] = $responsable;
-                    $data['creadoPor'] = $creadoPor;
-                    $data['status'] = $status;
-                    $data['dataComentariosVP'] = $dataComentariosVP;
-                    $data['adjuntos'] = $dataImagen . $dataAdjunto;
-                    $data['equipo'] = $equipo;
                 }
+                $data['idPendiente'] = $idFalla;
+                $data['actividad'] = $actividad;
+                $data['fecha'] = $rangoFecha;
+                $data['responsable'] = $responsable;
+                $data['creadoPor'] = $creadoPor;
+                $data['status'] = $status;
+                $data['dataComentariosVP'] = $dataComentariosVP;
+                $data['adjuntos'] = $dataImagen . $dataAdjunto;
+                $data['equipo'] = $equipo;
             }
         } elseif ($tipoPendiente == "TAREA") {
             $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.rango_fecha, t_mp_np.responsable,
@@ -7894,16 +7893,15 @@ if (isset($_POST['action'])) {
                             }
                         }
                     }
-
-                    $data['idPendiente'] = $idTarea;
-                    $data['actividad'] = $actividad;
-                    $data['fecha'] = $rangoFecha;
-                    $data['responsable'] = $responsable;
-                    $data['creadoPor'] = $creadoPor;
-                    $data['status'] = $status;
-                    $data['dataComentariosVP'] = $dataComentariosVP;
-                    $data['adjuntos'] = $dataImagen . $dataAdjunto;
                 }
+                $data['idPendiente'] = $idTarea;
+                $data['actividad'] = $actividad;
+                $data['fecha'] = $rangoFecha;
+                $data['responsable'] = $responsable;
+                $data['creadoPor'] = $creadoPor;
+                $data['status'] = $status;
+                $data['dataComentariosVP'] = $dataComentariosVP;
+                $data['adjuntos'] = $dataImagen . $dataAdjunto;
             }
         }
         echo json_encode($data);
