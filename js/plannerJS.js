@@ -153,13 +153,14 @@ function obtenerEquipos(
         beforeSend: function () {
             var pageloader = document.getElementById("loader");
             if (pageloader) {
-                pageloader.classList.toggle("is-active");
+                // pageloader.classList.toggle("is-active");
+                
             }
         },
         success: function (data) {
             $("#modalHotel").removeClass('is-active');
             var pageloader = document.getElementById("loader");
-            pageloader.classList.toggle("is-active");
+            // pageloader.classList.toggle("is-active");
             try {
                 var datos = JSON.parse(data);
                 $("#divNameSeccion").removeClass();
@@ -313,12 +314,12 @@ function obtenerEquiposxPalabra(
         beforeSend: function () {
             var pageloader = document.getElementById("loader");
             if (pageloader) {
-                pageloader.classList.toggle("is-active");
+                // pageloader.classList.toggle("is-active");
             }
         },
         success: function (data) {
-            var pageloader = document.getElementById("loader");
-            pageloader.classList.toggle("is-active");
+            // var pageloader = document.getElementById("loader");
+            // pageloader.classList.toggle("is-active");
             try {
                 var datos = JSON.parse(data);
                 $("#divNameSubseccion").html(datos.nombreSubseccion);
@@ -3848,14 +3849,14 @@ function buscarMC() {
             beforeSend: function () {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
-                    pageloader.classList.toggle("is-active");
+                    // pageloader.classList.toggle("is-active");
                 }
             },
             success: function (data) {
                 var pageloader = document.getElementById("loader");
                 var pageloaderTimeout = setTimeout(function () {
-                    pageloader.classList.toggle("is-active");
-                    clearTimeout(pageloaderTimeout);
+                    // pageloader.classList.toggle("is-active");
+                    // clearTimeout(pageloaderTimeout);
                 }, 3000);
                 $("#tbodyTabla").html("");
                 $("#tablaMC").dataTable().fnDestroy();
@@ -4140,14 +4141,14 @@ function buscarMisPendientes(idResponsable) {
             beforeSend: function () {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
-                    pageloader.classList.toggle("is-active");
+                    // pageloader.classList.toggle("is-active");
                 }
             },
             success: function (data) {
                 var pageloader = document.getElementById("loader");
                 var pageloaderTimeout = setTimeout(function () {
-                    pageloader.classList.toggle("is-active");
-                    clearTimeout(pageloaderTimeout);
+                    // pageloader.classList.toggle("is-active");
+                    // clearTimeout(pageloaderTimeout);
                 }, 3000);
                 $("#tbodyTabla").html("");
                 $("#tablaMC").dataTable().fnDestroy();
