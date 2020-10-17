@@ -797,7 +797,6 @@ $tablaRanking .= "</div>";
                             <div class="control has-icons-left has-icons-right">
                                 <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo" autocomplete="off"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
                             </div>
-                            <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
                         <div class="control">
                             <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
@@ -2800,7 +2799,6 @@ $tablaRanking .= "</div>";
                             <div class="control has-icons-left has-icons-right">
                                 <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
                             </div>
-                            <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
                         <div class="control">
                             <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
