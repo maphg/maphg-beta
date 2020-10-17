@@ -98,7 +98,7 @@ const datosProyectos = params => {
     var fTipo = '';
     var fJustificacion = '';
     var fCoste = '';
-
+    var fToolTip = '';
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
