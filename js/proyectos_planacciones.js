@@ -102,14 +102,12 @@ const datosProyectos = params => {
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
-        fJustificacionAdjunto = `onclick="justificacionAdjuntosProyectos(${idProyecto});"`;
         fStatus = `onclick="statusProyecto(${idProyecto});"`;
         fRangoFecha = `onclick="obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
         fCotizaciones = `onclick="cotizacionesProyectos(${idProyecto});"`;
         fTipo = `onclick="obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
         fJustificacion = `onclick="obtenerDatoProyectos(${idProyecto},'justificacion');"`;
         fCoste = `onclick="obtenerDatoProyectos(${idProyecto},'coste');""`;
-
     }
 
 
@@ -139,7 +137,7 @@ const datosProyectos = params => {
                 <div class="leading-3">${params.fechaFin}</div>
             </td>
 
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fJustificacionAdjunto}>
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fCotizaciones}>
                 <h1>${valorCotizaciones}</h1>
             </td>
 
