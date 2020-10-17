@@ -107,9 +107,8 @@ if (isset($_GET['action'])) {
                         $statusActividad = $x['status'];
                         if ($status == "N" or $status == "PENDIENTE") {
                             $totalActividadesSolucionadas++;
-                        } else {
-                            $totalActividadesCreadas++;
                         }
+                        $totalActividadesCreadas++;
                     }
                     $pda = "$totalActividadesSolucionadas / $totalActividadesCreadas";
                 }
