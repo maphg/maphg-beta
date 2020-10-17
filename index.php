@@ -299,7 +299,7 @@ $tablaRanking .= "</div>";
 
 <body>
 
-    <div id="loader" class="pageloader is-dark is-active"><span class="title">Cargando...</span></div>
+    <!-- <div id="loader" class="pageloader is-dark"><span class="title">Cargando...</span></div> -->
     <!--Menu principal latelar izquierdo SIDEBAR-->
 
 
