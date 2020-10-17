@@ -814,119 +814,6 @@
     </div>
 
 
-    <!-- Modal de Proyectos *Eliminar cuando se agregue el nuevo diseño de Proyectos -->
-    <div id="modalProyectosx" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalProyectos')"
-                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <!-- SECCION Y UBICACION -->
-            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div id="estiloSeccionProyectos"
-                    class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="seccionProyectos" class="font-medium text-base"></h1>
-                </div>
-                <div class="ml-4 font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded">
-                    <h1>PROYECTOS</h1>
-                </div>
-            </div>
-
-            <!-- CONTENIDO PROYECTOS-->
-            <div class="p-2 mt-6 flex justify-center items-center flex-col">
-                <div class="flex flex-row items-center w-full">
-                    <div class="ml-10 relative text-gray-600 w-2/6 self-start">
-                        <input id="palabraProyectox"
-                            class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full"
-                            type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
-                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
-                            <i class="fad fa-search"></i>
-                        </button>
-                    </div>
-                    <div class="text-xs ml-2">
-
-                        <button id="btnNuevoProyecto"
-                            class=" px-2 py-1 bg-indigo-300 text-indigo-500 font-bold  rounded"> <i
-                                class="fas fa-plus"></i> Nuevo</button>
-
-                        <button id="btnProyecto"
-                            class=" px-2 py-1 hover:bg-blue-300 text-blue-500 border-blue-300 border-2 font-bold rounded ml-24"><i
-                                class="fas fa-tasks"></i> Proyectos</button>
-
-                        <button id="btnGanttProyecto"
-                            class=" px-2 py-1 hover:bg-blue-300 text-blue-500 border-blue-300 border-2 font-bold rounded"><i
-                                class="fas fa-stream"></i> Gantt</button>
-
-                        <button id="btnSolucionadosProyectos"
-                            class="px-2 py-1 hover:bg-green-300 text-green-500 border-green-300 border-2 font-bold ml-24 rounded"><i
-                                class="fas fa-check"></i> Solucionados
-                        </button>
-
-                        <button id="btnPendientesProyectos"
-                            class=" px-2 py-1 hover:bg-red-300 text-red-500 border-red-300 border-2 font-bold rounded"><i
-                                class="fas fa-check"></i> Pendientes</button>
-
-                    </div>
-                </div>
-                <!-- Contenedor de los equipos y locales(Tabla) -->
-                <div id="contenidoProyectos"
-                    class="hidden mt-2 w-full flex flex-col justify-center items-center overflow-y-auto scrollbar"
-                    style="max-height: 80vh;">
-                    <!-- titulos -->
-                    <div
-                        class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xxs h-8 text-bluegray-500 divide-x">
-                        <div id="proyectoOrden" class="w-2/5 h-full flex items-center justify-center ">
-                            <h1>PROYECTO</h1>
-                        </div>
-                        <div id="proyectoOrdenPDA" class="w-24 h-full flex items-center justify-center">
-                            <h1>PDA</h1>
-                        </div>
-                        <div id="proyectoOrdenRESP" class="w-32 flex h-full items-center justify-center">
-                            <h1>RESP.</h1>
-                        </div>
-                        <div id="proyectoOrdenFECHA" class="w-24 flex h-full items-center justify-center">
-                            <h1>FECHA</h1>
-                        </div>
-                        <div id="proyectoOrdenCOT" class="w-24 flex h-full items-center justify-center">
-                            <h1>COT</h1>
-                        </div>
-                        <div id="proyectoOrdenTIPO" class="w-24 flex h-full items-center justify-center">
-                            <h1>TIPO</h1>
-                        </div>
-                        <div id="proyectoOrdenJUST" class="w-24 flex h-full items-center justify-center">
-                            <h1>JUST</h1>
-                        </div>
-                        <div id="proyectoOrdenCOSTE" class="w-24 flex h-full items-center justify-center">
-                            <h1>COSTE</h1>
-                        </div>
-                        <div class="w-24 flex h-full items-center justify-center">
-                            <h1>STATUS</h1>
-                        </div>
-                    </div>
-
-                    <div id="dataProyectos" class="w-full"></div>
-                </div>
-            </div>
-            <div id="paginacionProyectos"
-                class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6"></div>
-            <!-- CONTENIDO PROYECTOS -->
-
-            <!-- CONTENIDO GANTT -->
-            <div id="contenidoGantt" class="mt-2 w-full flex flex-col justify-center items-center">
-                <div class="mt-2 w-full  flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar"
-                    style="max-height: 80vh;">
-                    <div class="w-full h-full text-xxs uppercase mt-5" id="chartdiv"></div>
-                </div>
-            </div>
-            <!-- CONTENIDO GANTT -->
-
-        </div>
-    </div>
-
-
     <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
     <div id="modalVerEnPlanner" class="modal">
         <div class="rounded-md" style="width: 900px;">
@@ -1049,7 +936,7 @@
                     </button>
                 </div>
 
-                <div
+                <div id="agregarProyecto"
                     class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
                     <i class="fas fa-plus mr-1 text-xs"></i>
                     <h1>Nuevo</h1>

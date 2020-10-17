@@ -43,6 +43,7 @@ if (isset($_GET['action'])) {
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.activo = 1 
         $filtroDestino  $filtroStatus
+        ORDER BY t_proyectos.id DESC
         ";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $p) {

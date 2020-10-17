@@ -336,6 +336,8 @@ function tooltipProyectos(idproyecto) {
 
 // OBTIENES LOS PROYECTOS
 function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
+    document.getElementById("modalProyectos").classList.add("open");
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSubseccion = 200;
@@ -347,23 +349,8 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
     estiloBotonesProyectos(status, 'PROYECTOS');
 
     // Secciones de Botones.
-    document.getElementById("seccionProyectos").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-    document.getElementById("btnProyecto")
-        .setAttribute("onclick", 'obtenerProyectosP("PROYECTO")');
-    document.getElementById("modalProyectos").classList.add("open");
     document.getElementById("btnCrearProyecto")
         .setAttribute("onclick", "agregarProyecto()");
-    document.getElementById("btnNuevoProyecto")
-        .setAttribute("onclick", "datosAgregarProyecto()");
-    document.getElementById("btnSolucionadosProyectos")
-        .setAttribute("onclick", 'obtenerProyectosS("PROYECTO")');
-    document.getElementById("btnGanttProyecto")
-        .setAttribute("onclick", "ganttP()");
-
-    // Oculta y Muestra contenido
-    document.getElementById("contenidoProyectos").classList.remove("hidden");
-    document.getElementById("contenidoGantt").classList.add("hidden");
 
     const action = "consultaProyectos";
     const ruta = "php/proyectos_planacciones.php?";
@@ -658,7 +645,7 @@ function agregarProyecto() {
             success: function (data) {
                 // console.log(data);
                 if (data == 1) {
-                    obtenerProyectosP("PROYECTO");
+                    obtenerProyectos(idSeccion, "PENDIENTE");
                     obtenerDatosUsuario(idDestino);
                     alertaImg("Proyecto Agregado", "", "success", 2500);
                     document.getElementById("tituloProyectoN").value = "";
@@ -907,12 +894,10 @@ document.getElementById("exportarProyectos").addEventListener('click', function 
     tableToExcel('contenedorDeProyectos', 'PROYECTOS');
 });
 
-
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyecto").addEventListener('keyup', function () {
     buscadorEquipo('contenedorDeProyectos', 'palabraProyecto', 0);
 });
-
 
 // EVENTO PARA PROYECTOS PENDIENTES
 document.getElementById("proyectosPendientes").addEventListener('click', function () {
@@ -921,7 +906,6 @@ document.getElementById("proyectosPendientes").addEventListener('click', functio
     alertaImg('Proyectos Pendientes', '', 'success', 1500);
 });
 
-
 // EVENTO PARA PROYECTOS SOLUCIONADOS
 document.getElementById("proyectosSolucionados").addEventListener('click', function () {
     let idSeccion = localStorage.getItem('idSeccion');
@@ -929,9 +913,11 @@ document.getElementById("proyectosSolucionados").addEventListener('click', funct
     alertaImg('Proyectos Solucionados', '', 'success', 1500);
 });
 
-
 // EVENTO PARA PROYECTOS SOLUCIONADOS
 document.getElementById("btnCerrerModalProyectos").addEventListener('click', function () {
     document.getElementById("tooltipProyectos").classList.add('hidden');
 });
+
+// EVENTO PARA  AGREGAR PROYECTO
+document.getElementById("agregarProyecto").addEventListener('click', datosAgregarProyecto);
 // ********** FRAGMENTO PARA LOS EVENTOS **********
