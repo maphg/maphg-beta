@@ -153,14 +153,16 @@ function obtenerEquipos(
         beforeSend: function () {
             var pageloader = document.getElementById("loader");
             if (pageloader) {
-                // pageloader.classList.toggle("is-active");
-                
+                // 
+                alertaImg('Obtieniendo Datos', '', 'info', 1500);
+
             }
         },
         success: function (data) {
             $("#modalHotel").removeClass('is-active');
             var pageloader = document.getElementById("loader");
             // pageloader.classList.toggle("is-active");
+            alertaImg('Obtieniendo Datos', '', 'info', 1500);
             try {
                 var datos = JSON.parse(data);
                 $("#divNameSeccion").removeClass();
@@ -315,11 +317,13 @@ function obtenerEquiposxPalabra(
             var pageloader = document.getElementById("loader");
             if (pageloader) {
                 // pageloader.classList.toggle("is-active");
+                alertaImg('Obtieniendo Datos', '', 'info', 1500);
             }
         },
         success: function (data) {
             // var pageloader = document.getElementById("loader");
             // pageloader.classList.toggle("is-active");
+            alertaImg('Obtieniendo Datos', '', 'info', 1500);
             try {
                 var datos = JSON.parse(data);
                 $("#divNameSubseccion").html(datos.nombreSubseccion);
@@ -3849,15 +3853,17 @@ function buscarMC() {
             beforeSend: function () {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
-                    // pageloader.classList.toggle("is-active");
+                    // 
+                    alertaImg('Obtieniendo Datos', '', 'info', 1500);
                 }
             },
             success: function (data) {
                 var pageloader = document.getElementById("loader");
                 var pageloaderTimeout = setTimeout(function () {
                     // pageloader.classList.toggle("is-active");
+                    alertaImg('Obtieniendo Datos', '', 'info', 1500);
                     // clearTimeout(pageloaderTimeout);
-                }, 3000);
+                });
                 $("#tbodyTabla").html("");
                 $("#tablaMC").dataTable().fnDestroy();
                 $("#tbodyTabla").html(data);
@@ -4142,14 +4148,16 @@ function buscarMisPendientes(idResponsable) {
                 var pageloader = document.getElementById("loader");
                 if (pageloader) {
                     // pageloader.classList.toggle("is-active");
+                    alertaImg('Obtieniendo Datos', '', 'info', 1500);
                 }
             },
             success: function (data) {
                 var pageloader = document.getElementById("loader");
                 var pageloaderTimeout = setTimeout(function () {
                     // pageloader.classList.toggle("is-active");
+                    alertaImg('Obtieniendo Datos', '', 'info', 1500);
                     // clearTimeout(pageloaderTimeout);
-                }, 3000);
+                });
                 $("#tbodyTabla").html("");
                 $("#tablaMC").dataTable().fnDestroy();
                 $("#tbodyTabla").html(data);
