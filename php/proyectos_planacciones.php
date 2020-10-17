@@ -210,4 +210,171 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+    if ($action == "obtenerPlanaccion") {
+        $idProyecto = $_GET['idProyecto'];
+        $array = array();
+
+        $query = "SELECT t_proyectos_planaccion.id, c_destinos.destino, 
+        t_proyectos_planaccion.responsable,
+        t_proyectos_planaccion.justificacion, t_proyectos_planaccion.actividad, 
+        t_colaboradores.nombre, t_colaboradores.apellido,t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.fecha_creacion,t_proyectos_planaccion.coste, 
+        t_proyectos_planaccion.status,
+        t_proyectos_planaccion.status_urgente,
+        t_proyectos_planaccion.status_material,
+        t_proyectos_planaccion.status_trabajando,
+        t_proyectos_planaccion.energetico_electricidad,
+        t_proyectos_planaccion.energetico_agua, 
+        t_proyectos_planaccion.energetico_diesel,
+        t_proyectos_planaccion.energetico_gas,
+        t_proyectos_planaccion.departamento_calidad,
+        t_proyectos_planaccion.departamento_compras,
+        t_proyectos_planaccion.departamento_direccion,
+        t_proyectos_planaccion.departamento_finanzas,
+        t_proyectos_planaccion.departamento_rrhh
+        FROM t_proyectos_planaccion 
+        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id 
+        INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
+        LEFT JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idPlanaccion = $x['id'];
+                $actividad = $x['actividad'];
+                $creadoPor = $x['nombre'] . " " . $x['apellido'];
+                $idResponsable = $x['responsable'];
+                $coste = $x['coste'];
+                $justificacion = $x['justificacion'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = $x['fecha_creacion'];
+                $destino = $x['destino'];
+                $status = $x['status'];
+                $sUrgente = $x['status_urgente'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajando'];
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $subTareas = 0;
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+
+                #Justifiacion
+                if ($justificacion != "") {
+                    $justificacion = "SI";
+                } else {
+                    $justificacion = "NO";
+                }
+
+                #Status de Planacción
+                if ($status == "N" or $status == "PENDIENTE") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                #Coste
+                if ($coste <= 0) {
+                    $coste = 0;
+                }
+                #Status (Trabajando, Departamentos, Energeticos, Material)
+                if ($sUrgente > 0) {
+                    $sUrgentex = 1;
+                } else {
+                    $sUrgentex = 0;
+                }
+                if ($sMaterial > 0) {
+                    $sMaterialx = 1;
+                } else {
+                    $sMaterialx = 0;
+                }
+                if ($sTrabajando > 0) {
+                    $sTrabajandox = 1;
+                } else {
+                    $sTrabajandox = 0;
+                }
+                if ($sEnergetico > 0) {
+                    $sEnergeticox = 1;
+                } else {
+                    $sEnergeticox = 0;
+                }
+                if ($sDepartamento > 0) {
+                    $sDepartamentox = 1;
+                } else {
+                    $sDepartamentox = 0;
+                }
+
+                #Obtiene el Responsable Asignado
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id IN ($idResponsable)
+                ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $nombreResponsable = "";
+                    foreach ($result as $x) {
+                        $nombreResponsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #Comentarios de Planaccion
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalComentarios = 0;
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #Adjuntos de Planaccion
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idProyecto and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalAdjuntos = 0;
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                $arrayTemp = array(
+                    "id" => $idPlanaccion,
+                    "destino" => $destino,
+                    "actividad" => $actividad,
+                    "creadoPor" => $creadoPor,
+                    "subTareas" => $subTareas,
+                    "responsable" => $nombreResponsable,
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "comentarios" => $totalComentarios,
+                    "adjuntos" => $totalAdjuntos,
+                    "justificacion" => $justificacion,
+                    "coste" => $coste,
+                    "status" => $status,
+                    "materiales" => intval($sMaterial),
+                    "energeticos" => intval($sEnergetico),
+                    "departamentos" => intval($sDepartamento),
+                    "trabajando" => intval($sTrabajando)
+                );
+                $array[] = $arrayTemp;
+            }
+        }
+        echo json_encode($array);
+    }
 }

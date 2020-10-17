@@ -109,7 +109,7 @@ const datosProyectos = params => {
         fTipo = `onclick="obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
         fJustificacion = `onclick="obtenerDatoProyectos(${idProyecto},'justificacion');"`;
         fCoste = `onclick="obtenerDatoProyectos(${idProyecto},'coste');""`;
-        fToolTip = `onclick="tooltipProyectos(${idProyecto})"`;
+        fToolTip = `onclick="obtenerPlanaccion(${idProyecto})"`;
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
 
     } else {
@@ -194,8 +194,8 @@ const datosPlanes = params => {
     var materiales = params.materiales;
     var materialesx = ''
 
-    var direccion = params.direccion;
-    var direccionx = ''
+    var departamento = params.departamento;
+    var departamentox = ''
 
     var energeticos = params.energeticos;
     var energeticosx = ''
@@ -242,12 +242,12 @@ const datosPlanes = params => {
             materialesx = '';
     }
 
-    switch (direccion) {
+    switch (departamento) {
         case 'si':
-            direccionx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+            departamentox = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
             break;
         default:
-            direccionx = '';
+            departamentox = '';
     }
 
     switch (energeticos) {
@@ -277,7 +277,7 @@ const datosPlanes = params => {
                 </div>
             </td>
             <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                <h1>${params.pda}</h1>
+                <h1>${params.subTareas}</h1>
             </td>
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
                 <h1>${params.responsable}</h1>
@@ -296,7 +296,7 @@ const datosPlanes = params => {
                 <div class="text-sm flex justify-center items-center font-bold">
                     ${materialesx}
                     ${energeticosx}
-                    ${direccionx}
+                    ${departamentox}
                     ${trabajandox}
                 </div>
             </td>
@@ -388,7 +388,6 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                     const energeticos = array[x].energeticos;
                     const departamento = array[x].departamento;
                     const trabajando = array[x].trabajando;
-                    console.log(status);
                     $tablaProyectos.innerHTML += datosProyectos({
                         id: id,
                         destino: destino,
@@ -609,7 +608,6 @@ function datosAgregarProyecto() {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             document.getElementById("responsableProyectoN").innerHTML = data.dataUsuarios;
         },
     });
@@ -648,7 +646,6 @@ function agregarProyecto() {
             },
             // dataType: "JSON",
             success: function (data) {
-                // console.log(data);
                 if (data == 1) {
                     obtenerProyectos(idSeccion, "PENDIENTE");
                     obtenerDatosUsuario(idDestino);
@@ -695,7 +692,6 @@ function obtenerResponsablesProyectos(idProyecto) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
             alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 200);
         },
@@ -729,7 +725,6 @@ function subirJustificacionProyectos(idTabla, tabla) {
             contentType: false,
             processData: false,
             success: function (data) {
-                // console.log(data);
                 if (data == 1) {
                     alertaImg("Proceso Cancelado", "", "info", 3000);
                 } else if (data == 6) {
@@ -773,7 +768,6 @@ function justificacionAdjuntosProyectos(idProyecto) {
         success: function (data) {
             document.getElementById("dataImagenesProyecto").innerHTML = '';
             document.getElementById("dataAdjuntosProyecto").innerHTML = '';
-            console.log(data);
             if (data.imagen != "") {
                 document.getElementById("dataImagenesProyecto").innerHTML = data.imagen;
                 document.getElementById("contenedorImagenesJP").classList.remove('hidden');
@@ -851,46 +845,66 @@ function cotizacionesProyectos(idProyecto) {
 }
 
 
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
-$tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', direccion: 'si', trabajando: 'si' });
+// OBTIEN LOS PLANES DE ACCIÓN POR PORYECTO
+function obtenerPlanaccion(idProyecto) {
+    tooltipProyectos(idProyecto);
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = 'obtenerPlanaccion';
+    const ruta = 'php/proyectos_planacciones.php?';
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array.length > 0) {
+                document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
+                document.getElementById('palabraProyecto').value = '';
+                for (let x = 0; x < array.length; x++) {
+                    const id = array[x].id;
+                    const destino = array[x].destino;
+                    const actividad = array[x].actividad;
+                    const creadoPor = array[x].creadoPor;
+                    const subTareas = array[x].subTareas;
+                    const responsable = array[x].responsable;
+                    const fechaInicio = array[x].fechaInicio;
+                    const fechaFin = array[x].fechaFin;
+                    const comentarios = array[x].comentarios;
+                    const adjuntos = array[x].adjuntos;
+                    const justificacion = array[x].justificacion;
+                    const coste = array[x].coste;
+                    const status = array[x].status;
+                    const materiales = array[x].materiales;
+                    const energeticos = array[x].energeticos;
+                    const departamento = array[x].departamento;
+                    const trabajando = array[x].trabajando;
 
+                    // $tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', departamento: 'si', trabajando: 'si' });
+                    $tablaPlanes.innerHTML += datosPlanes({
+                        id: id,
+                        destino: destino,
+                        actividad: actividad,
+                        creadoPor: creadoPor,
+                        subTareas: subTareas,
+                        responsable: responsable,
+                        fechaInicio: fechaInicio,
+                        fechaFin: fechaFin,
+                        comentarios: comentarios,
+                        adjuntos: adjuntos,
+                        justificacion: justificacion,
+                        coste: coste,
+                        status: status,
+                        materiales: materiales,
+                        energeticos: energeticos,
+                        departamento: departamento,
+                        trabajando: trabajando
+                    });
+                }
+            } else {
+                alertaImg('Sin Proyectos', '', 'info', 1500);
+                document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
+            }
+        });
+}
 
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********
