@@ -99,6 +99,7 @@ const datosProyectos = params => {
     var fJustificacion = '';
     var fCoste = '';
     var fToolTip = '';
+    var iconoStatus = '';
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
@@ -109,14 +110,18 @@ const datosProyectos = params => {
         fJustificacion = `onclick="obtenerDatoProyectos(${idProyecto},'justificacion');"`;
         fCoste = `onclick="obtenerDatoProyectos(${idProyecto},'coste');""`;
         fToolTip = `onclick="tooltipProyectos(${idProyecto})"`;
-    }
+        iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
 
+    } else {
+        iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+        fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
+    }
 
     return `
         <tr id="${params.id}proyecto" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select">
 
-            <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;">
-                <div class="font-semibold uppercase leading-4" ${fToolTip}>
+            <td class="px-4 border-b border-gray-200 truncate py-3" ${fToolTip} style="max-width: 360px;">
+                <div class="font-semibold uppercase leading-4">
                     <h1 id="${params.id}tituloProyecto">${params.proyecto}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
@@ -125,7 +130,7 @@ const datosProyectos = params => {
                 </div>
             </td>
 
-            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fToolTip}>
                 <h1>${params.pda}</h1>
             </td>
 
@@ -165,7 +170,7 @@ const datosProyectos = params => {
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
                 <div class="px-2">
-                    <i class="fas fa-ellipsis-h  text-lg"></i>
+                    ${iconoStatus}
                 </div>
             </td>
             
