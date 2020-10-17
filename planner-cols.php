@@ -1036,8 +1036,8 @@
     <div id="modalProyectos" class="modal">
         <div class="w-full h-screen bg-purple-400">
             <div class="flex justify-center items-center mb-5 relative pt-4">
-                <div class="font-light text-3xl ml-3 leading-none text-purple-600 absolute left-0">
-                    <h1>Proyectos</h1>
+                <div class="font-light text-3xl ml-3 leading-none text-purple-600 absolute left-0 text-center">
+                    <h1>Proyectos</h1><span id="loadProyectos"></span>
                 </div>
 
                 <div class="relative text-gray-600 w-72">
@@ -1055,24 +1055,24 @@
                     <h1>Nuevo</h1>
                 </div>
 
-                <div
-                    class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
+                <div id="opcionProyectos"
+                    class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
                     <i class="fas fa-list mr-1 font-normal text-xs"></i>
                     <h1>Proyectos</h1>
                 </div>
-                <div
-                    class="text-purple-400 text-sm cursor-pointer bg-purple-200 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                <div id="opcionGanttProyectos"
+                    class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
                     <i class="fas fa-stream mr-1 font-normal text-xs"></i>
                     <h1>Gantt</h1>
                 </div>
 
-                <div
-                    class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
+                <div id="proyectosPendientes"
+                    class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
                     <i class="fas fa-minus mr-1 font-normal text-xs"></i>
                     <h1>Pendientes</h1>
                 </div>
-                <div
-                    class="text-purple-400 text-sm cursor-pointer bg-purple-200 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                <div id="proyectosSolucionados"
+                    class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
                     <i class="fas fa-check mr-1 font-normal text-xs"></i>
                     <h1>Solucionados</h1>
                 </div>
@@ -1084,7 +1084,8 @@
                 </div>
             </div>
 
-            <div class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-purple-200"
+            <div id="btnCerrerModalProyectos"
+                class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-purple-200"
                 onclick="toggleModalTailwind('modalProyectos')">
                 <i class="fas fa-times"></i>
                 <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
@@ -2043,11 +2044,11 @@
     <!-- ACTIVIDADES MP -->
 
     <!-- PLANACCION PROYECTOS -->
-    <div id="tooltipProyectoPlanacciones" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
+    <div id="tooltipProyectos" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
         <div class="flex flex-col container mx-auto scrollbar">
             <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                 <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar"
-                    style="max-height: 80vh;">
+                    style="max-height: 50vh;">
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
                         <thead>
                             <tr class="cursor-pointer bg-white">

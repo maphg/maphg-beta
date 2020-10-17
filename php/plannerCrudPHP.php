@@ -236,7 +236,7 @@ if (isset($_POST['action'])) {
                             $dataZIL .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -379,7 +379,7 @@ if (isset($_POST['action'])) {
                             $dataZIE .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -522,7 +522,7 @@ if (isset($_POST['action'])) {
                             $dataAUTO .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -666,7 +666,7 @@ if (isset($_POST['action'])) {
                             $dataDEC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -810,7 +810,7 @@ if (isset($_POST['action'])) {
                             $dataDEP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -955,7 +955,7 @@ if (isset($_POST['action'])) {
                             $dataZHA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1099,7 +1099,7 @@ if (isset($_POST['action'])) {
                             $dataZHC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1243,7 +1243,7 @@ if (isset($_POST['action'])) {
                             $dataZHP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1387,7 +1387,7 @@ if (isset($_POST['action'])) {
                             $dataZIA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1531,7 +1531,7 @@ if (isset($_POST['action'])) {
                             $dataZIC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectosP('PROYECTO');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
