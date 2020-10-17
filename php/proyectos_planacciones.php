@@ -105,7 +105,7 @@ if (isset($_GET['action'])) {
                     foreach ($result as $x) {
                         $idActividad = $x['id'];
                         $statusActividad = $x['status'];
-                        if ($status == "N" or $status == "PENDIENTE") {
+                        if ($statusActividad == "N" || $statusActividad == "PENDIENTE") {
                             $totalActividadesSolucionadas++;
                         }
                         $totalActividadesCreadas++;
