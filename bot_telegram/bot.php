@@ -23,7 +23,6 @@ switch ($message) {
 
 function sendMessageX($chatId, $response)
 {
-    // $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&text=' . urlencode($response);
-    $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=spoifsdffdsf";
+    $url = $GLOBALS["website"] . '/sendMessage?chat_id=' . $chatId . '&text=' . urlencode($response);
     file_get_contents($url);
 }

@@ -16,6 +16,35 @@
     <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/planner_cols.css">
+    <style>
+        .contenedor {
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            .contenedor {
+                max-width: 640px;
+            }
+        }
+
+        @media (min-width: 850px) {
+            .contenedor {
+                max-width: 850px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .contenedor {
+                max-width: 1024px;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .contenedor {
+                max-width: 1280px;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
@@ -879,8 +908,8 @@
                 <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
             </div>
 
-            <div class="w-full h-auto">
-                <div class="flex flex-col container mx-auto scrollbar">
+            <div class="w-full h-auto flex flex-col contenedor mx-auto scrollbar">
+                <div class="flex flex-col contenedor mx-auto scrollbar">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                         <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
@@ -1696,7 +1725,7 @@
 
     <!-- PLANACCION PROYECTOS -->
     <div id="tooltipProyectos" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
-        <div class="flex flex-col container mx-auto scrollbar">
+        <div class="flex flex-col contenedor mx-auto scrollbar">
             <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                 <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
