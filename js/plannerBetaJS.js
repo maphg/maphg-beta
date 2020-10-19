@@ -296,92 +296,183 @@ function calendarioSecciones() {
   document.getElementById("dia").innerHTML = dia;
 
   // Restable Clases en los Botones.
-  document.getElementById("btn-zil").classList.remove("btn-activo");
-  document.getElementById("btn-auto").classList.remove("btn-activo");
-  document.getElementById("btn-dep").classList.remove("btn-activo");
-  document.getElementById("btn-zia").classList.remove("btn-activo");
-  document.getElementById("btn-zhp").classList.remove("btn-activo");
-  document.getElementById("btn-zic").classList.remove("btn-activo");
-  document.getElementById("btn-dec").classList.remove("btn-activo");
-  document.getElementById("btn-zie").classList.remove("btn-activo");
-  document.getElementById("btn-zhc").classList.remove("btn-activo");
-  document.getElementById("btn-zha").classList.remove("btn-activo");
-  document.getElementById("colzia").classList.add("hidden");
-  document.getElementById("colzhp").classList.add("hidden");
-  document.getElementById("coldep").classList.add("hidden");
-  document.getElementById("colzic").classList.add("hidden");
-  document.getElementById("coldec").classList.add("hidden");
-  document.getElementById("colzie").classList.add("hidden");
-  document.getElementById("colzhc").classList.add("hidden");
-  document.getElementById("colzha").classList.add("hidden");
-  document.getElementById("colzil").classList.add("hidden");
-  document.getElementById("colauto").classList.add("hidden");
+
+
+  if (document.getElementById("colzia")) {
+    document.getElementById("colzia").classList.add("hidden");
+
+  }
+
+  if (document.getElementById("colzhp")) {
+    document.getElementById("colzhp").classList.add("hidden");
+    document.getElementById("btn-zia").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("coldep")) {
+    document.getElementById("coldep").classList.add("hidden");
+    document.getElementById("btn-zhp").classList.remove("btn-activo");
+    document.getElementById("btn-dep").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colzic")) {
+    document.getElementById("colzic").classList.add("hidden");
+    document.getElementById("btn-zic").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("coldec")) {
+    document.getElementById("coldec").classList.add("hidden");
+    document.getElementById("btn-dec").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colzie")) {
+    document.getElementById("colzie").classList.add("hidden");
+    document.getElementById("btn-zie").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colzhc")) {
+    document.getElementById("colzhc").classList.add("hidden");
+    document.getElementById("btn-zhc").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colzha")) {
+    document.getElementById("colzha").classList.add("hidden");
+    document.getElementById("btn-zha").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colzil")) {
+    document.getElementById("colzil").classList.add("hidden");
+    document.getElementById("btn-zil").classList.remove("btn-activo");
+  }
+
+  if (document.getElementById("colauto")) {
+    document.getElementById("colauto").classList.add("hidden");
+    document.getElementById("btn-auto").classList.remove("btn-activo");
+  }
 
   switch (hoydia) {
     case "lunes":
-      document.getElementById("btn-zia").classList.add("btn-activo");
-      document.getElementById("btn-zhp").classList.add("btn-activo");
-      document.getElementById("btn-dep").classList.add("btn-activo");
       document.getElementById("label-lunes").classList.add("text-gray-700");
-      document.getElementById("colzia").classList.remove("hidden");
-      document.getElementById("colzhp").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
+
+      if (document.getElementById("colzia")) {
+        document.getElementById("btn-zia").classList.add("btn-activo");
+        document.getElementById("colzia").classList.remove("hidden");
+      }
+      if (document.getElementById("colzhp")) {
+        document.getElementById("btn-zhp").classList.add("btn-activo");
+        document.getElementById("colzhp").classList.remove("hidden");
+      }
+      if (document.getElementById("coldep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
+
       break;
+
     case "martes":
-      document.getElementById("btn-dep").classList.add("btn-activo");
-      document.getElementById("btn-zic").classList.add("btn-activo");
       document.getElementById("label-martes").classList.add("text-gray-700");
-      document.getElementById("colzic").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
+
+      if (document.getElementById("colzic")) {
+        document.getElementById("btn-zic").classList.add("btn-activo");
+        document.getElementById("colzic").classList.remove("hidden");
+      }
+      if (document.getElementById("coldep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
       break;
+
     case "miercoles":
-      document.getElementById("btn-dec").classList.add("btn-activo");
-      document.getElementById("btn-dep").classList.add("btn-activo");
-      document.getElementById("btn-zie").classList.add("btn-activo");
       document.getElementById("label-miercoles").classList.add("text-gray-700");
-      document.getElementById("coldec").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
-      document.getElementById("colzie").classList.remove("hidden");
+
+      if (document.getElementById("coldec")) {
+        document.getElementById("btn-dec").classList.add("btn-activo");
+        document.getElementById("coldec").classList.remove("hidden");
+      }
+      if (document.getElementById("coldep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
+      if (document.getElementById("colzie")) {
+        document.getElementById("btn-zie").classList.add("btn-activo");
+        document.getElementById("colzie").classList.remove("hidden");
+      }
       break;
+
     case "jueves":
-      document.getElementById("btn-zhc").classList.add("btn-activo");
-      document.getElementById("btn-zha").classList.add("btn-activo");
-      document.getElementById("btn-dep").classList.add("btn-activo");
       document.getElementById("label-jueves").classList.add("text-gray-700");
-      document.getElementById("colzhc").classList.remove("hidden");
-      document.getElementById("colzha").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
+
+      if (document.getElementById("btn-zhc")) {
+        document.getElementById("btn-zhc").classList.add("btn-activo");
+        document.getElementById("colzhc").classList.remove("hidden");
+      }
+      if (document.getElementById("btn-zha")) {
+        document.getElementById("btn-zha").classList.add("btn-activo");
+        document.getElementById("colzha").classList.remove("hidden");
+      }
+      if (document.getElementById("btn-dep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
       break;
+
     case "viernes":
-      document.getElementById("btn-zil").classList.add("btn-activo");
-      document.getElementById("btn-auto").classList.add("btn-activo");
-      document.getElementById("btn-dep").classList.add("btn-activo");
       document.getElementById("label-viernes").classList.add("text-gray-700");
-      document.getElementById("colzil").classList.remove("hidden");
-      document.getElementById("colauto").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
+
+      if (document.getElementById("colzil")) {
+        document.getElementById("btn-zil").classList.add("btn-activo");
+        document.getElementById("colzil").classList.remove("hidden");
+      }
+      if (document.getElementById("coldep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
+      if (document.getElementById("colauto")) {
+        document.getElementById("btn-auto").classList.add("btn-activo");
+        document.getElementById("colauto").classList.remove("hidden");
+      }
       break;
+
     default:
-      document.getElementById("btn-zil").classList.add("btn-activo");
-      document.getElementById("btn-auto").classList.add("btn-activo");
-      document.getElementById("btn-dep").classList.add("btn-activo");
-      document.getElementById("btn-zia").classList.add("btn-activo");
-      document.getElementById("btn-zhp").classList.add("btn-activo");
-      document.getElementById("btn-zic").classList.add("btn-activo");
-      document.getElementById("btn-dec").classList.add("btn-activo");
-      document.getElementById("btn-zie").classList.add("btn-activo");
-      document.getElementById("btn-zhc").classList.add("btn-activo");
-      document.getElementById("btn-zha").classList.add("btn-activo");
-      document.getElementById("colzia").classList.remove("hidden");
-      document.getElementById("colzhp").classList.remove("hidden");
-      document.getElementById("coldep").classList.remove("hidden");
-      document.getElementById("colzic").classList.remove("hidden");
-      document.getElementById("coldec").classList.remove("hidden");
-      document.getElementById("colzie").classList.remove("hidden");
-      document.getElementById("colzhc").classList.remove("hidden");
-      document.getElementById("colzha").classList.remove("hidden");
-      document.getElementById("colzil").classList.remove("hidden");
-      document.getElementById("colauto").classList.remove("hidden");
+      if (document.getElementById("colzia")) {
+        document.getElementById("btn-zia").classList.add("btn-activo");
+        document.getElementById("colzia").classList.remove("hidden");
+      }
+      if (document.getElementById("colzhp")) {
+        document.getElementById("btn-zhp").classList.add("btn-activo");
+        document.getElementById("colzhp").classList.remove("hidden");
+      }
+      if (document.getElementById("coldep")) {
+        document.getElementById("btn-dep").classList.add("btn-activo");
+        document.getElementById("coldep").classList.remove("hidden");
+      }
+      if (document.getElementById("colzic")) {
+        document.getElementById("btn-zic").classList.add("btn-activo");
+        document.getElementById("colzic").classList.remove("hidden");
+      }
+      if (document.getElementById("coldec")) {
+        document.getElementById("btn-dec").classList.add("btn-activo");
+        document.getElementById("coldec").classList.remove("hidden");
+      }
+      if (document.getElementById("colzie")) {
+        document.getElementById("btn-zie").classList.add("btn-activo");
+        document.getElementById("colzie").classList.remove("hidden");
+      }
+      if (document.getElementById("btn-zhc")) {
+        document.getElementById("btn-zhc").classList.add("btn-activo");
+        document.getElementById("colzhc").classList.remove("hidden");
+      }
+      if (document.getElementById("btn-zha")) {
+        document.getElementById("btn-zha").classList.add("btn-activo");
+        document.getElementById("colzha").classList.remove("hidden");
+      }
+      if (document.getElementById("colzil")) {
+        document.getElementById("btn-zil").classList.add("btn-activo");
+        document.getElementById("colzil").classList.remove("hidden");
+      }
+      if (document.getElementById("colauto")) {
+        document.getElementById("btn-auto").classList.add("btn-activo");
+        document.getElementById("colauto").classList.remove("hidden");
+      }
       break;
   }
 }
@@ -1278,7 +1369,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
     dataType: "JSON",
     success: function (data) {
       // console.log(data);
-      alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
+      // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
       document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
       document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
       );
@@ -2033,207 +2124,6 @@ function agregarPlanaccion(idProyecto) {
 }
 
 
-// Obtener posibles RESPONSABLES para PLANACCION
-function obtenerResponsablesPlanaccion(idPlanaccion) {
-  document
-    .getElementById("palabraUsuario")
-    .setAttribute(
-      "onkeyup",
-      "obtenerResponsablesPlanaccion(" + idPlanaccion + ")"
-    );
-  document.getElementById("modalUsuarios").classList.add("open");
-  let idItem = idPlanaccion;
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-  let tipoAsginacion = "asignarPlanaccion";
-  let palabraUsuario = document.getElementById("palabraUsuario").value;
-  const action = "obtenerUsuarios";
-
-  $.ajax({
-    type: "POST",
-    url: "php/plannerCrudPHP.php",
-    data: {
-      action: action,
-      idUsuario: idUsuario,
-      idDestino: idDestino,
-      idItem: idItem,
-      tipoAsginacion: tipoAsginacion,
-      palabraUsuario: palabraUsuario,
-    },
-    dataType: "JSON",
-    success: function (data) {
-      // console.log(data);
-      document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-      alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 200);
-    },
-  });
-}
-
-
-// Actualizar PLANACCION
-function actualizarPlanaccion(valor, columna, idPlanaccion) {
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-  let idSeccion = localStorage.getItem("idSeccion");
-  let actividad = document.getElementById("inputEditarTitulo").value;
-
-  const action = "actualizarPlanaccion";
-  $.ajax({
-    type: "POST",
-    url: "php/plannerCrudPHP.php",
-    data: {
-      action: action,
-      idUsuario: idUsuario,
-      idDestino: idDestino,
-      idSeccion: idSeccion,
-      idPlanaccion: idPlanaccion,
-      valor: valor,
-      columna: columna,
-      actividad: actividad,
-    },
-    // dataType: "JSON",
-    success: function (data) {
-      // console.log(data);
-
-      obtenerProyectosP("PROYECTO");
-      if (data == 1) {
-        document.getElementById("modalUsuarios").classList.remove("open");
-        alertaImg("Responsable Actualizado", "", "success", 2500);
-      } else if (data == 2) {
-        document.getElementById("modalEditarTitulo").classList.remove("open");
-        document.getElementById("modalStatus").classList.remove("open");
-        alertaImg("Actividad Actualizada", "", "success", 2500);
-      } else if (data == 3) {
-        document.getElementById("modalStatus").classList.remove("open");
-        alertaImg("Actividad Eliminada", "", "success", 2500);
-      } else if (data == 4) {
-        document.getElementById("modalStatus").classList.remove("open");
-        alertaImg("Actividad Solucionada", "", "success", 2500);
-      } else if (data == 5) {
-        document.getElementById("modalStatus").classList.remove("open");
-        alertaImg("Status Actualizado", "", "success", 2500);
-      } else if (data == 6) {
-        document.getElementById("modalStatus").classList.remove("open");
-        alertaImg("Actividad Restaurada", "", "success", 2500);
-      }
-    },
-  });
-}
-
-
-// Status para Planaccion
-function statusPlanaccion(idPlanaccion) {
-  let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-  let idSeccion = localStorage.getItem("idSeccion")
-
-  document.getElementById("inputEditarTitulo").value = actividadActual;
-  document.getElementById("modalStatus").classList.add("open");
-
-  // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
-  document.getElementById("btnEditarTitulo").setAttribute("onclick", 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")");
-
-  document.getElementById("statusActivo").setAttribute("onclick", 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")");
-
-  document.getElementById("statusFinalizar").setAttribute("onclick", 'actualizarPlanaccion("F","status",' + idPlanaccion + ")");
-
-  document.getElementById("statusMaterial").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
-
-  document.getElementById("statusTrabajare").setAttribute("onclick", 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")");
-
-  document.getElementById("statusElectricidad").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")");
-
-  document.getElementById("statusAgua").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")");
-
-  document.getElementById("statusDiesel").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")");
-
-  document.getElementById("statusGas").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")");
-
-  document.getElementById("statusRRHH").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")");
-
-  document.getElementById("statusCalidad").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")");
-
-  document.getElementById("statusDireccion").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")");
-
-  document.getElementById("statusFinanzas").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")");
-
-  document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
-
-
-  const action = "statusPlanaccion";
-  $.ajax({
-    type: "POST",
-    url: "php/plannerCrudPHP.php",
-    data: {
-      action: action,
-      idUsuario: idUsuario,
-      idDestino: idDestino,
-      idSeccion: idSeccion,
-      idPlanaccion: idPlanaccion,
-    },
-    dataType: "JSON",
-    success: function (data) {
-      // console.log(data);
-      // Llama la función para formatear el Modal de Status
-      estiloDefectoModalStatus();
-
-      if (data.sMaterial == 1) {
-        estiloStatusActivoModalStatus("statusMaterial");
-      }
-
-      if (data.sTrabajando == 1) {
-        estiloStatusActivoModalStatus("statusTrabajare");
-      }
-
-      if (data.eElectricidad == 1 || data.eAgua == 1 || data.eDiesel == 1 || data.eGas == 1) {
-        estiloStatusActivoModalStatus("statusenergeticos");
-      }
-
-      if (data.eElectricidad == 1) {
-        estiloStatusActivoModalStatus("statusElectricidad");
-      }
-
-      if (data.eAgua == 1) {
-        estiloStatusActivoModalStatus("statusAgua");
-      }
-
-      if (data.eDiesel == 1) {
-        estiloStatusActivoModalStatus("statusDiesel");
-      }
-
-      if (data.eGas == 1) {
-        estiloStatusActivoModalStatus("statusGas");
-      }
-
-      if (data.dCalidad == 1 || data.dCompras == 1 || data.dDireccion == 1 || data.dFinanzas == 1 || data.dRRHH == 1) {
-        estiloStatusActivoModalStatus("statusdep");
-      }
-
-      if (data.dCalidad == 1) {
-        estiloStatusActivoModalStatus("statusCalidad");
-      }
-
-      if (data.dCompras == 1) {
-        estiloStatusActivoModalStatus("statusCompras");
-      }
-
-      if (data.dDireccion == 1) {
-        estiloStatusActivoModalStatus("statusDireccion");
-      }
-
-      if (data.dFinanzas == 1) {
-        estiloStatusActivoModalStatus("statusFinanzas");
-      }
-
-      if (data.dRRHH == 1) {
-        estiloStatusActivoModalStatus("statusRRHH");
-      }
-    },
-  });
-}
-
-
 // Comentarios para Planaccion
 function comentariosPlanaccion(idPlanaccion) {
   document
@@ -2312,47 +2202,13 @@ function adjuntosPlanaccion(idPlanaccion) {
 }
 
 
-// Agrega Comentario en Planaccion
-function agregarComentarioPlanaccion(idPlanaccion) {
-  let comentario = document.getElementById("inputComentario").value;
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-
-  const action = "agregarComentarioPlanaccion";
-  if (comentario.length > 0) {
-    $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-        action: action,
-        idUsuario: idUsuario,
-        idDestino: idDestino,
-        idPlanaccion: idPlanaccion,
-        comentario: comentario,
-      },
-      // dataType: "JSON",
-      success: function (data) {
-        if (data == 1) {
-          obtenerProyectosP("PROYECTO");
-          comentariosPlanaccion(idPlanaccion);
-          document.getElementById("inputComentario").value = "";
-          alertaImg("Comentario Agregado", "", "success", 2500);
-        } else {
-          alertaImg("Intente de Nuevo", "", "info", 2500);
-        }
-      },
-    });
-  } else {
-    alertaImg("Comentario NO Valido", "", "info", 2500);
-  }
-}
-
-
 // Sube imagenes con dos parametros, con el formulario #inputAdjuntos
 function subirImagenGeneral(idTabla, tabla) {
   let idUsuario = localStorage.getItem("usuario");
   let idDestino = localStorage.getItem("idDestino");
   let img = document.getElementById("inputAdjuntos").files;
+  let idProyecto = localStorage.getItem('idProyecto');
+  let idSeccion = localStorage.getItem('idSeccion');
 
   for (let index = 0; index < img.length; index++) {
     let imgData = new FormData();
@@ -2385,13 +2241,12 @@ function subirImagenGeneral(idTabla, tabla) {
           // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
         } else if (data == 3) {
           alertaImg("Cotización Agregada", "", "success", 2500);
-          obtenerProyectosP("PROYECTO");
+          obtenerProyectos(idSeccion, 'PENDIENTE');
           cotizacionesProyectos(idTabla);
-
           // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
         } else if (data == 4) {
           alertaImg("Adjunto Agregado", "", "success", 2500);
-          obtenerProyectosP("PROYECTO");
+          obtenerPlanaccion(idProyecto);
           adjuntosPlanaccion(idTabla);
         } else if (data == 5) {
           alertaImg("Adjunto Agregado", "", "success", 2500);
@@ -3448,6 +3303,11 @@ function actualizarSubseccion(idSubseccion) {
   localStorage.SetItem("idSubseccion", idSubseccion);
 }
 
+
+// Oculta Vista
+function hiddenVista(idVista) {
+  document.getElementById(idVista).classList.add('hidden');
+}
 
 function llamarFuncionX(nombreFuncion) {
   // Obtiene Datos Generales de la SESSION(LOCALSTORAGE.GETITEM)

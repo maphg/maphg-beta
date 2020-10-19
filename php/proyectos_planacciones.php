@@ -160,28 +160,18 @@ if (isset($_GET['action'])) {
 
                         if ($sUrgente > 0) {
                             $sUrgentex = 1;
-                        } else {
-                            $sUrgentex = 0;
                         }
                         if ($sMaterial > 0) {
                             $sMaterialx = 1;
-                        } else {
-                            $sMaterialx = 0;
                         }
                         if ($sTrabajando > 0) {
                             $sTrabajandox = 1;
-                        } else {
-                            $sTrabajandox = 0;
                         }
                         if ($sEnergetico > 0) {
                             $sEnergeticox = 1;
-                        } else {
-                            $sEnergeticox = 0;
                         }
-                        if ($sDepartamento > 0) {
+                        if ($sDepartamento >= 1) {
                             $sDepartamentox = 1;
-                        } else {
-                            $sDepartamentox = 0;
                         }
                     }
                 }
@@ -200,10 +190,10 @@ if (isset($_GET['action'])) {
                     "comentarios" => $totalComentarios,
                     "coste" => $coste,
                     "status" => $status,
-                    "materiales" => $sMaterialx,
-                    "energeticos" => $sEnergeticox,
-                    "departamento" => $sDepartamentox,
-                    "trabajando" => $sTrabajandox
+                    "materiales" => intval($sMaterialx),
+                    "energeticos" => intval($sEnergeticox),
+                    "departamento" => intval($sDepartamentox),
+                    "trabajando" => intval($sTrabajandox)
                 );
                 $array[] = $arrayTemp;
             }
@@ -240,6 +230,14 @@ if (isset($_GET['action'])) {
         WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
+
+                // Valor Inicial STATUS 
+                $sMaterialx = 0;
+                $sEnergeticox = 0;
+                $sDepartamentox = 0;
+                $sTrabajandox = 0;
+                // Valor Inicial STATUS 
+
                 $idPlanaccion = $x['id'];
                 $actividad = $x['actividad'];
                 $creadoPor = $x['nombre'] . " " . $x['apellido'];
@@ -247,7 +245,7 @@ if (isset($_GET['action'])) {
                 $coste = $x['coste'];
                 $justificacion = $x['justificacion'];
                 $rangoFecha = $x['rango_fecha'];
-                $fechaCreacion = $x['fecha_creacion'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format('d/m/Y');
                 $destino = $x['destino'];
                 $status = $x['status'];
                 $sUrgente = $x['status_urgente'];
@@ -255,7 +253,6 @@ if (isset($_GET['action'])) {
                 $sTrabajando = $x['status_trabajando'];
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
-                $subTareas = 0;
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -295,31 +292,22 @@ if (isset($_GET['action'])) {
                 if ($coste <= 0) {
                     $coste = 0;
                 }
+
                 #Status (Trabajando, Departamentos, Energeticos, Material)
                 if ($sUrgente > 0) {
                     $sUrgentex = 1;
-                } else {
-                    $sUrgentex = 0;
                 }
                 if ($sMaterial > 0) {
                     $sMaterialx = 1;
-                } else {
-                    $sMaterialx = 0;
                 }
                 if ($sTrabajando > 0) {
                     $sTrabajandox = 1;
-                } else {
-                    $sTrabajandox = 0;
                 }
                 if ($sEnergetico > 0) {
                     $sEnergeticox = 1;
-                } else {
-                    $sEnergeticox = 0;
                 }
                 if ($sDepartamento > 0) {
                     $sDepartamentox = 1;
-                } else {
-                    $sDepartamentox = 0;
                 }
 
                 #Obtiene el Responsable Asignado
@@ -329,7 +317,7 @@ if (isset($_GET['action'])) {
                 WHERE t_users.id IN ($idResponsable)
                 ";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $nombreResponsable = "";
+                    $nombreResponsable = "-";
                     foreach ($result as $x) {
                         $nombreResponsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
@@ -345,11 +333,20 @@ if (isset($_GET['action'])) {
                 }
 
                 #Adjuntos de Planaccion
-                $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idProyecto and status = 1";
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                #Planaccion Actividades
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $idPlanaccion and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $subTareas = 0;
+                    foreach ($result as $x) {
+                        $subTareas = $x['count(id)'];
                     }
                 }
 
@@ -367,10 +364,10 @@ if (isset($_GET['action'])) {
                     "justificacion" => $justificacion,
                     "coste" => $coste,
                     "status" => $status,
-                    "materiales" => intval($sMaterial),
-                    "energeticos" => intval($sEnergetico),
-                    "departamentos" => intval($sDepartamento),
-                    "trabajando" => intval($sTrabajando)
+                    "materiales" => intval($sMaterialx),
+                    "energeticos" => intval($sEnergeticox),
+                    "departamentos" => intval($sDepartamentox),
+                    "trabajando" => intval($sTrabajandox)
                 );
                 $array[] = $arrayTemp;
             }

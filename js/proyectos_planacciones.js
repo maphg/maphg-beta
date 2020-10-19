@@ -103,15 +103,14 @@ const datosProyectos = params => {
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
-        fStatus = `onclick="statusProyecto(${idProyecto});"`;
-        fRangoFecha = `onclick="obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
-        fCotizaciones = `onclick="cotizacionesProyectos(${idProyecto});"`;
-        fTipo = `onclick="obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
-        fJustificacion = `onclick="obtenerDatoProyectos(${idProyecto},'justificacion');"`;
-        fCoste = `onclick="obtenerDatoProyectos(${idProyecto},'coste');""`;
-        fToolTip = `onclick="obtenerPlanaccion(${idProyecto})"`;
+        fStatus = `onclick="hiddenVista('tooltipProyectos'); statusProyecto(${idProyecto});"`;
+        fRangoFecha = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
+        fCotizaciones = `onclick="hiddenVista('tooltipProyectos'); cotizacionesProyectos(${idProyecto});"`;
+        fTipo = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
+        fJustificacion = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'justificacion');"`;
+        fCoste = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'coste');""`;
+        fToolTip = `onclick="tooltipProyectos(${idProyecto}); obtenerPlanaccion(${idProyecto});"`;
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
-
     } else {
         iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
@@ -182,20 +181,19 @@ const datosProyectos = params => {
 
 const $tablaPlanes = document.getElementById('contenedorDePlanesdeaccion');
 const datosPlanes = params => {
+    var idPlanaccion = params.id;
+
     var comentarios = params.comentarios;
     var valorcomentarios = 'X'
 
     var adjuntos = params.adjuntos;
     var valoradjuntos = 'X'
 
-    var tipo = params.tipo;
-    var valorTipo = 'X'
-
     var materiales = params.materiales;
     var materialesx = ''
 
-    var departamento = params.departamento;
-    var departamentox = ''
+    var departamentos = params.departamentos;
+    var departamentosx = ''
 
     var energeticos = params.energeticos;
     var energeticosx = ''
@@ -219,39 +217,24 @@ const datosPlanes = params => {
             valoradjuntos = params.adjuntos;
     }
 
-    switch (tipo) {
-        case 'capin':
-            valorTipo = '<div class="px-2 bg-red-300 text-red-600 rounded-full uppercase"><h1>capin</h1></div>';
-            break;
-        case 'capex':
-            valorTipo = '<div class="px-2 bg-yellow-300 text-yellow-600 rounded-full uppercase"><h1>capex</h1></div>';
-            break;
-        case 'proyecto':
-            valorTipo = '<div class="px-2 bg-blue-300 text-blue-600 rounded-full uppercase"><h1>proyecto</h1></div>';
-            break;
-
-        default:
-            valorTipo = '---';
-    }
-
     switch (materiales) {
-        case 'si':
+        case 1:
             materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
             break;
         default:
             materialesx = '';
     }
 
-    switch (departamento) {
-        case 'si':
-            departamentox = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+    switch (departamentos) {
+        case 1:
+            departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
             break;
         default:
-            departamentox = '';
+            departamentosx = '';
     }
 
     switch (energeticos) {
-        case 'si':
+        case 1:
             energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
             break;
         default:
@@ -259,44 +242,63 @@ const datosPlanes = params => {
     }
 
     switch (trabajando) {
-        case 'si':
+        case 1:
             trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
             break;
         default:
             trabajandox = '';
     }
 
+    var fResponsable = '';
+    var fComentarios = '';
+    var fAdjuntos = '';
+    var fStatus = '';
+    var iconoStatus = '';
+    var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion});"`;
+    if (params.status == "PENDIENTE") {
+        fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion}); nivelVista(1,'modalUsuarios');"`;
+        fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccion'); comentariosPlanaccion(${idPlanaccion}); nivelVista(1,'modalComentarios');"`;
+        fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccion'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
+        fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccion'); statusPlanaccion(${idPlanaccion}); nivelVista(1,'modalStatus');"`;
+        iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+    } else {
+        fStatus = `onclick="actualizarPlanaccion('N','status', ${idPlanaccion});"`;
+        iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+    }
+
     return `
-        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
-            <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;">
+        <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select">
+            <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;" 
+            ${fToolTip}>
                 <div class="font-semibold uppercase leading-4">
-                    <h1>${params.actividad}</h1>
+                    <h1 id="AP${idPlanaccion}">${params.actividad}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
                     <h1>Creado por: ${params.creadoPor}</h1>
                 </div>
             </td>
-            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
+            ${fToolTip}>
                 <h1>${params.subTareas}</h1>
             </td>
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable}>
                 <h1>${params.responsable}</h1>
             </td>
             <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
                 <div class="leading-4">${params.fechaInicio}</div>
                 <div class="leading-3">${params.fechaFin}</div>
             </td>
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
                 <h1>${valorcomentarios}</h1>
             </td>
-            <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
             <h1>${valoradjuntos}</h1>
             </td>
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
                 <div class="text-sm flex justify-center items-center font-bold">
                     ${materialesx}
                     ${energeticosx}
-                    ${departamentox}
+                    ${departamentosx}
                     ${trabajandox}
                 </div>
             </td>
@@ -305,16 +307,14 @@ const datosPlanes = params => {
                 <h1>${params.id}</h1>
             </td>
 
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
                 <div class="px-2">
-                    <i class="fas fa-ellipsis-h  text-lg"></i>
+                    ${iconoStatus}
                 </div>
             </td>                        
         </tr>
         `;
 };
-
-
 
 
 // TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
@@ -337,6 +337,30 @@ function tooltipProyectos(idproyecto) {
     const tooltip = document.getElementById('tooltipProyectos');
     Popper.createPopper(button, tooltip);
 }
+
+// TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
+function tooltipPlanaccion(idPlanaccion) {
+    // Ciclo para quitar bg-gray-200
+    let filas = document.getElementsByClassName("fila-planaccion-select");
+    for (let x = 0; x < filas.length; x++) {
+        filas[x].classList.remove('bg-gray-300');
+    }
+    document.getElementById("tooltipActividadesPlanaccion").classList.toggle('hidden');
+
+    if (document.getElementById("tooltipActividadesPlanaccion").classList.contains('hidden')) {
+        document.getElementById(idPlanaccion + 'planaccion').classList.remove('bg-gray-300');
+    } else {
+        document.getElementById(idPlanaccion + 'planaccion').classList.add('bg-gray-300');
+    }
+
+    // Propiedades para el tooltip
+    const button = document.getElementById(idPlanaccion + 'planaccion');
+    const tooltip = document.getElementById('tooltipActividadesPlanaccion');
+    Popper.createPopper(button, tooltip, {
+        placement: 'bottom'
+    });
+}
+
 
 
 // OBTIENES LOS PROYECTOS
@@ -693,7 +717,6 @@ function obtenerResponsablesProyectos(idProyecto) {
         dataType: "JSON",
         success: function (data) {
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-            alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 200);
         },
     });
 }
@@ -847,7 +870,7 @@ function cotizacionesProyectos(idProyecto) {
 
 // OBTIEN LOS PLANES DE ACCIÓN POR PORYECTO
 function obtenerPlanaccion(idProyecto) {
-    tooltipProyectos(idProyecto);
+    localStorage.setItem('idProyecto', idProyecto);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     const action = 'obtenerPlanaccion';
@@ -875,7 +898,7 @@ function obtenerPlanaccion(idProyecto) {
                     const status = array[x].status;
                     const materiales = array[x].materiales;
                     const energeticos = array[x].energeticos;
-                    const departamento = array[x].departamento;
+                    const departamentos = array[x].departamentos;
                     const trabajando = array[x].trabajando;
 
                     // $tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', departamento: 'si', trabajando: 'si' });
@@ -895,17 +918,249 @@ function obtenerPlanaccion(idProyecto) {
                         status: status,
                         materiales: materiales,
                         energeticos: energeticos,
-                        departamento: departamento,
+                        departamentos: departamentos,
                         trabajando: trabajando
                     });
                 }
             } else {
-                alertaImg('Sin Proyectos', '', 'info', 1500);
+                alertaImg('Sin Plan de Acción', '', 'info', 1500);
                 document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
             }
         });
 }
 
+
+// OBTIENE RESPONSABLE PARA PLAN DE ACCIÓN
+function obtenerResponsablesPlanaccion(idPlanaccion) {
+    document.getElementById("palabraUsuario")
+        .setAttribute("onkeyup", "obtenerResponsablesPlanaccion(" + idPlanaccion + ")");
+    document.getElementById("modalUsuarios").classList.add("open");
+    let idItem = idPlanaccion;
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let tipoAsginacion = "asignarPlanaccion";
+    let palabraUsuario = document.getElementById("palabraUsuario").value;
+    const action = "obtenerUsuarios";
+
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idItem: idItem,
+            tipoAsginacion: tipoAsginacion,
+            palabraUsuario: palabraUsuario,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            nivelVista(1, 'modalUsuarios');
+            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
+        },
+    });
+}
+
+
+// Actualizar PLANACCION
+function actualizarPlanaccion(valor, columna, idPlanaccion) {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idSeccion = localStorage.getItem("idSeccion");
+    let actividad = document.getElementById("inputEditarTitulo").value;
+    let idProyecto = localStorage.getItem('idProyecto');
+    const action = "actualizarPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idSeccion: idSeccion,
+            idPlanaccion: idPlanaccion,
+            valor: valor,
+            columna: columna,
+            actividad: actividad,
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            obtenerPlanaccion(idProyecto);
+            if (data == 1) {
+                document.getElementById("modalUsuarios").classList.remove("open");
+                alertaImg("Responsable Actualizado", "", "success", 2500);
+                nivelVista(0, 'modalUsuarios')
+            } else if (data == 2) {
+                document.getElementById("modalEditarTitulo").classList.remove("open");
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Actividad Actualizada", "", "success", 2500);
+            } else if (data == 3) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Actividad Eliminada", "", "success", 2500);
+            } else if (data == 4) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Actividad Solucionada", "", "success", 2500);
+            } else if (data == 5) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Status Actualizado", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
+            } else if (data == 6) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Actividad Restaurada", "", "success", 2500);
+            }
+        },
+    });
+}
+
+
+// Status para Planaccion
+function statusPlanaccion(idPlanaccion) {
+    let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idSeccion = localStorage.getItem("idSeccion")
+
+    document.getElementById("inputEditarTitulo").value = actividadActual;
+    document.getElementById("modalStatus").classList.add("open");
+
+    // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
+    document.getElementById("btnEditarTitulo").setAttribute("onclick", 'actualizarPlanaccion(0,"actividad",' + idPlanaccion + ")");
+
+    document.getElementById("statusActivo").setAttribute("onclick", 'actualizarPlanaccion(0,"activo",' + idPlanaccion + ")");
+
+    document.getElementById("statusFinalizar").setAttribute("onclick", 'actualizarPlanaccion("F","status",' + idPlanaccion + ")");
+
+    document.getElementById("statusMaterial").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
+
+    document.getElementById("statusTrabajare").setAttribute("onclick", 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")");
+
+    document.getElementById("statusElectricidad").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_electricidad",' + idPlanaccion + ")");
+
+    document.getElementById("statusAgua").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_agua",' + idPlanaccion + ")");
+
+    document.getElementById("statusDiesel").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_diesel",' + idPlanaccion + ")");
+
+    document.getElementById("statusGas").setAttribute("onclick", 'actualizarPlanaccion(1, "energetico_gas",' + idPlanaccion + ")");
+
+    document.getElementById("statusRRHH").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_rrhh",' + idPlanaccion + ")");
+
+    document.getElementById("statusCalidad").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_calidad",' + idPlanaccion + ")");
+
+    document.getElementById("statusDireccion").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_direccion",' + idPlanaccion + ")");
+
+    document.getElementById("statusFinanzas").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")");
+
+    document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
+
+    const action = "statusPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idSeccion: idSeccion,
+            idPlanaccion: idPlanaccion,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            // console.log(data);
+            // Llama la función para formatear el Modal de Status
+            estiloDefectoModalStatus();
+
+            if (data.sMaterial == 1) {
+                estiloStatusActivoModalStatus("statusMaterial");
+            }
+
+            if (data.sTrabajando == 1) {
+                estiloStatusActivoModalStatus("statusTrabajare");
+            }
+
+            if (data.eElectricidad == 1 || data.eAgua == 1 || data.eDiesel == 1 || data.eGas == 1) {
+                estiloStatusActivoModalStatus("statusenergeticos");
+            }
+
+            if (data.eElectricidad == 1) {
+                estiloStatusActivoModalStatus("statusElectricidad");
+            }
+
+            if (data.eAgua == 1) {
+                estiloStatusActivoModalStatus("statusAgua");
+            }
+
+            if (data.eDiesel == 1) {
+                estiloStatusActivoModalStatus("statusDiesel");
+            }
+
+            if (data.eGas == 1) {
+                estiloStatusActivoModalStatus("statusGas");
+            }
+
+            if (data.dCalidad == 1 || data.dCompras == 1 || data.dDireccion == 1 || data.dFinanzas == 1 || data.dRRHH == 1) {
+                estiloStatusActivoModalStatus("statusdep");
+            }
+
+            if (data.dCalidad == 1) {
+                estiloStatusActivoModalStatus("statusCalidad");
+            }
+
+            if (data.dCompras == 1) {
+                estiloStatusActivoModalStatus("statusCompras");
+            }
+
+            if (data.dDireccion == 1) {
+                estiloStatusActivoModalStatus("statusDireccion");
+            }
+
+            if (data.dFinanzas == 1) {
+                estiloStatusActivoModalStatus("statusFinanzas");
+            }
+
+            if (data.dRRHH == 1) {
+                estiloStatusActivoModalStatus("statusRRHH");
+            }
+        },
+    });
+}
+
+
+// AGREGAR COMENTARIO PLAN DE ACCIÓN
+function agregarComentarioPlanaccion(idPlanaccion) {
+    let comentario = document.getElementById("inputComentario").value;
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idProyecto = localStorage.getItem('idProyecto');
+    const action = "agregarComentarioPlanaccion";
+    if (comentario.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idPlanaccion: idPlanaccion,
+                comentario: comentario,
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                if (data == 1) {
+                    comentariosPlanaccion(idPlanaccion);
+                    obtenerPlanaccion(idProyecto);
+                    document.getElementById("inputComentario").value = "";
+                    alertaImg("Comentario Agregado", "", "success", 2500);
+                } else {
+                    alertaImg("Intente de Nuevo", "", "info", 2500);
+                }
+            },
+        });
+    } else {
+        alertaImg("Comentario NO Valido", "", "info", 2500);
+    }
+}
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL
@@ -940,3 +1195,15 @@ document.getElementById("btnCerrerModalProyectos").addEventListener('click', fun
 // EVENTO PARA  AGREGAR PROYECTO
 document.getElementById("agregarProyecto").addEventListener('click', datosAgregarProyecto);
 // ********** FRAGMENTO PARA LOS EVENTOS **********
+
+
+// Funciones para Niveles de Vistas(Nivel 0: Elimina z-index, Nivel 1: z-index:101, Nivel 2: z-index:201)
+function nivelVista(nivel, idVista) {
+    if (nivel == 0) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:0;');
+    } else if (nivel == 1) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:101;');
+    } else if (nivel == 2) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:201;');
+    }
+}

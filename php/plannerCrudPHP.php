@@ -6574,7 +6574,7 @@ if (isset($_POST['action'])) {
         $idPlanaccion = $_POST['idPlanaccion'];
         $actividad = $_POST['actividad'];
         $idSeccion = $_POST['idSeccion'];
-        $codigoSeguimiento = $_POST['codigoSeguimiento'];
+        $codigoSeguimiento = isset($_POST['codigoSeguimiento']);
 
         if ($columna == "asignarPlanaccion" and $valor > 0) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
