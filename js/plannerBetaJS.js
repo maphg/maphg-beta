@@ -3274,6 +3274,19 @@ function hiddenVista(idVista) {
   document.getElementById(idVista).classList.add('hidden');
 }
 
+
+// Funciones para Niveles de Vistas(Nivel 0: Elimina z-index, Nivel 1: z-index:101, Nivel 2: z-index:201)
+function nivelVista(nivel, idVista) {
+  if (nivel == 0) {
+    document.getElementById(idVista).setAttribute('style', 'z-index:0;');
+  } else if (nivel == 1) {
+    document.getElementById(idVista).setAttribute('style', 'z-index:101;');
+  } else if (nivel == 2) {
+    document.getElementById(idVista).setAttribute('style', 'z-index:201;');
+  }
+}
+
+
 function llamarFuncionX(nombreFuncion) {
   // Obtiene Datos Generales de la SESSION(LOCALSTORAGE.GETITEM)
   let idUsuario = localStorage.getItem("usuario");

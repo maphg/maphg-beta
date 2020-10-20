@@ -271,7 +271,7 @@ const datosPlanes = params => {
     }
 
     return `
-    <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion} status_default">
+    <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion}">
             <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;" 
             ${fToolTip}>
                 <div class="font-semibold uppercase leading-4">
@@ -970,7 +970,6 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             nivelVista(1, 'modalUsuarios');
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
         },
@@ -1001,7 +1000,6 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             obtenerPlanaccion(idProyecto);
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
@@ -1087,7 +1085,6 @@ function statusPlanaccion(idPlanaccion) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             // Llama la función para formatear el Modal de Status
             estiloDefectoModalStatus();
 
@@ -1204,7 +1201,6 @@ function agregarPlanaccion() {
             },
             // dataType: "JSON",
             success: function (data) {
-                console.log(data);
                 if (data.length > 1) {
                     document.getElementById("agregarPlanaccion").value = '';
                     obtenerProyectos(idSeccion, 'PENDIENTE');
@@ -1222,27 +1218,37 @@ function agregarPlanaccion() {
 
 
 function statusPlanaccionx(status) {
-    if (document.getElementsByClassName('planaccion_' + status)) {
+    console.log(status);
+    if (document.getElementsByClassName('planaccion_' + status).length > 0) {
 
-        let planaccion = document.getElementsByClassName('status_default');
-        console.log(planaccion);
-        for (let x = 0; x < planaccion.length; x++) {
-            document.getElementsByClassName('planaccion_' + status)[x].classList.remove('hidden');
-        }
         document.getElementById('planaccionPendientes').
             classList.remove('bg-purple-600', 'bg-purple-200');
         document.getElementById('planaccionSolucionados').
             classList.remove('bg-purple-600', 'bg-purple-200');
 
-        if (status == "PENDIENTE") {
-            for (let x = 0; x < planaccion.length; x++) {
-                document.getElementsByClassName('planaccion_SOLUCIONADO')[x].classList.add('hidden');
+        if (status == "SOLUCIONADO") {
+            for (let x = 0; x < document.getElementsByClassName('planaccion_SOLUCIONADO').length; x++) {
+                document.getElementsByClassName('planaccion_SOLUCIONADO')[x].
+                    classList.remove('hidden');
             }
+
+            for (let x = 0; x < document.getElementsByClassName('planaccion_PENDIENTE').length; x++) {
+                document.getElementsByClassName('planaccion_PENDIENTE')[x].
+                    classList.add('hidden');
+            }
+
             document.getElementById('planaccionPendientes').classList.add('bg-purple-200');
             document.getElementById('planaccionSolucionados').classList.add('bg-purple-600');
+
         } else {
-            for (let x = 0; x < planaccion.length; x++) {
-                document.getElementsByClassName('planaccion_PENDIENTE')[x].classList.add('hidden');
+            for (let x = 0; x < document.getElementsByClassName('planaccion_PENDIENTE').length; x++) {
+                document.getElementsByClassName('planaccion_PENDIENTE')[x].
+                    classList.remove('hidden');
+            }
+
+            for (let x = 0; x < document.getElementsByClassName('planaccion_SOLUCIONADO').length; x++) {
+                document.getElementsByClassName('planaccion_SOLUCIONADO')[x].
+                    classList.add('hidden');
             }
             document.getElementById('planaccionSolucionados').classList.add('bg-purple-200');
             document.getElementById('planaccionPendientes').classList.add('bg-purple-600');
@@ -1258,6 +1264,8 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
     localStorage.setItem('idPlanaccion', idPlanaccion);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    document.getElementById("loadProyectos").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     const action = "obtenerActividadesPlanaccion";
     const ruta = "php/proyectos_planacciones.php?";
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idPlanaccion=${idPlanaccion}`;
@@ -1269,7 +1277,6 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const actividad = array[x].actividad;
-                    console.log(id, actividad);
                     document.getElementById("dataActividades").innerHTML += `
                         <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
                             <div class="w-4 h-4 border-2 border-gray-300 hover:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
@@ -1283,8 +1290,11 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
                     `;
                 }
             }
+        }).then(() => {
+            document.getElementById("loadProyectos").innerHTML = '';
         })
         .catch(function () {
+            document.getElementById("loadProyectos").innerHTML = '';
             document.getElementById("dataActividades").innerHTML = '';
             alertaImg('Sin Actividades', '', 'info', 1200);
         })
@@ -1305,7 +1315,6 @@ function agregarActividadPlanaccion() {
         fetch(URL)
             .then(res => res.json())
             .then(array => {
-                console.log(array);
                 if (array == "Agregado") {
                     alertaImg('Actividas Agregada', '', 'success', 1200);
                     document.getElementById("agregarActividadPlanaccion").value = '';
@@ -1387,15 +1396,3 @@ document.getElementById("btnAgregarActividadPlanaccion").addEventListener('click
 
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********
-
-
-// Funciones para Niveles de Vistas(Nivel 0: Elimina z-index, Nivel 1: z-index:101, Nivel 2: z-index:201)
-function nivelVista(nivel, idVista) {
-    if (nivel == 0) {
-        document.getElementById(idVista).setAttribute('style', 'z-index:0;');
-    } else if (nivel == 1) {
-        document.getElementById(idVista).setAttribute('style', 'z-index:101;');
-    } else if (nivel == 2) {
-        document.getElementById(idVista).setAttribute('style', 'z-index:201;');
-    }
-}
