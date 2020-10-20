@@ -374,6 +374,11 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
     let idDestino = localStorage.getItem("idDestino");
     let idSubseccion = 200;
 
+    // Atributos Iniciales
+    document.getElementById("proyectosPendientes").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "PENDIENTE");`);
+    document.getElementById("proyectosSolucionados").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "SOLUCIONADO");`);
+    // Atributos Iniciales
+
     // Actualiza la Sección
     localStorage.setItem("idSeccion", idSeccion);
 
@@ -463,7 +468,6 @@ function estiloBotonesProyectos(status, opcion = 'PROYECTOS') {
     if (opcion == "PROYECTOS") {
         document.getElementById("opcionProyectos").classList.add('bg-purple-200');
         document.getElementById("opcionProyectos").classList.remove('bg-purple-600');
-
     } else {
         document.getElementById("opcionGanttProyectos").classList.add('bg-purple-200');
         document.getElementById("opcionGanttProyectos").classList.remove('bg-purple-600');
@@ -688,6 +692,8 @@ function agregarProyecto() {
                     document.getElementById("justificacionProyectoN").value = "";
                     document.getElementById("costeProyectoN").value = "";
                     document.getElementById("modalAgregarProyecto").classList.remove("open");
+                    document.getElementById("contenidoProyectos").classList.remove('hidden');
+                    document.getElementById("contenidoGantt").classList.add('hidden');
                 } else {
                     alertaImg("Intente de Nuevo", "", "info", 3000);
                 }
@@ -1330,6 +1336,200 @@ function agregarActividadPlanaccion() {
 }
 
 
+//Función para Generar Grafica GANTT de PROYECTOS PENDIENTES 
+function ganttP() {
+    // Cambia diseño de Botones en Proyectos
+
+    // Oculta y Muestra contenido
+    document.getElementById("palabraProyecto")
+        .setAttribute("onkeyup", "ganttP()");
+    estiloBotonesProyectos('PENDIENTE', 'GANTT');
+    // Data URL
+    const action = "ganttProyectosP";
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idSeccion = localStorage.getItem("idSeccion");
+    let idSubseccion = 200;
+    let palabraProyecto = document.getElementById("palabraProyecto").value;
+    let dataURL =
+        "php/graficas_am4charts.php?action=" +
+        action +
+        "&idUsuario=" +
+        idUsuario +
+        "&idDestino=" +
+        idDestino +
+        "&idSeccion=" +
+        idSeccion +
+        "&idSubseccion=" +
+        idSubseccion +
+        "&palabraProyecto=" +
+        palabraProyecto;
+
+    fetch(dataURL)
+        .then((res) => res.json())
+        .then((dataGantt) => {
+            const arrayTratado = new Promise((resolve, recject) => {
+                for (var i = 0; i < dataGantt.length; i++) {
+                    var colorSet = new am4core.ColorSet();
+                    dataGantt[i]["color"] = colorSet.getIndex(i);
+                }
+                resolve(dataGantt);
+            });
+
+            arrayTratado
+                .then((response) => {
+                    generarGantt(response);
+                })
+                .catch((error) => {
+                    // console.log("Error" + error);
+                });
+
+            let size = 100 + dataGantt.length * 50;
+            document
+                .getElementById("chartdiv")
+                .setAttribute("style", "height:" + size + "px");
+        });
+
+    function generarGantt(dataGantt) {
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.paddingRight = 30;
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+        var colorSet = new am4core.ColorSet();
+        colorSet.saturation = 0.4;
+
+        chart.data = dataGantt;
+        chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "category";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.inversed = true;
+
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 70;
+        dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+        dateAxis.renderer.tooltipLocation = 0;
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.height = am4core.percent(70);
+        series1.columns.template.tooltipText =
+            "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+        series1.dataFields.openDateX = "start";
+        series1.dataFields.dateX = "end";
+        series1.dataFields.categoryY = "category";
+        series1.columns.template.propertyFields.fill = "color"; // get color from data
+        series1.columns.template.propertyFields.stroke = "color";
+        series1.columns.template.strokeOpacity = 1;
+
+        chart.scrollbarX = new am4core.Scrollbar();
+    }
+}
+
+
+//Función para Generar Grafica GANTT de PROYECTOS SOLUCIONADOS 
+function ganttS() {
+
+    // Oculta y Muestra contenido
+    document.getElementById("palabraProyecto")
+        .setAttribute("onkeyup", "ganttS()");
+    estiloBotonesProyectos('SOLUCIONADO', 'GANTT');
+    // Data URL
+    const action = "ganttProyectosS";
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idSeccion = localStorage.getItem("idSeccion");
+    let idSubseccion = 200;
+    let palabraProyecto = document.getElementById("palabraProyecto").value;
+    let dataURL =
+        "php/graficas_am4charts.php?action=" +
+        action +
+        "&idUsuario=" +
+        idUsuario +
+        "&idDestino=" +
+        idDestino +
+        "&idSeccion=" +
+        idSeccion +
+        "&idSubseccion=" +
+        idSubseccion +
+        "&palabraProyecto=" +
+        palabraProyecto;
+
+    fetch(dataURL)
+        .then((res) => res.json())
+        .then((dataGantt) => {
+            const arrayTratado = new Promise((resolve, recject) => {
+                for (var i = 0; i < dataGantt.length; i++) {
+                    var colorSet = new am4core.ColorSet();
+                    dataGantt[i]["color"] = colorSet.getIndex(i);
+                }
+                resolve(dataGantt);
+            });
+
+            arrayTratado
+                .then((response) => {
+                    generarGantt(response);
+                })
+                .catch((error) => {
+                    // console.log("Error" + error);
+                });
+            let size = 100 + dataGantt.length * 50;
+            document
+                .getElementById("chartdiv")
+                .setAttribute("style", "height:" + size + "px");
+        });
+
+    function generarGantt(dataGantt) {
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        var chart = am4core.create("chartdiv", am4charts.XYChart);
+        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+        chart.paddingRight = 30;
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+        var colorSet = new am4core.ColorSet();
+        colorSet.saturation = 0.4;
+
+        chart.data = dataGantt;
+        chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+        chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+        var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "category";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.inversed = true;
+
+        var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.minGridDistance = 70;
+        dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+        dateAxis.renderer.tooltipLocation = 0;
+
+        var series1 = chart.series.push(new am4charts.ColumnSeries());
+        series1.columns.template.height = am4core.percent(70);
+        series1.columns.template.tooltipText =
+            "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+        series1.dataFields.openDateX = "start";
+        series1.dataFields.dateX = "end";
+        series1.dataFields.categoryY = "category";
+        series1.columns.template.propertyFields.fill = "color"; // get color from data
+        series1.columns.template.propertyFields.stroke = "color";
+        series1.columns.template.strokeOpacity = 1;
+
+        chart.scrollbarX = new am4core.Scrollbar();
+    }
+}
+
+
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL
 document.getElementById("exportarProyectos").addEventListener('click', function () {
@@ -1339,20 +1539,6 @@ document.getElementById("exportarProyectos").addEventListener('click', function 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyecto").addEventListener('keyup', function () {
     buscadorEquipo('contenedorDeProyectos', 'palabraProyecto', 0);
-});
-
-// EVENTO PARA PROYECTOS PENDIENTES
-document.getElementById("proyectosPendientes").addEventListener('click', function () {
-    let idSeccion = localStorage.getItem('idSeccion');
-    obtenerProyectos(idSeccion, 'PENDIENTE');
-    alertaImg('Proyectos Pendientes', '', 'success', 1500);
-});
-
-// EVENTO PARA PROYECTOS SOLUCIONADOS
-document.getElementById("proyectosSolucionados").addEventListener('click', function () {
-    let idSeccion = localStorage.getItem('idSeccion');
-    obtenerProyectos(idSeccion, 'SOLUCIONADO');
-    alertaImg('Proyectos Solucionados', '', 'success', 1500);
 });
 
 // EVENTO PARA PROYECTOS SOLUCIONADOS
@@ -1394,5 +1580,30 @@ document.getElementById("agregarActividadPlanaccion").addEventListener('keyup', 
 // EVENTO PARA  AGREGAR ACTIVIDAD EN PLANACCIÓN
 document.getElementById("btnAgregarActividadPlanaccion").addEventListener('click', agregarActividadPlanaccion);
 
+// EVENTO PARA  MOSTRAR GANTT 
+document.getElementById("opcionGanttProyectos").addEventListener('click', () => {
+    document.getElementById("contenidoProyectos").classList.add("hidden");
+    document.getElementById("contenidoGantt").classList.remove("hidden");
+    estiloBotonesProyectos('PENDIENTE', 'PROYECTO');
+    ganttP();
+
+    document.getElementById("proyectosPendientes").setAttribute('onclick', 'ganttP()');
+    document.getElementById("proyectosSolucionados").setAttribute('onclick', 'ganttS()');
+
+});
+
+// EVENTO PARA  MOSTRAR PROYECTOS 
+document.getElementById("opcionProyectos").addEventListener('click', () => {
+    let idSeccion = localStorage.getItem('idSeccion');
+    document.getElementById("contenidoProyectos").classList.remove("hidden");
+    document.getElementById("contenidoGantt").classList.add("hidden");
+    estiloBotonesProyectos('PENDIENTE', 'GANTT');
+    obtenerProyectos(idSeccion, 'PENDIENTE');
+
+    document.getElementById("proyectosPendientes").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "PENDIENTE");`);
+
+    document.getElementById("proyectosSolucionados").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "SOLUCIONADO");`);
+
+});
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********

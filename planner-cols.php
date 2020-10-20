@@ -908,7 +908,8 @@
                 <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
             </div>
 
-            <div class="w-full h-auto flex flex-col contenedor mx-auto scrollbar">
+            <!-- CONTENIDO PROYECTOS -->
+            <div id="contenidoProyectos" class="w-full h-auto flex flex-col contenedor mx-auto scrollbar">
                 <div class="flex flex-col contenedor mx-auto scrollbar">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                         <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
@@ -963,6 +964,16 @@
                     </div>
                 </div>
             </div>
+            <!-- CONTENIDO PROYECTOS -->
+
+            <!-- CONTENIDO GANTT -->
+            <div id="contenidoGantt" class="mt-2 w-full flex flex-col justify-center items-center hidden">
+                <div class="mt-2 w-full  flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white" style="max-height: 80vh;">
+                    <div class="w-full h-full text-xxs uppercase mt-5" id="chartdiv"></div>
+                </div>
+            </div>
+            <!-- CONTENIDO GANTT -->
+
         </div>
     </div>
 
@@ -1733,6 +1744,7 @@
                 </div>
 
                 <div id="btnagregarPlanaccion" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
                     <h1>Nuevo</h1>
                 </div>
 
