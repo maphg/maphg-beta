@@ -967,7 +967,7 @@
             <!-- CONTENIDO PROYECTOS -->
 
             <!-- CONTENIDO GANTT -->
-            <div id="contenidoGantt" class="mt-2 w-full flex flex-col justify-center items-center hidden">
+            <div id="contenidoGantt" class="flex flex-col contenedor mx-auto overflow-x-auto  scrollbar hidden">
                 <div class="mt-2 w-full  flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white" style="max-height: 80vh;">
                     <div class="w-full h-full text-xxs uppercase mt-5" id="chartdiv"></div>
                 </div>
