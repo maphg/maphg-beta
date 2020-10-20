@@ -43,7 +43,7 @@ const datosProyectos = params => {
             valorTipo = '<div class="px-2 bg-blue-300 text-blue-600 rounded-full uppercase"><h1>proyecto</h1></div>';
             break;
         default:
-            valorTipo = '- - -';
+            valorTipo = '';
     }
 
     switch (justificacion) {
@@ -100,9 +100,10 @@ const datosProyectos = params => {
     var fCoste = '';
     var fToolTip = '';
     var iconoStatus = '';
+    var ocultarActividades = `onclick="hiddenVista('tooltipActividadesPlanaccion')"`;
 
     if (params.status == "PENDIENTE" || params.status == "N") {
-        fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
+        fResponsable = `onclick="hiddenVista('tooltipProyectos'); obtenerResponsablesProyectos(${idProyecto})"`;
         fStatus = `onclick="hiddenVista('tooltipProyectos'); statusProyecto(${idProyecto});"`;
         fRangoFecha = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
         fCotizaciones = `onclick="hiddenVista('tooltipProyectos'); cotizacionesProyectos(${idProyecto});"`;
@@ -117,7 +118,7 @@ const datosProyectos = params => {
     }
 
     return `
-        <tr id="${params.id}proyecto" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select">
+        <tr id="${params.id}proyecto" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select" ${ocultarActividades}>
 
             <td class="px-4 border-b border-gray-200 truncate py-3" ${fToolTip} style="max-width: 360px;">
                 <div class="font-semibold uppercase leading-4">
@@ -254,8 +255,10 @@ const datosPlanes = params => {
     var fAdjuntos = '';
     var fStatus = '';
     var iconoStatus = '';
-    var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion});"`;
+    var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion}); obtenerActividadesPlanaccion(${idPlanaccion})"`;
+    var statusPlanaccion = '';
     if (params.status == "PENDIENTE") {
+        statusPlanaccion = 'planaccion_PENDIENTE';
         fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion}); nivelVista(1,'modalUsuarios');"`;
         fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccion'); comentariosPlanaccion(${idPlanaccion}); nivelVista(1,'modalComentarios');"`;
         fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccion'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
@@ -264,10 +267,11 @@ const datosPlanes = params => {
     } else {
         fStatus = `onclick="actualizarPlanaccion('N','status', ${idPlanaccion});"`;
         iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+        statusPlanaccion = 'planaccion_SOLUCIONADO hidden';
     }
 
     return `
-        <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select">
+    <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion} status_default">
             <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;" 
             ${fToolTip}>
                 <div class="font-semibold uppercase leading-4">
@@ -362,7 +366,6 @@ function tooltipPlanaccion(idPlanaccion) {
 }
 
 
-
 // OBTIENES LOS PROYECTOS
 function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
     document.getElementById("modalProyectos").classList.add("open");
@@ -441,6 +444,10 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
             // Quita el Loader hasta que Finalize la carga de Proyectos
             document.getElementById("loadProyectos").innerHTML = '';
         })
+        .catch(function () {
+            document.getElementById("loadProyectos").innerHTML = '';
+            document.getElementById('contenedorDeProyectos').innerHTML = '';
+        });
 }
 
 
@@ -722,7 +729,7 @@ function obtenerResponsablesProyectos(idProyecto) {
 }
 
 
-//Sube Justificacion de Proyectos
+//SUBÉ JUSTIFICACIÓN DE PROYECTOS
 function subirJustificacionProyectos(idTabla, tabla) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
@@ -763,7 +770,7 @@ function subirJustificacionProyectos(idTabla, tabla) {
 }
 
 
-// Justificación Proyectos Adjuntos
+// JUSTIFICACIÓN PROYECTOS ADJUNTOS
 function justificacionAdjuntosProyectos(idProyecto) {
 
     document.getElementById("mediaProyectos").classList.remove('hidden');
@@ -805,7 +812,7 @@ function justificacionAdjuntosProyectos(idProyecto) {
 }
 
 
-// Obtener Status de proyectos
+// OBTENER STATUS PLANACCIÓN
 function statusProyecto(idProyecto) {
     document.getElementById("modalTituloEliminar").classList.add("open");
     let tituloActual = document.getElementById(idProyecto + 'tituloProyecto').innerHTML;
@@ -873,6 +880,8 @@ function obtenerPlanaccion(idProyecto) {
     localStorage.setItem('idProyecto', idProyecto);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+    document.getElementById("loadProyectos").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     const action = 'obtenerPlanaccion';
     const ruta = 'php/proyectos_planacciones.php?';
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
@@ -901,7 +910,6 @@ function obtenerPlanaccion(idProyecto) {
                     const departamentos = array[x].departamentos;
                     const trabajando = array[x].trabajando;
 
-                    // $tablaPlanes.innerHTML += datosPlanes({ id: '588', destino: 'CMU', actividad: 'Aqui va el nombre o descripcion del proyecto', creadoPor: 'Eduardo Meneses', pda: '44/66', responsable: 'Pedro Rego', fechaInicio: '15/10/2020', fechaFin: '16/10/2020', comentarios: 0, adjuntos: 7, justificacion: 'si', coste: '345352', status: 'pendiente', materiales: 'no', energeticos: 'no', departamento: 'si', trabajando: 'si' });
                     $tablaPlanes.innerHTML += datosPlanes({
                         id: id,
                         destino: destino,
@@ -926,6 +934,13 @@ function obtenerPlanaccion(idProyecto) {
                 alertaImg('Sin Plan de Acción', '', 'info', 1500);
                 document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
             }
+        })
+        .then(() => {
+            document.getElementById("loadProyectos").innerHTML = '';
+        })
+        .catch(function () {
+            document.getElementById("loadProyectos").innerHTML = '';
+            document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
         });
 }
 
@@ -963,7 +978,7 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
 }
 
 
-// Actualizar PLANACCION
+// ACTUALIZAR PLANACCIÓN
 function actualizarPlanaccion(valor, columna, idPlanaccion) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
@@ -999,9 +1014,11 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             } else if (data == 3) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Actividad Eliminada", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
             } else if (data == 4) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Actividad Solucionada", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
             } else if (data == 5) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Status Actualizado", "", "success", 2500);
@@ -1009,13 +1026,14 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             } else if (data == 6) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Actividad Restaurada", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
             }
         },
     });
 }
 
 
-// Status para Planaccion
+// STATUS PLANACCIÓN
 function statusPlanaccion(idPlanaccion) {
     let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
     let idUsuario = localStorage.getItem("usuario");
@@ -1053,6 +1071,8 @@ function statusPlanaccion(idPlanaccion) {
     document.getElementById("statusFinanzas").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_finanzas",' + idPlanaccion + ")");
 
     document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
+
+    nivelVista(2, 'modalEditarTitulo');
 
     const action = "statusPlanaccion";
     $.ajax({
@@ -1162,6 +1182,145 @@ function agregarComentarioPlanaccion(idPlanaccion) {
     }
 }
 
+
+// AGREGA PLANESACCIÓN A PROYECTOS
+function agregarPlanaccion() {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let actividad = document.getElementById("agregarPlanaccion").value;
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idProyecto = localStorage.getItem('idProyecto');
+    if (actividad.length >= 1) {
+        const action = "agregarPlanaccion";
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idProyecto: idProyecto,
+                actividad: actividad
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                console.log(data);
+                if (data.length > 1) {
+                    document.getElementById("agregarPlanaccion").value = '';
+                    obtenerProyectos(idSeccion, 'PENDIENTE');
+                    obtenerPlanaccion(idProyecto);
+                    alertaImg("Actividad Agregada", "", "success", 2500);
+                } else {
+                    alertaImg("Intente de Nuevo", "", "info", 3000);
+                }
+            },
+        });
+    } else {
+        alertaImg("Intente de Nuevo", "", "info", 3000);
+    }
+}
+
+
+function statusPlanaccionx(status) {
+    if (document.getElementsByClassName('planaccion_' + status)) {
+
+        let planaccion = document.getElementsByClassName('status_default');
+        console.log(planaccion);
+        for (let x = 0; x < planaccion.length; x++) {
+            document.getElementsByClassName('planaccion_' + status)[x].classList.remove('hidden');
+        }
+        document.getElementById('planaccionPendientes').
+            classList.remove('bg-purple-600', 'bg-purple-200');
+        document.getElementById('planaccionSolucionados').
+            classList.remove('bg-purple-600', 'bg-purple-200');
+
+        if (status == "PENDIENTE") {
+            for (let x = 0; x < planaccion.length; x++) {
+                document.getElementsByClassName('planaccion_SOLUCIONADO')[x].classList.add('hidden');
+            }
+            document.getElementById('planaccionPendientes').classList.add('bg-purple-200');
+            document.getElementById('planaccionSolucionados').classList.add('bg-purple-600');
+        } else {
+            for (let x = 0; x < planaccion.length; x++) {
+                document.getElementsByClassName('planaccion_PENDIENTE')[x].classList.add('hidden');
+            }
+            document.getElementById('planaccionSolucionados').classList.add('bg-purple-200');
+            document.getElementById('planaccionPendientes').classList.add('bg-purple-600');
+        }
+    } else {
+        alertaImg('No se Encontraron:' + status, '', 'info', 1000);
+    }
+}
+
+
+// OBTIENE LAS ACTIVIDAD RELACIONADAS PARA EL PLAN DE ACCIÓN
+function obtenerActividadesPlanaccion(idPlanaccion) {
+    localStorage.setItem('idPlanaccion', idPlanaccion);
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    const action = "obtenerActividadesPlanaccion";
+    const ruta = "php/proyectos_planacciones.php?";
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idPlanaccion=${idPlanaccion}`;
+    fetch(URL)
+        .then(res => res.json())
+        .then(array => {
+            document.getElementById("dataActividades").innerHTML = '';
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const id = array[x].id;
+                    const actividad = array[x].actividad;
+                    console.log(id, actividad);
+                    document.getElementById("dataActividades").innerHTML += `
+                        <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                            <div class="w-4 h-4 border-2 border-gray-300 hover:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
+                            <div class=" text-justify">
+                                <h1>${actividad}</h1>
+                            </div>
+                            <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer">
+                                <i class="fas fa-ellipsis-h  text-sm"></i>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        })
+        .catch(function () {
+            document.getElementById("dataActividades").innerHTML = '';
+            alertaImg('Sin Actividades', '', 'info', 1200);
+        })
+}
+
+
+// AGREGA ACTIVIDAD PARA EL PLAN DE ACCIÓN
+function agregarActividadPlanaccion() {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idPlanaccion = localStorage.getItem('idPlanaccion');
+    let actividad = document.getElementById("agregarActividadPlanaccion").value;
+    let idProyecto = localStorage.getItem('idProyecto');
+    const ruta = "php/proyectos_planacciones.php?";
+    const action = "agregarActividadPlanaccion";
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idPlanaccion=${idPlanaccion}&actividad=${actividad}`;
+    if (actividad.length > 0) {
+        fetch(URL)
+            .then(res => res.json())
+            .then(array => {
+                console.log(array);
+                if (array == "Agregado") {
+                    alertaImg('Actividas Agregada', '', 'success', 1200);
+                    document.getElementById("agregarActividadPlanaccion").value = '';
+                    obtenerPlanaccion(idProyecto);
+                    obtenerActividadesPlanaccion(idPlanaccion);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1200);
+                }
+            })
+    } else {
+        alertaImg('Intente de Nuevo', '', 'info', 1200);
+    }
+}
+
+
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL
 document.getElementById("exportarProyectos").addEventListener('click', function () {
@@ -1190,10 +1349,43 @@ document.getElementById("proyectosSolucionados").addEventListener('click', funct
 // EVENTO PARA PROYECTOS SOLUCIONADOS
 document.getElementById("btnCerrerModalProyectos").addEventListener('click', function () {
     document.getElementById("tooltipProyectos").classList.add('hidden');
+    document.getElementById("tooltipActividadesPlanaccion").classList.add('hidden');
 });
 
 // EVENTO PARA  AGREGAR PROYECTO
 document.getElementById("agregarProyecto").addEventListener('click', datosAgregarProyecto);
+
+// EVENTO PARA  MOSTRAR PLANACCIÓN PENDIENTES
+document.getElementById("planaccionPendientes").addEventListener('click', () => {
+    statusPlanaccionx('PENDIENTE');
+});
+
+// EVENTO PARA  MOSTRAR PLANACCIÓN SOLUCIONADOS
+document.getElementById("planaccionSolucionados").addEventListener('click', () => {
+    statusPlanaccionx('SOLUCIONADO');
+});
+
+// EVENTO PARA  AGREGAR PLANACCIÓN
+document.getElementById("agregarPlanaccion").addEventListener('keyup', event => {
+    if (event.keyCode === 13) {
+        agregarPlanaccion();
+    }
+});
+
+// EVENTO PARA  AGREGAR PLANACCIÓN
+document.getElementById("btnagregarPlanaccion").addEventListener('click', agregarPlanaccion);
+
+// EVENTO PARA  AGREGAR ACTIVIDAD EN PLANACCIÓN
+document.getElementById("agregarActividadPlanaccion").addEventListener('keyup', event => {
+    if (event.keyCode === 13) {
+        agregarActividadPlanaccion();
+    }
+});
+
+// EVENTO PARA  AGREGAR ACTIVIDAD EN PLANACCIÓN
+document.getElementById("btnAgregarActividadPlanaccion").addEventListener('click', agregarActividadPlanaccion);
+
+
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 
 

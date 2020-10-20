@@ -16,6 +16,7 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $semanaActual = date('W');
 
+    #OBTIENE LOS PROYECTOS SEGÚN LA SECCIÓN Y DESTINO
     if ($action == "consultaProyectos") {
         $idSeccion = $_GET['idSeccion'];
         $status = $_GET['status'];
@@ -201,6 +202,8 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
+    #OBTIENE LOS PLANES DE ACCIÓN POR PROYECTO
     if ($action == "obtenerPlanaccion") {
         $idProyecto = $_GET['idProyecto'];
         $array = array();
@@ -227,7 +230,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
         LEFT JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1";
+        WHERE t_proyectos_planaccion.id_proyecto = $idProyecto and t_proyectos_planaccion.activo = 1 ORDER BY t_proyectos_planaccion.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
 
@@ -373,5 +376,36 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($array);
+    }
+
+
+    #OBTIENE LAS ACTIVIDADES
+    if ($action == "obtenerActividadesPlanaccion") {
+        $idPlanaccion = $_GET['idPlanaccion'];
+        $array = array();
+        $query = "SELECT id, actividad FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $idPlanaccion and activo = 1 ORDER BY id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $actividad = $i['actividad'];
+                $arrayTemp = array("id" => $id, "actividad" => $actividad);
+                $array[] = $arrayTemp;
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    #AGREGA ACTIVDAD PARA PLANACCIÓN
+    if ($action == "agregarActividadPlanaccion") {
+        $idPlanaccion = $_GET['idPlanaccion'];
+        $actividad = $_GET['actividad'];
+        $array = array();
+        $array['respuesta'] = "Error";
+
+        $query = "INSERT INTO t_proyectos_planaccion_actividades (id_planaccion, actividad) VALUES ($idPlanaccion, '$actividad')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo json_encode($array['respuesta'] = "Agregado");
+        }
     }
 }

@@ -6549,14 +6549,15 @@ if (isset($_POST['action'])) {
         $idProyecto = $_POST['idProyecto'];
         $actividad = $_POST['actividad'];
 
-        $query = "SELECT responsable, titulo FROM t_proyectos WHERE id = $idProyecto";
+        $query = "SELECT responsable, titulo, rango_fecha FROM t_proyectos WHERE id = $idProyecto";
         if ($result = mysqli_query($conn_2020, $query)) {
             $responsable = 0;
             foreach ($result as $value) {
                 $responsable = $value['responsable'];
                 $proyecto = $value['titulo'];
+                $rangoFecha = $value['rango_fecha'];
             }
-            $query = "INSERT INTO t_proyectos_planaccion(id_proyecto, actividad, status, creado_por, fecha_creacion, responsable, activo) VALUES($idProyecto, '$actividad', 'N', $idUsuario, '$fechaActual', $responsable, 1)";
+            $query = "INSERT INTO t_proyectos_planaccion(id_proyecto, actividad, status, creado_por, fecha_creacion, rango_fecha, responsable, activo) VALUES($idProyecto, '$actividad', 'N', $idUsuario, '$fechaActual', '$rangoFecha', $responsable, 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo $proyecto;
             } else {

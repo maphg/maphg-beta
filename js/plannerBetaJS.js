@@ -2089,41 +2089,6 @@ function expandirProyectos(id, idProyecto) {
 }
 
 
-// Agrega una Actividad en PROYECTOS.
-function agregarPlanaccion(idProyecto) {
-  let idUsuario = localStorage.getItem("usuario");
-  let idDestino = localStorage.getItem("idDestino");
-  let actividad = document.getElementById("NA" + idProyecto).value;
-  if (actividad.length >= 1) {
-    const action = "agregarPlanaccion";
-    $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-        action: action,
-        idUsuario: idUsuario,
-        idDestino: idDestino,
-        idProyecto: idProyecto,
-        actividad: actividad,
-      },
-      // dataType: "JSON",
-      success: function (data) {
-        // console.log(data);
-        if (data.length > 1) {
-          obtenerProyectosP("PROYECTO");
-          alertaImg("Actividad Agregada", "", "success", 2500);
-          expandir("proyecto" + idProyecto);
-        } else {
-          alertaImg("Intente de Nuevo", "", "info", 3000);
-        }
-      },
-    });
-  } else {
-    alertaImg("Intente de Nuevo", "", "info", 3000);
-  }
-}
-
-
 // Comentarios para Planaccion
 function comentariosPlanaccion(idPlanaccion) {
   document
@@ -3304,7 +3269,7 @@ function actualizarSubseccion(idSubseccion) {
 }
 
 
-// Oculta Vista
+// Oculta Vista con la clase HIDDEN
 function hiddenVista(idVista) {
   document.getElementById(idVista).classList.add('hidden');
 }
