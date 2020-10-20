@@ -1344,6 +1344,8 @@ function ganttP() {
     document.getElementById("palabraProyecto")
         .setAttribute("onkeyup", "ganttP()");
     estiloBotonesProyectos('PENDIENTE', 'GANTT');
+    document.getElementById("loadProyectos").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     // Data URL
     const action = "ganttProyectosP";
     let idUsuario = localStorage.getItem("usuario");
@@ -1379,9 +1381,11 @@ function ganttP() {
             arrayTratado
                 .then((response) => {
                     generarGantt(response);
+                    document.getElementById("loadProyectos").innerHTML = '';
                 })
                 .catch((error) => {
                     // console.log("Error" + error);
+                    document.getElementById("loadProyectos").innerHTML = '';
                 });
 
             let size = 100 + dataGantt.length * 50;
@@ -1441,6 +1445,8 @@ function ganttS() {
     document.getElementById("palabraProyecto")
         .setAttribute("onkeyup", "ganttS()");
     estiloBotonesProyectos('SOLUCIONADO', 'GANTT');
+    document.getElementById("loadProyectos").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     // Data URL
     const action = "ganttProyectosS";
     let idUsuario = localStorage.getItem("usuario");
@@ -1476,9 +1482,11 @@ function ganttS() {
             arrayTratado
                 .then((response) => {
                     generarGantt(response);
+                    document.getElementById("loadProyectos").innerHTML = '';
                 })
                 .catch((error) => {
                     // console.log("Error" + error);
+                    document.getElementById("loadProyectos").innerHTML = '';
                 });
             let size = 100 + dataGantt.length * 50;
             document
