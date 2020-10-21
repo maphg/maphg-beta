@@ -1568,7 +1568,7 @@ function ganttS() {
 function generarOTPlanaccion(idPlanaccion) {
     alertaImg('Generando... OT #' + idPlanaccion, '', 'success', 1200);
     localStorage.setItem('URL', idPlanaccion);
-    let URL = 'https://localhost/maphg-beta/OT_proyectos/';
+    let URL = 'https://www.maphg.com/beta/OT_proyectos/';
     window.open(URL, "OT PROYECTO #" + idPlanaccion, "width=1300px, height=900px");
 }
 
