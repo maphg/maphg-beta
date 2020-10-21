@@ -129,19 +129,19 @@ function consultaActividadesOT(idOT) {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             // Actividades OT
             var actividades = '';
 
-            for (let i = 0; i < array.actividades.length; i++) {
-                var id = array.actividades[i].id;
-                var actividad = array.actividades[i].actividad;
-                var tipoActividad = array.actividades[i].tipoActividad;
-                var medicion = array.actividades[i].medicion;
+            if (array.actividades) {
+                for (let i = 0; i < array.actividades.length; i++) {
+                    var id = array.actividades[i].id;
+                    var actividad = array.actividades[i].actividad;
+                    var tipoActividad = array.actividades[i].tipoActividad;
+                    var medicion = array.actividades[i].medicion;
 
-                if (tipoActividad == "actividad") {
+                    if (tipoActividad == "actividad") {
 
-                    actividades += `
+                        actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
                             <label class="mx-2 inline-flex items-center">
                                 <input id="actividad_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="checkbox" class="form-checkbox w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" disabled>
@@ -151,18 +151,19 @@ function consultaActividadesOT(idOT) {
                             </label>
                         </div>
                     `;
+                    }
                 }
             }
+            if (array.test) {
+                for (let i = 0; i < array.test.length; i++) {
+                    var id = array.test[i].id;
+                    var actividad = array.test[i].actividad;
+                    var tipoActividad = array.test[i].tipoActividad;
+                    var medicion = array.test[i].medicion;
 
-            for (let i = 0; i < array.test.length; i++) {
-                var id = array.test[i].id;
-                var actividad = array.test[i].actividad;
-                var tipoActividad = array.test[i].tipoActividad;
-                var medicion = array.test[i].medicion;
+                    if (tipoActividad == "test") {
 
-                if (tipoActividad == "test") {
-
-                    actividades += `
+                        actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
                             <div class="mr-2 flex flex-col leading-none">
                                 <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura" disabled>
@@ -173,17 +174,19 @@ function consultaActividadesOT(idOT) {
                             </div>
                         </div>
                     `;
+                    }
                 }
             }
 
-            for (let i = 0; i < array.check.length; i++) {
-                var id = array.check[i].id;
-                var actividad = array.check[i].actividad;
-                var tipoActividad = array.check[i].tipoActividad;
-                var medicion = array.check[i].medicion;
+            if (array.check) {
+                for (let i = 0; i < array.check.length; i++) {
+                    var id = array.check[i].id;
+                    var actividad = array.check[i].actividad;
+                    var tipoActividad = array.check[i].tipoActividad;
+                    var medicion = array.check[i].medicion;
 
-                if (tipoActividad == "checkList") {
-                    actividades += `
+                    if (tipoActividad == "checkList") {
+                        actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start cursor-pointer mb-1 leading-none  hover:bg-green-100 hover:text-green-500">
 
                             <div class="flex items-center justify-start p-1 rounded">
@@ -212,6 +215,7 @@ function consultaActividadesOT(idOT) {
                             </div>
                         </div>                    
                     `;
+                    }
                 }
             }
 

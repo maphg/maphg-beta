@@ -6,7 +6,6 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
     let idUsuario = localStorage.getItem('usuario');
     const action = "obtenerOTDigital";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
-    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -472,7 +471,6 @@ function actividadRealizadaOT(idOT, idActividad, tipoActividad) {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             if (array == "Actualizado") {
                 consultarActividadRealizadaOT(idOT);
                 alertaImg("Actividad Actualizada", "", "success", 2000);
@@ -540,7 +538,6 @@ function consultaResponsablesOT(idOT) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultaResponsablesOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
-    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -572,11 +569,9 @@ function eliminarResponsbleOT(idOT, idResponsable) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "eliminarResponsbleOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&idResponsable=${idResponsable}`;
-    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             if (array == "Agregado") {
                 consultaResponsablesOT(idOT);
                 document.getElementById("modalUsuarios").classList.remove('open');
@@ -614,7 +609,6 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
             document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
             document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
@@ -629,11 +623,9 @@ function consultaActividadesOT(idOT) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultaActividadesOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
-    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            console.log(array);
             // Actividades OT
             var actividades = '';
 
@@ -757,7 +749,6 @@ function guardarCambiosOT() {
     let idOT = localStorage.getItem('idOT');
     const action = "guardarCambiosOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&comentario=${comentario}`;
-    console.log(URL);
     fetch(URL)
         .then(res => res.json())
         .then(array => {

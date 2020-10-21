@@ -256,6 +256,7 @@ const datosPlanes = params => {
     var fStatus = '';
     var iconoStatus = '';
     var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion}); obtenerActividadesPlanaccion(${idPlanaccion})"`;
+    var fOT = `onclick="generarOTPlanaccion(${idPlanaccion})";`;
     var statusPlanaccion = '';
     if (params.status == "PENDIENTE") {
         statusPlanaccion = 'planaccion_PENDIENTE';
@@ -307,7 +308,7 @@ const datosPlanes = params => {
                 </div>
             </td>
             
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fOT}>
                 <h1>${params.id}</h1>
             </td>
 
@@ -342,6 +343,7 @@ function tooltipProyectos(idproyecto) {
     Popper.createPopper(button, tooltip);
 }
 
+
 // TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
 function tooltipPlanaccion(idPlanaccion) {
     // Ciclo para quitar bg-gray-200
@@ -362,6 +364,30 @@ function tooltipPlanaccion(idPlanaccion) {
     const tooltip = document.getElementById('tooltipActividadesPlanaccion');
     Popper.createPopper(button, tooltip, {
         placement: 'bottom'
+    });
+}
+
+
+// TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
+function tooltipEditarEliminarSolucionar(idActividad) {
+    // Ciclo para quitar bg-gray-200
+    let filas = document.getElementsByClassName("fila-actividad-select");
+    for (let x = 0; x < filas.length; x++) {
+        filas[x].classList.remove('bg-gray-300');
+    }
+    document.getElementById("tooltipEditarEliminarSolucionar").classList.toggle('hidden');
+
+    if (document.getElementById("tooltipEditarEliminarSolucionar").classList.contains('hidden')) {
+        document.getElementById(idActividad + 'actividad').classList.remove('bg-gray-300');
+    } else {
+        document.getElementById(idActividad + 'actividad').classList.add('bg-gray-300');
+    }
+
+    // Propiedades para el tooltip
+    const button = document.getElementById(idActividad + 'actividad');
+    const tooltip = document.getElementById('tooltipEditarEliminarSolucionar');
+    Popper.createPopper(button, tooltip, {
+        placement: 'top'
     });
 }
 
@@ -1260,7 +1286,7 @@ function statusPlanaccionx(status) {
             document.getElementById('planaccionPendientes').classList.add('bg-purple-600');
         }
     } else {
-        alertaImg('No se Encontraron:' + status, '', 'info', 1000);
+        alertaImg('Sin: ' + status + 'S', '', 'info', 1000);
     }
 }
 
@@ -1281,15 +1307,15 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
             document.getElementById("dataActividades").innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
-                    const id = array[x].id;
+                    const idActividad = array[x].id;
                     const actividad = array[x].actividad;
                     document.getElementById("dataActividades").innerHTML += `
-                        <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                        <div id="${idActividad}actividad" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2 fila-actividad-select">
                             <div class="w-4 h-4 border-2 border-gray-300 hover:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
                             <div class=" text-justify">
                                 <h1>${actividad}</h1>
                             </div>
-                            <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer">
+                            <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" onclick="tooltipEditarEliminarSolucionar(${idActividad})">
                                 <i class="fas fa-ellipsis-h  text-sm"></i>
                             </div>
                         </div>
@@ -1538,6 +1564,10 @@ function ganttS() {
 }
 
 
+function generarOTPlanaccion(idPlanaccion) {
+    alertaImg('Generando OT #' + idPlanaccion, '', 'success', 1200);
+}
+
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL
 document.getElementById("exportarProyectos").addEventListener('click', function () {
@@ -1598,6 +1628,15 @@ document.getElementById("opcionGanttProyectos").addEventListener('click', () => 
     document.getElementById("proyectosPendientes").setAttribute('onclick', 'ganttP()');
     document.getElementById("proyectosSolucionados").setAttribute('onclick', 'ganttS()');
 
+});
+
+
+// OCULTA SUBVENTANAS DE LOS PROYECTOS
+document.getElementById("contenidoOpcionesProyectos").addEventListener('click', function () {
+    console.log('click');
+    hiddenVista("tooltipActividadesPlanaccion");
+    hiddenVista("tooltipProyectos");
+    hiddenVista("tooltipEditarEliminarSolucionar");
 });
 
 // EVENTO PARA  MOSTRAR PROYECTOS 

@@ -52,35 +52,35 @@
                     <!-- DESTINO SECCION Y SUBSECCION -->
                     <div class="flex flex-row">
                         <div id="logoClassOT" class="relative">
-                            <h1 id="seccionOT" class="">ZIC</h1>
+                            <h1 id="seccionOT" class=""></h1>
                         </div>
                         <div class="flex flex-col justify-center items-start ml-1">
                             <div class="font-semibold text-sm px-1 rounded  text-bluegray-900 mb-1 flex justify-start items-center">
-                                <h1 id="destinoOT" class="font-bold">CMU</h1>
+                                <h1 id="destinoOT" class="font-bold"></h1>
                             </div>
                             <div class="font-semibold text-sm px-1 rounded  text-bluegray-900 flex justify-start items-center">
-                                <h1 id="subseccionOT" class="font-bold">FAN&COILS</h1>
+                                <h1 id="subseccionOT" class="font-bold"></h1>
                             </div>
                         </div>
                     </div>
                     <!-- DESTINO SECCION Y SUBSECCION -->
                     <div class="flex flex-col uppercase items-start font-semibold text-bluegray-800 leading-none">
                         <div class="text-base font-semibold">
-                            <h1 id="tipoMantenimientoOT" class="">MANTENIMIENTO PREVENTIVO</h1>
+                            <h1 id="tipoMantenimientoOT" class=""></h1>
                         </div>
                         <div class="text-3xl">
-                            <h1 id="numeroOT" class="">OT NÚMERO 72627</h1>
+                            <h1 id="numeroOT" class="">OT NÚMERO #</h1>
                         </div>
                         <div class="text-base font-semibold flex">
-                            <h1 id="tipoMatenimiento2OT" class="mr-4">MANTENIMIENTO MENOR</h1>
-                            <h1 id="periodicidadOT" class="mr-4">SEMESTRAL</h1>
-                            <h1 id="semanaOT" class="mr-4">SEMANA 44</h1>
-                            <h1 id="añoOT" class="mr-4">2020</h1>
+                            <h1 id="tipoMatenimiento2OT" class="mr-4"></h1>
+                            <h1 id="periodicidadOT" class="mr-4"></h1>
+                            <h1 id="semanaOT" class="mr-4"></h1>
+                            <h1 id="añoOT" class="mr-4"></h1>
                         </div>
                     </div>
                     <div class="flex flex-col uppercase items-center font-semibold text-bluegray-800 leading-none">
                         <div class="text-xs font-semibold">
-                            <h1 id="fechaOT" class="">GENERADA EL 24/07/2020</h1>
+                            <h1 id="fechaOT" class=""></h1>
                         </div>
                         <div class="text-xl font-semibold py-1 px-2 rounded-full border-2 border-bluegray-900 mt-1">
                             <h1 id="statusOT" class=""></h1>
@@ -90,23 +90,23 @@
                 <div class="flex flex-row items-center justify-start w-full my-4">
                     <div class="relative flex flex-col items-center justify-center border-4 mr-2 border-bluegray-900 rounded-md">
                         <img src="svg/qractivefinder.svg" class="w-16 rounded-md" alt="">
-                        <div class="absolute text-xs font-bold border rounded-sm px-1 border-bluegray-900 bg-bluegray-900 text-white flex flex-col items-center justify-center" style="margin-top: 3.2rem; z-index: 234234234234;">
+                        <div class="absolute text-xs font-bold border rounded-sm px-1 border-bluegray-900 bg-bluegray-900 text-white flex flex-col items-center justify-center" style="margin-top: 6.5rem; z-index: 234234234234;">
                             <h1 style="z-index: 123123;">234234</h1>
                             <div class="w-3 h-3 bg-bluegray-900 rounded-sm transform rotate-45 absolute mx-auto" style="top: -20%; z-index: 123;"></div>
                         </div>
                     </div>
                     <div class="flex flex-col uppercase items-start font-semibold text-bluegray-800 leading-none">
                         <div class="truncate text-base font-semibold">
-                            <h1 class="">EQUIPO</h1>
+                            <h1 class=""></h1>
                         </div>
                         <div class="truncate w-252 text-3xl">
-                            <h1 id="equipoOT" class="">Fan & COIL habitacion 1403</h1>
+                            <h1 id="equipoOT" class=""></h1>
                         </div>
                         <div class="truncate text-base font-semibold flex">
-                            <h1 class="mr-4">GP</h1>
-                            <h1 class="mr-4">HOTEL WHITE SAND</h1>
-                            <h1 class="mr-4">VILLA 14</h1>
-                            <h1 class="mr-4">HABITACION 1403</h1>
+                            <h1 id="marcaHotel" class="mr-4"></h1>
+                            <h1 id="nombreHotel" class="mr-4"></h1>
+                            <h1 id="nombreVilla" class="mr-4"></h1>
+                            <h1 id="nombreHabitacion" class="mr-4"></h1>
                         </div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
                 <div class="text-bluegray-900 border-4 border-bluegray-50 rounded-md w-full h-32 mt-4">
-                    <textarea id="comentarioOT" class="text-xs font-semibold p-2 text-gray-700 focus:outline-none focus:shadow-outline-none uppercase w-full h-full" placeholder="Observaciones / Comentarios"></textarea>
+                    <textarea id="comentarioOT" class="text-xs font-semibold p-2 text-gray-700 focus:outline-none focus:shadow-outline-none uppercase w-full h-full" placeholder="Observaciones / Comentarios" disabled></textarea>
                 </div>
                 <div class="w-full flex justify-evenly">
                     <div class="text-bluegray-900 rounded-md w-64 h-32 mt-4 flex flex-col justify-center items-center px-2">

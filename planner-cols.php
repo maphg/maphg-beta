@@ -862,7 +862,7 @@
     <!-- MODAL PROYECTOS -->
     <div id="modalProyectos" class="modal">
         <div class="w-full h-screen bg-purple-400">
-            <div class="flex justify-center items-center mb-5 relative pt-4">
+            <div id="contenidoOpcionesProyectos" class="flex justify-center items-center mb-5 relative pt-4">
                 <div class="font-light text-3xl ml-3 leading-none text-purple-600 absolute left-0 text-center">
                     <h1>Proyectos</h1><span id="loadProyectos"></span>
                 </div>
@@ -1828,6 +1828,56 @@
         </div>
     </div>
     <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+
+    <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
+    <div id="tooltipEditarEliminarSolucionar" class="hidden" style="z-index: 201;">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="hiddenVista('tooltipEditarEliminarSolucionar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+
+            <div id="finalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                <div class="">
+                    <h1>SOLUCIONAR</h1>
+                </div>
+                <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+                    <div class="">
+                        <i class="fas fa-pen fa-lg"></i>
+                    </div>
+                </div>
+                <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-random fa-lg"></i>
+                    </div>
+                </div>
+                <div id="eliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-trash fa-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
 
 
     <!-- ***** TOOLTIPS ***** -->

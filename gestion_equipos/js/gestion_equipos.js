@@ -116,13 +116,13 @@ const datosPlanes = params => {
     return result;
 };
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
+// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '76856', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'FS', tipoEquipo: 'Junnior Suite', status: 'TALLER', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
+// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '76856', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'FS', tipoEquipo: 'Junnior Suite', status: 'TALLER', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '234', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'GP', tipoEquipo: 'Fan&coil', status: 'BAJA', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
+// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '234', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'GP', tipoEquipo: 'Fan&coil', status: 'BAJA', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-$tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '3425', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'TRS', tipoEquipo: 'Junnior Suite', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'LOCAL', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
+// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '3425', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'TRS', tipoEquipo: 'Junnior Suite', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'LOCAL', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
 
 const $ContenedorPlanesEquipos = document.getElementById('contenedorPlanesEquipo');
@@ -915,8 +915,6 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
 
     document.getElementById("cancelarOTMP").
         setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
-
-
 }
 
 
@@ -948,7 +946,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let numeroSemanas = 0;
-
 
     const action = "programarMP";
     $.ajax({
