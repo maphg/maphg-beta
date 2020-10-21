@@ -1564,9 +1564,14 @@ function ganttS() {
 }
 
 
+// REDIRECIONA (OT_proyectos/) PARA GENERAR LA OT CON localStorage.setItem('URL', idPlanaccion)
 function generarOTPlanaccion(idPlanaccion) {
-    alertaImg('Generando OT #' + idPlanaccion, '', 'success', 1200);
+    alertaImg('Generando... OT #' + idPlanaccion, '', 'success', 1200);
+    localStorage.setItem('URL', idPlanaccion);
+    let URL = 'https://localhost/maphg-beta/OT_proyectos/';
+    window.open(URL, "OT PROYECTO #" + idPlanaccion, "width=1300px, height=900px");
 }
+
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL

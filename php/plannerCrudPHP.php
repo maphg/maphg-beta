@@ -3908,7 +3908,7 @@ if (isset($_POST['action'])) {
                 }
 
                 // Admite solo Imagenes.
-                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                     if (strpbrk($adjuntoURL, ' ')) {
                         $dataImagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -7023,7 +7023,7 @@ if (isset($_POST['action'])) {
                     }
 
                     // Admite solo Imagenes.
-                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
 
                         if (strpbrk($adjuntoURL, ' ')) {
                             $dataImagen .= "
@@ -7081,7 +7081,7 @@ if (isset($_POST['action'])) {
                     }
 
                     // Admite solo Imagenes.
-                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
 
                         if (strpbrk($adjuntoURL, ' ')) {
                             $dataImagen .= "
@@ -7136,7 +7136,7 @@ if (isset($_POST['action'])) {
                     }
 
                     // Admite solo Imagenes.
-                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                         if (strpbrk($adjuntoURL, ' ')) {
                             $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -7188,7 +7188,7 @@ if (isset($_POST['action'])) {
                     }
 
                     // Admite solo Imagenes.
-                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                         if (strpbrk($adjuntoURL, ' ')) {
                             $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
@@ -7561,7 +7561,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // Admite solo Imagenes.
-                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
 
                                 if (strpbrk($adjuntoURL, ' ')) {
                                     $dataImagen .= "
@@ -7861,7 +7861,7 @@ if (isset($_POST['action'])) {
                             }
 
                             // Admite solo Imagenes.
-                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png")) {
+                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                                 if (strpbrk($adjuntoURL, ' ')) {
                                     $dataImagen .= "
                                     <a href=\"$adjuntoURL\" target=\"_blank\">

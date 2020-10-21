@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAPHG OT MP</title>
+    <title>MAPHG OT PROYECTOS</title>
     <link rel="stylesheet" href="../css/tailwindproduccion.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="../css/modales.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/alertify.min.css">
 </head>
 
 <body class="flex flex-col justify-start items-start md:items-center h-auto bg-bluegray-900" style="font-family: 'Roboto', sans-serif;">
@@ -52,7 +53,7 @@
                     <!-- DESTINO SECCION Y SUBSECCION -->
                     <div class="flex flex-row">
                         <div id="logoClassOT" class="relative">
-                            <h1 id="seccionOT" class=""></h1>
+                            <h1 id="seccionOT" class="">ZIA</h1>
                         </div>
                         <div class="flex flex-col justify-center items-start ml-1">
                             <div class="font-semibold text-sm px-1 rounded  text-bluegray-900 mb-1 flex justify-start items-center">
@@ -72,7 +73,7 @@
                             <h1 id="numeroOT" class="">OT NÚMERO #</h1>
                         </div>
                         <div class="text-base font-semibold flex">
-                            <h1 id="tipoMatenimiento2OT" class="mr-4"></h1>
+                            <h1 id="tipoMatenimiento2OT" class="mr-4">PROYECTO</h1>
                             <h1 id="periodicidadOT" class="mr-4"></h1>
                             <h1 id="semanaOT" class="mr-4"></h1>
                             <h1 id="añoOT" class="mr-4"></h1>
@@ -178,6 +179,8 @@
     <script src="../js/html2canvas.js"></script>
     <script src="../js/exportarPdf.js"></script>
     <script src="js/OT_JS.js"></script>
+    <script src="../js/alertify.min.js"></script>
+    <script src="../js/alertasSweet.js"></script>
 </body>
 
 </html>

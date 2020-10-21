@@ -300,5 +300,4 @@ function consultarActividadRealizadaOT(idOT) {
 }
 
 
-
 verOT();
