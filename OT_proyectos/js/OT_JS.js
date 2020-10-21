@@ -29,7 +29,7 @@ const verOTProyectos = () => {
                 }
 
                 document.getElementById("dataActividades").innerHTML = '';
-                if (array.actividades.length > 0) {
+                if (array.actividades) {
                     for (let x = 0; x < array.actividades.length; x++) {
                         const id = array.actividades[x].id;
                         const actividad = array.actividades[x].actividad;
@@ -48,7 +48,7 @@ const verOTProyectos = () => {
                 }
 
                 document.getElementById("mediaOT").innerHTML = '';
-                if (array.adjuntos.length > 0) {
+                if (array.adjuntos) {
                     for (let x = 0; x < array.adjuntos.length; x++) {
                         const adjunto = array.adjuntos[x].url;
 
