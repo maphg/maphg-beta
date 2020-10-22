@@ -23,25 +23,25 @@
 
         @media (min-width: 640px) {
             .contenedor {
-                max-width: 640px;
+                max-width: 630px;
             }
         }
 
         @media (min-width: 850px) {
             .contenedor {
-                max-width: 850px;
+                max-width: 840px;
             }
         }
 
         @media (min-width: 1024px) {
             .contenedor {
-                max-width: 1024px;
+                max-width: 1014px;
             }
         }
 
         @media (min-width: 1280px) {
             .contenedor {
-                max-width: 1280px;
+                max-width: 1270px;
             }
         }
     </style>
@@ -247,6 +247,8 @@
             </div>
         </div>
     </div>
+    <!-- MODAL EQUIPOS Y LOCALES -->
+
 
     <!-- MODAL EQUIPO PARA LOS MP-->
     <div id="modalMPEquipo" class="modal relative">
@@ -490,6 +492,7 @@
             <!-- PLANES MP -->
         </div>
     </div>
+    <!-- MODAL EQUIPO PARA LOS MP-->
 
 
     <!-- MODAL PARA PENDIENTES POR SECCIONES -->
@@ -617,6 +620,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL PARA PENDIENTES POR SECCIONES -->
 
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
@@ -690,6 +694,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
 
 
     <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
@@ -763,6 +768,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
 
 
     <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
@@ -857,7 +863,7 @@
             </div>
         </div>
     </div>
-
+    <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
 
     <!-- MODAL PROYECTOS -->
     <div id="modalProyectos" class="modal">
@@ -976,6 +982,189 @@
 
         </div>
     </div>
+    <!-- MODAL PROYECTOS -->
+
+    <!-- MODAL PROYECTOS DEP -->
+    <div id="modalProyectosDEP" class="modal">
+        <div class="w-full h-screen bg-fondos-7">
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+                <div class="font-light text-xl ml-3 leading-none text-bluegray-600 absolute left-0">
+                    <h1>Compras-Almacén</h1>
+                </div>
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Proyectos</h1><span id="loadProyectosDEP"></span>
+                </div>
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 bg-red-300 text-red-500 px-2 font-semibold border-2 border-red-200">
+                    <i class="fas fa-star mr-1"></i>
+                    <h1>Etiquetado como Materiales</h1>
+                </div>
+
+                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <div class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-bluegray-200 hover:text-white" onclick="toggleModalTailwind('modalProyectosDEP');">
+                <i class="fas fa-times"></i>
+                <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
+            </div>
+
+            <div class="w-full h-auto">
+                <div class="flex flex-col container mx-auto scrollbar">
+                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Proyecto
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            PDA
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Responsable
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Fechas
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Cotizaciones
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Tipo
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Justificación
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Coste
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Status
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorDeProyectosDEP" class="bg-white divide-y divide-gray-200">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full bg-bluegray-900 py-4">
+                    <div class="flex flex-col container mx-auto scrollbar">
+                        <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                            <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                                    <thead>
+                                        <tr class="cursor-pointer bg-white">
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Actividad
+                                            </th>
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                SubTareas
+                                            </th>
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Responsable
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Fechas
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Comentarios
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Adjuntos
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Status
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                OT
+                                            </th>
+
+                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenedorDePlanesdeaccionDEP" class="bg-white divide-y divide-gray-200">
+                                        <!-- More rows... -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex">
+                    <div class="bg-white rounded p-2 flex flex-col  text-xxs font-semibold">
+                        <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                            <div class="w-4 h-4  mr-2 flex-none"></div>
+                            <div class=" text-justify w-full h-full">
+                                <input type="text" name="" id="" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad">
+                            </div>
+                            <div class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PROYECTOS DEP -->
+
 
     <!-- ********** MODALES SECUNDARIOS ********** -->
 
@@ -1670,7 +1859,7 @@
                     </div>
                 </div>
 
-                <h1 class="self-start mb-2">Justificacion:</h1>
+                <h1 class="self-start mb-2">Justificación:</h1>
                 <input id="justificacionProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Escriba aquí la justificación del Proyecto" autocomplete="off">
 
                 <button id="btnCrearProyecto" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
@@ -1740,7 +1929,7 @@
             <div class="flex justify-center items-center mb-5 relative pt-4">
 
                 <div class="relative text-gray-600 w-72">
-                    <input id="agregarPlanaccion" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Título Planacción" autocomplete="off">
+                    <input id="agregarPlanaccion" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Agregar Plan Acción" autocomplete="off">
                 </div>
 
                 <div id="btnagregarPlanaccion" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
@@ -1830,8 +2019,8 @@
     <!-- ACTIVIDADES PLAN DE ACCIÓN -->
 
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
-    <div id="tooltipEditarEliminarSolucionar" class="hidden" style="z-index: 201;">
-        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+    <div id="tooltipEditarEliminarSolucionar" class="hidden bg-white rounded-md" style="z-index: 201;">
+        <div class="pt-10 p-2" style="width: 300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="hiddenVista('tooltipEditarEliminarSolucionar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -1846,7 +2035,7 @@
             </div>
             <!-- CONTENIDO -->
 
-            <div id="finalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+            <div id="btnFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-4 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
                 <div class="">
                     <h1>SOLUCIONAR</h1>
                 </div>
@@ -1855,18 +2044,30 @@
                 </div>
             </div>
 
+            <div id="segmentoTitulo" class="w-full text-center h-8 rounded-md cursor-pointer mb-4 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 text-xs hidden">
+                <div class="w-full">
+                    <input id="inputTitulo" type="text" class="w-64 p-2 text-justify text-black bg-gray-200 rounded-md text-black" placeholder="Actualizar título" autocomplete="off">
+                </div>
+                <div id="btnTitulo" class="w-8 h-8 flex items-center justify-center font-black px-5 bg-green-200 rounded-md">
+                    <i class="fas fa-sync-alt fa-1x"></i>
+                </div>
+            </div>
+
             <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+
+                <div id="btnActualizarTitulo" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
                     <div class="">
                         <i class="fas fa-pen fa-lg"></i>
                     </div>
                 </div>
-                <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+
+                <div class="bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
                     <div class="">
                         <i class="fas fa-random fa-lg"></i>
                     </div>
                 </div>
-                <div id="eliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+
+                <div id="btnEliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
                     <div class="">
                         <i class="fas fa-trash fa-lg"></i>
                     </div>
@@ -1896,6 +2097,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/sorttable.js"></script>
+    <!-- Librerias JS -->
 
 
     <!-- JS para los planes de los equipos -->
@@ -1913,7 +2115,12 @@
     <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
     <script src="js/proyectos_planacciones.js"></script>
     <script src="js/funciones_tablas.js"></script>
+    <script src="js/proyectos_dep.js"></script>
     <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
+
+    <!-- SEGURIDAD DE SESSION -->
+    <script src="js/seguridad_session.js"></script>
+    <!-- SEGURIDAD DE SESSION -->
 
 </body>
 

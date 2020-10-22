@@ -100,7 +100,7 @@ const datosProyectos = params => {
     var fCoste = '';
     var fToolTip = '';
     var iconoStatus = '';
-    var ocultarActividades = `onclick="hiddenVista('tooltipActividadesPlanaccion')"`;
+    var ocultarActividades = `onclick="hiddenVista('tooltipActividadesPlanaccion'); hiddenVista('tooltipEditarEliminarSolucionar');"`;
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="hiddenVista('tooltipProyectos'); obtenerResponsablesProyectos(${idProyecto})"`;
@@ -255,9 +255,10 @@ const datosPlanes = params => {
     var fAdjuntos = '';
     var fStatus = '';
     var iconoStatus = '';
-    var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion}); obtenerActividadesPlanaccion(${idPlanaccion})"`;
-    var fOT = `onclick="generarOTPlanaccion(${idPlanaccion})";`;
+    var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion}); obtenerActividadesPlanaccion(${idPlanaccion});"`;
+    var fOT = `onclick="generarOTPlanaccion(${idPlanaccion});"`;
     var statusPlanaccion = '';
+    var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
     if (params.status == "PENDIENTE") {
         statusPlanaccion = 'planaccion_PENDIENTE';
         fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion}); nivelVista(1,'modalUsuarios');"`;
@@ -272,7 +273,7 @@ const datosPlanes = params => {
     }
 
     return `
-    <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion}">
+    <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion}" ${ocultarActividades}>
             <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;" 
             ${fToolTip}>
                 <div class="font-semibold uppercase leading-4">
@@ -370,6 +371,10 @@ function tooltipPlanaccion(idPlanaccion) {
 
 // TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
 function tooltipEditarEliminarSolucionar(idActividad) {
+    localStorage.setItem('idActividad', idActividad);
+    let tituloActividad = document.getElementById('tituloActividad' + idActividad).innerHTML;
+    document.getElementById("inputTitulo").value = tituloActividad;
+
     // Ciclo para quitar bg-gray-200
     let filas = document.getElementsByClassName("fila-actividad-select");
     for (let x = 0; x < filas.length; x++) {
@@ -389,6 +394,22 @@ function tooltipEditarEliminarSolucionar(idActividad) {
     Popper.createPopper(button, tooltip, {
         placement: 'top'
     });
+
+    document.getElementById("btnFinalizar").setAttribute('onclick', `actualizarActividadPlanaccion(${idActividad}, 'SOLUCIONADO', 'STATUS')`);
+
+    document.getElementById("btnTitulo").setAttribute('onclick', `actualizarActividadPlanaccion(${idActividad}, 'ACTIVIDAD', 'ACTIVIDAD')`);
+
+    document.getElementById("btnEliminar").setAttribute('onclick', `actualizarActividadPlanaccion(${idActividad}, '0', 'ACTIVO')`);
+
+    if (document.getElementById(idActividad + 'actividad').childNodes[1].classList.contains('bg-green-300')) {
+        document.getElementById("btnFinalizar").classList.remove('hover:bg-green-200');
+        document.getElementById("btnFinalizar").classList.add('bg-green-200');
+        console.log('SI');
+    } else {
+        document.getElementById("btnFinalizar").classList.add('hover:bg-green-200');
+        document.getElementById("btnFinalizar").classList.remove('bg-green-200');
+        console.log('NO');
+    }
 }
 
 
@@ -912,68 +933,72 @@ function obtenerPlanaccion(idProyecto) {
     localStorage.setItem('idProyecto', idProyecto);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
-    document.getElementById("loadProyectos").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     const action = 'obtenerPlanaccion';
     const ruta = 'php/proyectos_planacciones.php?';
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-            if (array.length > 0) {
-                document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
-                document.getElementById('palabraProyecto').value = '';
-                for (let x = 0; x < array.length; x++) {
-                    const id = array[x].id;
-                    const destino = array[x].destino;
-                    const actividad = array[x].actividad;
-                    const creadoPor = array[x].creadoPor;
-                    const subTareas = array[x].subTareas;
-                    const responsable = array[x].responsable;
-                    const fechaInicio = array[x].fechaInicio;
-                    const fechaFin = array[x].fechaFin;
-                    const comentarios = array[x].comentarios;
-                    const adjuntos = array[x].adjuntos;
-                    const justificacion = array[x].justificacion;
-                    const coste = array[x].coste;
-                    const status = array[x].status;
-                    const materiales = array[x].materiales;
-                    const energeticos = array[x].energeticos;
-                    const departamentos = array[x].departamentos;
-                    const trabajando = array[x].trabajando;
+    if (!document.getElementById('tooltipProyectos').classList.contains('hidden')) {
+        document.getElementById("loadProyectos").innerHTML =
+            '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array.length > 0) {
+                    document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
+                    document.getElementById('palabraProyecto').value = '';
+                    for (let x = 0; x < array.length; x++) {
+                        const id = array[x].id;
+                        const destino = array[x].destino;
+                        const actividad = array[x].actividad;
+                        const creadoPor = array[x].creadoPor;
+                        const subTareas = array[x].subTareas;
+                        const responsable = array[x].responsable;
+                        const fechaInicio = array[x].fechaInicio;
+                        const fechaFin = array[x].fechaFin;
+                        const comentarios = array[x].comentarios;
+                        const adjuntos = array[x].adjuntos;
+                        const justificacion = array[x].justificacion;
+                        const coste = array[x].coste;
+                        const status = array[x].status;
+                        const materiales = array[x].materiales;
+                        const energeticos = array[x].energeticos;
+                        const departamentos = array[x].departamentos;
+                        const trabajando = array[x].trabajando;
 
-                    $tablaPlanes.innerHTML += datosPlanes({
-                        id: id,
-                        destino: destino,
-                        actividad: actividad,
-                        creadoPor: creadoPor,
-                        subTareas: subTareas,
-                        responsable: responsable,
-                        fechaInicio: fechaInicio,
-                        fechaFin: fechaFin,
-                        comentarios: comentarios,
-                        adjuntos: adjuntos,
-                        justificacion: justificacion,
-                        coste: coste,
-                        status: status,
-                        materiales: materiales,
-                        energeticos: energeticos,
-                        departamentos: departamentos,
-                        trabajando: trabajando
-                    });
+                        $tablaPlanes.innerHTML += datosPlanes({
+                            id: id,
+                            destino: destino,
+                            actividad: actividad,
+                            creadoPor: creadoPor,
+                            subTareas: subTareas,
+                            responsable: responsable,
+                            fechaInicio: fechaInicio,
+                            fechaFin: fechaFin,
+                            comentarios: comentarios,
+                            adjuntos: adjuntos,
+                            justificacion: justificacion,
+                            coste: coste,
+                            status: status,
+                            materiales: materiales,
+                            energeticos: energeticos,
+                            departamentos: departamentos,
+                            trabajando: trabajando
+                        });
+                    }
+                } else {
+                    alertaImg('Sin Plan de Acción', '', 'info', 1500);
+                    document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
                 }
-            } else {
-                alertaImg('Sin Plan de Acción', '', 'info', 1500);
+            })
+            .then(() => {
+                document.getElementById("loadProyectos").innerHTML = '';
+            })
+            .catch(function () {
+                document.getElementById("loadProyectos").innerHTML = '';
                 document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
-            }
-        })
-        .then(() => {
-            document.getElementById("loadProyectos").innerHTML = '';
-        })
-        .catch(function () {
-            document.getElementById("loadProyectos").innerHTML = '';
-            document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
-        });
+            });
+    } else {
+        document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
+    }
 }
 
 
@@ -1309,11 +1334,19 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
                 for (let x = 0; x < array.length; x++) {
                     const idActividad = array[x].id;
                     const actividad = array[x].actividad;
+                    var status = array[x].status;
+
+                    if (status == "SOLUCIONADO") {
+                        status = 'bg-green-300';
+                    } else {
+                        status = 'hove:bg-green-300';
+                    }
+
                     document.getElementById("dataActividades").innerHTML += `
                         <div id="${idActividad}actividad" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2 fila-actividad-select">
-                            <div class="w-4 h-4 border-2 border-gray-300 hover:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
+                            <div class="w-4 h-4 border-2 border-gray-300 ${status} hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
                             <div class=" text-justify">
-                                <h1>${actividad}</h1>
+                                <h1 id="tituloActividad${idActividad}">${actividad}</h1>
                             </div>
                             <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" onclick="tooltipEditarEliminarSolucionar(${idActividad})">
                                 <i class="fas fa-ellipsis-h  text-sm"></i>
@@ -1573,6 +1606,48 @@ function generarOTPlanaccion(idPlanaccion) {
 }
 
 
+function actualizarActividadPlanaccion(idActividad, parametro, columna) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idProyecto = localStorage.getItem('idProyecto');
+    let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+    if (columna == "ACTIVIDAD") {
+        parametro = document.getElementById("inputTitulo").value;
+    }
+
+    const action = "actualizarActividadPlanaccion";
+    const ruta = "php/proyectos_planacciones.php?";
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idActividad=${idActividad}&parametro=${parametro}&columna=${columna}`;
+    fetch(URL)
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp.resp);
+            if (resp.resp == "ELIMINADO") {
+                alertaImg('Actividad Eliminada', '', 'success', 1200);
+                document.getElementById('tooltipEditarEliminarSolucionar').classList.add('hidden');
+                obtenerPlanaccion(idProyecto);
+                obtenerActividadesPlanaccion(idPlanaccion);
+            } else if (resp.resp == "TITULO") {
+                alertaImg('Actividad Actualizada', '', 'success', 1200);
+                document.getElementById('segmentoTitulo').classList.add('hidden');
+                document.getElementById('tooltipEditarEliminarSolucionar').classList.add('hidden');
+                obtenerActividadesPlanaccion(idPlanaccion);
+            } else if (resp.resp == "PENDIENTE" || resp.resp == "SOLUCIONADO") {
+                alertaImg('Status Acualizado', '', 'success', 1200);
+                document.getElementById('tooltipEditarEliminarSolucionar').classList.add('hidden');
+                document.getElementById('tooltipEditarEliminarSolucionar').classList.add('hidden');
+                obtenerActividadesPlanaccion(idPlanaccion);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        })
+        .catch(function () {
+            obtenerPlanaccion(idProyecto);
+        });
+}
+
+
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // EVENTO PARA EXPORTA PROYECTOS EN EXCEL
 document.getElementById("exportarProyectos").addEventListener('click', function () {
@@ -1632,7 +1707,6 @@ document.getElementById("opcionGanttProyectos").addEventListener('click', () => 
 
     document.getElementById("proyectosPendientes").setAttribute('onclick', 'ganttP()');
     document.getElementById("proyectosSolucionados").setAttribute('onclick', 'ganttS()');
-
 });
 
 

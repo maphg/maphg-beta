@@ -401,15 +401,15 @@ function calendarioSecciones() {
     case "jueves":
       document.getElementById("label-jueves").classList.add("text-gray-700");
 
-      if (document.getElementById("btn-zhc")) {
+      if (document.getElementById("colzhc")) {
         document.getElementById("btn-zhc").classList.add("btn-activo");
         document.getElementById("colzhc").classList.remove("hidden");
       }
-      if (document.getElementById("btn-zha")) {
+      if (document.getElementById("colzha")) {
         document.getElementById("btn-zha").classList.add("btn-activo");
         document.getElementById("colzha").classList.remove("hidden");
       }
-      if (document.getElementById("btn-dep")) {
+      if (document.getElementById("coldep")) {
         document.getElementById("btn-dep").classList.add("btn-activo");
         document.getElementById("coldep").classList.remove("hidden");
       }
@@ -457,11 +457,11 @@ function calendarioSecciones() {
         document.getElementById("btn-zie").classList.add("btn-activo");
         document.getElementById("colzie").classList.remove("hidden");
       }
-      if (document.getElementById("btn-zhc")) {
+      if (document.getElementById("colzhc")) {
         document.getElementById("btn-zhc").classList.add("btn-activo");
         document.getElementById("colzhc").classList.remove("hidden");
       }
-      if (document.getElementById("btn-zha")) {
+      if (document.getElementById("colzha")) {
         document.getElementById("btn-zha").classList.add("btn-activo");
         document.getElementById("colzha").classList.remove("hidden");
       }
@@ -3055,6 +3055,11 @@ function actualizarSubseccion(idSubseccion) {
 // Oculta Vista con la clase HIDDEN
 function hiddenVista(idVista) {
   document.getElementById(idVista).classList.add('hidden');
+}
+
+// toggle clase HIDDEN
+function toggleHidden(idVista) {
+  document.getElementById(idVista).classList.toggle('hidden');
 }
 
 

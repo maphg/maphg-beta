@@ -6,7 +6,6 @@ setlocale(LC_MONETARY, 'es_ES');
 // Modulo para importar la Conxión a la DB.
 include 'conexion.php';
 
-
 if (isset($_POST['action'])) {
     // Variables Globales.
     $action = $_POST['action'];
@@ -731,7 +730,7 @@ if (isset($_POST['action'])) {
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
 
-                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
+                        $queryPendientes = "SELECT count(id) FROM t_proyectos WHERE id_subseccion = $idSubseccion AND (status = 'N' OR status= 'PENDIENTE' OR status = '') AND activo = 1 $filtroDestino";
                         if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
                             if ($value = mysqli_fetch_array($resultPendientes)) {
 
@@ -768,7 +767,7 @@ if (isset($_POST['action'])) {
                                     $dataAux = "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerDEP($idSubseccion);\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -780,7 +779,7 @@ if (isset($_POST['action'])) {
                                     $dataDEP .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerProyectosDEP($idSubseccion, 'PENDIENTE');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">

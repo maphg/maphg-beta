@@ -7537,6 +7537,7 @@ $tablaRanking .= "</div>";
 <script src="js/plannerBeta.js"></script>
 <script src="js/refreshSession.js"></script>
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="js/seguridad_session.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
