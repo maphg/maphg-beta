@@ -12,9 +12,7 @@ function seguridad_session() {
             }
         })
         .catch(function () {
-            alertaImg('¡Usuario Denegado!', '', 'error', 1200);
-            location.href = "https://www.maphg.com/beta/login.php";
-            localStorage.clear();
+            console.log()
         });
 }
 setInterval(seguridad_session, 60000);
