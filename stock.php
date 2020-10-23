@@ -56,7 +56,7 @@
     <!-- MENÚ -->
 
     <!-- INICIA MODAL 100% -->
-    <div class="w-full h-screen">
+    <div class="w-full h-auto">
 
         <div class="flex justify-center items-center mb-5 relative pt-4">
             <div class="font-light text-3xl ml-3 leading-none text-orange-600 absolute left-0">
