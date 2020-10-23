@@ -115,9 +115,7 @@ document.getElementById("palabraMaterial").addEventListener('click', function ()
 });
 
 document.getElementById("destinosSelecciona").addEventListener('click', function () {
-    console.log(localStorage.getItem('idDestino'));
     consultarStock();
-
 });
 
 document.getElementById("cerrarSession").addEventListener('click', function () {
@@ -141,8 +139,6 @@ function consultarStock() {
                 alertaImg(array.length + ' Registros Encontrados', '', 'success', 1200);
                 document.getElementById("contenedorDeMateriales").innerHTML = '';
 
-                // $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'seguridad', status: 'solicitado', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
-
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const seccion = array[x].seccion;
@@ -158,7 +154,7 @@ function consultarStock() {
                     const stock_real = array[x].stock_real;
                     const stock_teorico = array[x].stock_teorico;
 
-                    console.log(x, caracteristicas + '\n');
+                    console.log(x + '\n');
 
                     $tablaMateriales.innerHTML += datosMateriales({
                         id: id,
