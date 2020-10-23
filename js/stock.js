@@ -137,6 +137,7 @@ function consultarStock() {
         .then(array => array.json())
         .then(array => {
             if (array.length > 0) {
+                alertaImg(array.length + 'Registros', '', 'info', 1200);
                 document.getElementById("contenedorDeMateriales").innerHTML = '';
 
                 // $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'seguridad', status: 'solicitado', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
