@@ -125,7 +125,6 @@ document.getElementById("cerrarSession").addEventListener('click', function () {
 
 
 function consultarStock() {
-    alertaImg('Cargando Registros...', '', 'success', 1200);
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultarStock";
@@ -169,12 +168,17 @@ function consultarStock() {
                         .insertAdjacentHTML('beforeend', data);
                 }
             } else {
-                alertaImg('Stock No Disponible', '', 'info', 1200);
+                alertaImg('Stock No Disponible', '', 'warning', 1200);
+            }
+            return array.length;
+        })
+        .then(function (registros) {
+            if (registros > 0) {
+                alertaImg('Registros Cargados', '', 'success', 1200);
             }
         })
         .catch(function () {
-            alertaImg('sin Stock', '', 'info', 1200);
-
+            alertaImg('sin Stock', '', 'warning', 1200);
             document.getElementById("contenedorDeMateriales").innerHTML = '';
 
         })
