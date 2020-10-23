@@ -113,7 +113,7 @@ document.getElementById("palabraMaterial").addEventListener('click', function ()
 });
 
 document.getElementById("destinosSelecciona").addEventListener('click', function () {
-    iniciarStock()();
+    consultarStock();
 });
 
 document.getElementById("cerrarSession").addEventListener('click', function () {
@@ -125,6 +125,7 @@ document.getElementById("cerrarSession").addEventListener('click', function () {
 
 
 function consultarStock() {
+    alertaImg('Cargando Registros...', '', 'success', 1200);
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultarStock";
@@ -179,18 +180,5 @@ function consultarStock() {
         })
 }
 
-
-function inicializarTabla() {
-    alertaImg('Cargando Registros...', '', 'success', 1200);
-    document.getElementById("contenedorDeMateriales").innerHTML = '';
-}
-
-
-function iniciarStock() {
-    inicializarTabla();
-    setTimeout(function () { consultarStock(); }, 2000);
-}
-
-
 // INICIALIZA LA FUNCIÓN PRINCIPAL
-iniciarStock();
+window.onload(consultarStock());
