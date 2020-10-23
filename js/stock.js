@@ -149,9 +149,7 @@ function consultarStock() {
                     const stock_real = array[x].stock_real;
                     const stock_teorico = array[x].stock_teorico;
 
-                    console.log('');
-
-                    $tablaMateriales.innerHTML += datosMateriales({
+                    var data = datosMateriales({
                         id: id,
                         seccion: seccion,
                         subseccion: area,
@@ -166,6 +164,8 @@ function consultarStock() {
                         stockReal: stock_real,
                         stockTeorico: stock_teorico
                     });
+                    document.getElementById("contenedorDeMateriales")
+                        .insertAdjacentHTML('beforeend', data);
                 }
             } else {
                 alertaImg('Stock No Disponible', '', 'info', 1200);
@@ -173,6 +173,7 @@ function consultarStock() {
         })
         .catch(function () {
             alertaImg('sin Stock', '', 'info', 1200);
+
             document.getElementById("contenedorDeMateriales").innerHTML = '';
 
         })
