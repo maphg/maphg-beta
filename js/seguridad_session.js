@@ -7,12 +7,12 @@ function seguridad_session() {
             if (resp == 0) {
                 alertaImg('¡Usuario Denegado!', '', 'error', 1200);
                 alertaImg('¡Usuario Denegado!', '', 'error', 1200);
-                location.href = "https://www.maphg.com/beta/login.php";
                 localStorage.clear();
+                location.href = "https://www.maphg.com/beta/login.php";
             }
         })
         .catch(function () {
-            console.log()
+            console.log(1);
         });
 }
 setInterval(seguridad_session, 60000);

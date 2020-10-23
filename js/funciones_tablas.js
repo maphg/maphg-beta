@@ -31,3 +31,24 @@ function buscadorEquipo(idTabla, idInput, columna) {
         }
     }
 }
+
+
+// Buscador Tabla
+function buscdorTabla(idTabla, idInput, columna) {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById(idInput);
+    filter = input.value.toUpperCase();
+    table = document.getElementById(idTabla);
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[columna];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}

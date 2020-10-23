@@ -1007,7 +1007,7 @@
                     <i class="fas fa-list mr-1 font-normal text-xs"></i>
                     <h1>Proyectos</h1><span id="loadProyectosDEP"></span>
                 </div>
-                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2 hidden">
                     <i class="fas fa-stream mr-1 font-normal text-xs"></i>
                     <h1>Gantt</h1>
                 </div>
@@ -1095,7 +1095,7 @@
                 <div class="w-full bg-bluegray-900 py-4">
                     <div class="flex flex-col container mx-auto scrollbar">
                         <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                            <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                            <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed">
                                     <thead>
                                         <tr class="cursor-pointer bg-white">
@@ -1989,9 +1989,11 @@
 
                             </tr>
                         </thead>
+
                         <tbody id="contenedorDePlanesdeaccion" class="bg-white divide-y divide-gray-200">
                             <!-- More rows... -->
                         </tbody>
+
                     </table>
                 </div>
             </div>
