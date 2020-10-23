@@ -116,7 +116,7 @@
                     almacenes</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="../stock/stock.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
+                <a href="https://www.maphg.com/beta/stock.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://www.maphg.com/pedidosEntregar.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
