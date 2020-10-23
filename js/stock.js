@@ -136,6 +136,7 @@ function consultarStock() {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            console.log(array.length);
             if (array.length > 0) {
                 alertaImg(array.length + ' Registros Encontrados', '', 'success', 1200);
                 document.getElementById("contenedorDeMateriales").innerHTML = '';
@@ -156,6 +157,8 @@ function consultarStock() {
                     const fecha = array[x].fecha;
                     const stock_real = array[x].stock_real;
                     const stock_teorico = array[x].stock_teorico;
+
+                    console.log(x, caracteristicas + '\n');
 
                     $tablaMateriales.innerHTML += datosMateriales({
                         id: id,
