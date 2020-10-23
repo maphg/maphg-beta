@@ -32,6 +32,7 @@
                 <option value="t_subalmacenes_items_stock">Stock Subalmacenes (t_subalmacenes_items_stock)</option>
                 <option value="t_users">Cuentas Usuarios (t_users)</option>
                 <option value="t_colaboradores">Cuentas Colaboradores (t_colaboradores)</option>
+                <option value="t_stock_america">Stock (t_stock_america)</option>
                 <option value="t_equipos">Equipos Tabla Antigua (t_equipos)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -658,6 +659,37 @@
                 document.getElementById("columna11").value = 'id_seccion';
                 document.getElementById("columna12").value = '';
                 document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+            } else if (tabla == "t_stock_america") {
+                document.getElementById("columna1").value = 'id_destino';
+                document.getElementById("columna2").value = 'seccion';
+                document.getElementById("columna3").value = 'area';
+                document.getElementById("columna4").value = 'descripcion';
+                document.getElementById("columna5").value = 'marca';
+                document.getElementById("columna6").value = 'modelo';
+                document.getElementById("columna7").value = 'caracteristicas';
+                document.getElementById("columna8").value = 'codigo';
+                document.getElementById("columna9").value = 'categoria';
+                document.getElementById("columna10").value = 'status';
+                document.getElementById("columna11").value = 'fecha';
+                document.getElementById("columna12").value = 'stock_real';
+                document.getElementById("columna13").value = 'stock_teorico';
                 document.getElementById("columna14").value = '';
                 document.getElementById("columna15").value = '';
                 document.getElementById("columna16").value = '';
