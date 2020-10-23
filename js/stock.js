@@ -132,8 +132,8 @@ function consultarStock() {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            document.getElementById("contenedorDeMateriales").innerHTML = '';
             if (array.length > 0) {
-                document.getElementById("contenedorDeMateriales").innerHTML = '';
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const seccion = array[x].seccion;
