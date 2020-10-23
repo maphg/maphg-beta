@@ -93,11 +93,6 @@ const datosMateriales = params => {
         `;
 };
 
-// $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'seguridad', status: 'solicitado', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
-// $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS PARA LA VILLA 234JHSDF KSDF SD', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'emergencia', status: 'PdteOrdenDeCompra', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
-// $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'bajaRotacion', status: 'PdteDeProveedor', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
-// $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'mediaRotacion', status: 'entregado', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
-// $tablaMateriales.innerHTML += datosMateriales({ seccion: 'ZIA', subseccion: 'FILTROS OSMOSIS', descripcion: 'BOMBA DE CARCAMOS', marca: 'GRINLLER', modelo: '32MN423M4M', caracteristicas: '4 HP DE POTENCIA', codigo: '234234234', categoria: 'altaRotacion', status: 'entregado', fecha: '14/11/2020', stockReal: '22', stockTeorico: '10' });
 
 // ********** EVENTOS **********
 
@@ -118,7 +113,7 @@ document.getElementById("palabraMaterial").addEventListener('click', function ()
 });
 
 document.getElementById("destinosSelecciona").addEventListener('click', function () {
-    consultarStock();
+    iniciarStock()();
 });
 
 document.getElementById("cerrarSession").addEventListener('click', function () {
@@ -138,9 +133,7 @@ function consultarStock() {
         .then(array => array.json())
         .then(array => {
             if (array.length > 0) {
-                alertaImg(array.length + ' Registros Encontrados', '', 'success', 1200);
                 document.getElementById("contenedorDeMateriales").innerHTML = '';
-
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const seccion = array[x].seccion;
@@ -176,7 +169,6 @@ function consultarStock() {
                 }
             } else {
                 alertaImg('Stock No Disponible', '', 'info', 1200);
-                document.getElementById("contenedorDeMateriales").innerHTML = '';
             }
         })
         .catch(function () {
@@ -186,5 +178,18 @@ function consultarStock() {
         })
 }
 
+
+function inicializarTabla() {
+    alertaImg('Cargando Registros...', '', 'success', 1200);
+    document.getElementById("contenedorDeMateriales").innerHTML = '';
+}
+
+
+function iniciarStock() {
+    inicializarTabla();
+    setTimeout(function () { consultarStock(); }, 2000);
+}
+
+
 // INICIALIZA LA FUNCIÓN PRINCIPAL
-consultarStock();
+iniciarStock();

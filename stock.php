@@ -86,10 +86,10 @@
                                 <tr class="cursor-pointer bg-white">
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Seccion
+                                        Sección
                                     </th>
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Area
+                                        Área
                                     </th>
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                         Descripción
@@ -102,15 +102,15 @@
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Caracteristicas
+                                        Características
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Codigo
+                                        Código
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Categoria
+                                        Categoría
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
@@ -122,11 +122,11 @@
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Stock real
+                                        Stock Real
                                     </th>
 
                                     <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Stock teórico
+                                        Stock Teórico
                                     </th>
 
                                 </tr>
