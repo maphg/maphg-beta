@@ -3809,6 +3809,25 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
+            } elseif ($tipoAsginacion == "asignarProyectoDEP") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"actualizarProyectosDEP($idUsuario, 'asignarProyecto', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
+                }
             } elseif ($tipoAsginacion == "asignarPlanaccion") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {

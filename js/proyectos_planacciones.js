@@ -1,5 +1,5 @@
 'use strict'
-const $tablaProyectos = document.getElementById('contenedorDeProyectos');
+// const $tablaProyectos = document.getElementById('contenedorDeProyectos');
 const datosProyectos = params => {
     var cotizaciones = params.cotizaciones;
     var valorCotizaciones = 'X'
@@ -109,7 +109,7 @@ const datosProyectos = params => {
         fCotizaciones = `onclick="hiddenVista('tooltipProyectos'); cotizacionesProyectos(${idProyecto});"`;
         fTipo = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
         fJustificacion = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'justificacion');"`;
-        fCoste = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'coste');""`;
+        fCoste = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'coste');"`;
         fToolTip = `onclick="tooltipProyectos(${idProyecto}); obtenerPlanaccion(${idProyecto});"`;
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
     } else {
@@ -180,7 +180,7 @@ const datosProyectos = params => {
 
 
 
-const $tablaPlanes = document.getElementById('contenedorDePlanesdeaccion');
+// const $tablaPlanes = document.getElementById('contenedorDePlanesdeaccion');
 const datosPlanes = params => {
     var idPlanaccion = params.id;
 
@@ -448,7 +448,6 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
         .then(array => {
             if (array.length > 0) {
                 document.getElementById('contenedorDeProyectos').innerHTML = '';
-                document.getElementById('palabraProyecto').value = '';
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const destino = array[x].destino;
@@ -467,7 +466,7 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                     const energeticos = array[x].energeticos;
                     const departamento = array[x].departamento;
                     const trabajando = array[x].trabajando;
-                    $tablaProyectos.innerHTML += datosProyectos({
+                    const dataProyectos = datosProyectos({
                         id: id,
                         destino: destino,
                         proyecto: proyecto,
@@ -486,6 +485,8 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                         departamento: departamento,
                         trabajando: trabajando
                     });
+
+                    document.getElementById("contenedorDeProyectos").insertAdjacentHTML('beforeend', dataProyectos);
                 }
             } else {
                 alertaImg('Sin Proyectos', '', 'info', 1500);
@@ -701,7 +702,7 @@ function agregarProyecto() {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSeccion = localStorage.getItem("idSeccion");
-    let idSubseccion = 200;
+    let idSubseccion = localStorage.getItem('idSubseccion');
     let titulo = document.getElementById("tituloProyectoN").value;
     let tipo = document.getElementById("tipoProyectoN").value;
     let fecha = document.getElementById("fechaProyectoN").value;
@@ -936,14 +937,14 @@ function obtenerPlanaccion(idProyecto) {
     const action = 'obtenerPlanaccion';
     const ruta = 'php/proyectos_planacciones.php?';
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
-    if (!document.getElementById('tooltipProyectos').classList.contains('hidden')) {
-        document.getElementById("loadProyectos").innerHTML =
-            '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
-        fetch(URL)
-            .then(array => array.json())
-            .then(array => {
+    document.getElementById("loadProyectos").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            document.getElementById("contenedorDePlanesdeaccion").innerHTML = '';
+            if (!document.getElementById('tooltipProyectos').classList.contains('hidden')) {
                 if (array.length > 0) {
-                    document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
                     document.getElementById('palabraProyecto').value = '';
                     for (let x = 0; x < array.length; x++) {
                         const id = array[x].id;
@@ -964,7 +965,7 @@ function obtenerPlanaccion(idProyecto) {
                         const departamentos = array[x].departamentos;
                         const trabajando = array[x].trabajando;
 
-                        $tablaPlanes.innerHTML += datosPlanes({
+                        const dataPlanaccion = datosPlanes({
                             id: id,
                             destino: destino,
                             actividad: actividad,
@@ -983,22 +984,24 @@ function obtenerPlanaccion(idProyecto) {
                             departamentos: departamentos,
                             trabajando: trabajando
                         });
+
+                        document.getElementById("contenedorDePlanesdeaccion")
+                            .insertAdjacentHTML('beforeend', dataPlanaccion);
                     }
                 } else {
                     alertaImg('Sin Plan de Acción', '', 'info', 1500);
-                    document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
                 }
-            })
-            .then(() => {
-                document.getElementById("loadProyectos").innerHTML = '';
-            })
-            .catch(function () {
-                document.getElementById("loadProyectos").innerHTML = '';
+            } else {
                 document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
-            });
-    } else {
-        document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
-    }
+            }
+        })
+        .then(() => {
+            document.getElementById("loadProyectos").innerHTML = '';
+        })
+        .catch(function () {
+            document.getElementById("loadProyectos").innerHTML = '';
+            document.getElementById('contenedorDePlanesdeaccion').innerHTML = '';
+        });
 }
 
 
@@ -1275,7 +1278,6 @@ function agregarPlanaccion() {
 
 
 function statusPlanaccionx(status) {
-    console.log(status);
     if (document.getElementsByClassName('planaccion_' + status).length > 0) {
 
         document.getElementById('planaccionPendientes').
@@ -1656,7 +1658,7 @@ document.getElementById("exportarProyectos").addEventListener('click', function 
 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyecto").addEventListener('keyup', function () {
-    buscadorEquipo('contenedorDeProyectos', 'palabraProyecto', 0);
+    buscdorTabla('contenedorDeProyectos', 'palabraProyecto', 0);
 });
 
 // EVENTO PARA PROYECTOS SOLUCIONADOS

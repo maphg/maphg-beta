@@ -923,41 +923,41 @@
                                 <thead>
                                     <tr class="cursor-pointer bg-white">
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Proyecto
                                         </th>
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             PDA
                                         </th>
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Responsable
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Fechas
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Cotizaciones
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Tipo
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Justificación
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Coste
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Status
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                         </th>
 
                                     </tr>
@@ -988,40 +988,41 @@
     <div id="modalProyectosDEP" class="modal">
         <div class="w-full h-screen bg-fondos-7">
             <div class="flex justify-center items-center mb-5 relative pt-4">
-                <div class="font-light text-xl ml-3 leading-none text-bluegray-600 absolute left-0">
-                    <h1>Compras-Almacén</h1>
+                <div class="font-light text-xl ml-3 leading-none text-bluegray-600 absolute left-0 text-center">
+                    <h1 id="ProyectosSubseccionDEP"></h1><span class="text-center" id="loadProyectosDEP"></span>
                 </div>
                 <div class="relative text-gray-600 w-72">
-                    <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                    <input id="palabraProyectoDEP" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
                     <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                         <i class="fad fa-search"></i>
                     </button>
                 </div>
 
-                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                <div id="agregarProyectoDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-gray-400 hover:text-bluegray-900 px-2">
                     <i class="fas fa-plus mr-1 text-xs"></i>
                     <h1>Nuevo</h1>
                 </div>
 
-                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                <div id="opcionProyectosDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
                     <i class="fas fa-list mr-1 font-normal text-xs"></i>
-                    <h1>Proyectos</h1><span id="loadProyectosDEP"></span>
+                    <h1>Proyectos</h1>
                 </div>
                 <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2 hidden">
                     <i class="fas fa-stream mr-1 font-normal text-xs"></i>
                     <h1>Gantt</h1>
                 </div>
 
-                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 bg-red-300 text-red-500 px-2 font-semibold border-2 border-red-200">
+                <div id="etiquetadoProyectosDEP" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 bg-red-300 text-red-500 px-2 font-semibold border-2 border-red-200">
                     <i class="fas fa-star mr-1"></i>
-                    <h1>Etiquetado como Materiales</h1>
+                    <h1>Etiquetado como <span id="etiquetadoDEP"></span></h1>
                 </div>
 
-                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                <div id="proyectosPendientesDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
                     <i class="fas fa-minus mr-1 font-normal text-xs"></i>
                     <h1>Pendientes</h1>
                 </div>
-                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
+
+                <div id="proyectosSolucionadosDEP" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
                     <i class="fas fa-check mr-1 font-normal text-xs"></i>
                     <h1>Solucionados</h1>
                 </div>
@@ -1032,54 +1033,54 @@
                 </div>
             </div>
 
-            <div class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-bluegray-200 hover:text-white" onclick="toggleModalTailwind('modalProyectosDEP');">
+            <div id="btnCerrerModalProyectosDEP" class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-bluegray-200 hover:text-white" onclick="toggleModalTailwind('modalProyectosDEP');">
                 <i class="fas fa-times"></i>
                 <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
             </div>
 
-            <div class="w-full h-auto">
+            <div id="contenedorDEP" class="w-full h-auto">
                 <div class="flex flex-col container mx-auto scrollbar">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                         <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                            <table id="tablaProyectosDEP" class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                 <thead>
                                     <tr class="cursor-pointer bg-white">
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Proyecto
                                         </th>
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             PDA
                                         </th>
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Responsable
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Fechas
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Cotizaciones
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Tipo
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Justificación
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Coste
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                             Status
                                         </th>
 
-                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                         </th>
 
                                     </tr>
@@ -1091,76 +1092,67 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="w-full bg-bluegray-900 py-4">
-                    <div class="flex flex-col container mx-auto scrollbar">
-                        <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                            <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
-                                <table class="min-w-full divide-y divide-gray-200 table-fixed">
-                                    <thead>
-                                        <tr class="cursor-pointer bg-white">
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Actividad
-                                            </th>
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                SubTareas
-                                            </th>
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Responsable
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Fechas
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Comentarios
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Adjuntos
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                Status
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                OT
-                                            </th>
-
-                                            <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                            </th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody id="contenedorDePlanesdeaccionDEP" class="bg-white divide-y divide-gray-200">
-                                        <!-- More rows... -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex">
-                    <div class="bg-white rounded p-2 flex flex-col  text-xxs font-semibold">
-                        <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
-                            <div class="w-4 h-4  mr-2 flex-none"></div>
-                            <div class=" text-justify w-full h-full">
-                                <input type="text" name="" id="" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad">
-                            </div>
-                            <div class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
-                                <i class="fas fa-plus"></i>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
             </div>
+
+            <!-- ETIQUETADO -->
+            <div id="contendorEtiquetado" class="w-full bg-bluegray-900 py-4 hidden">
+                <div class="flex flex-col container mx-auto scrollbar">
+                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Origen
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Sección
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            #OT
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Responsable
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Fechas
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Comentarios
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Adjuntos
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Status
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Cod2Bend
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            CodSap
+                                        </th>
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorDeEtiquetados" class="bg-white divide-y divide-gray-200 min-w-full table-fixed">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ETIQUETADO -->
         </div>
     </div>
     <!-- MODAL PROYECTOS DEP -->
@@ -1923,6 +1915,7 @@
     </div>
     <!-- ACTIVIDADES MP -->
 
+
     <!-- PLANACCION PROYECTOS -->
     <div id="tooltipProyectos" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
         <div class="flex flex-col contenedor mx-auto scrollbar">
@@ -2001,6 +1994,7 @@
     </div>
     <!-- PLANACCION PROYECTOS -->
 
+
     <!-- ACTIVIDADES PLAN DE ACCIÓN -->
     <div id="tooltipActividadesPlanaccion" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
         <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
@@ -2019,6 +2013,106 @@
         </div>
     </div>
     <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+
+
+    <!-- PLANACCION PROYECTOS DEP -->
+    <div id="tooltipProyectosDEP" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
+        <div class="flex flex-col contenedor mx-auto scrollbar">
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="agregarPlanaccionDEP" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Agregar Plan Acción" autocomplete="off">
+                </div>
+
+                <div id="btnagregarPlanaccionDEP" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="planaccionPendientesDEP" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2 bg-purple-200">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="planaccionSolucionadosDEP" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2 bg-purple-600">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+            </div>
+            <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                        <thead>
+                            <tr class="cursor-pointer bg-white">
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Actividad
+                                </th>
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    SubTareas
+                                </th>
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Responsable
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Fechas
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Comentarios
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Adjuntos
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    Status
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    OT
+                                </th>
+
+                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="contenedorDePlanesdeaccionDEP" class="bg-white divide-y divide-gray-200">
+                            <!-- More rows... -->
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- PLANACCION PROYECTOS -->
+
+
+    <!-- ACTIVIDADES PLAN DE ACCIÓN DEP -->
+    <div id="tooltipActividadesPlanaccionDEP" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+            <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                <div class="w-4 h-4  mr-2 flex-none"></div>
+                <div class=" text-justify w-full h-full">
+                    <input id="agregarActividadPlanaccionDEP" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                </div>
+                <div id="btnAgregarActividadPlanaccionDEP" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+
+            <div id="dataActividadesDEP" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+        </div>
+    </div>
+    <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+
 
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
     <div id="tooltipEditarEliminarSolucionar" class="hidden bg-white rounded-md" style="z-index: 201;">
@@ -2077,8 +2171,6 @@
 
             </div>
         </div>
-    </div>
-
     </div>
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
 

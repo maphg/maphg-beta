@@ -1,6 +1,6 @@
 'use strict'
 
-const $tablaPlanesDeMantto = document.getElementById('contenedorDePlanes');
+// const $tablaPlanesDeMantto = document.getElementById('contenedorDeEquipos');
 const datosPlanes = params => {
     var status = params.status;
     var claseStatus = ';'
@@ -116,16 +116,8 @@ const datosPlanes = params => {
     return result;
 };
 
-// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '5678', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'ZI', tipoEquipo: 'Fan&coil', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
 
-// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '76856', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'FS', tipoEquipo: 'Junnior Suite', status: 'TALLER', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
-
-// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '234', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'GP', tipoEquipo: 'Fan&coil', status: 'BAJA', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'EQUIPO', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
-
-// $tablaPlanesDeMantto.innerHTML += datosPlanes({ id: '3425', destino: 'rm', equipo: 'FAN&COIL HABITACION 1040', seccion: 'ZIC', subseccion: 'FAN&COILS', marca: 'TRS', tipoEquipo: 'Junnior Suite', status: 'OPERATIVO', marcaEquipo: 'MARCA', modelo: 'MODELO', equipoLocal: 'LOCAL', ubicacion: 'Habitacion 1104', proximoMP: '2(X)' });
-
-
-const $ContenedorPlanesEquipos = document.getElementById('contenedorPlanesEquipo');
+// const $ContenedorPlanesEquipos = document.getElementById('contenedorPlanesEquipo');
 const datosPlanEquipo = params => {
     return `
         <div class="flex-none flex flex-row w-100 justify-evenly items-center flex-wrap cursor-pointer rounded-lg p-2 mr-6 border border-gray-300 my-1">
@@ -385,7 +377,7 @@ function consultaEquiposLocales() {
 
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
     // limpia el contendor, para nuevo resultado
-    document.getElementById('contenedorDePlanes').innerHTML = '';
+    document.getElementById('contenedorDeEquipos').innerHTML = '';
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -393,7 +385,7 @@ function consultaEquiposLocales() {
                 // alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
                 for (let index = 0; index < array.length; index++) {
-                    $tablaPlanesDeMantto.innerHTML += datosPlanes({
+                    const equiposX = datosPlanes({
                         id: array[index].id,
                         destino: array[index].destino,
                         equipo: array[index].equipo,
@@ -411,6 +403,8 @@ function consultaEquiposLocales() {
                         solucionado: array[index].solucionado,
                         planificado: array[index].planificado
                     });
+                    document.getElementById("contenedorDeEquipos")
+                        .insertAdjacentHTML('beforeend', equiposX);
                 }
             } else {
                 alertaImg('Equipos Obtenidos: 0', '', 'info', 3000)
@@ -735,6 +729,7 @@ function consultarPlanEquipo(idEquipo) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     const action = "consultarPlanEquipo";
+
     $.ajax({
         type: "POST",
         url: "../php/plannerCrudPHP.php",
@@ -750,7 +745,7 @@ function consultarPlanEquipo(idEquipo) {
             if (data.length > 0) {
                 for (let index = 0; index < data.length; index++) {
 
-                    $ContenedorPlanesEquipos.innerHTML += datosPlanEquipo({
+                    const planesX = datosPlanEquipo({
                         solucionado: data[index].solucionado,
                         proceso: data[index].proceso,
                         planificado: data[index].planificado,
@@ -865,6 +860,9 @@ function consultarPlanEquipo(idEquipo) {
                         proceso_51: data[index].proceso_51,
                         proceso_52: data[index].proceso_52
                     });
+
+                    document.getElementById("contenedorPlanesEquipo")
+                        .insertAdjacentHTML('beforeend', planesX);
                 }
                 indicadorSemanaActual(data[0].semanaActual);
             } else {
@@ -1287,7 +1285,7 @@ function consultarDestinos() {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            let opcionDestinos = `<option value="0">Destinos </option>`;
+            let opcionDestinos = '';
             for (let index = 0; index < array.length; index++) {
                 opcionDestinos += `<option value="${array[index].id}">${array[index].destino}</option>`;
             }
@@ -1318,6 +1316,9 @@ function consultarSecciones() {
             return opcionSecciones;
         }).then(opcionSecciones => {
             document.getElementById("filtroSeccion").innerHTML = opcionSecciones;
+        })
+        .catch(function () {
+            document.getElementById("loadequipos").innerHTML = '';
         });
 }
 
