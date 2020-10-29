@@ -40,9 +40,9 @@ date_default_timezone_set('America/Cancun');
             <!-- CONTENEDOR WIDGETS DE SECCION -->
             <div class="flex flex-row justify-center items-center w-full mt-4">
                 <!-- ESPACIO DEL WIDGET -->
-                <h1 class="text-2xl font-light text-gray-700 text-center">Bitácora Diaria de <strong class=" font-semibold">Mantenimiento</strong></h1>
+                <h1 class="text-2xl font-light text-gray-700 text-center">Bitácora de <strong class=" font-semibold">ENERGÉTICOS</strong></h1>
             </div>
-            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
+            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2 hidden">
                 <!-- ESPACIO DEL WIDGET -->
                 <div class="inline-block w-auto relative">
                     <select id="idDestino" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
@@ -149,14 +149,14 @@ date_default_timezone_set('America/Cancun');
             </div>
 
             <!-- Input para Seleccionar la Fecha. -->
-            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
+            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2 hidden">
                 <div class="sans-serif inline-block w-auto relative" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
                     <input id="dateGeneral" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" type="date" placeholder="" value="<?= date('Y-m-d') ?>" min="2020-01-01" max="2030-12-31">
                 </div>
             </div>
 
             <!-- Button para Cargar los Filtros Destino - Energetico - Fecha -->
-            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
+            <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2 hidden">
                 <div class="block appearance-none bg-white border border-grey-light hover:border-grey cursor px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700 cursor-pointer" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
                     Buscar
                 </div>
@@ -165,7 +165,7 @@ date_default_timezone_set('America/Cancun');
 
         <!-- ---------------- SECCION 1 CONSUMO DE HOY ---------------- -->
 
-        <div class="w-full flex flex-col items-center flex-wrap">
+        <div class="w-full flex flex-col items-center flex-wrap hidden">
             <div class="cursor-pointer flex self-start my-3">
                 <!-- CONTENEDOR DE TITULO -->
                 <h1 class="text-gray-200 bg-gray-900 pl-4 pr-3 py-3 uppercase rounded-r-full font-semibold my-3">
@@ -422,6 +422,10 @@ date_default_timezone_set('America/Cancun');
         </div>
     </div>
     <!-- modal-acontecimientos -->
+
+    <div class="w-full h-screen p-5">
+        <iframe src="https://app.powerbi.com/view?r=eyJrIjoiNmUwMTNjYjUtMDk0Ny00YjAyLTgyNGYtOWViNGE3YWI3ZWYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" style="height: 100%;"></iframe>
+    </div>
 
     <!-- Librerias JS -->
     <script src="js/jquery-3.3.1.js"></script>
