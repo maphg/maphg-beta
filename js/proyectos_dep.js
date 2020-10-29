@@ -423,7 +423,7 @@ const datosEtiquetados = params => {
         case 'TAREA':
             valorOrigen = '<div class="px-2 bg-orange-300 py-1 text-orange-600 rounded-full uppercase"><h1>Tareas</h1></div>';
             break;
-        case 'OTMP':
+        case 'PREVENTIVO':
             valorOrigen = '<div class="px-2 bg-blue-300 py-1 text-blue-600 rounded-full uppercase"><h1>MP</h1></div>';
             break;
         default:
@@ -574,6 +574,8 @@ function tooltipPlanaccionDEP(idPlanaccion) {
 // OBTIENES LOS PROYECTOS DEP
 function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado = 'NINGUNO') {
     document.getElementById("modalProyectosDEP").classList.add("open");
+    document.getElementById("contendorEtiquetado").classList.add("hidden");
+    document.getElementById("contenedorDEP").classList.remove("hidden");
 
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
@@ -1344,7 +1346,6 @@ function obtenerEtiquetados() {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array.length);
             document.getElementById("contenedorDeEtiquetados").innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
@@ -1384,7 +1385,7 @@ function obtenerEtiquetados() {
                         adjuntos: adjuntos,
                         energeticos: energeticos,
                         materiales: materiales,
-                        direccion: departamentos,
+                        departamentos: departamentos,
                         trabajando: trabajando,
                         status: status,
                         cod2bend: cod2bend,
@@ -1401,7 +1402,10 @@ function obtenerEtiquetados() {
         .then(function () {
             document.getElementById("loadProyectosDEP").innerHTML = '';
         })
-        .catch(err => console.log(err))
+        .catch(err => function () {
+            document.getElementById("loadProyectosDEP").innerHTML = '';
+            document.getElementById("contenedorDeEtiquetados").innerHTML = '';
+        });
 }
 
 // ********** EVENTOS **********
@@ -1447,6 +1451,7 @@ document.getElementById("btnCerrerModalProyectosDEP").addEventListener('click', 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyectoDEP").addEventListener('keyup', function () {
     buscdorTabla('contenedorDeProyectosDEP', 'palabraProyectoDEP', 0);
+    buscdorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
 });
 
 document.getElementById("opcionProyectosDEP").addEventListener('click', function () {

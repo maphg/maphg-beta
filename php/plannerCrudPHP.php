@@ -2722,7 +2722,7 @@ if (isset($_POST['action'])) {
         ";
 
         // Busca Equipos.
-        $queryEquipos = "SELECT id FROM t_equipos WHERE id_subseccion = $idSubseccion AND status = 'A' $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
+        $queryEquipos = "SELECT id FROM t_equipos_america WHERE id_subseccion = $idSubseccion AND (status = 'A' or status = 'OPERATIVO') $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
         if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
             $totalEquipos = mysqli_num_rows($resultEquipos);
 
@@ -2780,7 +2780,7 @@ if (isset($_POST['action'])) {
                 $idEquipo = $ordenIdEquipos[$keyMC];
 
                 // Realiza busca los equipos con el arreglo ordenado
-                $queryEquipos = "SELECT id, equipo FROM t_equipos WHERE id = $idEquipo";
+                $queryEquipos = "SELECT id, equipo FROM t_equipos_america WHERE id = $idEquipo";
                 if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
                     if ($rowEquipo = mysqli_fetch_array($resultEquipos)) {
                         // Variables Globales para los equipos.
@@ -2921,70 +2921,70 @@ if (isset($_POST['action'])) {
                                 </div>
                             ";
 
-                        // Tareas P.
+                        // Tareas P
                         $dataEquipos .= "
                                 <div onclick=\"obtenerTareasP($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasP\">
                                     <h1>$totalTareasP</h1>
                                 </div>
                             ";
 
-                        // Tareas F.
+                        // Tareas F
                         $dataEquipos .= "
                                 <div onclick=\"obtenerTareasS($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasF\">
                                     <h1>$totalTareasF</h1>
                                 </div>
                             ";
 
-                        // MP Planificados.
+                        // MP Planificados
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\" onclick=\"\">
                                     <h1>$totalMPN</h1>
                                 </div>
                             ";
 
-                        // MP Finalizados.
+                        // MP Finalizados
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md\">
                                     <h1>$totalMPF</h1>
                                 </div>
                             ";
 
-                        // MP Ultimo.
+                        // MP Ultimo
                         $dataEquipos .= "
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
                                     <h1 class=\"font-xs\">$fechaMPFecha</h1>
                                 </div>
                             ";
 
-                        // Test Equipo.
+                        // Test Equipo
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-indigo-200 text-indigo-500 hover:shadow-md\">
                                     <h1>0</h1>
                                 </div>
                             ";
 
-                        // Ultimo TEST Equipo.
+                        // Ultimo TEST Equipo
                         $dataEquipos .= "
                                 <div class=\"w-24 flex h-full items-center justify-center hover:shadow-md\">
-                                    <h1 class=\"font-xs\">AGO 2020</h1>
+                                    <h1 class=\"font-xs\"></h1>
                                 </div>
                             ";
 
-                        // Cotizaciones Equipos.
+                        // Cotizaciones Equipos
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center bg-blue-200 text-blue-500 hover:shadow-md\">
                                     <h1>0</h1>
                                 </div>
                             ";
 
-                        // Info Equipos.
+                        // Info Equipos
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 hover:shadow-md\" onclick=\"informacionEquipo($idEquipo);\">
                                     <h1><i class=\"fas fa-eye fa-lg\"></i></h1>
                                 </div>
                             ";
 
-                        // Fotos Equipos.
+                        // Fotos Equipos
                         $dataEquipos .= "
                                 <div class=\"w-16 flex h-full items-center justify-center hover:bg-teal-200 hover:text-teal-500 rounded-r-md hover:shadow-md\" 
                                 onclick=\"obtenerMediaEquipo($idEquipo)\">
@@ -3618,9 +3618,9 @@ if (isset($_POST['action'])) {
                 }
 
                 $MC .= "
-                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                    <div id=\"FALLA$idMC\" class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
                         <!-- FALLA -->
-                        <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
+                        <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\" onclick=\"obtenerActividadesOT($idMC, 'FALLA');\">
 
                             <div class=\" $statusUrgente absolute\" style=\"left:0%;\">
                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
@@ -4372,9 +4372,9 @@ if (isset($_POST['action'])) {
                 }
 
                 $dataTareas .= "
-                    <div class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
+                    <div id=\"TAREA$idTarea\" class=\"mt-2 w-full flex flex-row justify-center items-center font-semibold text-xs h-8 text-bluegray-500 cursor-pointer\">
                         <!-- FALLA -->
-                        <div class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
+                        <div onclick=\"obtenerActividadesOT($idTarea, 'TAREA');\" class=\"truncate w-full h-full flex flex-row items-center justify-between bg-red-100 text-red-500 rounded-l-md cursor-pointer hover:shadow-md border-l-4 border-red-200 relative\">
 
                             <div class=\" hidden absolute\" style=\"left:0%;\">
                                <i class=\"fas fa-siren-on animated flash infinite fa-rotate-270\"></i>
@@ -8092,8 +8092,8 @@ if (isset($_POST['action'])) {
         potencia_energetica_frio_kw = $PotenciaEnergeticaFrioKWEquipo,
         potencia_energetica_frio_tr = $potenciaEnergeticaFrioTREquipo,
         potencia_energetica_calor_kcal = $potenciaEnergeticaCalorKCALEquipo,
-        caudal_aire_m3h = $caudalAireM3HEquipo,
-        status = '$estadoEquipo' 
+        caudal_aire_m3h = $caudalAireM3HEquipo
+        -- status = '$estadoEquipo' 
         -- coste = $,
         -- id_fases = $ 
 

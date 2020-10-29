@@ -250,12 +250,12 @@ if (isset($_GET['action'])) {
                 if ($valorStatus == 1) {
                     $query = "UPDATE t_mp_planificacion_iniciada SET $status = '0' WHERE id = $idOT and activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
-                        $array['respuesta'] = "ACTIVADO";
+                        $array['respuesta'] = "DESACTIVADO";
                     }
                 } else {
                     $query = "UPDATE t_mp_planificacion_iniciada SET $status = '1' WHERE id = $idOT and activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
-                        $array['respuesta'] = "DESACTIVADO";
+                        $array['respuesta'] = "ACTIVADO";
                     }
                 }
             }

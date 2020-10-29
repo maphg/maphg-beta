@@ -867,22 +867,35 @@ if (isset($_GET['action'])) {
         if ($idSubseccion == 213) {
             $filtroEtiqueta_FALLAS = "and t_mc.status_material = '1'";
             $filtroEtiqueta_TAREAS = "and t_mp_np.status_material = '1'";
+            $filtroEtiqueta_PROYECTOS = "and t_proyectos_planaccion.status_material = '1'";
+            $filtroEtiqueta_PREVENTIVOS = "and t_mp_planificacion_iniciada.status_material = '1'";
         } elseif ($idSubseccion == 214) {
             $filtroEtiqueta_FALLAS = "and t_mc.departamento_calidad = '1'";
             $filtroEtiqueta_TAREAS = "and t_mp_np.departamento_calidad = '1'";
+            $filtroEtiqueta_PROYECTOS = "and t_proyectos_planaccion.departamento_calidad = '1'";
+            $filtroEtiqueta_PREVENTIVOS = "and t_mp_planificacion_iniciada.departamento_calidad = '1'";
+        } elseif ($idSubseccion == 211) {
+            $filtroEtiqueta_FALLAS = "and t_mc.departamento_finanzas = '1'";
+            $filtroEtiqueta_TAREAS = "and t_mp_np.departamento_finanzas = 1";
+            $filtroEtiqueta_PROYECTOS = "and t_proyectos_planaccion.departamento_finanzas = 1";
+            $filtroEtiqueta_PREVENTIVOS = "and t_mp_planificacion_iniciada.departamento_finanzas = 1";
         } else {
             $filtroEtiqueta_FALLAS = "and t_mc.id = 0";
             $filtroEtiqueta_TAREAS = "and t_mp_np.id = 0";
+            $filtroEtiqueta_PROYECTOS = "and t_proyectos_planaccion.id = 0";
+            $filtroEtiqueta_PREVENTIVOS = "and t_mp_planificacion_iniciada.id = 0";
         }
 
         if ($idDestino == 10) {
             $filtroDestino_PROYECTOS = "";
             $filtroDestino_FALLAS = "";
             $filtroDestino_TAREAS = "";
+            $filtroDestino_PREVENTIVOS = "";
         } else {
             $filtroDestino_PROYECTOS = "and t_proyectos.id_destino = $idDestino";
             $filtroDestino_FALLAS = "and t_proyectos.id_destino = $idDestino";
             $filtroDestino_TAREAS = "and t_mp_np.id_destino = $idDestino";
+            $filtroDestino_PREVENTIVOS = "and t_equipos.id_destino = $idDestino";
         }
 
         #FALLAS
@@ -1015,12 +1028,12 @@ if (isset($_GET['action'])) {
                     "adjuntos" => $totalAdjuntos,
                     "energeticos" => $sEnergeticox,
                     "materiales" => $sMaterialx,
-                    "departamento" => $sDepartamentox,
+                    "departamentos" => $sDepartamentox,
                     "trabajando" => $sTrabajandox,
                     "status" => $status,
                     "cod2bend" => $cod2bend,
                     "codsap" => $codsap,
-                    "ot" => "F$idFalla"
+                    "ot" => "F-$idFalla"
                 );
 
                 $array[] = $arrayTemp;
@@ -1037,10 +1050,9 @@ if (isset($_GET['action'])) {
         LEFT JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
         INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
-        INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id
-        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_mp_np.activo = 1 $filtroDestino_TAREAS $filtroEtiqueta_TAREAS";
-
         if ($result_TAREAS = mysqli_query($conn_2020, $TAREAS)) {
             foreach ($result_TAREAS as $x) {
                 $sMaterialx = 0;
@@ -1158,12 +1170,12 @@ if (isset($_GET['action'])) {
                     "adjuntos" => $totalAdjuntos,
                     "energeticos" => $sEnergeticox,
                     "materiales" => $sMaterialx,
-                    "departamento" => $sDepartamentox,
+                    "departamentos" => $sDepartamentox,
                     "trabajando" => $sTrabajandox,
                     "status" => $status,
                     "cod2bend" => $cod2bend,
                     "codsap" => $codsap,
-                    "ot" => "T$idTarea"
+                    "ot" => "T-$idTarea"
                 );
 
                 $array[] = $arrayTemp;
@@ -1171,9 +1183,295 @@ if (isset($_GET['action'])) {
         }
 
 
+        #PROYECTOS
+        $PROYECTOS = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.fecha_creacion, t_proyectos_planaccion.cod2bend, t_proyectos_planaccion.codsap, t_proyectos.titulo, t_proyectos_planaccion.status, 
+        t_proyectos_planaccion.responsable, t_proyectos_planaccion.status_material, t_proyectos_planaccion.status_trabajando, t_proyectos_planaccion.status_urgente, 
+        t_proyectos_planaccion.departamento_calidad, t_proyectos_planaccion.departamento_compras, t_proyectos_planaccion.departamento_direccion, t_proyectos_planaccion.departamento_finanzas, t_proyectos_planaccion.departamento_rrhh, t_proyectos_planaccion.energetico_electricidad, t_proyectos_planaccion.energetico_agua, t_proyectos_planaccion.energetico_diesel, t_proyectos_planaccion.energetico_gas,
+        c_secciones.seccion, c_subsecciones.grupo, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_proyectos_planaccion
+        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+        INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
+        INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos_planaccion.activo = 1 $filtroDestino_PROYECTOS $filtroEtiqueta_PROYECTOS";
+        if ($result_PROYECTOS = mysqli_query($conn_2020, $PROYECTOS)) {
+            foreach ($result_PROYECTOS as $x) {
+                $sMaterialx = 0;
+                $sEnergeticox = 0;
+                $sDepartamentox = 0;
+                $sTrabajandox = 0;
+
+                $idPlanaccion = $x['id'];
+                $sMaterial = $x['status_material'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format('d/m/Y');
+                $status = $x['status'];
+                $sUrgente = $x['status_urgente'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajando'];
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $seccion = $x['seccion'];
+                $subseccion = $x['grupo'];
+                $equipo = $x['titulo'];
+                $descripcion = $x['actividad'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $idResponsable = $x['responsable'];
+                $cod2bend = $x['cod2bend'];
+                $codsap = $x['codsap'];
+
+                #Status (Trabajando, Departamentos, Energeticos, Material)
+                if ($sUrgente > 0) {
+                    $sUrgentex = 1;
+                }
+                if ($sMaterial > 0) {
+                    $sMaterialx = 1;
+                }
+                if ($sTrabajando > 0) {
+                    $sTrabajandox = 1;
+                }
+                if ($sEnergetico > 0) {
+                    $sEnergeticox = 1;
+                }
+                if ($sDepartamento > 0) {
+                    $sDepartamentox = 1;
+                }
+                if ($status == "N" or $status == "PENDIENTE") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                #EQUIPO
+                if ($equipo == "" or $equipo == NULL) {
+                    $equipo = "";
+                }
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #RESPONSE
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $responsable = '';
+                    foreach ($result as $x) {
+                        $responsable
+                            = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalComentarios = 0;
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #ADJUNTOS
+                $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalAdjuntos = 0;
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+                $arrayTemp = array(
+                    "id" => $idPlanaccion,
+                    "seccion" => $seccion,
+                    "subseccion" => $subseccion,
+                    "equipo" => $equipo,
+                    "descripcion" => $descripcion,
+                    "creadoPor" => $creadoPor,
+                    "origen" => "PROYECTO",
+                    "responsable" => $responsable,
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "comentarios" => $totalComentarios,
+                    "adjuntos" => $totalAdjuntos,
+                    "energeticos" => $sEnergeticox,
+                    "materiales" => $sMaterialx,
+                    "departamentos" => $sDepartamentox,
+                    "trabajando" => $sTrabajandox,
+                    "status" => $status,
+                    "cod2bend" => $cod2bend,
+                    "codsap" => $codsap,
+                    "ot" => "P-$idPlanaccion"
+                );
+
+                $array[] = $arrayTemp;
+            }
+        }
 
 
+        #PREVENTIVOS
+        $PREVENTIVOS = "SELECT t_mp_planificacion_iniciada.id, 
+        t_mp_planes_mantenimiento.tipo_plan, t_mp_planes_mantenimiento.grado, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.fecha_creacion, t_mp_planificacion_iniciada.cod2bend, t_mp_planificacion_iniciada.codsap, 
+        t_equipos_america.equipo, t_mp_planificacion_iniciada.status, 
+        t_mp_planificacion_iniciada.id_responsables, t_mp_planificacion_iniciada.status_material, t_mp_planificacion_iniciada.status_trabajando, t_mp_planificacion_iniciada.status_urgente, 
+        t_mp_planificacion_iniciada.departamento_calidad, t_mp_planificacion_iniciada.departamento_compras, t_mp_planificacion_iniciada.departamento_direccion, t_mp_planificacion_iniciada.departamento_finanzas, t_mp_planificacion_iniciada.departamento_rrhh, t_mp_planificacion_iniciada.energetico_electricidad, t_mp_planificacion_iniciada.energetico_agua, t_mp_planificacion_iniciada.energetico_diesel, t_mp_planificacion_iniciada.energetico_gas,
+        c_secciones.seccion, c_subsecciones.grupo, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_mp_planificacion_iniciada
+        LEFT JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+        INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        INNER JOIN t_users ON t_mp_planificacion_iniciada.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN t_mp_planes_mantenimiento 
+            ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+        WHERE t_mp_planificacion_iniciada.activo = 1 $filtroDestino_PREVENTIVOS $filtroEtiqueta_PREVENTIVOS";
+        if ($result_PROYECTOS = mysqli_query($conn_2020, $PREVENTIVOS)) {
+            foreach ($result_PROYECTOS as $x) {
+                $sMaterialx = 0;
+                $sEnergeticox = 0;
+                $sDepartamentox = 0;
+                $sTrabajandox = 0;
 
+                $idPreventivo = $x['id'];
+                $sMaterial = $x['status_material'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format('d/m/Y');
+                $status = $x['status'];
+                $sUrgente = $x['status_urgente'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajando'];
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $seccion = $x['seccion'];
+                $subseccion = $x['grupo'];
+                $equipo = $x['equipo'];
+                $descripcion = $x['tipo_plan'] . " " . $x['grado'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $idResponsable = $x['id_responsables'];
+                $cod2bend = $x['cod2bend'];
+                $codsap = $x['codsap'];
+
+                #Status (Trabajando, Departamentos, Energeticos, Material)
+                if ($sUrgente > 0) {
+                    $sUrgentex = 1;
+                }
+                if ($sMaterial > 0) {
+                    $sMaterialx = 1;
+                }
+                if ($sTrabajando > 0) {
+                    $sTrabajandox = 1;
+                }
+                if ($sEnergetico > 0) {
+                    $sEnergeticox = 1;
+                }
+                if ($sDepartamento > 0) {
+                    $sDepartamentox = 1;
+                }
+                if ($status == "N" or $status == "PENDIENTE") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                #EQUIPO
+                if ($equipo == "" or $equipo == NULL) {
+                    $equipo = "";
+                }
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #RESPONSABLE
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id IN ($idResponsable)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $responsable = '';
+                    foreach ($result as $x) {
+                        $responsable
+                            = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT count(id) FROM t_mp_planificacion_iniciada 
+                WHERE id = $idPreventivo and comentario != ''";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalComentarios = 0;
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #ADJUNTOS
+                $query = "SELECT count(id) FROM t_mp_planificacion_iniciada_adjuntos 
+                WHERE t_mp_planificacion_iniciada = $idPreventivo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalAdjuntos = 0;
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                $arrayTemp = array(
+                    "id" => $idPreventivo,
+                    "seccion" => $seccion,
+                    "subseccion" => $subseccion,
+                    "equipo" => $equipo,
+                    "descripcion" => $descripcion,
+                    "creadoPor" => $creadoPor,
+                    "origen" => "PREVENTIVO",
+                    "responsable" => $responsable,
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "comentarios" => $totalComentarios,
+                    "adjuntos" => $totalAdjuntos,
+                    "energeticos" => $sEnergeticox,
+                    "materiales" => $sMaterialx,
+                    "departamentos" => $sDepartamentox,
+                    "trabajando" => $sTrabajandox,
+                    "status" => $status,
+                    "cod2bend" => $cod2bend,
+                    "codsap" => $codsap,
+                    "ot" => "MP-$idPreventivo"
+                );
+
+                $array[] = $arrayTemp;
+            }
+        }
         echo json_encode($array);
     }
 }

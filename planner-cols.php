@@ -29,19 +29,37 @@
 
         @media (min-width: 850px) {
             .contenedor {
-                max-width: 840px;
+                max-width: 850px;
             }
         }
 
         @media (min-width: 1024px) {
             .contenedor {
-                max-width: 1014px;
+                max-width: 1024px;
             }
         }
 
-        @media (min-width: 1280px) {
+        @media (min-width: 1200px) {
             .contenedor {
-                max-width: 1270px;
+                max-width: 1220px;
+            }
+        }
+
+        @media (min-width: 1366px) {
+            .contenedor {
+                max-width: 1366px;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .contenedor {
+                max-width: 1920px;
+            }
+        }
+
+        @media (min-width: 2176px) {
+            .contenedor {
+                max-width: 2176px;
             }
         }
     </style>
@@ -285,9 +303,9 @@
                             <i class="mr-1 text-blue-400">BITÁCORAS:</i>
                             <h2>ZI</h2>
                         </div>
-                        <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer">
-                            <i class="mr-1 text-red-300">R</i>
-                            <h2>REEMPLAZADO</h2>
+                        <div class="flex items-center text-xs text-red-400 px-1 bg-green-100 rounded-full w-auto cursor-pointer">
+                            <i class="mr-1 text-green-300">R</i>
+                            <h2>ACTUAL</h2>
                         </div>
                     </div>
                 </div>
@@ -2175,6 +2193,26 @@
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
 
 
+    <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+    <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+            <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                <div class="w-4 h-4  mr-2 flex-none"></div>
+                <div class=" text-justify w-full h-full">
+                    <input id="agregarActividadGeneral" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                </div>
+                <div id="btnAgregarActividadGeneral" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+
+            <div id="dataActividadesGeneral" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+        </div>
+    </div>
+    <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+
+
     <!-- ***** TOOLTIPS ***** -->
 
     <!-- Librerias JS -->
@@ -2215,7 +2253,6 @@
     <!-- SEGURIDAD DE SESSION -->
     <script src="js/seguridad_session.js"></script>
     <!-- SEGURIDAD DE SESSION -->
-
 </body>
 
 </html>
