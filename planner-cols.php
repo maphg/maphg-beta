@@ -933,7 +933,7 @@
             </div>
 
             <!-- CONTENIDO PROYECTOS -->
-            <div id="contenidoProyectos" class="w-full h-auto flex flex-col contenedor mx-auto scrollbar">
+            <div id="contenidoProyectos" class="flex flex-col contenedor mx-auto overflow-x-auto  scrollbar scrollbar">
                 <div class="flex flex-col contenedor mx-auto scrollbar">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                         <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
