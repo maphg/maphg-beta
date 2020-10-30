@@ -142,7 +142,7 @@
         </dav>
         <dav id="hijo4" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">Equipos</o>
+                <a href="https://www.maphg.com/beta/gestion_equipos" class="menu-hijo-3 CA">Equipos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Proyectos</o>
