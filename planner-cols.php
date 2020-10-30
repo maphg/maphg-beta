@@ -23,7 +23,7 @@
 
         @media (min-width: 640px) {
             .contenedor {
-                max-width: 630px;
+                max-width: 640px;
             }
         }
 
