@@ -3139,8 +3139,8 @@ if (isset($_POST['action'])) {
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
                 t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.rango_fecha 
                 FROM t_mc 
-                INNER JOIN t_users ON t_mc.creado_por = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_mc.status = 'F' AND t_mc.activo = 1 AND t_mc.id_subseccion = $idSubseccion 
                 AND(t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino ORDER BY t_mc.id DESC
             ";
@@ -3153,8 +3153,8 @@ if (isset($_POST['action'])) {
                 t_mc.departamento_finanzas, t_mc.departamento_rrhh,
                 t_mc.id, t_mc.responsable, t_mc.actividad, t_mc.fecha_realizado, t_mc.fecha_creacion, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.rango_fecha 
                 FROM t_mc 
-                INNER JOIN t_users ON t_mc.creado_por = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_mc.id_equipo = $idEquipo AND t_mc.status = 'F' AND t_mc.activo = 1
             ";
         }
@@ -3390,7 +3390,7 @@ if (isset($_POST['action'])) {
         $query = "
             SELECT c_secciones.seccion, t_equipos.equipo 
             FROM t_equipos 
-            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
+            LEFT JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
             WHERE t_equipos.id = $idEquipo;
         ";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -4472,7 +4472,6 @@ if (isset($_POST['action'])) {
             $data['dataTareas'] = $dataTareas;
             $data['contadorTareas'] = $contadorTareas;
         }
-        $data['query'] = $query;
         echo json_encode($data);
     }
 

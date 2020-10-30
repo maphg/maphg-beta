@@ -106,34 +106,34 @@
                 <table id="tablaGestionEquipos" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead>
                         <tr class="cursor-pointer">
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Destino
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Sección
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Subsección
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Equipo
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Tipo equipo/local
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Marca Modelo
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Ubicacion
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Status
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Proximo MP
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
                                 Resumen MP
                             </th>
                         </tr>

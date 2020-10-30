@@ -743,7 +743,7 @@ function exportarPorUsuario(
 
 
 // El estilo se aplica DIV>H1(class="zie-logo").
-function estiloSeccionModal(padreSeccion, seccion) {
+function estiloSeccionModal(padreSeccion, seccion = 0) {
    let seccionClase = seccion.toLowerCase() + "-logo-modal";
    document.getElementById(padreSeccion).classList.remove("zil-logo-modal");
    document.getElementById(padreSeccion).classList.remove("zie-logo-modal");
@@ -1020,7 +1020,7 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
 
          // alerta para mostrar información de los Equipos obtenidos.
          if (data.totalEquipos <= 0) {
-            alertaImg("Sin Equipos/Locales", "", "success", 3000);
+            alertaImg('Sin Equipos/Locales', '', 'info', 3000);
          }
       },
    });
@@ -1242,7 +1242,7 @@ function obtenerMCF(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
+         console.log(data);
          document.getElementById("dataMCF").innerHTML = data.dataMCF;
          estiloSeccionModal("estiloSeccionMCF", data.seccion);
          document.getElementById("seccionMCF").innerHTML = data.seccion;
