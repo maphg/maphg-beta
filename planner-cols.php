@@ -934,7 +934,7 @@
 
             <!-- CONTENIDO PROYECTOS -->
             <div id="contenidoProyectos" class="flex flex-col mx-auto contenedor overflow-x-auto  scrollbar">
-                <div class="flex flex-col contenedor mx-auto scrollbar">
+                <div class="flex flex-col contenedor scrollbar">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
                         <div class="align-middle inline-block shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
                             <table class="divide-y divide-gray-200 table-fixed sortable">
@@ -992,8 +992,8 @@
 
             <!-- CONTENIDO GANTT -->
             <div id="contenidoGantt" class="flex flex-col mx-auto contenedor overflow-x-auto scrollbar hidden">
-                <div class="mt-2 mx-auto flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white sm:rounded-lg border-b border-gray-200" style="max-height: 80vh;">
-                    <div class="w-full h-full text-xxs uppercase mt-5" id="chartdiv"></div>
+                <div class="mt-2 mx-auto flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white sm:rounded-lg border-b border-gray-200 w-full h-full" style="max-height: 80vh;">
+                    <div class="text-xxs uppercase mt-5" id="chartdiv"></div>
                 </div>
             </div>
             <!-- CONTENIDO GANTT -->
