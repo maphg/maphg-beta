@@ -934,7 +934,7 @@
 
             <!-- CONTENIDO PROYECTOS -->
             <div id="contenidoProyectos" class="flex flex-col mx-auto contenedor overflow-x-auto  scrollbar">
-                <div class="flex flex-col contenedor scrollbar mx-auto">
+                <div class="flex flex-col contenedor mx-auto">
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar mx-auto">
                         <div class="align-middle inline-block shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
                             <table class="divide-y divide-gray-200 table-fixed sortable">
@@ -993,7 +993,7 @@
             <!-- CONTENIDO GANTT -->
             <div id="contenidoGantt" class="flex flex-col mx-auto contenedor overflow-x-auto scrollbar hidden">
                 <div class="mt-2 mx-auto flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white sm:rounded-lg border-b border-gray-200 w-full h-full" style="max-height: 80vh;">
-                    <div class="text-xxs uppercase mt-5 w-full h-full" id="chartdiv"></div>
+                    <div class="text-xxs uppercase mt-5 w-full h-full mx-auto" id="chartdiv"></div>
                 </div>
             </div>
             <!-- CONTENIDO GANTT -->
@@ -1935,11 +1935,11 @@
 
 
     <!-- PLANACCION PROYECTOS -->
-    <div id="tooltipProyectos" role="tooltip" class="w-full bg-bluegray-900 py-4 hidden" style="z-index:100">
-        <div class="flex flex-col contenedor mx-auto scrollbar">
+    <div id="tooltipProyectos" role="tooltip" class="bg-bluegray-900 p-1 rounded-lg hidden" style="z-index:100">
+        <div class="flex flex-col">
             <div class="flex justify-center items-center mb-5 relative pt-4">
 
-                <div class="relative text-gray-600 w-72">
+                <div class="relative text-gray-600">
                     <input id="agregarPlanaccion" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Agregar Plan Acción" autocomplete="off">
                 </div>
 
@@ -1959,7 +1959,7 @@
                 </div>
 
             </div>
-            <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+            <div class="-my-2 py-2 overflow-x-auto scrollbar">
                 <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
                         <thead>
