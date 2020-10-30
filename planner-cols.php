@@ -1960,7 +1960,7 @@
 
             </div>
             <div class="-my-2 py-2 overflow-x-auto scrollbar">
-                <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 40vh;">
+                <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 35vh;">
                     <table class="min-w-full divide-y divide-gray-200 table-fixed">
                         <thead>
                             <tr class="cursor-pointer bg-white">
