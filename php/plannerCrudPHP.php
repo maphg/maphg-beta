@@ -2909,28 +2909,28 @@ if (isset($_POST['action'])) {
 
                         //Fallas Pendientes N. 
                         $dataEquipos .= "       
-                                <div onclick=\"obtenerMCN($idEquipo);\" class=\"w-16 h-full flex items-center justify-center $estiloMCN hover:shadow-md\">
+                                <div onclick=\"obtenerFallas($idEquipo); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 h-full flex items-center justify-center $estiloMCN hover:shadow-md\">
                                     <h1>$totalMCN</h1>
                                 </div>
                             ";
 
                         //Fallas Solucionados F 
                         $dataEquipos .= "
-                                <div onclick=\"obtenerMCF($idEquipo);\" class=\"w-16 flex h-full items-center justify-center $estiloMCF hover:shadow-md\">
+                                <div onclick=\"obtenerFallas($idEquipo); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 flex h-full items-center justify-center $estiloMCF hover:shadow-md\">
                                     <h1>$totalMCF</h1>
                                 </div>
                             ";
 
                         // Tareas P
                         $dataEquipos .= "
-                                <div onclick=\"obtenerTareasP($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasP\">
+                                <div onclick=\"obtenerTareas($idEquipo); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasP\">
                                     <h1>$totalTareasP</h1>
                                 </div>
                             ";
 
                         // Tareas F
                         $dataEquipos .= "
-                                <div onclick=\"obtenerTareasS($idEquipo);\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasF\">
+                                <div onclick=\"obtenerTareas($idEquipo); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 flex h-full items-center justify-center hover:shadow-md $estiloTareasF\">
                                     <h1>$totalTareasF</h1>
                                 </div>
                             ";
@@ -3021,7 +3021,7 @@ if (isset($_POST['action'])) {
         if ($idEquipo == 0) {
             $data['nombreEquipo'] = "Tarea General";
         } else {
-            $query = "SELECT equipo FROM t_equipos WHERE id = $idEquipo";
+            $query = "SELECT equipo FROM t_equipos_america WHERE id = $idEquipo";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
                     $nombreEquipo = $value['equipo'];

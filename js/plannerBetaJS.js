@@ -3,6 +3,8 @@ let idUsuario = localStorage.getItem("usuario");
 let idDestino = localStorage.getItem("idDestino");
 // VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
 
+// API PARA REPORTE DE ERRORES
+const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
 // Función principal.
 function comprobarSession() {
@@ -90,7 +92,6 @@ $(function () {
       ev,
       picker
    ) {
-      // console.log(picker);
       $(this).val("");
    });
 });
@@ -129,7 +130,6 @@ $(function () {
       ev,
       picker
    ) {
-      // console.log(picker);
       $(this).val("");
    });
 });
@@ -174,7 +174,6 @@ $(function () {
       ev,
       picker
    ) {
-      // console.log(picker);
       $(this).val("");
    });
 });
@@ -215,7 +214,6 @@ $(function () {
       ev,
       picker
    ) {
-      // console.log(picker);
       $(this).val("");
    });
 });
@@ -479,7 +477,6 @@ function calendarioSecciones() {
 
 
 function expandir(id) {
-   // console.log(id);
    let idtoggle = id + "toggle";
    let idtitulo = id + "titulo";
 
@@ -517,7 +514,6 @@ function hora() {
 
    document.getElementById("hora").innerHTML = hora;
    document.getElementById("nombreDestino").innerHTML = nombreDestinoArray;
-   // console.log(hora, nombreDestinoArray);
 }
 
 
@@ -557,7 +553,6 @@ function consultaSubsecciones(idDestino, idUsuario) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("columnasSeccionesZIL").innerHTML = data.dataZIL;
          document.getElementById("columnasSeccionesZIE").innerHTML = data.dataZIE;
          document.getElementById("columnasSeccionesAUTO").innerHTML = data.dataAUTO;
@@ -584,7 +579,6 @@ function pendientesSubsecciones(
    idUsuario,
    idDestino
 ) {
-   // console.log(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino);
    document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = "";
    document.getElementById("modalPendientes").classList.add("open");
    document.getElementById("estiloSeccion").innerHTML =
@@ -606,7 +600,6 @@ function pendientesSubsecciones(
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          // Tipo de Vista Seleccionado
          document.getElementById("tipoPendienteNombre").innerHTML =
             data.tipoPendienteNombre;
@@ -732,7 +725,6 @@ function exportarPorUsuario(
       },
       // dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document
             .getElementById("modalExportarSeccionesUsuarios")
             .classList.add("open");
@@ -763,7 +755,6 @@ function estiloSeccionModal(padreSeccion, seccion = 0) {
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccion(padreSeccion, seccion) {
    let seccionClase = seccion.toLowerCase() + "-logo";
-   // console.log(seccionClase);
    document.getElementById(padreSeccion).classList.remove("zil-logo");
    document.getElementById(padreSeccion).classList.remove("zie-logo");
    document.getElementById(padreSeccion).classList.remove("auto-logo");
@@ -807,7 +798,6 @@ function exportarPendientes(
    idSubseccion,
    tipoExportar
 ) {
-   // console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
    const action = "consultaFinalExcel";
    $.ajax({
       type: "POST",
@@ -822,8 +812,6 @@ function exportarPendientes(
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data.listaIdT);
-         // console.log(data.listaIdF);
          let usuarioSession = localStorage.getItem("usuario");
 
          if (tipoExportar == "exportarMisPendientes") {
@@ -965,7 +953,6 @@ function exportarPendientes(
 // Obtiene los equipos de las subsecciones y por destino, considerando AME, como Global.
 // rangoInicial y rangoFinal, ya no se necesita, solo se utilizaba para la paginación.
 function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento) {
-   // console.log(idUsuario, idDestino, idSeccion, idSubseccion, rangoInicial, rangoFinal, tipoOrdenamiento);
    // Se agregan los filtros en las columnas de los equipos.
    document.getElementById("tipoOrdenamientoMCN")
       .setAttribute("onclick", "obtenerEquipos(" + idUsuario + "," + idDestino + "," + idSeccion + "," + idSubseccion + "," + rangoInicial + "," + rangoFinal + ',"MCN")');
@@ -992,7 +979,6 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
    // fetch(url)
    //   .then(res => res.json())
    //   .then(array => {
-   //     console.log(array);
    //   });
 
    $.ajax({
@@ -1011,7 +997,6 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("dataEquipos").innerHTML = data.dataEquipos;
          document.getElementById("seccionEquipos").innerHTML = data.seccionEquipos;
          estiloSeccionModal("estiloSeccionEquipos", data.seccionEquipos);
@@ -1039,8 +1024,6 @@ function paginacionEquipos() {
       next: "siguiente",
       animation: false,
    });
-   // console.log('Paginación');
-
    $(".holder>a").addClass(
       "-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
    );
@@ -1055,7 +1038,6 @@ function obtenerMCN(idEquipo) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idSubseccion = localStorage.getItem("idSubseccion");
-   // console.log(idEquipo, idUsuario, idDestino, idSubseccion);
 
    document.getElementById("tipoPendientesX").innerHTML = "FALLAS PENDIENTES";
    document.getElementById("modalPendientesX").classList.add("open");
@@ -1082,7 +1064,6 @@ function obtenerMCN(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          estiloSeccionModal("estiloSeccionMCN", data.seccion);
          document.getElementById("seccionMCN").innerHTML = data.seccion;
          document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
@@ -1114,7 +1095,6 @@ function obtenerstatusMC(idMC) {
       success: function (data) {
          // Llama a la Función para reflejar los cambios en los MC por Equipo.
 
-         // console.log(data);
          // Status
          document
             .getElementById("statusUrgente")
@@ -1201,9 +1181,9 @@ function actualizarStatusMC(idMC, status, valorStatus) {
                obtenerDatosUsuario(idDestino);
             }
             if (valorStatus == "F") {
-               obtenerMCF(idEquipo);
+               obtenerFallas(idEquipo);
             } else {
-               obtenerMCN(idEquipo);
+               obtenerFallas(idEquipo);
                document.getElementById("modalEditarTitulo").classList.remove("open");
                document.getElementById("modalStatus").classList.remove("open");
             }
@@ -1219,7 +1199,6 @@ function actualizarStatusMC(idMC, status, valorStatus) {
 
 // Obtiene todos los MC-F por Equipo.
 function obtenerMCF(idEquipo) {
-   // console.log(idEquipo);
    document.getElementById("tipoSolucionadosX").innerHTML =
       "FALLAS SOLUCIONADAS";
    document.getElementById("seccionMCF").innerHTML =
@@ -1242,7 +1221,6 @@ function obtenerMCF(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("dataMCF").innerHTML = data.dataMCF;
          estiloSeccionModal("estiloSeccionMCF", data.seccion);
          document.getElementById("seccionMCF").innerHTML = data.seccion;
@@ -1273,7 +1251,6 @@ function datosModalAgregarMC() {
       dataType: "JSON",
       success: function (data) {
          let idUltimoMC = parseInt(data.idUltimoMC) + 1;
-         // console.log(data);
          document
             .getElementById("btnAgregarMC")
             .setAttribute("onclick", "agregarMC(" + idUltimoMC + ");");
@@ -1294,9 +1271,8 @@ function agregarMC(idMC) {
    let rangoFechaMC = document.getElementById("inputRangoFechaMC").value;
    let responsableMC = document.getElementById("responsableMC").value;
    let comentarioMC = document.getElementById("comentarioMC").value;
-   // console.log(idUsuario, idDestino, idEquipo, idSeccion, idSubseccion, actividadMC, rangoFechaMC, responsableMC, comentarioMC);
 
-   if (actividadMC != "" && rangoFechaMC != "" && responsableMC != "") {
+   if (actividadMC != "" && actividadMC.length <= 65 && rangoFechaMC != "" && responsableMC != "") {
       const action = "agregarMC";
       $.ajax({
          type: "POST",
@@ -1315,13 +1291,12 @@ function agregarMC(idMC) {
          },
          // dataType: "JSON",
          success: function (data) {
-            // console.log(data);
             document.getElementById("inputComentario").value = comentarioMC;
             if (data >= 1) {
                agregarComentarioMC(idMC);
-               alertaImg("MC agregado", "", "success", 1500);
+               alertaImg("FALLA AGREGADA", "", "success", 1500);
                obtenerDatosUsuario(idDestino);
-               obtenerMCN(idEquipo);
+               obtenerFallas(idEquipo);
                llamarFuncionX("obtenerEquipos");
                datosModalAgregarMC();
                document.getElementById("inputActividadMC").value = "";
@@ -1333,7 +1308,7 @@ function agregarMC(idMC) {
                      .classList.remove("open");
                }, 1200);
             } else {
-               alertaImg("Intente de Nuevo", "", "question", 1500);
+               alertaImg("Intente de Nuevo", "", "question", 900);
                datosModalAgregarMC();
             }
          },
@@ -1368,7 +1343,6 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
          document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
          document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
@@ -1397,13 +1371,12 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
       },
       // dataType: "JSON",
       success: function (data) {
-         // console.log(data);
 
          if (data == "MC") {
             alertaImg("Responsable Actualizado", "", "success", 2500);
             document.getElementById("modalUsuarios").classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
-            obtenerMCN(idEquipo);
+            obtenerFallas(idEquipo);
 
             // TAREAS
          } else if (data == "TAREA") {
@@ -1463,7 +1436,6 @@ function obtenerAdjuntosMC(idMC) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
 
          if (data.imagen != "") {
             document.getElementById("dataImagenes").innerHTML = data.imagen;
@@ -1488,8 +1460,6 @@ function obtenerComentariosMC(idMC) {
    let idDestino = localStorage.getItem("idDestino");
 
    document.getElementById("modalComentarios").classList.add("open");
-   document.getElementById("dataComentarios").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 
    const action = "obtenerComentariosMC";
    $.ajax({
@@ -1512,8 +1482,12 @@ function obtenerComentariosMC(idMC) {
                "onkeyup",
                "if(event.keyCode == 13)agregarComentarioMC(" + idMC + ")"
             );
-         document.getElementById("dataComentarios").innerHTML =
-            data.dataComentarios;
+         if (data.dataComentarios != undefined && data.dataComentarios != '') {
+            document.getElementById("dataComentarios").innerHTML =
+               data.dataComentarios;
+         } else {
+            document.getElementById("dataComentarios").innerHTML = '<h1 class="text-center w-full text-gray-600 font-medium">SIN COMENTARIOS</h1>';
+         }
       },
    });
 }
@@ -1540,7 +1514,7 @@ function agregarComentarioMC(idMC) {
          success: function (data) {
             if (data == 1) {
                obtenerComentariosMC(idMC);
-               obtenerMCN(idEquipo);
+               obtenerFallas(idEquipo);
                document.getElementById("inputComentario").value = "";
                alertaImg("Comentario Agregado", "", "success", 2000);
             } else {
@@ -1586,7 +1560,6 @@ function obtenerTareasP(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("seccionMCN").innerHTML = data.seccion;
          document.getElementById("nombreEquipoMCN").innerHTML = data.nombreEquipo;
          document.getElementById("dataPendientes").innerHTML = data.dataTareas;
@@ -1599,7 +1572,6 @@ function obtenerTareasP(idEquipo) {
 
 //Se obtienen las Tareas Finaizadas.
 function obtenerTareasS(idEquipo) {
-   // console.log(idEquipo);
    document.getElementById("tipoSolucionadosX").innerHTML =
       "FALLAS SOLUCIONADAS";
    document.getElementById("seccionMCF").innerHTML =
@@ -1624,7 +1596,6 @@ function obtenerTareasS(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("dataMCF").innerHTML = data.dataTareas;
          estiloSeccionModal("estiloSeccionMCF", data.seccion);
          document.getElementById("seccionMCF").innerHTML = data.seccion;
@@ -1673,7 +1644,6 @@ function obtenerAdjuntosTareas(idTarea) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
 
          if (data.dataImagenes != "") {
             document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
@@ -1937,7 +1907,6 @@ function obtenerFechaTareas(idTarea, rangoFecha) {
 
 // Opciones Responsable para Agregar Tarea.
 function datosAgregarTarea() {
-   // console.log('datosAgregarTarea');
    document.getElementById("responsableMC").innerHTML = "";
    document.getElementById("modalAgregarMC").classList.add("open");
    let idUsuario = localStorage.getItem("usuario");
@@ -1994,7 +1963,6 @@ function agregarTarea() {
          },
          // dataType: "JSON",
          success: function (data) {
-            // console.log(data);
             if (data == 1) {
                obtenerDatosUsuario(idDestino);
                llamarFuncionX("obtenerEquipos");
@@ -2045,7 +2013,6 @@ function obtenerMediaEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
 
          if (data.imagen != "") {
             document.getElementById("dataImagenes").innerHTML = data.imagen;
@@ -2174,7 +2141,7 @@ function subirImagenGeneral(idTabla, tabla) {
    let img = document.getElementById("inputAdjuntos").files;
    let idProyecto = localStorage.getItem('idProyecto');
    let idSeccion = localStorage.getItem('idSeccion');
-
+   let idEquipo = localStorage.getItem('idEquipo');
    for (let index = 0; index < img.length; index++) {
       let imgData = new FormData();
       const action = "subirImagenGeneral";
@@ -2221,6 +2188,7 @@ function subirImagenGeneral(idTabla, tabla) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 8) {
                obtenerAdjuntosMC(idTabla);
+               obtenerFallas(idEquipo);
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 9) {
                obtenerImagenesEquipo(idTabla);
@@ -2228,7 +2196,6 @@ function subirImagenGeneral(idTabla, tabla) {
             } else {
                alertaImg("Intente de Nuevo", "", "info", 3000);
             }
-            // console.log(data);
          },
       });
    }
@@ -2257,7 +2224,6 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
          document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
          document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
@@ -2429,7 +2395,6 @@ function informacionEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("btnAdjuntosEquipo").setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
 
          obtenerImagenesEquipo(idEquipo);
@@ -2438,7 +2403,6 @@ function informacionEquipo(idEquipo) {
             setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
 
          let URLQR = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo;
-         console.log(URLQR);
          document.getElementById("QREquipo").
             setAttribute("src", URLQR);
          // document.getElementById("QREquipo").
@@ -2497,7 +2461,6 @@ function obtenerImagenesEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
 
          if (data.imagen != "") {
             document.getElementById("dataImagenes").innerHTML = data.imagen;
@@ -2767,7 +2730,6 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
       },
       // dataType: "JSON",
       success: function (data) {
-         console.log(data);
          if (data == 1) {
             alertaImg(`Programación Existente, Semana ${semanaX} `, '', 'error', 3000);
          } else if (data == 2) {
@@ -2856,7 +2818,6 @@ function consultarActividadesMP(idPlan) {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("tooltipActividadesMP").innerHTML = data.actividades;
       }
    });
@@ -2878,7 +2839,6 @@ function consultarOpcionesEquipo() {
       },
       dataType: "JSON",
       success: function (data) {
-         // console.log(data);
          document.getElementById("seccionEquipo").innerHTML = data.secciones;
          document.getElementById("subseccionEquipo").innerHTML = data.subsecciones;
          document.getElementById("tipoEquipo").innerHTML = data.tipos;
@@ -2912,9 +2872,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
       },
       // dataType: "JSON",
       success: function (data) {
-         console.log(data);
          if (data == 13) {
-            console.log(idSemana, idProceso, idEquipo, semanaX, idPlan);
             localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
             window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
          } else {
@@ -2931,7 +2889,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {
-   console.log(x);
    document.getElementById("VerOTMP").classList.add('hidden');
    document.getElementById("generarOTMP").classList.add('hidden');
    document.getElementById("solucionarOTMP").classList.add('hidden');
@@ -3029,7 +2986,6 @@ function classNameToggle(nameClass) {
    var i;
    for (i = 0; i < x.length; i++) {
       document.getElementsByClassName(nameClass)[i].classList.toggle("hidden");
-      // console.log(nameClass, i);
    }
 }
 
@@ -3144,7 +3100,6 @@ function obtenerActividadesOT(idTipo, tipo) {
       .then(function () {
          // Propiedades para el tooltip
          const elemento = tipo + idTipo;
-         console.log(elemento);
          const button = document.getElementById(elemento);
          const tooltip = document.getElementById('tooltipActividadesGeneral');
          Popper.createPopper(button, tooltip, {
@@ -3228,7 +3183,6 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array);
          obtenerActividadesOT(idTipo, tipo);
          if (array == "AGREGADO") {
             alertaImg('Actividad, Agregada', '', 'success', 1200);
@@ -3241,7 +3195,7 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
          document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
       })
       .catch(function (err) {
-         fetch(`https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error(3213): ${err}`);
+         fetch(`${APIERROR + err}`);
       })
 }
 
@@ -3252,6 +3206,374 @@ async function cerrarSession() {
    await localStorage.clear();
    await comprobarSession();
 }
+
+
+// FUNCION PARA DISEÑO DE FILA DE FALLA
+const datosFallasTareas = params => {
+
+   var idRegistro = params.id;
+
+   var comentarios = params.comentarios;
+   var valorcomentarios = '';
+
+   var adjuntos = params.adjuntos;
+   var valoradjuntos = '';
+
+   var materiales = params.materiales;
+   var materialesx = '';
+
+   var departamentos = params.departamentos;
+   var departamentosx = '';
+
+   var energeticos = params.energeticos;
+   var energeticosx = '';
+
+   var trabajando = params.trabajando;
+   var trabajandox = '';
+
+   switch (comentarios) {
+      case 0:
+         valorcomentarios = '<i class="fad fa-minus text-xl text-red-400"></i>';
+         break;
+      default:
+         valorcomentarios = params.comentarios;
+   }
+
+   switch (adjuntos) {
+      case 0:
+         valoradjuntos = '<i class="fad fa-minus text-xl text-red-400"></i>';
+         break;
+      default:
+         valoradjuntos = params.adjuntos;
+   }
+
+   switch (materiales) {
+      case 1:
+         materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
+         break;
+      default:
+         materialesx = '';
+   }
+
+   switch (departamentos) {
+      case 1:
+         departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+         break;
+      default:
+         departamentosx = '';
+   }
+
+   switch (energeticos) {
+      case 1:
+         energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
+         break;
+      default:
+         energeticosx = '';
+   }
+
+   switch (trabajando) {
+      case 1:
+         trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
+         break;
+      default:
+         trabajandox = '';
+   }
+
+   if (params.status == "PENDIENTE") {
+      var statusX = 'S-PENDIENTE';
+      var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
+      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, ${params.fechaInicio + '-' + params.fechaFin});"`;
+      var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
+      var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
+      var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+
+   } else {
+      var statusX = 'S-SOLUCIONADO';
+      var fResponsable = ``;
+      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
+      var fAdjuntos = ``;
+      var fComentarios = ``;
+      var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
+      var fActividades = ``;
+      var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+
+   }
+
+   return `
+        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal ${statusX}">
+           
+        <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
+        ${fActividades}>
+            <div class="font-semibold uppercase leading-4">
+               <h1>${params.actividad}</h1>
+            </div>
+            <div class="text-gray-500 leading-3 flex">
+               <h1>Creado por: ${params.creadoPor}</h1>
+            </div>
+         </td>
+
+         <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
+         ${fActividades}>
+            <h1>${params.pda}</h1>
+         </td>
+         
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
+         ${fResponsable}>
+            <h1>${params.responsable}</h1>
+         </td>
+
+         <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" 
+         ${fRangoFecha}>
+            <div class="leading-4">${params.fechaInicio}</div>
+            <div class="leading-3">${params.fechaFin}</div>
+         </td>
+
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3"
+         ${fComentarios}>
+            <h1>${valorcomentarios}</h1>
+         </td>
+
+         <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+            <h1>${valoradjuntos}</h1>
+         </td>
+
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
+            <div class="text-sm flex justify-center items-center font-bold">
+               ${materialesx}
+               ${energeticosx}
+               ${departamentosx}
+               ${trabajandox}
+            </div>
+         </td>
+         
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <h1>${params.id}</h1>
+         </td>
+
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
+            <div class="px-2">
+               ${iconoStatus}
+            </div>
+         </td>
+
+      </tr>
+   `;
+};
+
+
+// FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
+function obtenerFallas(idEquipo = 0) {
+   localStorage.setItem("idEquipo", idEquipo);
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
+   let tipoPendiente = 'FALLAS';
+   const action = "obtenerFallas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}`;
+
+   document.getElementById("seccionFallaTarea").innerHTML =
+      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("contenedorPrincipalTareasFallas").
+      setAttribute('style', 'background:#fc8181; min-height: 60vh;');
+   document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
+   document.getElementById("pendienteFallaTarea").
+      setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
+   document.getElementById("solucionadosFallaTarea").
+      setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
+   document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-red-200', 'text-red-400', 'bg-red-200', 'bg-red-600');
+
+   // OBTEIENE DATOS DE LAS FALLAS
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         document.getElementById("dataPendientesX").innerHTML = '';
+
+         if (array.length > 0) {
+            for (let x = 0; x < array.length; x++) {
+               const id = array[x].id;
+               const actividad = array[x].actividad;
+               const creadoPor = array[x].creadoPor;
+               const pda = array[x].pda;
+               const responsable = array[x].responsable;
+               const fechaInicio = array[x].fechaInicio;
+               const fechaFin = array[x].fechaFin;
+               const comentarios = array[x].comentarios;
+               const adjuntos = array[x].adjuntos;
+               const status = array[x].status;
+               const materiales = array[x].materiales;
+               const energeticos = array[x].energeticos;
+               const departamentos = array[x].departamentos;
+               const trabajando = array[x].trabajando;
+
+               const data = datosFallasTareas({
+                  id: id,
+                  actividad: actividad,
+                  creadoPor: creadoPor,
+                  pda: pda,
+                  responsable: responsable,
+                  fechaInicio: fechaInicio,
+                  fechaFin: fechaFin,
+                  comentarios: comentarios,
+                  adjuntos: adjuntos,
+                  status: status,
+                  materiales: materiales,
+                  trabajando: trabajando,
+                  energeticos: energeticos,
+                  departamentos: departamentos
+               });
+
+               document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
+            }
+         } else {
+            alertaImg('Equipo/Local, Sin Fallas', '', 'info', 1200);
+         }
+      })
+      .then(function () {
+         complementosFallasTareas();
+      })
+      .then(function () { obtenerFallasPendientes(idEquipo) })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+         document.getElementById("dataPendientesX").innerHTML = '';
+         complementosFallasTareas();
+         document.getElementById("seccionFallaTarea").innerHTML = '';
+      })
+
+
+   const complementosFallasTareas = () => {
+      // OBTIENE NOMBRE DE EQUIPO Y SECCIÓN
+      const URL2 = `php/select_REST_planner.php?action=complementosFallasTareas&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
+      fetch(URL2)
+         .then(array => array.json())
+         .then(array => {
+
+            if (array.seccion) {
+               let seccionX = array.seccion.toLowerCase();
+
+               document.getElementById("estiloSeccionFallaTarea").className = '';
+               document.getElementById("estiloSeccionFallaTarea").
+                  classList.add(seccionX + '-logo-modal', 'flex', 'justify-center', 'items-center', 'rounded-b-md', 'w-16', 'h-10', 'shadow-xs');
+
+               document.getElementById("seccionFallaTarea").innerHTML =
+                  array.seccion.toUpperCase();
+            }
+
+            if (array.equipo) {
+               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + tipoPendiente;
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   }
+};
+
+function obtenerFallasSolucionados(idEquipo) {
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["solucionadosFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["pendienteFallaTarea", "ganttFallaTarea", "exportarFallaTarea", "agregarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-red-200', 'text-red-400', 'bg-red-200', 'bg-red-600');
+
+   let pendientes = document.getElementsByClassName("S-PENDIENTE");
+   let solucionados = document.getElementsByClassName("S-SOLUCIONADO");
+
+   if (pendientes.length > 0) {
+      for (let x = 0; x < pendientes.length; x++) {
+         document.getElementsByClassName("S-PENDIENTE")[x].classList.add('hidden');
+      }
+   }
+
+   if (solucionados.length > 0) {
+      for (let x = 0; x < solucionados.length; x++) {
+         document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
+      }
+   } else {
+      alertaImg('Sin SOLUCIONADOS', '', 'info', 1200);
+   }
+}
+
+function obtenerFallasPendientes(idEquipo) {
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-red-200', 'text-red-400', 'bg-red-200', 'bg-red-600');
+
+   let pendientes = document.getElementsByClassName("S-PENDIENTE");
+   let solucionados = document.getElementsByClassName("S-SOLUCIONADO");
+
+   if (pendientes.length > 0) {
+      for (let x = 0; x < pendientes.length; x++) {
+         document.getElementsByClassName("S-PENDIENTE")[x].classList.remove('hidden');
+      }
+   } else {
+      alertaImg('Sin PENDIENTES', '', 'info', 1200);
+   }
+
+   if (solucionados.length > 0) {
+      for (let x = 0; x < solucionados.length; x++) {
+         document.getElementsByClassName("S-SOLUCIONADO")[x].classList.add('hidden');
+      }
+   }
+}
+
+// FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
+function obtenerTareas(idEquipo = 0) { console.log(idEquipo) }
+
+
+// FUNCION ARRAY PARA ESTILO DE OPCIONES EN MODAL #modalTareasFallas
+// RECIBE 2 ARRAS PARA ACTIVOS E INACTIVOS
+function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgActivo, bgInactivo) {
+
+   if (activos) {
+      activos.forEach(function (x) {
+         if (document.getElementById(x)) {
+            document.getElementById(x).classList.remove(hover, texto, bgActivo, bgInactivo);
+         }
+      })
+   }
+
+   if (inactivos) {
+      inactivos.forEach(function (x) {
+         if (document.getElementById(x)) {
+            document.getElementById(x).classList.remove(hover, texto, bgActivo, bgInactivo);
+         }
+      })
+   }
+
+   if (activos) {
+      activos.forEach(function (x) {
+         if (document.getElementById(x)) {
+            document.getElementById(x).classList.add(bgActivo, texto);
+         }
+      })
+   }
+
+   if (inactivos) {
+      inactivos.forEach(function (x) {
+         if (document.getElementById(x)) {
+            document.getElementById(x).classList.add(hover, bgInactivo, texto);
+         }
+      })
+   }
+}
+
+// FUNCION UNIVERSAL PARA LA TABLA #dataPendientesX
+// EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
+document.getElementById("palabraFallaTarea").addEventListener('keyup', function () {
+   buscdorTabla('dataPendientesX', 'palabraFallaTarea', 0);
+});
+
+
+
+
 
 
 // Función para comprobar session.

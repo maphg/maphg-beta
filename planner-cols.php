@@ -642,7 +642,7 @@
 
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
-    <div id="modalPendientesX" class="modal">
+    <div id="modalPendientesX-" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -715,15 +715,137 @@
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
 
 
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalTareasFallas" class="modal">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12 overflow-x-auto scrollbar">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTareasFallas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionFallaTarea" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionFallaTarea" class="font-medium text-base"></h1>
+                </div>
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1 id="equipoFallaTarea">. . .</h1>
+                </div>
+            </div>
+
+            <div id="contenidoOpcionesProyectos" class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraFallaTarea" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="agregarFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="opcionFallaPendiente" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1 id="tipoFallaTarea"></h1>
+                </div>
+
+                <div id="ganttFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="pendienteFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="solucionadosFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+                <div id="exportarFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2" id="exportarProyectos">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <div class="overflow-x-auto scrollbar">
+                    <div class="align-middle inline-block min-w-full shadow-md rounded border-b border-gray-200" style="max-height: 45vh;">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                            <thead>
+                                <tr class="cursor-pointer bg-white">
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Actividad
+                                    </th>
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        SubTareas
+                                    </th>
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Responsable
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Fechas
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Comentarios
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Status
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        OT
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="dataPendientesX" class="bg-white divide-y divide-gray-200">
+                                <!-- More rows... -->
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+
+
     <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
     <div id="modalSolucionadosX" class="modal">
-        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12 h-full">
+
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalSolucionadosX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+            <!-- BOTON CERRARL -->
+
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div id="estiloSeccionMCF" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
@@ -733,6 +855,7 @@
                     <h1><span id="nombreEquipoMCF"></span> / <span id="tipoSolucionadosX"></span></h1>
                 </div>
             </div>
+            <!-- SECCION Y UBICACION -->
 
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
@@ -784,6 +907,7 @@
                     <!-- equipo -->
                 </div>
             </div>
+
         </div>
     </div>
     <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
@@ -1339,7 +1463,7 @@
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
 
-                <div class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="max-height: 80vh;">
+                <div class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="max-height: 50vh;">
                     <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
@@ -1661,11 +1785,11 @@
                     <h1 id="nombreEquipoMC"></h1>
                 </div>
                 <h1 class="self-start mb-2">Descripción:</h1>
-                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción" maxlength="60" autocomplete="off">
+                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
                 <div class="flex w-full items-center justify-center">
 
                     <div class="w-1/2 flex flex-col pr-4">
-                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalizacion:</h1>
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
                         <input id="inputRangoFechaMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
                     </div>
 
