@@ -62,6 +62,38 @@
                 max-width: 2176px;
             }
         }
+
+        /* Arrow TOOLTIP */
+
+            #arrowtooltipActividadesGeneral,
+      #arrowtooltipActividadesGeneral::before {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        z-index: -1;
+      }
+
+      #arrowtooltipActividadesGeneral::before {
+        content: '';
+        transform: rotate(45deg);
+        background: #333;
+      }
+
+      #tooltipActividadesGeneral[data-popper-placement^='top'] > #arrowtooltipActividadesGeneral {
+        bottom: -4px;
+      }
+
+      #tooltipActividadesGeneral[data-popper-placement^='bottom'] > #arrowtooltipActividadesGeneral {
+        top: -4px;
+      }
+
+      #tooltipActividadesGeneral[data-popper-placement^='left'] > #arrowtooltipActividadesGeneral {
+        right: -4px;
+      }
+
+      #tooltipActividadesGeneral[data-popper-placement^='right'] > #arrowtooltipActividadesGeneral {
+        left: -4px;
+      }
     </style>
 </head>
 
@@ -778,6 +810,7 @@
 
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
+
                 <div class="overflow-x-auto scrollbar">
                     <div class="align-middle inline-block min-w-full shadow-md rounded border-b border-gray-200" style="max-height: 45vh;">
                         <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
@@ -831,8 +864,10 @@
             </div>
         </div>
 
-        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
-        <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        
+                                        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+        <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden absolute" role="tooltip" style="z-index:200">
+          <div id="arrowtooltipActividadesGeneral" data-popper-arrow></div>
             <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
                 <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
                     <div class="w-4 h-4  mr-2 flex-none"></div>

@@ -2800,9 +2800,7 @@ function consultarActividadesMP(idPlan) {
    // Propiedades para el tooltip
    const button = document.getElementById(idPlan + 'Actividades');
    const tooltip = document.getElementById('tooltipActividadesMP');
-   Popper.createPopper(button, tooltip, {
-      placement: 'top',
-   });
+   Popper.createPopper(button, tooltip);
 
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
@@ -3102,9 +3100,7 @@ function obtenerActividadesOT(idTipo, tipo) {
          const elemento = tipo + idTipo;
          const button = document.getElementById(elemento);
          const tooltip = document.getElementById('tooltipActividadesGeneral');
-         Popper.createPopper(button, tooltip, {
-            placement: 'bottom'
-         });
+         Popper.createPopper(button, tooltip);
       })
       .catch(function (err) {
          document.getElementById("tooltipActividadesGeneral").classList.add('hidden');
@@ -3167,12 +3163,12 @@ function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
             alertaImg('Intente de Nuevo', '', 'info', 1200);
          }
 
-         if(tipo == "FALLA"){
+         if (tipo == "FALLA") {
             obtenerFallas(idEquipo);
          }
       })
       .catch(function (err) {
-         fetch(`https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error(3180): ${err}`);
+         fetch(APIERROR + err);
       })
 }
 
@@ -3297,8 +3293,7 @@ const datosFallasTareas = params => {
       var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
-      var enlaceToltip = `Falla${idRegistro}`;
-
+      var enlaceToltip = `FALLA${idRegistro}`;
    } else {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = ``;
@@ -3306,14 +3301,13 @@ const datosFallasTareas = params => {
       var fAdjuntos = ``;
       var fComentarios = ``;
       var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
-      var fActividades = ``;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
-      var enlaceToltip = `Falla${idRegistro}`;
-
+      var enlaceToltip = `FALLA${idRegistro}`;
    }
 
    return `
-        <tr id="${enlaceToltip}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
+        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
         ${statusX}">
            
         <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
@@ -3326,7 +3320,7 @@ const datosFallasTareas = params => {
             </div>
          </td>
 
-         <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
+         <td id="${enlaceToltip}" class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
          ${fActividades}>
             <h1>${params.pda}</h1>
          </td>
@@ -3582,8 +3576,6 @@ function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgAct
 document.getElementById("palabraFallaTarea").addEventListener('keyup', function () {
    buscdorTabla('dataPendientesX', 'palabraFallaTarea', 0);
 });
-
-
 
 
 
