@@ -182,7 +182,7 @@ $(function () {
 // Función para Input Fechas FALLAS
 $(function () {
    $('input[name="fechaMC"]').daterangepicker({
-      autoUpdateInput: false,
+      autoUpdateInput: true,
       showWeekNumbers: true,
       locale: {
          cancelLabel: "Cancelar",
@@ -483,7 +483,10 @@ function expandir(id) {
    if (document.getElementById(idtoggle)) {
       var toggle = document.getElementById(idtoggle);
       toggle.classList.toggle("hidden");
-      document.getElementById(idtitulo).classList.toggle("truncate");
+
+      if (document.getElementById(idtitulo)) {
+         document.getElementById(idtitulo).classList.toggle("truncate");
+      }
    }
 }
 
@@ -1190,7 +1193,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
             // Cierra el Modal de Fecha MC.
             document.getElementById("modalFechaMC").classList.remove("open");
          } else {
-            alertaImg("Intente de Nuevo", "", "question", 2000);
+            alertaImg("Intente de Nuevo", "", "info", 2000);
          }
       },
    });
@@ -3252,42 +3255,34 @@ const datosFallasTareas = params => {
          valoradjuntos = params.adjuntos;
    }
 
-   switch (materiales) {
-      case 1:
-         materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
-         break;
-      default:
-         materialesx = '';
+   if (materiales >= 1) {
+      materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
+   } else {
+      materialesx = '';
    }
 
-   switch (departamentos) {
-      case 1:
-         departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
-         break;
-      default:
-         departamentosx = '';
+   if (departamentos >= 1) {
+      departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+   } else {
+      departamentosx = '';
    }
 
-   switch (energeticos) {
-      case 1:
-         energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
-         break;
-      default:
-         energeticosx = '';
+   if (energeticos >= 1) {
+      energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
+   } else {
+      energeticosx = '';
    }
 
-   switch (trabajando) {
-      case 1:
-         trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
-         break;
-      default:
-         trabajandox = '';
+   if (trabajando >= 1) {
+      trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
+   } else {
+      trabajandox = '';
    }
 
    if (params.status == "PENDIENTE") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
-      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, ${params.fechaInicio + '-' + params.fechaFin});"`;
+      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
       var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
       var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
@@ -3296,10 +3291,10 @@ const datosFallasTareas = params => {
       var enlaceToltip = `FALLA${idRegistro}`;
    } else {
       var statusX = 'S-SOLUCIONADO';
-      var fResponsable = ``;
-      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
-      var fAdjuntos = ``;
-      var fComentarios = ``;
+      var fResponsable = '';
+      var fRangoFecha = '';
+      var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
       var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';

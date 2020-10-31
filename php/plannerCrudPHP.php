@@ -4212,7 +4212,6 @@ if (isset($_POST['action'])) {
             echo 1;
         } else {
             echo 0;
-            echo $idMC . $status . $valorStatus . $tituloMC . $fechaFinalizado;
         }
     }
 

@@ -56,7 +56,19 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
 
-        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
+        t_mc.status_urgente,
+        t_mc.status_material,
+        t_mc.status_trabajare,
+        t_mc.energetico_electricidad,
+        t_mc.energetico_agua,
+        t_mc.energetico_diesel,
+        t_mc.energetico_gas,
+        t_mc.departamento_calidad,
+        t_mc.departamento_compras,
+        t_mc.departamento_direccion,
+        t_mc.departamento_finanzas,
+        t_mc.departamento_rrhh
         FROM t_mc 
         INNER JOIN t_users ON t_mc.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -70,6 +82,11 @@ if (isset($_GET['action'])) {
                 $rangoFecha = $x['rango_fecha'];
                 $fechaCreacion = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
                 $status = $x['status'];
+                $sUrgente = intval($x['status_urgente']);
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajare']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -158,10 +175,10 @@ if (isset($_GET['action'])) {
                     "fechaInicio" => $fechaInicio,
                     "fechaFin" => $fechaFin,
                     "status" => $status,
-                    "materiales" => $materiales,
-                    "energeticos" => $energeticos,
-                    "departamentos" => $departamentos,
-                    "trabajando" => $trabajando,
+                    "materiales" => $sMaterial,
+                    "energeticos" => $sEnergetico,
+                    "departamentos" => $sDepartamento,
+                    "trabajando" => $sTrabajando,
                 );
 
                 $array[] = $arrayTemp;
