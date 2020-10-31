@@ -3145,6 +3145,7 @@ function opcionesActividadesOT(idTipo, tipo, idActividad) {
 function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+   let idEquipo = localStorage.getItem('idEquipo');
    let actividad = document.getElementById("inputTitulo").value;
    const action = "actualizarActividadOT";
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTipo=${idTipo}&tipo=${tipo}&columna=${columna}&actividad=${actividad}&idActividad=${idActividad}`;
@@ -3165,6 +3166,10 @@ function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
          } else {
             alertaImg('Intente de Nuevo', '', 'info', 1200);
          }
+
+         if(tipo == "FALLA"){
+            obtenerFallas(idEquipo);
+         }
       })
       .catch(function (err) {
          fetch(`https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error(3180): ${err}`);
@@ -3176,6 +3181,7 @@ function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
 function agregarActividadOT(idTipo, tipo, columna, idActividad) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+   let idEquipo = localStorage.getItem('idEquipo');
    let actividad = document.getElementById("agregarActividadGeneral").value;
    const action = "actualizarActividadOT";
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTipo=${idTipo}&tipo=${tipo}&columna=${columna}&actividad=${actividad}&idActividad=${idActividad}`;
@@ -3193,6 +3199,9 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
       .then(function () {
          document.getElementById("agregarActividadGeneral").value = '';
          document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
+         if (tipo == "FALLA") {
+            obtenerFallas(idEquipo);
+         }
       })
       .catch(function (err) {
          fetch(`${APIERROR + err}`);
@@ -3288,6 +3297,7 @@ const datosFallasTareas = params => {
       var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+      var enlaceToltip = `Falla${idRegistro}`;
 
    } else {
       var statusX = 'S-SOLUCIONADO';
@@ -3298,11 +3308,13 @@ const datosFallasTareas = params => {
       var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
       var fActividades = ``;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+      var enlaceToltip = `Falla${idRegistro}`;
 
    }
 
    return `
-        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal ${statusX}">
+        <tr id="${enlaceToltip}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
+        ${statusX}">
            
         <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
         ${fActividades}>

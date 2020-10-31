@@ -24,10 +24,10 @@ if (isset($_GET['action'])) {
 
         if ($tipo == "FALLA") {
             $query = "SELECT id, actividad, status FROM t_mc_actividades_ot 
-            WHERE id_falla = $idTipo and activo = 1";
+            WHERE id_falla = $idTipo and activo = 1 ORDER BY id DESC";
         } elseif ($tipo == "TAREA") {
             $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot 
-            WHERE id_tarea = $idTipo and activo = 1";
+            WHERE id_tarea = $idTipo and activo = 1 ORDER BY id DESC";
         }
 
         if ($result = mysqli_query($conn_2020, $query)) {

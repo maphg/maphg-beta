@@ -830,6 +830,26 @@
 
             </div>
         </div>
+
+        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+        <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+            <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                    <div class="w-4 h-4  mr-2 flex-none"></div>
+                    <div class=" text-justify w-full h-full">
+                        <input id="agregarActividadGeneral" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                    </div>
+                    <div id="btnAgregarActividadGeneral" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+
+                <div id="dataActividadesGeneral" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+            </div>
+        </div>
+        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+
     </div>
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
 
@@ -2316,25 +2336,6 @@
     </div>
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
 
-
-    <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
-    <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
-        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
-            <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
-                <div class="w-4 h-4  mr-2 flex-none"></div>
-                <div class=" text-justify w-full h-full">
-                    <input id="agregarActividadGeneral" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
-                </div>
-                <div id="btnAgregarActividadGeneral" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
-                    <i class="fas fa-plus"></i>
-                </div>
-            </div>
-
-            <div id="dataActividadesGeneral" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
-
-        </div>
-    </div>
-    <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
 
 
     <!-- ***** TOOLTIPS ***** -->
