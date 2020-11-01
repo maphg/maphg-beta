@@ -1386,7 +1386,7 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
             alertaImg("Responsable Actualizado", "", "success", 2500);
             document.getElementById("modalUsuarios").classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
          } else {
             alertaImg("Intenete de Nuevo", "", "question", 2500);
          }
@@ -1723,7 +1723,7 @@ function agregarComentarioTarea(idTarea) {
          success: function (data) {
             if (data == 1) {
                obtenerComentariosTareas(idTarea);
-               obtenerTareasP(idEquipo);
+               obtenerTareas(idEquipo);
                document.getElementById("inputComentario").value = "";
                alertaImg("Comentario Agregado", "", "success", 2000);
             } else {
@@ -1863,33 +1863,33 @@ function actualizarTareas(idTarea, columna, valor) {
       // dataType: "JSON",
       success: function (data) {
          if (data == 1) {
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 2) {
             obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquipos");
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
             alertaImg("Tarea SOLUCIONADA", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 3) {
             obtenerDatosUsuario(idDestino);
-            obtenerTareasS(idEquipo);
+            obtenerTareas(idEquipo);
             llamarFuncionX("obtenerEquipos");
             alertaImg("Tarea Recuperada como PENDIENTE", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 4) {
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
             obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquipos");
             alertaImg("Tarea Eliminada", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 5) {
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
             alertaImg("Título Actualizado", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 6) {
-            obtenerTareasP(idEquipo);
+            obtenerTareas(idEquipo);
             alertaImg("Rango de Fecha, Actualizada", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else {
@@ -1969,14 +1969,14 @@ function agregarTarea() {
             if (data == 1) {
                obtenerDatosUsuario(idDestino);
                llamarFuncionX("obtenerEquipos");
-               obtenerTareasP(idEquipo);
+               obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("modalAgregarMC").classList.remove("open");
                alertaImg("Tarea Agregada", "", "success", 1500);
             } else if (data == 2) {
                obtenerDatosUsuario(idDestino);
                llamarFuncionX("obtenerEquipos");
-               obtenerTareasP(idEquipo);
+               obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("modalAgregarMC").classList.remove("open");
                document.getElementById("comentarioMC").value = "";
@@ -2188,6 +2188,7 @@ function subirImagenGeneral(idTabla, tabla) {
                obtenerMediaEquipo(idTabla);
             } else if (data == 7) {
                obtenerAdjuntosTareas(idTabla);
+               obtenerTareas(idEquipo);
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 8) {
                obtenerAdjuntosMC(idTabla);
@@ -3279,7 +3280,7 @@ const datosFallasTareas = params => {
       trabajandox = '';
    }
 
-   if (params.status == "PENDIENTE") {
+   if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
       var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
@@ -3289,7 +3290,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
-   } else {
+   } else if (params.status == "SOLUCIONADO" && params.tipo == "FALLA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = '';
       var fRangoFecha = '';
@@ -3299,6 +3300,26 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
+   } else if (params.status == "PENDIENTE" && params.tipo == "TAREA") {
+      var statusX = 'S-PENDIENTE';
+      var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
+      var fRangoFecha = `onclick="obtenerFechaTareas(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
+      var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
+      var fStatus = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
+      var fActividades = '';
+      var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+      var enlaceToltip = `TAREA${idRegistro}`;
+   } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
+      var statusX = 'S-SOLUCIONADO';
+      var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
+      var fRangoFecha = '';
+      var fAdjuntos = '';
+      var fComentarios = '';
+      var fStatus = `onclick="actualizarTareas(${idRegistro},  'status', 'P');"`;
+      var fActividades = '';
+      var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+      var enlaceToltip = `TAREA${idRegistro}`;
    }
 
    return `
@@ -3350,7 +3371,7 @@ const datosFallasTareas = params => {
          </td>
          
          <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
-            <h1>${params.id}</h1>
+            <h1>${params.ot}</h1>
          </td>
 
          <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
@@ -3374,7 +3395,6 @@ function obtenerFallas(idEquipo = 0) {
    let tipoPendiente = 'FALLAS';
    const action = "obtenerFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}`;
-
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
@@ -3400,6 +3420,7 @@ function obtenerFallas(idEquipo = 0) {
          if (array.length > 0) {
             for (let x = 0; x < array.length; x++) {
                const id = array[x].id;
+               const ot = array[x].ot;
                const actividad = array[x].actividad;
                const creadoPor = array[x].creadoPor;
                const pda = array[x].pda;
@@ -3413,9 +3434,11 @@ function obtenerFallas(idEquipo = 0) {
                const energeticos = array[x].energeticos;
                const departamentos = array[x].departamentos;
                const trabajando = array[x].trabajando;
+               const tipo = array[x].tipo;
 
                const data = datosFallasTareas({
                   id: id,
+                  ot: ot,
                   actividad: actividad,
                   creadoPor: creadoPor,
                   pda: pda,
@@ -3428,7 +3451,8 @@ function obtenerFallas(idEquipo = 0) {
                   materiales: materiales,
                   trabajando: trabajando,
                   energeticos: energeticos,
-                  departamentos: departamentos
+                  departamentos: departamentos,
+                  tipo: tipo
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
@@ -3526,7 +3550,119 @@ function obtenerFallasPendientes(idEquipo) {
 }
 
 // FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
-function obtenerTareas(idEquipo = 0) { console.log(idEquipo) }
+function obtenerTareas(idEquipo = 0) {
+   localStorage.setItem("idEquipo", idEquipo);
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
+   let tipoPendiente = 'TAREAS';
+   const action = "obtenerTareas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   document.getElementById("seccionFallaTarea").innerHTML =
+      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("contenedorPrincipalTareasFallas").
+      setAttribute('style', 'background:#fbd38d; min-height: 60vh;');
+   document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
+   document.getElementById("pendienteFallaTarea").
+      setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
+   document.getElementById("solucionadosFallaTarea").
+      setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
+   document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-orange-200', 'text-orange-400', 'bg-orange-200', 'bg-orange-600');
+
+   // OBTEIENE DATOS DE LAS FALLAS
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         document.getElementById("dataPendientesX").innerHTML = '';
+         if (array.length > 0) {
+            for (let x = 0; x < array.length; x++) {
+               const id = array[x].id;
+               const ot = array[x].ot;
+               const actividad = array[x].actividad;
+               const creadoPor = array[x].creadoPor;
+               const pda = array[x].pda;
+               const responsable = array[x].responsable;
+               const fechaInicio = array[x].fechaInicio;
+               const fechaFin = array[x].fechaFin;
+               const comentarios = array[x].comentarios;
+               const adjuntos = array[x].adjuntos;
+               const status = array[x].status;
+               const materiales = array[x].materiales;
+               const energeticos = array[x].energeticos;
+               const departamentos = array[x].departamentos;
+               const trabajando = array[x].trabajando;
+               const tipo = array[x].tipo;
+
+               const data = datosFallasTareas({
+                  id: id,
+                  ot: ot,
+                  actividad: actividad,
+                  creadoPor: creadoPor,
+                  pda: pda,
+                  responsable: responsable,
+                  fechaInicio: fechaInicio,
+                  fechaFin: fechaFin,
+                  comentarios: comentarios,
+                  adjuntos: adjuntos,
+                  status: status,
+                  materiales: materiales,
+                  trabajando: trabajando,
+                  energeticos: energeticos,
+                  departamentos: departamentos,
+                  tipo: tipo
+               });
+
+               document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
+            }
+         } else {
+            alertaImg('Equipo/Local, Sin Fallas', '', 'info', 1200);
+         }
+      })
+      .then(function () {
+         complementosFallasTareas();
+      })
+      .then(function () { obtenerFallasPendientes(idEquipo) })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+         document.getElementById("dataPendientesX").innerHTML = '';
+         complementosFallasTareas();
+         document.getElementById("seccionFallaTarea").innerHTML = '';
+      })
+
+
+   const complementosFallasTareas = () => {
+      // OBTIENE NOMBRE DE EQUIPO Y SECCIÓN
+      const URL2 = `php/select_REST_planner.php?action=complementosFallasTareas&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
+      fetch(URL2)
+         .then(array => array.json())
+         .then(array => {
+
+            if (array.seccion) {
+               let seccionX = array.seccion.toLowerCase();
+
+               document.getElementById("estiloSeccionFallaTarea").className = '';
+               document.getElementById("estiloSeccionFallaTarea").
+                  classList.add(seccionX + '-logo-modal', 'flex', 'justify-center', 'items-center', 'rounded-b-md', 'w-16', 'h-10', 'shadow-xs');
+
+               document.getElementById("seccionFallaTarea").innerHTML =
+                  array.seccion.toUpperCase();
+            }
+
+            if (array.equipo) {
+               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + tipoPendiente;
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   }
+}
 
 
 // FUNCION ARRAY PARA ESTILO DE OPCIONES EN MODAL #modalTareasFallas

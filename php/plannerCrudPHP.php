@@ -2695,11 +2695,11 @@ if (isset($_POST['action'])) {
                 <div class=\"w-16 flex h-full items-center justify-center relative\">
                 </div>
                 <!-- MC PENDIENTES -->
-                <div onclick=\"obtenerMCN(0);\" class=\"w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md\">
+                <div onclick=\"obtenerTareas(0); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 h-full flex items-center justify-center bg-red-200 text-red-400 hover:shadow-md\">
                     <h1>$totalTGN</h1>
                 </div>
                 <!-- MC SOLUCIONADOS -->
-                <div onclick=\"obtenerMCF(0);\" class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md rounded-r\">
+                <div onclick=\"obtenerTareas(0); toggleModalTailwind('modalTareasFallas');\" class=\"w-16 flex h-full items-center justify-center bg-green-200 text-green-500 hover:shadow-md rounded-r\">
                     <h1>$totalTGF</h1>
                 </div>
                 <div class=\"w-16 flex h-full items-center justify-center relative\">
