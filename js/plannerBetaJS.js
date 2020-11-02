@@ -3201,6 +3201,8 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
          document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
          if (tipo == "FALLA") {
             obtenerFallas(idEquipo);
+         } else if (tipo == "TAREA") {
+            obtenerTareas(idEquipo);
          }
       })
       .catch(function (err) {
@@ -3280,6 +3282,7 @@ const datosFallasTareas = params => {
       trabajandox = '';
    }
 
+   var fOT = `<a href="OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
@@ -3307,7 +3310,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
       var fStatus = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
-      var fActividades = '';
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
@@ -3317,7 +3320,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = '';
       var fComentarios = '';
       var fStatus = `onclick="actualizarTareas(${idRegistro},  'status', 'P');"`;
-      var fActividades = '';
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
    }
@@ -3371,7 +3374,7 @@ const datosFallasTareas = params => {
          </td>
          
          <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
-            <h1>${params.ot}</h1>
+            <h1>${fOT}</h1>
          </td>
 
          <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
@@ -3559,6 +3562,7 @@ function obtenerTareas(idEquipo = 0) {
    let tipoPendiente = 'TAREAS';
    const action = "obtenerTareas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
@@ -3568,7 +3572,9 @@ function obtenerTareas(idEquipo = 0) {
       setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
    document.getElementById("solucionadosFallaTarea").
       setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
-   document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+
+   document.getElementById("agregarFallaTarea").setAttribute("onclick", "datosAgregarTarea();");
+   document.getElementById("btnAgregarMC").setAttribute("onclick", "agregarTarea();");
 
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];

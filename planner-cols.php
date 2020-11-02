@@ -2388,7 +2388,6 @@
     <script src="js/sorttable.js"></script>
     <!-- Librerias JS -->
 
-
     <!-- JS para los planes de los equipos -->
     <script src="js/planes_equipo.js"></script>
     <!-- JS para los planes de los equipos -->

@@ -4938,6 +4938,8 @@ if (isset($_POST['action'])) {
         $responsable = $_POST['responsable'];
         $rangoFecha = $_POST['rangoFecha'];
         $comentario = $_POST['comentario'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
 
         $query = "SELECT max(id) FROM t_mp_np";
         $id = 0;
@@ -4945,8 +4947,8 @@ if (isset($_POST['action'])) {
             foreach ($result as $value) {
                 $idUltimo = intval($value['max(id)']) + 1;
             }
-            $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, titulo, responsable, rango_fecha, fecha) 
-            VALUES($idUltimo, $idEquipo, $idUsuario, $idDestino,  '$titulo', '$responsable', '$rangoFecha', '$fechaActual')";
+            $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, titulo, responsable, rango_fecha, fecha) 
+            VALUES($idUltimo, $idEquipo, $idUsuario, $idDestino, $idSeccion, $idSubseccion, '$titulo', '$responsable', '$rangoFecha', '$fechaActual')";
             if ($result = mysqli_query($conn_2020, $query)) {
                 if ($comentario != "" and $idUltimo > 0) {
                     $queryComentario = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha) 
