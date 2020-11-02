@@ -5,14 +5,13 @@ function seguridad_session() {
         .then(resp => resp.json())
         .then(resp => {
             if (resp == 0) {
-                alertaImg('¡Usuario Denegado!', '', 'error', 1200);
-                alertaImg('¡Usuario Denegado!', '', 'error', 1200);
                 localStorage.clear();
+                alertaImg('¡Usuario Denegado!', '', 'error', 1200);
                 location.href = "https://www.maphg.com/beta/login.php";
             }
         })
-        .catch(function () {
-            console.log(1);
+        .catch(function (err) {
+            console.log(err);
         });
 }
-setInterval(seguridad_session, 60000);
+setInterval(seguridad_session, 300000);

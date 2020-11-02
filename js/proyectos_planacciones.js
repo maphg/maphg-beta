@@ -256,7 +256,10 @@ const datosPlanes = params => {
     var fStatus = '';
     var iconoStatus = '';
     var fToolTip = `onclick="tooltipPlanaccion(${idPlanaccion}); obtenerActividadesPlanaccion(${idPlanaccion});"`;
-    var fOT = `onclick="generarOTPlanaccion(${idPlanaccion});"`;
+    // var fOT = `onclick="generarOTPlanaccion(${idPlanaccion});"`;
+    var fOT = `<a href="OT_proyectos/#P${idPlanaccion}" class="text-black" target="_blank"> 
+    ${idPlanaccion}</a>`;
+
     var statusPlanaccion = '';
     var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
     if (params.status == "PENDIENTE") {
@@ -309,8 +312,8 @@ const datosPlanes = params => {
                 </div>
             </td>
             
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fOT}>
-                <h1>${params.id}</h1>
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                <h1>${fOT}</h1>
             </td>
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>

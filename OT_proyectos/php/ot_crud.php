@@ -13,7 +13,7 @@ if (isset($_GET['action'])) {
     $fechaActual = date('Y-m-D H:m:s');
 
     if ($action == "obtnerOTPlanaccion") {
-        $ot = $_GET['ot'];
+        $idOT = $_GET['idOT'];
         $array = array();
 
         $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, 
@@ -24,7 +24,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
-        WHERE t_proyectos_planaccion.id = $ot";
+        WHERE t_proyectos_planaccion.id = $idOT";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idPlanaccion = $x['id'];
@@ -44,8 +44,8 @@ if (isset($_GET['action'])) {
                 }
 
                 #ACTIVIDADES PLANACCION
-                $query = "SELECT id, actividad FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $ot and activo = 1 ORDER BY id DESC";
-                $aarrayActividades = array();
+                $query = "SELECT id, actividad FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $idOT and activo = 1 ORDER BY id DESC";
+                $arrayActividades = array();
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idActividadX = $x['id'];

@@ -53,7 +53,7 @@
                     <!-- DESTINO SECCION Y SUBSECCION -->
                     <div class="flex flex-row">
                         <div id="logoClassOT" class="relative">
-                            <h1 id="seccionOT" class="">ZIA</h1>
+                            <h1 id="seccionOT" class=""></h1>
                         </div>
                         <div class="flex flex-col justify-center items-start ml-1">
                             <div class="font-semibold text-sm px-1 rounded  text-bluegray-900 mb-1 flex justify-start items-center">
@@ -178,9 +178,9 @@
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/html2canvas.js"></script>
     <script src="../js/exportarPdf.js"></script>
-    <script src="js/OT_JS.js"></script>
     <script src="../js/alertify.min.js"></script>
     <script src="../js/alertasSweet.js"></script>
+    <script src="js/OT_JS.js"></script>
 </body>
 
 </html>

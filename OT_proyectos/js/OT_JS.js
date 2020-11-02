@@ -1,17 +1,29 @@
-const verOTProyectos = () => {
+function validarOT() {
+    let URL = window.location.hash;
+    const idOT = URL.replace(/#|P|/gi, '');
+
+    if (idOT > 0) {
+        generarOT(idOT, 'TAREA');
+        alertaImg('Generando OT #' + idOT, '', 'success', 1500);
+    } else {
+        alertaImg('No se Encontro OT #' + idOT, '', 'info', 1500);
+    }
+}
+
+
+
+function generarOT(idOT) {
     // OT -> idPlanaccion
-    let ot = localStorage.getItem('URL');
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     const ruta = 'php/ot_crud.php?';
     const action = 'obtnerOTPlanaccion';
-    const URL = `${ruta}action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&ot=${ot}`;
+    const URL = `${ruta}action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idOT=${idOT}`;
     // const URL = 'php/ot_crud.php?action=obtnerOTPlanaccion&idDestino=10&idUsuario=1&ot=3217';
-    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            if (array) {
+            if (array.length > 0 && array != undefined) {
 
                 document.getElementById("numeroOT").innerHTML = 'OT NÚMERO ' + array.idPlanaccion;
                 document.getElementById("idOTQR").innerHTML = array.idPlanaccion;
@@ -74,11 +86,13 @@ const verOTProyectos = () => {
                 // document.getElementById("dataMaterialesOT").innerHTML = '';
                 // document.getElementById("indicacionesAdicionalesOT").innerHTML = '';
 
+            } else {
+                alertaImg('No se Encontro OT #' + idOT, '', 'info', 1000);
             }
         })
         .catch(function () {
-            alertaImg('OT #' + ot + ', No Encontrada', '', 'info', 1000);
+            alertaImg('No se Encontro OT #' + idOT, '', 'info', 1000);
         })
 }
 
-verOTProyectos();
+validarOT();
