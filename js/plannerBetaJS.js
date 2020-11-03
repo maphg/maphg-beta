@@ -3573,7 +3573,6 @@ function obtenerTareas(idEquipo = 0) {
    let tipoPendiente = 'TAREAS';
    const action = "obtenerTareas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
-   console.log(URL);
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
@@ -3879,7 +3878,6 @@ function ganttFallas(idEquipo, status) {
    let palabraEquipo = document.getElementById("palabraFallaTarea").value;
    const action = "ganttFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=${idEquipo}&status=${status}&palabraEquipo=${palabraEquipo}`;
-   console.log(URL);
    document.getElementById("pendienteFallaTarea").
       setAttribute("onclick", `ganttFallas(${idEquipo}, 'PENDIENTE')`);
    document.getElementById("solucionadosFallaTarea").
@@ -3890,7 +3888,6 @@ function ganttFallas(idEquipo, status) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array);
          document.getElementById("dataGanttFallasPendientes").innerHTML = '';
          if (array.length > 0) {
 
