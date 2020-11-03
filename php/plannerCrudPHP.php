@@ -2667,17 +2667,18 @@ if (isset($_POST['action'])) {
         $opcionBuscarEquipo = "onclick=\"obtenerEquipos($idUsuario, $idDestino, $idSeccion, $idSubseccion);\"";
         $seccionEquipos = $arraySeccion[$idSeccion];
 
-        // Tareas Generales.
-        $queryTGF = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'F' AND 
-        id_seccion = $idSeccion AND id_subseccion = $idSubseccion 
-        AND (t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino";
+        // Tareas Generales SOLUCIONADO
+        $queryTGF = "SELECT id FROM t_mp_np WHERE activo = 1 and (status='SOLUCIONADO' or status = 'F') and 
+        id_seccion = $idSeccion and id_subseccion = $idSubseccion 
+        and (t_mp_np.id_equipo = 0 OR t_mp_np.id_equipo = '') $filtroDestino";
         if ($resultTGF = mysqli_query($conn_2020, $queryTGF)) {
             $totalTGF = mysqli_num_rows($resultTGF);
         }
-
-        $queryTGN = "SELECT id FROM t_mc WHERE activo = 1 AND status = 'N' AND 
-        id_subseccion = $idSubseccion AND id_seccion = $idSeccion 
-        AND (t_mc.id_equipo = 0 OR t_mc.id_equipo = '') $filtroDestino";
+        
+        // Tareas Generales PENDIENTE
+        $queryTGN = "SELECT id FROM t_mp_np WHERE activo = 1 and 
+        (status = 'N' or status='PENDIENTE' or status='P') and id_subseccion = $idSubseccion and id_seccion = $idSeccion 
+        and (t_mp_np.id_equipo = 0 OR t_mp_np.id_equipo = '') $filtroDestino";
         if ($resultTGN = mysqli_query($conn_2020, $queryTGN)) {
             $totalTGN = mysqli_num_rows($resultTGN);
         }
@@ -2722,7 +2723,8 @@ if (isset($_POST['action'])) {
         ";
 
         // Busca Equipos.
-        $queryEquipos = "SELECT id FROM t_equipos_america WHERE id_subseccion = $idSubseccion AND (status = 'A' or status = 'OPERATIVO') $filtroPalabraEquipo $filtroDestino ORDER BY equipo ASC";
+        $queryEquipos = "SELECT id FROM t_equipos_america WHERE id_subseccion = $idSubseccion AND (status = 'A' or status = 'OPERATIVO') $filtroPalabraEquipo $filtroDestino 
+        ORDER BY id DESC";
         if ($resultEquipos = mysqli_query($conn_2020, $queryEquipos)) {
             $totalEquipos = mysqli_num_rows($resultEquipos);
 
@@ -2824,11 +2826,11 @@ if (isset($_POST['action'])) {
                         }
 
                         //TAREAS PENDIENTES. 
-                        $queryTareas = "SELECT COUNT(id) FROM t_mp_np 
-                        WHERE id_equipo = $idEquipo AND status ='F' AND activo = 1";
+                        $queryTareas = "SELECT count(id) FROM t_mp_np 
+                        WHERE id_equipo = $idEquipo and id_seccion = $idSeccion and id_subseccion = $idSubseccion and (status ='F' or status = 'PENDIENTE') and activo = 1";
                         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                             if ($row = mysqli_fetch_array($resultTareas)) {
-                                $totalTareasF = $row['COUNT(id)'];
+                                $totalTareasF = $row['count(id)'];
                                 if ($totalTareasF > 0) {
                                     $estiloTareasF = "bg-green-200 text-green-400";
                                 } else {
@@ -2839,12 +2841,11 @@ if (isset($_POST['action'])) {
                         }
 
                         //TAREAS SOLUCIONADAS 
-                        $queryTareas = "SELECT COUNT(id) FROM t_mp_np 
-                        WHERE id_equipo = $idEquipo AND (status ='N' OR status ='P' OR status = '') 
-                        AND activo = 1";
+                        $queryTareas = "SELECT count(id) FROM t_mp_np 
+                        WHERE id_equipo = $idEquipo and id_seccion = $idSeccion and id_subseccion = $idSubseccion and (status ='N' or status ='SOLUCIONADO' or status = 'P' or status = '') and activo = 1";
                         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                             if ($row = mysqli_fetch_array($resultTareas)) {
-                                $totalTareasP = $row['COUNT(id)'];
+                                $totalTareasP = $row['count(id)'];
                                 if ($totalTareasP > 0) {
                                     $estiloTareasP = "bg-red-200 text-red-400";
                                 } else {

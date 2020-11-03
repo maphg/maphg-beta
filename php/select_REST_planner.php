@@ -64,6 +64,14 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and t_mp_np.id_destino = $idDestino";
         }
 
+        if ($idEquipo == 0) {
+            $filtroEquipo = "and t_mp_np.id_seccion = $idSeccion and 
+            t_mp_np.id_subseccion = $idSubseccion ";
+        } else {
+            $filtroEquipo = "";
+        }
+
+
         $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.status, t_mp_np.responsable, t_colaboradores.nombre, t_mp_np.fecha, t_mp_np.rango_fecha,
         t_colaboradores.apellido,
         t_mp_np.status_urgente,
@@ -81,7 +89,8 @@ if (isset($_GET['action'])) {
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_mp_np.id_equipo = $idEquipo and t_mp_np.activo = 1 ORDER BY t_mp_np.id DESC";
+        WHERE t_mp_np.id_equipo = $idEquipo and t_mp_np.activo = 1 $filtroEquipo
+        ORDER BY t_mp_np.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTarea = $x['id'];
@@ -372,6 +381,137 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+
+    #GANTT PARA TAREAS (PENDIENTES Y SOLUCIONADOS)
+    if ($action == "ganttTareas") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $idEquipo = $_GET['idEquipo'];
+        $status = $_GET['status'];
+        $palabraEquipo = $_GET['palabraEquipo'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        if ($idEquipo == 0) {
+            $filtroEquipo = "and id_seccion = $idSeccion and id_subseccion = $idSubseccion";
+        } else {
+            $filtroEquipo = "";
+        }
+
+        if ($status == "PENDIENTE") {
+            $filtroStatus = "and (status = 'P' or status = 'PENDIENTE' or status = 'N' or status = '')";
+        } else {
+            $filtroStatus = "and (status = 'SOLUCIONADO' or status = 'F')";
+        }
+
+        if ($palabraEquipo == "") {
+            $filtroPalabra = "";
+        } else {
+            $filtroPalabra = "and equipo LIKE '%$palabraEquipo%'";
+        }
+
+        $query = "SELECT id, titulo, rango_fecha, fecha FROM t_mp_np WHERE activo = 1 and id_equipo = $idEquipo $filtroDestino $filtroEquipo $filtroPalabra $filtroStatus";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTarea = $x['id'];
+                $actividad = $x['titulo'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = $x['fecha'];
+
+                #Rango Fecha
+                if ($rangoFecha != "" and strlen($rangoFecha) >= 22) {
+                    $fechaInicio = "$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9]-$rangoFecha[3]$rangoFecha[4]-$rangoFecha[0]$rangoFecha[1]";
+
+                    $fechaFin = "$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[13]$rangoFecha[14]";
+                } else {
+                    $fechaInicio = (new DateTime($fechaCreacion))->format('Y-m-d');
+                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 1 days"));
+                }
+
+                $arrayAux = array(
+                    "category" => $actividad,
+                    "start" => $fechaInicio,
+                    "end" => $fechaFin,
+                    "task" => $actividad
+                );
+                $array[] = $arrayAux;
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    #GANTT PARA FALLAS (PENDIENTES Y SOLUCIONADOS)
+    if ($action == "ganttFallas") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $idEquipo = $_GET['idEquipo'];
+        $status = $_GET['status'];
+        $palabraEquipo = $_GET['palabraEquipo'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        if ($idEquipo == 0) {
+            $filtroEquipo = "and id_seccion = $idSeccion and id_subseccion = $idSubseccion";
+        } else {
+            $filtroEquipo = "";
+        }
+
+        if ($status == "PENDIENTE") {
+            $filtroStatus = "and (status = 'P' or status = 'PENDIENTE' or status = 'N' or status = '')";
+        } else {
+            $filtroStatus = "and (status = 'SOLUCIONADO' or status = 'F')";
+        }
+
+        if ($palabraEquipo == "") {
+            $filtroPalabra = "";
+        } else {
+            $filtroPalabra = "and equipo LIKE '%$palabraEquipo%'";
+        }
+
+        $query = "SELECT id, actividad, rango_fecha, fecha_creacion FROM t_mc WHERE activo = 1 and id_equipo = $idEquipo $filtroStatus";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTarea = $x['id'];
+                $actividad = $x['actividad'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = $x['fecha_creacion'];
+
+                #Rango Fecha
+                if ($rangoFecha != "" and strlen($rangoFecha) >= 22) {
+                    $fechaInicio = "$rangoFecha[6]$rangoFecha[7]$rangoFecha[8]$rangoFecha[9]-$rangoFecha[3]$rangoFecha[4]-$rangoFecha[0]$rangoFecha[1]";
+
+                    $fechaFin = "$rangoFecha[19]$rangoFecha[20]$rangoFecha[21]$rangoFecha[22]-$rangoFecha[16]$rangoFecha[17]-$rangoFecha[13]$rangoFecha[14]";
+                } else {
+                    $fechaInicio = (new DateTime($fechaCreacion))->format('Y-m-d');
+                    $fechaFin = date("Y-m-d", strtotime($fechaInicio . "+ 1 days"));
+                }
+
+                $arrayAux = array(
+                    "category" => $actividad,
+                    "start" => $fechaInicio,
+                    "end" => $fechaFin,
+                    "task" => $actividad
+                );
+                $array[] = $arrayAux;
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+
 
     // CIERRE FINAL
 }

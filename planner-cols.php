@@ -749,7 +749,7 @@
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
     <div id="modalTareasFallas" class="modal">
-        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12 overflow-x-auto scrollbar">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -768,7 +768,7 @@
                 </div>
             </div>
 
-            <div id="contenidoOpcionesProyectos" class="flex justify-center items-center mb-5 relative pt-4">
+            <div id="contenidoOpcionesFallaTarea" class="flex justify-center items-center mb-5 relative pt-4">
 
                 <div class="relative text-gray-600 w-72">
                     <input id="palabraFallaTarea" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
@@ -808,8 +808,8 @@
                 </div>
             </div>
 
-            <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
+            <!-- CONTENIDO TAREAS FALLAS -->
+            <div id="pendientesFallasTareas" class="p-2 flex justify-center items-center flex-col w-full">
 
                 <div class="overflow-x-auto scrollbar">
                     <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
@@ -862,6 +862,19 @@
                 </div>
 
             </div>
+            <!-- CONTENIDO TAREAS FALLAS -->
+
+            <!-- CONTENIDO GANTT TAREAS FALLAS -->
+            <div id="ganttFallasTareas" class="p-2 flex justify-center items-center flex-col w-full hidden">
+                <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200 mx-auto bg-white" style="max-height: 45vh;">
+                    <div class="min-w-full divide-y divide-gray-200 table-fixed border rounded">
+                        <div class="text-xxs uppercase mt-5 w-full h-full mx-auto" id="dataGanttFallasPendientes"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- CONTENIDO GANTT TAREAS FALLAS -->
+
+
         </div>
 
         <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->

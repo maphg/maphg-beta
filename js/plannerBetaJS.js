@@ -3390,6 +3390,9 @@ const datosFallasTareas = params => {
 
 // FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
 function obtenerFallas(idEquipo = 0) {
+   document.getElementById("pendientesFallasTareas").classList.remove('hidden');
+   document.getElementById("ganttFallasTareas").classList.add('hidden');
+
    localStorage.setItem("idEquipo", idEquipo);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -3408,6 +3411,8 @@ function obtenerFallas(idEquipo = 0) {
    document.getElementById("solucionadosFallaTarea").
       setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
    document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+   document.getElementById("ganttFallaTarea").
+      setAttribute('onclick', `ganttFallas(${idEquipo}, 'PENDIENTE')`);
 
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
@@ -3504,6 +3509,7 @@ function obtenerFallas(idEquipo = 0) {
    }
 };
 
+
 function obtenerFallasSolucionados(idEquipo) {
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["solucionadosFallaTarea", "opcionFallaPendiente"];
@@ -3527,6 +3533,7 @@ function obtenerFallasSolucionados(idEquipo) {
       alertaImg('Sin SOLUCIONADOS', '', 'info', 1200);
    }
 }
+
 
 function obtenerFallasPendientes(idEquipo) {
    // APLICA ESTILO A LAS OPCIONES
@@ -3552,8 +3559,12 @@ function obtenerFallasPendientes(idEquipo) {
    }
 }
 
+
 // FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
 function obtenerTareas(idEquipo = 0) {
+   document.getElementById("pendientesFallasTareas").classList.remove('hidden');
+   document.getElementById("ganttFallasTareas").classList.add('hidden');
+
    localStorage.setItem("idEquipo", idEquipo);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -3562,19 +3573,26 @@ function obtenerTareas(idEquipo = 0) {
    let tipoPendiente = 'TAREAS';
    const action = "obtenerTareas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
-
+   console.log(URL);
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
       setAttribute('style', 'background:#fbd38d; min-height: 60vh;');
    document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
    document.getElementById("pendienteFallaTarea").
-      setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
+      setAttribute('onclick', `obtenerTareasPendientes(${idEquipo})`);
    document.getElementById("solucionadosFallaTarea").
-      setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
+      setAttribute('onclick', `obtenerTareasSolucionados(${idEquipo})`);
 
-   document.getElementById("agregarFallaTarea").setAttribute("onclick", "datosAgregarTarea();");
-   document.getElementById("btnAgregarMC").setAttribute("onclick", "agregarTarea();");
+   document.getElementById("agregarFallaTarea").
+      setAttribute("onclick", "datosAgregarTarea();");
+   document.getElementById("btnAgregarMC").
+      setAttribute("onclick", "agregarTarea();");
+
+   document.getElementById("ganttFallaTarea").
+      setAttribute("onclick", `ganttTareas(${idEquipo}, 'PENDIENTE')`);
+   document.getElementById("opcionFallaPendiente").
+      setAttribute("onclick", `obtenerTareas(${idEquipo})`);
 
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
@@ -3633,7 +3651,7 @@ function obtenerTareas(idEquipo = 0) {
       .then(function () {
          complementosFallasTareas();
       })
-      .then(function () { obtenerFallasPendientes(idEquipo) })
+      .then(function () { obtenerTareasPendientes(idEquipo) })
       .catch(function (err) {
          fetch(APIERROR + err);
          document.getElementById("dataPendientesX").innerHTML = '';
@@ -3671,6 +3689,55 @@ function obtenerTareas(idEquipo = 0) {
 }
 
 
+function obtenerTareasSolucionados(idEquipo) {
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["solucionadosFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["pendienteFallaTarea", "ganttFallaTarea", "exportarFallaTarea", "agregarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-orange-200', 'text-orange-400', 'bg-orange-200', 'bg-orange-600');
+
+   let pendientes = document.getElementsByClassName("S-PENDIENTE");
+   let solucionados = document.getElementsByClassName("S-SOLUCIONADO");
+
+   if (pendientes.length > 0) {
+      for (let x = 0; x < pendientes.length; x++) {
+         document.getElementsByClassName("S-PENDIENTE")[x].classList.add('hidden');
+      }
+   }
+
+   if (solucionados.length > 0) {
+      for (let x = 0; x < solucionados.length; x++) {
+         document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
+      }
+   } else {
+      alertaImg('Sin SOLUCIONADOS', '', 'info', 1200);
+   }
+}
+
+
+function obtenerTareasPendientes(idEquipo) {
+   // APLICA ESTILO A LAS OPCIONES
+   let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
+   let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
+   estiloOpcionesModalTareasFallas(activos, inactivos, 'hover:bg-orange-200', 'text-orange-400', 'bg-orange-200', 'bg-orange-600');
+
+   let pendientes = document.getElementsByClassName("S-PENDIENTE");
+   let solucionados = document.getElementsByClassName("S-SOLUCIONADO");
+
+   if (pendientes.length > 0) {
+      for (let x = 0; x < pendientes.length; x++) {
+         document.getElementsByClassName("S-PENDIENTE")[x].classList.remove('hidden');
+      }
+   } else {
+      alertaImg('Sin PENDIENTES', '', 'info', 1200);
+   }
+
+   if (solucionados.length > 0) {
+      for (let x = 0; x < solucionados.length; x++) {
+         document.getElementsByClassName("S-SOLUCIONADO")[x].classList.add('hidden');
+      }
+   }
+}
+
 // FUNCION ARRAY PARA ESTILO DE OPCIONES EN MODAL #modalTareasFallas
 // RECIBE 2 ARRAS PARA ACTIVOS E INACTIVOS
 function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgActivo, bgInactivo) {
@@ -3678,7 +3745,7 @@ function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgAct
    if (activos) {
       activos.forEach(function (x) {
          if (document.getElementById(x)) {
-            document.getElementById(x).classList.remove(hover, texto, bgActivo, bgInactivo);
+            document.getElementById(x).classList.remove('hover:bg-orange-200', 'text-orange-400', 'bg-orange-200', 'bg-orange-600', 'hover:bg-red-200', 'text-red-400', 'bg-red-200', 'bg-red-600');
          }
       })
    }
@@ -3686,7 +3753,7 @@ function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgAct
    if (inactivos) {
       inactivos.forEach(function (x) {
          if (document.getElementById(x)) {
-            document.getElementById(x).classList.remove(hover, texto, bgActivo, bgInactivo);
+            document.getElementById(x).classList.remove('hover:bg-orange-200', 'text-orange-400', 'bg-orange-200', 'bg-orange-600', 'hover:bg-red-200', 'text-red-400', 'bg-red-200', 'bg-red-600');
          }
       })
    }
@@ -3707,6 +3774,189 @@ function estiloOpcionesModalTareasFallas(activos, inactivos, hover, texto, bgAct
       })
    }
 }
+
+
+//Función para Generar Grafica GANTT de PROYECTOS PENDIENTES 
+function ganttTareas(idEquipo, status) {
+
+   document.getElementById("pendientesFallasTareas").classList.add('hidden');
+   document.getElementById("ganttFallasTareas").classList.remove('hidden');
+
+   let idUsuario = localStorage.getItem("usuario");
+   let idDestino = localStorage.getItem("idDestino");
+   let idSeccion = localStorage.getItem("idSeccion");
+   let idSubseccion = localStorage.getItem("idSubseccion");
+   let palabraEquipo = document.getElementById("palabraFallaTarea").value;
+   const action = "ganttTareas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=${idEquipo}&status=${status}&palabraEquipo=${palabraEquipo}`;
+
+   document.getElementById("pendienteFallaTarea").
+      setAttribute("onclick", `ganttTareas(${idEquipo}, 'PENDIENTE')`);
+   document.getElementById("solucionadosFallaTarea").
+      setAttribute("onclick", `ganttTareas(${idEquipo}, 'SOLUCIONADO')`);
+   document.getElementById("opcionFallaPendiente").
+      setAttribute("onclick", `obtenerTareas(${idEquipo})`);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         document.getElementById("dataGanttFallasPendientes").innerHTML = '';
+         if (array.length > 0) {
+
+            for (var i = 0; i < array.length; i++) {
+               var colorSet = new am4core.ColorSet();
+               array[i]["color"] = colorSet.getIndex(i);
+            }
+
+            const size = 100 + array.length * 50;
+            document.getElementById("dataGanttFallasPendientes")
+               .setAttribute("style", "height:" + size + "px");
+
+         } else {
+            alertaImg('No se Encontraron Datos', '', 'info', 1200);
+         }
+         return array;
+      }).then(function (array) {
+         generarGantt(array);
+      })
+      .catch(function (err) {
+         fethc(APIERROR + err);
+      });
+
+   function generarGantt(array) {
+      am4core.useTheme(am4themes_animated);
+
+      var chart = am4core.create("dataGanttFallasPendientes", am4charts.XYChart);
+      chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+      chart.paddingRight = 30;
+      chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+      var colorSet = new am4core.ColorSet();
+      colorSet.saturation = 0.4;
+
+      chart.data = array;
+      chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+      chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+      var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.dataFields.category = "category";
+      categoryAxis.renderer.grid.template.location = 0;
+      categoryAxis.renderer.inversed = true;
+
+      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.renderer.minGridDistance = 70;
+      dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+      dateAxis.renderer.tooltipLocation = 0;
+
+      var series1 = chart.series.push(new am4charts.ColumnSeries());
+      series1.columns.template.height = am4core.percent(70);
+      series1.columns.template.tooltipText =
+         "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+      series1.dataFields.openDateX = "start";
+      series1.dataFields.dateX = "end";
+      series1.dataFields.categoryY = "category";
+      series1.columns.template.propertyFields.fill = "color"; // get color from data
+      series1.columns.template.propertyFields.stroke = "color";
+      series1.columns.template.strokeOpacity = 1;
+
+      chart.scrollbarX = new am4core.Scrollbar();
+   }
+}
+
+
+//Función para Generar Grafica GANTT de PROYECTOS PENDIENTES 
+function ganttFallas(idEquipo, status) {
+
+   document.getElementById("pendientesFallasTareas").classList.add('hidden');
+   document.getElementById("ganttFallasTareas").classList.remove('hidden');
+
+   let idUsuario = localStorage.getItem("usuario");
+   let idDestino = localStorage.getItem("idDestino");
+   let idSeccion = localStorage.getItem("idSeccion");
+   let idSubseccion = localStorage.getItem("idSubseccion");
+   let palabraEquipo = document.getElementById("palabraFallaTarea").value;
+   const action = "ganttFallas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=${idEquipo}&status=${status}&palabraEquipo=${palabraEquipo}`;
+   console.log(URL);
+   document.getElementById("pendienteFallaTarea").
+      setAttribute("onclick", `ganttFallas(${idEquipo}, 'PENDIENTE')`);
+   document.getElementById("solucionadosFallaTarea").
+      setAttribute("onclick", `ganttFallas(${idEquipo}, 'SOLUCIONADO')`);
+   document.getElementById("opcionFallaPendiente").
+      setAttribute("onclick", `obtenerFallas(${idEquipo})`);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array);
+         document.getElementById("dataGanttFallasPendientes").innerHTML = '';
+         if (array.length > 0) {
+
+            for (var i = 0; i < array.length; i++) {
+               var colorSet = new am4core.ColorSet();
+               array[i]["color"] = colorSet.getIndex(i);
+            }
+
+            const size = 100 + array.length * 50;
+            document.getElementById("dataGanttFallasPendientes")
+               .setAttribute("style", "height:" + size + "px");
+
+         } else {
+            alertaImg('No se Encontraron Datos', '', 'info', 1200);
+         }
+         return array;
+      }).then(function (array) {
+         generarGantt(array);
+      })
+      .catch(function (err) {
+         fethc(APIERROR + err);
+      });
+
+   function generarGantt(array) {
+      am4core.useTheme(am4themes_animated);
+
+      var chart = am4core.create("dataGanttFallasPendientes", am4charts.XYChart);
+      chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+      chart.paddingRight = 30;
+      chart.dateFormatter.inputDateFormat = "yyyy-MM-dd HH:mm";
+
+      var colorSet = new am4core.ColorSet();
+      colorSet.saturation = 0.4;
+
+      chart.data = array;
+      chart.dateFormatter.dateFormat = "yyyy-MM-dd";
+      chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+      var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.dataFields.category = "category";
+      categoryAxis.renderer.grid.template.location = 0;
+      categoryAxis.renderer.inversed = true;
+
+      var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+      dateAxis.renderer.minGridDistance = 70;
+      dateAxis.baseInterval = { count: 1, timeUnit: "day" };
+      dateAxis.renderer.tooltipLocation = 0;
+
+      var series1 = chart.series.push(new am4charts.ColumnSeries());
+      series1.columns.template.height = am4core.percent(70);
+      series1.columns.template.tooltipText =
+         "{task}: [bold]{openDateX}[/] - [bold]{dateX}[/]";
+
+      series1.dataFields.openDateX = "start";
+      series1.dataFields.dateX = "end";
+      series1.dataFields.categoryY = "category";
+      series1.columns.template.propertyFields.fill = "color"; // get color from data
+      series1.columns.template.propertyFields.stroke = "color";
+      series1.columns.template.strokeOpacity = 1;
+
+      chart.scrollbarX = new am4core.Scrollbar();
+   }
+}
+
+
 
 // FUNCION UNIVERSAL PARA LA TABLA #dataPendientesX
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
