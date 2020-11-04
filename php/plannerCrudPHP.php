@@ -2674,7 +2674,7 @@ if (isset($_POST['action'])) {
         if ($resultTGF = mysqli_query($conn_2020, $queryTGF)) {
             $totalTGF = mysqli_num_rows($resultTGF);
         }
-        
+
         // Tareas Generales PENDIENTE
         $queryTGN = "SELECT id FROM t_mp_np WHERE activo = 1 and 
         (status = 'N' or status='PENDIENTE' or status='P') and id_subseccion = $idSubseccion and id_seccion = $idSeccion 
@@ -7002,6 +7002,28 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
+        } elseif ($tabla == "t_equipos_cotizaciones") {
+            $imgNombre = "EQUIPO_ID_COT_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../img/equipos/cotizaciones/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_equipos_cotizaciones(id_equipo, url_archivo, fecha, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 11;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
         } else {
             echo 0;
         }
@@ -7150,6 +7172,59 @@ if (isset($_POST['action'])) {
                         $adjuntoURL = "../equipos/files/$url";
                     } elseif (file_exists("../img/equipos/$url")) {
                         $adjuntoURL = "img/equipos/$url";
+                    } else {
+                        $adjuntoURL = "";
+                    }
+
+                    // Admite solo Imagenes.
+                    if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+                        if (strpbrk($adjuntoURL, ' ')) {
+                            $imagen .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                </div>
+                            </a>
+                        ";
+                        } else {
+                            $imagen .= "
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+                            ";
+                        }
+                    } else {
+                        $documento .= "
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>                    
+                        ";
+                    }
+                }
+                $data['imagen'] = $imagen;
+                $data['documento'] = $documento;
+            }
+        } elseif ($tabla == "t_equipos_cotizaciones") {
+            $query = "SELECT t_equipos_cotizaciones.id, t_equipos_cotizaciones.url_archivo, 
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_equipos_cotizaciones 
+            LEFT JOIN t_users ON t_equipos_cotizaciones.subido_por = t_users.id 
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_equipos_cotizaciones.id_equipo = $idTabla AND t_equipos_cotizaciones.activo = 1
+            ORDER BY t_equipos_cotizaciones.id DESC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $value) {
+                    $url = $value['url_archivo'];
+
+                    if (file_exists("../../equipos/cotizaciones/$url")) {
+                        $adjuntoURL = "../equipos/cotizaciones/$url";
+                    } elseif (file_exists("../img/equipos/cotizaciones/$url")) {
+                        $adjuntoURL = "img/equipos/cotizaciones/$url";
                     } else {
                         $adjuntoURL = "";
                     }
@@ -8848,6 +8923,49 @@ if (isset($_POST['action'])) {
         }
 
         $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+
+    #OBTIENE LOS COMENTARIOS POR EQUIPO
+    if ($action == "obtenerComentariosEquipos") {
+        $idEquipo = $_POST['idEquipo'];
+        $array = array();
+
+        $query = "SELECT t_equipos_comentarios.id, t_equipos_comentarios.comentarios, 
+        t_equipos_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_equipos_comentarios 
+        INNER JOIN t_users ON t_equipos_comentarios.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_equipos_comentarios.id_equipo = $idEquipo and t_equipos_comentarios.status = '1'
+        ORDER BY t_equipos_comentarios.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idComentario = $x['id'];
+                $comentario = $x['comentarios'];
+                $nombre = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $fecha = (new DateTime($x['fecha']))->format('d/m/Y H:m:s');
+                $arrayTemp = array(
+                    "idComentario" => $idComentario,
+                    "comentario" => $comentario,
+                    "nombre" => $nombre,
+                    "fecha" => $fecha
+                );
+
+                $array[] = $arrayTemp;
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "agregarComentarioEquipo") {
+        $idEquipo = $_POST["idEquipo"];
+        $comentario = $_POST["comentario"];
+
+        $query = "INSERT INTO t_equipos_comentarios(fecha, comentarios, id_equipo, id_usuario, status) VALUES('$fechaActual', '$comentario', $idEquipo, $idUsuario, '1')";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {

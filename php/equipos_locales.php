@@ -196,7 +196,7 @@ if (isset($_GET['action'])) {
                 $arrayTemp = array(
                     "filaNumero" => intval($contador),
                     "idEquipo" => intval($idEquipo),
-                    "equipo" => $equipo . " - " . $idEquipo,
+                    "equipo" => $equipo,
                     "tipoEquipo" => $tipoEquipo,
                     "statusEquipo" => $statusEquipo,
                     "fallasP" => intval($fallasPendientes),

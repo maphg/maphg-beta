@@ -2020,6 +2020,138 @@ function obtenerMediaEquipo(idEquipo) {
    });
 }
 
+// Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
+function obtenerCotizacionesEquipo(idEquipo) {
+   document.getElementById("modalMedia").classList.add("open");
+   document.getElementById("inputAdjuntos").
+      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_cotizaciones")');
+   document.getElementById("contenedorImagenes").classList.add('hidden');
+   document.getElementById("contenedorDocumentos").classList.add('hidden');
+
+   let idTabla = idEquipo;
+   let tabla = "t_equipos_cotizaciones";
+
+   const action = "obtenerAdjuntos";
+   $.ajax({
+      type: "POST",
+      url: "php/plannerCrudPHP.php",
+      data: {
+         action: action,
+         idUsuario: idUsuario,
+         idDestino: idDestino,
+         idTabla: idTabla,
+         tabla: tabla
+      },
+      dataType: "JSON",
+      success: function (data) {
+
+         if (data.imagen != "") {
+            document.getElementById("dataImagenes").innerHTML = data.imagen;
+            document.getElementById("contenedorImagenes").classList.remove('hidden');
+         }
+
+         if (data.documento != "") {
+            document.getElementById("dataAdjuntos").innerHTML = data.documento;
+            document.getElementById("contenedorDocumentos").classList.remove('hidden');
+         }
+
+      },
+   });
+}
+
+
+function agregarComentarioEquipo(idEquipo) {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let comentario = document.getElementById("inputComentario").value;
+
+   const action = "agregarComentarioEquipo";
+   if (comentario.length > 1) {
+
+      $.ajax({
+         type: 'POST',
+         url: 'php/plannerCrudPHP.php',
+         data: {
+            action: action,
+            comentario: comentario,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo
+         },
+         // dataType: 'JSON',
+         success: function (data) {
+            if (data == 1) {
+               obtenerComentariosEquipos(idEquipo);
+               alertaImg('Comentario Agregado', '', 'success', 1200);
+               document.getElementById("inputComentario").value = '';
+               obtenerEquiposAmerica(idSeccion, idSubseccion);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+            document.getElementById("dataComentarios").innerHTML = '';
+         }
+      })
+   } else {
+      alertaImg('Intente de Nuevo', '', 'info', 1200);
+   }
+}
+
+
+function obtenerComentariosEquipos(idEquipo) {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   document.getElementById("btnComentario").
+      setAttribute('onclick', `agregarComentarioEquipo(${idEquipo})`);
+
+   const action = "obtenerComentariosEquipos";
+   $.ajax({
+      type: 'POST',
+      url: 'php/plannerCrudPHP.php',
+      data: {
+         action: action,
+         idUsuario: idUsuario,
+         idDestino: idDestino,
+         idEquipo: idEquipo
+      },
+      dataType: 'JSON',
+      success: function (array) {
+         document.getElementById("dataComentarios").innerHTML = '';
+         if (array.length > 0) {
+            for (let x = 0; x < array.length; x++) {
+               const idComentario = array[x].idComentario;
+               const comentario = array[x].comentario;
+               const nombre = array[x].nombre;
+               const fecha = array[x].fecha;
+               const dataX = `
+                  <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
+                     <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
+                           <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}\" width=\"48\" height=\"48\" alt=\"\">
+                     </div>
+                     <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                           <div class=\"text-xs font-bold flex flex-row justify-between w-full\">
+                              <div>
+                                 <h1>${nombre}</h1>
+                              </div>
+                              <div>
+                                 <p class=\"font-mono ml-2 text-gray-600\">${fecha}</p>
+                              </div>
+                           </div>
+                           <div class=\"text-xs w-full\">
+                              <p>${comentario}</p>
+                           </div>
+                     </div>
+                  </div>        
+               `;
+
+               document.getElementById("dataComentarios").insertAdjacentHTML('beforeend', dataX);
+            }
+         }
+      }
+   })
+}
 
 // ---------- PROYECTOS ----------
 
@@ -2133,6 +2265,7 @@ function subirImagenGeneral(idTabla, tabla) {
    let img = document.getElementById("inputAdjuntos").files;
    let idProyecto = localStorage.getItem('idProyecto');
    let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
    let idEquipo = localStorage.getItem('idEquipo');
    for (let index = 0; index < img.length; index++) {
       let imgData = new FormData();
@@ -2175,6 +2308,7 @@ function subirImagenGeneral(idTabla, tabla) {
             } else if (data == 5) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
                obtenerMediaEquipo(idTabla);
+               obtenerEquiposAmerica(idSeccion, idSubseccion);
             } else if (data == 7) {
                obtenerAdjuntosTareas(idTabla);
                obtenerTareas(idEquipo);
@@ -2186,6 +2320,10 @@ function subirImagenGeneral(idTabla, tabla) {
             } else if (data == 9) {
                obtenerImagenesEquipo(idTabla);
                alertaImg("Adjunto Agregado", "", "success", 2500);
+            } else if (data == 11) {
+               alertaImg("Cotización Agregada", "", "success", 2500);
+               obtenerCotizacionesEquipo(idTabla);
+               obtenerEquiposAmerica(idSeccion, idSubseccion);
             } else {
                alertaImg("Intente de Nuevo", "", "info", 3000);
             }
@@ -4052,10 +4190,10 @@ const dataEquiposAmerica = params => {
    var idEquipo = params.idEquipo;
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
    var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   var tComentarios = ``;
+   var tComentarios = `onclick="obtenerComentariosEquipos(${idEquipo}); toggleModalTailwind('modalComentarios');"`;
    var tAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
    var tInfo = `onclick="informacionEquipo(${idEquipo});"`;
-   var tCotizaciones = ``;
+   var tCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
 
    return `
         <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
@@ -4131,7 +4269,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${tCotizaciones}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcotizaciones}</h1>
                 </div>
@@ -4143,7 +4281,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200 truncate py-2 text-center leading-none hover:bg-gray-300" ${tComentarios}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcomentarios}</h1>
                 </div>
