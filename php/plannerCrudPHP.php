@@ -348,7 +348,7 @@ if (isset($_POST['action'])) {
                                     $dataZIE .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -491,7 +491,7 @@ if (isset($_POST['action'])) {
                                     $dataAUTO .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -635,7 +635,7 @@ if (isset($_POST['action'])) {
                                     $dataDEC .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -924,7 +924,7 @@ if (isset($_POST['action'])) {
                                     $dataZHA .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1068,7 +1068,7 @@ if (isset($_POST['action'])) {
                                     $dataZHC .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1212,7 +1212,7 @@ if (isset($_POST['action'])) {
                                     $dataZHP .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1356,7 +1356,7 @@ if (isset($_POST['action'])) {
                                     $dataZIA .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1500,7 +1500,7 @@ if (isset($_POST['action'])) {
                                     $dataZIC .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
