@@ -94,6 +94,37 @@
         #tooltipActividadesGeneral[data-popper-placement^='right']>#arrowtooltipActividadesGeneral {
             left: -4px;
         }
+
+        /* Arrow TOOLTIP */
+        #arrowtooltipActividadesProyecto,
+        #arrowtooltipActividadesProyecto::before {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            z-index: -1;
+        }
+
+        #arrowtooltipActividadesProyecto::before {
+            content: '';
+            transform: rotate(45deg);
+            background: #333;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='top']>#arrowtooltipActividadesProyecto {
+            bottom: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='bottom']>#arrowtooltipActividadesProyecto {
+            top: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='left']>#arrowtooltipActividadesProyecto {
+            right: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='right']>#arrowtooltipActividadesProyecto {
+            left: -4px;
+        }
     </style>
 </head>
 
@@ -2346,6 +2377,7 @@
 
     <!-- ACTIVIDADES PLAN DE ACCIÓN -->
     <div id="tooltipActividadesPlanaccion" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        <div id="arrowtooltipActividadesProyecto" data-popper-arrow></div>
         <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
             <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
                 <div class="w-4 h-4  mr-2 flex-none"></div>

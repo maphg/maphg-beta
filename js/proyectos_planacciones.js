@@ -286,7 +286,7 @@ const datosPlanes = params => {
                     <h1>Creado por: ${params.creadoPor}</h1>
                 </div>
             </td>
-            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
+            <td id="${idPlanaccion}planaccionX" class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
             ${fToolTip}>
                 <h1>${params.subTareas}</h1>
             </td>
@@ -344,7 +344,9 @@ function tooltipProyectos(idproyecto) {
     // Propiedades para el tooltip
     const button = document.getElementById(idproyecto + 'proyecto');
     const tooltip = document.getElementById('tooltipProyectos');
-    Popper.createPopper(button, tooltip);
+    Popper.createPopper(button, tooltip, {
+        placement: 'bottom-start'
+    });
 }
 
 
@@ -364,7 +366,7 @@ function tooltipPlanaccion(idPlanaccion) {
     }
 
     // Propiedades para el tooltip
-    const button = document.getElementById(idPlanaccion + 'planaccion');
+    const button = document.getElementById(idPlanaccion + 'planaccionX');
     const tooltip = document.getElementById('tooltipActividadesPlanaccion');
     Popper.createPopper(button, tooltip, {
         placement: 'bottom'
