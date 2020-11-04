@@ -683,7 +683,6 @@ function obtenerPlanaccionDEP(idProyecto) {
     const action = 'obtenerPlanaccion';
     const ruta = 'php/proyectos_planacciones.php?';
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
-    console.log('false');
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
     fetch(URL)
@@ -870,7 +869,6 @@ function agregarProyectoDEP() {
 
 // AGREGA PLANESACCIÓN A PROYECTOS
 function agregarPlanaccionDEP() {
-    console.log('PLAN ACCIÓN AGREGADA');
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let actividad = document.getElementById("agregarPlanaccionDEP").value;

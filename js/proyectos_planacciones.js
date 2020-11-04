@@ -409,11 +409,9 @@ function tooltipEditarEliminarSolucionar(idActividad) {
     if (document.getElementById(idActividad + 'actividad').childNodes[1].classList.contains('bg-green-300')) {
         document.getElementById("btnFinalizar").classList.remove('hover:bg-green-200');
         document.getElementById("btnFinalizar").classList.add('bg-green-200');
-        console.log('SI');
     } else {
         document.getElementById("btnFinalizar").classList.add('hover:bg-green-200');
         document.getElementById("btnFinalizar").classList.remove('bg-green-200');
-        console.log('NO');
     }
 }
 
@@ -1450,7 +1448,6 @@ function ganttP() {
                     document.getElementById("loadProyectos").innerHTML = '';
                 })
                 .catch((error) => {
-                    // console.log("Error" + error);
                     document.getElementById("loadProyectos").innerHTML = '';
                 });
 
@@ -1551,7 +1548,6 @@ function ganttS() {
                     document.getElementById("loadProyectos").innerHTML = '';
                 })
                 .catch((error) => {
-                    // console.log("Error" + error);
                     document.getElementById("loadProyectos").innerHTML = '';
                 });
             let size = 100 + dataGantt.length * 50;
@@ -1629,7 +1625,6 @@ function actualizarActividadPlanaccion(idActividad, parametro, columna) {
     fetch(URL)
         .then(resp => resp.json())
         .then(resp => {
-            console.log(resp.resp);
             if (resp.resp == "ELIMINADO") {
                 alertaImg('Actividad Eliminada', '', 'success', 1200);
                 document.getElementById('tooltipEditarEliminarSolucionar').classList.add('hidden');
@@ -1719,7 +1714,6 @@ document.getElementById("opcionGanttProyectos").addEventListener('click', () => 
 
 // OCULTA SUBVENTANAS DE LOS PROYECTOS
 document.getElementById("contenidoOpcionesProyectos").addEventListener('click', function () {
-    console.log('click');
     hiddenVista("tooltipActividadesPlanaccion");
     hiddenVista("tooltipProyectos");
     hiddenVista("tooltipEditarEliminarSolucionar");

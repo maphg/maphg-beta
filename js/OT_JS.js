@@ -5,7 +5,7 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "obtenerOTDigital";
-    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
+    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -198,7 +198,7 @@ function consultaAdjuntosOT(idOT) {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultarAdjuntosOT";
-    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -437,6 +437,7 @@ function actualizaStatusOT(idOT, status) {
                 document.getElementById("modalSolucionarOT").classList.remove('open');
                 document.getElementById("modalStatus").classList.remove('open');
             }
+            consultaStatusOT(idOT);
         });
 }
 

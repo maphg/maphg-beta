@@ -15,7 +15,6 @@ function storageUsuario() {
         },
         // dataType: "json",
         success: function (data) {
-            console.log('Session Actualizad:' + new Date());
         }
     });
 }

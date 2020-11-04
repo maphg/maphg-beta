@@ -6868,14 +6868,14 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
-        } elseif ($tabla == "t_equipos_adjuntos") {
+        } elseif ($tabla == "t_equipos_america_adjuntos") {
             $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
             $ruta = "../img/equipos/";
 
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
                     if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
-                        $query = "INSERT INTO t_equipos_adjuntos(id_equipo, url_archivo, fecha_subida, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        $query = "INSERT INTO t_equipos_america_adjuntos(id_equipo, url_adjunto, fecha, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             echo 5;
                         } else {
@@ -7156,17 +7156,17 @@ if (isset($_POST['action'])) {
                 $data['imagen'] = $imagen;
                 $data['documento'] = $documento;
             }
-        } elseif ($tabla == "t_equipos_adjuntos") {
-            $query = "SELECT t_equipos_adjuntos.id, t_equipos_adjuntos.url_archivo, 
+        } elseif ($tabla == "t_equipos_america_adjuntos") {
+            $query = "SELECT t_equipos_america_adjuntos.id, t_equipos_america_adjuntos.url_adjunto, 
             t_colaboradores.nombre, t_colaboradores.apellido
-            FROM t_equipos_adjuntos 
-            LEFT JOIN t_users ON t_equipos_adjuntos.subido_por = t_users.id 
+            FROM t_equipos_america_adjuntos 
+            LEFT JOIN t_users ON t_equipos_america_adjuntos.subido_por = t_users.id 
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_equipos_adjuntos.id_equipo = $idTabla AND t_equipos_adjuntos.activo = 1
-            ORDER BY t_equipos_adjuntos.fecha_subida DESC";
+            WHERE t_equipos_america_adjuntos.id_equipo = $idTabla AND t_equipos_america_adjuntos.activo = 1
+            ORDER BY t_equipos_america_adjuntos.fecha DESC";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
-                    $url = $value['url_archivo'];
+                    $url = $value['url_adjunto'];
 
                     if (file_exists("../../equipos/files/$url")) {
                         $adjuntoURL = "../equipos/files/$url";
@@ -7181,7 +7181,7 @@ if (isset($_POST['action'])) {
                         if (strpbrk($adjuntoURL, ' ')) {
                             $imagen .= "
                             <a href=\"$adjuntoURL\" target=\"_blank\">
-                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md\">
                                     <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
                                 </div>
                             </a>
@@ -7189,7 +7189,7 @@ if (isset($_POST['action'])) {
                         } else {
                             $imagen .= "
                                 <a href=\"$adjuntoURL\" target=\"_blank\">
-                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                                     </div>
                                 </a>
                             ";
@@ -8037,7 +8037,7 @@ if (isset($_POST['action'])) {
 
         $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
-        t_equipos_america.coste, t_equipos_america.caudal_aire_cfm
+        t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.id_fases
         FROM t_equipos_america 
         LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
         LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
@@ -8073,6 +8073,7 @@ if (isset($_POST['action'])) {
                 $caudal_aire_cfm = $i['caudal_aire_cfm'];
                 $status = $i['status'];
                 $tipo = $i['id_tipo'];
+                $idFases = $i['id_fases'];
 
                 $data['idEquipo'] = $id;
                 $data['idEquipoPrincipal'] = $idEquipoPrincipal;
@@ -8103,6 +8104,7 @@ if (isset($_POST['action'])) {
                 $data['status'] = $status;
                 $data['tipo'] = $tipo;
                 $data['semanaActual'] = $semanaActual;
+                $data['idFases'] = $idFases;
             }
         }
         echo json_encode($data);
@@ -8138,6 +8140,7 @@ if (isset($_POST['action'])) {
         $caudalAireM3HEquipo = $_POST['caudalAireM3HEquipo'];
         $caudalAireCFMEquipo = $_POST['caudalAireCFMEquipo'];
         $estadoEquipo = $_POST['estadoEquipo'];
+        $idFaseEquipo = $_POST['idFaseEquipo'];
 
         if ($jerarquiaEquipo == "PRIMARIO") {
             $equipoPrincipal = 0;
@@ -8168,10 +8171,9 @@ if (isset($_POST['action'])) {
         potencia_energetica_frio_kw = $PotenciaEnergeticaFrioKWEquipo,
         potencia_energetica_frio_tr = $potenciaEnergeticaFrioTREquipo,
         potencia_energetica_calor_kcal = $potenciaEnergeticaCalorKCALEquipo,
-        caudal_aire_m3h = $caudalAireM3HEquipo
-        -- status = '$estadoEquipo' 
-        -- coste = $,
-        -- id_fases = $ 
+        caudal_aire_m3h = $caudalAireM3HEquipo,
+        status = '$estadoEquipo',
+        id_fases = $idFaseEquipo 
 
         WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {

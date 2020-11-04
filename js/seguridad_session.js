@@ -11,7 +11,6 @@ function seguridad_session() {
             }
         })
         .catch(function (err) {
-            console.log(err);
         });
 }
 setInterval(seguridad_session, 300000);

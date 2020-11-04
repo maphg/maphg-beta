@@ -1985,12 +1985,12 @@ function agregarTarea() {
 function obtenerMediaEquipo(idEquipo) {
    document.getElementById("modalMedia").classList.add("open");
    document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos")');
+      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
    document.getElementById("contenedorImagenes").classList.add('hidden');
    document.getElementById("contenedorDocumentos").classList.add('hidden');
 
    let idTabla = idEquipo;
-   let tabla = "t_equipos_adjuntos";
+   let tabla = "t_equipos_america_adjuntos";
 
    const action = "obtenerAdjuntos";
    $.ajax({
@@ -2309,6 +2309,7 @@ function subirImagenGeneral(idTabla, tabla) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
                obtenerMediaEquipo(idTabla);
                obtenerEquiposAmerica(idSeccion, idSubseccion);
+               obtenerImagenesEquipo(idTabla);
             } else if (data == 7) {
                obtenerAdjuntosTareas(idTabla);
                obtenerTareas(idEquipo);
@@ -2319,6 +2320,9 @@ function subirImagenGeneral(idTabla, tabla) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 9) {
                obtenerImagenesEquipo(idTabla);
+               alertaImg("Adjunto Agregado", "", "success", 2500);
+            } else if (data == 10) {
+               consultaAdjuntosOT(idTabla);
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 11) {
                alertaImg("Cotización Agregada", "", "success", 2500);
@@ -2458,7 +2462,7 @@ function toggleInputsEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
    const arrayBtnEquipo =
       [
-         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo'
+         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo'
       ]
 
    arrayBtnEquipo.forEach(element => {
@@ -2510,9 +2514,10 @@ function informacionEquipo(idEquipo) {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    document.getElementById("modalMPEquipo").classList.add('open');
+   document.getElementById("tooltipMP").classList.add('hidden');
 
+   // Funciones principales
    consultarOpcionesEquipo();
-   toggleInputsEquipo(0);
 
    const action = "informacionEquipo";
    $.ajax({
@@ -2526,23 +2531,17 @@ function informacionEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         document.getElementById("btnAdjuntosEquipo").setAttribute('onclick', 'toggleModalTailwind("modalMedia")');
-
-         obtenerImagenesEquipo(idEquipo);
-         consultarPlanEquipo(idEquipo);
          document.getElementById("inputAdjuntos").
-            setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
+            setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
 
-         let URLQR = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo;
          document.getElementById("QREquipo").
-            setAttribute("src", URLQR);
-         // document.getElementById("QREquipo").
-         // setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/planner-cols.php?id=" + idEquipo);
+            setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
 
          document.getElementById("nombreEquipo").value = data.equipo;
          document.getElementById("seccionEquipo").value = data.idSeccion;
          document.getElementById("subseccionEquipo").value = data.idSubseccion;
          document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+         document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
          document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
          document.getElementById("modeloEquipo").value = data.modelo;
          document.getElementById("serieEquipo").value = data.numero_serie;
@@ -2563,9 +2562,80 @@ function informacionEquipo(idEquipo) {
          document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
          document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
          document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
-         document.getElementById("estadoEquipo").innerHTML = data.status;
+         document.getElementById("estadoEquipo").value = data.status;
+         document.getElementById("tipoEquipo").value = data.tipo;
+         document.getElementById("idFaseEquipo").value = data.idFases;
+         document.getElementById("contenedorEstadoEquipo").classList.
+            remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
+         document.getElementById("iconEstadoEquipo").classList.
+            remove('text-red-400', 'text-green-400', 'text-orange-400');
+         document.getElementById("estadoEquipo").classList.
+            remove('text-red-400', 'text-green-400', 'text-orange-400');
+
+         if (data.status == "TALLER") {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
+            document.getElementById("estadoEquipo").classList.add('text-orange-400');
+         } else if (data.status == "BAJA") {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
+            document.getElementById("estadoEquipo").classList.add('text-red-400');
+         } else {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
+            document.getElementById("estadoEquipo").classList.add('text-green-400');
+         }
+
+         // Eventos
+         document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+
+         document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
+            document.getElementById("modalMedia").classList.add('open');
+            obtenerImagenesEquipo(idEquipo);
+         });
+
+
+         // Funciones Secundarias
+         toggleInputsEquipo(0);
+         obtenerImagenesEquipo(idEquipo);
+         consultarPlanEquipo(idEquipo);
+         opcionesJerarquiaEquipo(idEquipo);
+
       }
    });
+}
+
+
+function opcionesJerarquiaEquipo(idEquipo) {
+
+   let jerarquia = document.getElementById("jerarquiaEquipo").value;
+   let idUsuario = localStorage.getItem("usuario");
+   let idDestino = localStorage.getItem("idDestino");
+   const action = "opcionesJerarquiaEquipo";
+   const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+
+   if (jerarquia == "SECUNDARIO") {
+      fetch(URL)
+         .then(res => res.json())
+         .then(array => {
+            let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
+            if (array.length > 0) {
+               for (let index = 0; index < array.length; index++) {
+                  var id = array[index].id;
+                  var equipo = array[index].equipo;
+                  opcionesEquipo += `<option value="${id}">${equipo} </option>`;
+               }
+               return opcionesEquipo;
+            }
+         }).then(opcionesEquipo => {
+            document.getElementById("dataOpcionesEquipos").innerHTML = opcionesEquipo;
+            document.getElementById("contenedorDataOpcionesEquipos").classList.remove('hidden');
+         });
+
+   } else {
+      document.getElementById("contenedorDataOpcionesEquipos").classList.add('hidden');
+      document.getElementById("dataOpcionesEquipos").value = 0;
+   }
 }
 
 
@@ -2573,11 +2643,11 @@ function informacionEquipo(idEquipo) {
 function obtenerImagenesEquipo(idEquipo) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
-   let tabla = "t_equipos_adjuntos_america";
+   let tabla = "t_equipos_america_adjuntos";
    let idTabla = idEquipo;
 
    document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_adjuntos_america")');
+      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
 
    const action = "obtenerAdjuntos";
    $.ajax({
@@ -2592,18 +2662,20 @@ function obtenerImagenesEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-
          if (data.imagen != "") {
             document.getElementById("dataImagenes").innerHTML = data.imagen;
             document.getElementById("dataImagenesEquipo").innerHTML = data.imagen;
             document.getElementById("contenedorImagenes").classList.remove('hidden');
             document.getElementById("dataImagenes").classList.remove("justify-center");
+         } else {
+            document.getElementById("contenedorImagenes").classList.add('hidden');
          }
 
          if (data.documento != "") {
             document.getElementById("dataAdjuntos").innerHTML = data.documento;
-            document.getElementById("contenedorDocumentos").classList.remove('hidden');
             document.getElementById("dataAdjuntos").classList.remove("justify-center");
+         } else {
+            document.getElementById("contenedorDocumentos").classList.add('hidden');
          }
       },
    });
@@ -2612,13 +2684,17 @@ function obtenerImagenesEquipo(idEquipo) {
 
 // Actualiza la información de los Equipos
 function actualizarEquipo(idEquipo) {
+   let idSeccionX = localStorage.getItem('idSeccion');
+   let idSubseccionX = localStorage.getItem('idSubseccion');
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
+
    let nombreEquipo = document.getElementById("nombreEquipo").value;
    let seccionEquipo = document.getElementById("seccionEquipo").value;
    let subseccionEquipo = document.getElementById("subseccionEquipo").value;
    let tipoEquipo = document.getElementById("tipoEquipo").value;
    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
+   let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
    let marcaEquipo = document.getElementById("marcaEquipo").value;
    let modeloEquipo = document.getElementById("modeloEquipo").value;
    let serieEquipo = document.getElementById("serieEquipo").value;
@@ -2639,6 +2715,8 @@ function actualizarEquipo(idEquipo) {
    let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
+   let estadoEquipo = document.getElementById("estadoEquipo").value;
+   let idFaseEquipo = document.getElementById("idFaseEquipo").value;
    const action = "actualizarEquipo";
    $.ajax({
       type: "POST",
@@ -2653,6 +2731,7 @@ function actualizarEquipo(idEquipo) {
          subseccionEquipo: subseccionEquipo,
          tipoEquipo: tipoEquipo,
          jerarquiaEquipo: jerarquiaEquipo,
+         equipoPrincipal: equipoPrincipal,
          marcaEquipo: marcaEquipo,
          modeloEquipo: modeloEquipo,
          serieEquipo: serieEquipo,
@@ -2672,14 +2751,16 @@ function actualizarEquipo(idEquipo) {
          potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
          potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
          caudalAireM3HEquipo: caudalAireM3HEquipo,
-         caudalAireCFMEquipo: caudalAireCFMEquipo
+         caudalAireCFMEquipo: caudalAireCFMEquipo,
+         estadoEquipo: estadoEquipo,
+         idFaseEquipo: idFaseEquipo
       },
       // dataType: "JSON",
       success: function (data) {
          if (data = 1) {
             informacionEquipo(idEquipo);
             alertaImg('Equipo Actualizado', '', 'success', 2500);
-            llamarFuncionX('obtenerEquipos');
+            obtenerEquiposAmerica(idSeccionX, idSubseccionX);
          } else {
             alertaImg('Intente de Nuevo', '', 'info', 3000);
          }
@@ -2688,11 +2769,14 @@ function actualizarEquipo(idEquipo) {
 }
 
 
+
+
+// Obtiene el Calendario de MP de los Equipos
 function consultarPlanEquipo(idEquipo) {
-   document.getElementById("contenedorPlanesEquipo").innerHTML = '';
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    const action = "consultarPlanEquipo";
+
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -2704,10 +2788,11 @@ function consultarPlanEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
+         document.getElementById("contenedorPlanesEquipo").innerHTML = '';
          if (data.length > 0) {
             for (let index = 0; index < data.length; index++) {
 
-               $ContenedorPlanesEquipos.innerHTML += datosPlanEquipo({
+               const planesX = datosPlanEquipo({
                   solucionado: data[index].solucionado,
                   proceso: data[index].proceso,
                   planificado: data[index].planificado,
@@ -2822,19 +2907,662 @@ function consultarPlanEquipo(idEquipo) {
                   proceso_51: data[index].proceso_51,
                   proceso_52: data[index].proceso_52
                });
-            }
-         } else {
-            alertaImg('Sin Planes MP', '', 'info', 3000);
-         }
 
+               document.getElementById("contenedorPlanesEquipo")
+                  .insertAdjacentHTML('beforeend', planesX);
+            }
+            indicadorSemanaActual(data[0].semanaActual);
+         } else {
+            document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+         }
       }
    });
 }
 
 
+// Función para Agregar Evento ENTER y agregar alguna Actividad Extra
+document.getElementById("inputActividadesExtra").addEventListener("keyup", function (event) {
+   if (event.keyCode === 13) {
+      let idOT = localStorage.getItem('idOT');
+      agregarActividadesExtra(idOT);
+   }
+});
+
+// Avento para guardarCambiosOT
+document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
+
+
+function guardarCambiosOT() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let comentario = document.getElementById("comentarioOT").value;
+   let idOT = localStorage.getItem('idOT');
+   const action = "guardarCambiosOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&comentario=${comentario}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         if (array == "Actualizado") {
+            alertaImg(`OT #${idOT} Actualizada`, '', 'success', 3000);
+         } else {
+            alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+         }
+      });
+}
+
+
+// Función para Agregar Actividades
+function agregarActividadesExtra(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let actividadesExtra = document.getElementById("inputActividadesExtra").value;
+   const action = "agregarActividadesExtra";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&actividadesExtra=${actividadesExtra}`;
+   if (actividadesExtra.length > 0 && actividadesExtra != "0") {
+      fetch(URL)
+         .then(res => res.json())
+         .then(array => {
+            if (array == "Agregada") {
+               consultarActividades(idOT);
+               document.getElementById("inputActividadesExtra").value = '';
+               alertaImg('Actividad Agregada', '', 'success', 2000);
+            } else {
+               alertaImg('Actividad Repetida', '', 'info', 2500);
+               consultarActividades(idOT);
+            }
+         });
+   } else {
+      alertaImg('Actividad Vacia', '', 'info', 2500);
+   }
+}
+
+
+// Elimina Actividades Extra de la OT
+function eliminarActividadesExtra(idOT, posicionItem) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "eliminarActividadesExtra";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&posicionItem=${posicionItem}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         if (array == "Eliminada") {
+            consultarActividades(idOT);
+            alertaImg('Actividad Eliminada', '', 'success', 2000);
+         } else {
+            consultarActividades(idOT);
+            alertaImg('Actividad NO Eliminada', '', 'info', 2500);
+         }
+      });
+}
+
+
+function actualizaStatusOT(idOT, status) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "actualizaStatusOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&status=${status}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         if (array.respuesta == "ACTIVADO") {
+            alertaImg(`Status Activado`, '', 'success', 3000);
+         } else if (array.respuesta == "DESACTIVADO") {
+            alertaImg(`Status Desactivado`, '', 'success', 3000);
+         } else if (array.respuesta == "SOLUCIONADO") {
+            let idEquipo = localStorage.getItem('idEquipo');
+            informacionEquipo(idEquipo);
+            alertaImg(`OT #${array.idOT} Solucionado`, '', 'success', 3000);
+            document.getElementById("modalSolucionarOT").classList.remove('open');
+            document.getElementById("modalStatus").classList.remove('open');
+         }
+         consultaStatusOT(idOT);
+      });
+}
+
+
+// Responsables asignados
+function eliminarResponsbleOT(idOT, idResponsable) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "eliminarResponsbleOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&idResponsable=${idResponsable}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         if (array == "Agregado") {
+            consultaResponsablesOT(idOT);
+            document.getElementById("modalUsuarios").classList.remove('open');
+            alertaImg("Usuario Asignado a la OT: " + idOT, "", "success", 2000);
+         } else if (array == "Eliminado") {
+            consultaResponsablesOT(idOT);
+            document.getElementById("modalUsuarios").classList.remove('open');
+            alertaImg("Usuario Eliminado", "", "success", 2000);
+         }
+      });
+}
+
+
+// Responsables asignados
+function consultaResponsablesOT(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "consultaResponsablesOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         let responsables = `
+                <div onclick="toggleModalTailwind('modalUsuarios'); obtenerUsuarios('asignarOT', ${idOT});" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                    <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                </div>
+            `;
+
+         for (let i = 0; i < array.length; i++) {
+            var nombre = array[i].nombre + ' ' + array[i].apellido;
+            var idResponsable = array[i].idUsuario;
+
+            responsables += `
+                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">${nombre}</h1>
+                        <i onclick="eliminarResponsbleOT(${idOT}, ${idResponsable})" class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+         document.getElementById("responsablesOT").innerHTML = responsables;
+      });
+}
+
+
+function consultarActividadRealizadaOT(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "consultarActividadRealizadaOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         let actividades = array.actividades.split(';');
+         for (let i = 0; i < actividades.length; i++) {
+            if (actividades[i] != "") {
+               document.getElementById("actividad_" + actividades[i]).checked = true;
+            }
+         }
+
+         let test = array.test.split(';');
+         for (let i = 0; i < test.length; i++) {
+            if (test[i] != "") {
+               const test_2 = test[i].split('=');
+               const idTest = test_2[0];
+               var valorTest = test_2[1];
+               if (valorTest == undefined) {
+                  valorTest = "";
+               }
+               document.getElementById("test_" + idTest).value = valorTest;
+            }
+         }
+
+         let check = array.check.split(';');
+         for (let i = 0; i < check.length; i++) {
+            if (check[i] != "") {
+               const check_2 = check[i].split('=');
+               const idCheck = check_2[0];
+               var valorCheck = check_2[1];
+
+               if (valorCheck == "SI") {
+                  document.getElementById("check_si_" + idCheck).checked = true;
+               }
+               if (valorCheck == "NO") {
+                  document.getElementById("check_no_" + idCheck).checked = true;
+               }
+               if (valorCheck == "NA") {
+                  document.getElementById("check_na_" + idCheck).checked = true;
+               }
+            }
+         }
+      });
+}
+
+
+// Consulta los Status de la OT
+function consultaStatusOT(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "consultarStatusOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         estiloDefectoModalStatus();
+         let status = `
+                <div id="statusOT2" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                    <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                </div>            
+            `;
+
+         if (array.statusTrabajare == "1") {
+            estiloStatusActivoModalStatus("statusTrabajare");
+            status += `
+                <div class="bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2">
+                <h1 class="font-medium">Trabajando</h1>
+                <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                </div>
+                `;
+         }
+
+         if (array.statusMaterial == "1") {
+            estiloStatusActivoModalStatus("statusMaterial");
+            status += `
+                    <div class="bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Material</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusElectricidad == "1") {
+            estiloStatusActivoModalStatus("statusElectricidad");
+            status += `
+                    <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Electricidad</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusDiesel == "1") {
+            estiloStatusActivoModalStatus("statusDiesel");
+            status += `
+                    <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Diesel</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusGas == "1") {
+            estiloStatusActivoModalStatus("statusGas");
+            status += `
+                    <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Gas</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusAgua == "1") {
+            estiloStatusActivoModalStatus("statusAgua");
+            status += `
+                    <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Agua</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusCalidad == "1") {
+            estiloStatusActivoModalStatus("statusCalidad");
+            status += `
+                    <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Calidad</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusCompras == "1") {
+            estiloStatusActivoModalStatus("statusCompras");
+            status += `
+                    <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Compras</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusDireccion == "1") {
+            estiloStatusActivoModalStatus("statusDireccion");
+            status += `
+                    <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Dirección</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusFinanzas == "1") {
+            estiloStatusActivoModalStatus("statusFinanzas");
+            status += `
+                    <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">Finanzas</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusRRHH == "1") {
+            estiloStatusActivoModalStatus("statusRRHH");
+            status += `
+                    <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
+                        <h1 class="font-medium">RRHH</h1>
+                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                `;
+         }
+
+         if (array.statusCalidad == "1" || array.statusCompras == "1" || array.statusDireccion == "1" || array.statusFinanzas == "1" || array.statusRRHH == "1") {
+            estiloStatusActivoModalStatus("statusdep");
+         }
+
+         if (array.statusElectricidad == "1" || array.statusDiesel == "1" || array.statusGas == "1" || array.statusAgua == "1") {
+            estiloStatusActivoModalStatus("statusenergeticos");
+         }
+
+         return status;
+      })
+      .then(status => {
+         document.getElementById("dataStatusOT").innerHTML = status;
+         document.getElementById("statusOT2").setAttribute("onclick", `consultaStatusOT(${idOT}); toggleModalTailwind('modalStatus');`);
+         document.getElementById("statusMaterial").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
+         document.getElementById("statusTrabajare").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_trabajando');`);
+         document.getElementById("statusElectricidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_electricidad');`);
+         document.getElementById("statusAgua").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_agua');`);
+         document.getElementById("statusDiesel").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_diesel');`);
+         document.getElementById("statusGas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_gas');`);
+         document.getElementById("statusRRHH").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_rrhh');`);
+         document.getElementById("statusDireccion").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_direccion');`);
+         document.getElementById("statusFinanzas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_finanzas');`);
+         document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
+         document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
+         document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("btnFinalizarOT").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+      });
+}
+
+
+function consultaAdjuntosOT(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "consultarAdjuntosOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         document.getElementById("imagenesOT").innerHTML = '';
+         document.getElementById("documentosOT").innerHTML = '';
+         document.getElementById("dataImagenes").innerHTML = '';
+         document.getElementById("dataAdjuntos").innerHTML = '';
+
+         let imagenes = '';
+         let documentos = '';
+
+         for (let i = 0; i < array.length; i++) {
+            const id = array[i].id;
+            const nombre = array[i].nombre;
+            const url = array[i].url;
+            const tipo = array[i].tipo;
+
+            if (tipo == "imagenes") {
+               imagenes += `
+                    <a id="${id}" href="planner/mp_ot/${url}" target="_blank">
+                        <div class="m-2 cursor-pointer overflow-hidden w-20 h-20 rounded-md">
+                            <img src="planner/mp_ot/${url}" class="w-full" alt="">
+                        </div>
+                    </a>            
+                    `;
+            } else {
+               documentos += `
+                        <a id="${id}" href="planner/mp_ot/${url}" target="_blank">
+                            <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                                <i class="fad fa-file-alt fa-2x"></i>
+                                <p class=" font-normal ml-2">${url}</p>
+                            </div>
+                        </a>                   
+                    `;
+            }
+         }
+
+         document.getElementById("imagenesOT").innerHTML = imagenes;
+         document.getElementById("documentosOT").innerHTML = documentos;
+
+         document.getElementById("dataImagenes").innerHTML = imagenes;
+         document.getElementById("dataAdjuntos").innerHTML = documentos;
+
+         if (imagenes != "") {
+            document.getElementById("contenedorImagenes").classList.remove('hidden');
+         } else {
+            document.getElementById("contenedorImagenes").classList.add('hidden');
+         }
+
+         if (documentos != "") {
+            document.getElementById("contenedorDocumentos").classList.remove('hidden');
+         } else {
+            document.getElementById("contenedorDocumentos").classList.add('hidden');
+         }
+
+         // Eventos
+         document.getElementById("inputAdjuntos").setAttribute("onchange", `subirImagenGeneral(${idOT}, "t_mp_planificacion_iniciada_adjuntos")`);
+         document.getElementById("btnAdjuntosOT").setAttribute("onclick", `consultaAdjuntosOT(${idOT}); toggleModalTailwind('modalMedia');`);
+      });
+}
+
+
+// Consulta las actividades Extra de la OT
+function consultarActividades(idOT) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "consultarActividadesExtraOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         // ACTIVIDADES EXTRA
+         var actividadesExtra = '';
+         for (let i = 0; i < array[0].actividadesExtra.length; i++) {
+            const actividad = array[0].actividadesExtra[i];
+            if (actividad == "0") {
+               document.getElementById("actividadesExtraOT").innerHTML = '';
+            } else {
+               actividadesExtra += `
+                        <div class="p-2 rounded font-semibold flex items-center justify-start bg-green-100 text-green-500 cursor-pointer mb-1">
+                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-green-600">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="w-full text-justify">
+                                <h1>${actividad}</h1>
+                            </div>
+                            <div class="text-justify text-gray-500" onclick="eliminarActividadesExtra(${idOT}, ${i})";>
+                                <i class="fas fa-trash"></i>
+                            </div>
+                        </div>                   
+                    `;
+            }
+
+         }
+         document.getElementById("actividadesExtraOT").innerHTML = actividadesExtra;
+      });
+}
+
+
+// Muestra el Menú de los Planes
+function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
+
+   document.getElementById("tooltipMP").classList.remove('hidden');
+
+   document.getElementById('semanaProgramacionMP').innerHTML = '(Semana ' + semanaX + ')';
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(id);
+   const tooltip = document.getElementById('tooltipMP');
+
+   Popper.createPopper(button, tooltip, {
+      placement: 'top',
+   });
+
+   document.getElementById("programarMPIndividual").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARINDIVIDUAL")`);
+
+   document.getElementById("programarMPDesdeAqui").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARDESDEAQUI")`);
+
+   document.getElementById("programarMPPersonalizado").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARPERSONALIZADO")`);
+   document.getElementById("eliminarMPIndividual").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARINDIVIDUAL")`);
+
+   document.getElementById("eliminarMPDesdeAqui").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARDESDEAQUI")`);
+
+   document.getElementById("VerOTMP").
+      setAttribute('onclick', `VerOTMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "VEROT")`);
+
+   document.getElementById("generarOTMP").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
+
+   document.getElementById("solucionarOTMP").
+      setAttribute('onclick', `obtenerOTDigital(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "SOLUCIONAROT")`);
+
+   document.getElementById("cancelarOTMP").
+      setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
+}
+
+
+function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
+   document.getElementById("modalSolucionarOT").classList.add('open');
+   document.getElementById("tooltipMP").classList.add('hidden');
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerOTDigital";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         let idOT = array[0].OT;
+         document.getElementById("numeroOT").innerHTML = idOT;
+         localStorage.setItem('idOT', idOT);
+
+         // Status de la OT
+         document.getElementById("statusOT").innerHTML = array[0].statusOT;
+         if (array[0].statusOT == "SOLUCIONADO") {
+            document.getElementById("statusOT").classList.remove("bg-yellow-200", "text-yellow-500", "bg-green-200", "text-green-500");
+            document.getElementById("statusOT").classList.add("bg-green-200", "text-green-500");
+         } else {
+            document.getElementById("statusOT").classList.remove("bg-yellow-200", "text-yellow-500", "bg-green-200", "text-green-500");
+            document.getElementById("statusOT").classList.add("bg-yellow-200", "text-yellow-500");
+         }
+
+         document.getElementById("semanaOT").innerHTML = array[0].semana;
+         document.getElementById("comentarioOT").value = array[0].comentario;
+         document.getElementById("tipoOT").innerHTML = array[0].tipoPlan;
+
+
+         // Actividades OT
+         var actividades = '';
+
+         for (let i = 0; i < array[0].actividades.length; i++) {
+            var id = array[0].actividades[i].id;
+            var actividad = array[0].actividades[i].actividad;
+            var tipoActividad = array[0].actividades[i].tipoActividad;
+            var medicion = array[0].actividades[i].medicion;
+
+            if (tipoActividad == "actividad") {
+
+               actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                            <label class="mx-2 inline-flex items-center">
+                                <input id="actividad_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="checkbox" class="form-checkbox w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600">
+                                <div class="ml-2 text-justify">
+                                    <h1>${actividad}</h1>
+                                </div>
+                            </label>
+                        </div>
+                    `;
+            } else if (tipoActividad == "test") {
+
+               actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                            <div class="mr-2 flex flex-col leading-none">
+                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura">
+                                <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
+                            </div>
+                            <div class=" text-justify flex items-center">
+                                <h1>${actividad}</h1>
+                            </div>
+                        </div>
+                    `;
+            } else if (tipoActividad == "checkList") {
+               actividades += `
+                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start cursor-pointer mb-1 leading-none  hover:bg-green-100 hover:text-green-500">
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_si_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="SI">
+                                <div class=" text-justify">
+                                    <h1>SI</h1>
+                                </div>
+                            </div>
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_no_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="NO">
+                                <div class=" text-justify">
+                                    <h1>NO</h1>
+                                </div>
+                            </div>
+
+                            <div class="flex hover:bg-green-300 hover:text-green-700 items-center justify-start p-1 rounded">
+                                <input id="check_na_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="NA">
+                                <div class=" text-justify">
+                                    <h1>N/A</h1>
+                                </div>
+                            </div>
+
+                            <div class=" text-justify flex items-center">
+                                <h1>${actividad}</h1>
+                            </div>
+                        </div>                    
+                    `;
+            }
+         }
+         document.getElementById("actividadesOT").innerHTML = actividades;
+
+         // Funciones Complementarias Primarias
+         consultarActividades(idOT);
+         consultaAdjuntosOT(idOT);
+         consultaStatusOT(idOT);
+
+         return idOT;
+      })
+      .then(idOT => {
+         // Funciones Complementarias Secunadarias
+         consultarActividadRealizadaOT(idOT);
+         consultaResponsablesOT(idOT);
+      });
+}
+
+// Indicador de Semana actual para los MP
+function indicadorSemanaActual(semana) {
+   let totalElementos = document.getElementsByClassName("semana_" + semana);
+   let codigo = '';
+
+   if (semana < 10) {
+      codigo = `
+            0${semana}
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+        `;
+   } else {
+      codigo = `
+            ${semana}
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+        `;
+   }
+
+   for (let i = 0; i < totalElementos.length; i++) {
+      document.getElementsByClassName("semana_" + semana)[i].innerHTML = codigo;
+   }
+}
+
+
 // Genera la Programación de los MP
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    let numeroSemanas = 0;
@@ -2887,6 +3615,7 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
             alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
             consultarPlanEquipo(idEquipo);
             cerrarTooltip('tooltipMP');
+            VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
          } else if (data == 8) {
             alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
             consultarPlanEquipo(idEquipo);
@@ -2911,9 +3640,11 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
             alertaImg(`Intente de Nuevo`, '', 'info', 3000);
          }
          // consultarPlanEquipo(idEquipo);
+         // consultaEquiposLocales();
       }
    });
 }
+
 
 
 function consultarActividadesMP(idPlan) {
@@ -2976,10 +3707,8 @@ function consultarOpcionesEquipo() {
    });
 }
 
-
 // Proceso para Ver OT
 function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
-
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    let numeroSemanas = 0;
@@ -2997,6 +3726,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
          idEquipo: idEquipo,
          semanaX: semanaX,
          accionMP: accionMP,
+         idPlan: idPlan,
          numeroSemanas: numeroSemanas
       },
       // dataType: "JSON",
@@ -3006,15 +3736,10 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
             window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
          } else {
             alertaImg(`Semana ${semanaX}, Sin Proceso`, '', 'error', 3000);
-
          }
       }
    });
-
-
-
 }
-
 
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {

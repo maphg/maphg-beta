@@ -84,7 +84,7 @@ if (isset($_GET['action'])) {
 
                 #TOTAL ADJUNTOS POR EQUIPO
                 $totalAdjuntos = 0;
-                $query = "SELECT count(id) FROM t_equipos_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
+                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $totalAdjuntos = $a['count(id)'];
