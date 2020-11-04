@@ -346,12 +346,21 @@ if (isset($_GET['action'])) {
 
 
     #OBTIENE, SECCION, SUBSECCION, NOMBRE EQUIPO
-    if ($action == "complementosFallasTareas") {
+    if ($action == "DestinoSeccionSubseccionEquipo") {
         $idEquipo = $_GET["idEquipo"];
         $idSeccion = $_GET["idSeccion"];
         $idSubseccion = $_GET["idSubseccion"];
         $tipoPendiente = $_GET['tipoPendiente'];
         $array = array();
+
+        $query = "SELECT destino FROM c_destinos WHERE id = $idDestino";
+        $array['destino'] = "-";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $destino = $x['destino'];
+                $array['destino'] = $destino;
+            }
+        }
 
         $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
         $array['seccion'] = "-";
@@ -510,6 +519,8 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
+    #OBTIENE LOS EQUIPOS AMERICA CON SUS DETALLES DE PENDIENTES
 
 
 

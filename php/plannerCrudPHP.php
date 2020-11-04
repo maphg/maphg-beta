@@ -192,7 +192,7 @@ if (isset($_POST['action'])) {
                         if ($resultSubseccion = mysqli_query($conn_2020, $querySubseccion)) {
                             if ($rowSubseccion = mysqli_fetch_array($resultSubseccion)) {
                                 $idSubseccion = $rowSubseccion['id'];
-                                $idSeccionAux = $rowSubseccion['id_seccion'];
+                                $idSeccion = $rowSubseccion['id_seccion'];
                                 $nombreSubseccion = $rowSubseccion['grupo'];
                                 $totalPendiente = $totalSubseccionOrdenZIL[$key];
 
@@ -206,7 +206,7 @@ if (isset($_POST['action'])) {
                                 $dataZIL .= "
                                     <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                         class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                        onclick=\"actualizarSeccionSubseccion($idSeccionAux, $idSubseccion); llamarFuncionX('obtenerEquipos');\">
+                                        onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
                                         <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                         <div
                                             class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">

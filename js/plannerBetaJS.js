@@ -973,17 +973,6 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
    let palabraEquipo = document.getElementById("inputPalabraEquipo").value;
    const action = "obtenerEquipos";
 
-   // Alerta para Notificar el tipo de ordenamiento.
-   // alertaImg("Ordenando Equipos", "", "info", 3000);
-   const ruta = "php/equipos_locales.php?";
-   // const url = `${ruta}&action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&
-   // idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&palabraEquipo=${palabraEquipo}`;
-   const url = 'php/equipos_locales.php?&action=obtenerEquipos&idDestino=1&idUsuario=1&idSeccion=9&idSubseccion=12&palabraEquipo=1';
-   // fetch(url)
-   //   .then(res => res.json())
-   //   .then(array => {
-   //   });
-
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -3474,16 +3463,16 @@ function obtenerFallas(idEquipo = 0) {
       })
       .then(function () { obtenerFallasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + err);
-         document.getElementById("dataPendientesX").innerHTML = '';
+         fetch(APIERROR + '3466' + err);
          complementosFallasTareas();
+         document.getElementById("dataPendientesX").innerHTML = '';
          document.getElementById("seccionFallaTarea").innerHTML = '';
       })
 
 
-   const complementosFallasTareas = () => {
+   function complementosFallasTareas() {
       // OBTIENE NOMBRE DE EQUIPO Y SECCIÓN
-      const URL2 = `php/select_REST_planner.php?action=complementosFallasTareas&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
+      const URL2 = `php/select_REST_planner.php?action=DestinoSeccionSubseccionEquipo&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
       fetch(URL2)
          .then(array => array.json())
          .then(array => {
@@ -3530,7 +3519,7 @@ function obtenerFallasSolucionados(idEquipo) {
          document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
       }
    } else {
-      alertaImg('Sin SOLUCIONADOS', '', 'info', 1200);
+      alertaImg('Sin Solucionados', '', 'info', 1200);
    }
 }
 
@@ -3572,7 +3561,9 @@ function obtenerTareas(idEquipo = 0) {
    let idSubseccion = localStorage.getItem("idSubseccion");
    let tipoPendiente = 'TAREAS';
    const action = "obtenerTareas";
+
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
@@ -3652,16 +3643,16 @@ function obtenerTareas(idEquipo = 0) {
       })
       .then(function () { obtenerTareasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         fetch(APIERROR + ' -3644- ' + err);
          document.getElementById("dataPendientesX").innerHTML = '';
-         complementosFallasTareas();
          document.getElementById("seccionFallaTarea").innerHTML = '';
+         complementosFallasTareas();
       })
 
 
-   const complementosFallasTareas = () => {
+   function complementosFallasTareas() {
       // OBTIENE NOMBRE DE EQUIPO Y SECCIÓN
-      const URL2 = `php/select_REST_planner.php?action=complementosFallasTareas&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
+      const URL2 = `php/select_REST_planner.php?action=DestinoSeccionSubseccionEquipo&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}&idSeccion=${idSeccion}&tipoPendiente=${tipoPendiente}`;
       fetch(URL2)
          .then(array => array.json())
          .then(array => {
@@ -3708,7 +3699,7 @@ function obtenerTareasSolucionados(idEquipo) {
          document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
       }
    } else {
-      alertaImg('Sin SOLUCIONADOS', '', 'info', 1200);
+      alertaImg('Sin Solucionados', '', 'info', 1200);
    }
 }
 
@@ -3954,11 +3945,382 @@ function ganttFallas(idEquipo, status) {
 }
 
 
+// FUNCION PARA OBTENER DISEÑO DE LOS EQUIPOS
+const dataEquiposAmerica = params => {
+
+   var tipoEquipo = params.tipoEquipo;
+   var valorTipoEquipo = '';
+
+   if (tipoEquipo == "EQUIPO") {
+      valorTipoEquipo = '<div class="text-blue-400 bg-blue-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class=""><i class="fas fa-cog mr-1"></i>Equipo</h1></div>';
+   } else if (tipoEquipo == "LOCAL") {
+      valorTipoEquipo = '<div class="text-teal-400 bg-teal-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class=""><i class="fas fa-home mr-1"></i>Local</h1></div>';
+   } else {
+      valorTipoEquipo = '<div class="text-red-400 bg-red-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class=""><i class="fas fa-question-circle mr-1"></i></h1></div>';
+   }
+
+   var statusEquipo = params.statusEquipo;
+   var valorstatusEquipo = ''
+
+   if (statusEquipo == 'OPERATIVO') {
+      valorstatusEquipo = '<div class="text-green-400 bg-green-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Operativo</h1></div>';
+   } else if (statusEquipo == 'BAJA') {
+      valorstatusEquipo = '<div class="text-red-400 bg-red-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Baja</h1></div>';
+   } else if (statusEquipo == 'TALLER') {
+      valorstatusEquipo = '<div class="text-orange-400 bg-orange-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Taller</h1></div>';
+   }
+
+
+   var ultimoMpFecha = params.ultimoMpFecha;
+
+   if (ultimoMpFecha == 0) {
+      valorultimoMpFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorultimoMpFecha = params.ultimoMpFecha;
+   }
+
+   var ultimoMpSemana = params.ultimoMpSemana;
+
+   if (ultimoMpSemana == 0) {
+      valorultimoMpSemana = '';
+   } else {
+      valorultimoMpSemana = "Sem " + params.ultimoMpSemana;
+   }
+
+
+   var proximoMpFecha = params.proximoMpFecha;
+
+   if (proximoMpFecha == 0) {
+      valorproximoMpFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorproximoMpFecha = params.proximoMpFecha;
+   }
+
+   var proximoMpSemana = params.proximoMpSemana;
+
+   if (proximoMpSemana == 0) {
+      valorproximoMpSemana = '';
+   } else {
+      valorproximoMpSemana = "Sem " + params.proximoMpSemana;
+   }
+
+   var ultimoTestFecha = params.ultimoTestFecha;
+
+   if (ultimoTestFecha == 0) {
+      valorultimoTestFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorultimoTestFecha = params.ultimoTestFecha;
+   }
+
+
+   var ultimoTestSemana = params.ultimoTestSemana;
+
+   if (ultimoTestSemana == 0) {
+      valorultimoTestSemana = '';
+   } else {
+      valorultimoTestSemana = "Sem " + params.ultimoTestSemana;
+   }
+
+
+   var cotizaciones = params.cotizaciones;
+
+   if (cotizaciones == 0) {
+      valorcotizaciones = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorcotizaciones = params.cotizaciones;
+   }
+
+   var imagenes = params.imagenes;
+
+   if (imagenes == 0) {
+      valorimagenes = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorimagenes = params.imagenes;
+   }
+
+   var comentarios = params.comentarios;
+
+   if (comentarios == 0) {
+      valorcomentarios = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+   } else {
+      valorcomentarios = params.comentarios;
+   }
+
+   var idEquipo = params.idEquipo;
+   var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
+   var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
+   var tComentarios = ``;
+   var tAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
+   var tInfo = `onclick="informacionEquipo(${idEquipo});"`;
+   var tCotizaciones = ``;
+
+   return `
+        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
+            
+            <td class="px-4 border-b border-gray-200truncate py-2" style="max-width: 360px;"
+            ${tInfo}>
+                <div class="font-semibold uppercase text-sm">
+                    <h1>${params.equipo}</h1>
+                </div>
+                <div class="text-gray-500 leading-none flex text-xxs">
+                    ${valorTipoEquipo}
+                    ${valorstatusEquipo}
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fFallas}>
+                <div class="font-bold uppercase text-sm text-red-400">
+                    <h1>${params.fallasP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400">
+                    <h1>${params.fallasS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-bold uppercase text-sm text-red-400">
+                    <h1>${params.mpP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400">
+                    <h1>${params.mpS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${valorultimoMpFecha}</h1>
+                </div>
+                <div class="">
+                    <h1>${valorultimoMpSemana}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${valorproximoMpFecha}</h1>
+                </div>
+                <div class="uppercase">
+                    <h1>${valorproximoMpSemana}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fTareas}>
+                <div class="font-bold uppercase text-sm text-red-400">
+                    <h1>${params.tareasP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400">
+                    <h1>${params.tareasS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${params.testR}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${valorultimoTestFecha}</h1>
+                </div>
+                <div class="uppercase">
+                    <h1>${valorultimoTestSemana}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${valorcotizaciones}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${tAdjuntos}>
+                <div class="font-semibold uppercase">
+                    <h1>${valorimagenes}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 truncate py-2 text-center leading-none hover:bg-gray-300">
+                <div class="font-semibold uppercase">
+                    <h1>${valorcomentarios}</h1>
+                </div>
+            </td>
+            
+        </tr>
+    `;
+};
+
+
+// OBTIENE LOS EQUIPOS AMERICA
+function obtenerEquiposAmerica(idSeccion, idSubseccion) {
+   localStorage.setItem('idSeccion', idSeccion);
+   localStorage.setItem("idSubseccion", idSubseccion);
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+   const action = "obtenerEquiposAmerica";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
+   document.getElementById("tareasGeneralesEquipo").
+      setAttribute('onclick', "obtenerTareas(0); toggleModalTailwind('modalTareasFallas');");
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         document.getElementById("contenedorEquiposAmerica").innerHTML = '';
+         if (array.length > 0) {
+            for (let x = 0; x < array.length; x++) {
+               const idEquipo = array[x].idEquipo;
+               const equipo = array[x].equipo;
+               const tipoEquipo = array[x].tipoEquipo;
+               const statusEquipo = array[x].statusEquipo;
+               const fallasP = array[x].fallasP;
+               const fallasS = array[x].fallasS;
+               const mpP = array[x].mpP;
+               const mpS = array[x].mpS;
+               const ultimoMpFecha = array[x].ultimoMpFecha;
+               const ultimoMpSemana = array[x].ultimoMpSemana;
+               const proximoMpFecha = array[x].proximoMpFecha;
+               const proximoMpSemana = array[x].proximoMpSemana;
+               const tareasP = array[x].tareasP;
+               const tareasS = array[x].tareasS;
+               const testR = array[x].testR;
+               const ultimoTestFecha = array[x].ultimoTestFecha;
+               const ultimoTestSemana = array[x].ultimoTestSemana;
+               const cotizaciones = array[x].cotizaciones;
+               const imagenes = array[x].imagenes;
+               const comentarios = array[x].comentarios;
+
+               const data = dataEquiposAmerica({
+                  idEquipo: idEquipo,
+                  equipo: equipo,
+                  tipoEquipo: tipoEquipo,
+                  statusEquipo: statusEquipo,
+                  fallasP: fallasP,
+                  fallasS: fallasS,
+                  mpP: mpP,
+                  mpS: mpS,
+                  ultimoMpFecha: ultimoMpFecha,
+                  ultimoMpSemana: ultimoMpSemana,
+                  proximoMpFecha: proximoMpFecha,
+                  proximoMpSemana: proximoMpSemana,
+                  tareasP: tareasP,
+                  tareasS: tareasS,
+                  testR: testR,
+                  ultimoTestFecha: ultimoTestFecha,
+                  ultimoTestSemana: ultimoTestSemana,
+                  cotizaciones: cotizaciones,
+                  imagenes: imagenes,
+                  comentarios: comentarios
+               });
+
+               document.getElementById("contenedorEquiposAmerica").
+                  insertAdjacentHTML('beforeend', data);
+            }
+         } else {
+            alertaImg('Sin Equipos/Locales', '', 'info', 1200);
+         }
+      })
+      .then(function () {
+         const URL2 = `php/select_REST_planner.php?action=DestinoSeccionSubseccionEquipo&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=0&tipoPendiente=''`;
+         fetch(URL2)
+            .then(array => array.json())
+            .then(array => {
+               document.getElementById("seccionSubseccionDestinoEquiposAmerica").
+                  innerHTML = array.seccion + ' - ' + array.subseccion + ' - ' + array.destino;
+            }).catch(function (err) {
+               fetch(APIERROR + err)
+               document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
+            })
+      })
+      .then(function () {
+         obtenerTodosPendientes();
+      })
+      .catch(function (err) {
+         document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
+         fetch(APIERROR + err);
+      });
+}
+
+
+// OBTIENE TODOS LOS PENDIENTES DE  DESTINO->SECCIÓN->SUBSECCIÓN
+function obtenerTodosPendientes() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
+
+   let tg = document.getElementById("totalesTareasGenerales");
+   let preventivos = document.getElementById("totalesPreventivos");
+   let test = document.getElementById("totalesTest");
+   let fallas = document.getElementById("totalesFallas");
+   let tareas = document.getElementById("totalesTareas");
+
+   tg.innerHTML = '<i class="text-white fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   preventivos.innerHTML = '<i class="text-blue-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   test.innerHTML = '<i class="text-indigo-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   fallas.innerHTML = '<i class="text-red-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   tareas.innerHTML = '<i class="text-orange-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
+   setTimeout(function () {
+
+   }, 1100);
+
+   const action = "obtenerTodosPendientes";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            fallas.innerHTML = `
+               <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+               </div>
+               <h1 class="text-red-400">${array.fallasP}</h1>
+               <h1 class=" text-green-400 text-xs font-semibold">${array.fallasS}</h1>
+            `;
+
+            tareas.innerHTML = `
+               <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+               </div>
+               <h1 class="text-red-400">${array.tareasP}</h1>
+               <h1 class=" text-green-400 text-xs font-semibold">${array.tareasS}</h1>
+            `;
+
+            preventivos.innerHTML = `
+               <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+               </div>
+               <h1 class="text-red-400">${array.mpP}</h1>
+               <h1 class=" text-green-400 text-xs font-semibold">${array.mpS}</h1>
+            `;
+
+            test.innerHTML = `
+               <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+               </div>
+               <h1 class=" text-white text-xs font-semibold py-1">${array.test}</h1>
+            `;
+
+            tg.innerHTML = `
+               <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+               </div>
+               <h1 class="text-red-400">${array.tareasGP}</h1>
+               <h1 class=" text-green-400 text-xs font-semibold">${array.tareasGS}</h1>
+            `;
+
+         }
+      })
+}
 
 // FUNCION UNIVERSAL PARA LA TABLA #dataPendientesX
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraFallaTarea").addEventListener('keyup', function () {
    buscdorTabla('dataPendientesX', 'palabraFallaTarea', 0);
+});
+
+// EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
+document.getElementById("palabraEquipoAmerica").addEventListener('keyup', function () {
+   buscdorTabla('contenedorEquiposAmerica', 'palabraEquipoAmerica', 0);
 });
 
 

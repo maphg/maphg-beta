@@ -203,6 +203,148 @@
     <!-- ********** MODALES PRINCIPALES ********** -->
 
     <!-- MODAL EQUIPOS Y LOCALES -->
+    <div id="modalEquiposAmerica" class="modal">
+        <div class="w-full h-screen bg-gray-300">
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+                <div class="font-light text-3xl ml-3 leading-none text-bluegray-700 mr-12">
+                    <h1 class="text-center mb-2">Equipos & Locales</h1>
+                    <h1 id="seccionSubseccionDestinoEquiposAmerica" class="text-xs font-normal text-center"></h1>
+                </div>
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar equipo o local" autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+                <div class="text-blue-500 text-sm cursor-pointer bg-blue-300 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-blue-200 px-2">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <div class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-red-200" onclick="cerrarmodal('modalEquiposAmerica');">
+                <i class="fas fa-times"></i>
+                <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
+            </div>
+
+            <div class="w-full h-auto">
+                <div class="flex flex-col container mx-auto scrollbar">
+                    <div class="flex items-center justify-start ">
+                        <div id="tareasGeneralesEquipo" class="flex-none flex items-center bg-white rounded mb-2 cursor-pointer hover:bg-gray-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-bluegray-800 uppercase flex py-1">
+                                <h1><i class="fad fa-circle mr-2 text-red-400"></i>tareas generales de área</h1>
+                            </div>
+                            <div id="totalesTareasGenerales" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-blue-600 uppercase flex py-1">
+                                <h1>PREVENTIVOS</h1>
+                            </div>
+                            <div id="totalesPreventivos" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-indigo-600 uppercase flex py-1">
+                                <h1>TEST</h1>
+                            </div>
+                            <div id="totalesTest" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class=" text-white text-xs font-semibold py-1">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-red-300 rounded mb-2 cursor-pointer hover:bg-red-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-red-600 uppercase flex py-1">
+                                <h1>FALLAS</h1>
+                            </div>
+                            <div id="totalesFallas" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-orange-300 rounded mb-2 cursor-pointer hover:bg-orange-200 shadow-sm">
+                            <div class="text-sm px-3 leading-noene font-semibold text-orange-600 uppercase flex py-1">
+                                <h1>TAREAS</h1>
+                            </div>
+                            <div id="totalesTareas" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Equipo/Local
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Fallas
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            PREVENTIVOS
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Último MP
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Proximo MP
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Tareas
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Test
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Último Test
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Cot
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Pics
+                                        </th>
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            COments
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorEquiposAmerica" class="bg-white divide-y divide-gray-200">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- MODAL PARA EQUIPOS -->
     <div id="modalEquipos" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 1200px;">
             <!-- BOTON CERRARL -->
