@@ -21,6 +21,7 @@ function generarOT(idOT, tipo) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "generarOT";
     const URL = `php/ot_fallas_tareas.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&tipo=${tipo}`;
+    console.log(URL);
     fetch(URL)
         .then((array) => array.json())
         .then(array => {

@@ -76,70 +76,71 @@ if (isset($_GET['action'])) {
                         }
                     }
                 }
-                $array['actividades'] = $act;
-            } elseif ($tipo == "FALLA") {
-                $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_equipos_america.equipo, c_secciones.seccion, c_subsecciones.grupo, c_destinos.destino
+            }
+
+            $array['actividades'] = $act;
+        } elseif ($tipo == "FALLA") {
+            $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_equipos_america.equipo, c_secciones.seccion, c_subsecciones.grupo, c_destinos.destino
             FROM t_mc
             INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
             INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
             INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
             LEFT JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
             WHERE t_mc.id = $idOT";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $idOT = $x['id'];
-                        $actividad = $x['actividad'];
-                        $status = $x['status'];
-                        $equipo = $x['equipo'];
-                        $destino = $x['destino'];
-                        $seccion = $x['seccion'];
-                        $subseccion = $x['grupo'];
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idOT = $x['id'];
+                    $actividad = $x['actividad'];
+                    $status = $x['status'];
+                    $equipo = $x['equipo'];
+                    $destino = $x['destino'];
+                    $seccion = $x['seccion'];
+                    $subseccion = $x['grupo'];
 
-                        if ($status == "N" or $status == "PENDIENTE" or $status == "P") {
-                            $status = "PENDIENTE";
-                        } else {
-                            $status = "SOLUCIONADO";
-                        }
+                    if ($status == "N" or $status == "PENDIENTE" or $status == "P") {
+                        $status = "PENDIENTE";
+                    } else {
+                        $status = "SOLUCIONADO";
+                    }
 
-                        $arrayTemp = array(
-                            "idOT" => $idOT,
-                            "actividad" => $actividad,
-                            "status" => $status,
-                            "equipo" => $equipo,
-                            "destino" => $destino,
-                            "seccion" => $seccion,
-                            "subseccion" => $subseccion,
-                            "tipo" => $tipo,
-                        );
+                    $arrayTemp = array(
+                        "idOT" => $idOT,
+                        "actividad" => $actividad,
+                        "status" => $status,
+                        "equipo" => $equipo,
+                        "destino" => $destino,
+                        "seccion" => $seccion,
+                        "subseccion" => $subseccion,
+                        "tipo" => $tipo,
+                    );
 
-                        $array['datos'] = $arrayTemp;
+                    $array['datos'] = $arrayTemp;
 
-                        $query = "SELECT id, actividad, status FROM t_mc_actividades_ot WHERE id_falla = $idOT and activo = 1 ORDER BY id DESC";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            foreach ($result as $x) {
-                                $idActividad = $x['id'];
-                                $actividadX = $x['actividad'];
-                                $statusX = $x['status'];
+                    $query = "SELECT id, actividad, status FROM t_mc_actividades_ot WHERE id_falla = $idOT and activo = 1 ORDER BY id DESC";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $idActividad = $x['id'];
+                            $actividadX = $x['actividad'];
+                            $statusX = $x['status'];
 
-                                if ($statusX == "N" or $statusX == "PENDIENTE" or $statusX == "P") {
-                                    $statusX = "PENDIENTE";
-                                } else {
-                                    $statusX = "SOLUCIONADO";
-                                }
-
-                                $actTemp = array(
-                                    "idActividad" => $idActividad,
-                                    "actividad" => $actividadX,
-                                    "status" => $statusX
-                                );
-                                $act[] = $actTemp;
+                            if ($statusX == "N" or $statusX == "PENDIENTE" or $statusX == "P") {
+                                $statusX = "PENDIENTE";
+                            } else {
+                                $statusX = "SOLUCIONADO";
                             }
+
+                            $actTemp = array(
+                                "idActividad" => $idActividad,
+                                "actividad" => $actividadX,
+                                "status" => $statusX
+                            );
+                            $act[] = $actTemp;
                         }
                     }
-                    $array['actividades'] = $act;
                 }
+                $array['actividades'] = $act;
             }
-            echo json_encode($array);
         }
     }
+    echo json_encode($array);
 }
