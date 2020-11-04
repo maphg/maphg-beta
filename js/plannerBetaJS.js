@@ -3174,29 +3174,32 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
    let actividad = document.getElementById("agregarActividadGeneral").value;
    const action = "actualizarActividadOT";
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTipo=${idTipo}&tipo=${tipo}&columna=${columna}&actividad=${actividad}&idActividad=${idActividad}`;
-
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         obtenerActividadesOT(idTipo, tipo);
-         if (array == "AGREGADO") {
-            alertaImg('Actividad, Agregada', '', 'success', 1200);
-         } else {
-            alertaImg('Intente de Nuevo', '', 'info', 1200);
-         }
-      })
-      .then(function () {
-         document.getElementById("agregarActividadGeneral").value = '';
-         document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
-         if (tipo == "FALLA") {
-            obtenerFallas(idEquipo);
-         } else if (tipo == "TAREA") {
-            obtenerTareas(idEquipo);
-         }
-      })
-      .catch(function (err) {
-         fetch(`${APIERROR + err}`);
-      })
+   if (actividad.length > 1) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            obtenerActividadesOT(idTipo, tipo);
+            if (array == "AGREGADO") {
+               alertaImg('Actividad, Agregada', '', 'success', 1200);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+         })
+         .then(function () {
+            document.getElementById("agregarActividadGeneral").value = '';
+            document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
+            if (tipo == "FALLA") {
+               obtenerFallas(idEquipo);
+            } else if (tipo == "TAREA") {
+               obtenerTareas(idEquipo);
+            }
+         })
+         .catch(function (err) {
+            fetch(`${APIERROR + err}`);
+         })
+   } else {
+      alertaImg('Actividad NO Valida', '', 'info', 1200);
+   }
 }
 
 
