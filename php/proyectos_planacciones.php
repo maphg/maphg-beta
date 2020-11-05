@@ -985,8 +985,8 @@ if (isset($_GET['action'])) {
                 FROM t_users 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id = $idResponsable";
+                $responsable = '';
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $responsable = '';
                     foreach ($result as $x) {
                         $responsable
                             = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
@@ -995,8 +995,8 @@ if (isset($_GET['action'])) {
 
                 #COMENTARIOS
                 $query = "SELECT count(id) FROM t_mc_comentarios WHERE id_mc = $idFalla and activo = 1";
+                $totalComentarios = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
@@ -1004,8 +1004,8 @@ if (isset($_GET['action'])) {
 
                 #ADJUNTOS
                 $query = "SELECT count(id) FROM t_mc_adjuntos WHERE id_mc = $idFalla and activo = 1";
+                $totalAdjuntos = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
                     }
@@ -1129,8 +1129,8 @@ if (isset($_GET['action'])) {
                 FROM t_users 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id = $idResponsable";
+                $responsable = '';
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $responsable = '';
                     foreach ($result as $x) {
                         $responsable
                             = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
@@ -1139,8 +1139,8 @@ if (isset($_GET['action'])) {
 
                 #COMENTARIOS
                 $query = "SELECT count(id) FROM comentarios_mp_np WHERE id_mp_np = $idTarea and activo = 1";
+                $totalComentarios = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
@@ -1148,8 +1148,8 @@ if (isset($_GET['action'])) {
 
                 #ADJUNTOS
                 $query = "SELECT count(id) FROM adjuntos_mp_np WHERE id_mp_np = $idTarea and activo = 1";
+                $totalAdjuntos = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
                     }
@@ -1271,8 +1271,8 @@ if (isset($_GET['action'])) {
                 FROM t_users 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id = $idResponsable";
+                $responsable = '';
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $responsable = '';
                     foreach ($result as $x) {
                         $responsable
                             = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
@@ -1281,8 +1281,8 @@ if (isset($_GET['action'])) {
 
                 #COMENTARIOS
                 $query = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion and activo = 1";
+                $totalComentarios = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
@@ -1290,8 +1290,8 @@ if (isset($_GET['action'])) {
 
                 #ADJUNTOS
                 $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
+                $totalAdjuntos = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
                     }
@@ -1417,8 +1417,8 @@ if (isset($_GET['action'])) {
                 FROM t_users 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id IN ($idResponsable)";
+                $responsable = '';
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $responsable = '';
                     foreach ($result as $x) {
                         $responsable
                             = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
@@ -1428,8 +1428,8 @@ if (isset($_GET['action'])) {
                 #COMENTARIOS
                 $query = "SELECT count(id) FROM t_mp_planificacion_iniciada 
                 WHERE id = $idPreventivo and comentario != ''";
+                $totalComentarios = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
@@ -1437,9 +1437,9 @@ if (isset($_GET['action'])) {
 
                 #ADJUNTOS
                 $query = "SELECT count(id) FROM t_mp_planificacion_iniciada_adjuntos 
-                WHERE t_mp_planificacion_iniciada = $idPreventivo and activo = 1";
+                WHERE id_planificacion_iniciada = $idPreventivo and activo = 1";
+                $totalAdjuntos = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
                     }
