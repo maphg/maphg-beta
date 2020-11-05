@@ -409,7 +409,7 @@ function consultaEquiposLocales() {
             } else {
                 alertaImg('Equipos Obtenidos: 0', '', 'info', 3000)
             }
-            return array[0].semanaActual;
+            // return array[0].semanaActual;
         });
 }
 
