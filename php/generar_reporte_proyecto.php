@@ -46,17 +46,6 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $costeP = $e['coste'];
         $totalP = $cantidadP * $costeP;
 
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(50);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(10);
-        $objPHPExcel->getActiveSheet()->getRowDimension($fila)->setRowHeight(45);
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idP);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $areaP);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $actividadP);
