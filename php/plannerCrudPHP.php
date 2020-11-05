@@ -8939,13 +8939,13 @@ if (isset($_POST['action'])) {
         $idEquipo = $_POST['idEquipo'];
         $array = array();
 
-        $query = "SELECT t_equipos_comentarios.id, t_equipos_comentarios.comentarios, 
-        t_equipos_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
-        FROM t_equipos_comentarios 
-        INNER JOIN t_users ON t_equipos_comentarios.id_usuario = t_users.id
+        $query = "SELECT t_equipos_america_comentarios.id, t_equipos_america_comentarios.comentarios, 
+        t_equipos_america_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_equipos_america_comentarios 
+        INNER JOIN t_users ON t_equipos_america_comentarios.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_equipos_comentarios.id_equipo = $idEquipo and t_equipos_comentarios.status = '1'
-        ORDER BY t_equipos_comentarios.id DESC";
+        WHERE t_equipos_america_comentarios.id_equipo = $idEquipo and t_equipos_america_comentarios.status = '1'
+        ORDER BY t_equipos_america_comentarios.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idComentario = $x['id'];
@@ -8969,7 +8969,7 @@ if (isset($_POST['action'])) {
         $idEquipo = $_POST["idEquipo"];
         $comentario = $_POST["comentario"];
 
-        $query = "INSERT INTO t_equipos_comentarios(fecha, comentarios, id_equipo, id_usuario, status) VALUES('$fechaActual', '$comentario', $idEquipo, $idUsuario, '1')";
+        $query = "INSERT INTO t_equipos_america_comentarios(fecha, comentarios, id_equipo, id_usuario, status) VALUES('$fechaActual', '$comentario', $idEquipo, $idUsuario, '1')";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {

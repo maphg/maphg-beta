@@ -93,7 +93,7 @@ if (isset($_GET['action'])) {
 
                 #TOTAL COMENTARIOS POR EQUIPO
                 $totalComentarios = 0;
-                $query = "SELECT count(id) FROM t_equipos_comentarios WHERE id_equipo = $idEquipo and status = 1";
+                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $totalComentarios = $a['count(id)'];
