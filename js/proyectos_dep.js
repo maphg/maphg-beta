@@ -572,7 +572,7 @@ function tooltipPlanaccionDEP(idPlanaccion) {
 
 
 // OBTIENES LOS PROYECTOS DEP
-function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado = 'NINGUNO') {
+function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado) {
     document.getElementById("modalProyectosDEP").classList.add("open");
     document.getElementById("contendorEtiquetado").classList.add("hidden");
     document.getElementById("contenedorDEP").classList.remove("hidden");
@@ -598,7 +598,6 @@ function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado = 'N
     const action = "consultaProyectosDEP";
     const ruta = "php/proyectos_planacciones.php?";
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${status}&etiquetado=${etiquetado}`;
-
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 
@@ -1337,7 +1336,6 @@ function obtenerEtiquetados() {
     let idSubseccion = localStorage.getItem('idSubseccion');
     const action = "obtenerMarcados";
     const URL = `php/proyectos_planacciones.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`;
-
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 

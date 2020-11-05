@@ -863,7 +863,6 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerMarcados") {
         $idSubseccion = $_GET['idSubseccion'];
         $array = array();
-
         if ($idSubseccion == 213) {
             $filtroEtiqueta_FALLAS = "and t_mc.status_material = '1'";
             $filtroEtiqueta_TAREAS = "and t_mp_np.status_material = '1'";
@@ -893,9 +892,9 @@ if (isset($_GET['action'])) {
             $filtroDestino_PREVENTIVOS = "";
         } else {
             $filtroDestino_PROYECTOS = "and t_proyectos.id_destino = $idDestino";
-            $filtroDestino_FALLAS = "and t_proyectos.id_destino = $idDestino";
+            $filtroDestino_FALLAS = "and t_mc.id_destino = $idDestino";
             $filtroDestino_TAREAS = "and t_mp_np.id_destino = $idDestino";
-            $filtroDestino_PREVENTIVOS = "and t_equipos.id_destino = $idDestino";
+            $filtroDestino_PREVENTIVOS = "and t_equipos_america.id_destino = $idDestino";
         }
 
         #FALLAS
@@ -1333,7 +1332,7 @@ if (isset($_GET['action'])) {
         t_mp_planificacion_iniciada.departamento_calidad, t_mp_planificacion_iniciada.departamento_compras, t_mp_planificacion_iniciada.departamento_direccion, t_mp_planificacion_iniciada.departamento_finanzas, t_mp_planificacion_iniciada.departamento_rrhh, t_mp_planificacion_iniciada.energetico_electricidad, t_mp_planificacion_iniciada.energetico_agua, t_mp_planificacion_iniciada.energetico_diesel, t_mp_planificacion_iniciada.energetico_gas,
         c_secciones.seccion, c_subsecciones.grupo, t_colaboradores.nombre, t_colaboradores.apellido
         FROM t_mp_planificacion_iniciada
-        LEFT JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+        INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
         INNER JOIN t_users ON t_mp_planificacion_iniciada.creado_por = t_users.id

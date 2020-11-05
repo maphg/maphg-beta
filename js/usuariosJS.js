@@ -6,38 +6,38 @@ $(document).ready(function () {
     });
 });
 
-function cargarTareasDestinoPlanner(pagina, idDestino) {
-    if (pagina == 1) {
-        var url = "../php/tareasPHP.php";
-    } else {
-        var url = "php/tareasPHP.php";
-    }
-    if (idDestino == undefined) {
-        var destino = document.getElementById("cbDestinos").value;
-    } else {
-        var destino = idDestino;
-    }
+// function cargarTareasDestinoPlanner(pagina, idDestino) {
+//     if (pagina == 1) {
+//         var url = "../php/tareasPHP.php";
+//     } else {
+//         var url = "php/tareasPHP.php";
+//     }
+//     if (idDestino == undefined) {
+//         var destino = document.getElementById("cbDestinos").value;
+//     } else {
+//         var destino = idDestino;
+//     }
 
-    //    for (i = 0; i <= destino.length; i++) {
-    //        if (destino[i].checked) {
-    //            var idDestino = destino[i].value;
-    //            break;
-    //        }
-    //    }
-    $.ajax({
-        type: 'post',
-        url: url,
-        data: 'action=34&idDestino=' + destino,
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            $(".loader").fadeOut('slow');
-            location.reload();
+//     //    for (i = 0; i <= destino.length; i++) {
+//     //        if (destino[i].checked) {
+//     //            var idDestino = destino[i].value;
+//     //            break;
+//     //        }
+//     //    }
+//     $.ajax({
+//         type: 'post',
+//         url: url,
+//         data: 'action=34&idDestino=' + destino,
+//         beforeSend: function () {
+//             $(".loader").show();
+//         },
+//         success: function (data) {
+//             $(".loader").fadeOut('slow');
+//             location.reload();
 
-        }
-    });
-}
+//         }
+//     });
+// }
 
 function validarUsuario() {
     var username = document.getElementById("inputusuario").value;
@@ -60,11 +60,16 @@ function validarUsuario() {
                             localStorage.setItem('idSubseccion', 0);
                             localStorage.setItem('idEquipo', 0);
                             localStorage.setItem('idMC', 0);
+                            alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
+
+                            if (data.idDestino == 2) {
+                                location.href = "planner-cols.php";
+                            } else {
+                                location.href = "index.php";
+                            }
+                        } else {
+                            location.href = "login.php";
                         }
-                        location.href = "index.php";
-                        alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
-
-
                     } else if (data.respuesta == 2) {
                         alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
 
@@ -73,8 +78,6 @@ function validarUsuario() {
                     } else {
                         // toastr.warning(data, 'Advertencia', {
                         alertaImg(data, 'has-text-warning', 'warning', 3000);
-
-
                     }
                 }
             });
@@ -121,26 +124,26 @@ function logout() {
     });
 }
 
-function logout2() {
-    $.ajax({
-        type: 'post',
-        url: '../php/usuariosPHP.php',
-        data: 'action=2',
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            $(".loader").fadeOut('slow');
-            if (data == 1) {
-                location.href = "../login.php";
-            } else {
-                $("#msg").html("");
-                $("#msg").html(data);
-            }
+// function logout2() {
+//     $.ajax({
+//         type: 'post',
+//         url: '../php/usuariosPHP.php',
+//         data: 'action=2',
+//         beforeSend: function () {
+//             $(".loader").show();
+//         },
+//         success: function (data) {
+//             $(".loader").fadeOut('slow');
+//             if (data == 1) {
+//                 location.href = "../login.php";
+//             } else {
+//                 $("#msg").html("");
+//                 $("#msg").html(data);
+//             }
 
-        }
-    });
-}
+//         }
+//     });
+// }
 
 function obtDatosEmpleado(idEmpleado) {
     $.ajax({

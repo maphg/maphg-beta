@@ -86,6 +86,13 @@ if ($result = mysqli_query($conn_2020, $query)) {
 
 // $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 // $objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+// $fecha = date('d-m-Y H:m:s');
+// header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+// header('Content-Disposition: attachment;filename="Reporte Proyectos_' . $fecha . '.xlsx"');
+// header('Cache-Control: max-age=0');
+// $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+// $objWriter->save('PHP://output');
+
 $fecha = date('d-m-Y H:m:s');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 header('Content-Disposition: attachment;filename="Reporte Proyectos_' . $fecha . '.xlsx"');
