@@ -103,7 +103,7 @@ if (isset($_GET['action'])) {
                 #ULTIMO PREVENTIVO POR EQUIPO
                 $ultimoMpFecha = "";
                 $ultimoMpSemana = 0;
-                $query = "SELECT semana, fecha_creacion FROM t_mp_planificacion_iniciada WHERE id_equipo = $idEquipo and status = 'FINALIZADO' and activo = 1
+                $query = "SELECT semana, fecha_creacion FROM t_mp_planificacion_iniciada WHERE id_equipo = $idEquipo and status = 'SOLUCIONADO' and activo = 1
                 ORDER BY id DESC LIMIT 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
@@ -119,7 +119,7 @@ if (isset($_GET['action'])) {
                 $mpS = 0;
                 $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'FINALIZADO' and 
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
                 t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' ";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
@@ -164,7 +164,7 @@ if (isset($_GET['action'])) {
                 $testR = 0;
                 $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'FINALIZADO' and 
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
                 t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST' ";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
@@ -172,15 +172,15 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                #PREVENTIVOS SOLUCIONADOS POR EQUIPO
+                #PREVENTIVOS TEST SOLUCIONADOS POR EQUIPO
                 $ultimoTestFecha = 0;
                 $ultimoTestSemana = 0;
                 $query = "SELECT t_mp_planificacion_iniciada.semana, 
                 t_mp_planificacion_iniciada.fecha_creacion 
                 FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'FINALIZADO' and 
-                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST' ";
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $ultimoTestFecha = $a['fecha_creacion'];
@@ -334,7 +334,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'FINALIZADO' and t_mp_planificacion_iniciada.activo = 1 and 
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
         t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -364,7 +364,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'FINALIZADO' and t_mp_planificacion_iniciada.activo = 1 and 
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
         t_mp_planes_mantenimiento.tipo_plan = 'TEST' $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -374,7 +374,6 @@ if (isset($_GET['action'])) {
                     $$totalTest = $x['id'];;
             }
         }
-
 
         echo json_encode($array);
     }

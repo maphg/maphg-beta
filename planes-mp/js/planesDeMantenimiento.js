@@ -358,7 +358,7 @@ function agregarActividadPlanMP() {
             },
             dataType: "JSON",
             success: function (data) {
-                // console.log(data);
+                console.log(data);
                 if (data.resultado == 1) {
                     obtenerActividadesPlanMP();
                     document.getElementById("modalAgregarActividadMP").classList.remove('open');

@@ -717,7 +717,7 @@
                 <h1>Planes Preventivos</h1>
             </div>
 
-            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4">
+            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar" style="height:300px; max-height:305px;">
             </div>
             <!-- PLANES MP -->
 

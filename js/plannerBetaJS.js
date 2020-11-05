@@ -1169,7 +1169,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
          if (data == 1) {
             alertaImg("Información Actualizada", "", "success", 2000);
             if (status == "activo" || status == "status") {
-               llamarFuncionX("obtenerEquipos");
+               llamarFuncionX("obtenerEquiposAmerica");
                obtenerDatosUsuario(idDestino);
             }
             if (valorStatus == "F") {
@@ -1289,7 +1289,7 @@ function agregarMC(idMC) {
                alertaImg("FALLA AGREGADA", "", "success", 1500);
                obtenerDatosUsuario(idDestino);
                obtenerFallas(idEquipo);
-               llamarFuncionX("obtenerEquipos");
+               llamarFuncionX("obtenerEquiposAmerica");
                datosModalAgregarMC();
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("comentarioMC").value = "";
@@ -1857,20 +1857,20 @@ function actualizarTareas(idTarea, columna, valor) {
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 2) {
             obtenerDatosUsuario(idDestino);
-            llamarFuncionX("obtenerEquipos");
+            llamarFuncionX("obtenerEquiposAmerica");
             obtenerTareas(idEquipo);
             alertaImg("Tarea SOLUCIONADA", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 3) {
             obtenerDatosUsuario(idDestino);
             obtenerTareas(idEquipo);
-            llamarFuncionX("obtenerEquipos");
+            llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Recuperada como PENDIENTE", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 4) {
             obtenerTareas(idEquipo);
             obtenerDatosUsuario(idDestino);
-            llamarFuncionX("obtenerEquipos");
+            llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Eliminada", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 5) {
@@ -1957,19 +1957,20 @@ function agregarTarea() {
          success: function (data) {
             if (data == 1) {
                obtenerDatosUsuario(idDestino);
-               llamarFuncionX("obtenerEquipos");
+               llamarFuncionX("obtenerEquiposAmerica");
                obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("modalAgregarMC").classList.remove("open");
                alertaImg("Tarea Agregada", "", "success", 1500);
             } else if (data == 2) {
                obtenerDatosUsuario(idDestino);
-               llamarFuncionX("obtenerEquipos");
+               llamarFuncionX("obtenerEquiposAmerica");
                obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("modalAgregarMC").classList.remove("open");
                document.getElementById("comentarioMC").value = "";
-               alertaImg("Tarea Y Comentario, Agregado", "", "success", 1500);
+               alertaImg("Tarea Agregada", "", "success", 1500);
+               alertaImg("Comentario, Agregado", "", "success", 1500);
             } else {
                alertaImg("Intente de Nuevo", "", "question", 1500);
             }
@@ -2612,7 +2613,7 @@ function opcionesJerarquiaEquipo(idEquipo) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    const action = "opcionesJerarquiaEquipo";
-   const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+   const URL = `gestion_equipos/php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
 
    if (jerarquia == "SECUNDARIO") {
       fetch(URL)
@@ -2777,6 +2778,8 @@ function consultarPlanEquipo(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
    const action = "consultarPlanEquipo";
 
+   document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -2788,132 +2791,145 @@ function consultarPlanEquipo(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         document.getElementById("contenedorPlanesEquipo").innerHTML = '';
-         if (data.length > 0) {
-            for (let index = 0; index < data.length; index++) {
+         if (data.planes) {
+            if (data.planes.length > 0) {
+               for (let index = 0; index < data.planes.length; index++) {
 
-               const planesX = datosPlanEquipo({
-                  solucionado: data[index].solucionado,
-                  proceso: data[index].proceso,
-                  planificado: data[index].planificado,
-                  idSemana: data[index].idSemana,
-                  idProceso: data[index].idProceso,
-                  idEquipo: data[index].idEquipo,
-                  idPlan: data[index].idPlan,
-                  periodicidad: data[index].periodicidad,
-                  tipoPlan: data[index].tipoPlan,
-                  semana_1: data[index].semana_1,
-                  semana_2: data[index].semana_2,
-                  semana_3: data[index].semana_3,
-                  semana_4: data[index].semana_4,
-                  semana_5: data[index].semana_5,
-                  semana_6: data[index].semana_6,
-                  semana_7: data[index].semana_7,
-                  semana_8: data[index].semana_8,
-                  semana_9: data[index].semana_9,
-                  semana_10: data[index].semana_10,
-                  semana_11: data[index].semana_11,
-                  semana_12: data[index].semana_12,
-                  semana_13: data[index].semana_13,
-                  semana_14: data[index].semana_14,
-                  semana_15: data[index].semana_15,
-                  semana_16: data[index].semana_16,
-                  semana_17: data[index].semana_17,
-                  semana_18: data[index].semana_18,
-                  semana_19: data[index].semana_19,
-                  semana_20: data[index].semana_20,
-                  semana_21: data[index].semana_21,
-                  semana_22: data[index].semana_22,
-                  semana_23: data[index].semana_23,
-                  semana_24: data[index].semana_24,
-                  semana_25: data[index].semana_25,
-                  semana_26: data[index].semana_26,
-                  semana_27: data[index].semana_27,
-                  semana_28: data[index].semana_28,
-                  semana_29: data[index].semana_29,
-                  semana_30: data[index].semana_30,
-                  semana_31: data[index].semana_31,
-                  semana_32: data[index].semana_32,
-                  semana_33: data[index].semana_33,
-                  semana_34: data[index].semana_34,
-                  semana_35: data[index].semana_35,
-                  semana_36: data[index].semana_36,
-                  semana_37: data[index].semana_37,
-                  semana_38: data[index].semana_38,
-                  semana_39: data[index].semana_39,
-                  semana_40: data[index].semana_40,
-                  semana_41: data[index].semana_41,
-                  semana_42: data[index].semana_42,
-                  semana_43: data[index].semana_43,
-                  semana_44: data[index].semana_44,
-                  semana_45: data[index].semana_45,
-                  semana_46: data[index].semana_46,
-                  semana_47: data[index].semana_47,
-                  semana_48: data[index].semana_48,
-                  semana_49: data[index].semana_49,
-                  semana_50: data[index].semana_50,
-                  semana_51: data[index].semana_51,
-                  semana_52: data[index].semana_52,
-                  proceso_1: data[index].proceso_1,
-                  proceso_2: data[index].proceso_2,
-                  proceso_3: data[index].proceso_3,
-                  proceso_4: data[index].proceso_4,
-                  proceso_5: data[index].proceso_5,
-                  proceso_6: data[index].proceso_6,
-                  proceso_7: data[index].proceso_7,
-                  proceso_8: data[index].proceso_8,
-                  proceso_9: data[index].proceso_9,
-                  proceso_10: data[index].proceso_10,
-                  proceso_11: data[index].proceso_11,
-                  proceso_12: data[index].proceso_12,
-                  proceso_13: data[index].proceso_13,
-                  proceso_14: data[index].proceso_14,
-                  proceso_15: data[index].proceso_15,
-                  proceso_16: data[index].proceso_16,
-                  proceso_17: data[index].proceso_17,
-                  proceso_18: data[index].proceso_18,
-                  proceso_19: data[index].proceso_19,
-                  proceso_20: data[index].proceso_20,
-                  proceso_21: data[index].proceso_21,
-                  proceso_22: data[index].proceso_22,
-                  proceso_23: data[index].proceso_23,
-                  proceso_24: data[index].proceso_24,
-                  proceso_25: data[index].proceso_25,
-                  proceso_26: data[index].proceso_26,
-                  proceso_27: data[index].proceso_27,
-                  proceso_28: data[index].proceso_28,
-                  proceso_29: data[index].proceso_29,
-                  proceso_30: data[index].proceso_30,
-                  proceso_31: data[index].proceso_31,
-                  proceso_32: data[index].proceso_32,
-                  proceso_33: data[index].proceso_33,
-                  proceso_34: data[index].proceso_34,
-                  proceso_35: data[index].proceso_35,
-                  proceso_36: data[index].proceso_36,
-                  proceso_37: data[index].proceso_37,
-                  proceso_38: data[index].proceso_38,
-                  proceso_39: data[index].proceso_39,
-                  proceso_40: data[index].proceso_40,
-                  proceso_41: data[index].proceso_41,
-                  proceso_42: data[index].proceso_42,
-                  proceso_43: data[index].proceso_43,
-                  proceso_44: data[index].proceso_44,
-                  proceso_45: data[index].proceso_45,
-                  proceso_46: data[index].proceso_46,
-                  proceso_47: data[index].proceso_47,
-                  proceso_48: data[index].proceso_48,
-                  proceso_49: data[index].proceso_49,
-                  proceso_50: data[index].proceso_50,
-                  proceso_51: data[index].proceso_51,
-                  proceso_52: data[index].proceso_52
-               });
+                  const planesX = datosPlanEquipo({
+                     solucionado: data.planes[index].solucionado,
+                     proceso: data.planes[index].proceso,
+                     planificado: data.planes[index].planificado,
+                     idSemana: data.planes[index].idSemana,
+                     idProceso: data.planes[index].idProceso,
+                     idEquipo: data.planes[index].idEquipo,
+                     idPlan: data.planes[index].idPlan,
+                     periodicidad: data.planes[index].periodicidad,
+                     tipoPlan: data.planes[index].tipoPlan,
+                     semana_1: data.planes[index].semana_1,
+                     semana_2: data.planes[index].semana_2,
+                     semana_3: data.planes[index].semana_3,
+                     semana_4: data.planes[index].semana_4,
+                     semana_5: data.planes[index].semana_5,
+                     semana_6: data.planes[index].semana_6,
+                     semana_7: data.planes[index].semana_7,
+                     semana_8: data.planes[index].semana_8,
+                     semana_9: data.planes[index].semana_9,
+                     semana_10: data.planes[index].semana_10,
+                     semana_11: data.planes[index].semana_11,
+                     semana_12: data.planes[index].semana_12,
+                     semana_13: data.planes[index].semana_13,
+                     semana_14: data.planes[index].semana_14,
+                     semana_15: data.planes[index].semana_15,
+                     semana_16: data.planes[index].semana_16,
+                     semana_17: data.planes[index].semana_17,
+                     semana_18: data.planes[index].semana_18,
+                     semana_19: data.planes[index].semana_19,
+                     semana_20: data.planes[index].semana_20,
+                     semana_21: data.planes[index].semana_21,
+                     semana_22: data.planes[index].semana_22,
+                     semana_23: data.planes[index].semana_23,
+                     semana_24: data.planes[index].semana_24,
+                     semana_25: data.planes[index].semana_25,
+                     semana_26: data.planes[index].semana_26,
+                     semana_27: data.planes[index].semana_27,
+                     semana_28: data.planes[index].semana_28,
+                     semana_29: data.planes[index].semana_29,
+                     semana_30: data.planes[index].semana_30,
+                     semana_31: data.planes[index].semana_31,
+                     semana_32: data.planes[index].semana_32,
+                     semana_33: data.planes[index].semana_33,
+                     semana_34: data.planes[index].semana_34,
+                     semana_35: data.planes[index].semana_35,
+                     semana_36: data.planes[index].semana_36,
+                     semana_37: data.planes[index].semana_37,
+                     semana_38: data.planes[index].semana_38,
+                     semana_39: data.planes[index].semana_39,
+                     semana_40: data.planes[index].semana_40,
+                     semana_41: data.planes[index].semana_41,
+                     semana_42: data.planes[index].semana_42,
+                     semana_43: data.planes[index].semana_43,
+                     semana_44: data.planes[index].semana_44,
+                     semana_45: data.planes[index].semana_45,
+                     semana_46: data.planes[index].semana_46,
+                     semana_47: data.planes[index].semana_47,
+                     semana_48: data.planes[index].semana_48,
+                     semana_49: data.planes[index].semana_49,
+                     semana_50: data.planes[index].semana_50,
+                     semana_51: data.planes[index].semana_51,
+                     semana_52: data.planes[index].semana_52,
+                     proceso_1: data.planes[index].proceso_1,
+                     proceso_2: data.planes[index].proceso_2,
+                     proceso_3: data.planes[index].proceso_3,
+                     proceso_4: data.planes[index].proceso_4,
+                     proceso_5: data.planes[index].proceso_5,
+                     proceso_6: data.planes[index].proceso_6,
+                     proceso_7: data.planes[index].proceso_7,
+                     proceso_8: data.planes[index].proceso_8,
+                     proceso_9: data.planes[index].proceso_9,
+                     proceso_10: data.planes[index].proceso_10,
+                     proceso_11: data.planes[index].proceso_11,
+                     proceso_12: data.planes[index].proceso_12,
+                     proceso_13: data.planes[index].proceso_13,
+                     proceso_14: data.planes[index].proceso_14,
+                     proceso_15: data.planes[index].proceso_15,
+                     proceso_16: data.planes[index].proceso_16,
+                     proceso_17: data.planes[index].proceso_17,
+                     proceso_18: data.planes[index].proceso_18,
+                     proceso_19: data.planes[index].proceso_19,
+                     proceso_20: data.planes[index].proceso_20,
+                     proceso_21: data.planes[index].proceso_21,
+                     proceso_22: data.planes[index].proceso_22,
+                     proceso_23: data.planes[index].proceso_23,
+                     proceso_24: data.planes[index].proceso_24,
+                     proceso_25: data.planes[index].proceso_25,
+                     proceso_26: data.planes[index].proceso_26,
+                     proceso_27: data.planes[index].proceso_27,
+                     proceso_28: data.planes[index].proceso_28,
+                     proceso_29: data.planes[index].proceso_29,
+                     proceso_30: data.planes[index].proceso_30,
+                     proceso_31: data.planes[index].proceso_31,
+                     proceso_32: data.planes[index].proceso_32,
+                     proceso_33: data.planes[index].proceso_33,
+                     proceso_34: data.planes[index].proceso_34,
+                     proceso_35: data.planes[index].proceso_35,
+                     proceso_36: data.planes[index].proceso_36,
+                     proceso_37: data.planes[index].proceso_37,
+                     proceso_38: data.planes[index].proceso_38,
+                     proceso_39: data.planes[index].proceso_39,
+                     proceso_40: data.planes[index].proceso_40,
+                     proceso_41: data.planes[index].proceso_41,
+                     proceso_42: data.planes[index].proceso_42,
+                     proceso_43: data.planes[index].proceso_43,
+                     proceso_44: data.planes[index].proceso_44,
+                     proceso_45: data.planes[index].proceso_45,
+                     proceso_46: data.planes[index].proceso_46,
+                     proceso_47: data.planes[index].proceso_47,
+                     proceso_48: data.planes[index].proceso_48,
+                     proceso_49: data.planes[index].proceso_49,
+                     proceso_50: data.planes[index].proceso_50,
+                     proceso_51: data.planes[index].proceso_51,
+                     proceso_52: data.planes[index].proceso_52
+                  });
 
-               document.getElementById("contenedorPlanesEquipo")
-                  .insertAdjacentHTML('beforeend', planesX);
+                  document.getElementById("contenedorPlanesEquipo")
+                     .insertAdjacentHTML('beforeend', planesX);
+               }
+               indicadorSemanaActual(data.planes[0].semanaActual);
             }
-            indicadorSemanaActual(data[0].semanaActual);
          } else {
-            document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+            if (data.creado) {
+               document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"> Creando Plan MP... </h1>`;
+               if (data.creado == "SI") {
+                  alertaImg('Creando Plan MP', '', 'success', 1900);
+                  setTimeout(function () {
+                     consultarPlanEquipo(idEquipo);
+                  }, 1100)
+               } else {
+                  document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+               }
+            } else {
+               document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+            }
          }
       }
    });
@@ -2930,6 +2946,46 @@ document.getElementById("inputActividadesExtra").addEventListener("keyup", funct
 
 // Avento para guardarCambiosOT
 document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
+
+
+function actividadRealizadaOT(idOT, idActividad, tipoActividad) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let valor = 0;
+
+   if (tipoActividad == "test") {
+      valor = document.getElementById("test_" + idActividad).value;
+   }
+
+   if (tipoActividad == "checkList") {
+
+      if (document.getElementById("check_si_" + idActividad).checked) {
+         valor = document.getElementById("check_si_" + idActividad).value;
+      }
+
+      if (document.getElementById("check_no_" + idActividad).checked) {
+         valor = document.getElementById("check_no_" + idActividad).value;
+      }
+
+      if (document.getElementById("check_na_" + idActividad).checked) {
+         valor = document.getElementById("check_na_" + idActividad).value;
+      }
+   }
+
+   const action = "actividadRealizadaOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&idActividad=${idActividad}&tipoActividad=${tipoActividad}&valor=${valor}`;
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         if (array == "Actualizado") {
+            consultarActividadRealizadaOT(idOT);
+            alertaImg("Actividad Actualizada", "", "success", 2000);
+         } else {
+            consultarActividadRealizadaOT(idOT);
+            alertaImg("Intente de Nuevo", "", "success", 2000);
+         }
+      });
+}
 
 
 function guardarCambiosOT() {
@@ -3482,7 +3538,7 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
                actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
                             <div class="mr-2 flex flex-col leading-none">
-                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura">
+                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura" autocomplete="off">
                                 <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
                             </div>
                             <div class=" text-justify flex items-center">
@@ -3565,6 +3621,8 @@ function indicadorSemanaActual(semana) {
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
    let numeroSemanas = 0;
 
    if (accionMP == "PROGRAMARPERSONALIZADO") {
@@ -3639,12 +3697,10 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
          } else {
             alertaImg(`Intente de Nuevo`, '', 'info', 3000);
          }
-         // consultarPlanEquipo(idEquipo);
-         // consultaEquiposLocales();
+         obtenerEquiposAmerica(idSeccion, idSubseccion);
       }
    });
 }
-
 
 
 function consultarActividadesMP(idPlan) {
@@ -3731,11 +3787,10 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
       },
       // dataType: "JSON",
       success: function (data) {
-         if (data == 13) {
+
+         if (data == 10) {
             localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
             window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
-         } else {
-            alertaImg(`Semana ${semanaX}, Sin Proceso`, '', 'error', 3000);
          }
       }
    });
@@ -3898,8 +3953,8 @@ function llamarFuncionX(nombreFuncion) {
          consultaSubsecciones(idDestino, idUsuario);
          break;
 
-      case (nombreFuncion = "obtenerEquipos"):
-         obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, 0, 49, "MCN");
+      case (nombreFuncion = "obtenerEquiposAmerica"):
+         obtenerEquiposAmerica(idSeccion, idSubseccion);
          break;
    }
 }
@@ -4887,7 +4942,6 @@ const dataEquiposAmerica = params => {
       valorultimoTestSemana = "Sem " + params.ultimoTestSemana;
    }
 
-
    var cotizaciones = params.cotizaciones;
 
    if (cotizaciones == 0) {
@@ -5029,7 +5083,6 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
-
    document.getElementById("tareasGeneralesEquipo").
       setAttribute('onclick', "obtenerTareas(0); toggleModalTailwind('modalTareasFallas');");
    fetch(URL)
@@ -5061,7 +5114,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
                const data = dataEquiposAmerica({
                   idEquipo: idEquipo,
-                  equipo: equipo,
+                  equipo: equipo + ' ' + idEquipo,
                   tipoEquipo: tipoEquipo,
                   statusEquipo: statusEquipo,
                   fallasP: fallasP,

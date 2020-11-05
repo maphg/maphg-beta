@@ -5,7 +5,7 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "obtenerOTDigital";
-    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
+    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -54,7 +54,7 @@ function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accion
                     actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
                             <div class="mr-2 flex flex-col leading-none">
-                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura">
+                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura" autocomplete="off">
                                 <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
                             </div>
                             <div class=" text-justify flex items-center">
@@ -198,7 +198,7 @@ function consultaAdjuntosOT(idOT) {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultarAdjuntosOT";
-    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+    const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
     fetch(URL)
         .then(res => res.json())
         .then(array => {

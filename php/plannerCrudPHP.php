@@ -8188,6 +8188,7 @@ if (isset($_POST['action'])) {
         $idEquipo = $_POST['idEquipo'];
         $año = date('Y');
         $data = array();
+        $array = array();
 
         $query = "SELECT t_equipos_america.id 'idEquipo', t_equipos_america.id_destino, t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
         c_frecuencias_mp.frecuencia, t_mp_planes_mantenimiento.grado
@@ -8479,22 +8480,23 @@ if (isset($_POST['action'])) {
 
                             $data[] = $arrayTemp;
                         }
+                        $array['planes'] = $data;
                     } else {
                         $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $query = "INSERT INTO t_mp_planeacion_proceso(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
                             if ($result = mysqli_query($conn_2020, $query)) {
-                                echo "SI";
+                                $array['creado'] = "SI";
                             } else {
-                                echo "NO";
+                                $array['creado'] = "NO";
                             }
                         } else {
-                            echo "NO";
+                            $array['creado'] = "NO";
                         }
                     }
                 }
             }
-            echo json_encode($data);
+            echo json_encode($array);
         }
     }
 
@@ -8510,14 +8512,14 @@ if (isset($_POST['action'])) {
         $año = date('Y');
         $idPlan = $_POST['idPlan'];
 
-        $query = "SELECT* 
+        $query = "SELECT *
         FROM t_mp_planeacion_semana 
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planeacion_semana.id_plan = t_mp_planes_mantenimiento.id
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
         WHERE t_mp_planeacion_semana.id = $idSemana and t_mp_planeacion_semana.id_equipo = $idEquipo and t_mp_planeacion_semana.activo = 1 and t_mp_planes_mantenimiento.status = 'ACTIVO'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
-                // $idPlan = $i["id_plan"];
+                $idPlan = $i["id_plan"];
                 $valoSemanaX = $i["semana_" . $semanaX];
                 $semanas = $i["semanas"];
                 $saltos = $i["saltos"];

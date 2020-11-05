@@ -420,7 +420,7 @@ function toggleInputsEquipo(estadoInputs) {
     let idEquipo = localStorage.getItem('idEquipo');
     const arrayBtnEquipo =
         [
-            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo'
+            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo'
         ]
 
     arrayBtnEquipo.forEach(element => {
@@ -640,6 +640,8 @@ function consultarPlanEquipo(idEquipo) {
     let idDestino = localStorage.getItem('idDestino');
     const action = "consultarPlanEquipo";
 
+    document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+
     $.ajax({
         type: "POST",
         url: "../php/plannerCrudPHP.php",
@@ -651,132 +653,145 @@ function consultarPlanEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
-            document.getElementById("contenedorPlanesEquipo").innerHTML = '';
-            if (data.length > 0) {
-                for (let index = 0; index < data.length; index++) {
+            if (data.planes) {
+                if (data.planes.length > 0) {
+                    for (let index = 0; index < data.planes.length; index++) {
 
-                    const planesX = datosPlanEquipo({
-                        solucionado: data[index].solucionado,
-                        proceso: data[index].proceso,
-                        planificado: data[index].planificado,
-                        idSemana: data[index].idSemana,
-                        idProceso: data[index].idProceso,
-                        idEquipo: data[index].idEquipo,
-                        idPlan: data[index].idPlan,
-                        periodicidad: data[index].periodicidad,
-                        tipoPlan: data[index].tipoPlan,
-                        semana_1: data[index].semana_1,
-                        semana_2: data[index].semana_2,
-                        semana_3: data[index].semana_3,
-                        semana_4: data[index].semana_4,
-                        semana_5: data[index].semana_5,
-                        semana_6: data[index].semana_6,
-                        semana_7: data[index].semana_7,
-                        semana_8: data[index].semana_8,
-                        semana_9: data[index].semana_9,
-                        semana_10: data[index].semana_10,
-                        semana_11: data[index].semana_11,
-                        semana_12: data[index].semana_12,
-                        semana_13: data[index].semana_13,
-                        semana_14: data[index].semana_14,
-                        semana_15: data[index].semana_15,
-                        semana_16: data[index].semana_16,
-                        semana_17: data[index].semana_17,
-                        semana_18: data[index].semana_18,
-                        semana_19: data[index].semana_19,
-                        semana_20: data[index].semana_20,
-                        semana_21: data[index].semana_21,
-                        semana_22: data[index].semana_22,
-                        semana_23: data[index].semana_23,
-                        semana_24: data[index].semana_24,
-                        semana_25: data[index].semana_25,
-                        semana_26: data[index].semana_26,
-                        semana_27: data[index].semana_27,
-                        semana_28: data[index].semana_28,
-                        semana_29: data[index].semana_29,
-                        semana_30: data[index].semana_30,
-                        semana_31: data[index].semana_31,
-                        semana_32: data[index].semana_32,
-                        semana_33: data[index].semana_33,
-                        semana_34: data[index].semana_34,
-                        semana_35: data[index].semana_35,
-                        semana_36: data[index].semana_36,
-                        semana_37: data[index].semana_37,
-                        semana_38: data[index].semana_38,
-                        semana_39: data[index].semana_39,
-                        semana_40: data[index].semana_40,
-                        semana_41: data[index].semana_41,
-                        semana_42: data[index].semana_42,
-                        semana_43: data[index].semana_43,
-                        semana_44: data[index].semana_44,
-                        semana_45: data[index].semana_45,
-                        semana_46: data[index].semana_46,
-                        semana_47: data[index].semana_47,
-                        semana_48: data[index].semana_48,
-                        semana_49: data[index].semana_49,
-                        semana_50: data[index].semana_50,
-                        semana_51: data[index].semana_51,
-                        semana_52: data[index].semana_52,
-                        proceso_1: data[index].proceso_1,
-                        proceso_2: data[index].proceso_2,
-                        proceso_3: data[index].proceso_3,
-                        proceso_4: data[index].proceso_4,
-                        proceso_5: data[index].proceso_5,
-                        proceso_6: data[index].proceso_6,
-                        proceso_7: data[index].proceso_7,
-                        proceso_8: data[index].proceso_8,
-                        proceso_9: data[index].proceso_9,
-                        proceso_10: data[index].proceso_10,
-                        proceso_11: data[index].proceso_11,
-                        proceso_12: data[index].proceso_12,
-                        proceso_13: data[index].proceso_13,
-                        proceso_14: data[index].proceso_14,
-                        proceso_15: data[index].proceso_15,
-                        proceso_16: data[index].proceso_16,
-                        proceso_17: data[index].proceso_17,
-                        proceso_18: data[index].proceso_18,
-                        proceso_19: data[index].proceso_19,
-                        proceso_20: data[index].proceso_20,
-                        proceso_21: data[index].proceso_21,
-                        proceso_22: data[index].proceso_22,
-                        proceso_23: data[index].proceso_23,
-                        proceso_24: data[index].proceso_24,
-                        proceso_25: data[index].proceso_25,
-                        proceso_26: data[index].proceso_26,
-                        proceso_27: data[index].proceso_27,
-                        proceso_28: data[index].proceso_28,
-                        proceso_29: data[index].proceso_29,
-                        proceso_30: data[index].proceso_30,
-                        proceso_31: data[index].proceso_31,
-                        proceso_32: data[index].proceso_32,
-                        proceso_33: data[index].proceso_33,
-                        proceso_34: data[index].proceso_34,
-                        proceso_35: data[index].proceso_35,
-                        proceso_36: data[index].proceso_36,
-                        proceso_37: data[index].proceso_37,
-                        proceso_38: data[index].proceso_38,
-                        proceso_39: data[index].proceso_39,
-                        proceso_40: data[index].proceso_40,
-                        proceso_41: data[index].proceso_41,
-                        proceso_42: data[index].proceso_42,
-                        proceso_43: data[index].proceso_43,
-                        proceso_44: data[index].proceso_44,
-                        proceso_45: data[index].proceso_45,
-                        proceso_46: data[index].proceso_46,
-                        proceso_47: data[index].proceso_47,
-                        proceso_48: data[index].proceso_48,
-                        proceso_49: data[index].proceso_49,
-                        proceso_50: data[index].proceso_50,
-                        proceso_51: data[index].proceso_51,
-                        proceso_52: data[index].proceso_52
-                    });
+                        const planesX = datosPlanEquipo({
+                            solucionado: data.planes[index].solucionado,
+                            proceso: data.planes[index].proceso,
+                            planificado: data.planes[index].planificado,
+                            idSemana: data.planes[index].idSemana,
+                            idProceso: data.planes[index].idProceso,
+                            idEquipo: data.planes[index].idEquipo,
+                            idPlan: data.planes[index].idPlan,
+                            periodicidad: data.planes[index].periodicidad,
+                            tipoPlan: data.planes[index].tipoPlan,
+                            semana_1: data.planes[index].semana_1,
+                            semana_2: data.planes[index].semana_2,
+                            semana_3: data.planes[index].semana_3,
+                            semana_4: data.planes[index].semana_4,
+                            semana_5: data.planes[index].semana_5,
+                            semana_6: data.planes[index].semana_6,
+                            semana_7: data.planes[index].semana_7,
+                            semana_8: data.planes[index].semana_8,
+                            semana_9: data.planes[index].semana_9,
+                            semana_10: data.planes[index].semana_10,
+                            semana_11: data.planes[index].semana_11,
+                            semana_12: data.planes[index].semana_12,
+                            semana_13: data.planes[index].semana_13,
+                            semana_14: data.planes[index].semana_14,
+                            semana_15: data.planes[index].semana_15,
+                            semana_16: data.planes[index].semana_16,
+                            semana_17: data.planes[index].semana_17,
+                            semana_18: data.planes[index].semana_18,
+                            semana_19: data.planes[index].semana_19,
+                            semana_20: data.planes[index].semana_20,
+                            semana_21: data.planes[index].semana_21,
+                            semana_22: data.planes[index].semana_22,
+                            semana_23: data.planes[index].semana_23,
+                            semana_24: data.planes[index].semana_24,
+                            semana_25: data.planes[index].semana_25,
+                            semana_26: data.planes[index].semana_26,
+                            semana_27: data.planes[index].semana_27,
+                            semana_28: data.planes[index].semana_28,
+                            semana_29: data.planes[index].semana_29,
+                            semana_30: data.planes[index].semana_30,
+                            semana_31: data.planes[index].semana_31,
+                            semana_32: data.planes[index].semana_32,
+                            semana_33: data.planes[index].semana_33,
+                            semana_34: data.planes[index].semana_34,
+                            semana_35: data.planes[index].semana_35,
+                            semana_36: data.planes[index].semana_36,
+                            semana_37: data.planes[index].semana_37,
+                            semana_38: data.planes[index].semana_38,
+                            semana_39: data.planes[index].semana_39,
+                            semana_40: data.planes[index].semana_40,
+                            semana_41: data.planes[index].semana_41,
+                            semana_42: data.planes[index].semana_42,
+                            semana_43: data.planes[index].semana_43,
+                            semana_44: data.planes[index].semana_44,
+                            semana_45: data.planes[index].semana_45,
+                            semana_46: data.planes[index].semana_46,
+                            semana_47: data.planes[index].semana_47,
+                            semana_48: data.planes[index].semana_48,
+                            semana_49: data.planes[index].semana_49,
+                            semana_50: data.planes[index].semana_50,
+                            semana_51: data.planes[index].semana_51,
+                            semana_52: data.planes[index].semana_52,
+                            proceso_1: data.planes[index].proceso_1,
+                            proceso_2: data.planes[index].proceso_2,
+                            proceso_3: data.planes[index].proceso_3,
+                            proceso_4: data.planes[index].proceso_4,
+                            proceso_5: data.planes[index].proceso_5,
+                            proceso_6: data.planes[index].proceso_6,
+                            proceso_7: data.planes[index].proceso_7,
+                            proceso_8: data.planes[index].proceso_8,
+                            proceso_9: data.planes[index].proceso_9,
+                            proceso_10: data.planes[index].proceso_10,
+                            proceso_11: data.planes[index].proceso_11,
+                            proceso_12: data.planes[index].proceso_12,
+                            proceso_13: data.planes[index].proceso_13,
+                            proceso_14: data.planes[index].proceso_14,
+                            proceso_15: data.planes[index].proceso_15,
+                            proceso_16: data.planes[index].proceso_16,
+                            proceso_17: data.planes[index].proceso_17,
+                            proceso_18: data.planes[index].proceso_18,
+                            proceso_19: data.planes[index].proceso_19,
+                            proceso_20: data.planes[index].proceso_20,
+                            proceso_21: data.planes[index].proceso_21,
+                            proceso_22: data.planes[index].proceso_22,
+                            proceso_23: data.planes[index].proceso_23,
+                            proceso_24: data.planes[index].proceso_24,
+                            proceso_25: data.planes[index].proceso_25,
+                            proceso_26: data.planes[index].proceso_26,
+                            proceso_27: data.planes[index].proceso_27,
+                            proceso_28: data.planes[index].proceso_28,
+                            proceso_29: data.planes[index].proceso_29,
+                            proceso_30: data.planes[index].proceso_30,
+                            proceso_31: data.planes[index].proceso_31,
+                            proceso_32: data.planes[index].proceso_32,
+                            proceso_33: data.planes[index].proceso_33,
+                            proceso_34: data.planes[index].proceso_34,
+                            proceso_35: data.planes[index].proceso_35,
+                            proceso_36: data.planes[index].proceso_36,
+                            proceso_37: data.planes[index].proceso_37,
+                            proceso_38: data.planes[index].proceso_38,
+                            proceso_39: data.planes[index].proceso_39,
+                            proceso_40: data.planes[index].proceso_40,
+                            proceso_41: data.planes[index].proceso_41,
+                            proceso_42: data.planes[index].proceso_42,
+                            proceso_43: data.planes[index].proceso_43,
+                            proceso_44: data.planes[index].proceso_44,
+                            proceso_45: data.planes[index].proceso_45,
+                            proceso_46: data.planes[index].proceso_46,
+                            proceso_47: data.planes[index].proceso_47,
+                            proceso_48: data.planes[index].proceso_48,
+                            proceso_49: data.planes[index].proceso_49,
+                            proceso_50: data.planes[index].proceso_50,
+                            proceso_51: data.planes[index].proceso_51,
+                            proceso_52: data.planes[index].proceso_52
+                        });
 
-                    document.getElementById("contenedorPlanesEquipo")
-                        .insertAdjacentHTML('beforeend', planesX);
+                        document.getElementById("contenedorPlanesEquipo")
+                            .insertAdjacentHTML('beforeend', planesX);
+                    }
+                    indicadorSemanaActual(data.planes[0].semanaActual);
                 }
-                indicadorSemanaActual(data[0].semanaActual);
             } else {
-                document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+                if (data.creado) {
+                    document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"> Creando Plan MP... </h1>`;
+                    if (data.creado == "SI") {
+                        alertaImg('Creando Plan MP', '', 'success', 1900);
+                        setTimeout(function () {
+                            consultarPlanEquipo(idEquipo);
+                        }, 1100)
+                    } else {
+                        document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+                    }
+                } else {
+                    document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+                }
             }
         }
     });
@@ -1313,6 +1328,102 @@ function QREquipo() {
     }
 }
 
+
+// Función para Obtener información de los equipos.
+function informacionEquipo(idEquipo) {
+    localStorage.setItem('idEquipo', idEquipo);
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    document.getElementById("modalMPEquipo").classList.add('open');
+    document.getElementById("tooltipMP").classList.add('hidden');
+
+    // Funciones principales
+    consultarOpcionesEquipo();
+
+    const action = "informacionEquipo";
+    $.ajax({
+        type: "POST",
+        url: "../php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo
+        },
+        dataType: "JSON",
+        success: function (data) {
+            document.getElementById("inputAdjuntos").
+                setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+
+            document.getElementById("QREquipo").
+                setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
+
+            document.getElementById("nombreEquipo").value = data.equipo;
+            document.getElementById("seccionEquipo").value = data.idSeccion;
+            document.getElementById("subseccionEquipo").value = data.idSubseccion;
+            document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+            document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
+            document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
+            document.getElementById("modeloEquipo").value = data.modelo;
+            document.getElementById("serieEquipo").value = data.numero_serie;
+            document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
+            document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
+            document.getElementById("largoEquipo").value = data.largo_cm;
+            document.getElementById("anchoEquipo").value = data.ancho_cm;
+            document.getElementById("altoEquipo").value = data.alto_cm;
+            document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
+            document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
+            document.getElementById("voltajeEquipo").value = data.voltaje_v;
+            document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
+            document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
+            document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
+            document.getElementById("cargaMCAEquipo").value = data.carga_mca;
+            document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
+            document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
+            document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
+            document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
+            document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
+            document.getElementById("estadoEquipo").value = data.status;
+            document.getElementById("tipoEquipo").value = data.tipo;
+            document.getElementById("idFaseEquipo").value = data.idFases;
+            document.getElementById("contenedorEstadoEquipo").classList.
+                remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
+            document.getElementById("iconEstadoEquipo").classList.
+                remove('text-red-400', 'text-green-400', 'text-orange-400');
+            document.getElementById("estadoEquipo").classList.
+                remove('text-red-400', 'text-green-400', 'text-orange-400');
+
+            if (data.status == "TALLER") {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
+                document.getElementById("estadoEquipo").classList.add('text-orange-400');
+            } else if (data.status == "BAJA") {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
+                document.getElementById("estadoEquipo").classList.add('text-red-400');
+            } else {
+                document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
+                document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
+                document.getElementById("estadoEquipo").classList.add('text-green-400');
+            }
+
+            // Eventos
+            document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+
+            document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
+                document.getElementById("modalMedia").classList.add('open');
+                obtenerImagenesEquipo(idEquipo);
+            });
+
+            // Funciones Secundarias
+            toggleInputsEquipo(0);
+            obtenerImagenesEquipo(idEquipo);
+            consultarPlanEquipo(idEquipo);
+            opcionesJerarquiaEquipo(idEquipo);
+
+        }
+    });
+}
 
 function indicadorSemanaActual(semana) {
     let totalElementos = document.getElementsByClassName("semana_" + semana);

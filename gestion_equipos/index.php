@@ -189,7 +189,11 @@
                         </div>
                         <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="mr-1 text-blue-400">BITÁCORAS:</i>
-                            <h2>ZI</h2>
+                            <select id="idFaseEquipo" class="text-xs font-bold">
+                                <option value="1">GP</option>
+                                <option value="2">TRS</option>
+                                <option value="3">ZI</option>
+                            </select>
                         </div>
                         <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer">
                             <i class="mr-1 text-red-300">R</i>
@@ -391,7 +395,7 @@
                 <h1>Planes Preventivos</h1>
             </div>
 
-            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4">
+            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4" style="height:300px; max-height:305px;">
             </div>
             <!-- PLANES MP -->
         </div>
