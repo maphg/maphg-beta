@@ -614,9 +614,8 @@ function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado) {
     fetch(URL)
         .then(resp => resp.json())
         .then(array => {
+            document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
             if (array.length > 0) {
-                document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
-
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const destino = array[x].destino;
