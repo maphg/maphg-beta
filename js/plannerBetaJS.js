@@ -2463,7 +2463,7 @@ function toggleInputsEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
    const arrayBtnEquipo =
       [
-         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo'
+         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo'
       ]
 
    arrayBtnEquipo.forEach(element => {
@@ -2566,6 +2566,7 @@ function informacionEquipo(idEquipo) {
          document.getElementById("estadoEquipo").value = data.status;
          document.getElementById("tipoEquipo").value = data.tipo;
          document.getElementById("idFaseEquipo").value = data.idFases;
+         document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
          document.getElementById("contenedorEstadoEquipo").classList.
             remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
          document.getElementById("iconEstadoEquipo").classList.
@@ -2718,6 +2719,7 @@ function actualizarEquipo(idEquipo) {
    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
    let estadoEquipo = document.getElementById("estadoEquipo").value;
    let idFaseEquipo = document.getElementById("idFaseEquipo").value;
+   let tipoLocalEquipo = document.getElementById("tipoLocalEquipo").value;
    const action = "actualizarEquipo";
    $.ajax({
       type: "POST",
@@ -2754,7 +2756,8 @@ function actualizarEquipo(idEquipo) {
          caudalAireM3HEquipo: caudalAireM3HEquipo,
          caudalAireCFMEquipo: caudalAireCFMEquipo,
          estadoEquipo: estadoEquipo,
-         idFaseEquipo: idFaseEquipo
+         idFaseEquipo: idFaseEquipo,
+         tipoLocalEquipo: tipoLocalEquipo
       },
       // dataType: "JSON",
       success: function (data) {
@@ -4324,6 +4327,12 @@ function obtenerFallas(idEquipo = 0) {
    document.getElementById("ganttFallaTarea").
       setAttribute('onclick', `ganttFallas(${idEquipo}, 'PENDIENTE')`);
 
+   document.getElementById("estiloEquipoFallaTarea").className = '';
+   document.getElementById("estiloEquipoFallaTarea").
+      classList.add('ml-4', 'font-bold', 'bg-red-200', 'text-red-500', 'text-xs', 'py-1', 'px-2', 'rounded'
+      );
+
+
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
    let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
@@ -4504,6 +4513,11 @@ function obtenerTareas(idEquipo = 0) {
       setAttribute("onclick", `ganttTareas(${idEquipo}, 'PENDIENTE')`);
    document.getElementById("opcionFallaPendiente").
       setAttribute("onclick", `obtenerTareas(${idEquipo})`);
+
+   document.getElementById("estiloEquipoFallaTarea").className = '';
+   document.getElementById("estiloEquipoFallaTarea").
+      classList.add('ml-4', 'font-bold', 'bg-orange-200', 'text-orange-500', 'text-xs', 'py-1', 'px-2', 'rounded'
+      );
 
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
@@ -4868,7 +4882,7 @@ function ganttFallas(idEquipo, status) {
 
 // FUNCION PARA OBTENER DISEÑO DE LOS EQUIPOS
 const dataEquiposAmerica = params => {
-
+   var icono = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
    var tipoEquipo = params.tipoEquipo;
    var valorTipoEquipo = '';
 
@@ -4895,7 +4909,7 @@ const dataEquiposAmerica = params => {
    var ultimoMpFecha = params.ultimoMpFecha;
 
    if (ultimoMpFecha == 0) {
-      valorultimoMpFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorultimoMpFecha = icono;
    } else {
       valorultimoMpFecha = params.ultimoMpFecha;
    }
@@ -4912,7 +4926,7 @@ const dataEquiposAmerica = params => {
    var proximoMpFecha = params.proximoMpFecha;
 
    if (proximoMpFecha == 0) {
-      valorproximoMpFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorproximoMpFecha = icono;
    } else {
       valorproximoMpFecha = params.proximoMpFecha;
    }
@@ -4928,7 +4942,7 @@ const dataEquiposAmerica = params => {
    var ultimoTestFecha = params.ultimoTestFecha;
 
    if (ultimoTestFecha == 0) {
-      valorultimoTestFecha = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorultimoTestFecha = icono;
    } else {
       valorultimoTestFecha = params.ultimoTestFecha;
    }
@@ -4945,7 +4959,7 @@ const dataEquiposAmerica = params => {
    var cotizaciones = params.cotizaciones;
 
    if (cotizaciones == 0) {
-      valorcotizaciones = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorcotizaciones = icono;
    } else {
       valorcotizaciones = params.cotizaciones;
    }
@@ -4953,7 +4967,7 @@ const dataEquiposAmerica = params => {
    var imagenes = params.imagenes;
 
    if (imagenes == 0) {
-      valorimagenes = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorimagenes = icono;
    } else {
       valorimagenes = params.imagenes;
    }
@@ -4961,10 +4975,69 @@ const dataEquiposAmerica = params => {
    var comentarios = params.comentarios;
 
    if (comentarios == 0) {
-      valorcomentarios = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
+      valorcomentarios = icono;
    } else {
       valorcomentarios = params.comentarios;
    }
+
+   var totalDespiece = params.totalDespiece;
+   if (totalDespiece == 0) {
+      valorDespiece = icono;
+   } else {
+      valorDespiece = totalDespiece;
+   }
+
+   var totalTestR = params.testR;
+   if (totalTestR == 0) {
+      valorTestR = icono;
+   } else {
+      valorTestR = totalTestR;
+   }
+
+   if (params.fallasP == 0) {
+      valorFallasP = '';
+   } else {
+      valorFallasP = params.fallasP;
+   }
+
+   if (params.fallasS == 0) {
+      valorFallasS = '';
+   } else {
+      valorFallasS = params.fallasS;
+   }
+
+   if (params.tareasP == 0) {
+      valorTareasP = '';
+   } else {
+      valorTareasP = params.tareasP;
+   }
+
+   if (params.tareasS == 0) {
+      valorTareasS = '';
+   } else {
+      valorTareasS = params.tareasS;
+   }
+
+   if (params.mpP == 0) {
+      valormpP = '';
+   } else {
+      valormpP = params.mpP;
+   }
+
+   if (params.mpS == 0) {
+      valormpS = '';
+   } else {
+      valormpS = params.mpS;
+   }
+
+   if (valormpS == '' && valormpP == '') {
+      valormpS = icono;
+   }
+
+   if (valorTareasP == '' && valorTareasS == '') {
+      valorTareasP = icono;
+   }
+
 
    var idEquipo = params.idEquipo;
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
@@ -4990,19 +5063,19 @@ const dataEquiposAmerica = params => {
 
             <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fFallas}>
                 <div class="font-bold uppercase text-sm text-red-400">
-                    <h1>${params.fallasP}</h1>
+                    <h1>${valorFallasP}</h1>
                 </div>
                 <div class="font-semibold uppercase text-green-400">
-                    <h1>${params.fallasS}</h1>
+                    <h1>${valorFallasS}</h1>
                 </div>
             </td>
 
             <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-bold uppercase text-sm text-red-400">
-                    <h1>${params.mpP}</h1>
+                    <h1>${valormpP}</h1>
                 </div>
                 <div class="font-semibold uppercase text-green-400">
-                    <h1>${params.mpS}</h1>
+                    <h1>${valormpS}</h1>
                 </div>
             </td>
 
@@ -5026,16 +5099,16 @@ const dataEquiposAmerica = params => {
 
             <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fTareas}>
                 <div class="font-bold uppercase text-sm text-red-400">
-                    <h1>${params.tareasP}</h1>
+                    <h1>${valorTareasP}</h1>
                 </div>
                 <div class="font-semibold uppercase text-green-400">
-                    <h1>${params.tareasS}</h1>
+                    <h1>${valorTareasS}</h1>
                 </div>
             </td>
 
             <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-semibold uppercase">
-                    <h1>${params.testR}</h1>
+                    <h1>${valorTestR}</h1>
                 </div>
             </td>
 
@@ -5060,12 +5133,18 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 truncate py-2 text-center leading-none hover:bg-gray-300" ${tComentarios}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${tComentarios}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcomentarios}</h1>
                 </div>
             </td>
-            
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${tComentarios}>
+                <div class="font-semibold uppercase">
+                    <h1>${valorDespiece}</h1>
+                </div>
+            </td>
+
         </tr>
     `;
 };
@@ -5111,10 +5190,11 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                const cotizaciones = array[x].cotizaciones;
                const imagenes = array[x].imagenes;
                const comentarios = array[x].comentarios;
+               const totalDespiece = array[x].totalDespiece;
 
                const data = dataEquiposAmerica({
                   idEquipo: idEquipo,
-                  equipo: equipo + ' ' + idEquipo,
+                  equipo: equipo,
                   tipoEquipo: tipoEquipo,
                   statusEquipo: statusEquipo,
                   fallasP: fallasP,
@@ -5132,7 +5212,8 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                   ultimoTestSemana: ultimoTestSemana,
                   cotizaciones: cotizaciones,
                   imagenes: imagenes,
-                  comentarios: comentarios
+                  comentarios: comentarios,
+                  totalDespiece: totalDespiece
                });
 
                document.getElementById("contenedorEquiposAmerica").

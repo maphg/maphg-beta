@@ -326,39 +326,55 @@
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                 <thead>
                                     <tr class="cursor-pointer bg-white">
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Equipo/Local
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Fallas
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             PREVENTIVOS
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Último MP
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Proximo MP
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Tareas
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Test
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Último Test
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Cot
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                             Pics
                                         </th>
+
                                         <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                            COments
+                                            Coments
                                         </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                            Despiece
+                                        </th>
+
                                     </tr>
                                 </thead>
                                 <tbody id="contenedorEquiposAmerica" class="bg-white divide-y divide-gray-200">
@@ -506,8 +522,13 @@
                         </div>
                         <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
-                            <h2 class="mr-2">EQUIPO <h2 id="jerarquiaEquipo2"> -</h2>
+                            <h2 class="mr-2">
+                                <select id="tipoLocalEquipo" class="text-xs font-bold">
+                                    <option value="EQUIPO">EQUIPO</option>
+                                    <option value="LOCAL">LOCAL</option>
+                                </select>
                             </h2>
+                            <h2 id="jerarquiaEquipo2"></h2>
                         </div>
                         <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="mr-1 text-blue-400">BITÁCORAS:</i>
@@ -987,7 +1008,7 @@
                 <div id="estiloSeccionFallaTarea" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
                     <h1 id="seccionFallaTarea" class="font-medium text-base"></h1>
                 </div>
-                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                <div id="estiloEquipoFallaTarea" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
                     <h1 id="equipoFallaTarea">. . .</h1>
                 </div>
             </div>

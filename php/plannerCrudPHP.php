@@ -1474,7 +1474,7 @@ if (isset($_POST['action'])) {
                                 $totalFallas = $x['count(t_mc.id)'];
                             }
                         }
-                        
+
                         $totalSubseccionOrdenZIA[] = intval($totalFallas) + intval($totalTareas);
                         $idSubseccionOrdenZIA[] = $idSubseccion;
                     }
@@ -1751,8 +1751,9 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
-    // *****************************************************************************************************
-    // Pendientes por Subsecciones.
+    // *********************************************************************************************
+
+    // Pendientes Por Subsecciones
     if ($action == "consultarPendientesSubsecciones") {
         // Variables recibidad de Ajax.
         $idSeccion = $_POST['idSeccion'];
@@ -8209,14 +8210,14 @@ if (isset($_POST['action'])) {
         $data = array();
 
         // Valores por DEFAULT
-        $data['equipo'] = "- -";
+        $data['equipo'] = "";
 
-        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        $query = "SELECT t_equipos_america.id, t_equipos_america.local_equipo, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
         t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.id_fases
         FROM t_equipos_america 
-        LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
-        LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
         WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1";
 
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -8250,6 +8251,7 @@ if (isset($_POST['action'])) {
                 $status = $i['status'];
                 $tipo = $i['id_tipo'];
                 $idFases = $i['id_fases'];
+                $tipoLocalEquipo = $i['local_equipo'];
 
                 $data['idEquipo'] = $id;
                 $data['idEquipoPrincipal'] = $idEquipoPrincipal;
@@ -8281,6 +8283,7 @@ if (isset($_POST['action'])) {
                 $data['tipo'] = $tipo;
                 $data['semanaActual'] = $semanaActual;
                 $data['idFases'] = $idFases;
+                $data['tipoLocalEquipo'] = $tipoLocalEquipo;
             }
         }
         echo json_encode($data);
@@ -8317,6 +8320,7 @@ if (isset($_POST['action'])) {
         $caudalAireCFMEquipo = $_POST['caudalAireCFMEquipo'];
         $estadoEquipo = $_POST['estadoEquipo'];
         $idFaseEquipo = $_POST['idFaseEquipo'];
+        $tipoLocalEquipo = $_POST['tipoLocalEquipo'];
 
         if ($jerarquiaEquipo == "PRIMARIO") {
             $equipoPrincipal = 0;
@@ -8349,7 +8353,8 @@ if (isset($_POST['action'])) {
         potencia_energetica_calor_kcal = $potenciaEnergeticaCalorKCALEquipo,
         caudal_aire_m3h = $caudalAireM3HEquipo,
         status = '$estadoEquipo',
-        id_fases = $idFaseEquipo 
+        id_fases = $idFaseEquipo,
+        local_equipo = '$tipoLocalEquipo'
 
         WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {

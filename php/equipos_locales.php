@@ -21,10 +21,17 @@ if (isset($_GET['action'])) {
         $contador = 0;
         $array = array();
 
+        if ($idDestino == 10) {
+            $filtroDestinoEquipo = "";
+        } else {
+            $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
+        }
+
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
         t_equipos_america.local_equipo, t_equipos_america.status
         FROM t_equipos_america
-        WHERE t_equipos_america.id_destino = $idDestino and t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.status  = 'OPERATIVO' and t_equipos_america.activo = 1";
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and 
+        t_equipos_america.jerarquia = 'PRINCIPAL' $filtroDestinoEquipo";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
@@ -191,7 +198,13 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $mpProximo = 0;
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
+                $totalDespiece = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalDespiece = $x['count(id)'];
+                    }
+                }
 
                 $arrayTemp = array(
                     "filaNumero" => intval($contador),
@@ -214,7 +227,8 @@ if (isset($_GET['action'])) {
                     "ultimoTestSemana" => intval($ultimoTestSemana),
                     "cotizaciones" => intval($totalCotizaciones),
                     "imagenes" => intval($totalAdjuntos),
-                    "comentarios" => intval($totalComentarios)
+                    "comentarios" => intval($totalComentarios),
+                    "totalDespiece" => intval($totalDespiece)
                 );
                 $array[] = $arrayTemp;
             }
@@ -234,51 +248,46 @@ if (isset($_GET['action'])) {
             $filtroDestinoTarea = "";
             $filtroDestinoMP = "";
             $filtroDestinoTG = "";
+            $filtroDestinoEquipo = "";
         } else {
             $filtroDestino = "and id_destino = '$idDestino'";
             $filtroDestinoTarea = "and t_equipos_america.id_destino = '$idDestino'";
             $filtroDestinoMP = "and t_equipos_america.id_destino = '$idDestino'";
             $filtroDestinoTG = "and id_destino = '$idDestino'";
+            $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
         }
 
         #FALLAS SOLUCIONADOS
         $array['fallasS'] = 0;
-        $query = "SELECT count(id) FROM t_mc 
-        WHERE activo = 1 and (status = 'F' or status = 'SOLUCIONADO') and 
-        id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalFallasS = $x['count(id)'];
-                $array['fallasS'] = intval($totalFallasS);
+        $queryFallas = "SELECT count(t_mc.id) 
+        FROM t_mc
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+        WHERE t_equipos_america.id_seccion = $idSeccion and 
+        t_equipos_america.id_subseccion = $idSubseccion and 
+        t_equipos_america.activo = 1 and
+        (t_mc.status = 'PENDIENTE' or t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO') 
+        and t_mc.activo = 1 $filtroDestinoEquipo";
+        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
+            foreach ($resultFallas as $x) {
+                $totalFallas = $x['count(t_mc.id)'];
+                $array['fallasS'] = $totalFallas;
             }
         }
 
         #FALLAS PENDIENTES
         $array['fallasP'] = 0;
-        $query = "SELECT count(id) FROM t_mc 
-        WHERE activo = 1 and (status = 'N' or status = 'P' or status = 'PENDIENTE') and 
-        id_seccion = $idSeccion and id_subseccion = $idSubseccion $filtroDestino";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalFallasP = $x['count(id)'];
-                $array['fallasP'] = intval($totalFallasP);
-            }
-        }
-
-        #TAREAS PENDIENTES
-        $array['tareasP'] = 0;
-        $query = "SELECT count(t_mp_np.id) 'id'
-        FROM t_mp_np 
-        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
-        WHERE t_mp_np.activo = 1 and 
-        (t_mp_np.status = 'N' or t_mp_np.status = 'P' or t_mp_np.status = 'PENDIENTE') and 
-        t_equipos_america.id_seccion = $idSeccion and 
-        t_equipos_america.id_subseccion = $idSubseccion 
-        $filtroDestinoTarea";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalTareasP = $x['id'];
-                $array['tareasP'] = intval($totalTareasP);
+        $queryFallas = "SELECT count(t_mc.id) 
+        FROM t_mc
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+        WHERE t_equipos_america.id_seccion = $idSeccion and 
+        t_equipos_america.id_subseccion = $idSubseccion and 
+        t_equipos_america.activo = 1 and
+        (t_mc.status = 'N' or t_mc.status = 'P' or t_mc.status = 'PENDIENTE') 
+        and t_mc.activo = 1 $filtroDestinoEquipo";
+        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
+            foreach ($resultFallas as $x) {
+                $totalFallas = $x['count(t_mc.id)'];
+                $array['fallasP'] = $totalFallas;
             }
         }
 
@@ -314,7 +323,7 @@ if (isset($_GET['action'])) {
 
         #TAREAS SOLUCIONADAS
         $array['tareasS'] = 0;
-        $query = "SELECT count(t_mp_np.id) 'id'
+        $queryTareas = "SELECT count(t_mp_np.id) 'id'
         FROM t_mp_np 
         INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
         WHERE t_mp_np.activo = 1 and 
@@ -322,13 +331,28 @@ if (isset($_GET['action'])) {
         t_equipos_america.id_seccion = $idSeccion and 
         t_equipos_america.id_subseccion = $idSubseccion 
         $filtroDestinoTarea";
-        if ($result = mysqli_query($conn_2020, $query)) {
+        if ($result = mysqli_query($conn_2020, $queryTareas)) {
             foreach ($result as $x) {
                 $totalTareasS = $x['id'];
                 $array['tareasS'] = intval($totalTareasS);
             }
         }
 
+        #TAREAS PENDIENTES
+        $array['tareasP'] = 0;
+        $queryTareas = "SELECT count(t_mp_np.id) 
+        FROM t_mp_np
+        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
+        $totalTareas = 0;
+        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+            foreach ($resultTareas as $x) {
+                $totalTareas = $x['count(t_mp_np.id)'];
+                $array['tareasP'] = intval($totalTareas);
+            }
+        }
+
+        #PREVENTIVOS SOLUCIONADO POR EQUIPO
         $array['mpS'] = 0;
         $query = "SELECT count(.t_mp_planificacion_iniciada.id) 'id' 
         FROM t_mp_planificacion_iniciada
@@ -344,6 +368,7 @@ if (isset($_GET['action'])) {
             }
         }
 
+        #PREVENTIVOS PENDIENTE POR EQUIPO
         $array['mpP'] = 0;
         $query = "SELECT count(.t_mp_planificacion_iniciada.id) 'id' 
         FROM t_mp_planificacion_iniciada
@@ -359,6 +384,7 @@ if (isset($_GET['action'])) {
             }
         }
 
+        #TEST REALIZADO POR EQUIPO
         $array['test'] = 0;
         $query = "SELECT count(.t_mp_planificacion_iniciada.id) 'id' 
         FROM t_mp_planificacion_iniciada
