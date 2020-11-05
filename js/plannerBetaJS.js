@@ -5038,6 +5038,9 @@ const dataEquiposAmerica = params => {
       valorTareasP = icono;
    }
 
+   if (valorFallasP == '' && valorFallasS == '') {
+      valorFallasP = icono;
+   }
 
    var idEquipo = params.idEquipo;
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
