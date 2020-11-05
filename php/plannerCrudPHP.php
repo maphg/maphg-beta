@@ -132,6 +132,12 @@ if (isset($_POST['action'])) {
             $filtroDestino = "AND id_destino = $idDestino";
         }
 
+        if ($idDestino == 10) {
+            $filtroDestinoEquipo = "";
+        } else {
+            $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
+        }
+
         // ZIL
         if ($ZIL_Permiso == 1) {
             if ($idDestino == 10) {
@@ -170,16 +176,33 @@ if (isset($_POST['action'])) {
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
 
-                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
-                            if ($value = mysqli_fetch_array($resultPendientes)) {
-
-                                $totalPendiente = $value['count(id)'];
-                                $totalSubseccionOrdenZIL[] = $totalPendiente;
+                        $queryTareas = "SELECT count(t_mp_np.id) 
+                        FROM t_mp_np
+                        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
+                        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
+                        $totalTareas = 0;
+                        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+                            foreach ($resultTareas as $x) {
+                                $totalTareas = $x['count(t_mp_np.id)'];
                             }
-                        } else {
-                            $totalSubseccionOrdenZIL[] = 0;
                         }
+
+                        $queryFallas = "SELECT count(t_mc.id) 
+                        FROM t_mc
+                        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+                        WHERE t_equipos_america.id_seccion = $idSeccion and 
+                        t_equipos_america.id_subseccion = $idSubseccion and 
+                        t_equipos_america.activo = 1 and
+                        (t_mc.status = 'PENDIENTE' or t_mc.status = 'N' or t_mc.status = 'P') 
+                        and t_mc.activo = 1 $filtroDestinoEquipo";
+                        $totalFallas = 0;
+                        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
+                            foreach ($resultFallas as $x) {
+                                $totalFallas = $x['count(t_mc.id)'];
+                            }
+                        }
+
+                        $totalSubseccionOrdenZIL[] = intval($totalFallas) + intval($totalTareas);
                         $idSubseccionOrdenZIL[] = $idSubseccion;
                     }
                     array_multisort($totalSubseccionOrdenZIL, SORT_DESC, $idSubseccionOrdenZIL);
@@ -1452,16 +1475,33 @@ if (isset($_POST['action'])) {
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
 
-                        $queryPendientes = "SELECT count(id) FROM t_mc WHERE id_subseccion = $idSubseccion AND status = 'N' AND activo = 1 $filtroDestino";
-                        if ($resultPendientes = mysqli_query($conn_2020, $queryPendientes)) {
-                            if ($value = mysqli_fetch_array($resultPendientes)) {
-
-                                $totalPendiente = $value['count(id)'];
-                                $totalSubseccionOrdenZIC[] = $totalPendiente;
+                        $queryTareas = "SELECT count(t_mp_np.id) 
+                        FROM t_mp_np
+                        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
+                        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
+                        $totalTareas = 0;
+                        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
+                            foreach ($resultTareas as $x) {
+                                $totalTareas = $x['count(t_mp_np.id)'];
                             }
-                        } else {
-                            $totalSubseccionOrdenZIC[] = 0;
                         }
+
+                        $queryFallas = "SELECT count(t_mc.id) 
+                        FROM t_mc
+                        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+                        WHERE t_equipos_america.id_seccion = $idSeccion and 
+                        t_equipos_america.id_subseccion = $idSubseccion and 
+                        t_equipos_america.activo = 1 and
+                        (t_mc.status = 'PENDIENTE' or t_mc.status = 'N' or t_mc.status = 'P') 
+                        and t_mc.activo = 1 $filtroDestinoEquipo";
+                        $totalFallas = 0;
+                        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
+                            foreach ($resultFallas as $x) {
+                                $totalFallas = $x['count(t_mc.id)'];
+                            }
+                        }
+
+                        $totalSubseccionOrdenZIC[] = intval($totalFallas) + intval($totalTareas);
                         $idSubseccionOrdenZIC[] = $idSubseccion;
                     }
                     array_multisort($totalSubseccionOrdenZIC, SORT_DESC, $idSubseccionOrdenZIC);
