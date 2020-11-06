@@ -2083,7 +2083,6 @@ function agregarComentarioEquipo(idEquipo) {
          },
          // dataType: 'JSON',
          success: function (data) {
-            console.log(data);
             if (data == 1) {
                obtenerComentariosEquipos(idEquipo);
                alertaImg('Comentario Agregado', '', 'success', 1200);
