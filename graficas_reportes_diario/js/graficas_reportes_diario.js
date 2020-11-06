@@ -15,7 +15,7 @@ function cargarSeccionEstilosGraficas(idDestino, idSeccion) {
     // dataType: "json",
     success: function (data) {
       let estiloSeccion = data.toLowerCase() + '-logo';
-      document.getElementById("dataSeccion").classList.remove('zil-logo', 'zie-logo', 'auto-logo', 'dec-logo', 'dep-logo', 'zha-logo', 'zhc-logo', 'zhp-logo', 'zia-logo', 'zic-logo');
+      document.getElementById("dataSeccion").classList.remove('zil-logo', 'zie-logo', 'auto-logo', 'dec-logo', 'dep-logo', 'zha-logo', 'zhc-logo', 'zhp-logo', 'zia-logo', 'zic-logo', 'zhh-logo');
       document.getElementById("dataSeccion").classList.add(estiloSeccion);
       document.getElementById("dataNombreSeccion").innerHTML = data;
     }

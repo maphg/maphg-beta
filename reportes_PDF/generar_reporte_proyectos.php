@@ -34,7 +34,7 @@
                     <!-- BADGE DEL LOGO -->
                     <!-- DESTINO SECCION Y SUBSECCION -->
                     <div class="flex flex-row flex-none">
-                        <div id="claseSeccion" class="zic-logo relative">
+                        <div id="claseSeccion" class="relative">
                             <h1 id="seccion" class=""></h1>
                         </div>
                         <div class="flex flex-col justify-center items-start ml-1">

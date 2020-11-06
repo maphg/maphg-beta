@@ -3815,6 +3815,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
    });
 }
 
+
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {
    document.getElementById("VerOTMP").classList.add('hidden');
@@ -3981,6 +3982,7 @@ function llamarFuncionX(nombreFuncion) {
 
 // FUNCIÓN PARA MOSTRAL TOOLTIP DE ACTIVIDADES
 function obtenerActividadesOT(idTipo, tipo) {
+   console.log('obtenerActividadesOT');
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerActividadesOT";

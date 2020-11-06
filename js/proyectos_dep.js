@@ -92,6 +92,7 @@ const datosProyectosDEP = params => {
     }
 
     if (params.status == "PENDIENTE") {
+        var statusX = 'S-DEP-PENDIENTE';
         var fObtenerPlanaccion = `onclick="obtenerPlanaccionDEP(${idProyecto}); tooltipProyectosDEP(${idProyecto})"`;
         var fResponsable = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerResponsablesProyectosDEP(${idProyecto})"`;
         var fRangoFecha = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'rango_fecha');"`;
@@ -99,11 +100,11 @@ const datosProyectosDEP = params => {
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto}, 'tipo');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'coste');"`;
-
         var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
         var fStatus = `onclick="hiddenVista('tooltipProyectosDEP'); statusProyectoDEP(${idProyecto});"`;
 
     } else {
+        var statusX = 'S-DEP-SOLUCIONADO hidden';
         var fObtenerPlanaccion = `onclick="obtenerPlanaccionDEP(${idProyecto}); tooltipProyectosDEP(${idProyecto})"`;
         var fResponsable = `onclick="hiddenVista('tooltipProyectosDEP');"`;
         var fRangoFecha = `onclick="hiddenVista('tooltipProyectosDEP');"`;
@@ -111,13 +112,12 @@ const datosProyectosDEP = params => {
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP');"`;
-
         var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         var fStatus = `onclick="actualizarProyectosDEP('N', 'status', ${idProyecto});"`;
     }
 
     return `
-        <tr id="${idProyecto}proyectoDEP" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select-DEP">
+        <tr id="${idProyecto}proyectoDEP" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select-DEP ${statusX}">
 
             <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
             ${fObtenerPlanaccion}>
@@ -358,16 +358,16 @@ const datosEtiquetados = params => {
     var id = params.id;
 
     var comentarios = params.comentarios;
-    var valorcomentarios = 'X'
+    var valorcomentarios = '';
 
     var adjuntos = params.adjuntos;
-    var valoradjuntos = 'X'
+    var valoradjuntos = '';
 
     var tipo = params.tipo;
-    var valorTipo = 'X'
+    var valorTipo = '';
 
     var origen = params.origen;
-    var valorOrigen = "X"
+    var valorOrigen = '';
 
 
     var materiales = params.materiales;
@@ -430,8 +430,6 @@ const datosEtiquetados = params => {
             valorOrigen = '';
     }
 
-
-
     switch (materiales) {
         case 1:
             materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
@@ -464,9 +462,43 @@ const datosEtiquetados = params => {
             trabajandox = '';
     }
 
+    var fActividades = '';
+    var fResponsable = '';
+    var fFecha = '';
+    var fComentarios = '';
+    var fAdjuntos = '';
+    var fStatus = '';
+var fOT = '';
+    if (origen == "FALLA") {
+        fActividades = `onclick="obtenerActividadesOT(${id}, 'FALLA');"`;
+        fResponsable = `onclick="obtenerUsuarios('asignarMC', ${id});"`;
+        fFecha = `onclick="obtenerFechaMC(${id}, '${params.fechaInicio} - ${params.fechaFin}');"`;
+        fComentarios = `onclick="obtenerComentariosMC(${id});"`;
+        fAdjuntos = `onclick="obtenerAdjuntosMC(${id});"`;
+        fStatus = `onclick="obtenerstatusMC(${id});"`;
+        fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${id}" class="text-black" target="_blank">F${id}</a>`;
+    } else if (origen == "TAREA") {
+        fActividades = ``;
+        fResponsable = ``;
+    } else if (origen == "PROYECTO") {
+        fActividades = ``;
+        fResponsable = ``;
+    } else if (origen == "PREVENTIVO") {
+        fActividades = ``;
+        fResponsable = ``;
+    }
+
+    if (params.status == "PENDIENTE") {
+        var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+    } else {
+        var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+    }
+
     return `
         <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
-            <td class="px-4 border-b border-gray-200 py-3 truncate" style="max-width: 360px;">
+
+            <td class="px-4 border-b border-gray-200 py-3 truncate" style="max-width: 360px;" 
+            ${fActividades}>
                 <div class="font-semibold uppercase leading-4">
                     ${params.descripcion}
                 </div>
@@ -474,6 +506,7 @@ const datosEtiquetados = params => {
                     ${valorOrigen}<h1 class="mx-2 text-bluegray-500 uppercase font-semibold">${params.equipo}</h1> <h1 class="">Creado: ${params.creadoPor}</h1> 
                 </div>
             </td>
+
             <td class="px-4 border-b border-gray-200 py-3 text-center truncate" style="max-width: 360px;">
                 <div class="font-semibold uppercase leading-none">
                     ${params.seccion}
@@ -482,22 +515,31 @@ const datosEtiquetados = params => {
                  ${params.subseccion}
                 </div>
             </td>
+
             <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                <h1>${params.ot}</h1>
+                <h1>${fOT}</h1>
             </td>
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable}>
                 <h1>${params.responsable}</h1>
             </td>
-            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+
+            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3"
+            ${fFecha}>
                 <div class="leading-4">${params.fechaInicio}</div>
                 <div class="leading-3">${params.fechaFin}</div>
             </td>
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" 
+            ${fComentarios}>
                 <h1>${valorcomentarios}</h1>
             </td>
-            <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3">
+
+            <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3"
+            ${fAdjuntos}>
             <h1>${valoradjuntos}</h1>
             </td>
+
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
                 <div class="text-sm flex justify-center items-center font-bold">
                     ${materialesx}
@@ -510,16 +552,16 @@ const datosEtiquetados = params => {
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
                 <h1>${params.cod2bend}</h1>
             </td>
+
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
                 <h1>${params.codsap}</h1>
             </td>
 
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
                 <div class="px-2">
-                    <i class="fas fa-ellipsis-h  text-lg"></i>
+                    ${iconoStatus}
                 </div>
             </td>
-            
             
         </tr>
         `;
@@ -572,34 +614,40 @@ function tooltipPlanaccionDEP(idPlanaccion) {
 
 
 // OBTIENES LOS PROYECTOS DEP
-function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado) {
+function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
     document.getElementById("modalProyectosDEP").classList.add("open");
     document.getElementById("contendorEtiquetado").classList.add("hidden");
     document.getElementById("contenedorDEP").classList.remove("hidden");
 
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-
-    // Atributos Iniciales
-    document.getElementById("proyectosPendientesDEP").setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
-    document.getElementById("proyectosSolucionadosDEP").setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "SOLUCIONADO");`);
-    // Atributos Iniciales
-
-    // Actualiza la Sección
     localStorage.setItem("idSubseccion", idSubseccion);
 
+    // Atributos Iniciales
+    document.getElementById("proyectosPendientesDEP").
+        setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+    document.getElementById("proyectosSolucionadosDEP").
+        setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "SOLUCIONADO");`);
+    document.getElementById("opcionProyectosDEP").
+        setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+    document.getElementById("etiquetadoProyectosDEP").
+        setAttribute('onclick', "obtenerEtiquetados('PENDIENTE');");
+    // Atributos Iniciales
+
     // Estilo para Botones Superiores
-    estiloBotonesProyectos(status, 'PROYECTOS');
+    estiloBotonesProyectos(statusProyecto, 'PROYECTOS');
 
     // Secciones de Botones.
     document.getElementById("btnCrearProyecto")
         .setAttribute("onclick", "agregarProyectoDEP()");
+    document.getElementById("loadProyectosDEP").innerHTML =
+        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 
     const action = "consultaProyectosDEP";
     const ruta = "php/proyectos_planacciones.php?";
-    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${status}&etiquetado=${etiquetado}`;
-    document.getElementById("loadProyectosDEP").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
+
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${statusProyecto}&etiquetado=${etiquetado}`;
+    console.log(URL);
 
     // OBTIENE NOMBRE DE LA SUBSECCIÓN
     fetch(`php/proyectos_planacciones.php?action=obtenerSubseccion&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`)
@@ -609,10 +657,9 @@ function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado) {
             document.getElementById("etiquetadoDEP").innerHTML = array.subseccion;
         });
 
-
     // OBTIENE LOS PROYECTOS
     fetch(URL)
-        .then(resp => resp.json())
+        .then(array => array.json())
         .then(array => {
             document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
             if (array.length > 0) {
@@ -654,6 +701,7 @@ function obtenerProyectosDEP(idSubseccion, status = 'PENDIENTE', etiquetado) {
                         departamento: departamento,
                         trabajando: trabajando
                     });
+                    console.log(status);
                     document.getElementById("contenedorDeProyectosDEP").insertAdjacentHTML('beforeend', dataProyectosz);
                 }
             } else {
@@ -1329,15 +1377,29 @@ function agregarActividadPlanaccionDEP() {
 }
 
 
-function obtenerEtiquetados() {
+function obtenerEtiquetados(status) {
+    document.getElementById("contendorEtiquetado").classList.remove("hidden");
+    document.getElementById("contenedorDEP").classList.add("hidden");
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     let idSubseccion = localStorage.getItem('idSubseccion');
     const action = "obtenerMarcados";
-    const URL = `php/proyectos_planacciones.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`;
+    const URL = `php/proyectos_planacciones.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${status}`;
+
+    // Atributos Iniciales
+    document.getElementById("proyectosPendientesDEP").
+        setAttribute('onclick', "obtenerEtiquetados('PENDIENTE');");
+
+    document.getElementById("proyectosSolucionadosDEP").
+        setAttribute('onclick', "obtenerEtiquetados('SOLUCIONADO');");
+
+    document.getElementById("opcionProyectosDEP").
+        setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+    // Atributos Iniciales
+
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
-
+    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {
@@ -1397,7 +1459,7 @@ function obtenerEtiquetados() {
         .then(function () {
             document.getElementById("loadProyectosDEP").innerHTML = '';
         })
-        .catch(err => function () {
+        .catch(function (err) {
             document.getElementById("loadProyectosDEP").innerHTML = '';
             document.getElementById("contenedorDeEtiquetados").innerHTML = '';
         });
@@ -1449,13 +1511,13 @@ document.getElementById("palabraProyectoDEP").addEventListener('keyup', function
     buscdorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
 });
 
-document.getElementById("opcionProyectosDEP").addEventListener('click', function () {
-    document.getElementById("contenedorDEP").classList.remove('hidden');
-    document.getElementById("contendorEtiquetado").classList.add('hidden');
-});
+// document.getElementById("opcionProyectosDEP").addEventListener('click', function () {
+//     document.getElementById("contenedorDEP").classList.remove('hidden');
+//     document.getElementById("contendorEtiquetado").classList.add('hidden');
+// });
 
-document.getElementById("etiquetadoProyectosDEP").addEventListener('click', function () {
-    document.getElementById("contenedorDEP").classList.add('hidden');
-    document.getElementById("contendorEtiquetado").classList.remove('hidden');
-    obtenerEtiquetados();
-});
+// document.getElementById("etiquetadoProyectosDEP").addEventListener('click', function () {
+//     document.getElementById("contenedorDEP").classList.add('hidden');
+//     document.getElementById("contendorEtiquetado").classList.remove('hidden');
+//     obtenerEtiquetados();
+// });

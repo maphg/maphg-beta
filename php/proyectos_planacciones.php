@@ -17,8 +17,9 @@ if (isset($_GET['action'])) {
     $semanaActual = date('W');
 
     #OBTIENE LOS PROYECTOS SEGÚN LA SECCIÓN Y DESTINO
-    if ($action == "consultaProyectos") {
+    if ($action == "obtenerProyectos") {
         $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
         $status = $_GET['status'];
         $array = array();
 
@@ -42,7 +43,8 @@ if (isset($_GET['action'])) {
         LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         LEFT JOIN t_users ON t_proyectos.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.activo = 1
+        WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion 
+        and t_proyectos.activo = 1
         $filtroDestino  $filtroStatus
         ORDER BY t_proyectos.id DESC
         ";
@@ -435,20 +437,17 @@ if (isset($_GET['action'])) {
             $filtroEtiqueta = "";
         }
 
-        if ($etiquetado == "NINGUNO") {
-            $filtroSubseccion = "and t_proyectos.id_subseccion = $idSubseccion";
-        } else {
-            $filtroSubseccion = "";
-        }
+
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
-        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.tipo
-        FROM t_proyectos 
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
+        t_proyectos.tipo, t_proyectos.status
+        FROM t_proyectos
         LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         LEFT JOIN t_users ON t_proyectos.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos.activo = 1
-        $filtroDestino  $filtroStatus $filtroEtiqueta $filtroSubseccion
+        WHERE t_proyectos.activo = 1 and t_proyectos.id_subseccion = $idSubseccion
+        $filtroDestino  $filtroStatus $filtroEtiqueta 
         ORDER BY t_proyectos.id DESC
         ";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -463,6 +462,7 @@ if (isset($_GET['action'])) {
                 $justificacion = $p['justificacion'];
                 $coste = $p['coste'];
                 $tipo = $p['tipo'];
+                $status = $p['status'];
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -862,7 +862,9 @@ if (isset($_GET['action'])) {
     #OBTIENE PROYECTOS, TAREAS, FALLAS, PREVENTIVOS, MARCADOS SEGÚN LA ETIQUETA(MATERIALES, FINANZAS, DIRECCIÓN)
     if ($action == "obtenerMarcados") {
         $idSubseccion = $_GET['idSubseccion'];
+        $status = $_GET['status'];
         $array = array();
+
         if ($idSubseccion == 213) {
             $filtroEtiqueta_FALLAS = "and t_mc.status_material = '1'";
             $filtroEtiqueta_TAREAS = "and t_mp_np.status_material = '1'";
@@ -897,6 +899,19 @@ if (isset($_GET['action'])) {
             $filtroDestino_PREVENTIVOS = "and t_equipos_america.id_destino = $idDestino";
         }
 
+        if ($status == "PENDIENTE") {
+            $filtroStatus_FALLAS = "and (t_mc.status = 'P' or t_mc.status = 'N' or t_mc.status = 'PENDIENTE')";
+            $filtroStatus_TAREAS = "and (t_mp_np.status = 'P' or t_mp_np.status = 'N' or t_mp_np.status = 'PENDIENTE')";
+            $filtroStatus_PROYECTOS = "and (t_proyectos_planaccion.status = 'P' or t_proyectos_planaccion.status = 'N' or t_proyectos_planaccion.status = 'PENDIENTE')";
+            $filtroStatus_PREVENTIVOS = "and (t_mp_planificacion_iniciada.status = 'P' or t_mp_planificacion_iniciada.status = 'N' or t_mp_planificacion_iniciada.status = 'PENDIENTE')";
+        } else {
+            $filtroStatus_FALLAS = "and (t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO')";
+            $filtroStatus_TAREAS = "and (t_mp_np.status = 'F' or t_mp_np.status = 'SOLUCIONADO')";
+            $filtroStatus_PROYECTOS = "and (t_proyectos_planaccion.status = 'F' or t_proyectos_planaccion.status = 'SOLUCIONADO')";
+            $filtroStatus_PREVENTIVOS = "and (t_mp_planificacion_iniciada.status = 'F' or t_mp_planificacion_iniciada.status = 'SOLUCIONADO')";
+        }
+
+
         #FALLAS
         $FALLAS = "SELECT t_mc.id, t_mc.rango_fecha, t_mc.fecha_creacion, t_mc.actividad, 
         t_mc.responsable, t_mc.status, t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente, t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas, t_colaboradores.nombre, t_colaboradores.apellido, c_secciones.seccion, 
@@ -907,7 +922,7 @@ if (isset($_GET['action'])) {
         LEFT JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
         INNER JOIN t_users ON t_mc.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_mc.activo = 1 $filtroEtiqueta_FALLAS $filtroDestino_FALLAS";
+        WHERE t_mc.activo = 1 $filtroEtiqueta_FALLAS $filtroDestino_FALLAS $filtroStatus_FALLAS";
         if ($result_FALLAS = mysqli_query($conn_2020, $FALLAS)) {
             foreach ($result_FALLAS as $x) {
                 $sMaterialx = 0;
@@ -957,7 +972,7 @@ if (isset($_GET['action'])) {
                 }
 
                 #EQUIPO
-                if ($equipo == "" or $equipo = NULL) {
+                if ($equipo == "" or $equipo == NULL) {
                     $equipo = "";
                 }
 
@@ -1051,7 +1066,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_mp_np.activo = 1 $filtroDestino_TAREAS $filtroEtiqueta_TAREAS";
+        WHERE t_mp_np.activo = 1 $filtroDestino_TAREAS $filtroEtiqueta_TAREAS $filtroStatus_TAREAS";
         if ($result_TAREAS = mysqli_query($conn_2020, $TAREAS)) {
             foreach ($result_TAREAS as $x) {
                 $sMaterialx = 0;
@@ -1193,7 +1208,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
         INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_proyectos_planaccion.activo = 1 $filtroDestino_PROYECTOS $filtroEtiqueta_PROYECTOS";
+        WHERE t_proyectos_planaccion.activo = 1 $filtroDestino_PROYECTOS $filtroEtiqueta_PROYECTOS $filtroStatus_PROYECTOS";
         if ($result_PROYECTOS = mysqli_query($conn_2020, $PROYECTOS)) {
             foreach ($result_PROYECTOS as $x) {
                 $sMaterialx = 0;
@@ -1339,7 +1354,7 @@ if (isset($_GET['action'])) {
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN t_mp_planes_mantenimiento 
             ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-        WHERE t_mp_planificacion_iniciada.activo = 1 $filtroDestino_PREVENTIVOS $filtroEtiqueta_PREVENTIVOS";
+        WHERE t_mp_planificacion_iniciada.activo = 1 $filtroDestino_PREVENTIVOS $filtroEtiqueta_PREVENTIVOS $filtroStatus_PREVENTIVOS";
         if ($result_PROYECTOS = mysqli_query($conn_2020, $PREVENTIVOS)) {
             foreach ($result_PROYECTOS as $x) {
                 $sMaterialx = 0;

@@ -243,7 +243,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -403,7 +404,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -563,7 +565,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -724,7 +727,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -799,38 +803,28 @@ if (isset($_POST['action'])) {
                                     class=\"flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800\">
                     ";
 
+                    if ($idDestino == 10) {
+                        $filtroDestinoDEP = "";
+                    } else {
+                        $filtroDestinoDEP = "and id_destino = $idDestino";
+                    }
 
                     // Obtiene Total de Pendientes para Ordenarlos.
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
 
-                        $queryTareas = "SELECT count(t_mp_np.id) 
-                        FROM t_mp_np
-                        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
-                        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
-                        $totalTareas = 0;
+                        $queryTareas = "SELECT count(id) 
+                        FROM t_proyectos
+                        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion 
+                        and activo = 1 and (status = 'PENDIENTE' or status = 'P' or status = 'N') $filtroDestinoDEP";
+                        $totalProyectos = 0;
                         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                             foreach ($resultTareas as $x) {
-                                $totalTareas = $x['count(t_mp_np.id)'];
+                                $totalProyectos = $x['count(id)'];
                             }
                         }
 
-                        $queryFallas = "SELECT count(t_mc.id) 
-                        FROM t_mc
-                        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-                        WHERE t_equipos_america.id_seccion = $idSeccion and 
-                        t_equipos_america.id_subseccion = $idSubseccion and 
-                        t_equipos_america.activo = 1 and
-                        (t_mc.status = 'PENDIENTE' or t_mc.status = 'N' or t_mc.status = 'P') 
-                        and t_mc.activo = 1 $filtroDestinoEquipo";
-                        $totalFallas = 0;
-                        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
-                            foreach ($resultFallas as $x) {
-                                $totalFallas = $x['count(t_mc.id)'];
-                            }
-                        }
-
-                        $totalSubseccionOrdenDEP[] = intval($totalFallas) + intval($totalTareas);
+                        $totalSubseccionOrdenDEP[] = intval($totalProyectos);
                         $idSubseccionOrdenDEP[] = $idSubseccion;
                     }
                     array_multisort($totalSubseccionOrdenDEP, SORT_DESC, $idSubseccionOrdenDEP);
@@ -885,7 +879,7 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1047,7 +1041,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1208,7 +1203,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1369,7 +1365,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1530,7 +1527,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1691,7 +1689,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);
@@ -1756,7 +1755,7 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
                                 <div
-                                    class=\"absolute text-red-700 bg-red-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    class=\"absolute text-cyan-700 bg-cyan-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
                                 </div>
                                 <div
@@ -1853,7 +1852,8 @@ if (isset($_POST['action'])) {
 
                     // PROYECTOS
                     $queryProyectos = "SELECT count(id) FROM t_proyectos 
-                    WHERE id_seccion = $idSeccion AND activo = 1 AND status='N' $filtroDestino ";
+                    WHERE id_seccion = $idSeccion and id_subseccion = 200 and activo = 1 
+                    and (status='N' or status = 'PENDIENTE') $filtroDestino ";
                     if ($resultProyectos = mysqli_query($conn_2020, $queryProyectos)) {
                         if ($row = mysqli_fetch_array($resultProyectos)) {
                             $totalProyecto = intval($row['count(id)']);

@@ -2,13 +2,13 @@
 // const $tablaProyectos = document.getElementById('contenedorDeProyectos');
 const datosProyectos = params => {
     var cotizaciones = params.cotizaciones;
-    var valorCotizaciones = 'X'
+    var valorCotizaciones = '';
 
     var tipo = params.tipo;
-    var valorTipo = 'X'
+    var valorTipo = '';
 
     var justificacion = params.justificacion;
-    var valorjustificacion = 'X'
+    var valorjustificacion = '';
 
     var materiales = params.materiales;
     var materialesx = ''
@@ -422,7 +422,7 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
 
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let idSubseccion = 200;
+    let idSubseccion = localStorage.getItem('idSubseccion');
 
     // Atributos Iniciales
     document.getElementById("proyectosPendientes").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "PENDIENTE");`);
@@ -439,10 +439,10 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
     document.getElementById("btnCrearProyecto")
         .setAttribute("onclick", "agregarProyecto()");
 
-    const action = "consultaProyectos";
+    const action = "obtenerProyectos";
     const ruta = "php/proyectos_planacciones.php?";
-    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&status=${status}`;
-
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&status=${status}`;
+    console.log(URL);
     document.getElementById("loadProyectos").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 
