@@ -2083,6 +2083,7 @@ function agregarComentarioEquipo(idEquipo) {
          },
          // dataType: 'JSON',
          success: function (data) {
+            console.log(data);
             if (data == 1) {
                obtenerComentariosEquipos(idEquipo);
                alertaImg('Comentario Agregado', '', 'success', 1200);
@@ -2463,7 +2464,7 @@ function toggleInputsEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
    const arrayBtnEquipo =
       [
-         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo'
+         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'contenedorDataOpcionesEquipos'
       ]
 
    arrayBtnEquipo.forEach(element => {
@@ -4885,6 +4886,7 @@ const dataEquiposAmerica = params => {
    var icono = '<i class="fad fa-minus text-xl text-red-400 leading-none"></i>';
    var tipoEquipo = params.tipoEquipo;
    var valorTipoEquipo = '';
+   var idEquipo = params.idEquipo;
 
    if (tipoEquipo == "EQUIPO") {
       valorTipoEquipo = '<div class="text-blue-400 bg-blue-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class=""><i class="fas fa-cog mr-1"></i>Equipo</h1></div>';
@@ -4980,13 +4982,6 @@ const dataEquiposAmerica = params => {
       valorcomentarios = params.comentarios;
    }
 
-   var totalDespiece = params.totalDespiece;
-   if (totalDespiece == 0) {
-      valorDespiece = icono;
-   } else {
-      valorDespiece = totalDespiece;
-   }
-
    var totalTestR = params.testR;
    if (totalTestR == 0) {
       valorTestR = icono;
@@ -5042,19 +5037,27 @@ const dataEquiposAmerica = params => {
       valorFallasP = icono;
    }
 
-   var idEquipo = params.idEquipo;
+   var totalDespiece = params.totalDespiece;
+   if (totalDespiece == 0) {
+      valorDespiece = icono;
+      fDespiece = `onclick="obtenerDespieceEquipo(0)"`;
+   } else {
+      valorDespiece = totalDespiece;
+      fDespiece = `onclick="obtenerDespieceEquipo(${idEquipo})"`;
+   }
+
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
    var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   var tComentarios = `onclick="obtenerComentariosEquipos(${idEquipo}); toggleModalTailwind('modalComentarios');"`;
-   var tAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
-   var tInfo = `onclick="informacionEquipo(${idEquipo});"`;
-   var tCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
+   var fComentarios = `onclick="obtenerComentariosEquipos(${idEquipo}); toggleModalTailwind('modalComentarios');"`;
+   var fAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
+   var fInfo = `onclick="informacionEquipo(${idEquipo});"`;
+   var fCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
 
    return `
-        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
+        <tr id="${idEquipo}EquipoAmerica" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
             
             <td class="px-4 border-b border-gray-200truncate py-2" style="max-width: 360px;"
-            ${tInfo}>
+            ${fInfo}>
                 <div class="font-semibold uppercase text-sm">
                     <h1>${params.equipo}</h1>
                 </div>
@@ -5124,25 +5127,25 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${tCotizaciones}>
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fCotizaciones}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcotizaciones}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${tAdjuntos}>
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fAdjuntos}>
                 <div class="font-semibold uppercase">
                     <h1>${valorimagenes}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${tComentarios}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${fComentarios}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcomentarios}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${tComentarios}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${fDespiece}>
                 <div class="font-semibold uppercase">
                     <h1>${valorDespiece}</h1>
                 </div>
@@ -5151,6 +5154,97 @@ const dataEquiposAmerica = params => {
         </tr>
     `;
 };
+
+
+// OBTIENE EL DESPIECE DE EQUIPOS
+function obtenerDespieceEquipo(idEquipo) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerDespieceEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+
+   document.getElementById("modalEquiposAmericaBG").
+      setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
+
+   if (idEquipo > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+
+            document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
+
+            if (array.length > 0) {
+               for (let x = 0; x < array.length; x++) {
+                  const idEquipo = array[x].idEquipo;
+                  const equipo = array[x].equipo;
+                  const tipoEquipo = array[x].tipoEquipo;
+                  const statusEquipo = array[x].statusEquipo;
+                  const fallasP = array[x].fallasP;
+                  const fallasS = array[x].fallasS;
+                  const mpP = array[x].mpP;
+                  const mpS = array[x].mpS;
+                  const ultimoMpFecha = array[x].ultimoMpFecha;
+                  const ultimoMpSemana = array[x].ultimoMpSemana;
+                  const proximoMpFecha = array[x].proximoMpFecha;
+                  const proximoMpSemana = array[x].proximoMpSemana;
+                  const tareasP = array[x].tareasP;
+                  const tareasS = array[x].tareasS;
+                  const testR = array[x].testR;
+                  const ultimoTestFecha = array[x].ultimoTestFecha;
+                  const ultimoTestSemana = array[x].ultimoTestSemana;
+                  const cotizaciones = array[x].cotizaciones;
+                  const imagenes = array[x].imagenes;
+                  const comentarios = array[x].comentarios;
+                  const totalDespiece = array[x].totalDespiece;
+
+                  const data = dataEquiposAmerica({
+                     idEquipo: idEquipo,
+                     equipo: equipo,
+                     tipoEquipo: tipoEquipo,
+                     statusEquipo: statusEquipo,
+                     fallasP: fallasP,
+                     fallasS: fallasS,
+                     mpP: mpP,
+                     mpS: mpS,
+                     ultimoMpFecha: ultimoMpFecha,
+                     ultimoMpSemana: ultimoMpSemana,
+                     proximoMpFecha: proximoMpFecha,
+                     proximoMpSemana: proximoMpSemana,
+                     tareasP: tareasP,
+                     tareasS: tareasS,
+                     testR: testR,
+                     ultimoTestFecha: ultimoTestFecha,
+                     ultimoTestSemana: ultimoTestSemana,
+                     cotizaciones: cotizaciones,
+                     imagenes: imagenes,
+                     comentarios: comentarios,
+                     totalDespiece: totalDespiece
+                  });
+
+                  document.getElementById("contenedorEquiposAmericaDespice").
+                     insertAdjacentHTML('beforeend', data);
+               }
+            } else {
+               alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1200);
+            }
+         })
+         .then(function () {
+            const button = document.getElementById(idEquipo + "EquipoAmerica");
+            const tooltip = document.getElementById('tooltipDespieceEquipo');
+            document.getElementById('tooltipDespieceEquipo').
+               classList.toggle('hidden');
+            Popper.createPopper(button, tooltip, {
+               placement: 'bottom'
+            });
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+            document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
+         })
+   } else {
+      alertaImg('Equipo Sin Despiece', '', 'info', 1200);
+   }
+}
 
 
 // OBTIENE LOS EQUIPOS AMERICA

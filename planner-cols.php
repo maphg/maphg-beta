@@ -235,7 +235,7 @@
 
     <!-- MODAL EQUIPOS Y LOCALES -->
     <div id="modalEquiposAmerica" class="modal">
-        <div class="w-full h-screen bg-gray-300">
+        <div id="modalEquiposAmericaBG" class="w-full h-screen bg-gray-300">
             <div class="flex justify-center items-center mb-5 relative pt-4">
                 <div class="font-light text-3xl ml-3 leading-none text-bluegray-700 mr-12">
                     <h1 class="text-center mb-2">Equipos & Locales</h1>
@@ -322,7 +322,7 @@
                     </div>
 
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative" style="max-height: 80vh;">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                 <thead>
                                     <tr class="cursor-pointer bg-white">
@@ -381,13 +381,74 @@
                                     <!-- More rows... -->
                                 </tbody>
                             </table>
+
+                            <!-- DESPIECE DE EQUIPOS AMERICA -->
+                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full border-solid border-4 border-gray-600 rounded hidden" style="max-height: 400px;">
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                    <thead>
+                                        <tr class="cursor-pointer bg-white">
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Equipo/Local
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Fallas
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                PREVENTIVOS
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Último MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Proximo MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Tareas
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Test
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Último Test
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Cot
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Pics
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Coments
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                Despiece
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenedorEquiposAmericaDespice" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <!-- DESPIECE DE EQUIPOS AMERICA -->
+
+
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 
 
@@ -2428,7 +2489,6 @@
 
 
     <!-- ***** TOOLTIPS ***** -->
-
 
     <!-- ACTIVIDADES MP -->
     <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;">
