@@ -232,6 +232,10 @@ function botones(idd) {
             document.getElementById("colzie").classList.toggle("hidden");
             document.getElementById("btn-zie").classList.toggle("btn-activo");
             break;
+         case "zhh":
+            document.getElementById("colzhh").classList.toggle("hidden");
+            document.getElementById("btn-zhh").classList.toggle("btn-activo");
+            break;
          case "zic":
             document.getElementById("colzic").classList.toggle("hidden");
             document.getElementById("btn-zic").classList.toggle("btn-activo");
@@ -266,7 +270,7 @@ function botones(idd) {
             break;
       }
    } else {
-      alertaImg("Acceso Denegado en: " + nombreCol, "", "warning", 2000);
+      alertaImg("Acceso Denegado: " + nombreCol, "", "info", 1200);
    }
 }
 
@@ -298,17 +302,18 @@ function calendarioSecciones() {
 
    if (document.getElementById("colzia")) {
       document.getElementById("colzia").classList.add("hidden");
+      document.getElementById("btn-zia").classList.remove("btn-activo");
 
    }
 
    if (document.getElementById("colzhp")) {
       document.getElementById("colzhp").classList.add("hidden");
-      document.getElementById("btn-zia").classList.remove("btn-activo");
+      document.getElementById("btn-zhp").classList.remove("btn-activo");
    }
 
    if (document.getElementById("coldep")) {
       document.getElementById("coldep").classList.add("hidden");
-      document.getElementById("btn-zhp").classList.remove("btn-activo");
+      document.getElementById("btn-dep").classList.remove("btn-activo");
       document.getElementById("btn-dep").classList.remove("btn-activo");
    }
 
@@ -372,6 +377,10 @@ function calendarioSecciones() {
          if (document.getElementById("colzic")) {
             document.getElementById("btn-zic").classList.add("btn-activo");
             document.getElementById("colzic").classList.remove("hidden");
+         }
+         if (document.getElementById("colzhh")) {
+            document.getElementById("btn-zhh").classList.add("btn-activo");
+            document.getElementById("colzhh").classList.remove("hidden");
          }
          if (document.getElementById("coldep")) {
             document.getElementById("btn-dep").classList.add("btn-activo");
@@ -442,6 +451,10 @@ function calendarioSecciones() {
          if (document.getElementById("coldep")) {
             document.getElementById("btn-dep").classList.add("btn-activo");
             document.getElementById("coldep").classList.remove("hidden");
+         }
+         if (document.getElementById("colzhh")) {
+            document.getElementById("btn-zhh").classList.add("btn-activo");
+            document.getElementById("colzhh").classList.remove("hidden");
          }
          if (document.getElementById("colzic")) {
             document.getElementById("btn-zic").classList.add("btn-activo");
@@ -568,6 +581,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
          document.getElementById("columnasSeccionesZHP").innerHTML = data.dataZHP;
          document.getElementById("columnasSeccionesZIA").innerHTML = data.dataZIA;
          document.getElementById("columnasSeccionesZIC").innerHTML = data.dataZIC;
+         document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
          calendarioSecciones();
       },
    });

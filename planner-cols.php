@@ -171,10 +171,13 @@
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-martes" class="text-sm font-bold mr-4">MARTES</h1>
+                        
+                        <h1 onclick="botones('zhh');" id="btn-zhh" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHH
+                        </h1>
                         <h1 onclick="botones('zic');" id="btn-zic" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIC
                         </h1>
-                        <h1 class="w-8 h-8 mr-2"></h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-miercoles" class=" text-sm font-bold mr-4">MIERCOLES</h1>
