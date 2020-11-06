@@ -764,6 +764,7 @@ function estiloSeccionModal(padreSeccion, seccion = 0) {
    document.getElementById(padreSeccion).classList.remove("zhp-logo-modal");
    document.getElementById(padreSeccion).classList.remove("zia-logo-modal");
    document.getElementById(padreSeccion).classList.remove("zic-logo-modal");
+   document.getElementById(padreSeccion).classList.remove("zhh-logo-modal");
 
    document.getElementById(padreSeccion).classList.add(seccionClase);
 }
@@ -782,6 +783,7 @@ function estiloSeccion(padreSeccion, seccion) {
    document.getElementById(padreSeccion).classList.remove("zhp-logo");
    document.getElementById(padreSeccion).classList.remove("zia-logo");
    document.getElementById(padreSeccion).classList.remove("zic-logo");
+   document.getElementById(padreSeccion).classList.remove("zhh-logo");
 
    document.getElementById(padreSeccion).classList.add(seccionClase);
 }
@@ -3805,7 +3807,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
       // dataType: "JSON",
       success: function (data) {
 
-         if (data == 10) {
+         if (data == 10 || data == 13) {
             localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
             window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
          }
