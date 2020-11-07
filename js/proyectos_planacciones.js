@@ -442,7 +442,6 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
     const action = "obtenerProyectos";
     const ruta = "php/proyectos_planacciones.php?";
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&status=${status}`;
-    console.log(URL);
     document.getElementById("loadProyectos").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 

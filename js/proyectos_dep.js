@@ -663,7 +663,6 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
     const ruta = "php/proyectos_planacciones.php?";
 
     const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${statusProyecto}&etiquetado=${etiquetado}`;
-    console.log(URL);
 
     // OBTIENE NOMBRE DE LA SUBSECCIÓN
     fetch(`php/proyectos_planacciones.php?action=obtenerSubseccion&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`)
@@ -717,7 +716,6 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
                         departamento: departamento,
                         trabajando: trabajando
                     });
-                    console.log(status);
                     document.getElementById("contenedorDeProyectosDEP").insertAdjacentHTML('beforeend', dataProyectosz);
                 }
             } else {
@@ -1415,7 +1413,6 @@ function obtenerEtiquetados(status) {
 
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
-    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {
