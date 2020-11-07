@@ -595,24 +595,6 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
-                $arrayTemp = array(
-                    "id" => $idTarea,
-                    "ot" => "T$idTarea",
-                    "actividad" => $actividad,
-                    "responsable" => $responsable,
-                    "creadoPor" => $creadoPor,
-                    "comentarios" => intval($totalComentarios),
-                    "adjuntos" => intval($totalAdjuntos),
-                    "pda" => intval($totalActividades),
-                    "fechaInicio" => $fechaInicio,
-                    "fechaFin" => $fechaFin,
-                    "status" => $status,
-                    "materiales" => $materiales,
-                    "energeticos" => $energeticos,
-                    "departamentos" => $departamentos,
-                    "trabajando" => $trabajando,
-                    "tipo" => "TAREA"
-                );
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $actividad);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $creadoPor);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $totalActividades);
