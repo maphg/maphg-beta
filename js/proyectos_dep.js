@@ -478,14 +478,30 @@ var fOT = '';
         fStatus = `onclick="obtenerstatusMC(${id});"`;
         fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${id}" class="text-black" target="_blank">F${id}</a>`;
     } else if (origen == "TAREA") {
-        fActividades = ``;
-        fResponsable = ``;
+        fActividades = `onclick="obtenerActividadesOT(${id}, 'TAREA');"`;
+        fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${id});"`;
+        fFecha = `onclick="obtenerFechaTareas(${id}, '${params.fechaInicio} - ${params.fechaFin}');"`;
+        fComentarios = `onclick="obtenerComentariosTareas(${id});"`;
+        fAdjuntos = `onclick="obtenerAdjuntosTareas(${id});"`;
+        fStatus = `onclick="obtenerInformacionTareas(${id}, '${params.descripcion}')"`;
+        fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#T${id}" class="text-black" target="_blank">T${id}</a>`;
     } else if (origen == "PROYECTO") {
-        fActividades = ``;
-        fResponsable = ``;
+        fActividades = `onclick="tooltipPlanaccion(${id}); obtenerActividadesPlanaccion(${id});"`;
+        fResponsable = `onclick="obtenerResponsablesPlanaccion(${id})"`;
+        fFecha = ``;
+        fComentarios = `onclick="comentariosPlanaccion(${id});"`;
+        fAdjuntos = `onclick="adjuntosPlanaccion(${id});"`;
+        fStatus = `onclick="statusPlanaccion(${id});"`;
+        fOT = `<a href="OT_proyectos/#P${id}" class="text-black" target="_blank">P${id}</a>`;
     } else if (origen == "PREVENTIVO") {
         fActividades = ``;
-        fResponsable = ``;
+        fResponsable = `onclick="toggleModalTailwind('modalUsuarios'); 
+        obtenerUsuarios('asignarOT', ${id});"`;
+        fFecha = ``;
+        fComentarios = ``;
+        fAdjuntos = `onclick="consultaAdjuntosOT(${id}); toggleModalTailwind('modalMedia');"`;
+        fStatus = `onclick="consultaStatusOT(${id}); toggleModalTailwind('modalStatus');"`;
+        fOT = ``;
     }
 
     if (params.status == "PENDIENTE") {

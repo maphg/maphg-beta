@@ -5272,8 +5272,10 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
-   document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
-
+   document.getElementById("seccionSubseccionDestinoEquiposAmerica").
+      innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
+   
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
    document.getElementById("tareasGeneralesEquipo").

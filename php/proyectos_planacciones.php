@@ -867,7 +867,7 @@ if (isset($_GET['action'])) {
 
         if ($idSubseccion == 213) {
             $filtroEtiqueta_FALLAS = "and t_mc.status_material = '1'";
-            $filtroEtiqueta_TAREAS = "and t_mp_np.status_material = '1'";
+            $filtroEtiqueta_TAREAS = "and t_mp_np.status_material = 1";
             $filtroEtiqueta_PROYECTOS = "and t_proyectos_planaccion.status_material = '1'";
             $filtroEtiqueta_PREVENTIVOS = "and t_mp_planificacion_iniciada.status_material = '1'";
         } elseif ($idSubseccion == 214) {
