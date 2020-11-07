@@ -4331,6 +4331,7 @@ function obtenerFallas(idEquipo = 0) {
    let tipoPendiente = 'FALLAS';
    const action = "obtenerFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}`;
+
    document.getElementById("seccionFallaTarea").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("contenedorPrincipalTareasFallas").
@@ -4343,6 +4344,9 @@ function obtenerFallas(idEquipo = 0) {
    document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
    document.getElementById("ganttFallaTarea").
       setAttribute('onclick', `ganttFallas(${idEquipo}, 'PENDIENTE')`);
+
+   document.getElementById("exportarFallaTarea").
+      setAttribute('onclick', 'reporteFallas(' + idEquipo + ')');
 
    document.getElementById("estiloEquipoFallaTarea").className = '';
    document.getElementById("estiloEquipoFallaTarea").
@@ -4535,6 +4539,10 @@ function obtenerTareas(idEquipo = 0) {
    document.getElementById("estiloEquipoFallaTarea").
       classList.add('ml-4', 'font-bold', 'bg-orange-200', 'text-orange-500', 'text-xs', 'py-1', 'px-2', 'rounded'
       );
+
+   document.getElementById("exportarFallaTarea").
+      setAttribute('onclick', 'reporteTareas(' + idEquipo + ')');
+
 
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
@@ -5274,11 +5282,16 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
    document.getElementById("seccionSubseccionDestinoEquiposAmerica").
       innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
    document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
-   
+
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
    document.getElementById("tareasGeneralesEquipo").
       setAttribute('onclick', "obtenerTareas(0); toggleModalTailwind('modalTareasFallas');");
+
+   document.getElementById('reporteEquipos').
+      setAttribute('onclick', 'reporteEquipos()');
+
    fetch(URL)
       .then(array => array.json())
       .then(array => {
@@ -5439,6 +5452,38 @@ document.getElementById("palabraEquipoAmerica").addEventListener('keyup', functi
 });
 
 
+
+// FUNCIONES PARA GENERAR REPORTES
+function reporteEquipos() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
+
+   const action = "reporteEquipos";
+   const URL = `php/exportar_excel_GET.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   window.location = URL;
+}
+
+function reporteFallas(idEquipo) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "reporteFallas";
+   const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+   window.location = URL;
+}
+
+function reporteTareas(idEquipo) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem("idSubseccion");
+
+   const action = "reporteTareas";
+   const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   window.location = URL;
+}
 
 
 // Función para comprobar session.

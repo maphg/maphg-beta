@@ -1,0 +1,639 @@
+<?php
+date_default_timezone_set('America/Cancun');
+setlocale(LC_MONETARY, 'es_ES');
+
+include 'conexion.php';
+require 'PHPExcel.php';
+
+if (isset($_GET['action'])) {
+    //Variables Globales 
+    $action = $_GET['action'];
+    $idUsuario = $_GET['idUsuario'];
+    $idDestino = $_GET['idDestino'];
+    $fechaActual = date('Y-m-d H:m:s');
+    $añoActual = date('Y');
+    $semanaActual = date('W');
+
+    if ($action == "reporteEquipos") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $fila = 2;
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Equipos");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'LOCAL/EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'FALLAS S');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FALLAS P');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'PREVENTIVO S');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'PREVENTIVO P');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'ULTIMO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'PROXIMO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'TAREAS S');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TAREAS P');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'TEST');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'ULTOMO TEST');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COT');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'PICS');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'COMENTS');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'DESPIECE');
+
+        if ($idDestino == 10) {
+            $filtroDestinoEquipo = "";
+        } else {
+            $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
+        }
+
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
+        t_equipos_america.local_equipo, t_equipos_america.status
+        FROM t_equipos_america
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and 
+        t_equipos_america.jerarquia = 'PRINCIPAL' $filtroDestinoEquipo";
+        if ($resultEquipo = mysqli_query($conn_2020, $query)) {
+            foreach ($resultEquipo as $x) {
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
+                $statusEquipo = $x['status'];
+                $tipoEquipo = $x['local_equipo'];
+                $fila++;
+
+                #FALLAS PENDIENTES
+                $fallasPendientes = 0;
+                $query = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'N' or status = '' or status = 'PENDIENTE' or status = 'P') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $fallasPendientes = $a['count(id)'];
+                    }
+                }
+
+                #FALLAS SOLUCIONADOS
+                $fallasSolucionadas = 0;
+                $query = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $fallasSolucionadas = $a['count(id)'];
+                    }
+                }
+
+                #TAREAS SOLUCIONADOS
+                $tareasSolucionadas = 0;
+                $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                    and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $tareasSolucionadas = $a['count(id)'];
+                    }
+                }
+
+                #TAREAS PENDIENTES
+                $tareasPendientes = 0;
+                $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                    and (status = 'N' or status = 'P' or status = 'PENDIENTE') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $tareasPendientes = $a['count(id)'];
+                    }
+                }
+
+                #TOTAL COTIZACIONES POR EQUIPO
+                $totalCotizaciones = 0;
+                $query = "SELECT count(id) FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalCotizaciones = $a['count(id)'];
+                    }
+                }
+
+                #TOTAL ADJUNTOS POR EQUIPO
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalAdjuntos = $a['count(id)'];
+                    }
+                }
+
+                #TOTAL COMENTARIOS POR EQUIPO
+                $totalComentarios = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalComentarios = $a['count(id)'];
+                    }
+                }
+
+                #ULTIMO PREVENTIVO POR EQUIPO
+                $ultimoMpFecha = "";
+                $ultimoMpSemana = 0;
+                $query = "SELECT semana, fecha_creacion FROM t_mp_planificacion_iniciada WHERE id_equipo = $idEquipo and status = 'SOLUCIONADO' and activo = 1
+                ORDER BY id DESC LIMIT 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $ultimoMpFecha = $a['fecha_creacion'];
+                        if ($ultimoMpFecha != "") {
+                            $ultimoMpFecha = (new DateTime($ultimoMpFecha))->format('d-m-Y');
+                        }
+                        $ultimoMpSemana = $a['semana'];
+                    }
+                }
+
+                #PREVENTIVOS SOLUCIONADOS POR EQUIPO
+                $mpS = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $mpS = $a['id'];
+                    }
+                }
+
+                #PREVENTIVOS PENDIENTES POR EQUIPO
+                $mpP = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id'
+                FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'PROCESO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $mpP = $a['id'];
+                    }
+                }
+
+                #MP PRIXIMO POR EQUIPO
+                $proximoMpFecha = "";
+                $proximoMpSemana = 0;
+                $query = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual' ORDER BY id DESC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $tareasSolucionadas = 0;
+                    foreach ($result as $a) {
+                        $proximoMpFechaX = (new DateTime($a['ultima_modificacion']))
+                            ->format("d/m/Y");
+                        for ($x = 1; $x < 53; $x++) {
+                            $semana_x = $a['semana_' . $x];
+                            if ($semana_x == "PLANIFICADO") {
+                                $proximoMpSemana = $x;
+                                $proximoMpFecha = $proximoMpFechaX;
+                                $x = 52;
+                            }
+                        }
+                    }
+                }
+
+                #PREVENTIVOS SOLUCIONADOS POR EQUIPO
+                $testR = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST' ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $testR = $a['id'];
+                    }
+                }
+
+                #PREVENTIVOS TEST SOLUCIONADOS POR EQUIPO
+                $ultimoTestFecha = 0;
+                $ultimoTestSemana = 0;
+                $query = "SELECT t_mp_planificacion_iniciada.semana, 
+                t_mp_planificacion_iniciada.fecha_creacion 
+                FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $ultimoTestFecha = $a['fecha_creacion'];
+                        $ultimoTestSemana = $a['semana'];
+                        if ($ultimoTestFecha != "") {
+                            $ultimoTestFecha = (new DateTime($ultimoTestFecha))->format('d-m-Y');
+                        }
+                    }
+                }
+
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
+                $totalDespiece = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalDespiece = $x['count(id)'];
+                    }
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $tipoEquipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $statusEquipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $fallasSolucionadas);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fallasPendientes);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $mpS);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $mpP);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $ultimoMpFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $proximoMpFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tareasSolucionadas);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tareasPendientes);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $testR);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $ultimoTestFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalCotizaciones);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $totalComentarios);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $totalDespiece);
+            }
+        }
+
+        $fecha = date('d-m-Y H:m:s');
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_Equipos_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
+
+    if ($action == "reporteFallas") {
+        // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
+        $idEquipo = $_GET['idEquipo'];
+        $fila = 1;
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Equipos");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ACTIVIDAD');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'CREADO POR');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'SUBTAREAS');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'RESPONSABLE');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FECHA INICIO');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'FECHA FIN');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'MATERIALES');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'ENERGETICOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'DEPARTAMENTOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TRABAJANDO');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'OT');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COMENTARIOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ADJUNTOS');
+
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
+            t_mc.status_urgente,
+            t_mc.status_material,
+            t_mc.status_trabajare,
+            t_mc.energetico_electricidad,
+            t_mc.energetico_agua,
+            t_mc.energetico_diesel,
+            t_mc.energetico_gas,
+            t_mc.departamento_calidad,
+            t_mc.departamento_compras,
+            t_mc.departamento_direccion,
+            t_mc.departamento_finanzas,
+            t_mc.departamento_rrhh
+            FROM t_mc 
+            LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+            LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1 ORDER BY t_mc.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idFalla = $x['id'];
+                $actividad = $x['actividad'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $idResponsable = $x['responsable'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
+                $status = $x['status'];
+                $sUrgente = intval($x['status_urgente']);
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajare']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $fila++;
+
+                #RESPONSABLE
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $idResponsable";
+                $responsable = " ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = strtok($x['nombre'], ' ') . " " .
+                            strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT count(id) FROM t_mc_comentarios 
+                    WHERE id_mc = $idFalla and activo = 1";
+                $totalComentarios = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #ADJUNTOS
+                $query = "SELECT count(id) FROM t_mc_adjuntos 
+                    WHERE id_mc = $idFalla and activo = 1";
+                $totalAdjuntos = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                #ACTIVIDADES
+                $query = "SELECT count(id) FROM t_mc_actividades_ot 
+                    WHERE id_falla = $idFalla and activo = 1";
+                $totalActividades = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalActividades = $x['count(id)'];
+                    }
+                }
+
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #STATUS 
+                if ($status == "N" or $status == "PENDIENTE" or $status == "" or $status == "P") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                if ($sMaterial > 0) {
+                    $materiales = 1;
+                } else {
+                    $materiales = 0;
+                }
+                if ($sTrabajando > 0) {
+                    $trabajando = 1;
+                } else {
+                    $trabajando = 0;
+                }
+                if ($sEnergetico > 0) {
+                    $energeticos = 1;
+                } else {
+                    $energeticos = 0;
+                }
+                if ($sDepartamento > 0) {
+                    $departamentos = 1;
+                } else {
+                    $departamentos = 0;
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $actividad);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $creadoPor);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $totalActividades);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $responsable);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fechaInicio);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $fechaFin);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $materiales);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $energeticos);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $departamentos);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $trabajando);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, "FALLA");
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, "F" . $idFalla);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalComentarios);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
+            }
+        }
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_FALLAS_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
+
+    if ($action == "reporteTareas") {
+
+        $idEquipo = $_GET['idEquipo'];
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $fila = 1;
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Equipos");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ACTIVIDAD');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'CREADO POR');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'SUBTAREAS');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'RESPONSABLE');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FECHA INICIO');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'FECHA FIN');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'MATERIALES');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'ENERGETICOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'DEPARTAMENTOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TRABAJANDO');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'OT');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COMENTARIOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ADJUTNOS');
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_mp_np.id_destino = $idDestino";
+        }
+
+        if ($idEquipo == 0) {
+            $filtroEquipo = "and t_mp_np.id_seccion = $idSeccion and 
+            t_mp_np.id_subseccion = $idSubseccion ";
+        } else {
+            $filtroEquipo = "";
+        }
+
+
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.status, t_mp_np.responsable, t_colaboradores.nombre, t_mp_np.fecha, t_mp_np.rango_fecha,
+        t_colaboradores.apellido,
+        t_mp_np.status_urgente,
+        t_mp_np.status_material,
+        t_mp_np.status_trabajando,
+        t_mp_np.energetico_electricidad,
+        t_mp_np.energetico_agua,
+        t_mp_np.energetico_diesel,
+        t_mp_np.energetico_gas,
+        t_mp_np.departamento_calidad,
+        t_mp_np.departamento_compras,
+        t_mp_np.departamento_direccion,
+        t_mp_np.departamento_finanzas,
+        t_mp_np.departamento_rrhh
+        FROM t_mp_np
+        LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_mp_np.id_equipo = $idEquipo and t_mp_np.activo = 1 $filtroEquipo
+        ORDER BY t_mp_np.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTarea = $x['id'];
+                $actividad = $x['titulo'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $idResponsable = $x['responsable'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha']))->format("d/m/Y");
+                $status = $x['status'];
+                $sUrgente = intval($x['status_urgente']);
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajando']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $fila++;
+
+                #RESPONSABLE
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                $responsable = " ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = strtok($x['nombre'], ' ') . " " .
+                            strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT count(id) FROM comentarios_mp_np 
+                WHERE id_mp_np = $idTarea and activo = 1";
+                $totalComentarios = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #ADJUNTOS
+                $query = "SELECT count(id) FROM adjuntos_mp_np 
+                WHERE id_mp_np = $idTarea and activo = 1";
+                $totalAdjuntos = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                #ACTIVIDADES
+                $query = "SELECT count(id) FROM t_mp_np_actividades_ot 
+                WHERE id_tarea = $idTarea and activo = 1";
+                $totalActividades = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalActividades = $x['count(id)'];
+                    }
+                }
+
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #STATUS 
+                if ($status == "N" or $status == "PENDIENTE" or $status == "" or $status == "P") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                if ($sMaterial > 0) {
+                    $materiales = 1;
+                } else {
+                    $materiales = 0;
+                }
+                if ($sTrabajando > 0) {
+                    $trabajando = 1;
+                } else {
+                    $trabajando = 0;
+                }
+                if ($sEnergetico > 0) {
+                    $energeticos = 1;
+                } else {
+                    $energeticos = 0;
+                }
+                if ($sDepartamento > 0) {
+                    $departamentos = 1;
+                } else {
+                    $departamentos = 0;
+                }
+
+                $arrayTemp = array(
+                    "id" => $idTarea,
+                    "ot" => "T$idTarea",
+                    "actividad" => $actividad,
+                    "responsable" => $responsable,
+                    "creadoPor" => $creadoPor,
+                    "comentarios" => intval($totalComentarios),
+                    "adjuntos" => intval($totalAdjuntos),
+                    "pda" => intval($totalActividades),
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "status" => $status,
+                    "materiales" => $materiales,
+                    "energeticos" => $energeticos,
+                    "departamentos" => $departamentos,
+                    "trabajando" => $trabajando,
+                    "tipo" => "TAREA"
+                );
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $actividad);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $creadoPor);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $totalActividades);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $responsable);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fechaInicio);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $fechaFin);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $materiales);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $energeticos);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $departamentos);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $trabajando);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, "TAREA");
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, "T" . $idTarea);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalComentarios);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
+            }
+        }
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_TAREAS_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
+}

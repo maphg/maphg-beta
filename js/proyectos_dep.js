@@ -468,7 +468,7 @@ const datosEtiquetados = params => {
     var fComentarios = '';
     var fAdjuntos = '';
     var fStatus = '';
-var fOT = '';
+    var fOT = '';
     if (origen == "FALLA") {
         fActividades = `onclick="obtenerActividadesOT(${id}, 'FALLA');"`;
         fResponsable = `onclick="obtenerUsuarios('asignarMC', ${id});"`;

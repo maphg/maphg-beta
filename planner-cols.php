@@ -250,7 +250,7 @@
                         <i class="fad fa-search"></i>
                     </button>
                 </div>
-                <div class="text-blue-500 text-sm cursor-pointer bg-blue-300 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-blue-200 px-2">
+                <div id="reporteEquipos" class="text-blue-500 text-sm cursor-pointer bg-blue-300 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-blue-200 px-2">
                     <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                     <h1>Exportar</h1>
                 </div>

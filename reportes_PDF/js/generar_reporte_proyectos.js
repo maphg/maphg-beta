@@ -1,4 +1,3 @@
-
 function obtenerProyecto(idProyecto) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');

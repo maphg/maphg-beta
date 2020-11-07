@@ -176,10 +176,26 @@ if (isset($_GET['action'])) {
                     $status = "SOLUCIONADO";
                 }
 
-                $materiales = 1;
-                $energeticos = 1;
-                $departamentos = 1;
-                $trabajando = 1;
+                if ($sMaterial > 0) {
+                    $materiales = 1;
+                } else {
+                    $materiales = 0;
+                }
+                if ($sTrabajando > 0) {
+                    $trabajando = 1;
+                } else {
+                    $trabajando = 0;
+                }
+                if ($sEnergetico > 0) {
+                    $energeticos = 1;
+                } else {
+                    $energeticos = 0;
+                }
+                if ($sDepartamento > 0) {
+                    $departamentos = 1;
+                } else {
+                    $departamentos = 0;
+                }
 
                 $arrayTemp = array(
                     "id" => $idTarea,
@@ -193,10 +209,10 @@ if (isset($_GET['action'])) {
                     "fechaInicio" => $fechaInicio,
                     "fechaFin" => $fechaFin,
                     "status" => $status,
-                    "materiales" => $sMaterial,
-                    "energeticos" => $sEnergetico,
-                    "departamentos" => $sDepartamento,
-                    "trabajando" => $sTrabajando,
+                    "materiales" => $materiales,
+                    "energeticos" => $energeticos,
+                    "departamentos" => $departamentos,
+                    "trabajando" => $trabajando,
                     "tipo" => "TAREA"
                 );
 
@@ -314,10 +330,27 @@ if (isset($_GET['action'])) {
                     $status = "SOLUCIONADO";
                 }
 
-                $materiales = 1;
-                $energeticos = 1;
-                $departamentos = 1;
-                $trabajando = 1;
+
+                if ($sMaterial > 0) {
+                    $materiales = 1;
+                } else {
+                    $materiales = 0;
+                }
+                if ($sTrabajando > 0) {
+                    $trabajando = 1;
+                } else {
+                    $trabajando = 0;
+                }
+                if ($sEnergetico > 0) {
+                    $energeticos = 1;
+                } else {
+                    $energeticos = 0;
+                }
+                if ($sDepartamento > 0) {
+                    $departamentos = 1;
+                } else {
+                    $departamentos = 0;
+                }
 
                 $arrayTemp = array(
                     "id" => $idFalla,
@@ -331,10 +364,10 @@ if (isset($_GET['action'])) {
                     "fechaInicio" => $fechaInicio,
                     "fechaFin" => $fechaFin,
                     "status" => $status,
-                    "materiales" => $sMaterial,
-                    "energeticos" => $sEnergetico,
-                    "departamentos" => $sDepartamento,
-                    "trabajando" => $sTrabajando,
+                    "materiales" => $materiales,
+                    "energeticos" => $energeticos,
+                    "departamentos" => $departamentos,
+                    "trabajando" => $trabajando,
                     "tipo" => "FALLA"
                 );
 
