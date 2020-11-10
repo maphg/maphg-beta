@@ -21,6 +21,9 @@ function comprobarSession() {
    }
 }
 
+document.getElementById("destinosSelecciona").addEventListener('click', () => {
+   botonDestino();
+});
 
 // Obtiene información del usuario, para mostrarlo en el menú 
 function obtenerDatosUsuario(idDestino) {
@@ -1090,6 +1093,9 @@ function obtenerstatusMC(idMC) {
    let idDestino = localStorage.getItem("idDestino");
    const action = "obtenerStatusMC";
 
+   // FUNCIÓN PARA DAR DISEÑO AL MODAL STATUS 
+   estiloModalStatus(idMC, 'FALLA');
+
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -1104,55 +1110,40 @@ function obtenerstatusMC(idMC) {
          // Llama a la Función para reflejar los cambios en los MC por Equipo.
 
          // Status
-         document
-            .getElementById("statusUrgente")
+         document.getElementById("statusUrgente")
             .setAttribute("onclick", data.dataStatusUrgente);
-         document
-            .getElementById("statusMaterial")
+         document.getElementById("statusMaterial")
             .setAttribute("onclick", data.dataStatusMaterial);
-         document
-            .getElementById("statusTrabajare")
+         document.getElementById("statusTrabajare")
             .setAttribute("onclick", data.dataStatusTrabajare);
          // Status Departamento.
-         document
-            .getElementById("statusCalidad")
+         document.getElementById("statusCalidad")
             .setAttribute("onclick", data.dataStatusCalidad);
-         document
-            .getElementById("statusCompras")
+         document.getElementById("statusCompras")
             .setAttribute("onclick", data.dataStatusCompras);
-         document
-            .getElementById("statusDireccion")
+         document.getElementById("statusDireccion")
             .setAttribute("onclick", data.dataStatusDireccion);
-         document
-            .getElementById("statusFinanzas")
+         document.getElementById("statusFinanzas")
             .setAttribute("onclick", data.dataStatusFinanzas);
-         document
-            .getElementById("statusRRHH")
+         document.getElementById("statusRRHH")
             .setAttribute("onclick", data.dataStatusRRHH);
          // Status Energéticos.
-         document
-            .getElementById("statusElectricidad")
+         document.getElementById("statusElectricidad")
             .setAttribute("onclick", data.dataStatusElectricidad);
-         document
-            .getElementById("statusAgua")
+         document.getElementById("statusAgua")
             .setAttribute("onclick", data.dataStatusAgua);
-         document
-            .getElementById("statusDiesel")
+         document.getElementById("statusDiesel")
             .setAttribute("onclick", data.dataStatusDiesel);
-         document
-            .getElementById("statusGas")
+         document.getElementById("statusGas")
             .setAttribute("onclick", data.dataStatusGas);
          // Finalizar MC.
-         document
-            .getElementById("statusFinalizar")
+         document.getElementById("statusFinalizar")
             .setAttribute("onclick", data.dataStatus);
          // Activo MC.
-         document
-            .getElementById("statusActivo")
+         document.getElementById("statusActivo")
             .setAttribute("onclick", data.dataStatusActivo);
          // Titulo MC.
-         document
-            .getElementById("btnEditarTitulo")
+         document.getElementById("btnEditarTitulo")
             .setAttribute("onclick", data.dataStatusTitulo);
          document.getElementById("inputEditarTitulo").value = data.dataTituloMC;
       },
@@ -1744,6 +1735,8 @@ function agregarComentarioTarea(idTarea) {
 
 // Modifica Status o alguna Columna(titulo, activo, status) en TAREAS
 function obtenerInformacionTareas(idTarea, tituloTarea) {
+
+   estiloModalStatus(idTarea, 'TAREA');
    document.getElementById("modalStatus").classList.add("open");
    localStorage.setItem("idTarea", idTarea);
 
@@ -2197,84 +2190,6 @@ function expandirProyectos(id, idProyecto) {
 }
 
 
-// Comentarios para Planaccion
-function comentariosPlanaccion(idPlanaccion) {
-   document
-      .getElementById("btnComentario")
-      .setAttribute(
-         "onclick",
-         "agregarComentarioPlanaccion(" + idPlanaccion + ")"
-      );
-   document.getElementById("modalComentarios").classList.add("open");
-
-   let idUsuario = localStorage.getItem("usuario");
-   let idDestino = localStorage.getItem("idDestino");
-
-   const action = "comentariosPlanaccion";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idPlanaccion: idPlanaccion,
-      },
-      // dataType: "JSON",
-      success: function (data) {
-         document.getElementById("dataComentarios").innerHTML = data;
-      },
-   });
-}
-
-
-// Muestra los adjuntos de Planaccion
-function adjuntosPlanaccion(idPlanaccion) {
-   document.getElementById("modalMedia").classList.add("open");
-   document.getElementById("contenedorImagenes").classList.add('hidden');
-   document.getElementById("contenedorDocumentos").classList.add('hidden');
-
-   let idUsuario = localStorage.getItem("usuario");
-   let idDestino = localStorage.getItem("idDestino");
-   let idTabla = idPlanaccion;
-   let tabla = "t_proyectos_planaccion_adjuntos";
-
-   document
-      .getElementById("inputAdjuntos")
-      .setAttribute(
-         "onchange",
-         "subirImagenGeneral(" +
-         idPlanaccion +
-         ', "t_proyectos_planaccion_adjuntos")'
-      );
-
-   const action = "obtenerAdjuntos";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idTabla: idTabla,
-         tabla: tabla,
-      },
-      dataType: "JSON",
-      success: function (data) {
-         if (data.imagen != "") {
-            document.getElementById("dataImagenes").innerHTML = data.imagen;
-            document.getElementById("contenedorImagenes").classList.remove('hidden');
-         }
-
-         if (data.documento != "") {
-            document.getElementById("dataAdjuntos").innerHTML = data.documento;
-            document.getElementById("contenedorDocumentos").classList.remove('hidden');
-         }
-      },
-   });
-}
-
-
 // Sube imagenes con dos parametros, con el formulario #inputAdjuntos
 function subirImagenGeneral(idTabla, tabla) {
    let idUsuario = localStorage.getItem("usuario");
@@ -2345,6 +2260,12 @@ function subirImagenGeneral(idTabla, tabla) {
                alertaImg("Cotización Agregada", "", "success", 2500);
                obtenerCotizacionesEquipo(idTabla);
                obtenerEquiposAmerica(idSeccion, idSubseccion);
+            } else if (data == 12) {
+               obtenerProyectosDEP(idSubseccion, 'PENDIENTE');
+               cotizacionesProyectosDEP(idTabla);
+            } else if (data == 13) {
+               obtenerPlanaccionDEP(idProyecto);
+               adjuntosPlanaccionDEP(idTabla)
             } else {
                alertaImg("Intente de Nuevo", "", "info", 3000);
             }
@@ -5485,6 +5406,130 @@ function reporteTareas(idEquipo) {
    window.location = URL;
 }
 
+
+document.getElementById("statusMaterial").addEventListener('click', function () {
+   alertaImg('COD2BEND, para aplicar Status M', '', 'success', 1200);
+});
+
+
+// FUNCIÓN PARA RESALTAR STATUS APLICADOS (TAREAS, FALLAS, PREVENTIVOS, PROYECTOS)
+function estiloModalStatus(idRegistro, tipoRegistro) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerStatus";
+   const URL = `php/select_REST_planner.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idRegistro=${idRegistro}&tipoRegistro=${tipoRegistro}`;
+
+   document.getElementById("statusenergeticostoggle").classList.add('hidden');
+   document.getElementById("statusdeptoggle").classList.add('hidden');
+
+   let sMaterialX = document.getElementById("statusMaterial");
+   let sTrabajareX = document.getElementById("statusTrabajare");
+   let sCalidadX = document.getElementById("statusCalidad");
+   let sComprasX = document.getElementById("statusCompras");
+   let sDireccionX = document.getElementById("statusDireccion");
+   let sFinanzasX = document.getElementById("statusFinanzas");
+   let sRRHHX = document.getElementById("statusRRHH");
+   let sElectricidadX = document.getElementById("statusElectricidad");
+   let sAguaX = document.getElementById("statusAgua");
+   let sDieselX = document.getElementById("statusDiesel");
+   let sGasX = document.getElementById("statusGas");
+   let sEnergeticosX = document.getElementById("statusenergeticos");
+   let sDepartamentosX = document.getElementById("statusdep");
+
+   sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs";
+
+   sTrabajareX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs";
+
+   sCalidadX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sComprasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sDireccionX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sFinanzasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sRRHHX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sElectricidadX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+   sAguaX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+   sDieselX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+   sGasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+   sEnergeticosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+   sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array[0]) {
+
+            if (array[0].sMaterial == 1) {
+               sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-orange-500 bg-gray-200 bg-orange-200 text-xs";
+            }
+
+            if (array[0].sTrabajare == 1) {
+               sTrabajareX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-blue-500 bg-gray-200 bg-blue-200 text-xs";
+            }
+
+            if (array[0].sCalidad == 1) {
+               sCalidadX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].sCompras == 1) {
+               sComprasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].sDireccion == 1) {
+               sDireccionX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].sFinanzas == 1) {
+               sFinanzasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].sRRHH == 1) {
+               sRRHHX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].sElectricidad == 1) {
+               sElectricidadX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+            }
+
+            if (array[0].sAgua == 1) {
+               sAguaX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+            }
+
+            if (array[0].sDiesel == 1) {
+               sDieselX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+            }
+
+            if (array[0].sGas == 1) {
+               sGasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+            }
+
+            if (array[0].sEnergeticos > 0) {
+               sEnergeticosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+            }
+
+            if (array[0].sDepartamentos > 0) {
+               sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+            }
+
+            if (array[0].titulo) {
+               document.getElementById("inputEditarTitulo").value = array[0].titulo;
+            }
+
+         }
+
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
 
 // Función para comprobar session.
 comprobarSession();

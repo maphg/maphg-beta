@@ -1,17 +1,16 @@
 'use strict';
 
-// const $tablaProyectosDEP = document.getElementById('contenedorDeProyectosDEP');
 const datosProyectosDEP = params => {
     var idProyecto = params.id;
 
     var cotizaciones = params.cotizaciones;
-    var valorCotizaciones = 'X'
+    var valorCotizaciones = '';
 
     var tipo = params.tipo;
-    var valorTipo = 'X';
+    var valorTipo = '';
 
     var justificacion = params.justificacion;
-    var valorjustificacion = 'X'
+    var valorjustificacion = '';
 
     var materiales = params.materiales;
     var materialesx = '';
@@ -96,7 +95,7 @@ const datosProyectosDEP = params => {
         var fObtenerPlanaccion = `onclick="obtenerPlanaccionDEP(${idProyecto}); tooltipProyectosDEP(${idProyecto})"`;
         var fResponsable = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerResponsablesProyectosDEP(${idProyecto})"`;
         var fRangoFecha = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'rango_fecha');"`;
-        var fCotizaciones = `onclick="hiddenVista('tooltipProyectosDEP'); cotizacionesProyectos(${idProyecto});"`;
+        var fCotizaciones = `onclick="hiddenVista('tooltipProyectosDEP'); cotizacionesProyectosDEP(${idProyecto});"`;
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto}, 'tipo');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'coste');"`;
@@ -104,7 +103,7 @@ const datosProyectosDEP = params => {
         var fStatus = `onclick="hiddenVista('tooltipProyectosDEP'); statusProyectoDEP(${idProyecto});"`;
 
     } else {
-        var statusX = 'S-DEP-SOLUCIONADO hidden';
+        var statusX = 'S-DEP-SOLUCIONADO';
         var fObtenerPlanaccion = `onclick="obtenerPlanaccionDEP(${idProyecto}); tooltipProyectosDEP(${idProyecto})"`;
         var fResponsable = `onclick="hiddenVista('tooltipProyectosDEP');"`;
         var fRangoFecha = `onclick="hiddenVista('tooltipProyectosDEP');"`;
@@ -184,19 +183,18 @@ const datosProyectosDEP = params => {
 };
 
 
-// const $tablaPlanesDEP = document.getElementById('contenedorDePlanesdeaccionDEP');
 const datosPlanesDEP = params => {
 
     var idPlanaccion = params.id;
 
     var comentarios = params.comentarios;
-    var valorcomentarios = 'X';
+    var valorcomentarios = '';
 
     var adjuntos = params.adjuntos;
-    var valoradjuntos = 'X';
+    var valoradjuntos = '';
 
     var tipo = params.tipo;
-    var valorTipo = 'X';
+    var valorTipo = '';
 
     var materiales = params.materiales;
     var materialesx = '';
@@ -275,11 +273,11 @@ const datosPlanesDEP = params => {
 
     if (params.status == "PENDIENTE") {
         var statusPlanaccion = 'planaccion_PENDIENTE';
-        var fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); obtenerResponsablesPlanaccion(${idPlanaccion}); nivelVista(1,'modalUsuarios');"`;
-        var fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); comentariosPlanaccion(${idPlanaccion}); nivelVista(1,'modalComentarios');"`;
-        var fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
+        var fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); obtenerResponsablesPlanaccion(${idPlanaccion});"`;
+        var fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); comentariosPlanaccionDEP(${idPlanaccion});"`;
+        var fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); adjuntosPlanaccionDEP(${idPlanaccion});"`;
         var fToolTip = `onclick="tooltipPlanaccionDEP(${idPlanaccion}); obtenerActividadesPlanaccionDEP(${idPlanaccion});"`;
-        var fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); statusPlanaccionDEP(${idPlanaccion}); nivelVista(1,'modalStatus');"`;
+        var fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccionDEP'); statusPlanaccionDEP(${idPlanaccion});"`;
         var fOT = `onclick="generarOTPlanaccion(${idPlanaccion});"`;
         var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
         var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
@@ -478,7 +476,7 @@ const datosEtiquetados = params => {
         fStatus = `onclick="obtenerstatusMC(${id});"`;
         fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${id}" class="text-black" target="_blank">F${id}</a>`;
     } else if (origen == "TAREA") {
-        fActividades = `onclick="obtenerActividadesOT(${id}, 'TAREA');"`;
+        fActividades = ``;
         fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${id});"`;
         fFecha = `onclick="obtenerFechaTareas(${id}, '${params.fechaInicio} - ${params.fechaFin}');"`;
         fComentarios = `onclick="obtenerComentariosTareas(${id});"`;
@@ -486,11 +484,11 @@ const datosEtiquetados = params => {
         fStatus = `onclick="obtenerInformacionTareas(${id}, '${params.descripcion}')"`;
         fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#T${id}" class="text-black" target="_blank">T${id}</a>`;
     } else if (origen == "PROYECTO") {
-        fActividades = `onclick="tooltipPlanaccion(${id}); obtenerActividadesPlanaccion(${id});"`;
+        fActividades = ``;
         fResponsable = `onclick="obtenerResponsablesPlanaccion(${id})"`;
         fFecha = ``;
-        fComentarios = `onclick="comentariosPlanaccion(${id});"`;
-        fAdjuntos = `onclick="adjuntosPlanaccion(${id});"`;
+        fComentarios = `onclick="comentariosPlanaccionDEP(${id});"`;
+        fAdjuntos = `onclick="adjuntosPlanaccionDEP(${id});"`;
         fStatus = `onclick="statusPlanaccion(${id});"`;
         fOT = `<a href="OT_proyectos/#P${id}" class="text-black" target="_blank">P${id}</a>`;
     } else if (origen == "PREVENTIVO") {
@@ -601,7 +599,9 @@ function tooltipProyectosDEP(idProyecto) {
     // Propiedades para el tooltip
     const button = document.getElementById(idProyecto + 'proyectoDEP');
     const tooltip = document.getElementById('tooltipProyectosDEP');
-    Popper.createPopper(button, tooltip);
+    Popper.createPopper(button, tooltip,{
+        placement: 'bottom-start'
+    });
 }
 
 
@@ -630,7 +630,7 @@ function tooltipPlanaccionDEP(idPlanaccion) {
 
 
 // OBTIENES LOS PROYECTOS DEP
-function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
+function obtenerProyectosDEP(idSubseccion, statusProyecto) {
     document.getElementById("modalProyectosDEP").classList.add("open");
     document.getElementById("contendorEtiquetado").classList.add("hidden");
     document.getElementById("contenedorDEP").classList.remove("hidden");
@@ -662,7 +662,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
     const action = "consultaProyectosDEP";
     const ruta = "php/proyectos_planacciones.php?";
 
-    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${statusProyecto}&etiquetado=${etiquetado}`;
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}&status=${statusProyecto}`;
 
     // OBTIENE NOMBRE DE LA SUBSECCIÓN
     fetch(`php/proyectos_planacciones.php?action=obtenerSubseccion&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`)
@@ -676,6 +676,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto, etiquetado) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            console.log(array);
             document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
@@ -1335,7 +1336,6 @@ function actualizarPlanaccionDEP(valor, columna, idPlanaccion) {
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
                 alertaImg("Responsable Actualizado", "", "success", 2500);
-                nivelVista(0, 'modalUsuarios')
             } else if (data == 2) {
                 document.getElementById("modalEditarTitulo").classList.remove("open");
                 document.getElementById("modalStatus").classList.remove("open");
@@ -1478,6 +1478,149 @@ function obtenerEtiquetados(status) {
         });
 }
 
+
+function cotizacionesProyectosDEP(idProyecto) {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idTabla = idProyecto;
+    let tabla = "t_proyectos_adjuntos";
+
+    document.getElementById("contenedorImagenes").classList.add('hidden');
+    document.getElementById("contenedorDocumentos").classList.add('hidden');
+
+    document.getElementById("modalMedia").classList.add("open");
+    document.getElementById("inputAdjuntos")
+        .setAttribute("onchange", "subirImagenGeneral(" + idProyecto + ", 't_proyectos_adjuntos_DEP');");
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if (data.imagen != "") {
+                document.getElementById("dataImagenes").innerHTML = data.imagen;
+                document.getElementById("contenedorImagenes").classList.remove('hidden');
+            }
+
+            if (data.documento != "") {
+                document.getElementById("dataAdjuntos").innerHTML = data.documento;
+                document.getElementById("contenedorDocumentos").classList.remove('hidden');
+            }
+        },
+    });
+}
+
+
+// AGREGAR COMENTARIO PLAN DE ACCIÓN
+function agregarComentarioPlanaccionDEP(idPlanaccion) {
+    let comentario = document.getElementById("inputComentario").value;
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idProyecto = localStorage.getItem('idProyecto');
+    const action = "agregarComentarioPlanaccion";
+    if (comentario.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            data: {
+                action: action,
+                idUsuario: idUsuario,
+                idDestino: idDestino,
+                idPlanaccion: idPlanaccion,
+                comentario: comentario,
+            },
+            // dataType: "JSON",
+            success: function (data) {
+                if (data == 1) {
+                    comentariosPlanaccionDEP(idPlanaccion);
+                    obtenerPlanaccionDEP(idProyecto);
+                    document.getElementById("inputComentario").value = "";
+                    alertaImg("Comentario Agregado", "", "success", 2500);
+                } else {
+                    alertaImg("Intente de Nuevo", "", "info", 2500);
+                }
+            },
+        });
+    } else {
+        alertaImg("Comentario NO Valido", "", "info", 2500);
+    }
+}
+
+
+// Comentarios para Planaccion
+function comentariosPlanaccionDEP(idPlanaccion) {
+    document.getElementById("btnComentario")
+        .setAttribute("onclick", "agregarComentarioPlanaccionDEP(" + idPlanaccion + ")");
+    document.getElementById("modalComentarios").classList.add("open");
+
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+
+    const action = "comentariosPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlanaccion: idPlanaccion,
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataComentarios").innerHTML = data;
+        },
+    });
+}
+
+
+// Muestra los adjuntos de Planaccion
+function adjuntosPlanaccionDEP(idPlanaccion) {
+    document.getElementById("modalMedia").classList.add("open");
+    document.getElementById("contenedorImagenes").classList.add('hidden');
+    document.getElementById("contenedorDocumentos").classList.add('hidden');
+
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idTabla = idPlanaccion;
+    let tabla = "t_proyectos_planaccion_adjuntos";
+
+    document.getElementById("inputAdjuntos")
+        .setAttribute("onchange", "subirImagenGeneral(" + idPlanaccion + ',"t_proyectos_planaccion_adjuntos_DEP")');
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if (data.imagen != "") {
+                document.getElementById("dataImagenes").innerHTML = data.imagen;
+                document.getElementById("contenedorImagenes").classList.remove('hidden');
+            }
+
+            if (data.documento != "") {
+                document.getElementById("dataAdjuntos").innerHTML = data.documento;
+                document.getElementById("contenedorDocumentos").classList.remove('hidden');
+            }
+        },
+    });
+}
 // ********** EVENTOS **********
 
 document.getElementById("btnActualizarTitulo").addEventListener('click', function () {
@@ -1523,14 +1666,3 @@ document.getElementById("palabraProyectoDEP").addEventListener('keyup', function
     buscdorTabla('contenedorDeProyectosDEP', 'palabraProyectoDEP', 0);
     buscdorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
 });
-
-// document.getElementById("opcionProyectosDEP").addEventListener('click', function () {
-//     document.getElementById("contenedorDEP").classList.remove('hidden');
-//     document.getElementById("contendorEtiquetado").classList.add('hidden');
-// });
-
-// document.getElementById("etiquetadoProyectosDEP").addEventListener('click', function () {
-//     document.getElementById("contenedorDEP").classList.add('hidden');
-//     document.getElementById("contendorEtiquetado").classList.remove('hidden');
-//     obtenerEtiquetados();
-// });

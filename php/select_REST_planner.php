@@ -553,8 +553,196 @@ if (isset($_GET['action'])) {
     }
 
 
-    #OBTIENE LOS EQUIPOS AMERICA CON SUS DETALLES DE PENDIENTES
+    #OBTIENE VALOR DE LOS STATUS((TAREAS, FALLAS, PREVENTIVOS, PROYECTOS) DONDE 1 = ACTIVO
+    if ($action == "obtenerStatus") {
+        $idRegistro = $_GET['idRegistro'];
+        $tipoRegistro = $_GET['tipoRegistro'];
+        $array = array();
 
+        $sMaterial = 0;
+        $sTrabajare = 0;
+        $sCalidad = 0;
+        $sCompras = 0;
+        $SDireccion = 0;
+        $sFinanzas = 0;
+        $sRRHH = 0;
+        $sElectricidad = 0;
+        $sAgua = 0;
+        $sDiesel = 0;
+        $sGas = 0;
+
+        if ($tipoRegistro == "FALLA") {
+            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas FROM t_mc WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajare'];
+                    $sCalidad = $x['departamento_calidad'];
+                    $sCompras = $x['departamento_compras'];
+                    $sDireccion = $x['departamento_direccion'];
+                    $sFinanzas = $x['departamento_finanzas'];
+                    $sRRHH = $x['departamento_rrhh'];
+                    $sElectricidad = $x['energetico_electricidad'];
+                    $sAgua = $x['energetico_agua'];
+                    $sDiesel = $x['energetico_diesel'];
+                    $sGas = $x['energetico_gas'];
+                    $titulo = $x['actividad'];
+                }
+            }
+        } elseif ($tipoRegistro == "TAREA") {
+            $query = "SELECT titulo, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas FROM t_mp_np WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajando'];
+                    $sCalidad = $x['departamento_calidad'];
+                    $sCompras = $x['departamento_compras'];
+                    $sDireccion = $x['departamento_direccion'];
+                    $sFinanzas = $x['departamento_finanzas'];
+                    $sRRHH = $x['departamento_rrhh'];
+                    $sElectricidad = $x['energetico_electricidad'];
+                    $sAgua = $x['energetico_agua'];
+                    $sDiesel = $x['energetico_diesel'];
+                    $sGas = $x['energetico_gas'];
+                    $titulo = $x['titulo'];
+                }
+            }
+        }
+
+        if ($sMaterial != "" and $sMaterial != 0) {
+            $sMaterial = 1;
+        } else {
+            $sMaterial = 0;
+        }
+        if ($sTrabajare != "" and $sTrabajare != 0) {
+            $sTrabajare = 1;
+        } else {
+            $sTrabajare = 0;
+        }
+        if ($sCalidad != "" and $sCalidad != 0) {
+            $sCalidad = 1;
+        } else {
+            $sCalidad = 0;
+        }
+        if ($sCompras != "" and $sCompras != 0) {
+            $sCompras = 1;
+        } else {
+            $sCompras = 0;
+        }
+        if ($sDireccion != "" and $sDireccion != 0) {
+            $sDireccion = 1;
+        } else {
+            $sDireccion = 0;
+        }
+        if ($sFinanzas != "" and $sFinanzas != 0) {
+            $sFinanzas = 1;
+        } else {
+            $sFinanzas = 0;
+        }
+        if ($sRRHH != "" and $sRRHH != 0) {
+            $sRRHH = 1;
+        } else {
+            $sRRHH = 0;
+        }
+        if ($sElectricidad != "" and $sElectricidad != 0) {
+            $sElectricidad = 1;
+        } else {
+            $sElectricidad = 0;
+        }
+        if ($sAgua != "" and $sAgua != 0) {
+            $sAgua = 1;
+        } else {
+            $sAgua = 0;
+        }
+        if ($sDiesel != "" and $sDiesel != 0) {
+            $sDiesel = 1;
+        } else {
+            $sDiesel = 0;
+        }
+        if ($sGas != "" and $sGas != 0) {
+            $sGas = 1;
+        } else {
+            $sGas = 0;
+        }
+
+        $array[] = array(
+            "sMaterial" => intval($sMaterial),
+            "sTrabajare" => intval($sTrabajare),
+            "sCalidad" => intval($sCalidad),
+            "sCompras" => intval($sCompras),
+            "sDireccion" => intval($sDireccion),
+            "sFinanzas" => intval($sFinanzas),
+            "sRRHH" => intval($sRRHH),
+            "sElectricidad" => intval($sElectricidad),
+            "sAgua" => intval($sAgua),
+            "sDiesel" => intval($sDiesel),
+            "sGas" => intval($sGas),
+            "sDepartamentos" => intval($sCompras) + intval($sDireccion) + intval($sCalidad) + intval($sFinanzas) + intval($sRRHH),
+            "sEnergeticos" => intval($sAgua) + intval($sDiesel) + intval($sGas) + intval($sElectricidad),
+            "titulo"=> $titulo
+        );
+
+        echo json_encode($array);
+    }
+
+
+    // Consulta los Destinos que tiene acceso el usuario.
+    if ($action == "obtenerDatosUsuario") {
+        $data = array();
+        $destinosOpcion = "";
+
+        $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo, c_destinos.id, c_destinos.destino
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
+        INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
+        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1;
+        ";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $value) {
+                $idDestinoUsuario = $value['id'];
+                $nombre = $value['nombre'];
+                $apellido = $value['apellido'];
+                $cargo = $value['cargo'];
+            }
+            $data['nombre'] = $nombre;
+            $data['apellido'] = $apellido;
+            $data['cargo'] = $cargo;
+        }
+
+        if ($idDestinoUsuario == 10) {
+            $query = "SELECT id, destino FROM c_destinos WHERE status='A' ORDER BY destino ASC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                while ($row = mysqli_fetch_array($result)) {
+                    $idDestinoS = $row['id'];
+                    $nombreDestino = $row['destino'];
+                    $destinosOpcion .= "<a href=\"#\" onclick=\"obtenerDatosUsuario($idDestinoS);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDestino</a>";
+                }
+
+                $queryDestino = "SELECT destino FROM c_destinos WHERE id = $idDestino";
+                if ($resultDestino = mysqli_query($conn_2020, $queryDestino)) {
+                    if ($row = mysqli_fetch_array($resultDestino)) {
+                        $destino = $row['destino'];
+                    }
+                    $data['destino'] = $destino;
+                }
+            }
+        } else {
+            $query = "SELECT id, destino FROM c_destinos WHERE id = $idDestinoUsuario";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($row = mysqli_fetch_array($result)) {
+                    $idDestinoS = $row['id'];
+                    $nombreDestino = $row['destino'];
+                    $data['destino'] = $nombreDestino;
+                    $destinosOpcion .= "<a href=\"#\" onclick=\"obtenerDatosUsuario($idDestinoS);\" class=\"hover:text-white d6 m-0 p-2 mb-2\">$nombreDestino</a>";
+                }
+            }
+        }
+
+        $data['destinosOpcion'] = $destinosOpcion;
+        echo json_encode($data);
+    }
 
 
     // CIERRE FINAL

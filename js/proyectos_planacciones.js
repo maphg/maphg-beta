@@ -264,7 +264,7 @@ const datosPlanes = params => {
     var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
     if (params.status == "PENDIENTE") {
         statusPlanaccion = 'planaccion_PENDIENTE';
-        fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion}); nivelVista(1,'modalUsuarios');"`;
+        fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion});"`;
         fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccion'); comentariosPlanaccion(${idPlanaccion}); nivelVista(1,'modalComentarios');"`;
         fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccion'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
         fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccion'); statusPlanaccion(${idPlanaccion}); nivelVista(1,'modalStatus');"`;
@@ -418,8 +418,6 @@ function tooltipEditarEliminarSolucionar(idActividad) {
 
 // OBTIENES LOS PROYECTOS
 function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
-    document.getElementById("modalProyectos").classList.add("open");
-
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSubseccion = localStorage.getItem('idSubseccion');
@@ -916,7 +914,6 @@ function cotizacionesProyectos(idProyecto) {
         },
         dataType: "JSON",
         success: function (data) {
-
             if (data.imagen != "") {
                 document.getElementById("dataImagenes").innerHTML = data.imagen;
                 document.getElementById("contenedorImagenes").classList.remove('hidden');
@@ -1063,6 +1060,7 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         // dataType: "JSON",
         success: function (data) {
             obtenerPlanaccion(idProyecto);
+            obtenerPlanaccionDEP(idProyecto);
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
                 alertaImg("Responsable Actualizado", "", "success", 2500);
@@ -1204,6 +1202,38 @@ function statusPlanaccion(idPlanaccion) {
         },
     });
 }
+
+
+// Comentarios para Planaccion
+function comentariosPlanaccion(idPlanaccion) {
+    document
+        .getElementById("btnComentario")
+        .setAttribute(
+            "onclick",
+            "agregarComentarioPlanaccion(" + idPlanaccion + ")"
+        );
+    document.getElementById("modalComentarios").classList.add("open");
+
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+
+    const action = "comentariosPlanaccion";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlanaccion: idPlanaccion,
+        },
+        // dataType: "JSON",
+        success: function (data) {
+            document.getElementById("dataComentarios").innerHTML = data;
+        },
+    });
+}
+
 
 
 // AGREGAR COMENTARIO PLAN DE ACCIÓN
@@ -1646,6 +1676,47 @@ function actualizarActividadPlanaccion(idActividad, parametro, columna) {
         .catch(function () {
             obtenerPlanaccion(idProyecto);
         });
+}
+
+
+// Muestra los adjuntos de Planaccion
+function adjuntosPlanaccion(idPlanaccion) {
+    document.getElementById("modalMedia").classList.add("open");
+    document.getElementById("contenedorImagenes").classList.add('hidden');
+    document.getElementById("contenedorDocumentos").classList.add('hidden');
+
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let idTabla = idPlanaccion;
+    let tabla = "t_proyectos_planaccion_adjuntos";
+
+    document.getElementById("inputAdjuntos")
+        .setAttribute("onchange", "subirImagenGeneral(" + idPlanaccion + ',"t_proyectos_planaccion_adjuntos")');
+
+    const action = "obtenerAdjuntos";
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idTabla: idTabla,
+            tabla: tabla,
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if (data.imagen != "") {
+                document.getElementById("dataImagenes").innerHTML = data.imagen;
+                document.getElementById("contenedorImagenes").classList.remove('hidden');
+            }
+
+            if (data.documento != "") {
+                document.getElementById("dataAdjuntos").innerHTML = data.documento;
+                document.getElementById("contenedorDocumentos").classList.remove('hidden');
+            }
+        },
+    });
 }
 
 

@@ -161,7 +161,7 @@ if (isset($_POST['action'])) {
                     $dataZIL .= " 
                         <div id=\"colzil\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-green-700 bg-green-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -271,7 +271,7 @@ if (isset($_POST['action'])) {
                             $dataZIL .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -317,7 +317,7 @@ if (isset($_POST['action'])) {
                     $dataZIE .= " 
                         <div id=\"colzie\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-yellow-700 bg-yellow-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -442,7 +442,7 @@ if (isset($_POST['action'])) {
                             $dataZIE .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -488,7 +488,7 @@ if (isset($_POST['action'])) {
                     $dataAUTO .= " 
                         <div id=\"colauto\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-teal-700 bg-teal-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -613,7 +613,7 @@ if (isset($_POST['action'])) {
                             $dataAUTO .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -659,7 +659,7 @@ if (isset($_POST['action'])) {
                     $dataDEC .= " 
                         <div id=\"coldec\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-purple-700 bg-purple-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -785,7 +785,7 @@ if (isset($_POST['action'])) {
                             $dataDEC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -831,7 +831,7 @@ if (isset($_POST['action'])) {
                     $dataDEP .= " 
                         <div id=\"coldep\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-gray-300 bg-gray-900 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -936,7 +936,7 @@ if (isset($_POST['action'])) {
                             $dataDEP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -983,7 +983,7 @@ if (isset($_POST['action'])) {
                     $dataZHA .= " 
                         <div id=\"colzha\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-indigo-700 bg-indigo-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1109,7 +1109,7 @@ if (isset($_POST['action'])) {
                             $dataZHA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1155,7 +1155,7 @@ if (isset($_POST['action'])) {
                     $dataZHC .= " 
                         <div id=\"colzhc\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-orange-700 bg-orange-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1281,7 +1281,7 @@ if (isset($_POST['action'])) {
                             $dataZHC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1327,7 +1327,7 @@ if (isset($_POST['action'])) {
                     $dataZHP .= " 
                         <div id=\"colzhp\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-lightblue-700 bg-lightblue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1453,7 +1453,7 @@ if (isset($_POST['action'])) {
                             $dataZHP .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1499,7 +1499,7 @@ if (isset($_POST['action'])) {
                     $dataZIA .= " 
                         <div id=\"colzia\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1625,7 +1625,7 @@ if (isset($_POST['action'])) {
                             $dataZIA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1672,7 +1672,7 @@ if (isset($_POST['action'])) {
                     $dataZIC .= " 
                         <div id=\"colzic\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-red-700 bg-red-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1797,7 +1797,7 @@ if (isset($_POST['action'])) {
                             $dataZIC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1845,7 +1845,7 @@ if (isset($_POST['action'])) {
                     $dataZHH .= " 
                         <div id=\"colzhh\" class=\"hidden scrollbar flex flex-col justify-center items-center w-22rem mr-4\">
                             <div
-                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative mh\">
+                                class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-cyan-700 bg-cyan-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
                                     <h1 class=\"font-medium text-md\">$seccion</h1>
@@ -1970,7 +1970,7 @@ if (isset($_POST['action'])) {
                             $dataZHH .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -7465,7 +7465,50 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
-        } else {
+        } elseif ($tabla == "t_proyectos_adjuntos_DEP") {
+            $imgNombre = "COT_PROYECTO_DEP_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/proyectos/";
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_proyectos_adjuntos(id_proyecto, url_adjunto, fecha, subido_por, status) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 12;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
+        } elseif($tabla == "t_proyectos_planaccion_adjuntos_DEP"){
+            $imgNombre = "PLANACCION_ID_DEP" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $ruta = "../planner/proyectos/planaccion/";
+
+            if ($img['name'] != "") {
+                if (($img['size'] / 1000) < 100000) {
+                    if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        $query = "INSERT INTO t_proyectos_planaccion_adjuntos(id_actividad, url_adjunto, fecha_creado, subido_por, status) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            echo 13;
+                        } else {
+                            echo 0;
+                        }
+                    } else {
+                        echo 0;
+                    }
+                } else {
+                    echo 2;
+                }
+            } else {
+                echo 1;
+            }
+        }else {
             echo 0;
         }
     }
