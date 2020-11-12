@@ -35,7 +35,7 @@ function buscadorEquipo(idTabla, idInput, columna) {
 
 
 // Buscador Tabla
-function buscdorTabla(idTabla, idInput, columna) {
+function buscadorTabla(idTabla, idInput, columna) {
     var input, filter, table, tr, td, i, txtValue;
     input = document.getElementById(idInput);
     filter = input.value.toUpperCase();

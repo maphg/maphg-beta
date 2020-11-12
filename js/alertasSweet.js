@@ -52,31 +52,12 @@ function alertaMSJ(title, msj, icon) {
 
 // Función de StweetAlert, que recibe parametros, e incluye el logo de MAPHG.
 function alertaImg(text, classColorText, icon, timeAlert) {
-    // const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: 'top-end',
-    //     showConfirmButton: false,
-    //     timer: timeAlert,
-    //     timerProgressBar: true,
-    //     onOpen: (toast) => {
-    //         toast.addEventListener('mouseenter', Swal.stopTimer)
-    //         toast.addEventListener('mouseleave', Swal.resumeTimer)
-    //     }
-    // })
-    // Toast.fire({
-    //     // title: 'Sweet!',
-    //     text: text,
-    //     icon: icon,
-    //     background: '#e2e8f0',
-    //     customClass: {
-    //         container: 'm-1 w-30 text-red-400',
-    //         content: 'mt-3 text-red-400',
-    //         icon: 'mt-3 mx-2 w-5'
-    //     }
-    // })
+    let duration = 10;
+    if (timeAlert > 0) {
+        duration = timeAlert / 1010;
+    }
 
-    alertify.set('notifier', 'position', 'top-right', 'delay', timeAlert);
-
+    alertify.set('notifier', 'position', 'top-right', 'delay', duration);
 
     if (icon == "success") {
         alertify.success(text);
@@ -88,6 +69,8 @@ function alertaImg(text, classColorText, icon, timeAlert) {
         alertify.message(text);
     } else if (icon == "question") {
         alertify.message(text);
+    } else if (icon == "notify") {
+        alertify.notify(text);
     }
 }
 // Ejemplo para llamar a la función.

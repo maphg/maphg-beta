@@ -106,10 +106,10 @@ document.getElementById("exportarStock").addEventListener('click', function () {
 
 // BUSCADOR EN TABLA
 document.getElementById("palabraMaterial").addEventListener('keyup', function () {
-    buscdorTabla('tablaStock', 'palabraMaterial', 2);
+    buscadorTabla('tablaStock', 'palabraMaterial', 2);
 });
 document.getElementById("palabraMaterial").addEventListener('click', function () {
-    buscdorTabla('tablaStock', 'palabraMaterial', 2);
+    buscadorTabla('tablaStock', 'palabraMaterial', 2);
 });
 
 document.getElementById("destinosSelecciona").addEventListener('click', function () {

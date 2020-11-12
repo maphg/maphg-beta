@@ -618,4 +618,235 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+    if ($action == "reporteProyectosGlobal") {
+        $array = array();
+        $fila = 1;
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_proyectos.id_destino = $idDestino";
+        }
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Proyectos");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DESTINO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'PROYECTO');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'CREADO POR');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'PDA(PENDIENTES/TOTAL)');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'RESPONSABLE');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'FECHA INICIO');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'FECHA FIN');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'AÑO');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'COTIZACIONES');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'JUSTIFIACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'COMENTARIOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COSTE');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'MATERIALES');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'ENERGETICOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('R1', 'DEPARTAMENTOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('S1', 'TRABAJANDO');
+
+
+        $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, 
+        t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
+        t_proyectos.tipo, c_secciones.seccion, t_proyectos.status
+        FROM t_proyectos 
+        INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON t_proyectos.id_seccion = c_secciones.id
+        LEFT JOIN t_users ON t_proyectos.creado_por = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_proyectos.activo = 1 $filtroDestino ORDER BY t_proyectos.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $p) {
+                $idProyecto = $p['id'];
+                $creadoPor = $p['nombre'] . " " . $p['apellido'];
+                $destino = $p['destino'];
+                $seccion = $p['seccion'];
+                $titulo = $p['titulo'];
+                $idResponsable = $p['responsable'];
+                $rangoFecha = $p['rango_fecha'];
+                $fechaCreacion = (new DateTime($p['fecha_creacion']))->format('d/m/Y');
+                $año = (new DateTime($p['fecha_creacion']))->format('Y');
+                $justificacion = $p['justificacion'];
+                $coste = $p['coste'];
+                $tipo = $p['tipo'];
+                $status = $p['status'];
+                $fila++;
+
+                #Rango Fecha
+                if ($rangoFecha != "") {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                        $año = $fechaInicio[6] . $fechaInicio[7] . $fechaInicio[8] . $fechaInicio[9];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #Justifiacion
+                if ($justificacion != "") {
+                    $justificacion = "SI";
+                } else {
+                    $justificacion = "NO";
+                }
+
+                #Status de Proyecto
+                if ($status == "N" or $status == "PENDIENTE") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                #Coste
+                if ($coste <= 0) {
+                    $coste = 0;
+                }
+
+                #Obtiene PDA de Proyectos
+                $query = "SELECT id, status FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalActividadesCreadas = 0;
+                    $totalActividadesSolucionadas = 0;
+                    $pda = "";
+                    foreach ($result as $x) {
+                        $idActividad = $x['id'];
+                        $statusActividad = $x['status'];
+                        if ($statusActividad == "N" || $statusActividad == "PENDIENTE") {
+                            $totalActividadesSolucionadas++;
+                        }
+                        $totalActividadesCreadas++;
+                    }
+                    $pda = "$totalActividadesSolucionadas / $totalActividadesCreadas";
+                }
+
+                #Obtiene el Responsable Asignado
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable
+                ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $nombreResponsable = "";
+                    foreach ($result as $x) {
+                        $nombreResponsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #Comentarios de Proyecto
+                $query = "SELECT count(id) FROM t_proyectos_comentarios WHERE id_proyecto = $idProyecto and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalComentarios = 0;
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #Adjuntos de Proyecto
+                $query = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $totalAdjuntos = 0;
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $sMaterialx = 0;
+                    $sEnergeticox = 0;
+                    $sDepartamentox = 0;
+                    $sTrabajandox = 0;
+
+                    foreach ($result as $x) {
+                        $sUrgente = $x['status_urgente'];
+                        $sMaterial = $x['status_material'];
+                        $sTrabajando = $x['status_trabajando'];
+                        $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                        $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+
+                        if ($sUrgente > 0) {
+                            $sUrgentex = 1;
+                        }
+                        if ($sMaterial > 0) {
+                            $sMaterialx = 1;
+                        }
+                        if ($sTrabajando > 0) {
+                            $sTrabajandox = 1;
+                        }
+                        if ($sEnergetico > 0) {
+                            $sEnergeticox = 1;
+                        }
+                        if ($sDepartamento >= 1) {
+                            $sDepartamentox = 1;
+                        }
+                    }
+                }
+
+                $arrayTemp = array(
+                    "id" => $idProyecto,
+                    "destino" => $destino,
+                    "seccion" => $seccion,
+                    "proyecto" => $titulo,
+                    "creadoPor" => $creadoPor,
+                    "pda" => $pda,
+                    "responsable" => $nombreResponsable,
+                    "fechaInicio" => $fechaInicio, "fechaFin" => $fechaFin,
+                    "año" => $año,
+                    "cotizaciones" => $totalAdjuntos,
+                    "tipo" => $tipo,
+                    "justificacion" => $justificacion,
+                    "comentarios" => $totalComentarios,
+                    "coste" => $coste,
+                    "status" => $status,
+                    "materiales" => intval($sMaterialx),
+                    "energeticos" => intval($sEnergeticox),
+                    "departamento" => intval($sDepartamentox),
+                    "trabajando" => intval($sTrabajandox)
+                );
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $titulo);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $creadoPor);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $pda);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $nombreResponsable);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $fechaInicio);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $fechaFin);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $año);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $totalAdjuntos);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $justificacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $totalComentarios);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $coste);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, intval($sMaterialx));
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, intval($sEnergeticox));
+                $objPHPExcel->getActiveSheet()->setCellValue('R' . $fila, intval($sDepartamentox));
+                $objPHPExcel->getActiveSheet()->setCellValue('S' . $fila, intval($sTrabajandox));
+            }
+        }
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_PROYECTOS_GLOBAL_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
 }

@@ -7035,7 +7035,6 @@ if (isset($_POST['action'])) {
         $idPlanaccion = $_POST['idPlanaccion'];
         $actividad = $_POST['actividad'];
         $idSeccion = $_POST['idSeccion'];
-        $codigoSeguimiento = isset($_POST['codigoSeguimiento']);
 
         if ($columna == "asignarPlanaccion" and $valor > 0) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
@@ -7106,31 +7105,32 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "status_material") {
-            $select = "SELECT status_material FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
-            if ($result = mysqli_query($conn_2020, $select)) {
-                foreach ($result as $value) {
-                    $dato = $value['status_material'];
-                    if ($dato == 1) {
-                        $valor = 0;
-                    } else {
-                        $valor = 1;
-                    }
+            $codigoSeguimiento = $_POST['codigoSeguimiento'];
+            if ($codigoSeguimiento != "") {
+                $select = "SELECT status_material FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+                if ($result = mysqli_query($conn_2020, $select)) {
+                    foreach ($result as $value) {
+                        $dato = $value['status_material'];
+                        if ($dato == 1) {
+                            $valor = 0;
+                        } else {
+                            $valor = 1;
+                        }
 
-                    if ($codigoSeguimiento != "") {
-                        $query = "UPDATE t_proyectos_planaccion SET status_material = '1', cod2bend = '$codigoSeguimiento' WHERE id = $idPlanaccion";
+                        $query = "UPDATE t_proyectos_planaccion SET status_material = '$valor', cod2bend = '$codigoSeguimiento'  WHERE id = $idPlanaccion";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             echo 7;
-                        } else {
-                            echo 0;
-                        }
-                    } else {
-                        $query = "UPDATE t_proyectos_planaccion SET status_material = '0' WHERE id = $idPlanaccion";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            echo 8;
-                        } else {
-                            echo 0;
                         }
                     }
+                }
+            }
+        } elseif ($columna == "rango_fecha") {
+            $rangoFecha = $_POST['rangoFecha'];
+            if ($rangoFecha != "") {
+                $query = "UPDATE t_proyectos_planaccion SET rango_fecha = '$rangoFecha'
+                WHERE id = $idPlanaccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    echo 8;
                 }
             } else {
                 echo 0;
@@ -7486,7 +7486,7 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
-        } elseif($tabla == "t_proyectos_planaccion_adjuntos_DEP"){
+        } elseif ($tabla == "t_proyectos_planaccion_adjuntos_DEP") {
             $imgNombre = "PLANACCION_ID_DEP" . $idTabla . "_$aleatorio" . $nombreTratado;
             $ruta = "../planner/proyectos/planaccion/";
 
@@ -7508,7 +7508,7 @@ if (isset($_POST['action'])) {
             } else {
                 echo 1;
             }
-        }else {
+        } else {
             echo 0;
         }
     }

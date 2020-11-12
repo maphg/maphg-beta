@@ -5364,12 +5364,12 @@ function obtenerTodosPendientes() {
 // FUNCION UNIVERSAL PARA LA TABLA #dataPendientesX
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraFallaTarea").addEventListener('keyup', function () {
-   buscdorTabla('dataPendientesX', 'palabraFallaTarea', 0);
+   buscadorTabla('dataPendientesX', 'palabraFallaTarea', 0);
 });
 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraEquipoAmerica").addEventListener('keyup', function () {
-   buscdorTabla('contenedorEquiposAmerica', 'palabraEquipoAmerica', 0);
+   buscadorTabla('contenedorEquiposAmerica', 'palabraEquipoAmerica', 0);
 });
 
 
@@ -5384,6 +5384,9 @@ function reporteEquipos() {
    const action = "reporteEquipos";
    const URL = `php/exportar_excel_GET.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
    window.location = URL;
+   setTimeout(() => {
+      alertaImg('Generando Reporte...', '', 'success', 1200);
+   }, 820);
 }
 
 function reporteFallas(idEquipo) {
@@ -5393,6 +5396,9 @@ function reporteFallas(idEquipo) {
    const action = "reporteFallas";
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
    window.location = URL;
+   setTimeout(() => {
+      alertaImg('Generando Reporte...', '', 'success', 1200);
+   }, 820);
 }
 
 function reporteTareas(idEquipo) {
@@ -5404,6 +5410,9 @@ function reporteTareas(idEquipo) {
    const action = "reporteTareas";
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
    window.location = URL;
+   setTimeout(() => {
+      alertaImg('Generando Reporte...', '', 'success', 1200);
+   }, 820);
 }
 
 
@@ -5531,5 +5540,49 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
       })
 }
 
+
+function obtenerPendientesUsuario() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerPendientesUsuario";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   document.getElementById("loadPendientes").innerHTML =
+      '<i class="fa fa-spinner fa-pulse fa-2x"></i>';
+
+   setTimeout(function () {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array) {
+               console.log(array);
+               document.getElementById("totalPendientesFallas").
+                  innerHTML = `Fallas (${array.totalFallas})`;
+               document.getElementById("totalPendientesTareas").
+                  innerHTML = `Tareas (${array.totalTareas})`;
+               document.getElementById("totalPendientesPDA").
+                  innerHTML = `PDA (${array.totalProyectos})`;
+
+               const codigo = `
+                  <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
+                     <h1 class="truncate mr-2">ZIA - PTAR Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, illum. Doloremque illum impedit, accusamus explicabo odit asperiores similique aspernatur eum maiores eveniet facilis labore nostrum voluptatem culpa perferendis obcaecati tempora!</h1>
+                     <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
+                        <h1>2</h1>
+                     </div>
+                  </div>
+               `;
+            }
+         })
+         .then(() => {
+            document.getElementById("loadPendientes").innerHTML = '';
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   }, 4000);
+}
+
+
 // Función para comprobar session.
 comprobarSession();
+window.onload(obtenerPendientesUsuario());

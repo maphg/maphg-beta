@@ -661,7 +661,6 @@ try {
     });
 
     function ocultar(id) {
-        console.log(id);
         if (id == "divServicios") {
             $("#divMateriales").css('display', 'none');
             $("#divServicios").css('display', 'block');

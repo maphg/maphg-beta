@@ -145,7 +145,7 @@
                 <a href="https://www.maphg.com/beta/gestion_equipos" class="menu-hijo-3 CA">Equipos</a>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">Proyectos</o>
+                <a href="https://www.maphg.com/beta/proyectos_global.php" class="menu-hijo-3 CA">Proyectos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Entregas</o>

@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/planner_cols.css">
+
     <style>
         .contenedor {
             width: 100%;
@@ -171,13 +172,10 @@
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-martes" class="text-sm font-bold mr-4">MARTES</h1>
-
-                        <h1 onclick="botones('zhh');" id="btn-zhh" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
-                            ZHH
-                        </h1>
                         <h1 onclick="botones('zic');" id="btn-zic" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIC
                         </h1>
+                        <h1 class="w-8 h-8 mr-2"></h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-miercoles" class=" text-sm font-bold mr-4">MIERCOLES</h1>
@@ -210,7 +208,9 @@
                         <h1 onclick="botones('dep');" id="btn-dep" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             DEP
                         </h1>
-                        <h1 class="w-8 h-8 mr-2"></h1>
+                        <h1 onclick="botones('zhh');" id="btn-zhh" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHH
+                        </h1>
                     </div>
                 </div>
             </div>
@@ -223,38 +223,26 @@
                             <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
                                 <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute  py-2 text-cyan-700 text-2xl" style="top: -20px;">
                                     <i class="fad fa-clipboard-list-check "></i>
-                                    <h1 class="text-xs ml-2">Mis pendientes</h1>
+                                    <h1 class="text-xs ml-2">Mis pendientes <span id="loadPendientes" class="text-cyan-900 ml-2"></span></h1>
                                 </div>
                                 <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
                                     <div class="flex text-xs font-semibold my-3 justify-center items-center w-full">
                                         <div class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/3 text-center cursor-pointer">
-                                            <h1>Fallas (77)</h1>
+                                            <h1 id="totalPendientesFallas">Fallas (0)</h1>
                                         </div>
                                         <div class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer">
-                                            <h1>Tareas (20)</h1>
+                                            <h1 id="totalPendientesTareas">Tareas (0)</h1>
                                         </div>
                                         <div class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/3 text-center cursor-pointer">
-                                            <h1>PDA (77)</h1>
+                                            <h1 id="totalPendientesPDA">PDA (0)</h1>
                                         </div>
 
                                     </div>
 
 
-                                    <div class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
-                                        <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                                            <h1 class="truncate mr-2">ZIA - PTAR Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, illum. Doloremque illum impedit, accusamus explicabo odit asperiores similique aspernatur eum maiores eveniet facilis labore nostrum voluptatem culpa perferendis obcaecati tempora!</h1>
-                                            <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                                <h1>2</h1>
-                                            </div>
-                                        </div>
-
-                                        <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" onclick="actualizarSeccionSubseccion(23, 200); obtenerProyectos(23, 'PENDIENTE');">
-                                            <h1 class="truncate mr-2">ZIC - TABLEROS SECUNDARIOS</h1>
-                                            <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                                                <h1>53</h1>
-                                            </div>
-                                        </div>
+                                    <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -2425,7 +2413,7 @@
                 </div>
             </div>
             <div class="flex flex-row items-center pt-10">
-                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="---">
+                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="" autocomplete="off">
             </div>
         </div>
     </div>
@@ -2442,7 +2430,7 @@
             </div>
             <!-- INDICACION -->
             <div class="flex flex-row items-center pt-10">
-                <input id="fechaTareas" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaTareas" value="---">
+                <input id="fechaTareas" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaTareas" value="" autocomplete="off">
             </div>
         </div>
     </div>
@@ -2609,7 +2597,7 @@
                 </div>
             </div>
             <div class="flex flex-row items-center pt-10">
-                <input id="fechaProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaProyecto" value="--" autocomplete="off">
+                <input id="fechaProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaProyecto" value="" autocomplete="off">
             </div>
         </div>
     </div>

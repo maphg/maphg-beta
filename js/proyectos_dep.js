@@ -1663,6 +1663,6 @@ document.getElementById("btnCerrerModalProyectosDEP").addEventListener('click', 
 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyectoDEP").addEventListener('keyup', function () {
-    buscdorTabla('contenedorDeProyectosDEP', 'palabraProyectoDEP', 0);
-    buscdorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
+    buscadorTabla('contenedorDeProyectosDEP', 'palabraProyectoDEP', 0);
+    buscadorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
 });

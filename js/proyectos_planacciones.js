@@ -566,7 +566,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 obtenerProyectos(idSeccion, "PENDIENTE");
                 document.getElementById("modalActualizarProyecto")
                     .classList.remove("open");
-                alertaImg("Justifiacion Actualizado", "", "success", 2000);
+                alertaImg("Justifiación Actualizado", "", "success", 2000);
             } else if (data == 3) {
                 obtenerProyectos(idSeccion, "PENDIENTE");
                 document.getElementById("modalActualizarProyecto")
@@ -1206,13 +1206,10 @@ function statusPlanaccion(idPlanaccion) {
 
 // Comentarios para Planaccion
 function comentariosPlanaccion(idPlanaccion) {
-    document
-        .getElementById("btnComentario")
-        .setAttribute(
-            "onclick",
-            "agregarComentarioPlanaccion(" + idPlanaccion + ")"
-        );
     document.getElementById("modalComentarios").classList.add("open");
+
+    document.getElementById("btnComentario")
+        .setAttribute("onclick", "agregarComentarioPlanaccion(" + idPlanaccion + ")");
 
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
@@ -1728,7 +1725,7 @@ document.getElementById("exportarProyectos").addEventListener('click', function 
 
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 document.getElementById("palabraProyecto").addEventListener('keyup', function () {
-    buscdorTabla('contenedorDeProyectos', 'palabraProyecto', 0);
+    buscadorTabla('contenedorDeProyectos', 'palabraProyecto', 0);
 });
 
 // EVENTO PARA PROYECTOS SOLUCIONADOS

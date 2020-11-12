@@ -563,13 +563,14 @@ if (isset($_GET['action'])) {
         $sTrabajare = 0;
         $sCalidad = 0;
         $sCompras = 0;
-        $SDireccion = 0;
+        $sDireccion = 0;
         $sFinanzas = 0;
         $sRRHH = 0;
         $sElectricidad = 0;
         $sAgua = 0;
         $sDiesel = 0;
         $sGas = 0;
+        $titulo = "";
 
         if ($tipoRegistro == "FALLA") {
             $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas FROM t_mc WHERE id = $idRegistro";
@@ -605,6 +606,53 @@ if (isset($_GET['action'])) {
                     $sDiesel = $x['energetico_diesel'];
                     $sGas = $x['energetico_gas'];
                     $titulo = $x['titulo'];
+                }
+            }
+        } elseif ($tipoRegistro == "PROYECTO") {
+            $query = "SELECT titulo, status_material, status_trabajare
+            -- departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, 
+            -- energetico_diesel, energetico_gas 
+            FROM t_proyectos WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajare'];
+                    // $sCalidad = $x['departamento_calidad'];
+                    // $sCompras = $x['departamento_compras'];
+                    // $sDireccion = $x['departamento_direccion'];
+                    // $sFinanzas = $x['departamento_finanzas'];
+                    // $sRRHH = $x['departamento_rrhh'];
+                    // $sElectricidad = $x['energetico_electricidad'];
+                    // $sAgua = $x['energetico_agua'];
+                    // $sDiesel = $x['energetico_diesel'];
+                    // $sGas = $x['energetico_gas'];
+                    $titulo = $x['titulo'];
+                }
+            }
+        } elseif ($tipoRegistro == "PLANACCION") {
+            $query = "SELECT actividad, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas FROM t_proyectos_planaccion WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajando'];
+                    $sCalidad = $x['departamento_calidad'];
+                    $sCompras = $x['departamento_compras'];
+                    $sDireccion = $x['departamento_direccion'];
+                    $sFinanzas = $x['departamento_finanzas'];
+                    $sRRHH = $x['departamento_rrhh'];
+                    $sElectricidad = $x['energetico_electricidad'];
+                    $sAgua = $x['energetico_agua'];
+                    $sDiesel = $x['energetico_diesel'];
+                    $sGas = $x['energetico_gas'];
+                    $titulo = $x['actividad'];
+                }
+            }
+        } elseif ($tipoRegistro == "ACTIVIDADPLANACCION") {
+            $query = "SELECT actividad FROM t_proyectos_planaccion_actividades 
+            WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $titulo = $x['actividad'];
                 }
             }
         }
@@ -679,7 +727,7 @@ if (isset($_GET['action'])) {
             "sGas" => intval($sGas),
             "sDepartamentos" => intval($sCompras) + intval($sDireccion) + intval($sCalidad) + intval($sFinanzas) + intval($sRRHH),
             "sEnergeticos" => intval($sAgua) + intval($sDiesel) + intval($sGas) + intval($sElectricidad),
-            "titulo"=> $titulo
+            "titulo" => $titulo
         );
 
         echo json_encode($array);
@@ -744,6 +792,89 @@ if (isset($_GET['action'])) {
         echo json_encode($data);
     }
 
+
+    if ($action == "obtenerPendientesUsuario") {
+        $arrayIndex = array();
+        $array = array();
+        $totalFallas = 0;
+        $totalTareas = 0;
+        $totalProyectos = 0;
+        $totalMP = 0;
+
+        $query = "SELECT id, actividad FROM t_mc WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalFallas++;
+                $idFalla = $x['id'];
+                $actividad = $x['actividad'];
+
+                $arrayTemp = array(
+                    "idPendiente" => intval($idFalla),
+                    "actividad" => $actividad,
+                    "tipoPendiente" => "FALLA"
+                );
+                $arrayIndex[] = $arrayTemp;
+            }
+        }
+
+        $query = "SELECT id, titulo FROM t_mp_np WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalTareas++;
+                $idTarea = $x['id'];
+                $actividad = $x['titulo'];
+
+                $arrayTemp = array(
+                    "idPendiente" => intval($idTarea),
+                    "actividad" => $actividad,
+                    "tipoPendiente" => "TAREA"
+                );
+                $arrayIndex[] = $arrayTemp;
+            }
+        }
+
+        $query = "SELECT id, id_plan FROM t_mp_planificacion_iniciada WHERE id_responsables IN($idUsuario) and activo = 1 
+        and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalMP++;
+                $idMP = $x['id'];
+                $actividad = $x['id_plan'];
+
+                $arrayTemp = array(
+                    "idPendiente" => intval($idMP),
+                    "actividad" => "MP",
+                    "tipoPendiente" => "MP"
+                );
+                $arrayIndex[] = $arrayTemp;
+            }
+        }
+
+        $query = "SELECT id, titulo FROM t_proyectos WHERE responsable = $idUsuario and activo = 1 
+        and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalProyectos++;
+                $idProyecto = $x['id'];
+                $actividad = $x['titulo'];
+
+                $arrayTemp = array(
+                    "idPendiente" => intval($idProyecto),
+                    "actividad" => $actividad,
+                    "tipoPendiente" => "PROYECTO"
+                );
+                $arrayIndex[] = $arrayTemp;
+            }
+        }
+
+        $array['totalFallas'] = $totalFallas;
+        $array['totalTareas'] = $totalTareas;
+        $array['totalProyectos'] = $totalProyectos;
+        $array['totalMP'] = $totalMP;
+        $array['pendientes'] = $arrayIndex;
+
+        echo json_encode($array);
+    }
 
     // CIERRE FINAL
 }
