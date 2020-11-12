@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="css/alertify.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <style>
         #arrowtooltipActividadesGeneral,
         #arrowtooltipActividadesGeneral::before {
@@ -886,9 +887,9 @@
 <!-- JS OPCIONALES -->
 
 <!-- DATERANGEPICKER -->
-<script src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script src="js/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <!-- DATERANGEPICKER -->
 
 <!-- JS PARA ORDENAMIENTO DE TABLAS -->
@@ -925,6 +926,5 @@
 <!-- JS POPPER -->
 <script src="js/popper.min.js"></script>
 <!-- JS POPPER -->
-
 
 </html>
