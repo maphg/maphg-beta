@@ -59,7 +59,7 @@ function consultaResponsablesOT(idOT) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultaResponsablesOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
-    console.log(URL);
+
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -125,7 +125,7 @@ function consultaActividadesOT(idOT) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "consultaActividadesOT";
     const URL = `../php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
-    console.log(URL);
+
     fetch(URL)
         .then(res => res.json())
         .then(array => {

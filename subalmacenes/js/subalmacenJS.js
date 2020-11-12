@@ -1129,8 +1129,6 @@ consultaSubalmacen();
 
 // Funciones de Prueba.
 // function obtnerValorHTML(id) {
-//   console.log($("#" + id).html());
 // }
 // function obtnerValorINPUT(id) {
-//   console.log($("#" + id).html());
 // }

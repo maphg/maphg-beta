@@ -1863,7 +1863,6 @@ if ($result) {
     }
 
     function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
-        // console.log(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar);
         const action = "consultaFinalExcel";
         $.ajax({
             type: "POST",
@@ -1878,8 +1877,6 @@ if ($result) {
             },
             dataType: "JSON",
             success: function(data) {
-                console.log(data.listaIdT);
-                console.log(data.listaIdF);
                 let usuarioSession = localStorage.getItem('usuario');
 
                 if (tipoExportar == "exportarMisPendientes") {
@@ -1965,7 +1962,6 @@ if ($result) {
             },
             // dataType: "JSON",
             success: function(data) {
-                console.log(data);
                 document.getElementById("modalExportarSeccionesUsuarios").classList.add('open');
                 document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
             }
@@ -2018,7 +2014,6 @@ if ($result) {
             },
             dataType: "JSON",
             success: function(data) {
-                console.log(data);
                 document.getElementById("tipoPendienteVP").innerHTML =
                     tipoPendiente + ': ' + data.idPendiente;
                 document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;

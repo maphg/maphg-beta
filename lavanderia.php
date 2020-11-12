@@ -173,7 +173,6 @@
 
         // Función para mostrar la VISTA de CAMARAS
         function camaras() {
-            console.log("camaras");
             document.getElementById("graficos").classList.add('hidden');
             document.getElementById("camaras").classList.remove('hidden');
             document.getElementById("pendientes").classList.add('hidden');
@@ -190,7 +189,6 @@
             let idDestino = localStorage.getItem('idDestino');
             let idUsuario = localStorage.getItem('usuario');
             localStorage.setItem('idSeccion', 11);
-            console.log('Usuario:' + idUsuario, 'Desitno:' + idDestino)
 
             document.getElementById("graficos").classList.add('hidden');
             document.getElementById("camaras").classList.add('hidden');

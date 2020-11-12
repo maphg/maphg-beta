@@ -1075,7 +1075,6 @@ if (isset($_GET['upload']) && !FM_READONLY) {
                         alert('Error: Server Timeout');
                     });
                 }).on("success", function (res) {
-                    console.log('Upload Status >> ', res.status);
                 }).on("error", function(file, response) {
                     alert(response);
                 });

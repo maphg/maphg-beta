@@ -9,7 +9,6 @@ function toggleModal(idModal) {
 
 
 function consultaSubalmacen() {
-    console.log('HERE TWO');
     const action = "consultaSubalmacen";
     $.ajax({
         type: "POST",
@@ -22,7 +21,6 @@ function consultaSubalmacen() {
             $("#subalmacenGP").html(data.dataGP);
             $("#subalmacenTRS").html(data.dataTRS);
             $("#subalmacenZI").html(data.dataZI);
-            console.log('Here', data);
         }
     });
 }
@@ -61,7 +59,6 @@ function eliminarSubalmacen(idSubalmacen = 0, nombre = 'error') {
             },
             // dataType: "json",
             success: function (response) {
-                console.log(response);
                 consultaSubalmacen();
             }
         });
@@ -129,7 +126,6 @@ async function editarSubalmacen(idSubalmacen, nombre) {
                 tituloSubalmacen: tituloSubalmacen
             },
             success: function (response) {
-                console.log('--' + response + '--');
                 consultaSubalmacen();
                 // Swal.fire(`Subalamcen Actualizado: ${tituloSubalmacen}`)
                 alertaImg(response, 'text-green-600', 'success', 3000);

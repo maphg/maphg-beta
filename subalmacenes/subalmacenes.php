@@ -2291,7 +2291,6 @@ if (isset($_SESSION['usuario'])) {
     <script>
         function expandir(id) {
             let idtoggle = id + 'toggle';
-            console.log(idtoggle);
             let toggle = document.getElementById(idtoggle);
             // toggle.classList.toggle("hidden");
             $("#" + idtoggle).toggleClass('hidden');

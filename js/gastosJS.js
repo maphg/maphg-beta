@@ -531,7 +531,7 @@ function guardarSC() {
             cont = 0;
         }
     }
-    console.log(productos);//productos es un array que contiene n arrays (n productos)
+    //productos es un array que contiene n arrays (n productos)
     var data = 'action=2&idDestino=' + idDestino + '&tipoGasto=' + tipoGasto + '&numDoc=' + numDoc + '&fechaSol=' + fechaApr
             + '&fechaPosibleLlegada=' + fechaPosibleInicio + '&proveedor=' + proveedor + '&idPresupuesto=' + presupuesto + '&seccion=' + seccion + '&ubicacion=' + ubicacion
             + '&items=' + JSON.stringify(productos);
@@ -589,7 +589,7 @@ function guardarS() {
             cont = 0;
         }
     }
-    console.log(productos);//productos es un array que contiene n arrays (n productos)
+    //productos es un array que contiene n arrays (n productos)
     var data = 'action=2&idDestino=' + idDestino + '&tipoGasto=' + tipoGasto + '&numDoc=' + numDoc + '&fechaSol=' + fechaApr
             + '&fechaPosibleLlegada=' + fechaPosibleInicio + '&proveedor=' + proveedor + '&idPresupuesto=' + presupuesto + '&seccion=' + seccion + '&ubicacion=' + ubicacion
             + '&items=' + JSON.stringify(productos);

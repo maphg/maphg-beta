@@ -2297,7 +2297,6 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
          document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
          document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
@@ -5547,7 +5546,6 @@ function obtenerPendientesUsuario() {
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   console.log(URL);
    document.getElementById("loadPendientes").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x"></i>';
 

@@ -1,3 +1,6 @@
+// API PARA REPORTE DE ERRORES
+const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+
 function validarOT() {
     let URL = window.location.hash;
     const idOT = URL.replace(/#|T|F|/gi, '');
@@ -21,7 +24,7 @@ function generarOT(idOT, tipo) {
     let idUsuario = localStorage.getItem('usuario');
     const action = "generarOT";
     const URL = `php/ot_fallas_tareas.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&tipo=${tipo}`;
-    console.log(URL);
+
     fetch(URL)
         .then((array) => array.json())
         .then(array => {
@@ -76,7 +79,7 @@ function generarOT(idOT, tipo) {
 
         })
         .catch(function (err) {
-            console.log(err);
+            fetch(APIERROR + err);
         })
 }
 

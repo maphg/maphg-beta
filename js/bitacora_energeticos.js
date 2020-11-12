@@ -394,7 +394,6 @@ function agregarAcontecimiento(idDestino, opcion, fechaSeleccionada) {
         },
         dataType: 'json',
         success: function(datos) {
-            console.log(datos.respuestaAgregar);
             $("#acontecimientosTitulo").val('');
             $("#acontecimientosDescripcion").val('');
             alertInformacion('Acontecimiento Agregado.', 'success');

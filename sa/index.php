@@ -531,7 +531,6 @@ try {
 
             if (action == "Actualizar") {
                 var idSubalmacen = $("#optionId").val();
-                console.log(idSubalmacen);
 
                 $.ajax({
 

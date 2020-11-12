@@ -1304,7 +1304,6 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             obtenerPlanaccion(idProyecto);
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
@@ -1587,11 +1586,10 @@ function tooltipEditarEliminarSolucionar(idActividad) {
 
     const action = "obtenerStatus";
     const URL = `php/select_REST_planner.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idRegistro=${idActividad}&tipoRegistro=ACTIVIDADPLANACCION`;
-    console.log(URL);
+
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array)
             document.getElementById("editarTituloActividad").value = array[0].titulo;
         })
         .catch(function (err) {

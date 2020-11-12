@@ -59,7 +59,6 @@ function graficaHistorico(idDestino, idSeccion) {
       dateAxis.zoomToDates(
         new Date(2020, 08, 01),
         new Date(2020, 08, 08),
-        console.log(3)
       );
     });
 

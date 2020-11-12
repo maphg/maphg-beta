@@ -676,7 +676,6 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {

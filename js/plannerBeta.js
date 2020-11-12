@@ -844,7 +844,6 @@ function consultarCodigoSeguimientoTareaas(idTareaP, idEquipo, equipo, columna) 
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             document.getElementById("inputCodigoSeguimientoTareas").value = data;
         }
     });
@@ -852,7 +851,6 @@ function consultarCodigoSeguimientoTareaas(idTareaP, idEquipo, equipo, columna) 
 
 
 function verSolucionados(idTareaP) {
-    console.log(idTareaP);
     $(".actividadSolucionada" + idTareaP).toggleClass("is-sr-only");
 }
 
@@ -869,7 +867,6 @@ function finalizarTareaP(idTarea, idEquipo, equipo, status) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (data == 1) {
                 alertInformacion('Tarea Finalizada', 'success');
                 obtTareasP(idEquipo, equipo);
@@ -892,7 +889,6 @@ function obtDatosTarea(idTarea, titulo, idEquipo, equipo) {
 }
 
 function actualizarTarea(idTarea, idEquipo, equipo, columna) {
-    console.log(idTarea, idEquipo, equipo, columna);
     let titulo = document.getElementById("nuevoTituloTP").value;
     const action = "actualizarTarea";
     $.ajax({
@@ -906,7 +902,6 @@ function actualizarTarea(idTarea, idEquipo, equipo, columna) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             if (data == 1) {
                 alertInformacion('Título Actualizado', 'success');
                 obtTareasP(idEquipo, equipo);
@@ -996,7 +991,6 @@ function obtComentariosTarea(idEquipo, equipo, idTareaP, titulo) {
         },
         dataType: "JSON",
         success: function (data) {
-            console.log(data);
             document.getElementById("dataComentariosTareas").innerHTML = data.dataComentarios;
             document.getElementById("dataHeaderComentarios").innerHTML = data.dataHeaderComentario;
         }
@@ -1029,7 +1023,6 @@ function eliminarComentarioTarea(idComentario, idEquipo, equipo, idTareaP, titul
 
 
 function agregarComentarioTarea(idEquipo, equipo, idTareaP, titulo) {
-    console.log('Agregar Comentario');
     let comentario = document.getElementById("textComentarioTareas").value;
 
     var action = "agregarComentarioMPNP";

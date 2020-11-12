@@ -3,7 +3,7 @@ function obtenerProyecto(idProyecto) {
     let idDestino = localStorage.getItem('idDestino');
     const action = "obtenerProyecto";
     const URL = `php/generar_reporte_proyectos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
-    console.log(URL);
+
     fetch(URL)
         .then(res => res.json())
         .then(array => {

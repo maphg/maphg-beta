@@ -115,7 +115,6 @@
         originalinput.data('spinnerid', _currentSpinnerId);
 
         if (!originalinput.is('input')) {
-          console.log('Must be an input.');
           return;
         }
 
