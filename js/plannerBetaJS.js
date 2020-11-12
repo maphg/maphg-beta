@@ -2297,6 +2297,7 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
+         console.log(data);
          document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
          document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
          document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
@@ -5546,43 +5547,73 @@ function obtenerPendientesUsuario() {
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-
+   console.log(URL);
    document.getElementById("loadPendientes").innerHTML =
       '<i class="fa fa-spinner fa-pulse fa-2x"></i>';
 
-   setTimeout(function () {
-      fetch(URL)
-         .then(array => array.json())
-         .then(array => {
-            if (array) {
-               console.log(array);
-               document.getElementById("totalPendientesFallas").
-                  innerHTML = `Fallas (${array.totalFallas})`;
-               document.getElementById("totalPendientesTareas").
-                  innerHTML = `Tareas (${array.totalTareas})`;
-               document.getElementById("totalPendientesPDA").
-                  innerHTML = `PDA (${array.totalProyectos})`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
 
-               const codigo = `
-                  <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
-                     <h1 class="truncate mr-2">ZIA - PTAR Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, illum. Doloremque illum impedit, accusamus explicabo odit asperiores similique aspernatur eum maiores eveniet facilis labore nostrum voluptatem culpa perferendis obcaecati tempora!</h1>
-                     <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                        <h1>2</h1>
-                     </div>
-                  </div>
-               `;
+         document.getElementById("dataPendientesUsuario").innerHTML = '';
+
+         if (array) {
+            document.getElementById("totalPendientesFallas").
+               innerHTML = `Fallas (${array.totalFallas})`;
+            document.getElementById("totalPendientesTareas").
+               innerHTML = `Tareas (${array.totalTareasX})`;
+            document.getElementById("totalPendientesPDA").
+               innerHTML = `PDA (${array.totalProyectos})`;
+
+            if (array.pendientes.length > 0) {
+               for (let x = 0; x < array.pendientes.length; x++) {
+                  const idPendiente = array.pendientes[x].idPendiente;
+                  const tipoPendiente = array.pendientes[x].tipoPendiente;
+                  const seccion = array.pendientes[x].seccion;
+                  const actividad = array.pendientes[x].actividad;
+                  let fVerEnPlanner = '';
+
+                  if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
+                     fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente});"`;
+                  } else if (tipoPendiente == 'FALLA') {
+                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente});"`;
+                  }
+
+                  const codigo = `
+                        <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center"
+                        ${fVerEnPlanner}>
+                           <h1 class="truncate mr-2">
+                              ${seccion + ' - ' + tipoPendiente + ' - ' + actividad}
+                           </h1>
+                           <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
+                              <h1>1</h1>
+                           </div>
+                        </div>   
+                     `;
+
+                  document.getElementById("dataPendientesUsuario").
+                     insertAdjacentHTML('beforeend', codigo);
+               }
+            } else {
+               alertaImg('Sin Pendientes', '', 'success', 3000);
             }
-         })
-         .then(() => {
-            document.getElementById("loadPendientes").innerHTML = '';
-         })
-         .catch(function (err) {
-            fetch(APIERROR + err);
-         })
-   }, 4000);
+
+         }
+      })
+      .then(() => {
+         document.getElementById("loadPendientes").innerHTML = '';
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
 }
 
 
-// Función para comprobar session.
 comprobarSession();
-window.onload(obtenerPendientesUsuario());
+obtenerPendientesUsuario();
+
+
+// FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
+setInterval(function () {
+   obtenerPendientesUsuario();
+}, 60000);

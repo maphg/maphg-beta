@@ -239,11 +239,10 @@
 
                                     </div>
 
-
                                     <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
                                     </div>
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -650,7 +649,7 @@
                     <i class="fas fa-plus ga-lg"></i>
                 </div>
                 <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
-                    <img id="QREquipo" class="" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/#">
+                    <img id="QREquipo">
                 </div>
                 <div id="dataImagenesEquipo" class="w-full h-32 overflow-x-auto scrollbar flex items-center"></div>
             </div>
@@ -1342,7 +1341,7 @@
                 </div>
             </div>
             <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-center items-center w-full pb-6">
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
                 <div class="mb-3 flex flex-col w-full leading-none">
                     <h1 id="descripcionPendienteVP" class="px-2 py-1 w-full text-xl font-medium uppercase" style="color: #282B3B;"></h1>
                     <h1 class="px-2 py-1 w-full text-xs font-medium" style="color: #ABADB7;">Creado por:

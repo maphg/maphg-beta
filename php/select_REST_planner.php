@@ -798,36 +798,77 @@ if (isset($_GET['action'])) {
         $array = array();
         $totalFallas = 0;
         $totalTareas = 0;
+        $totalTareasGenerales = 0;
         $totalProyectos = 0;
         $totalMP = 0;
 
-        $query = "SELECT id, actividad FROM t_mc WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P')";
+        // $query = "SELECT id, id_equipo FROM t_mp_np WHERE id_seccion = 0";
+        // if ($result  = mysqli_query($conn_2020, $query)) {
+        //     foreach ($result as $x) {
+        //         $id = $x['id'];
+        //         $idEquipo = $x['id_equipo'];
+        //         $query = "SELECT id_seccion, id_subseccion FROM t_equipos WHERE id = $idEquipo";
+        //         if ($result = mysqli_query($conn_2020, $query)) {
+        //             foreach ($result as $x) {
+        //                 $idSeccion = $x['id_seccion'];
+        //                 $idSubseccion = $x['id_subseccion'];
+
+        //                 $query = "UPDATE t_mp_np SET id_seccion = $idSeccion, id_subseccion = $idSubseccion WHERE id = $id";
+        //                 if ($result = mysqli_query($conn_2020, $query)) {
+        //                     echo 1;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        $query = "SELECT t_mc.id, t_mc.actividad, c_secciones.seccion
+        FROM t_mc 
+        INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
+        WHERE t_mc.responsable = $idUsuario and t_mc.activo = 1 and 
+        (t_mc.status = 'N' or t_mc.status = 'PENDIENTE' or t_mc.status = 'P')";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalFallas++;
                 $idFalla = $x['id'];
+                $seccion = $x['seccion'];
                 $actividad = $x['actividad'];
 
                 $arrayTemp = array(
                     "idPendiente" => intval($idFalla),
-                    "actividad" => $actividad,
-                    "tipoPendiente" => "FALLA"
+                    "tipoPendiente" => "FALLA",
+                    "seccion" => $seccion,
+                    "actividad" => $actividad
                 );
                 $arrayIndex[] = $arrayTemp;
             }
         }
 
-        $query = "SELECT id, titulo FROM t_mp_np WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P')";
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.id_equipo, c_secciones.seccion 
+        FROM t_mp_np 
+        LEFT JOIN c_secciones  ON t_mp_np.id_seccion = c_secciones.id 
+        WHERE t_mp_np.responsable = $idUsuario and t_mp_np.activo = 1 and 
+        (t_mp_np.status='N' or t_mp_np.status='PENDIENTE' or t_mp_np.status='P')";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $totalTareas++;
                 $idTarea = $x['id'];
+                $seccion = $x['seccion'];
                 $actividad = $x['titulo'];
+                $idEquipo = intval($x['id_equipo']);
+
+                if ($idEquipo > 0) {
+                    $tipoPendiente = "TAREA";
+                    $totalTareas++;
+                } else {
+                    $tipoPendiente = "TAREAGENERAL";
+                    $totalTareasGenerales++;
+                }
 
                 $arrayTemp = array(
                     "idPendiente" => intval($idTarea),
+                    "tipoPendiente" => $tipoPendiente,
+                    "seccion" => $seccion,
                     "actividad" => $actividad,
-                    "tipoPendiente" => "TAREA"
                 );
                 $arrayIndex[] = $arrayTemp;
             }
@@ -843,10 +884,11 @@ if (isset($_GET['action'])) {
 
                 $arrayTemp = array(
                     "idPendiente" => intval($idMP),
+                    "tipoPendiente" => "MP",
+                    "seccion" => "MP",
                     "actividad" => "MP",
-                    "tipoPendiente" => "MP"
                 );
-                $arrayIndex[] = $arrayTemp;
+                // $arrayIndex[] = $arrayTemp;
             }
         }
 
@@ -860,15 +902,18 @@ if (isset($_GET['action'])) {
 
                 $arrayTemp = array(
                     "idPendiente" => intval($idProyecto),
+                    "tipoPendiente" => "PROYECTO",
+                    "seccion" => "PROYECTO",
                     "actividad" => $actividad,
-                    "tipoPendiente" => "PROYECTO"
                 );
-                $arrayIndex[] = $arrayTemp;
+                // $arrayIndex[] = $arrayTemp;
             }
         }
 
         $array['totalFallas'] = $totalFallas;
         $array['totalTareas'] = $totalTareas;
+        $array['totalTareasGenerales'] = $totalTareasGenerales;
+        $array['totalTareasX'] = $totalTareas + $totalTareasGenerales;
         $array['totalProyectos'] = $totalProyectos;
         $array['totalMP'] = $totalMP;
         $array['pendientes'] = $arrayIndex;
