@@ -112,8 +112,7 @@
         </dav>
         <dav id="hijo3" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="https://www.maphg.com/beta/subalmacenes/" target="_blanck" class="menu-hijo-3 CA">Sub
-                    almacenes</a>
+                <a href="https://www.maphg.com/beta/subalmacenes/" target="_blanck" class="menu-hijo-3 CA">Subalmacenes</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://www.maphg.com/beta/stock.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
