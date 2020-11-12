@@ -68,77 +68,77 @@
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna E</div>
+            <div class="my-1 text-2xl">Columna D</div>
             <div class="my-2"><input id="columna4" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna4" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna F</div>
+            <div class="my-1 text-2xl">Columna E</div>
             <div class="my-2"><input id="columna5" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna5" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna G</div>
+            <div class="my-1 text-2xl">Columna F</div>
             <div class="my-2"><input id="columna6" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna6" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna H</div>
+            <div class="my-1 text-2xl">Columna G</div>
             <div class="my-2"><input id="columna7" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna7" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna I</div>
+            <div class="my-1 text-2xl">Columna H</div>
             <div class="my-2"><input id="columna8" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna8" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna J</div>
+            <div class="my-1 text-2xl">Columna I</div>
             <div class="my-2"><input id="columna9" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna9" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna K</div>
+            <div class="my-1 text-2xl">Columna J</div>
             <div class="my-2"><input id="columna10" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna10" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna L</div>
+            <div class="my-1 text-2xl">Columna K</div>
             <div class="my-2"><input id="columna11" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna11" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna M</div>
+            <div class="my-1 text-2xl">Columna L</div>
             <div class="my-2"><input id="columna12" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna12" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna N</div>
+            <div class="my-1 text-2xl">Columna M</div>
             <div class="my-2"><input id="columna13" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna13" cols="25" rows="20"></textarea></div>
         </div>
 
         <!-- Columna X -->
         <div class="flex-initial px-4 py-2 m-2 bg-gray-200 text-center">
-            <div class="my-1 text-2xl">Columna Ñ</div>
+            <div class="my-1 text-2xl">Columna N</div>
             <div class="my-2"><input id="columna14" class="text-center" type="text" placeholder="nombre_columna" autocomplete="off"></div>
             <div class="my-1"><textarea name="" id="valorColumna14" cols="25" rows="20"></textarea></div>
         </div>
