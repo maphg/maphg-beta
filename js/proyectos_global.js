@@ -1727,6 +1727,36 @@ function actualizarFechaPlanaccion(idPlanaccion, fecha) {
 }
 
 
+// AGREGA ACTIVIDAD PARA EL PLAN DE ACCIÓN
+function agregarActividadPlanaccion() {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idPlanaccion = localStorage.getItem('idPlanaccion');
+    let actividad = document.getElementById("agregarActividadPlanaccion").value;
+    let idProyecto = localStorage.getItem('idProyecto');
+    const ruta = "php/proyectos_planacciones.php?";
+    const action = "agregarActividadPlanaccion";
+    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idPlanaccion=${idPlanaccion}&actividad=${actividad}`;
+    if (actividad.length > 0) {
+        fetch(URL)
+            .then(res => res.json())
+            .then(array => {
+                if (array == "Agregado") {
+                    alertaImg('Actividas Agregada', '', 'success', 1200);
+                    document.getElementById("agregarActividadPlanaccion").value = '';
+                    obtenerPlanaccion(idProyecto);
+                    obtenerActividadesPlanaccion(idPlanaccion);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1200);
+                }
+            })
+    } else {
+        alertaImg('Intente de Nuevo', '', 'info', 1200);
+    }
+}
+
+
+
 // Expande elementos ocultos con ID, terminacion (toggle, titulo)
 function expandir(id) {
     let idtoggle = id + "toggle";

@@ -281,7 +281,7 @@
                                         <div class=" text-justify w-full h-full">
                                             <input id="agregarActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
                                         </div>
-                                        <div id="btnAgregarActividadPlanaccion" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                        <div id="btnAgregarActividadPlanaccion" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm" onclick="agregarActividadPlanaccion();">
                                             <i class="fas fa-plus"></i>
                                         </div>
                                     </div>
