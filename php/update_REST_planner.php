@@ -61,12 +61,13 @@ if (isset($_GET['action'])) {
     }
 
     if ($action == "exportarEquipos") {
+        $array = array();
+        $contador = 0;
+        
         $query = "SELECT id FROM t_equipos WHERE id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEquipo = $x['id'];
-                $array = array();
-                $contador = 0;
 
                 $query = "SELECT id FROM t_equipos_america WHERE id = $idEquipo";
                 if ($result = mysqli_query($conn_2020, $query)) {
