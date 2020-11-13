@@ -448,9 +448,6 @@ function ganttProyectosGlobal(statusProyectos) {
     // Cambia diseño de Botones en Proyectos
 
     // Oculta y Muestra contenido
-    document.getElementById("palabraProyecto")
-        .setAttribute("onkeyup", "ganttProyectosGlobal()");
-
     document.getElementById("loadProyectos").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-m"></i>';
 
