@@ -5608,6 +5608,22 @@ function obtenerPendientesUsuario() {
 }
 
 
+// TRANFIERE EQUIPOS DE LA TABLA T_EQUIPOS -> T_EQUIPOS_AMERICA, POR DESTINO
+function exportarEquipos(idDestino) {
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "exportarEquipos";
+   const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   console.log(URL);
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ': (exportarEquipos)');
+      })
+}
+
 comprobarSession();
 obtenerPendientesUsuario();
 

@@ -59,4 +59,27 @@ if (isset($_GET['action'])) {
 
         echo json_encode($resp);
     }
+
+    if ($action == "exportarEquipos") {
+        $query = "SELECT id FROM t_equipos WHERE id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipo = $x['id'];
+                $array = array();
+                $contador = 0;
+
+                $query = "SELECT id FROM t_equipos_america WHERE id = $idEquipo";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $contador++;
+                        $idEquiposX = $x['id'];
+                        $arrayTemp = array("idEquipo" => intval($idEquiposX));
+                        $array['equipo'][] = $arrayTemp;
+                    }
+                }
+                $array['totalEquipos'] = $contador;
+            }
+        }
+        echo json_encode($array);
+    }
 }
