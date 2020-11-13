@@ -435,7 +435,7 @@ function obtenerProyectosGlobal(statusProyectos) {
                 document.getElementById("loadProyectos").innerHTML = '';
             })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (obtenerProyectosGlobal)');
             document.getElementById("loadProyectos").innerHTML = '';
             document.getElementById("contenedorDeProyectos").innerHTML = '';
 
@@ -990,7 +990,7 @@ function statusProyecto(idProyecto) {
                 setAttribute("onclick", 'actualizarProyectos("F", "status",' + idProyecto + ")");
         })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (statusProyecto)');
         })
 }
 
@@ -1269,7 +1269,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 
         })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (estiloModalStatus)');
         })
 }
 
@@ -1590,7 +1590,7 @@ function tooltipEditarEliminarSolucionar(idActividad) {
             document.getElementById("editarTituloActividad").value = array[0].titulo;
         })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (tooltipEditarEliminarSolucionar)');
         })
 }
 

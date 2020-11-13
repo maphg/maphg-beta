@@ -1,6 +1,7 @@
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
+
 function validarOT() {
     let URL = window.location.hash;
     const idOT = URL.replace(/#|T|F|/gi, '');
@@ -79,9 +80,10 @@ function generarOT(idOT, tipo) {
 
         })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (generarOT)');
         })
 }
+
 
 // Función Inicial
 validarOT();

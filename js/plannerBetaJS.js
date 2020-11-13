@@ -4020,7 +4020,7 @@ function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         fetch(APIERROR + err + ': (actualizarActividadOT)');
       })
 }
 
@@ -4054,7 +4054,7 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
             }
          })
          .catch(function (err) {
-            fetch(`${APIERROR + err}`);
+            fetch(APIERROR + err + ': (agregarActividadOT)');
          })
    } else {
       alertaImg('Actividad NO Valida', '', 'info', 1200);
@@ -4335,7 +4335,7 @@ function obtenerFallas(idEquipo = 0) {
       })
       .then(function () { obtenerFallasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + '3466' + err);
+         fetch(APIERROR + err + ': (obtenerFallas)');
          complementosFallasTareas();
          document.getElementById("dataPendientesX").innerHTML = '';
          document.getElementById("seccionFallaTarea").innerHTML = '';
@@ -4365,7 +4365,7 @@ function obtenerFallas(idEquipo = 0) {
             }
          })
          .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (complementosFallasTareas)');
          })
    }
 };
@@ -4524,7 +4524,7 @@ function obtenerTareas(idEquipo = 0) {
       })
       .then(function () { obtenerTareasPendientes(idEquipo) })
       .catch(function (err) {
-         fetch(APIERROR + ' -3644- ' + err);
+         fetch(APIERROR + err + ': (obtenerTareas)');
          document.getElementById("dataPendientesX").innerHTML = '';
          document.getElementById("seccionFallaTarea").innerHTML = '';
          complementosFallasTareas();
@@ -4554,7 +4554,7 @@ function obtenerTareas(idEquipo = 0) {
             }
          })
          .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (complementosFallasTareas)');
          })
    }
 }
@@ -4691,8 +4691,9 @@ function ganttTareas(idEquipo, status) {
          generarGantt(array);
       })
       .catch(function (err) {
-         fethc(APIERROR + err);
+         fethc(APIERROR + err + ': (ganttTareas)');
       });
+
 
    function generarGantt(array) {
       am4core.useTheme(am4themes_animated);
@@ -4780,7 +4781,7 @@ function ganttFallas(idEquipo, status) {
          generarGantt(array);
       })
       .catch(function (err) {
-         fethc(APIERROR + err);
+         fethc(APIERROR + err + ': (ganttFallas)');
       });
 
    function generarGantt(array) {
@@ -5183,7 +5184,7 @@ function obtenerDespieceEquipo(idEquipo) {
             });
          })
          .catch(function (err) {
-            fetch(APIERROR + err);
+            fetch(APIERROR + err + ': (obtenerDespieceEquipo)');
             document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
          })
    } else {
@@ -5280,7 +5281,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                document.getElementById("seccionSubseccionDestinoEquiposAmerica").
                   innerHTML = array.seccion + ' - ' + array.subseccion + ' - ' + array.destino;
             }).catch(function (err) {
-               fetch(APIERROR + err)
+               fetch(APIERROR + err + ': (obtenerEquiposAmerica 1)')
                document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
             })
       })
@@ -5289,7 +5290,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
       })
       .catch(function (err) {
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
-         fetch(APIERROR + err);
+         fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
       });
 }
 
@@ -5536,7 +5537,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 
       })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         fetch(APIERROR + err + ': (estiloModalStatus)');
       })
 }
 
@@ -5602,7 +5603,7 @@ function obtenerPendientesUsuario() {
          document.getElementById("loadPendientes").innerHTML = '';
       })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         fetch(APIERROR + err + ': (obtenerPendientesUsuario)');
       })
 }
 
