@@ -4621,6 +4621,7 @@ if (isset($_POST['action'])) {
         $tituloMC = $_POST['tituloMC'];
         $fechaFinalizado = "";
 
+
         if ($status == "status") {
             if ($valorStatus == "N") {
                 $valorStatus = "F";
@@ -4639,6 +4640,24 @@ if (isset($_POST['action'])) {
             $valorStatus = $tituloMC;
         } elseif ($status == "rango_fecha") {
             $valorStatus = "$valorStatus";
+        } elseif ($status == 'status_material') {
+            $cod2bend = $_POST['cod2bend'];
+            if ($cod2bend != "") {
+                $query = "SELECT status_material FROM t_mc WHERE id = $idMC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $valorX = $x['status_material'];
+                    }
+
+                    if ($valorX == 0) {
+                        $valorStatus = "1";
+                    } else {
+                        $valorStatus = "0";
+                    }
+                }
+            } else {
+                $status = "";
+            }
         } else {
             if ($valorStatus == "1") {
                 $valorStatus = "0";
@@ -4647,9 +4666,7 @@ if (isset($_POST['action'])) {
             }
         }
 
-        $query = "UPDATE t_mc 
-        SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado 
-        WHERE id = $idMC";
+        $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
@@ -5309,7 +5326,7 @@ if (isset($_POST['action'])) {
         $valor = $_POST['valor'];
         $tituloNuevo = $_POST['tituloNuevo'];
 
-        if ($columna == "status_urgente" || $columna == "status_material" || $columna == "status_trabajando" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
+        if ($columna == "status_urgente" || $columna == "status_trabajando" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
             $query = "SELECT $columna FROM t_mp_np WHERE id =  $idTarea";
             if ($result = mysqli_query($conn_2020, $query)) {
                 if ($row = mysqli_fetch_array($result))
@@ -5366,6 +5383,26 @@ if (isset($_POST['action'])) {
                 echo 6;
             } else {
                 echo 0;
+            }
+        } elseif ($columna == "status_material") {
+            $cod2bend = $_POST['cod2bend'];
+            if ($cod2bend != "") {
+                $valorX = 0;
+                $query = "SELECT status_material FROM t_mp_np WHERE id = $idTarea";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $valorX = $x['status_material'];
+                    }
+                }
+                if ($valorX == 0) {
+                    $valor = 1;
+                } else {
+                    $valor = 0;
+                }
+                $update = "UPDATE t_mp_np SET status_material = '$valor' WHERE id = $idTarea";
+                if ($result = mysqli_query($conn_2020, $update)) {
+                    echo 7;
+                }
             }
         } else {
             echo 0;
@@ -8401,7 +8438,7 @@ if (isset($_POST['action'])) {
                             $dataComentariosVP .= "
                                 <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
                                     <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
-                                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"48\" height=\"48\" alt=\"\">
+                                        <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"30\" height=\"30\" alt=\"\">
                                     </div>
                                     <div class=\"flex flex-col justify-start items-start p-2 w-full\">
                                         <div class=\"text-xs font-bold flex flex-row justify-between w-full\">

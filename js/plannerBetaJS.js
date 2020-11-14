@@ -1112,7 +1112,7 @@ function obtenerstatusMC(idMC) {
          // Status
          document.getElementById("statusUrgente")
             .setAttribute("onclick", data.dataStatusUrgente);
-         document.getElementById("statusMaterial")
+         document.getElementById("btnStatusMaterial")
             .setAttribute("onclick", data.dataStatusMaterial);
          document.getElementById("statusTrabajare")
             .setAttribute("onclick", data.dataStatusTrabajare);
@@ -1157,6 +1157,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
    let tituloMC = document.getElementById("inputEditarTitulo").value;
+   let cod2bend = document.getElementById("inputCod2bend").value;
    const action = "actualizarStatusMC";
 
    $.ajax({
@@ -1170,9 +1171,11 @@ function actualizarStatusMC(idMC, status, valorStatus) {
          status: status,
          valorStatus: valorStatus,
          tituloMC: tituloMC,
+         cod2bend: cod2bend
       },
       // dataType: "JSON",
       success: function (data) {
+         console.log(data);
          if (data == 1) {
             alertaImg("Información Actualizada", "", "success", 2000);
             if (status == "activo" || status == "status") {
@@ -1743,97 +1746,55 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
    // La función actulizarTarea(), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
 
    // Status
-   document
-      .getElementById("statusUrgente")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "status_urgente", 0)'
+   document.getElementById("statusUrgente")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_urgente", 0)'
       );
-   document
-      .getElementById("statusMaterial")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "status_material", 0)'
+   document.getElementById("btnStatusMaterial")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_material", 0)'
       );
-   document
-      .getElementById("statusTrabajare")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "status_trabajando", 0)'
+   document.getElementById("statusTrabajare")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_trabajando", 0)'
       );
 
    // Status Departamento.
-   document
-      .getElementById("statusCalidad")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "departamento_calidad", 0)'
+   document.getElementById("statusCalidad")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_calidad", 0)'
       );
-   document
-      .getElementById("statusCompras")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "departamento_compras", 0)'
+   document.getElementById("statusCompras")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_compras", 0)'
       );
-   document
-      .getElementById("statusDireccion")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "departamento_direccion", 0)'
+   document.getElementById("statusDireccion")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_direccion", 0)'
       );
-   document
-      .getElementById("statusFinanzas")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "departamento_finanzas", 0)'
+   document.getElementById("statusFinanzas")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_finanzas", 0)'
       );
-   document
-      .getElementById("statusRRHH")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "departamento_rrhh", 0)'
+   document.getElementById("statusRRHH")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_rrhh", 0)'
       );
 
    // Status Energéticos.
-   document
-      .getElementById("statusElectricidad")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "energetico_electricidad", 0)'
+   document.getElementById("statusElectricidad")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_electricidad", 0)'
       );
-   document
-      .getElementById("statusAgua")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "energetico_agua", 0)'
+   document.getElementById("statusAgua")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_agua", 0)'
       );
-   document
-      .getElementById("statusDiesel")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "energetico_diesel", 0)'
+   document.getElementById("statusDiesel")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_diesel", 0)'
       );
-   document
-      .getElementById("statusGas")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "energetico_gas", 0)'
+   document.getElementById("statusGas")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_gas", 0)'
       );
 
    // Finalizar MC.
-   document
-      .getElementById("statusFinalizar")
-      .setAttribute(
-         "onclick",
-         "actualizarTareas(" + idTarea + ', "status", "F")'
-      );
+   document.getElementById("statusFinalizar")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status", "F")');
    // Activo MC.
-   document
-      .getElementById("statusActivo")
+   document.getElementById("statusActivo")
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "activo", 0)');
    // Titulo MC.
-   document
-      .getElementById("btnEditarTitulo")
+   document.getElementById("btnEditarTitulo")
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "titulo", 0)');
    document.getElementById("inputEditarTitulo").value = tituloTarea;
 }
@@ -1845,6 +1806,7 @@ function actualizarTareas(idTarea, columna, valor) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
+   let cod2bend = document.getElementById("inputCod2bend").value;
    const action = "actualizarTareas";
    $.ajax({
       type: "POST",
@@ -1857,6 +1819,7 @@ function actualizarTareas(idTarea, columna, valor) {
          columna: columna,
          valor: valor,
          tituloNuevo: tituloNuevo,
+         cod2bend: cod2bend
       },
       // dataType: "JSON",
       success: function (data) {
@@ -1889,6 +1852,10 @@ function actualizarTareas(idTarea, columna, valor) {
          } else if (data == 6) {
             obtenerTareas(idEquipo);
             alertaImg("Rango de Fecha, Actualizada", "", "success", 2000);
+            document.getElementById("modalStatus").classList.remove("open");
+         } else if (data == 7) {
+            obtenerTareas(idEquipo);
+            alertaImg("Status Actualizado", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else {
             alertaImg("Intente de Nuevo", "", "question", 2000);
@@ -4274,7 +4241,6 @@ function obtenerFallas(idEquipo = 0) {
       classList.add('ml-4', 'font-bold', 'bg-red-200', 'text-red-500', 'text-xs', 'py-1', 'px-2', 'rounded'
       );
 
-
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
    let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
@@ -5418,7 +5384,7 @@ function reporteTareas(idEquipo) {
 
 
 document.getElementById("statusMaterial").addEventListener('click', function () {
-   alertaImg('COD2BEND, para aplicar Status M', '', 'success', 1200);
+   alertaImg('Ingrese Código cod2bend', '', 'info', 2000);
 });
 
 
@@ -5431,6 +5397,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 
    document.getElementById("statusenergeticostoggle").classList.add('hidden');
    document.getElementById("statusdeptoggle").classList.add('hidden');
+   document.getElementById("statusMaterialCod2bend").classList.add('hidden');
 
    let sMaterialX = document.getElementById("statusMaterial");
    let sTrabajareX = document.getElementById("statusTrabajare");
@@ -5533,6 +5500,9 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
                document.getElementById("inputEditarTitulo").value = array[0].titulo;
             }
 
+            if (array[0].cod2bend) {
+               document.getElementById("inputCod2bend").value = array[0].cod2bend;
+            }
          }
 
       })
