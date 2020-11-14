@@ -5641,5 +5641,5 @@ obtenerPendientesUsuario();
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
 setInterval(function () {
    obtenerPendientesUsuario();
-   comprobarSession();
-}, 60000);
+   // comprobarSession();
+}, 180000);
