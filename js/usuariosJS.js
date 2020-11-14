@@ -62,7 +62,7 @@ function validarUsuario() {
                             localStorage.setItem('idMC', 0);
                             alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
 
-                            if (data.idDestino == 2) {
+                            if (data.idDestino == 2 || data.idDestino == 3 || data.idDestino == 11) {
                                 location.href = "planner-cols.php";
                             } else {
                                 location.href = "index.php";
