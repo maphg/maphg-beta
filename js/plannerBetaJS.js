@@ -5613,11 +5613,51 @@ function exportarEquipos(idDestino) {
    let idUsuario = localStorage.getItem('usuario');
    const action = "exportarEquipos";
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   console.log(URL);
+   const URLConfirmado = `php/update_REST_planner.php?action=exportarEquiposConfirmado&idDestino=${idDestino}&idUsuario=${idUsuario}`;
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
+         if (array.totalEquipos == 0) {
+            alertify.confirm("Exportar Equipos a la Versión 3.0",
+               function () {
+                  alertaImg('Exportando Equipos...', '', 'success', 1300);
+                  fetch(URLConfirmado)
+                     .then(array => array.json())
+                     .then(array => {
+
+                        var codigo = '';
+                        for (let x = 0; x < array.equipo.length; x++) {
+                           const id = array.equipo[x].id;
+                           const status = array.equipo[x].status;
+                           codigo += `<p>Id Equipo: ${id} Status: ${status}</p>`;
+                        }
+                        alertify.minimalDialog || alertify.dialog('minimalDialog', function () {
+                           return {
+                              main: function (content) {
+                                 this.setContent(content);
+                              }
+                           };
+                        })
+                        alertify.minimalDialog(`
+                           Total: ${array.totalEquipos} 
+                           <br>
+                           Total Exportados: ${array.totalExportados} <br><br>
+                           ${codigo}
+                        `);
+                     })
+                     .catch(function (err) {
+                        fetch(APIERROR + err + ': (exportarEquipos)');
+                     })
+
+               },
+               function () {
+                  alertaImg('Exportación Cancelada', '', 'error', 1300);
+               })
+               .set({ title: "EQUIPOS" })
+               .set({ labels: { ok: 'Exportar', cancel: 'Cancelar' } });
+         } else {
+            alertaImg('Conflicto ID de Equipos', '', 'error', 1300);
+         }
       })
       .catch(function (err) {
          fetch(APIERROR + err + ': (exportarEquipos)');

@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="../css/alertify.min.css">
     <link rel="stylesheet" href="../css/planner_cols.css">
     <link rel="stylesheet" href="../css/animate.css">
+
+    <style>
+        .texto-equipo {
+            max-width: 180px;
+            word-wrap: break-word;
+        }
+        .texto-subseccion {
+            max-width: 120px;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 
 <body class=" bg-fondos-7 text-bluegray-800 scrollbar">

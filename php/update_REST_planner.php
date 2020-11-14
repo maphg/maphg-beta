@@ -60,10 +60,11 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
     if ($action == "exportarEquipos") {
         $array = array();
         $contador = 0;
-        
+
         $query = "SELECT id FROM t_equipos WHERE id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -80,6 +81,60 @@ if (isset($_GET['action'])) {
                 }
                 $array['totalEquipos'] = $contador;
             }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "exportarEquiposConfirmado") {
+        $array = array();
+        $contadorExportados = 0;
+        $contadorEquipos = -1;
+
+        $query = "SELECT * FROM t_equipos WHERE id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipo = $x['id'];
+                $cod2bend = $x['cod2bend'];
+                $equipo = $x['equipo'];
+                $matricula = $x['matricula'];
+                $id_marca = $x['id_marca'];
+                $modelo = $x['modelo'];
+                $serie = $x['serie'];
+                $id_tipo = $x['id_tipo'];
+                $id_ccoste = $x['id_ccoste'];
+                $id_destino = $x['id_destino'];
+                $id_hotel = $x['id_hotel'];
+                $id_seccion = $x['id_seccion'];
+                $id_subseccion = $x['id_subseccion'];
+                $id_area = $x['id_area'];
+                $id_localizacion = $x['id_localizacion'];
+                $id_ubicacion = $x['id_ubicacion'];
+                $id_sububicacion = $x['id_sububicacion'];
+                $status_equipo = $x['status_equipo'];
+                $categoria = $x['categoria'];
+                $status = $x['status'];
+                $coste = $x['coste'];
+                $contadorEquipos++;
+
+                if ($status == "A") {
+                    $status = "OPERATIVO";
+                } else {
+                    $status = "BAJA";
+                }
+                $arrayTemp = array("id" => $idEquipo, "status" => "No Agregado");
+                $array['equipo'][] = $arrayTemp;
+
+                $query = "INSERT INTO  t_equipos_america(id, equipo, cod2bend, matricula, serie, id_destino, id_seccion, id_subseccion, id_tipo, id_ccoste, id_hotel, id_area, id_localizacion, id_ubicacion, id_sububicacion, categoria, local_equipo, jerarquia, id_marca, modelo, numero_serie, codigo_fabricante, coste, id_fases, status, activo) VALUES($idEquipo, '$equipo', '$cod2bend', '$matricula', '$serie', '$id_destino', '$id_seccion', '$id_subseccion', '$id_tipo', '$id_ccoste', '$id_hotel', '$id_area', '$id_localizacion', '$id_ubicacion', '$id_sububicacion', '$categoria', 'EQUIPO', 'PRINCIPAL', '$id_marca', '$modelo', '', '', '$coste', '', '$status', 1)";
+                // $array['EQUIPO'][$idEquipo]['QUERY'] = $query;
+
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $arrayTemp = array("id" => $idEquipo, "status" => "Agregado");
+                    $array['equipo'][$contadorEquipos] = $arrayTemp;
+                    $contadorExportados++;
+                }
+            }
+            $array['totalEquipos'] = intval($contadorEquipos) + 1;
+            $array['totalExportados'] = $contadorExportados;
         }
         echo json_encode($array);
     }

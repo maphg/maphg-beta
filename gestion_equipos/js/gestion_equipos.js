@@ -78,11 +78,11 @@ const datosPlanes = params => {
                     ${params.seccion}
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    ${params.subseccion}
+                   <h1 class="texto-subseccion truncate">${params.subseccion}</h1>
                 </td>
                 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    <div class=" leading-5 text-gray-900">${params.equipo}</div>
+                    <div class=" leading-5 text-gray-900 truncate texto-equipo">${params.equipo}</div>
                     <div class=" leading-5 text-gray-500">ID ${params.id}</div>
                 </td> 
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
