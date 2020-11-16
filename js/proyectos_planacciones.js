@@ -1041,8 +1041,9 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSeccion = localStorage.getItem("idSeccion");
-    let actividad = document.getElementById("inputEditarTitulo").value;
+    let actividad = document.getElementById("editarTitulo").value;
     let idProyecto = localStorage.getItem('idProyecto');
+    let codigoSeguimiento = document.getElementById("inputCod2bend").value;
     const action = "actualizarPlanaccion";
     $.ajax({
         type: "POST",
@@ -1056,9 +1057,11 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             valor: valor,
             columna: columna,
             actividad: actividad,
+            codigoSeguimiento: codigoSeguimiento
         },
         // dataType: "JSON",
         success: function (data) {
+            console.log(data);
             obtenerPlanaccion(idProyecto);
             obtenerPlanaccionDEP(idProyecto);
             if (data == 1) {
@@ -1085,6 +1088,16 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Actividad Restaurada", "", "success", 2500);
                 obtenerProyectos(idSeccion, 'PENDIENTE');
+            } else if (data == 7) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Status Actualizado", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
+            }else if(data == 9){
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Bitácora Actualizada", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
+            } else {
+                alertaImg("Intente de Nuevo", "", "info", 1200);
             }
         },
     });
@@ -1093,12 +1106,7 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
 
 // STATUS PLANACCIÓN
 function statusPlanaccion(idPlanaccion) {
-    let actividadActual = document.getElementById("AP" + idPlanaccion).innerHTML;
-    let idUsuario = localStorage.getItem("usuario");
-    let idDestino = localStorage.getItem("idDestino");
-    let idSeccion = localStorage.getItem("idSeccion")
 
-    document.getElementById("inputEditarTitulo").value = actividadActual;
     document.getElementById("modalStatus").classList.add("open");
 
     // Agregan Funciones en los Botones del modalStatus para poder Aplicar un Status
@@ -1108,7 +1116,7 @@ function statusPlanaccion(idPlanaccion) {
 
     document.getElementById("statusFinalizar").setAttribute("onclick", 'actualizarPlanaccion("F","status",' + idPlanaccion + ")");
 
-    document.getElementById("statusMaterial").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
+    document.getElementById("btnStatusMaterial").setAttribute("onclick", 'actualizarPlanaccion(1, "status_material",' + idPlanaccion + ")");
 
     document.getElementById("statusTrabajare").setAttribute("onclick", 'actualizarPlanaccion(1, "status_trabajando",' + idPlanaccion + ")");
 
@@ -1130,77 +1138,14 @@ function statusPlanaccion(idPlanaccion) {
 
     document.getElementById("statusCompras").setAttribute("onclick", 'actualizarPlanaccion(1, "departamento_compras",' + idPlanaccion + ")");
 
+    document.getElementById("statusGP").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_gp",' + idPlanaccion + ")");
+
+    document.getElementById("statusTRS").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_trs",' + idPlanaccion + ")");
+
+    document.getElementById("statusZI").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_zi",' + idPlanaccion + ")");
+
     nivelVista(2, 'modalEditarTitulo');
-
-    const action = "statusPlanaccion";
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idSeccion: idSeccion,
-            idPlanaccion: idPlanaccion,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            // Llama la función para formatear el Modal de Status
-            estiloDefectoModalStatus();
-
-            if (data.sMaterial == 1) {
-                estiloStatusActivoModalStatus("statusMaterial");
-            }
-
-            if (data.sTrabajando == 1) {
-                estiloStatusActivoModalStatus("statusTrabajare");
-            }
-
-            if (data.eElectricidad == 1 || data.eAgua == 1 || data.eDiesel == 1 || data.eGas == 1) {
-                estiloStatusActivoModalStatus("statusenergeticos");
-            }
-
-            if (data.eElectricidad == 1) {
-                estiloStatusActivoModalStatus("statusElectricidad");
-            }
-
-            if (data.eAgua == 1) {
-                estiloStatusActivoModalStatus("statusAgua");
-            }
-
-            if (data.eDiesel == 1) {
-                estiloStatusActivoModalStatus("statusDiesel");
-            }
-
-            if (data.eGas == 1) {
-                estiloStatusActivoModalStatus("statusGas");
-            }
-
-            if (data.dCalidad == 1 || data.dCompras == 1 || data.dDireccion == 1 || data.dFinanzas == 1 || data.dRRHH == 1) {
-                estiloStatusActivoModalStatus("statusdep");
-            }
-
-            if (data.dCalidad == 1) {
-                estiloStatusActivoModalStatus("statusCalidad");
-            }
-
-            if (data.dCompras == 1) {
-                estiloStatusActivoModalStatus("statusCompras");
-            }
-
-            if (data.dDireccion == 1) {
-                estiloStatusActivoModalStatus("statusDireccion");
-            }
-
-            if (data.dFinanzas == 1) {
-                estiloStatusActivoModalStatus("statusFinanzas");
-            }
-
-            if (data.dRRHH == 1) {
-                estiloStatusActivoModalStatus("statusRRHH");
-            }
-        },
-    });
+    estiloModalStatus(idPlanaccion, 'PLANACCION');
 }
 
 

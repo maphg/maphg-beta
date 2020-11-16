@@ -2309,7 +2309,7 @@
                 </div>
 
                 <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+                    <div id="btnEditarTituloX" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="expandir(this.id)">
                         <div class="">
                             <i class="fas fa-pen fa-lg"></i>
                         </div>
@@ -2326,6 +2326,17 @@
                     </div>
 
                 </div>
+
+                <div id="btnEditarTituloXtoggle" class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs hidden">
+                    <div class=" w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center text-gray-500 px-1">
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" id="editarTitulo" type="text" placeholder="Nuevo Título">
+
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnEditarTitulo" type="button">
+                            <i class="fas fa-check fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

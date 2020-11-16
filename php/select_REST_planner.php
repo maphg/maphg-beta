@@ -572,9 +572,14 @@ if (isset($_GET['action'])) {
         $sGas = 0;
         $titulo = "";
         $cod2bend = "";
+        $bitacoraGP = "";
+        $bitacoraTRS = "";
+        $bitacoraZI = "";
 
         if ($tipoRegistro == "FALLA") {
-            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend FROM t_mc WHERE id = $idRegistro";
+            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend,
+            bitacora_gp, bitacora_trs, bitacora_zi
+             FROM t_mc WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $sMaterial = $x['status_material'];
@@ -590,10 +595,14 @@ if (isset($_GET['action'])) {
                     $sGas = $x['energetico_gas'];
                     $titulo = $x['actividad'];
                     $cod2bend = $x['cod2bend'];
+                    $bitacoraGP = $x['bitacora_gp'];
+                    $bitacoraTRS = $x['bitacora_trs'];
+                    $bitacoraZI = $x['bitacora_zi'];
                 }
             }
         } elseif ($tipoRegistro == "TAREA") {
-            $query = "SELECT titulo, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend FROM t_mp_np WHERE id = $idRegistro";
+            $query = "SELECT titulo, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            FROM t_mp_np WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $sMaterial = $x['status_material'];
@@ -609,6 +618,9 @@ if (isset($_GET['action'])) {
                     $sGas = $x['energetico_gas'];
                     $titulo = $x['titulo'];
                     $cod2bend = $x['cod2bend'];
+                    $bitacoraGP = $x['bitacora_gp'];
+                    $bitacoraTRS = $x['bitacora_trs'];
+                    $bitacoraZI = $x['bitacora_zi'];
                 }
             }
         } elseif ($tipoRegistro == "PROYECTO") {
@@ -633,7 +645,8 @@ if (isset($_GET['action'])) {
                 }
             }
         } elseif ($tipoRegistro == "PLANACCION") {
-            $query = "SELECT actividad, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas FROM t_proyectos_planaccion WHERE id = $idRegistro";
+            $query = "SELECT actividad, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            FROM t_proyectos_planaccion WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $sMaterial = $x['status_material'];
@@ -648,6 +661,10 @@ if (isset($_GET['action'])) {
                     $sDiesel = $x['energetico_diesel'];
                     $sGas = $x['energetico_gas'];
                     $titulo = $x['actividad'];
+                    $cod2bend = $x['cod2bend'];
+                    $bitacoraGP = $x['bitacora_gp'];
+                    $bitacoraTRS = $x['bitacora_trs'];
+                    $bitacoraZI = $x['bitacora_zi'];
                 }
             }
         } elseif ($tipoRegistro == "ACTIVIDADPLANACCION") {
@@ -731,7 +748,10 @@ if (isset($_GET['action'])) {
             "sDepartamentos" => intval($sCompras) + intval($sDireccion) + intval($sCalidad) + intval($sFinanzas) + intval($sRRHH),
             "sEnergeticos" => intval($sAgua) + intval($sDiesel) + intval($sGas) + intval($sElectricidad),
             "titulo" => $titulo,
-            "cod2bend" => $cod2bend
+            "cod2bend" => $cod2bend,
+            "bitacoraGP" => $bitacoraGP,
+            "bitacoraTRS" => $bitacoraTRS,
+            "bitacoraZI" => $bitacoraZI
         );
 
         echo json_encode($array);

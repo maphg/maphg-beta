@@ -1107,7 +1107,6 @@ function obtenerstatusMC(idMC) {
       },
       dataType: "JSON",
       success: function (data) {
-         // Llama a la Función para reflejar los cambios en los MC por Equipo.
 
          // Status
          document.getElementById("statusUrgente")
@@ -1145,7 +1144,15 @@ function obtenerstatusMC(idMC) {
          // Titulo MC.
          document.getElementById("btnEditarTitulo")
             .setAttribute("onclick", data.dataStatusTitulo);
-         document.getElementById("inputEditarTitulo").value = data.dataTituloMC;
+
+         // BITACORA GP, TRS, ZI
+         document.getElementById("statusGP")
+            .setAttribute("onclick", data.dataBitacoraGP);
+         document.getElementById("statusTRS")
+            .setAttribute("onclick", data.dataBitacoraTRS);
+         document.getElementById("statusZI")
+            .setAttribute("onclick", data.dataBitacoraZI);
+
       },
    });
 }
@@ -1156,7 +1163,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
-   let tituloMC = document.getElementById("inputEditarTitulo").value;
+   let tituloMC = document.getElementById("editarTitulo").value;
    let cod2bend = document.getElementById("inputCod2bend").value;
    const action = "actualizarStatusMC";
 
@@ -1175,8 +1182,8 @@ function actualizarStatusMC(idMC, status, valorStatus) {
       },
       // dataType: "JSON",
       success: function (data) {
-         console.log(data);
          if (data == 1) {
+            verEnPlanner('FALLA', idMC);
             alertaImg("Información Actualizada", "", "success", 2000);
             if (status == "activo" || status == "status") {
                llamarFuncionX("obtenerEquiposAmerica");
@@ -1375,17 +1382,20 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
       success: function (data) {
 
          if (data == "MC") {
+            // FALLAS
             alertaImg("Responsable Actualizado", "", "success", 2500);
             document.getElementById("modalUsuarios").classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
             obtenerFallas(idEquipo);
+            verEnPlanner('FALLA', idItem);
 
-            // TAREAS
          } else if (data == "TAREA") {
+            // TAREAS
             alertaImg("Responsable Actualizado", "", "success", 2500);
             document.getElementById("modalUsuarios").classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
             obtenerTareas(idEquipo);
+            verEnPlanner('TAREA', idItem);
          } else {
             alertaImg("Intenete de Nuevo", "", "question", 2500);
          }
@@ -1743,7 +1753,7 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
    document.getElementById("modalStatus").classList.add("open");
    localStorage.setItem("idTarea", idTarea);
 
-   // La función actulizarTarea(), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
+   // La función actulizarTarea(?, ?, ?), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
 
    // Status
    document.getElementById("statusUrgente")
@@ -1787,22 +1797,31 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_gas", 0)'
       );
 
-   // Finalizar MC.
+   // Finalizar TAREA
    document.getElementById("statusFinalizar")
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status", "F")');
-   // Activo MC.
+   // Activo TAREA
    document.getElementById("statusActivo")
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "activo", 0)');
-   // Titulo MC.
+   // Titulo TAREA
    document.getElementById("btnEditarTitulo")
       .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "titulo", 0)');
-   document.getElementById("inputEditarTitulo").value = tituloTarea;
+
+   // Bitacora GP
+   document.getElementById("statusGP")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_gp", 0)');
+   // Bitacora TRS
+   document.getElementById("statusTRS")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_trs", 0)');
+   // Bitacora ZI
+   document.getElementById("statusZI")
+      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_zi", 0)');
 }
 
 
 // Actualiza Datos de las Tareas
 function actualizarTareas(idTarea, columna, valor) {
-   let tituloNuevo = document.getElementById("inputEditarTitulo").value;
+   let tituloNuevo = document.getElementById("editarTitulo").value;
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
@@ -1823,6 +1842,7 @@ function actualizarTareas(idTarea, columna, valor) {
       },
       // dataType: "JSON",
       success: function (data) {
+         verEnPlanner('TAREA', idTarea);
          if (data == 1) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
@@ -1854,6 +1874,10 @@ function actualizarTareas(idTarea, columna, valor) {
             alertaImg("Rango de Fecha, Actualizada", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
          } else if (data == 7) {
+            obtenerTareas(idEquipo);
+            alertaImg("Status Actualizado", "", "success", 2000);
+            document.getElementById("modalStatus").classList.remove("open");
+         } else if (data == 8) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
             document.getElementById("modalStatus").classList.remove("open");
@@ -2212,10 +2236,12 @@ function subirImagenGeneral(idTabla, tabla) {
             } else if (data == 7) {
                obtenerAdjuntosTareas(idTabla);
                obtenerTareas(idEquipo);
+               verEnPlanner('TAREA', idTabla);
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 8) {
                obtenerAdjuntosMC(idTabla);
                obtenerFallas(idEquipo);
+               verEnPlanner('FALLA', idTabla);
                alertaImg("Adjunto Agregado", "", "success", 2500);
             } else if (data == 9) {
                obtenerImagenesEquipo(idTabla);
@@ -2244,12 +2270,11 @@ function subirImagenGeneral(idTabla, tabla) {
 
 // Funcion para buscar pendiente Ver en Planner
 function verEnPlanner(tipoPendiente, idPendiente) {
-   document.getElementById("modalVerEnPlanner").classList.add('open');
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    const action = "verEnPlanner";
    document.getElementById("dataStatusVP").
-      setAttribute('onclick', 'verEnPlanner("' + tipoPendiente + '",+' + idPendiente + ')');
+      setAttribute('onclick', `verEnPlanner('${tipoPendiente}', ${idPendiente});`);
 
 
    $.ajax({
@@ -2264,58 +2289,62 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
-         document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
-         document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
-         document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
-         document.getElementById("fechaVP").value = data.fecha;
-         document.getElementById("dataResponsablesVP").innerHTML = data.responsable;
-         document.getElementById("dataStatusVP").innerHTML = data.status;
-         document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
-         document.getElementById("dataAdjuntosVP").innerHTML = data.adjuntos;
+         if (data != "") {
+            document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
+            document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
+            document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
+            document.getElementById("fechaVP").value = data.fecha;
+            document.getElementById("dataResponsablesVP").innerHTML = data.responsable;
+            document.getElementById("dataStatusVP").innerHTML = data.status;
+            document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
+            document.getElementById("dataAdjuntosVP").innerHTML = data.adjuntos;
 
-         if (tipoPendiente == "FALLA") {
+            if (tipoPendiente == "FALLA") {
 
-            // FECHA
-            document.getElementById("fechaVP").
-               setAttribute('onclick', 'obtenerFechaMC(' + idPendiente + ', "' + data.fecha + '")');
-            document.getElementById("fechaVP").innerHTML = data.fecha;
-            document.getElementById("fechaTareas").value = data.fecha;
-
-
-            // RESPONSABLE
-            document.getElementById("responsableVP").
-               setAttribute('onclick', 'obtenerUsuarios("asignarMC",' + idPendiente + ')');
+               // FECHA
+               document.getElementById("fechaVP").
+                  setAttribute('onclick', 'obtenerFechaMC(' + idPendiente + ', "' + data.fecha + '")');
+               document.getElementById("fechaVP").innerHTML = data.fecha;
+               document.getElementById("fechaTareas").value = data.fecha;
 
 
-            // ADJUNTOS
-            document.getElementById("adjuntosVP").
-               setAttribute('onclick', 'obtenerAdjuntosMC(' + idPendiente + ')');
-
-            // COMENTARIOS
-            document.getElementById("btnComentarioVP").
-               setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
-
-         } else if (tipoPendiente == "TAREA") {
-
-            // FECHA
-            document.getElementById("fechaVP").
-               setAttribute('onclick', 'obtenerFechaTareas(' + idPendiente + ', "' + data.fecha + '")');
-            document.getElementById("fechaVP").innerHTML = data.fecha;
-            document.getElementById("fechaTareas").value = data.fecha;
+               // RESPONSABLE
+               document.getElementById("responsableVP").
+                  setAttribute('onclick', 'obtenerUsuarios("asignarMC",' + idPendiente + ')');
 
 
-            // RESPONSABLE
-            document.getElementById("responsableVP").
-               setAttribute('onclick', 'obtenerUsuarios("asignarTarea",' + idPendiente + ')');
+               // ADJUNTOS
+               document.getElementById("adjuntosVP").
+                  setAttribute('onclick', 'obtenerAdjuntosMC(' + idPendiente + ')');
+
+               // COMENTARIOS
+               document.getElementById("btnComentarioVP").
+                  setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+
+            } else if (tipoPendiente == "TAREA") {
+
+               // FECHA
+               document.getElementById("fechaVP").
+                  setAttribute('onclick', 'obtenerFechaTareas(' + idPendiente + ', "' + data.fecha + '")');
+               document.getElementById("fechaVP").innerHTML = data.fecha;
+               document.getElementById("fechaTareas").value = data.fecha;
 
 
-            // ADJUNTOS
-            document.getElementById("adjuntosVP").
-               setAttribute('onclick', 'obtenerAdjuntosTareas(' + idPendiente + ')');
+               // RESPONSABLE
+               document.getElementById("responsableVP").
+                  setAttribute('onclick', 'obtenerUsuarios("asignarTarea",' + idPendiente + ')');
 
-            // COMENTARIOS
-            document.getElementById("btnComentarioVP").
-               setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+
+               // ADJUNTOS
+               document.getElementById("adjuntosVP").
+                  setAttribute('onclick', 'obtenerAdjuntosTareas(' + idPendiente + ')');
+
+               // COMENTARIOS
+               document.getElementById("btnComentarioVP").
+                  setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+            }
+         } else {
+            document.getElementById("modalVerEnPlanner").classList.remove('open');
          }
       }
    });
@@ -2422,9 +2451,11 @@ function informacionEquipo(idEquipo) {
    document.getElementById("tooltipMP").classList.add('hidden');
 
    // Funciones principales
+   
    consultarOpcionesEquipo();
 
-   const action = "informacionEquipo";
+   setTimeout(() => {
+       const action = "informacionEquipo";
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -2500,7 +2531,6 @@ function informacionEquipo(idEquipo) {
             obtenerImagenesEquipo(idEquipo);
          });
 
-
          // Funciones Secundarias
          toggleInputsEquipo(0);
          obtenerImagenesEquipo(idEquipo);
@@ -2509,6 +2539,8 @@ function informacionEquipo(idEquipo) {
 
       }
    });
+  
+   }, 1200);
 }
 
 
@@ -4111,6 +4143,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
+      var fVerEnPlanner = `onclick="verEnPlanner('FALLA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "FALLA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = '';
@@ -4121,6 +4154,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
+      var fVerEnPlanner = `onclick="verEnPlanner('FALLA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
    } else if (params.status == "PENDIENTE" && params.tipo == "TAREA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -4131,6 +4165,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
+      var fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -4141,6 +4176,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
+      var fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
    }
 
    return `
@@ -4148,7 +4184,7 @@ const datosFallasTareas = params => {
         ${statusX}">
            
         <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
-        ${fActividades}>
+        ${fVerEnPlanner}>
             <div class="font-semibold uppercase leading-4">
                <h1>${params.actividad}</h1>
             </div>
@@ -4289,11 +4325,8 @@ function obtenerFallas(idEquipo = 0) {
                   departamentos: departamentos,
                   tipo: tipo
                });
-
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
-         } else {
-            alertaImg('Equipo/Local, Sin Fallas', '', 'info', 1200);
          }
       })
       .then(function () {
@@ -4375,8 +4408,6 @@ function obtenerFallasPendientes(idEquipo) {
       for (let x = 0; x < pendientes.length; x++) {
          document.getElementsByClassName("S-PENDIENTE")[x].classList.remove('hidden');
       }
-   } else {
-      alertaImg('Sin PENDIENTES', '', 'info', 1200);
    }
 
    if (solucionados.length > 0) {
@@ -4481,8 +4512,6 @@ function obtenerTareas(idEquipo = 0) {
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
-         } else {
-            alertaImg('Equipo/Local, Sin Fallas', '', 'info', 1200);
          }
       })
       .then(function () {
@@ -4545,8 +4574,6 @@ function obtenerTareasSolucionados(idEquipo) {
       for (let x = 0; x < solucionados.length; x++) {
          document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
       }
-   } else {
-      alertaImg('Sin Solucionados', '', 'info', 1200);
    }
 }
 
@@ -4564,8 +4591,6 @@ function obtenerTareasPendientes(idEquipo) {
       for (let x = 0; x < pendientes.length; x++) {
          document.getElementsByClassName("S-PENDIENTE")[x].classList.remove('hidden');
       }
-   } else {
-      alertaImg('Sin PENDIENTES', '', 'info', 1200);
    }
 
    if (solucionados.length > 0) {
@@ -5398,6 +5423,9 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    document.getElementById("statusenergeticostoggle").classList.add('hidden');
    document.getElementById("statusdeptoggle").classList.add('hidden');
    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
+   document.getElementById("statusMaterialCod2bend").classList.add('hidden');
+   document.getElementById("statusbitacoratoggle").classList.add('hidden');
+   document.getElementById("btnEditarTituloXtoggle").classList.add('hidden');
 
    let sMaterialX = document.getElementById("statusMaterial");
    let sTrabajareX = document.getElementById("statusTrabajare");
@@ -5412,6 +5440,10 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    let sGasX = document.getElementById("statusGas");
    let sEnergeticosX = document.getElementById("statusenergeticos");
    let sDepartamentosX = document.getElementById("statusdep");
+   let sGPX = document.getElementById("statusGP");
+   let sTRSX = document.getElementById("statusTRS");
+   let sZIX = document.getElementById("statusZI");
+   let statusbitacoraX = document.getElementById("statusbitacora");
 
    sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs";
 
@@ -5438,6 +5470,14 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    sEnergeticosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
 
    sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+   sGPX.className = "w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+   sTRSX.className = "w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+   sZIX.className = "w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+   statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
 
    fetch(URL)
       .then(array => array.json())
@@ -5496,12 +5536,32 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
                sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
             }
 
+            if (array[0].bitacoraGP > 0) {
+               sGPX.className = "w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+            }
+
+            if (array[0].bitacoraTRS > 0) {
+               sTRSX.className = "w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+            }
+
+            if (array[0].bitacoraZI > 0) {
+               sZIX.className = "w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+            }
+
+            if (array[0].bitacoraGP > 0 || array[0].bitacoraTRS > 0 || array[0].bitacoraZI > 0) {
+               statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+            }
+
             if (array[0].titulo) {
-               document.getElementById("inputEditarTitulo").value = array[0].titulo;
+               document.getElementById("editarTitulo").value = array[0].titulo;
+            } else {
+               document.getElementById("editarTitulo").value = '';
             }
 
             if (array[0].cod2bend) {
                document.getElementById("inputCod2bend").value = array[0].cod2bend;
+            } else {
+               document.getElementById("inputCod2bend").value = '';
             }
          }
 
@@ -5543,9 +5603,9 @@ function obtenerPendientesUsuario() {
                   let fVerEnPlanner = '';
 
                   if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
-                     fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente});"`;
+                     fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   } else if (tipoPendiente == 'FALLA') {
-                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente});"`;
+                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   }
 
                   const codigo = `
