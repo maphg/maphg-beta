@@ -1641,7 +1641,7 @@
 
                 <div id="etiquetadoProyectosDEP" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 bg-red-300 text-red-500 px-2 font-semibold border-2 border-red-200">
                     <i class="fas fa-star mr-1"></i>
-                    <h1>Etiquetado como <span id="etiquetadoDEP"></span></h1>
+                    <h1>Etiquetado <span id="etiquetadoDEP"></span></h1>
                 </div>
 
                 <div id="proyectosPendientesDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
@@ -1654,7 +1654,7 @@
                     <h1>Solucionados</h1>
                 </div>
 
-                <div class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                <div id="exportarProyectosDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
                     <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                     <h1>Exportar</h1>
                 </div>
@@ -2329,7 +2329,7 @@
 
                 <div id="btnEditarTituloXtoggle" class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs hidden">
                     <div class=" w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center text-gray-500 px-1">
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" id="editarTitulo" type="text" placeholder="Nuevo Título">
+                        <input id="editarTitulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" type="text" placeholder="Nuevo Título" maxlength="60">
 
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnEditarTitulo" type="button">
                             <i class="fas fa-check fa-1x"></i>

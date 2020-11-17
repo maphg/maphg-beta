@@ -599,7 +599,7 @@ function tooltipProyectosDEP(idProyecto) {
     // Propiedades para el tooltip
     const button = document.getElementById(idProyecto + 'proyectoDEP');
     const tooltip = document.getElementById('tooltipProyectosDEP');
-    Popper.createPopper(button, tooltip,{
+    Popper.createPopper(button, tooltip, {
         placement: 'bottom-start'
     });
 }
@@ -642,12 +642,18 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
     // Atributos Iniciales
     document.getElementById("proyectosPendientesDEP").
         setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+
     document.getElementById("proyectosSolucionadosDEP").
         setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "SOLUCIONADO");`);
+
     document.getElementById("opcionProyectosDEP").
         setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+
     document.getElementById("etiquetadoProyectosDEP").
         setAttribute('onclick', "obtenerEtiquetados('PENDIENTE');");
+        
+    document.getElementById("exportarProyectosDEP").
+        setAttribute('onclick', `exportarProyectosDEP(${idSubseccion});`);
     // Atributos Iniciales
 
     // Estilo para Botones Superiores
@@ -1408,10 +1414,15 @@ function obtenerEtiquetados(status) {
 
     document.getElementById("opcionProyectosDEP").
         setAttribute('onclick', `obtenerProyectosDEP(${idSubseccion}, "PENDIENTE");`);
+
+    document.getElementById("exportarProyectosDEP").
+        setAttribute('onclick', `exportarProyectosDEPEtiquetados(${idSubseccion});`);
     // Atributos Iniciales
 
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
+
+    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {
@@ -1665,3 +1676,29 @@ document.getElementById("palabraProyectoDEP").addEventListener('keyup', function
     buscadorTabla('contenedorDeProyectosDEP', 'palabraProyectoDEP', 0);
     buscadorTabla('contenedorDeEtiquetados', 'palabraProyectoDEP', 0);
 });
+
+
+function exportarProyectosDEP(idSubseccion) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const URL = `php/exportar_excel_GET.php?action=reporteProyectosDEP&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`;
+
+    setTimeout(() => {
+        alertaImg('Generando Reporte...', '', 'success', 1200);
+    }, 820);
+
+    window.location = URL;
+}
+
+
+function exportarProyectosDEPEtiquetados(idSubseccion) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const URL = `php/exportar_excel_GET.php?action=reporteProyectosDEPEtiquetados&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubseccion=${idSubseccion}`;
+
+    setTimeout(() => {
+        alertaImg('Generando Reporte...', '', 'success', 1200);
+    }, 820);
+
+    window.location = URL;
+}

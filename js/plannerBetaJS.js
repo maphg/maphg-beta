@@ -5702,3 +5702,13 @@ setInterval(function () {
    obtenerPendientesUsuario();
    // comprobarSession();
 }, 180000);
+
+
+// CONTADOR DE CARACTERES EN #editarTitulo
+document.getElementById("editarTitulo").addEventListener('keydown', event => {
+   if (event.keyCode > 47 && event.keyCode < 91) {
+      if (document.getElementById('editarTitulo').value.length >= 60) {
+         alertaImg('60 Caracteres como Máximo', '', 'info', 500);
+      }
+   }
+})

@@ -1087,7 +1087,7 @@ if (isset($_GET['action'])) {
                 if ($sDepartamento > 0) {
                     $sDepartamentox = 1;
                 }
-                if ($status == "N" or $status == "PENDIENTE") {
+                if ($status == "P" or $status == "N" or $status == "PENDIENTE") {
                     $status = "PENDIENTE";
                 } else {
                     $status = "SOLUCIONADO";
