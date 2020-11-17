@@ -153,7 +153,6 @@ if (isset($_GET['action'])) {
                 $proximoMpSemana = 0;
                 $query = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual' ORDER BY id DESC";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $tareasSolucionadas = 0;
                     foreach ($result as $a) {
                         $proximoMpFechaX = (new DateTime($a['ultima_modificacion']))
                             ->format("d/m/Y");
