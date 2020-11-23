@@ -2002,7 +2002,7 @@ if (isset($_POST['action'])) {
         if ($Energeticos_Permiso == 1) {
             if ($idDestino == 10) {
                 $query = "SELECT 
-                c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.gruop, c_secciones.seccion
+                c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, c_secciones.seccion
                 FROM c_subsecciones
                 INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
                 WHERE id_seccion = 1001";
