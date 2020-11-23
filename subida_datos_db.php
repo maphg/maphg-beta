@@ -10,8 +10,7 @@
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
     <link rel="stylesheet" href="css/fontawesome/css/all.min.css"">
-
-
+    <link rel="stylesheet" href="css/alertify.min.css">
 
 </head>
 
@@ -35,6 +34,7 @@
                 <option value="t_stock_america">Stock (t_stock_america)</option>
                 <option value="t_equipos">Equipos Tabla Antigua (t_equipos)</option>
                 <option value="t_mp_np">TAREAS (t_mp_np)</option>
+                <option value="t_subcontratas_america_materiales">Gastos Materiales (t_subcontratas_america_materiales)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -291,7 +291,7 @@
             </div>
         </div>
     </div>
-
+<script src="js/alertify.min.js"></script>
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/sweetalert2@9.js"></script>
@@ -708,7 +708,7 @@
                 document.getElementById("columna28").value = '';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
-            }else if(tabla == "t_mp_np"){
+            } else if (tabla == "t_mp_np") {
                 document.getElementById("columna1").value = 'id';
                 document.getElementById("columna2").value = 'id_equipo';
                 document.getElementById("columna3").value = 'id_usuario';

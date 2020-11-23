@@ -585,7 +585,9 @@ function consultaSubsecciones(idDestino, idUsuario) {
          document.getElementById("columnasSeccionesZIA").innerHTML = data.dataZIA;
          document.getElementById("columnasSeccionesZIC").innerHTML = data.dataZIC;
          document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
+         document.getElementById("columnasSeccionesEnergeticos").innerHTML = data.dataEnergeticos;
          calendarioSecciones();
+         console.log(data);
       },
    });
 }

@@ -934,6 +934,23 @@ if (isset($_GET['action'])) {
             }
         }
 
+        $query = "SELECT id, actividad FROM t_proyectos_planaccion WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalProyectos++;
+                $idProyecto = $x['id'];
+                $actividad = $x['actividad'];
+
+                $arrayTemp = array(
+                    "idPendiente" => intval($idProyecto),
+                    "tipoPendiente" => "PLANACCION",
+                    "seccion" => "PROYECTO",
+                    "actividad" => $actividad,
+                );
+                $arrayIndex[] = $arrayTemp;
+            }
+        }
+
         $array['totalFallas'] = $totalFallas;
         $array['totalTareas'] = $totalTareas;
         $array['totalTareasGenerales'] = $totalTareasGenerales;

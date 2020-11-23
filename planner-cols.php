@@ -225,8 +225,8 @@
                                     <i class="fad fa-clipboard-list-check "></i>
                                     <h1 class="text-xs ml-2">Mis pendientes <span id="loadPendientes" class="text-cyan-900 ml-2"></span></h1>
                                 </div>
-                                <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
-                                    <div class="flex text-xs font-semibold my-3 justify-center items-center w-full">
+                                <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
+                                    <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
                                         <div class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/3 text-center cursor-pointer">
                                             <h1 id="totalPendientesFallas">Fallas (0)</h1>
                                         </div>
@@ -248,6 +248,7 @@
                     </div>
                 </div>
             </div>
+            <div id="columnasSeccionesEnergeticos" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
             <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>

@@ -32,3 +32,10 @@ function cerrarmodal(idmodal) {
         })
     }
 };
+
+function abrirmodal(idModal) {
+    if (document.getElementById(idModal)) {
+        document.getElementById(idModal).classList.add('open')
+    }
+
+}
