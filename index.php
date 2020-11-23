@@ -1838,6 +1838,80 @@ $tablaRanking .= "</div>";
                         echo "</div>";
                     }
                     ?>
+
+                    <?php
+                    $id_seccion = 1001;
+                    $nombre_seccion = "Energéticos";
+
+                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
+                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
+
+                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
+                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
+                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
+                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-11'>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
+                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
+                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
+
+                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
+                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and activo=1 and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
+                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
+                                $row_cnt = mysqli_num_rows($result_t_mc);
+
+                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
+                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
+                                }
+                            }
+                        }
+
+                        // Imprime las subcategorias Ordenadas.
+
+                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
+                        arsort($array_energeticos);
+
+                        // Recorre el arreglo.
+                        foreach ($array_energeticos as $id => $total) {
+                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
+                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
+                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
+                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
+                                    . "<div class=\"column is-10\">"
+                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
+                                    . "</div>"
+                                    . "<div class=\"column\">";
+                                if ($total > 0) {
+                                    echo "<p class=\"t-pendiente\">$total</p>";
+                                } else {
+
+                                    echo  "<p class=\"t-normal\">0</p>";
+                                }
+                                echo
+                                    "</div>"
+                                        . "</div>"
+                                        . "</a>";
+                            }
+                        } //fin Foreach
+
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
+
+                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
+
+                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                            } else {
+
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                            }
+                        }
+                        echo "</div>";
+                    }
+                    ?>
+
                 <?php } else {
 
                     //COLUMNAS PARA EL DESTINO DE AMERICA ID:10 
@@ -2708,6 +2782,85 @@ $tablaRanking .= "</div>";
 
                         // Recorre el arreglo.
                         foreach ($array_zil as $id => $total) {
+                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
+                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
+                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+
+
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
+                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
+                                    . "<div class=\"column is-10\">"
+                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
+                                    . "</div>"
+                                    . "<div class=\"column\">";
+                                if ($total > 0) {
+                                    echo "<p class=\"t-pendiente\">$total</p>";
+                                } else {
+
+                                    echo  "<p class=\"t-normal\">0</p>";
+                                }
+                                echo
+                                    "</div>"
+                                        . "</div>"
+                                        . "</a>";
+                            }
+                        } //fin Foreach
+
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
+
+                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
+
+                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                            } else {
+
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                            }
+                        }
+                        echo "</div>";
+                    }
+
+
+                    // Fin America Total.
+                
+                ?>
+
+                
+                <?php
+                    $id_seccion = 1001;
+                    $nombre_seccion = "Energéticos";
+
+                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
+                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
+
+                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
+                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
+                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
+                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-1001'>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
+                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
+                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
+
+                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
+                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and activo=1 and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
+                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
+                                $row_cnt = mysqli_num_rows($result_t_mc);
+
+                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
+                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
+                                }
+                            }
+                        }
+
+                        // Imprime las subcategorias Ordenadas.
+
+                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
+                        arsort($array_energeticos);
+
+                        // Recorre el arreglo.
+                        foreach ($array_energeticos as $id => $total) {
                             $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
                             $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
                             if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
