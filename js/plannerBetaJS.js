@@ -65,6 +65,35 @@ function obtenerDatosUsuario(idDestino) {
 })();
 
 
+// FUNCION PARA ACTUALIZAR RANGO FECHA #rangoFechaX
+$(function () {
+   $('input[name="rangoFechaX"]').daterangepicker({
+      autoUpdateInput: false,
+      showWeekNumbers: true,
+      locale: {
+         cancelLabel: "Cancelar",
+         applyLabel: "Aplicar",
+         fromLabel: "De",
+         toLabel: "A",
+         customRangeLabel: "Personalizado",
+         weekLabel: "S",
+         daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+         monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      },
+   });
+
+   $('input[name="rangoFechaX"]').on("apply.daterangepicker", function (
+      ev,
+      picker
+   ) {
+      $(this).val(
+         picker.startDate.format("DD/MM/YYYY") +
+         " - " +
+         picker.endDate.format("DD/MM/YYYY")
+      );
+   });
+})
+
 // Función para Input Fechas para Agregar MC.
 $(function () {
    $('input[name="datefilter"]').daterangepicker({
@@ -2229,6 +2258,7 @@ function subirImagenGeneral(idTabla, tabla) {
             } else if (data == 4) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
                obtenerPlanaccion(idProyecto);
+               verEnPlanner('PLANACCION', idTabla);
                adjuntosPlanaccion(idTabla);
             } else if (data == 5) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
@@ -2278,7 +2308,6 @@ function verEnPlanner(tipoPendiente, idPendiente) {
    document.getElementById("dataStatusVP").
       setAttribute('onclick', `verEnPlanner('${tipoPendiente}', ${idPendiente});`);
 
-
    $.ajax({
       type: "POST",
       url: "php/plannerCrudPHP.php",
@@ -2291,11 +2320,11 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
+         console.log(data);
          if (data != "") {
             document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
             document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;
             document.getElementById("creadoPorVP").innerHTML = data.creadoPor;
-            document.getElementById("fechaVP").value = data.fecha;
             document.getElementById("dataResponsablesVP").innerHTML = data.responsable;
             document.getElementById("dataStatusVP").innerHTML = data.status;
             document.getElementById("dataComentariosVP").innerHTML = data.dataComentariosVP;
@@ -2328,14 +2357,14 @@ function verEnPlanner(tipoPendiente, idPendiente) {
                // FECHA
                document.getElementById("fechaVP").
                   setAttribute('onclick', 'obtenerFechaTareas(' + idPendiente + ', "' + data.fecha + '")');
-               document.getElementById("fechaVP").innerHTML = data.fecha;
-               document.getElementById("fechaTareas").value = data.fecha;
-
 
                // RESPONSABLE
                document.getElementById("responsableVP").
                   setAttribute('onclick', 'obtenerUsuarios("asignarTarea",' + idPendiente + ')');
 
+               // FECHA
+               document.getElementById("fechaVP").innerHTML = data.fecha;
+               document.getElementById("fechaTareas").value = data.fecha;
 
                // ADJUNTOS
                document.getElementById("adjuntosVP").
@@ -2344,6 +2373,29 @@ function verEnPlanner(tipoPendiente, idPendiente) {
                // COMENTARIOS
                document.getElementById("btnComentarioVP").
                   setAttribute('onclick', 'agregarComentarioVP("' + tipoPendiente + '", ' + idPendiente + ')');
+            } else if (tipoPendiente == "PLANACCION") {
+               // FECHA
+               document.getElementById("fechaVP").innerHTML = data.fecha;
+               document.getElementById("rangoFechaX").value = data.fecha;
+
+               document.getElementById("fechaVP").
+                  setAttribute('onclick', "abrirmodal('modalRangoFechaX')");
+
+               document.getElementById("btnAplicarRangoFecha").
+                  setAttribute('onclick', `actualizarPlanaccion(1, 'rango_fecha', ${idPendiente});`);
+
+               // RESPONSABLE
+               document.getElementById("responsableVP").
+                  setAttribute('onclick', 'obtenerResponsablesPlanaccion(' + idPendiente + ')');
+
+               // ADJUNTOS
+               document.getElementById("adjuntosVP").
+                  setAttribute('onclick', 'adjuntosPlanaccion(' + idPendiente + ')');
+
+               // COMENTARIOS
+               document.getElementById("btnComentarioVP").
+                  setAttribute('onclick', 'agregarComentarioPlanaccionVerEnPlanner(' + idPendiente + ')');
+
             }
          } else {
             document.getElementById("modalVerEnPlanner").classList.remove('open');
@@ -2351,6 +2403,42 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       }
    });
 }
+
+
+// AGREGAR COMENTARIO PLANACCION VER EN PLANNER
+// AGREGAR COMENTARIO PLAN DE ACCIÓN
+function agregarComentarioPlanaccionVerEnPlanner(idPlanaccion) {
+   let comentario = document.getElementById("comentarioVP").value;
+   let idUsuario = localStorage.getItem("usuario");
+   let idDestino = localStorage.getItem("idDestino");
+   const action = "agregarComentarioPlanaccion";
+   if (comentario.length > 0) {
+      $.ajax({
+         type: "POST",
+         url: "php/plannerCrudPHP.php",
+         data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idPlanaccion: idPlanaccion,
+            comentario: comentario,
+         },
+         // dataType: "JSON",
+         success: function (data) {
+            if (data == 1) {
+               verEnPlanner('PLANACCION', idPlanaccion);
+               document.getElementById("comentarioVP").value = "";
+               alertaImg("Comentario Agregado", "", "success", 2500);
+            } else {
+               alertaImg("Intente de Nuevo", "", "info", 2500);
+            }
+         },
+      });
+   } else {
+      alertaImg("Comentario NO Valido", "", "info", 2500);
+   }
+}
+
 
 // Comentaio Ver en Planner
 function agregarComentarioVP(tipoPendiente, idPendiente) {
@@ -5607,6 +5695,8 @@ function obtenerPendientesUsuario() {
                      fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   } else if (tipoPendiente == 'FALLA') {
                      fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
+                  } else if (tipoPendiente == 'PLANACCION') {
+                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   }
 
                   const codigo = `
@@ -5635,6 +5725,7 @@ function obtenerPendientesUsuario() {
       })
       .catch(function (err) {
          fetch(APIERROR + err + ': (obtenerPendientesUsuario)');
+         document.getElementById("loadPendientes").innerHTML = '';
       })
 }
 

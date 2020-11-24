@@ -2023,8 +2023,8 @@ if (isset($_POST['action'])) {
                             <div
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
-                                    class=\"absolute text-cyan-700 bg-cyan-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md\">$seccion</h1>
+                                    class=\"absolute text-yellow-700 bg-yellow-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
+                                    <h1 class=\"font-medium text-md truncate\">$seccion</h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
@@ -2114,7 +2114,7 @@ if (isset($_POST['action'])) {
                                     $dataEnergeticos .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                            onclick=\"obtenerEquiposAmerica($idSeccion, $idSubseccion); toggleModalTailwind('modalEquiposAmerica');\">
+                                           onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -7288,7 +7288,7 @@ if (isset($_POST['action'])) {
         $actividad = $_POST['actividad'];
         $idSeccion = $_POST['idSeccion'];
 
-        if ($columna == "asignarPlanaccion" and $valor > 0) {
+        if ($columna == "asignarPlanaccion" and $valor >= 0) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
@@ -8154,11 +8154,12 @@ if (isset($_POST['action'])) {
         $tipoPendiente = $_POST['tipoPendiente'];
         $idPendiente = $_POST['idPendiente'];
         $data = array();
-        $fecha = "--";
+        $fecha = "- -";
         $status = "";
         $dataComentariosVP = "";
         $dataImagen = "";
         $dataAdjunto = "";
+        $responsable = "";
 
         if ($tipoPendiente == "FALLA") {
             $query = "SELECT t_mc.id, t_equipos.equipo, t_mc.actividad, t_mc.rango_fecha, t_mc.responsable,
@@ -8176,7 +8177,7 @@ if (isset($_POST['action'])) {
                 foreach ($result as $i) {
                     $idFalla = $i['id'];
                     $actividad = $i['actividad'];
-                    $creadoPor = $i['nombre'] . "" . $i['apellido'];
+                    $creadoPor = $i['nombre'] . " " . $i['apellido'];
                     $rangoFecha = $i['rango_fecha'];
                     $fechaInicio = $i['fecha_inicio'];
                     $responsable = $i['responsable'];
@@ -8397,7 +8398,6 @@ if (isset($_POST['action'])) {
                     // ADJUNTOS
                     $queryAdjuntos = "SELECT t_mc_adjuntos.id, t_mc_adjuntos.url_adjunto, t_mc_adjuntos.fecha, t_mc_adjuntos.subido_por FROM t_mc_adjuntos 
                     WHERE t_mc_adjuntos.id_mc = $idFalla AND t_mc_adjuntos.activo = 1";
-
                     if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
 
                         foreach ($resultAdjuntos as $value) {
@@ -8469,7 +8469,7 @@ if (isset($_POST['action'])) {
                 foreach ($result as $i) {
                     $idTarea = $i['id'];
                     $actividad = $i['titulo'];
-                    $creadoPor = $i['nombre'] . "" . $i['apellido'];
+                    $creadoPor = $i['nombre'] . " " . $i['apellido'];
                     $rangoFecha = $i['rango_fecha'];
                     $responsable = $i['responsable'];
                     $actividadCaracteres = preg_replace('([^A-Za-z0-9 ])', '', $actividad);
@@ -8645,7 +8645,6 @@ if (isset($_POST['action'])) {
                         }
                     }
 
-
                     // COMENTARIOS
                     $queryComentario = "SELECT comentarios_mp_np.comentario, comentarios_mp_np.fecha, 
                     t_colaboradores.nombre, t_colaboradores.apellido
@@ -8697,7 +8696,6 @@ if (isset($_POST['action'])) {
                     $queryAdjuntos = "SELECT adjuntos_mp_np.id, adjuntos_mp_np.url, adjuntos_mp_np.fecha, 
                     adjuntos_mp_np.id_usuario FROM adjuntos_mp_np 
                     WHERE adjuntos_mp_np.id_mp_np = $idTarea AND adjuntos_mp_np.activo = 1";
-
                     if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
 
                         foreach ($resultAdjuntos as $value) {
@@ -8752,6 +8750,307 @@ if (isset($_POST['action'])) {
                 $data['status'] = $status;
                 $data['dataComentariosVP'] = $dataComentariosVP;
                 $data['adjuntos'] = $dataImagen . $dataAdjunto;
+            }
+        } elseif ($tipoPendiente == "PLANACCION") {
+            $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.responsable, t_proyectos_planaccion.status_urgente,
+            t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.status_material,
+            t_proyectos_planaccion.status_trabajando, 
+            t_proyectos_planaccion.energetico_electricidad,
+            t_proyectos_planaccion.energetico_agua,
+            t_proyectos_planaccion.energetico_diesel,
+            t_proyectos_planaccion.energetico_gas,
+            t_proyectos_planaccion.departamento_calidad,
+            t_proyectos_planaccion.departamento_compras,
+            t_proyectos_planaccion.departamento_direccion,
+            t_proyectos_planaccion.departamento_finanzas,
+            t_proyectos_planaccion.departamento_rrhh,
+            t_colaboradores.nombre, t_colaboradores.apellido
+            FROM t_proyectos_planaccion
+            INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+            INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+            WHERE t_proyectos_planaccion.id = $idPendiente";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idPlanaccion = $x['id'];
+                    $actividad = $x['actividad'];
+                    $creadoPor = $x['nombre'] . " " . $x['apellido'];
+                    $rangoFecha = $x['rango_fecha'];
+                    $responsable = $x['responsable'];
+
+                    // Status
+                    $statusUrgente = $x['status_urgente'];
+                    $statusMaterial = $x['status_material'];
+                    $statusTrabajare = $x['status_trabajando'];
+                    $statusElectricidad = $x['energetico_electricidad'];
+                    $statusAgua = $x['energetico_agua'];
+                    $statusDiesel = $x['energetico_diesel'];
+                    $statusGas = $x['energetico_gas'];
+                    $statusCalidad = $x['departamento_calidad'];
+                    $statusCompras = $x['departamento_compras'];
+                    $statusDireccion = $x['departamento_direccion'];
+                    $statusFinanzas = $x['departamento_finanzas'];
+                    $statusRRHH = $x['departamento_rrhh'];
+
+
+                    // COMPROVACIÓN RANGO FECHA
+                    if ($rangoFecha == "") {
+                        $rangoFecha = "--";
+                    }
+
+                    // AGREGAR STATUS MODALSTATUS
+                    $status .= "                 
+                        <div onclick=\"statusPlanaccion($idPlanaccion);\" class=\"bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600\">
+                            <h1 class=\"font-medium text-sm\"> <i class=\"fas fa-plus\"></i></h1>
+                        </div>
+                    ";
+
+                    if ($statusUrgente == 0 or $statusUrgente == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "";
+                    }
+
+                    if ($statusTrabajare == 0 or $statusTrabajare == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Trabajando</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'status_trabajando', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusMaterial == 0 or $statusMaterial == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Material</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'status_material',$idPendiente1)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusElectricidad == 0 or $statusElectricidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Electricidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'energetico_electricidad', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusAgua == 0 or $statusAgua == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Agua</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'energetico_agua',$idPendiente1)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusGas == 0 or $statusGas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Gas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'energetico_gas',$idPendiente1)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDiesel == 0 or $statusDiesel == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "
+                            <div class=\"bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Diesel</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'energetico_diesel',$idPendiente1)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCompras == 0 or $statusCompras == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Compras</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'departamento_compras', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusFinanzas == 0 or $statusFinanzas == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Finanzas</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'departamento_finanzas', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusRRHH == 0 or $statusRRHH == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">RRHH</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'departamento_rrhh',$idPendiente1)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusCalidad == 0 or $statusCalidad == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Calidad</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'departamento_calidad', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    if ($statusDireccion == 0 or $statusDireccion == "") {
+                        $status .= "";
+                    } else {
+                        $status .= "                        
+                            <div class=\"bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">Dirección</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'departamento_direccion', $idPendiente)\"></i>
+                            </div>
+                        ";
+                    }
+
+                    // RESPONSABLE
+                    $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_users 
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_users.id = $responsable";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $responsable = $i['nombre'] . " " . $i['apellido'];
+
+                            $responsable = "
+                            <div class=\"bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2\">
+                                <h1 class=\"font-medium\">$responsable</h1>
+                                <i class=\"fas fa-times ml-1 hover:text-red-500 cursor-pointer\" onclick=\"actualizarPlanaccion(0, 'asignarPlanaccion', $idPendiente);\"></i>
+                            </div>
+                            ";
+                        }
+                    }
+
+                    // COMENTARIOS
+                    $query = "SELECT t_proyectos_planaccion_comentarios.comentario, t_proyectos_planaccion_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+                    FROM t_proyectos_planaccion_comentarios
+                    INNER JOIN t_users ON t_proyectos_planaccion_comentarios.usuario = t_users.id
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_proyectos_planaccion_comentarios.id_actividad = $idPlanaccion and t_proyectos_planaccion_comentarios.activo = 1 
+                    ORDER BY t_proyectos_planaccion_comentarios.id DESC";
+                    $dataComentariosVP = "";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $comentario = $i['comentario'];
+                            $usuarioComentario = $i['nombre'] . " " . $i['apellido'];
+                            $fechaComentario = $i['fecha'];
+
+                            $dataComentariosVP .= "
+                                <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative\">
+                                        <div class=\"flex items-center justify-center\" style=\"width: 30px;\">
+                                            <img src=\"https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$usuarioComentario\" width=\"30\" height=\"30\" alt=\"\">
+                                        </div>
+                                        <div class=\"flex flex-col justify-start items-start p-2 w-full\">
+                                            <div class=\"font-bold flex flex-row justify-between w-full text-xxs\">
+                                                <div>
+                                                    <h1>$usuarioComentario</h1>
+                                                </div>
+                                                <div class=\"absolute bottom-0 right-0 mr-1 mb-1\">
+                                                    <p class=\"font-mono ml-2 text-teal-400\">$fechaComentario</p>
+                                                </div>
+                                            </div>
+                                            <div class=\"w-full text-xs text-justify\">
+                                                <p>$comentario</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ";
+                        }
+                    }
+
+                    // ADJUNTOS
+                    $queryAdjuntos = "SELECT t_proyectos_planaccion_adjuntos.id, t_proyectos_planaccion_adjuntos.url_adjunto, t_proyectos_planaccion_adjuntos.fecha_creado, t_proyectos_planaccion_adjuntos.subido_por 
+                    FROM t_proyectos_planaccion_adjuntos 
+                    WHERE t_proyectos_planaccion_adjuntos.id_actividad = $idPlanaccion AND t_proyectos_planaccion_adjuntos.status = 1";
+                    if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
+
+                        foreach ($resultAdjuntos as $value) {
+                            $url = $value['url_adjunto'];
+
+                            if (file_exists("../planner/proyectos/$url")) {
+                                $adjuntoURL = "planner/proyectos/$url";
+                            } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
+                                $adjuntoURL = "planner/proyectos/planaccion/$url";
+                            } elseif (file_exists("../../planner/proyectos/$url")) {
+                                $adjuntoURL = "../planner/proyectos/$url";
+                            } else {
+                                $adjuntoURL = "../planner/proyectos/planaccion/$url";
+                            }
+
+                            // Admite solo Imagenes.
+                            if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+                                if (strpbrk($adjuntoURL, ' ')) {
+                                    $dataImagen .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"m-2 cursor-pointer overflow-hidden w-20 h-20 rounded-md\">
+                                            <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                        </div>
+                                    </a>
+                                    ";
+                                } else {
+                                    $dataImagen .= "
+                                        <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                        </div>
+                                        </a>
+                                    ";
+                                }
+
+                                // Admite todo, menos lo anterior.
+                            } else {
+
+                                $dataAdjunto .= "
+                                    <a href=\"$adjuntoURL\" target=\"_blank\">
+                                        <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                            <i class=\"fad fa-file-alt fa-3x\"></i>
+                                            <p class=\"text-sm font-normal ml-2\">$url
+                                            </p>
+                                        </div>
+                                    </a>                    
+                                ";
+                            }
+                        }
+                    }
+                }
+
+                $data['idPendiente'] = $idPlanaccion;
+                $data['actividad'] = $actividad;
+                $data['fecha'] = $rangoFecha;
+                $data['responsable'] = $responsable;
+                $data['creadoPor'] = $creadoPor;
+                $data['status'] = $status;
+                $data['dataComentariosVP'] = $dataComentariosVP;
+                $data['adjuntos'] = $dataImagen . $dataAdjunto;
+                $data['equipo'] = "PROYECTO";
             }
         }
         echo json_encode($data);
@@ -9694,6 +9993,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     #OBTIENE LOS COMENTARIOS POR EQUIPO
     if ($action == "obtenerComentariosEquipos") {
         $idEquipo = $_POST['idEquipo'];
@@ -9725,6 +10025,7 @@ if (isset($_POST['action'])) {
         echo json_encode($array);
     }
 
+
     if ($action == "agregarComentarioEquipo") {
         $idEquipo = $_POST["idEquipo"];
         $comentario = $_POST["comentario"];
@@ -9737,6 +10038,23 @@ if (isset($_POST['action'])) {
         }
     }
 
+
+    if ($action == "obtenerRangoFechaPlanaccion") {
+        $idPlanaccion = $_POST['idPlanaccion'];
+        $rangoFecha = "";
+        $query = "SELECT rango_fecha, fecha_creacion FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format('d/m/Y');
+
+                if ($rangoFecha == "" || $rangoFecha == " ") {
+                    $rangoFecha = $fechaCreacion . ' - ' . $fechaCreacion;
+                }
+            }
+        }
+        echo json_encode($rangoFecha);
+    }
 
 
     // FIN

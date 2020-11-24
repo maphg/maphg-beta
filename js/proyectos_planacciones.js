@@ -259,7 +259,7 @@ const datosPlanes = params => {
     // var fOT = `onclick="generarOTPlanaccion(${idPlanaccion});"`;
     var fOT = `<a href="OT_proyectos/#P${idPlanaccion}" class="text-black" target="_blank"> 
     ${idPlanaccion}</a>`;
-
+    var fRangoFecha = '';
     var statusPlanaccion = '';
     var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
     if (params.status == "PENDIENTE") {
@@ -269,6 +269,7 @@ const datosPlanes = params => {
         fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccion'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
         fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccion'); statusPlanaccion(${idPlanaccion}); nivelVista(1,'modalStatus');"`;
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+        fRangoFecha = `onclick="abrirmodal('modalRangoFechaX'); obtenerRangoFechaPlanaccion(${idPlanaccion})"`;
     } else {
         fStatus = `onclick="actualizarPlanaccion('N','status', ${idPlanaccion});"`;
         iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
@@ -293,7 +294,7 @@ const datosPlanes = params => {
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable}>
                 <h1>${params.responsable}</h1>
             </td>
-            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fRangoFecha}>
                 <div class="leading-4">${params.fechaInicio}</div>
                 <div class="leading-3">${params.fechaFin}</div>
             </td>
@@ -528,6 +529,34 @@ function estiloBotonesProyectos(status, opcion = 'PROYECTOS') {
         document.getElementById("proyectosSolucionados").classList.add('bg-purple-200');
         document.getElementById("proyectosSolucionados").classList.remove('bg-purple-600');
     }
+}
+
+
+function obtenerRangoFechaPlanaccion(idPlanaccion) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerRangoFechaPlanaccion";
+
+    document.getElementById("btnAplicarRangoFecha").
+        setAttribute('onclick', `actualizarPlanaccion(1, 'rango_fecha', ${idPlanaccion});`);
+
+    console.log(idPlanaccion);
+    $.ajax({
+        type: "POST",
+        url: "php/plannerCrudPHP.php",
+        data: {
+            action: action,
+            idDestino: idDestino,
+            idUsuario: idUsuario,
+            idPlanaccion: idPlanaccion
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if (document.getElementById("rangoFechaX")) {
+                document.getElementById("rangoFechaX").value = data;
+            }
+        }
+    })
 }
 
 
@@ -1038,12 +1067,14 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
 
 // ACTUALIZAR PLANACCIÓN
 function actualizarPlanaccion(valor, columna, idPlanaccion) {
+    console.log(valor, columna, idPlanaccion);
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSeccion = localStorage.getItem("idSeccion");
     let actividad = document.getElementById("editarTitulo").value;
     let idProyecto = localStorage.getItem('idProyecto');
     let codigoSeguimiento = document.getElementById("inputCod2bend").value;
+    let rangoFecha = document.getElementById("rangoFechaX").value;
     const action = "actualizarPlanaccion";
     $.ajax({
         type: "POST",
@@ -1057,13 +1088,15 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             valor: valor,
             columna: columna,
             actividad: actividad,
-            codigoSeguimiento: codigoSeguimiento
+            codigoSeguimiento: codigoSeguimiento,
+            rangoFecha: rangoFecha
         },
         // dataType: "JSON",
         success: function (data) {
             console.log(data);
             obtenerPlanaccion(idProyecto);
             obtenerPlanaccionDEP(idProyecto);
+            verEnPlanner('PLANACCION', idPlanaccion);
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
                 alertaImg("Responsable Actualizado", "", "success", 2500);
@@ -1092,7 +1125,10 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Status Actualizado", "", "success", 2500);
                 obtenerProyectos(idSeccion, 'PENDIENTE');
-            }else if(data == 9){
+            } else if (data == 8) {
+                cerrarmodal('modalRangoFechaX');
+                alertaImg("Fecha Actualizada", "", "success", 1500);
+            } else if (data == 9) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Bitácora Actualizada", "", "success", 2500);
                 obtenerProyectos(idSeccion, 'PENDIENTE');

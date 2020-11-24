@@ -719,7 +719,7 @@ function obtenerDatoProyectos(idProyecto, columna) {
 // Función para Input Fechas PROYECTOS
 $(function () {
     $('input[name="rangoFechaX"]').daterangepicker({
-        autoUpdateInput: true,
+        autoUpdateInput: false,
         showWeekNumbers: true,
         locale: {
             cancelLabel: "Cancelar",
@@ -737,19 +737,13 @@ $(function () {
         $(this).val(picker.startDate.format("DD/MM/YYYY") + " - " + picker.endDate.format("DD/MM/YYYY")
         );
     });
-    $('input[name="rangoFechaX"]').on("cancel.daterangepicker", function (
-        ev,
-        picker
-    ) {
-        $(this).val("");
-    });
 })
 
 
 // Función para Input Fechas PROYECTOS
 $(function () {
     $('input[name="fechaProyecto"]').daterangepicker({
-        autoUpdateInput: true,
+        autoUpdateInput: false,
         showWeekNumbers: true,
         locale: {
             cancelLabel: "Cancelar",
@@ -774,12 +768,6 @@ $(function () {
             picker.endDate.format("DD/MM/YYYY");
         let idProyecto = localStorage.getItem("idProyecto");
         actualizarProyectos(rangoFecha, "rango_fecha", idProyecto);
-    });
-    $('input[name="fechaProyecto"]').on("cancel.daterangepicker", function (
-        ev,
-        picker
-    ) {
-        $(this).val("");
     });
 })
 
