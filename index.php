@@ -2854,24 +2854,14 @@ $tablaRanking .= "</div>";
                             $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
                             $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
                             if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+                                $idSubseccionX = $row_subsecciones['id'];
+                                $subseccionX = $row_subsecciones['grupo'];
 
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
                                 if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                                 } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                                 }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
                             }
                         } //fin Foreach
 
