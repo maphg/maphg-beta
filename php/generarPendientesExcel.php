@@ -92,12 +92,8 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
             if ($materialF != 0) {
                 $materialF = "SI";
-                $codsapF = "$codsapF";
-                $cod2bendF = "$cod2bendF";
             } else {
                 $materialF = "";
-                $codsapF = "";
-                $cod2bendF = "";
             }
 
             $queryComentario = "SELECT t_mc_comentarios.comentario, t_colaboradores.nombre, 
