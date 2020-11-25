@@ -261,7 +261,7 @@ if (isset($_GET['listaIdF'])) {
 
     <div id="33">
         <div class="flex flex-col items-start justify-start bg-white pt-4 px-4 overflow-hidden mt-1 relative"
-            style="width: 1223px; height: 1576px;">
+            style="width: 1223px; min-height: 1576px;">
 
             <div class="w-12 flex items-center justify-center absolute w-full h-full">
                 <div class="p-20">
@@ -285,8 +285,6 @@ if (isset($_GET['listaIdF'])) {
                         </div>
                     </div>
 
-
-
                     <div class="ml-2 font-light text-4xl flex flex-col leading-none">
                         <div>
                             <h1 class="">FALLAS Y TAREAS PENDIENTES</h1>
@@ -305,8 +303,6 @@ if (isset($_GET['listaIdF'])) {
                             <img class=" " src="../svg/qr.png" alt="">
                         </div>
                     </div>
-
-
 
                 </div>
 
