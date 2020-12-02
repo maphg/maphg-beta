@@ -1682,4 +1682,270 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+
+    if ($action == "reporteGestionEquipos") {
+        $filtroDestino = intval($_GET['filtroDestino']);
+        $filtroSeccion = intval($_GET['filtroSeccion']);
+        $filtroSubseccion = intval($_GET['filtroSubseccion']);
+        $filtroTipo = $_GET['filtroTipo'];
+        $filtroStatus = $_GET['filtroStatus'];
+        $filtroSemana = $_GET['filtroSemana'];
+        $filtroPalabra = $_GET['filtroPalabra'];
+        $array = array();
+        $fila = 1;
+
+        if ($filtroDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_equipos_america.id_destino = $filtroDestino";
+        }
+
+        if ($filtroTipo > 0) {
+            $filtroTipo = "and t_equipos_america.id_tipo = '$filtroTipo'";
+        } else {
+            $filtroTipo = "";
+        }
+
+        if ($filtroStatus != "") {
+            $filtroStatus = "and t_equipos_america.status = '$filtroStatus'";
+        } else {
+            $filtroStatus = "";
+        }
+
+        if ($filtroSeccion > 0) {
+            $filtroSeccion = "and t_equipos_america.id_seccion = $filtroSeccion";
+        } else {
+            $filtroSeccion = "";
+        }
+
+        if ($filtroSubseccion > 0) {
+            $filtroSubseccion = "and t_equipos_america.id_subseccion = $filtroSubseccion";
+        } else {
+            $filtroSubseccion = "";
+        }
+
+        if ($filtroPalabra == "") {
+            $filtroPalabra = "";
+        } else {
+            $filtroPalabra = "and (t_equipos_america.equipo LIKE '%$filtroPalabra%')";
+        }
+
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte EQUIPOS");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DESTINO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'SUBSECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FASE');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'ID TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'MARCA');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'MODELO');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'EQUIPO / LOCAL');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'UBICACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'PROMIXO MP');
+        // $objPHPExcel->getActiveSheet()->setCellValue('N1', 'PROCESO');
+        // $objPHPExcel->getActiveSheet()->setCellValue('O1', 'SOLUCIONADO');
+        // $objPHPExcel->getActiveSheet()->setCellValue('P1', 'PLANIFICADO');
+        // $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'SEMANA ACTUAL');
+
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
+        c_secciones.seccion, c_subsecciones.grupo, c_tipos.id 'id_tipo', c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
+        c_destinos.destino
+        FROM t_equipos_america
+        LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        LEFT JOIN c_tipos ON t_equipos_america.id_tipo = c_tipos.id
+        LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
+        LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
+        LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        WHERE t_equipos_america.activo = 1 
+        $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $equipo = $i['equipo'];
+                $local_equipo = $i['local_equipo'];
+                $status = $i['status'];
+                $seccion = $i['seccion'];
+                $subseccion = $i['grupo'];
+                $idTipo = $i['id_tipo'];
+                $tipo = $i['tipo'];
+                $marca = $i['marca'];
+                $ubicacion = $i['ubicacion'];
+                $modelo = $i['modelo'];
+                $idFases = $i['id_fases'];
+                $destino = $i['destino'];
+                $resultx = array();
+                $fila++;
+
+                // Contadores para Resumen MP
+                $contadorPlanificado = 0;
+                $contadorProceso = 0;
+                $contadorSolucionado = 0;
+
+                if ($filtroSemana <= 0 || $filtroSemana == "") {
+                    $mp = "SELECT* FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+
+                        foreach ($result as $x) {
+                            for ($i = $semanaActual; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PROCESO") {
+                                    $proximoMP = $i;
+                                    $resultx[] = $proximoMP;
+                                    $i = 52;
+                                }
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            // Resumen MP
+                            for ($i = 1; $i < 52; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PROCESO") {
+                                    $contadorProceso++;
+                                }
+                                if ($semana == "SOLUCIONADO") {
+                                    $contadorSolucionado++;
+                                }
+                            }
+                        }
+                    }
+
+                    $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+                        foreach ($result as $x) {
+                            for ($i = $semanaActual; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PLANIFICADO") {
+                                    $proximoMP = $i;
+                                    $resultx[] = $proximoMP;
+                                    $i = 52;
+                                }
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            for ($i = 1; $i < 53; $i++) {
+                                $semana = $x['semana_' . $i];
+                                if ($semana == "PLANIFICADO") {
+                                    $contadorPlanificado++;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $filtroSemana = intval($filtroSemana);
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
+                            if ($semana == "PROCESO") {
+                                $resultx[] = $filtroSemana;
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            // Resumen MP
+                            $semana = $x['semana_' . $filtroSemana];
+                            if ($semana == "PROCESO") {
+                                $contadorProceso++;
+                            }
+                            if ($semana == "SOLUCIONADO") {
+                                $contadorSolucionado++;
+                            }
+                        }
+                    }
+
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    if ($result = mysqli_query($conn_2020, $mp)) {
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
+                            if ($semana == "PLANIFICADO") {
+                                $resultx[] = $filtroSemana;
+                            }
+                        }
+
+                        foreach ($result as $x) {
+                            $semana = $x['semana_' . $filtroSemana];
+                            if ($semana == "PLANIFICADO") {
+                                $contadorPlanificado++;
+                            }
+                        }
+                    }
+                }
+
+                $resuly = array_count_values($resultx);
+                $xc = "";
+                foreach ($resuly as $key => $value) {
+                    if ($value > 1) {
+                        $xc .= " " . $key . "(" . $value . ") ";
+                    } else {
+                        $xc .= " " . $key;
+                    }
+                }
+
+
+                $fase = "";
+                $fases = "SELECT fase FROM c_fases WHERE id IN($idFases)";
+                if ($result = mysqli_query($conn_2020, $fases)) {
+                    foreach ($result as $i) {
+                        $fase .= $i['fase'] . " ";
+                    }
+                }
+
+                // $arrayTemp = array(
+                //     "id" => "$id",
+                //     "destino" => "$destino",
+                //     "equipo" => "$equipo",
+                //     "seccion" => "$seccion",
+                //     "subseccion" => "$subseccion",
+                //     "marca" => "$fase",
+                //     "idtipoEquipo" => intval($idTipo),
+                //     "tipoEquipo" => "$tipo",
+                //     "status" => "$status",
+                //     "marcaEquipo" => "$marca",
+                //     "modelo" => "$modelo",
+                //     "equipoLocal" => "$local_equipo",
+                //     "ubicacion" => "$ubicacion",
+                //     "proximoMP" => $xc,
+                //     "proceso" => $contadorProceso,
+                //     "solucionado" => $contadorSolucionado,
+                //     "planificado" => $contadorPlanificado,
+                //     "semanaActual" => $semanaActual
+                // );
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fase);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $idTipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $tipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $marca);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $modelo);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $local_equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $ubicacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $xc);
+                // $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $contadorProceso);
+                // $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $contadorSolucionado);
+                // $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $contadorPlanificado);
+                // $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $semanaActual);
+            }
+        }
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_EQUIPOS_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
 }

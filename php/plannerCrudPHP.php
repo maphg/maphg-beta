@@ -137,9 +137,11 @@ if (isset($_POST['action'])) {
         if ($idDestino == 10) {
             $filtroDestinoEquipo = "";
             $filtroDestinoTG = "";
+            $filtroDestinoPlanaccion = "";
         } else {
             $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
             $filtroDestinoTG = "and id_destino = $idDestino";
+            $filtroDestinoPlanaccion = "and t_proyectos.id_destino = $idDestino";
         }
 
         // ZIL
@@ -2075,7 +2077,19 @@ if (isset($_POST['action'])) {
                             }
                         }
 
-                        $totalSubseccionOrdenEnergeticos[] = intval($totalFallas) + intval($totalTareas) + intval($totalTareasGenerales);
+                        $queryPlanaccion = "SELECT count(t_proyectos_planaccion.id) 
+                        FROM t_proyectos
+                        INNER JOIN t_proyectos_planaccion ON t_proyectos.id = t_proyectos_planaccion.id_proyecto
+                        WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion and t_proyectos.activo = 1 and (t_proyectos.status = 'PENDIENTE' or t_proyectos.status = 'N' or t_proyectos.status = 'P') 
+                        and (t_proyectos_planaccion.status = 'PENDIENTE' or t_proyectos_planaccion.status = 'N' or t_proyectos_planaccion.status = 'P')$filtroDestinoPlanaccion";
+                        $totalPlanaccion = 0;
+                        if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
+                            foreach ($resultPlanaccion as $x) {
+                                $totalPlanaccion = $x['count(t_proyectos_planaccion.id)'];
+                            }
+                        }
+
+                        $totalSubseccionOrdenEnergeticos[] = intval($totalFallas) + intval($totalTareas) + intval($totalTareasGenerales) + intval($totalPlanaccion);
                         $idSubseccionOrdenEnergeticos[] = $idSubseccion;
                     }
                     array_multisort($totalSubseccionOrdenEnergeticos, SORT_DESC, $idSubseccionOrdenEnergeticos);
@@ -3178,7 +3192,8 @@ if (isset($_POST['action'])) {
         }
 
         // Genera lista ID de Fallas.
-        $query = "SELECT id FROM t_mc WHERE activo = 1 and status = 'N' $filtroTipoF";
+        $query = "SELECT id FROM t_mc WHERE activo = 1 and (status = 'N' or status = 'PENDIENTE') $filtroTipoF";
+        $data["query1"] = $query; 
         if ($result = mysqli_query($conn_2020, $query)) {
             $totalResultados = mysqli_num_rows($result);
             $contador = 0;
@@ -3197,8 +3212,8 @@ if (isset($_POST['action'])) {
 
         // Genera lista ID Tareas
         $queryT = "SELECT t_mp_np.id FROM t_mp_np 
-        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id 
-        WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P') $filtroTipoT";
+        LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P' OR t_mp_np.status = 'PENDIENTE') $filtroTipoT";
+        $data["query2"] = $queryT; 
         if ($resultT = mysqli_query($conn_2020, $queryT)) {
             $contador = 0;
             foreach ($resultT as $value) {

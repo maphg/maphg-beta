@@ -16,6 +16,7 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $semanaActual = date('W');
 
+
     if ($action == "consultaEquiposLocales") {
         $filtroDestino = intval($_GET['filtroDestino']);
         $filtroSeccion = intval($_GET['filtroSeccion']);
@@ -26,22 +27,22 @@ if (isset($_GET['action'])) {
         $filtroPalabra = $_GET['filtroPalabra'];
         $array = array();
 
-        if ($filtroDestino > 0) {
-            $filtroDestino = "and t_equipos_america.id_destino = $filtroDestino";
-        } else {
+        if ($filtroDestino == 10) {
             $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_equipos_america.id_destino = $filtroDestino";
         }
 
-        if ($filtroTipo == "0") {
+        if ($filtroTipo > 0) {
+            $filtroTipo = "and t_equipos_america.id_tipo = '$filtroTipo'";
+        } else {
             $filtroTipo = "";
-        } else {
-            $filtroTipo = "and t_equipos_america.local_equipo = '$filtroTipo'";
         }
 
-        if ($filtroStatus == "0") {
-            $filtroStatus = "";
-        } else {
+        if ($filtroStatus != "") {
             $filtroStatus = "and t_equipos_america.status = '$filtroStatus'";
+        } else {
+            $filtroStatus = "";
         }
 
         if ($filtroSeccion > 0) {
@@ -63,7 +64,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
-        c_secciones.seccion, c_subsecciones.grupo, c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
+        c_secciones.seccion, c_subsecciones.grupo, c_tipos.id 'id_tipo', c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
         c_destinos.destino
         FROM t_equipos_america
         LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
@@ -83,6 +84,7 @@ if (isset($_GET['action'])) {
                 $status = $i['status'];
                 $seccion = $i['seccion'];
                 $subseccion = $i['grupo'];
+                $idTipo = $i['id_tipo'];
                 $tipo = $i['tipo'];
                 $marca = $i['marca'];
                 $ubicacion = $i['ubicacion'];
@@ -215,6 +217,7 @@ if (isset($_GET['action'])) {
                     "seccion" => "$seccion",
                     "subseccion" => "$subseccion",
                     "marca" => "$fase",
+                    "idtipoEquipo" => intval($idTipo),
                     "tipoEquipo" => "$tipo",
                     "status" => "$status",
                     "marcaEquipo" => "$marca",
@@ -233,6 +236,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     if ($action == "consultarDestinos") {
         $array = array();
@@ -256,6 +260,7 @@ if (isset($_GET['action'])) {
         }
     }
 
+
     if ($action == "consultarSecciones") {
         $array = array();
 
@@ -271,6 +276,7 @@ if (isset($_GET['action'])) {
             echo json_encode($array);
         }
     }
+
 
     // Opciones para el Filtro de Subsecciones según la Seccion Asignada en el Filtro
     if ($action == "consultarSubsecciones") {

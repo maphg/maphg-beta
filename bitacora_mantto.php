@@ -398,8 +398,8 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                 <h1 class="text-red-400 bg-red-200 px-3 py-3 uppercase rounded-full font-semibold my-3 ml-4 shadow">
                     Habitaciones</h1>
             </div>
-            <div class="flex flex-row flex-wrap justify-center items-center w-full px-5 rounded">
-                <iframe src="https://app.powerbi.com/view?r=eyJrIjoiYTFjZDk4ODgtMGY0OC00YjFiLTlkODUtZmNjMGMyZWMzODdhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" height="620px"></iframe>
+            <div class="flex flex-row flex-wrap justify-center items-center w-full px-5">
+                <iframe src="https://app.powerbi.com/view?r=eyJrIjoiYTFjZDk4ODgtMGY0OC00YjFiLTlkODUtZmNjMGMyZWMzODdhIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" height="620px" class="rounded p-2 bg-white shadow-md"></iframe>
             </div>
             <div class="flex flex-row flex-wrap justify-center items-center w-full hidden">
                 <!-- CONTENEDOR WIDGETS DE SECCION -->
@@ -466,7 +466,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                     COCINAS</h1>
             </div>
             <div class="flex flex-row flex-wrap justify-center items-center w-full px-5 rounded">
-                <iframe src="https://app.powerbi.com/view?r=eyJrIjoiNzY1NmM0ZTMtYjM1Yy00NDhhLTk3YmQtZjg0MmFmYTk5OGFjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" height="620px"></iframe>
+                <iframe src="https://app.powerbi.com/view?r=eyJrIjoiNzY1NmM0ZTMtYjM1Yy00NDhhLTk3YmQtZjg0MmFmYTk5OGFjIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" width="100%" height="620px" class="rounded p-2 bg-white shadow-md"></iframe>
             </div>
             <div class="flex flex-row flex-wrap justify-center items-center w-full hidden">
                 <!-- CONTENEDOR WIDGETS DE SECCION -->

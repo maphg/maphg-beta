@@ -18,6 +18,7 @@
             max-width: 180px;
             word-wrap: break-word;
         }
+
         .texto-subseccion {
             max-width: 120px;
             word-wrap: break-word;
@@ -26,32 +27,34 @@
 </head>
 
 <body class=" bg-fondos-7 text-bluegray-800 scrollbar">
-    <div class="flex flex-col container mx-auto py-10 font-light text-3xl">
-        <h1>Equipos y Locales</h1>
+
+    <div class="flex flex-col container mx-auto font-light text-3xl">
+        <h1>Equipos y Locales <span id="load"></span></h1>
     </div>
 
-
     <div class="flex flex-row container mx-auto text-base mb-6">
-        <input id="filtroPalabra" type="search" name="" placeholder="Buscar Equipo o local" class="w-1/4 px-3 mr-6 bg-white focus:outline-none py-2 rounded-lg shadow-md">
 
-        <!-- <button class="btn btn-indigo shadow-md mx-4">
+        <input id="filtroPalabra" type="search" name="" placeholder="Buscar Equipo o local" class="w-1/4 px-3 mr-6 bg-white focus:outline-none py-2 rounded-lg shadow-md" autocomplete="off">
+
+        <button class="btn btn-indigo shadow-md mx-4 hidden">
             <i class="fas fa-plus"></i>
             Crear Equipo o Local
-        </button> -->
+        </button>
 
-        <div id="verGANTT" class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+        <div id="verGANTT" class="btn btn-indigo shadow-md mx-4 hidden">
             <h1>
                 <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
             </h1>
         </div>
-        <div id="exportarPendientes" onclick="tableToExcel('tablaGestionEquipos', 'equipos_locales_excel')" class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
-            <h1>
-                <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
-            </h1>
+
+        <div id="exportarPendientes" class="btn btn-indigo shadow-md mx-4">
+            <h1><i class="fas fa-arrow-alt-circle-down mx-1"></i>EXPORTAR</h1>
         </div>
+
     </div>
 
     <div class="flex flex-row container mx-auto text-base mb-6">
+
         <div class="flex flex-col pl-4 w-1/6">
             <h1 class="self-start mb-2">Destinos</h1>
             <div class="relative ">
@@ -64,7 +67,7 @@
             <h1 class="self-start mb-2">Secciones</h1>
             <div class="relative">
                 <select id="filtroSeccion" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
-                    <option value="0">Sección</option>
+                    <option value="">Sección</option>
                 </select>
             </div>
         </div>
@@ -73,7 +76,7 @@
             <h1 class="self-start mb-2">Subsecciones</h1>
             <div class="relative">
                 <select id="filtroSubseccion" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
-                    <option value="0">Subsección</option>
+                    <option value="">Subsección</option>
                 </select>
             </div>
         </div>
@@ -82,9 +85,7 @@
             <h1 class="self-start mb-2">Tipo</h1>
             <div class="relative">
                 <select id="filtroTipo" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
-                    <option value="0">Tipo</option>
-                    <option value="EQUIPO">EQUIPO</option>
-                    <option value="LOCAL">LOCAL</option>
+                    <option value="">Tipo</option>
                 </select>
             </div>
         </div>
@@ -93,7 +94,7 @@
             <h1 class="self-start mb-2">Status</h1>
             <div class="relative">
                 <select id="filtroStatus" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
-                    <option value="0">Status</option>
+                    <option value="">Status</option>
                     <option value="OPERATIVO">OPERATIVO</option>
                     <option value="BAJA">BAJA</option>
                     <option value="TALLER">TALLER</option>
@@ -109,42 +110,43 @@
                 </select>
             </div>
         </div>
+
     </div>
 
-    <div class="flex flex-col items-star lg:items-center mx-auto scrollbar">
-        <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
-            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 70vh;">
+    <div class="flex flex-col items-star lg:items-center mx-auto container mx-auto">
+        <div class="-my-2 py-2 overflow-x-auto scrollbar">
+            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 65vh;">
                 <table id="tablaGestionEquipos" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead>
                         <tr class="cursor-pointer">
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Destino
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Sección
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Subsección
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Equipo
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Tipo equipo/local
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Marca Modelo
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Ubicacion
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Status
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Proximo MP
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0">
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Resumen MP
                             </th>
                         </tr>

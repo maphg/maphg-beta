@@ -120,9 +120,9 @@ const datosProyectos = params => {
     return `
         <tr id="${params.id}proyecto" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select" ${ocultarActividades}>
 
-            <td class="px-4 border-b border-gray-200 truncate py-3" ${fToolTip} style="max-width: 360px;">
-                <div class="font-semibold uppercase leading-4">
-                    <h1 id="${params.id}tituloProyecto">${params.proyecto}</h1>
+            <td class="px-4 border-b border-gray-200 py-3" ${fToolTip} style="max-width: 360px;">
+                <div class="font-semibold uppercase leading-4" data-title="${params.proyecto}">
+                    <h1 id="${params.id}tituloProyecto" class="truncate">${params.proyecto}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
                     <h1 class="mr-2 font-semibold">${params.destino}</h1>

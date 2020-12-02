@@ -1,6 +1,8 @@
-'use strict'
+'use strict';
 
-// const $tablaPlanesDeMantto = document.getElementById('contenedorDeEquipos');
+// API PARA REPORTE DE ERRORES
+const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+
 const datosPlanes = params => {
     var status = params.status;
     var claseStatus = ';'
@@ -70,47 +72,69 @@ const datosPlanes = params => {
     var result = `
             <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
             onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id});">
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
                     <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
                     <div class=" leading-5 text-gray-500">${params.marca}</div>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold w-4">
                     ${params.seccion}
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                   <h1 class="texto-subseccion truncate">${params.subseccion}</h1>
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                   <h1 class="texto-subseccion w-18" data-title="${params.subseccion}"> 
+                   <p class="truncate">${params.subseccion}</p>
+                   </h1>
                 </td>
                 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    <div class=" leading-5 text-gray-900 truncate texto-equipo">${params.equipo}</div>
-                    <div class=" leading-5 text-gray-500">ID ${params.id}</div>
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+                    <div class=" leading-5 text-gray-900 w-18 texto-equipo" data-title="${params.equipo}"> <p class="truncate"> ${params.equipo}</p></div>
+                    <div class=" leading-5 text-gray-500">ID: ${params.id}</div>
                 </td> 
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    <div class=" leading-5 text-gray-900">${params.tipoEquipo}</div>
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+
+                    <div class=" leading-5 text-gray-900 w-16" data-title="${params.tipoEquipo}">
+                    <p class="truncate">${params.tipoEquipo}</p></div>
+
                     <div class=" leading-5 ${claseequipoLocal}"><i class="${icono} mr-2"></i>${params.equipoLocal}</div>
-                </td>           
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    <div class=" leading-5 text-gray-900">${params.marcaEquipo}</div>
-                    <div class=" leading-5 text-gray-500">MOD ${params.modelo}</div>
+
+                </td> 
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
+
+                    <div class="leading-5 text-gray-900 w-16" data-title="${params.marcaEquipo}">
+                    <p class="truncate">
+                    ${params.marcaEquipo}</p></div>
+
+                    <div class="leading-5 text-gray-500 w-16" data-title="${params.modelo}">
+                    <p class="truncate"> MOD: ${params.modelo}</p></div>
+
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
-                    ${params.ubicacion}
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold w-8" data-title="${params.ubicacion}">
+                    <p class="truncate">${params.ubicacion}</p>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
                     <span class="px-2 inline-flex  leading-5 font-bold rounded-full ${claseStatus} uppercase">
                         ${params.status}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
                     <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">
                         ${params.proximoMP}
                     </span>
                 </td>
-                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
                     <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">                   
                         ${planificado + proceso + solucionado} 
                     </span>
                 </td>
+
             </tr>
         `;
     return result;
@@ -360,7 +384,7 @@ const datosPlanEquipo = params => {
 };
 
 
-// Función para Consultar Equipos.
+// Función para Consultar Equipos
 function consultaEquiposLocales() {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
@@ -373,11 +397,15 @@ function consultaEquiposLocales() {
     let filtroStatus = document.getElementById("filtroStatus").value;
     let filtroSemana = document.getElementById("filtroSemana").value;
     let filtroPalabra = document.getElementById("filtroPalabra").value;
-    const action = "consultaEquiposLocales";
+    let load = document.getElementById("load");
 
+    const action = "consultaEquiposLocales";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
+
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDeEquipos').innerHTML = '';
+    load.innerHTML = '<i class="fa fa-spinner fa-pulse fa-sm fa-fw"></i>';
+
     fetch(URL)
         .then(res => res.json())
         .then(array => {
@@ -410,7 +438,36 @@ function consultaEquiposLocales() {
                 alertaImg('Equipos Obtenidos: 0', '', 'info', 3000)
             }
             // return array[0].semanaActual;
-        });
+            return array;
+        })
+        .then(array => {
+            var xl = [];
+            let option = document.getElementById("filtroTipo");
+
+            option.innerHTML = '<option value="">Tipo Equipo Seleccionado</option>';
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const idtipoEquipo = array[x].idtipoEquipo;
+                    const tipoEquipo = array[x].tipoEquipo;
+                    const id = array[x].id;
+                    xl[idtipoEquipo] = { "idTipo": idtipoEquipo, "tipo": tipoEquipo + ' ' + id };
+                }
+
+                xl.forEach(x => {
+                    const codigo = `<option value="${x.idTipo}">${x.tipo}</option>`;
+                    option.insertAdjacentHTML('beforeend', codigo);
+                });
+            }
+        })
+        .then(() => {
+            document.getElementById("filtroTipo").insertAdjacentHTML('afterbegin', '<option value="0">Todos</option>');
+            load.innerHTML = '';
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ' consultaEquiposLocales()');
+            load.innerHTML = '';
+            document.getElementById('contenedorDeEquipos').innerHTML = '';
+        })
 }
 
 
@@ -464,9 +521,6 @@ function toggleInputsEquipo(estadoInputs) {
         document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
     }
 }
-
-
-
 
 
 // Actualiza la información de los Equipos
@@ -923,7 +977,6 @@ function consultarOpcionesEquipo() {
 }
 
 
-
 // Genera la Programación de los MP
 function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
     let idUsuario = localStorage.getItem('usuario');
@@ -1310,9 +1363,6 @@ document.getElementById("filtroPalabra").
         buscadorEquipo('tablaGestionEquipos', 'filtroPalabra', 3);
     });
 
-// Función inicial para mostrar información de Equipos (t_equipos_america).
-consultaEquiposLocales();
-
 // Función para
 onload = QREquipo();
 
@@ -1445,3 +1495,39 @@ function indicadorSemanaActual(semana) {
         document.getElementsByClassName("semana_" + semana)[i].innerHTML = codigo;
     }
 }
+
+
+// FUNCIÓN PARA EXPORTAR EQUIPOS
+function exportarEquipos() {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    // Datos para Aplicar los Filtros
+    let filtroDestino = document.getElementById("filtroDestino").value;
+    let filtroSeccion = document.getElementById("filtroSeccion").value;
+    let filtroSubseccion = document.getElementById("filtroSubseccion").value;
+    let filtroTipo = document.getElementById("filtroTipo").value;
+    let filtroStatus = document.getElementById("filtroStatus").value;
+    let filtroSemana = document.getElementById("filtroSemana").value;
+    let filtroPalabra = document.getElementById("filtroPalabra").value;
+
+    const action = "reporteGestionEquipos";
+    const URL = `../php/exportar_excel_GET.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
+
+    window.location = URL;
+
+    setTimeout(() => {
+        alertaImg('Generando Reporte...', '', 'success', 1200);
+    }, 1200);
+}
+
+
+// CARGA CONTENIDO INICIAL, DESPUES DE QUE CARGA COMPLETAMENTE
+window.addEventListener("load", function () {
+    // Función inicial para mostrar información de Equipos (t_equipos_america).
+    consultaEquiposLocales();
+})
+
+
+// EVENTO PARA EXPORTA EQUIPOS
+document.getElementById("exportarPendientes").addEventListener('click', exportarEquipos);
