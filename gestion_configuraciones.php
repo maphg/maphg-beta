@@ -28,7 +28,7 @@
         </div>
 
         <button id="btnNuevoUsuario" class="btn btn-green mx-4 h-10 normal-case">
-            <i class="fas fa-user-plus fa-lg mx-1"></i> Agrear
+            <i class="fas fa-user-plus fa-lg mx-1"></i> Agregar
         </button>
 
     </div>
