@@ -599,6 +599,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "editarProyecto") {
         $idProyecto = $_POST['idProyecto'];
         $tituloProyecto = $_POST['tituloProyecto'];
@@ -610,7 +611,6 @@ if (isset($_POST['action'])) {
             echo "Error de Proyecto";
         }
     }
-
 
 
     if ($action == "actualizarCostoProyecto") {
@@ -665,6 +665,7 @@ if (isset($_POST['action'])) {
             echo "Tipo Actualizado";
     }
 
+
     if ($action == "asignarResponsableProyecto") {
 
         $idProyecto = $_POST['idProyecto'];
@@ -684,7 +685,6 @@ if (isset($_POST['action'])) {
             echo "insert";
         }
     }
-
 
 
     if ($action == "agregarComentarioProyecto") {
@@ -718,7 +718,6 @@ if (isset($_POST['action'])) {
                 </div>';
         }
     }
-
 
 
     if ($action == "agregarStatusProyecto") {
@@ -981,7 +980,6 @@ if (isset($_POST['action'])) {
     }
 
 
-
     // Check Habitaciones.
     if ($action == "consultarZona") {
 
@@ -1113,6 +1111,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "agregarSubseccion") {
 
         $idUsuario = $_POST['idUsuario'];
@@ -1160,6 +1159,7 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
 
     if ($action == "agregarFechaH") {
 
@@ -1220,6 +1220,7 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
 
     if ($action == "consultaComentariosH") {
         $idDestino = $_POST['idDestino'];
@@ -1289,7 +1290,6 @@ if (isset($_POST['action'])) {
 
 
     // Agregar codigo eliminar Zona
-
     if ($action == "eliminarZona") {
         $idZona = $_POST['idZona'];
 
@@ -1304,7 +1304,6 @@ if (isset($_POST['action'])) {
 
 
     // Crud Modulo Paradas de Equipos: Secciones -> Subsecciones -> Equipos -> Comentarios.
-
     if ($action == "consultaEquipos") {
 
         $idDestino = $_POST['idDestino'];
@@ -1369,7 +1368,6 @@ if (isset($_POST['action'])) {
     }
 
 
-
     if ($action == "agregarEquipo") {
         $idDestino = $_POST['idDestino'];
         $idSeccion = $_POST['idSeccion'];
@@ -1386,7 +1384,6 @@ if (isset($_POST['action'])) {
             echo "Error";
         }
     }
-
 
 
     if ($action == "comentarioEquipoCovid") {
@@ -1409,6 +1406,7 @@ if (isset($_POST['action'])) {
 				</div>';
         }
     }
+
 
     if ($action == "agregarComentarioEquipo1") {
         $idDestino = $_POST['idDestino'];
@@ -1513,6 +1511,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "restaurarMC") {
 
         $idMC = $_POST['idMC'];
@@ -1525,6 +1524,7 @@ if (isset($_POST['action'])) {
             echo "Error al Finalizar Mantinimiento Correctivo";
         }
     }
+
 
     // Crud para Tareas Gemerales MC.
     if ($action == "eliminarMC") {
@@ -1868,6 +1868,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "agregarComentarioPlanAccion") {
         $idPlanAccion = $_POST['idPlanAccion'];
         $comentario = $_POST['comentario'];
@@ -1896,6 +1897,7 @@ if (isset($_POST['action'])) {
             echo "Error al Eliminar!";
         }
     }
+
 
     if ($action == "actualizarPlanAccion") {
         $idPlan = $_POST['idPlan'];
@@ -1931,6 +1933,7 @@ if (isset($_POST['action'])) {
             echo "ok!";
         }
     }
+
 
     if ($action == "obtenerStatusPlanaccion") {
         $idPlanAccion = $_POST['idPlanAccion'];
@@ -1981,6 +1984,7 @@ if (isset($_POST['action'])) {
         $data['dataStatus'] = $dataStatus;
         echo json_encode($data);
     }
+
 
     if ($action == "eliminarStatusPlanAccion") {
         $idPlanAccion = $_POST['idPlanAccion'];
@@ -2788,6 +2792,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "consultaResponsableMPNP") {
         $idMPNP = $_POST['idMPNP'];
         $data = "";
@@ -2998,6 +3003,7 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($arrayConsultaActividad);
     }
+
 
     if ($action == "eliminarActividadMPNP") {
         $id = $_POST['id'];
@@ -3376,6 +3382,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "zonaMC") {
         $idMC = $_POST['idMC'];
         $zona = $_POST['zona'];
@@ -3625,6 +3632,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "agregarActividadTareaP") {
         $idUsuario = $_SESSION['usuario'];
         $fecha = date('Y-m-d H:m:s');
@@ -3639,6 +3647,7 @@ if (isset($_POST['action'])) {
             echo 0;
         }
     }
+
 
     if ($action == "agregarComentarioActividad") {
         $idUsuario = $_SESSION['usuario'];
@@ -3692,6 +3701,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "obtUsuariosTareasP") {
         $idEquipo = $_POST['idEquipo'];
         $equipo = $_POST['equipo'];
@@ -3717,6 +3727,7 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
 
     if ($action == "asignarUsuarioTareasP") {
         $idTareaP = $_POST['idTarea'];
@@ -3804,14 +3815,15 @@ if (isset($_POST['action'])) {
     if ($action == "consultarCodigoSeguimientoTareaas") {
         $idTareaP = $_POST['idTareaP'];
         $codsap = "";
-        $query = "SELECT codsap FROM t_mp_np WHERE id = $idTareaP";
+        $query = "SELECT cod2bend FROM t_mp_np WHERE id = $idTareaP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
-                $codsap = $i['codsap'];
+                $codsap = $i['cod2bend'];
             }
             echo $codsap;
         }
     }
+
 
     if ($action == "finalizarTareaP") {
         $idTarea = $_POST['idTarea'];
@@ -3823,6 +3835,7 @@ if (isset($_POST['action'])) {
             echo 0;
         }
     }
+
 
     if ($action == "actualizarTarea") {
         $columna = $_POST['columna'];
@@ -4032,6 +4045,217 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
+
+    // OBTENER PENDIENTES DE ENERGETICOS
+    if ($action == "obtenerPendientesEnergeticos") {
+        $idDestino = $_SESSION['idDestino'];
+        $idSeccion = $_POST["idSeccion"];
+        $idSubseccion = $_POST["idSubseccion"];
+        $status = $_POST["status"];
+        $array = array();
+        $seccion = "";
+        $subseccion = "";
+
+        if ($status == "PENDIENTE") {
+            $filtroStatus = "and (t_energeticos.status = 'PENDIENTE')";
+        } else {
+            $filtroStatus = "and (t_energeticos.status = 'SOLUCIONADO')";
+        }
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_energeticos.id_destino = $idDestino";
+        }
+
+        $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $seccion = $x['seccion'];
+            }
+        }
+        $array['seccion'][0] = $seccion;
+
+        $query = "SELECT grupo FROM c_subsecciones WHERE id = $idSubseccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $subseccion = $x['grupo'];
+            }
+        }
+        $array['subseccion'][0] = $subseccion;
+
+        // INICIALIZA EL ARRAY, PARA EVITAR ERROR
+        $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.fecha_creacion, t_energeticos.status, t_colaboradores.nombre, t_colaboradores.apellido 
+        FROM t_energeticos 
+        LEFT JOIN t_users ON t_energeticos.responsable = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_energeticos.activo = 1 and t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion $filtroStatus $filtroDestino ORDER BY t_energeticos.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x['id'];
+                $actividad = $x['actividad'];
+                $responsable = $x['nombre'] . " " . $x['apellido'];
+                $nombre = $x['nombre'];
+                $fecha = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
+                $status = $x['status'];
+                $totalAdjuntos = 0;
+
+                // COMENTARIOS
+                $totalComentarios = 0;
+                $query = "SELECT count(id) 'total' FROM t_energeticos_comentarios 
+                WHERE id_energetico = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['total'];
+                    }
+                }
+
+                if ($responsable == "" || $responsable == " " || $nombre == "" || $nombre == " ") {
+                    $responsable = "Sin Responsable";
+                    $nombre = "Sin Responsable";
+                }
+
+                $array['pendientes'][] =
+                    array(
+                        "id" => $id,
+                        "actividad" => $actividad,
+                        "responsable" => $responsable,
+                        "fecha" => $fecha,
+                        "adjuntos" => $totalAdjuntos,
+                        "comentarios" => $totalComentarios,
+                        "status" => $status,
+                        "nombre" => $nombre
+                    );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "agregarEnergetico") {
+        $idSeccion = $_POST["idSeccion"];
+        $idSubseccion = $_POST["idSubseccion"];
+        $actividad = $_POST['actividad'];
+        $fechaActual = date('Y-m-d H:m:s');
+        $idUsuario = $_SESSION['usuario'];
+        $idDestino = $_SESSION['idDestino'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_energeticos(id_destino, id_seccion, id_subseccion, actividad, creado_por, fecha_creacion) 
+        VALUES($idDestino, $idSeccion, $idSubseccion, '$actividad', $idUsuario, '$fechaActual')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "obtenerResponsablesEnergeticos") {
+        $palabraUsuario = $_POST['palabraUsuario'];
+        $idDestino = $_SESSION['idDestino'];
+        $array = array();
+
+        if ($palabraUsuario != "") {
+            $filtroPalabra = "and (t_colaboradores.nombre LIKE '%$palabraUsuario%' or t_colaboradores.apellido LIKE '%$palabraUsuario%')";
+        } else {
+            $filtroPalabra = "";
+        }
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_users.id_destino = $idDestino";
+        }
+
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.activo = 1 $filtroPalabra $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuario = $x["id"];
+                $usuario = $x["nombre"] . " " . $x["apellido"];
+
+                $array[] = array("idUsuario" => $idUsuario, "usuario" => $usuario,);
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "actualizarEnergetico") {
+        $idPendiente = $_POST["idPendiente"];
+        $columna = $_POST["columna"];
+        $valor = $_POST["valor"];
+        $resp = 0;
+
+        if ($columna == "responsable" and $valor > 0) {
+            $query = "UPDATE t_energeticos SET responsable = $valor WHERE id = $idPendiente";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status") {
+            if ($valor == "PENDIENTE") {
+                $valor = "SOLUCIONADO";
+            } else {
+                $valor = "PENDIENTE";
+            }
+            $query = "UPDATE t_energeticos SET status = '$valor' WHERE id = $idPendiente";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        } else {
+            $resp = 0;
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "agregarComentarioEnergtico") {
+        $idUsuario = $_SESSION['usuario'];
+        $idPendiente = $_POST["idPendiente"];
+        $comentario = $_POST['comentario'];
+        $fecha = date('Y-m-d H:m:s');
+        $resp = 0;
+
+        $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) 
+        VALUES($idPendiente, $idUsuario, '$fecha', '$comentario', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "obtenerComentariosEnergeticos") {
+        $idPendiente = $_POST["idPendiente"];
+        $array = array();
+
+        $query = "SELECT t_energeticos_comentarios.id, t_energeticos_comentarios.comentario,
+        t_energeticos_comentarios.fecha_creado, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_energeticos_comentarios 
+        INNER JOIN t_users ON t_energeticos_comentarios.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_energeticos_comentarios.id_energetico = $idPendiente and 
+        t_energeticos_comentarios.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x["id"];
+                $comentario = $x["comentario"];
+                $fecha_creado = $x["fecha_creado"];
+                $usuario = $x["nombre"] . " " . $x["apellido"];
+
+                $array[] = array(
+                    "id" => $id,
+                    "comentario" => $comentario,
+                    "fecha_creado" => $fecha_creado,
+                    "usuario" => $usuario
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
 
 
     //Cierre de IF para action.
