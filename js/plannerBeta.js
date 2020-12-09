@@ -1077,3 +1077,435 @@ function eliminarAdjuntoTarea(idImg, idTarea, idEquipo, equipo) {
 function obtStatusTareas() {
     document.getElementById("modalStatusTareasP").classList.add('modal-fx-superScaled', 'is-active');
 }
+
+
+// FUNCIÓN PARA ENERGETICOS
+function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
+    const action = "obtenerPendientesEnergeticos";
+    document.getElementById("modal-energeticos").classList.add("is-active");
+    let contenedor = document.getElementById("dataEnergeticos");
+    let btn = document.getElementById("btnObtenerEnergeticos");
+    document.getElementById("btnCrearEnergetico").
+        setAttribute('onclick', `agregarEnergetico(${idSeccion}, ${idSubseccion});`);
+
+    btn.classList = "";
+
+    if (status == "PENDIENTE") {
+        btn.setAttribute('onclick', `obtenerPendientesEnergeticos(${idSeccion}, ${idSubseccion}, 'SOLUCIONADO');`);
+        btn.classList = "button is-success";
+        btn.childNodes[2].textContent = 'Ver Solucionados';
+    } else {
+        btn.setAttribute('onclick', `obtenerPendientesEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE');`);
+        btn.classList = "button is-danger";
+        btn.childNodes[2].textContent = 'Ver Pendientes';
+    }
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idSeccion: idSeccion,
+            idSubseccion: idSubseccion,
+            status: status
+        },
+        dataType: "JSON",
+        success: function (array) {
+            console.log(array);
+
+            contenedor.innerHTML = '';
+            document.getElementById("textSeccionEnergeticos").
+                innerHTML = array.subseccion[0] + ' / PENDIENTES';
+            document.getElementById("textSeccionEnergeticos").
+                innerHTML = array.subseccion[0] + ' / PENDIENTES';
+
+            if (array.pendientes.length > 0) {
+                for (let x = 0; x < array.pendientes.length; x++) {
+                    const id = array.pendientes[x].id;
+                    const actividad = array.pendientes[x].actividad;
+                    const responsable = array.pendientes[x].responsable;
+                    const nombre = array.pendientes[x].nombre;
+                    const fecha = array.pendientes[x].fecha;
+                    const adjuntos = array.pendientes[x].adjuntos;
+                    const comentarios = array.pendientes[x].comentarios;
+                    const status = array.pendientes[x].status;
+
+                    if (comentarios <= 0) {
+                        comentariosX = '<i class="fad fa-minus has-text-danger fa-1x"></i>';
+                    } else {
+                        comentariosX = comentarios;
+                    }
+
+                    if (adjuntos <= 0) {
+                        adjuntosX = '<i class="fad fa-minus has-text-danger fa-1x"></i>';
+                    } else {
+                        adjuntosX = adjuntos;
+                    }
+
+                    if (status == "PENDIENTE") {
+                        estiloStatus = "is-danger";
+                        fStatus = ` 
+                            <p class="t-normal">
+                            <i class="fad fa-exclamation-circle has-text-info fa-"></i>
+                            </p>
+                        `;
+                        fResponsable = `onclick="obtenerResponsablesEnergeticos(${id})"`;
+                        fAdjuntos = `onclick="obtenerAdjuntosEnergeticos(${id})"`;
+                        fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
+                    } else {
+                        estiloStatus = "is-success";
+                        fStatus = `<p class="t-solucionado" onclick="actualizarEnergetico(${id}, 'status', 'SOLUCIONADO')">Restaurar</p>`;
+                        fResponsable = '';
+                        fAdjuntos = `onclick="obtenerAdjuntosEnergeticos(${id})"`;
+                        fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
+                    }
+
+                    const codigo = `
+                        <div id="energetico_${id}" class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
+                            <div class="column is-half">
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="message is-small ${estiloStatus}">
+                                            <p class="message-body"><strong>${actividad}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="columns is-gapless">
+
+                                    <div class="column" ${fResponsable}>
+                                        <p class="t-normal" data-tooltip="${responsable}">
+                                            ${nombre}
+                                        </p>
+                                    </div>
+
+                                    <div class="column">
+                                        <p class="t-normal">${fecha}</p>
+                                    </div>
+
+                                    <div class="column" ${fAdjuntos}>
+                                        <p class="t-normal">${adjuntosX}</p>
+                                    </div>
+
+                                    <div class="column" ${fComentarios}>
+                                        <p class="t-normal">${comentariosX}</p>
+                                    </div>
+
+                                    <div class="column">
+                                       ${fStatus}
+                                    </div>
+
+                                    <div class="column">
+                                        <p class="t-normal">NA</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            if (array.seccion[0]) {
+                document.getElementById("textSeccionEnergeticos").
+                    innerHTML = array.seccion[0];
+            }
+
+            if (array.subseccion[0]) {
+                document.getElementById("textSubseccionEnergeticos").
+                    innerHTML = array.subseccion[0];
+            }
+        },
+        error: function (e) {
+            contenedor.innerHTML = '';
+            document.getElementById("textSeccionEnergeticos").innerHTML = '';
+            document.getElementById("textSubseccionEnergeticos").innerHTML = '';
+        }
+    });
+}
+
+
+// FUNCIÓN PARA AGREGAR ENERGETICO
+function agregarEnergetico(idSeccion, idSubseccion) {
+    localStorage.setItem('idSeccion', idSeccion);
+    localStorage.setItem('idSubseccion', idSubseccion);
+    let actividad = document.getElementById("inputEnergetico");
+
+    const action = "agregarEnergetico";
+    if (actividad.value.length > 1) {
+        $.ajax({
+            type: "post",
+            url: "php/crud.php",
+            data: {
+                action: action,
+                idSeccion: idSeccion,
+                idSubseccion: idSubseccion,
+                status: status,
+                actividad: actividad.value
+            },
+            dataType: "JSON",
+            success: function (array) {
+                console.log(array);
+                if (array == 1) {
+                    obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                    alertaImg('PENDIENTE Agregado ', '', 'success', 1200);
+                    actividad.value = '';
+                } else {
+                    alertaImg('Intente de Nuevo ', '', 'info', 1200);
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        })
+    } else {
+        alertaImg('Intente de Nuevo ', '', 'info', 1200);
+    }
+}
+
+
+// OBTIENE RESPONSABLES
+function obtenerResponsablesEnergeticos(idPendiente) {
+    let palabraUsuario = document.getElementById("inputResponsableEnergeticos");
+    let contenedor = document.getElementById("divListaUsuariosEnergeticos");
+
+    document.getElementById("modalAgregarResponsableEnergeticos").
+        classList.add('is-active');
+
+    document.getElementById("inputResponsableEnergeticos").
+        setAttribute('onkeyup', 'obtenerResponsablesEnergeticos()');
+
+    const action = "obtenerResponsablesEnergeticos";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            palabraUsuario: palabraUsuario.value
+        },
+        dataType: "JSON",
+        success: function (array) {
+            console.log(array);
+            contenedor.innerHTML = '';
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuario = array[x].idUsuario;
+                    const usuario = array[x].usuario;
+                    codigo = `
+                        <h6 class="title is-6 manita border rounded py-1 px-1 my-1 mx-2 text-truncate usuario" 
+                        onclick="actualizarEnergetico(${idPendiente}, 'responsable', 
+                        ${idUsuario})">
+                            <i class="fas fa-user"></i> 
+                            ${usuario}
+                        </h6>
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        },
+        error: function (e) {
+            contenedor.innerHTML = '';
+        }
+    })
+}
+
+
+// ACTUALIZA DATOS DE LOS PENDIENTES DE ENERGETICOS
+function actualizarEnergetico(idPendiente, columna, valor) {
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    const action = "actualizarEnergetico";
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idPendiente: idPendiente,
+            columna: columna,
+            valor: valor
+        },
+        dataType: "JSON",
+        success: function (array) {
+            obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+            document.getElementById("modalAgregarResponsableEnergeticos").
+                classList.remove('is-active');
+
+            if (array == 1) {
+                alertaImg('Responsable Asignado', '', 'success', 1200);
+            } else if (array == 2) {
+                alertaImg('Status Actualizado', '', 'success', 1200);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        },
+        error: function (e) {
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+        }
+    })
+}
+
+
+// OBTENER ADJUNTOS
+function obtenerAdjuntosEnergeticos(idPendiente) {
+    document.getElementById("modal-energeticos-pictures").classList.add("is-active");
+    let contenedor = document.getElementById("dataAdjuntosEnergeticos");
+    const action = "obtenerAdjuntosEnergeticos";
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idPendiente: idPendiente
+        },
+        dataType: "JSON",
+        success: function (array) {
+            console.log(array);
+            contenedor.innerHTML = '';
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const id = array[x].id;
+                    const url = array[x].url;
+                    const subidoPor = array[x].subidoPor;
+                    const fecha = array[x].fecha;
+                    const tipo = array[x].tipo;
+                    const codigo = `
+                        <div class="timeline-item py-0" data-tipo="${url}">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="heading"><strong> </strong>
+                                <button class="is-delete is-size-7 manita" onclick="borrarFotosMC(2328, 8215);">
+                                    <a class="delete is-medium"></a>
+                                    </button></p>
+                                <p class="heading"></p>
+                                <a href="planner/energeticos/${url}" target="_BLANCK"><img class="ximg" src="planner/energeticos/${url}" alt=""></a>
+                            </div>
+                        </div>                    
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        },
+        error: function (e) {
+            console.log(e);
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+        }
+    })
+}
+
+
+// OBTENER COMENTARIOS
+function obtenerComentariosEnergeticos(idPendiente) {
+    document.getElementById("modal-energeticos-comentarios").classList.add("is-active");
+    let contenedor = document.getElementById("dataComentariosEnergetico");
+    const action = "obtenerComentariosEnergeticos";
+    document.getElementById("btnAgregarComentarioEnergetico").
+        setAttribute('onclick', `agregarComentariosEnergeticos(${idPendiente})`);
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idPendiente: idPendiente
+        },
+        dataType: "JSON",
+        success: function (array) {
+            console.log(array.length);
+            contenedor.innerHTML = '';
+
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const id = array[x].id;
+                    const comentario = array[x].comentario;
+                    const fecha_creado = array[x].fecha_creado;
+                    const usuario = array[x].usuario;
+
+                    const codigo = `
+                        <div class="timeline-item py-0">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <p class="heading"><strong>${usuario}</strong></p>
+                                <p class="heading">${fecha_creado}</p>
+                                <p class="has-text-justified">${comentario}</p>
+                            </div>
+                        </div>
+                    `;
+                    contenedor.insertAdjacentHTML('beforeend', codigo);
+                    console.log(codigo);
+                }
+            }
+        },
+        error: function (e) {
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+            contenedor.innerHTML = '';
+        }
+    })
+}
+
+
+// AGREGAR COMENTARIOS
+function agregarComentariosEnergeticos(idPendiente) {
+    let comentario = document.getElementById("inputComentarioEnergetico").value;
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    document.getElementById("modal-energeticos-comentarios").classList.add("is-active");
+    const action = "agregarComentarioEnergtico";
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idPendiente: idPendiente,
+            comentario: comentario
+        },
+        dataType: "JSON",
+        success: function (array) {
+            if (array == 1) {
+                obtenerComentariosEnergeticos(idPendiente);
+                obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                alertaImg('Comentario Agregado', '', 'success', 1200);
+                document.getElementById("inputComentarioEnergetico").value = '';
+            } else {
+                alertaImg('Intente de Nuevo ', '', 'info', 1200);
+            }
+        },
+        error: function (e) {
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+            obtenerComentariosEnergeticos(idPendiente);
+        }
+    })
+}
+
+
+
+function cargarAdjuntosEnergeticos(idEquipo) {
+    var inputFileImage = document.getElementById("inputAdjuntosEnergeticos");
+    var file = inputFileImage.files;
+    var data = new FormData();
+    for (i = 0; i < file.length; i++) {
+        data.append("fileToUpload" + i, file[i]);
+    }
+    data.append("idEquipo", idEquipo);
+    var url = "php/planner_uploadfiles_equipo.php";
+
+    $.ajax({
+        url: url, // Url to which the request is send
+        type: "POST", // Type of request to be send, called as method
+        data: data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+
+        success: function (data) {
+            if (data == 1) {
+                alertaImg('Adjunto Agregado', '', 'success', 1200);
+                obtenerFotosEquipo(idEquipo);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        },
+    });
+}

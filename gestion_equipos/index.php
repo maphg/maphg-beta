@@ -51,6 +51,10 @@
             <h1><i class="fas fa-arrow-alt-circle-down mx-1"></i>EXPORTAR</h1>
         </div>
 
+        <div id="agregarEquipoLocal" class="btn btn-blue shadow-md mx-4">
+            <h1><i class="fas fa-plus-circle mx-1"></i>Agregar Equipo / Local</h1>
+        </div>
+
     </div>
 
     <div class="flex flex-row container mx-auto text-base mb-6">
@@ -838,6 +842,97 @@
     <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;" style="z-index:100">
     </div>
     <!-- ACTIVIDADES MP -->
+
+
+    <!-- MODAL CONFIRMAR ENTRADA -->
+    <div id="modalAgregarEquipo" class="modal">
+        <div class="modal-window rounded-md" style="width:400px;">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalAgregarEquipo')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-tl-md rounded-br-md">
+                    <h1>Agregar Equipo / Local</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="pt-10 pb-2 px-2 flex justify-center items-center flex-col w-full">
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-4 py-5 bg-white sm:p-6">
+                        <div class="grid grid-cols-6 gap-6">
+
+                            <div class="col-span-6">
+                                <label class="block text-sm font-medium text-gray-700">Equipo / Local</label>
+                                <input id="descripcionXEquipo" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md" maxlength="60" pattern="[A-Za-z]{3}" title="(Max 60 Caracteres)" placeholder="Nombre De Equipo/Local">
+                            </div>
+
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">Destino</label>
+                                <select id="destinoXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Sección
+                                </label>
+                                <select id="seccionXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Subsección
+                                </label>
+                                <select id="subseccionXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Tipo Equipo / Local
+                                </label>
+                                <select id="tipoXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Marca
+                                </label>
+                                <select id="marcaXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Equipo / Local
+                                </label>
+                                <select id="equipoXLocal" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6">
+                                <label for="state" class="block text-sm font-medium text-gray-700">Modelo</label>
+                                <input id="modeloXEquipo" type="text" class="mt-1 block w-full py-1 shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-3 sm:px-6 text-center">
+                        <button id="btnAgregarEquipo" type="submit" class="inline-flex justify-center py-2 px-4 shadow-sm text-sm font-medium rounded-md text-white hover:bg-blue-600 bg-blue-400">
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
 
     <!-- ***** MODALES SECUNDARIO ***** -->
 

@@ -14,3 +14,8 @@ function seguridad_session() {
         });
 }
 setInterval(seguridad_session, 300000);
+
+// window.addEventListener('storage', () => {
+//     window.location = "/";
+//     alertaImg(' ¡Acceso Denegado! ', '', 'warning', 1000);
+// });

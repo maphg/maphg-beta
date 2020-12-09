@@ -1880,9 +1880,9 @@ $tablaRanking .= "</div>";
                                 $subseccionX = $row_subsecciones['grupo'];
 
                                 if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                                 } else {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                                 }
                             }
                         } //fin Foreach
@@ -2858,9 +2858,9 @@ $tablaRanking .= "</div>";
                                 $subseccionX = $row_subsecciones['grupo'];
 
                                 if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                                 } else {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, $idSubseccionX);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                                 }
                             }
                         } //fin Foreach
@@ -4674,6 +4674,116 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+    <!--MODAL ENERGETICOS-->
+    <div id="modal-energeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-lg">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column">
+                        <section class="hero is-light is-small">
+                            <!-- Hero head: will stick at the top -->
+                            <div class="hero-head">
+                                <nav class="navbar">
+                                    <div class="navbar-start has-text-centered">
+                                        <div class="navbar-item has-background-warning">
+                                            <p id="textSeccionEnergeticos" class="navbar-item has-text-weight-bold is-uppercase"></p>
+                                        </div>
+                                        <a id="textSubseccionEnergeticos" class="navbar-item"></a>
+                                    </div>
+                                    <div class="navbar-end has-text-centered">
+
+                                        <div class="navbar-item">
+                                            <button id="btnObtenerEnergeticos" type="button" class="button is-success" name="button">
+                                                <i class="fad fa-check-double mr-2"></i>
+                                                Ver solucionado
+                                            </button>
+                                        </div>
+
+                                        <div class="navbar-item">
+                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-energeticos');">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </nav>
+                            </div>
+                        </section>
+                        <section class="mt-4">
+                            <div class="columns is-centered">
+                                <div class="column is-3">
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <input id="inputEnergetico" class="input" type="text" placeholder="Agregar Pendiente" autocomplete="off">
+                                        </div>
+                                        <div id="btnCrearEnergetico" class="control">
+                                            <a class="button is-warning">
+                                                <i class="fad fa-plus-circle"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <section class="mt-4">
+
+                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
+                                <div class="column is-half">
+                                    <div class="columns is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Descripción</strong>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="column is-white">
+                                    <div class="columns is-gapless is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Responsable</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Fecha estimada de solución">
+                                                <strong>Fecha</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntos">
+                                                <strong>Adjuntos</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Comentarios">
+                                                <strong>Comentarios</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos"><strong>Status</strong></p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos"><strong>Opción</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="dataEnergeticos" class="scrollbar" style="overflow-x: hidden;overflow-y: scroll;max-height: 50vh;"></div>
+
+                        </section>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
     <!--INICIO MODAL MPNP-->
     <div id="modal-MPNP" class="modal">
         <div class="modal-background"></div>
@@ -4935,15 +5045,12 @@ $tablaRanking .= "</div>";
                 </div>
                 <div class="columns">
                     <div id="colFechaMC" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Fecha de la tarea</h4>
-
+                        <h4 class="subtitle is-4 has-text-centered">Rango de Fecha</h4>
                     </div>
                 </div>
                 <div class="columns is-centered">
                     <div class="column is-6">
                         <div id="myDatePickerMC" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                        <!--                    <input id="txtDateRange1" type="date">
-                                                   <input id="txtDateRange2" type="date" style="display:none;">-->
                     </div>
                 </div>
 
@@ -5025,6 +5132,34 @@ $tablaRanking .= "</div>";
         </div>
         <!--<button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsable');"></button>-->
     </div>
+
+
+    <!--MODAL AGREGAR RESPONSABLE TAREA GENERAL-->
+    <div id="modalAgregarResponsableEnergeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <input id="inputResponsableEnergeticos" class="input is-primary" type="text" placeholder="Buscar...">
+            </header>
+            <!-- Any other Bulma elements you want -->
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="divListaUsuariosEnergeticos" class="column"></div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column has-text-right">
+                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsableEnergeticos');">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsableEnergeticos');"></button>
+    </div>
+
 
     <!--MODAL CONFIRMAR COMPLETAR TAREA GENERAL-->
     <div id="modalConfirmacionTarea" class="modal">
@@ -6063,6 +6198,55 @@ $tablaRanking .= "</div>";
     </div>
 
 
+    <!--MODAL COMENTARIOS EQUIPO-->
+    <div id="modal-energeticos-comentarios" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="divHeaderComentarios" class="column">
+                        <button class="delete" aria-label="close" onclick="closeModal('modal-energeticos-comentarios');"></button>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
+
+                            <div class="columns is-centered">
+                                <div class="field has-addons has-addons-centered is-fullwidth">
+                                    <div class="control">
+                                        <div class="control has-icons-left has-icons-right">
+                                            <input id="inputComentarioEnergetico" class="input" type="text" placeholder="Añadir comentario" autocomplete="off">
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-comment"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="control"><button id="btnAgregarComentarioEnergetico" type="button" class="button is-info">Agregar</button></div>
+                                </div>
+                            </div>
+
+                            <div id="dataComentariosEnergetico"></div>
+
+                            <div class="timeline-item ">
+                                <div class="timeline-marker"></div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-marker is-icon">
+                                    <i class="fad fa-genderless"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
     <!--MODAL FOTOS EQUIPO-->
     <div id="modal-equipo-pictures" class="modal">
         <div class="modal-background"></div>
@@ -6166,6 +6350,45 @@ $tablaRanking .= "</div>";
                                     <button class="button is-success">Save changes</button>
                                     <button class="button">Cancel</button>
                                 </footer>-->
+        </div>
+    </div>
+
+
+    <!--MODAL FOTOS EQUIPO-->
+    <div id="modal-energeticos-pictures" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column is-6">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Fotografias generales</h4>
+                            <div class="columns is-centered">
+                                <div class="column is-8 has-text-centered">
+                                    <a class="button is-warning">
+                                        <input class="file-input" type="file" name="resume" id="inputAdjuntosEnergeticos" multiple>
+                                        <span class="icon">
+                                            <i class="fad fa-camera-alt"></i>
+                                        </span>
+                                        <span>Añadir fotografias</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div id="dataAdjuntosEnergeticos"></div>
+
+                            <div class="timeline-item ">
+                                <div class="timeline-marker"></div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker is-icon">
+                                    <i class="fad fa-genderless"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -6714,7 +6937,7 @@ $tablaRanking .= "</div>";
                 <div class="column is-3 has-text-left">
                     <div class="field has-addons">
                         <div class="control is-expanded ml-5">
-                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Nuevo Proyecto" maxlength="60" autocomplete="off">
+                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Proyecto" maxlength="60" autocomplete="off">
                         </div>
                         <div class="control">
                             <a class="button is-warning" onclick="nuevoProyecto();">
@@ -7768,9 +7991,6 @@ $tablaRanking .= "</div>";
     });
 
     $('#myDatePickerMC').datepicker({
-        // Let's make a function which will add class 'my-class' to every 11 of the month
-        // and make these cells disabled.
-
         onSelect: function onSelect(fd, date) {
             var idEquipo = $("#hddIdEquipo").val();
             var idDestino = $("#hddIdDestino").val();
@@ -7788,13 +8008,11 @@ $tablaRanking .= "</div>";
                     obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria,
                         'N');
                 }
-
-                //recargarListaTareasMC(idEquipo);
-                // alert(date + " " + idTarea);
             }
         }
     });
 </script>
+
 <script>
     // Obtener Día
     var fecha = new Date();

@@ -343,4 +343,132 @@ if (isset($_GET['action'])) {
             echo json_encode($array);
         }
     }
+
+
+    // OBTIENE OPCIONES PARA CREAR EQUIPO / LOCAL
+    if ($action == "obtenerOpcionesEquipo") {
+        $array = array();
+        $idSeccion = $_GET['idSeccion'];
+
+        // FILTROS
+        if ($idDestino == 10) {
+            $filtroDestino = "and id != 10";
+        } else {
+            $filtroDestino = " and id = $idDestino";
+        }
+
+        // DESTINOS
+        $query = "SELECT id, destino FROM c_destinos WHERE status = 'A' $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestino = $x["id"];
+                $destino = $x["destino"];
+
+                $array["destinos"][] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino
+                );
+            }
+        }
+
+        // SECCIONES
+        $query = "SELECT c_rel_destino_seccion.id_seccion, c_secciones.seccion
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccionX = $x["id_seccion"];
+                $seccion = $x['seccion'];
+
+                $array["secciones"][] = array(
+                    "idSeccion" => $idSeccionX,
+                    "seccion" => $seccion
+                );
+            }
+        }
+
+        // SUBSECCIONES
+        if ($idSeccion <= 0) {
+            $array["subsecciones"][] = array(
+                "idSubseccion" => "",
+                "subseccion" => ""
+            );
+        } else {
+            $query = "SELECT id, grupo FROM c_subsecciones WHERE id_seccion = $idSeccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idSubseccion = $x["id"];
+                    $subseccion = $x["grupo"];
+
+                    $array["subsecciones"][] = array(
+                        "idSubseccion" => $idSubseccion,
+                        "subseccion" => $subseccion
+                    );
+                }
+            }
+        }
+
+        // TIPOS DE EQUIPOS
+        $query = "SELECT id, tipo FROM c_tipos WHERE status = 'A'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTipo = $x["id"];
+                $tipo = $x["tipo"];
+
+                $array["tipos"][] = array(
+                    "idTipo" => intval($idTipo),
+                    "tipo" => $tipo
+                );
+            }
+        }
+
+        // MARCAS
+        $query = "SELECT id, marca FROM c_marcas WHERE status = 'A'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idMarca = $x["id"];
+                $marca = $x["marca"];
+
+                $array["marcas"][] = array(
+                    "idMarca" => intval($idMarca),
+                    "marca" => $marca
+                );
+            }
+        }
+
+        // TIPO LOCAL O EQUIPO
+        $array['tipoEquipo'][] = array("idTipoEquipo" => "EQUIPO", "tipo" => "EQUIPO");
+        $array['tipoEquipo'][] = array("idTipoEquipo" => "LOCAL", "tipo" => "LOCAL");
+
+        // STATUS LOCAL O EQUIPO
+        $array['status'][] = array("idStatus" => "OPERATIVO", "status" => "OPERATIVO");
+        $array['status'][] = array("idStatus" => "BAJA", "status" => "BAJA");
+        $array['status'][] = array("idStatus" => "TALLER", "status" => "TALLER");
+
+        echo json_encode($array);
+    }
+
+    if ($action == "agregarEquipoLocal") {
+        $equipo = $_GET['equipo'];
+        $destino = $_GET['destino'];
+        $seccion = $_GET['seccion'];
+        $subseccion = $_GET['subseccion'];
+        $tipo = $_GET['tipo'];
+        $marca = $_GET['marca'];
+        $equipolocal = $_GET['equipolocal'];
+        $modelo = $_GET['modelo'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_equipos_america(equipo, id_destino, id_seccion, id_subseccion, id_tipo, local_equipo, jerarquia, id_marca, modelo, id_fases, status, activo) VALUES('$equipo', $destino, $seccion, $subseccion, $tipo, '$equipolocal', 'PRINCIPAL', $marca, '$modelo', '', 'OPERATIVO', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+
+
+    // FIN
 }

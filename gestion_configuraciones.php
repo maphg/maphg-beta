@@ -13,64 +13,211 @@
 
 </head>
 
-<body class="p-1">
+<body class="p-1 relative">
 
-    <div class="flex justify-star items-center mb-5 relative container mx-auto mt-10">
-
-        <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
-            <h1>Gestión Usuarios
-                <span id="load" class="text-center ml-4 text-2xl"></span>
-            </h1>
-        </div>
-
-        <div class="relative text-gray-600 w-72">
-            <input id="palabraUsuario" type="search" placeholder="Buscar Usuario" class="bg-white border border-gray-300 rounded mr-4 w-full text-gray-600 text-sm focus:outline-none focus:border-gray-400 px-2 h-10" autocomplete="off">
-        </div>
-
-        <button id="btnNuevoUsuario" class="btn btn-green mx-4 h-10 normal-case">
-            <i class="fas fa-user-plus fa-lg mx-1"></i> Agregar
-        </button>
-
+    <div id="btnConfiguraciones" class="absolute bg-blue-400 cursor-pointer rounded-full shadow-md text-center w-2/12">
+        <ul class="text-white px-3 p-1 text-sm font-medium uppercase">
+            <i class="fa fa-cogs"></i> MENÚ Opciones
+        </ul>
     </div>
 
-    <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 80vh;">
-        <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
-            <thead class="bg-gray-200 cursor-pointer ">
-                <tr>
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Avatar
-                    </th>
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Nombre
-                    </th>
+    <div class="flex flex-row p-1">
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Cargo
-                    </th>
+        <div id="menuConfiguraciones" class="mr-2 w-2/12 py-1 px-3 rounded-md shadow mt-8 border border-gray-400 relative h-auto">
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Rol
-                    </th>
+            <!-- GESTIÓN DE USUARIOS -->
+            <ul id="btnGestionUsuarios" class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-users fa-lg mx-2"></i>
+                    Gestión de Usuarios
+                </li>
+            </ul>
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 sm:hidden md:block lg:block xl:block 2xl:block">
-                        Secciónes Asignadas
-                    </th>
+            <!-- GESTIÓN DE CARGOS -->
+            <ul id="btnGestionCargos" class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-users fa-lg mx-2"></i>
+                    Cargos
+                </li>
+            </ul>
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Fase
-                    </th>
+            <!-- SECCIONES -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-list fa-lg mx-2"></i>
+                    Secciones
+                </li>
+            </ul>
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        Status
-                    </th>
+            <!-- SUBSECCIONES -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-list fa-lg mx-2"></i>
+                    Subsecciones
+                </li>
+            </ul>
 
-                    <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                        <span class="sr-only">Edit</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody id="dataUsuarios" class="bg-white divide-y divide-gray-200"></tbody>
-        </table>
+            <!-- DESTINOS -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-flag fa-lg mx-2"></i>
+                    Destinos
+                </li>
+            </ul>
+
+            <!-- ASIGNACION DE SUBSECCIONES A SECCIONES -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-arrows-h fa-lg mx-2"></i>
+                    Asignaciones (Subsección -> Sección)
+                </li>
+            </ul>
+
+            <!-- TIPO EQUIPOS -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-list-alt fa-lg mx-2"></i>
+                    Tipo equipos
+                </li>
+            </ul>
+
+            <!-- MARCA EQUIPOS -->
+            <ul class="list-inside btn my-6 shadow-md hover:bg-rose-100 bg-blue-400 hover:bg-blue-500 text-white">
+                <li>
+                    <i class="fas fa-clipboard-list fa-lg mx-2"></i>
+                    Marca equipos
+                </li>
+            </ul>
+
+            <!-- SALIR DE LAS CONFIGURACIONES www.maphg.com -->
+            <ul id="btnSalir" class="list-inside btn my-6 hover:text-red-700 absolute bottom-0 right-0  text-red-500">
+                <li>
+                    <i class="fas fa-sign-out-alt fa-3x mx-1"></i>
+                </li>
+            </ul>
+            <!-- SALIR DE LAS CONFIGURACIONES www.maphg.com -->
+
+        </div>
+
+        <div id="columna2" class="w-10/12 mx-auto">
+
+            <!-- GESTIÓN DE USUARIOS -->
+            <div id="gestionUsuarios" class="rounded-md shadow mt-8 w-full mx-auto hidden">
+                <div class="flex justify-star items-center relative container mx-auto py-3">
+
+                    <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
+                        <h1>Gestión Usuarios
+                            <span id="load" class="text-center ml-4 text-2xl"></span>
+                        </h1>
+                    </div>
+
+                    <div class="relative text-gray-600 w-72">
+                        <input id="palabraUsuario" type="search" placeholder="Buscar Usuario" class="bg-white border border-gray-300 rounded mr-4 w-full text-gray-600 text-sm focus:outline-none focus:border-gray-400 px-2 h-10" autocomplete="off">
+                    </div>
+
+                    <button id="btnNuevoUsuario" class="btn btn-green mx-4 h-10 normal-case">
+                        <i class="fas fa-user-plus fa-lg mx-1"></i> Agregar
+                    </button>
+
+                </div>
+
+                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 80vh;">
+                    <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
+                        <thead class="bg-gray-200 cursor-pointer ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Avatar
+                                </th>
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Nombre
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Cargo
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Rol
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 sm:hidden md:block lg:block xl:block 2xl:block">
+                                    Secciónes Asignadas
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Fase
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Status
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    <span class="sr-only">Edit</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataUsuarios" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- GESTIÓN DE USUARIOS -->
+
+            <!-- GESTIÓN DE CARGOS -->
+            <div id="cargosUsuarios" class="ounded-md shadow mt-8 w-full mx-auto hidden">
+
+                <div class="flex justify-star items-center relative container mx-auto py-3">
+
+                    <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
+                        <h1>Gestión Cargos
+                            <span id="loadCargos" class="text-center ml-4 text-2xl"></span>
+                        </h1>
+                    </div>
+
+                    <div class="relative text-gray-600 w-72">
+                        <input id="palabraCargos" type="search" placeholder="Buscar Cargo" class="bg-white border border-gray-300 rounded mr-4 w-full text-gray-600 text-sm focus:outline-none focus:border-gray-400 px-2 h-10" autocomplete="off">
+                    </div>
+
+                    <button id="btnNuevoCargo" class="btn btn-green mx-4 h-10 normal-case">
+                        <i class="fas fa-user-plus fa-lg mx-1"></i> Agregar
+                    </button>
+
+                </div>
+
+                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 80vh;">
+                    <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
+                        <thead class="bg-gray-200 cursor-pointer ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    ID
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Cargo
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Asignados
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Status
+                                </th>
+
+                                <th scope="col" class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    <span class="sr-only">Edit</span>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="dataTablaCargos" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- GESTIÓN DE CARGOS -->
+
+        </div>
+
     </div>
 
 
@@ -318,6 +465,61 @@
         </div>
     </div>
     <!-- MODAL PARA EDITAR USUARIO -->
+
+    <!-- MODAL PARA EDITAR CARGOS -->
+    <div id="modalEditarCargos" class="modal">
+        <div class="modal-window rounded-md" style="width: 750px;">
+            <h1 class="text-center text-blue-400 font-semibold uppercase py-1">
+                Gestión de Cargos</h1>
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEditarCargos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="md:mt-0 md:col-span-2">
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-3 py-5 bg-white sm:p-3">
+
+                        <div class="grid grid-cols-8 gap-6">
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="first_name" class="block text-sm font-medium text-gray-700">Cargo</label>
+                                <input id="inputCargo" autocomplete="off" type="text" class="border border-blue-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-2">
+                            </div>
+
+                            <div class="col-span-2 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Status
+                                </label>
+
+                                <div class="inline-block relative">
+                                    <select id="statusCargo" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 py-2 pr-8 rounded  leading-tight focus:outline-none">
+                                        <option value="ACTIVO">ACTIVO </option>
+                                        <option value="BAJA">BAJA</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-2 sm:col-span-2">
+                                <button id="btnGuardarCargo" class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-4 py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                                    Guardar
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA EDITAR CARGOS -->
 
 </body>
 <script src="js/alertify.min.js"></script>

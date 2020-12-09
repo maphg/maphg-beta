@@ -2,6 +2,7 @@
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 // API PARA REPORTE DE ERRORES
 
+let iconSpin = '<i class="fa fa-spinner fa-spin fa-1x fa-fw"></i>';
 
 const codigoUsuario = x => {
     const id = x['y'].idUsuario;
@@ -190,6 +191,56 @@ const codigoUsuario = x => {
     return codigo;
 }
 
+const codigoCargo = x => {
+    const idCargo = x['y'].idCargo;
+    const cargo = x['y'].cargo;
+    const totalAsignados = x['y'].totalAsignados;
+    const status = x['y'].status;
+
+    if (status == "ACTIVO") {
+        statusX = `
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-200 text-green-800">
+                ACTIVO
+            </span>
+        `;
+    } else {
+        statusX = `
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-200 text-red-800">
+                BAJA
+            </span>
+        `;
+    }
+
+    const codigo = `
+        <tr id="cargo_${idCargo}">
+
+            <td class="px-6 py-4 whitespace-nowrap" >
+                ${idCargo}
+            </td>
+
+            <td class="px-6 py-4">
+                <div class="text-sm text-gray-900" data-title="${cargo}">
+                    <p class="truncate">${cargo}</p>
+                </div>
+            </td>
+
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${totalAsignados.parseInt()}
+            </td>
+
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                ${statusX}
+            </td>
+
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" onclick="abrirmodal('modalEditarCargos'); obtenerCargosX(${idCargo})">
+                <a href="#" class="text-indigo-600 hover:text-indigo-900"><i class="fas fa-ellipsis-v fa-lg"></i></a>
+            </td>
+
+        </tr >
+    `;
+    return codigo;
+}
+
 
 // FUNCIÓN PARA OBTENER TODOS LOS USUARIOS SEGÚN DESTINO
 function obtenerUsuarios(configuracionIdUsuario) {
@@ -200,8 +251,7 @@ function obtenerUsuarios(configuracionIdUsuario) {
     let load = document.getElementById("load");
     let palabraUsuario = document.getElementById("palabraUsuario");
 
-    load.innerHTML = '<i class="fa fa-spinner fa-pulse fa-lg fa-fw"></i>';
-
+    load.innerHTML = iconSpin;
     if (configuracionIdUsuario > 0) {
         tablaUsuarios = document.getElementById("usuario_" + configuracionIdUsuario);
     } else {
@@ -241,7 +291,6 @@ function obtenerUsuariosX(configuracionIdUsuario) {
     const URL1 = `php/gestion_configuraciones.php?action=opcionesUsuario&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     const URL2 = `php/gestion_configuraciones.php?action=obtenerUsuariosX&idDestino=${idDestino}&idUsuario=${idUsuario}&configuracionIdUsuario=${configuracionIdUsuario}`;
-    console.log(URL2);
 
     // ELEMENTOS
     let datosComplementariosUsuario = document.getElementById("datosComplementariosUsuario");
@@ -412,7 +461,6 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             fetch(URL2)
                 .then(array => array.json())
                 .then(array => {
-                    console.log(URL2);
                     if (array.length > 0) {
                         datosComplementariosUsuario.classList.remove('hidden');
                         for (let x = 0; x < array.length; x++) {
@@ -554,11 +602,9 @@ function actualizarUsuario(configuracionIdUsuario) {
 
     const action = "actualizarUsuario";
     const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&configuracionIdUsuario=${configuracionIdUsuario}&nombre=${nombre}&apellido=${apellido}&correo=${correo}&telefono=${telefono}&usuario=${usuario}&contraseña=${contraseña}`;
-    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             if (array == "1") {
                 alertaImg('Usuario Agregado', '', 'success', 1200);
                 obtenerUsuarios(configuracionIdUsuario);
@@ -593,7 +639,6 @@ function actualizaUsuarioOpciones(idUsuarioX, columna, valor) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             obtenerUsuariosX(idUsuarioX);
             obtenerUsuarios(idUsuarioX);
             if (array == 1) {
@@ -624,11 +669,93 @@ function actualizaUsuarioOpciones(idUsuarioX, columna, valor) {
 }
 
 
-// FUNCIÓN PARA TOGGLE HIDEN DE ELEMENTOS
-function toggleHidden(idElemento) {
-    if (document.getElementById(idElemento)) {
-        document.getElementById(idElemento).classList.toggle('hidden');
-    }
+// FUNCIÓN PARA OBTENER LOS CARGOS
+function obtenerCargos(idCargo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let tablaCargos = document.getElementById("dataTablaCargos");
+    let load = document.getElementById("loadCargos");
+    const action = "obtenerCargos";
+
+    const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idCargo=${idCargo}`;
+    load.innerHTML = iconSpin;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            tablaCargos.innerHTML = '';
+            if (array.length > 0) {
+                for (let x = 0; x < array.length; x++) {
+                    const y = array[x];
+                    const codigo = codigoCargo({ y });
+                    tablaCargos.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .then(() => {
+            load.innerHTML = '';
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ' URL: ' + URL);
+            tablaCargos.innerHTML = '';
+            load.innerHTML = '';
+        })
+}
+
+
+// FUNCIÓN PARA OBTENER LOS CARGOS
+function obtenerCargosX(idCargo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let cargo = document.getElementById("inputCargo");
+    let status = document.getElementById("statusCargo");
+    let btn = document.getElementById("btnGuardarCargo");
+    const action = "obtenerCargos";
+    btn.setAttribute("onclick", `actualizarCargo(${idCargo})`);
+    const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idCargo=${idCargo}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array.length > 0) {
+                cargo.value = array[0].cargo;
+                status.value = array[0].status;
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ' URL: ' + URL);
+        })
+}
+
+
+// ACTUALIZA CARGO O AGREGA SI EL PARAMETRO ES CERO 0
+function actualizarCargo(idCargo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let cargo = document.getElementById("inputCargo").value;
+    let status = document.getElementById("statusCargo").value;
+    const action = "actualizarCargo";
+    const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idCargo=${idCargo}&cargo=${cargo}&status=${status}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            console.log(array);
+            obtenerCargos(0);
+            document.getElementById("modalEditarCargos").classList.remove("open");
+            if (array == 1) {
+                alertaImg('Cargo Actualizado', '', 'success', 1200);
+            } else if (array == 2) {
+                alertaImg('Cargo Agregado', '', 'success', 1200);
+            } else if (array == 0) {
+                alertaImg('Datos Incorrectos', '', 'info', 1200);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
 }
 
 
@@ -760,6 +887,12 @@ document.getElementById("palabraUsuario").addEventListener('keyup', function () 
 })
 
 
+// BUSCAR CARGOS EN LA TABLA
+document.getElementById("palabraCargos").addEventListener('keyup', function () {
+    buscadorTabla('dataTablaCargos', 'palabraCargos', 1);
+})
+
+
 // OPCIÓN PARA AGREGAR UN NUEVO USUARIO
 document.getElementById("btnNuevoUsuario").addEventListener('click', function () {
     document.getElementById("datosComplementariosUsuario").classList.add('hidden');
@@ -776,6 +909,70 @@ document.getElementById("btnNuevoUsuario").addEventListener('click', function ()
 
     document.getElementById("btnGuardarUsuario").
         setAttribute('onclick', "actualizarUsuario(0);");
+})
+
+
+// OCULTAS TODAS LAS OPCIONES
+function ocultarOpciones(elementoMostrar) {
+    let array = ["gestionUsuarios", "cargosUsuarios"];
+
+    for (let x = 0; x < array.length; x++) {
+        const elementoOcultar = array[x];
+        if (document.getElementById(elementoOcultar) && elementoOcultar != elementoMostrar) {
+            document.getElementById(elementoOcultar).classList.add('hidden');
+        } else {
+            document.getElementById(elementoOcultar).classList.remove('hidden');
+        }
+    }
+}
+
+
+// FUNCIONES GENERICAS
+function toggleHidden(elemento) {
+    if (document.getElementById(elemento)) {
+        document.getElementById(elemento).classList.toggle('hidden');
+    }
+}
+
+
+// EVENTOS GENERALES
+document.getElementById("btnConfiguraciones").addEventListener("click", () => {
+    toggleHidden('menuConfiguraciones');
+
+    let columna2 = document.getElementById("columna2");
+    let menuConfiguraciones = document.getElementById("menuConfiguraciones");
+
+    if (menuConfiguraciones.classList.contains('hidden')) {
+        columna2.className = "mx-auto";
+    } else {
+        columna2.className = "w-10/12 mx-auto";
+    }
+})
+
+
+// OPCIÓN GESTIÓN USUARIOS
+document.getElementById("btnGestionUsuarios").addEventListener("click", async function () {
+    await ocultarOpciones('gestionUsuarios');
+    await obtenerUsuarios();
+})
+
+// OPCIÓN CARGOS
+document.getElementById("btnGestionCargos").addEventListener("click", async function () {
+    await ocultarOpciones('cargosUsuarios');
+    await obtenerCargos(0);
+})
+
+// OPCIÓN PARA REGRESAR A WWW.MAPHG.COM
+document.getElementById("btnSalir").addEventListener("click", function () {
+    window.location = "https://www.maphg.com/beta/planner-cols.php";
+})
+
+
+// ASIGNA VALORES PARA CREAR UN NUEVO CARGO
+document.getElementById("btnNuevoCargo").addEventListener("click", function () {
+    let btn = document.getElementById("btnGuardarCargo")
+    btn.setAttribute("onclick", 'actualizarCargo(0)');
+    document.getElementById("modalEditarCargos").classList.add("open");
 })
 
 

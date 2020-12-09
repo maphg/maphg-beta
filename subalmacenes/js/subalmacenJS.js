@@ -1,8 +1,9 @@
-// Ejemplo para llamar a la función de las alertas.
-// alertaImg('Item Agredado correctament!', 'has-text-danger', 'error', 3000)
-//                      msj                         color-text  icon    time
+// API PARA REPORTE DE ERRORES
+const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+// API PARA REPORTE DE ERRORES
 
 const arrayDestino = { 1: "RM", 7: "CMU", 2: "PVR", 6: "MBJ", 5: "PUJ", 11: "CAP", 3: "SDQ", 4: "SSA", 10: "AME" };
+
 
 function toggleModalTailwind(idModal) {
   $("#" + idModal).toggleClass('open');
@@ -11,7 +12,7 @@ function toggleModalTailwind(idModal) {
 
 // Funciones Principales para el Menu, donde se selecciona el destino.
 (function () {
-  let idDestinoDefault = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoDefault = localStorage.getItem('idDestino');
   $("#destinoSeleccionado").html(arrayDestino[idDestinoDefault]);
 }());
 
@@ -23,7 +24,7 @@ function idDestinoSeleccionado(idDestinoSeleccionado) {
 
 
 function consultaSubalmacen() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "consultaSubalmacen";
 
   $.ajax({
@@ -170,7 +171,7 @@ function busquedaExisenciaSubalmacen() {
 
 function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
   $("#modalExistenciasSubalmacen").addClass('open');
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   // console.log(idSubalmacen, idDestinoSeleccionado);
   const action = "consultaExistenciasSubalmacen";
   $.ajax({
@@ -202,7 +203,7 @@ function salidasSubalmacen() {
   console.log("Buscando");
   $("#modalSalidasSubalmacen").addClass('open');
   let palabraBuscar = $("#inputPalabraBuscarSubalmacenSalida").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
 
   document.getElementById("inputPalabraBuscarSubalmacenSalida").
@@ -233,7 +234,7 @@ function salidasSubalmacen() {
 
 function validarCantidaSalidaSubalmacen(idItem, Item, cantidadActual, idSubalmacen) {
   // idItem se refiera a idMaterial.
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let cantidad_tmp = $('#' + idItem).val();
   let cantidad = parseFloat(cantidad_tmp);
 
@@ -300,14 +301,14 @@ function consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen) {
 
 
 function recuperarCarrito() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
 }
 
 // FUNCIÓN PARA RESTABLECER CARRITO.
 function restablecerCarritoSalidasConfirmar() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   Swal.fire({
     toast: true,
@@ -348,7 +349,7 @@ function restablecerCarritoSalidas(idDestinoSeleccionado, idSubalmacen) {
 
 function carritoSalidaMotivo(paso) {
   let opcionSeleccionada = $("#carritoSalidaMotivo").val();
-  let idDestino = $("#inputIdDestinoSeleccionado").val();
+  let idDestino = localStorage.getItem('idDestino');
 
 
   if (paso == 'opcionSeccion') {
@@ -524,7 +525,7 @@ function carritoSalidaMotivo(paso) {
 
 
 function confirmarSalidaCarrito() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
 
   var action = "consultaCarritoSalida";
@@ -651,6 +652,7 @@ function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
   $("#dataMovimientos").html('');
 
   $("#inputIdSubalmacenSeleccionado").val(idSubalmacen);
+  localStorage.setItem("idSubalmacen", idSubalmacen);
   $("#subalmacenEntradasFase").html(fase);
   $("#subalmacenEntradasTitulo").html(nombre);
 
@@ -660,7 +662,7 @@ function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
 
 function entradasSubalmacen() {
   $("#modalSubalmacenEntradas").addClass('open');
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   let palabraBuscar = $("#inputPablabraBuscarEntradas").val();
 
@@ -706,7 +708,7 @@ function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, descripcionItem
 
 function capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual) {
   // console.log('Aqui');
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "capturarEntradaSubalmacenStock";
   $.ajax({
     type: "POST",
@@ -734,7 +736,7 @@ function capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, canti
 
 function consultaEntradaCarrito() {
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "consultaEntradaCarrito";
   $.ajax({
     type: "POST",
@@ -773,7 +775,7 @@ function consultaEntradaCarrito() {
 function confirmarEntradaCarrito() {
   $("#dataCarritoEntradas").html('');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let indexCantidadInput = $("#inputIndexEntradaCarrito").val().split(';');
   let contador = -1;
   indexCantidadInput.forEach(element => {
@@ -813,7 +815,7 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
 
 // FUNCIÓN PARA RESTABLECER CARRITO.
 function restablecerCarritoEntradasConfirmar() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   Swal.fire({
     toast: true,
@@ -856,7 +858,7 @@ function restablecerCarritoEntradas(idDestinoSeleccionado, idSubalmacen) {
 function movimientoExistenciasItems() {
   $("#dataMovimientosCarrito").html('');
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let palabraBuscar = $("#inputBuscarMovimientos").val();
   const action = "consultaMoverExistenciasItems";
   $.ajax({
@@ -912,7 +914,7 @@ function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, descripcionI
 
 function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual) {
   // console.log('Aqui');
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "capturarMovimientoSubalmacenStock";
   $.ajax({
     type: "POST",
@@ -942,7 +944,7 @@ function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, 
 
 function consultaMovimientoCarrito() {
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "consultaMovimientoCarrito";
   $.ajax({
     type: "POST",
@@ -986,7 +988,7 @@ function confirmarMovimientoCarrito() {
   let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
   let idOpcionSubalmacen = $("#idOpcionSubalmacenMovimientos").val();
   let seleccionadoSubalmacen = $("#idSubalmacenMovimientos").val();
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
 
   if (idOpcionSubalmacen != "" && seleccionadoSubalmacen != "") {
     $("#dataCarritoEntradas").html('');
@@ -1073,26 +1075,188 @@ function activarBtnFinalizarMovimiento() {
 // Funciones para mostrar todo los Items.
 
 function obtenerTodosItemsGlobales() {
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
-  let palabraBuscar = $("#inputPalabraBuscarTodo").val();
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let palabraBuscar = document.getElementById("inputPalabraBuscarTodo").value;
+  let contenedor = document.getElementById('dataTodosItems');
 
   const action = "consultaTodosItems";
-  $.ajax({
-    type: "POST",
-    url: "php/crud_subalmacen.php",
-    data: {
-      action: action,
-      idDestinoSeleccionado: idDestinoSeleccionado,
-      palabraBuscar: palabraBuscar
-    },
-    dataType: "json",
-    success: function (data) {
-      // console.log(data);
-      $("#dataTodosItems").html(data.dataTodo);
-      // console.log(data);
-      $("#inputResultadosXLS").val(data.ItemsResultado);
-    }
-  });
+  const URL = `php/crud_subalmacen.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraBuscar=${palabraBuscar}`;
+  console.log(URL);
+  fetch(URL)
+    .then(array => array.json())
+    .then(array => {
+      console.log(array);
+      contenedor.innerHTML = '';
+
+      if (array.length > 0) {
+        for (let x = 0; x < array.length; x++) {
+          const estilo = array[x].estilo;
+          const categoria = array[x].categoria;
+          const cod2bend = array[x].cod2bend;
+          const gremio = array[x].gremio;
+          const descripcion = array[x].descripcion;
+          const caracteristicas = array[x].caracteristicas;
+          const marca = array[x].marca;
+          const stockTeorico = array[x].stockTeorico;
+          const stockActual = array[x].stockActual;
+          const unidad = array[x].unidad;
+          const ubicacion = array[x].ubicacion;
+
+          const codigo = `
+            <div class="mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 rounded hover:bg-indigo-100 cursor-pointer text-center ${estilo}">
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${categoria}</h1>
+                </div>
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${cod2bend}</h1>
+                </div>
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${gremio}</h1>
+                </div>
+                <div class="w-64 flex h-full items-center justify-center truncate">
+                    <h1>${descripcion}</h1>
+                </div>
+                <div class="w-64 flex h-full items-center justify-center truncate">
+                    <h1>${caracteristicas}</h1>
+                </div>
+                <div class="w-64 flex h-full items-center justify-center truncate">
+                    <h1>${marca}</h1>
+                </div>
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${stockTeorico}</h1>
+                </div>
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${stockActual}</h1>
+                </div>
+                <div class="w-32 flex h-full items-center justify-center truncate">
+                    <h1>${unidad}</h1>
+                </div>
+                <div class="w-64 flex h-full items-center justify-center truncate">
+                    <h1>${ubicacion}</h1>
+                </div>
+            </div>         
+          `;
+          contenedor.insertAdjacentHTML('beforeend', codigo);
+        }
+      }
+    })
+    .catch(function (err) {
+      fetch(APIERROR + err);
+      contenedor.innerHTML = '';
+    })
+
+
+}
+
+
+// FUNCION PARA OBTENER LAS OPCIONES DE LOS ITEMS
+function modalAgregarItem(idSubalmacen) {
+  document.getElementById("modalAgregarItem").classList.add('open');
+  localStorage.setItem("idSubalmacen", idSubalmacen);
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  const action = "consultarOpcionesItem";
+  const URL = `php/crud_subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
+
+  document.getElementById("btnAgregarItems").
+    setAttribute('onclick', 'agregarItems(' + idSubalmacen + ');');
+
+  let contenedorMarca = document.getElementById("marcaItems");
+  let contenedorGremio = document.getElementById("gremioItems");
+  let contenedorUnidad = document.getElementById("unidadItems");
+
+  console.log(URL);
+  fetch(URL)
+    .then(array => array.json())
+    .then(array => {
+
+      contenedorMarca.innerHTML = '';
+      contenedorGremio.innerHTML = '';
+      contenedorUnidad.innerHTML = '';
+
+      if (array.marcas.length > 0) {
+        for (let x = 0; x < array.marcas.length; x++) {
+          const idMarca = array.marcas[x].idMarca;
+          const marca = array.marcas[x].marca;
+          const codigo = `<option value="${marca}">${marca}</option>`;
+          contenedorMarca.insertAdjacentHTML('beforeend', codigo);
+        }
+      }
+
+      if (array.gremios.length > 0) {
+        for (let x = 0; x < array.gremios.length; x++) {
+          const idGremio = array.gremios[x].idGremio;
+          const gremio = array.gremios[x].gremio;
+          const codigo = `<option value="${idGremio}">${gremio}</option>`;
+          contenedorGremio.insertAdjacentHTML('beforeend', codigo);
+        }
+      }
+
+      if (array.unidades.length > 0) {
+        for (let x = 0; x < array.unidades.length; x++) {
+          const idUnidad = array.unidades[x].idUnidad;
+          const unidad = array.unidades[x].unidad;
+          const codigo = `<option value="${unidad}">${unidad}</option>`;
+          contenedorUnidad.insertAdjacentHTML('beforeend', codigo);
+        }
+      }
+
+    })
+    .catch(function (err) {
+      contenedorMarca.innerHTML = '';
+      contenedorGremio.innerHTML = '';
+      contenedorUnidad.innerHTML = '';
+
+      fetch(APIERROR + err + ` modalAgregarItem(${idSubalmacen})`);
+    })
+}
+
+
+// FUNCION PARA AGREGAR ITEMS
+function agregarItems(idSubalmacen) {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let marca = document.getElementById("marcaItems").value;
+  let gremio = document.getElementById("gremioItems").value;
+  let unidad = document.getElementById("unidadItems").value;
+  let descripcion = document.getElementById("descripcionItems").value;
+  let caracteristicas = document.getElementById("caracteristicasItems").value;
+  let cod2bend = document.getElementById("cod2bendItems").value;
+  let categoria = document.getElementById("categoriaItems").value;
+  let stockTeorico = document.getElementById("stockTeoricoItems").value;
+  let stockActual = document.getElementById("stockActualItems").value;
+
+  const action = "agregarItems";
+  const URL = `php/crud_subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}&marca=${marca}&gremio=${gremio}&unidad=${unidad}&descripcion=${descripcion}&caracteristicas=${caracteristicas}&cod2bend=${cod2bend}&categoria=${categoria}&stockTeorico=${stockTeorico}&stockActual=${stockActual}`;
+
+  if (
+    marca != "" && gremio != "" && unidad != "" && descripcion != "" && caracteristicas != "" && cod2bend != "" && categoria != "" && stockTeorico != "" && stockActual != ""
+  ) {
+    fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+        console.log(array);
+        if (array == 1) {
+          document.getElementById("modalAgregarItem").classList.remove('open');
+          alertaImg('Item Agregado', '', 'success', 1200);
+
+          document.getElementById("descripcionItems").value = '';
+          document.getElementById("caracteristicasItems").value = '';
+          document.getElementById("cod2bendItems").value = '';
+          document.getElementById("categoriaItems").value = '';
+          document.getElementById("stockTeoricoItems").value = '';
+          document.getElementById("stockActualItems").value = '';
+        } else {
+          alertaImg('Intente de Nuevo', '', 'info', 1200);
+        }
+      })
+      .catch(function (err) {
+        fetch(APIERROR + err + `modalAgregarItem(${idSubalmacen})`);
+      })
+  } else {
+    alertaImg('Datos Incorrectos', '', 'info', 1200);
+  }
 }
 
 
@@ -1104,7 +1268,7 @@ function generarXLSItems(tipoXLS) {
   // let idInput = idItems.split(';');
   // idInput.pop();
 
-  let idDestinoSeleccionado = $("#inputIdDestinoSeleccionado").val();
+  let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let idSubalmacenSeleccionado = $("#inputIdSubalmacenSeleccionado").val();
   let page = "";
 
@@ -1127,8 +1291,4 @@ function generarXLSItems(tipoXLS) {
 consultaSubalmacen();
 
 
-// Funciones de Prueba.
-// function obtnerValorHTML(id) {
-// }
-// function obtnerValorINPUT(id) {
-// }
+document.getElementById("destinosSelecciona").addEventListener("click", consultaSubalmacen);

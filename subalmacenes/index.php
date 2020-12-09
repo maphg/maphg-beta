@@ -36,10 +36,10 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sub Almacenes</title>
     <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/tailwindproduccion.css">
-    <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="../css/tailwindproduccion.css">
+    <link rel="stylesheet" href="../css/modales.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
-    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="../css/animate.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
@@ -52,52 +52,57 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <input type="hidden" id="inputIndexMovimientosCarrito">
     <input type="hidden" id="inputID">
     <input type="hidden" id="inputResultadosXLS">
-    <div class="w-full">
+
+    <!-- MENÚ -->
+    <div class="w-full absolute top-0">
         <?php
-        include 'php/navbartop.php';
-        include 'php/menu-sidebar.php';
+        include 'php/navbartopJS.php';
+        include 'php/menuJS.php';
         ?>
     </div>
+    <!-- MENÚ -->
 
-    <div class="flex flex-col justify-evenly items-center w-full mt-8">
-        <div class="container flex flex-col bg-gray-800 rounded-b-md z-10" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
-            <div class="flex flex-row w-full m-3 items-center justify-start relative">
-                <div class="mr-2 text-orange-500">
-                    <i class="fad fa-box-alt fa-lg"></i>
-                </div>
-                <div class="font-medium text-xl text-gray-200">
-                    <h1>Sub Almacenes & Bodegas</h1>
-                </div>
-                <div class="absolute right-0 mr-10">
-                    <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales();"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
-                        General</button>
-                    <button data-target="modalInformes" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
-                </div>
-            </div>
-
-            <div class="flex flex-col justify-start items-center w-full rounded-b-md bg-white p-3" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem; height: 80vh;">
-
-                <div class="flex flex-col md:flex-row w-full">
-                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
-                        <div class="text-center font-semibold text-gray-700 text-xl">
-                            <h1>GP</h1>
-                        </div>
-                        <!-- Aquí se almacena la información obtenida.-->
-                        <div id="subalmacenGP"></div>
+    <div class="container mx-auto pt-16">
+        <div class="flex flex-col justify-evenly items-center w-full">
+            <div class="container flex flex-col bg-gray-800 rounded-b-md z-10" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
+                <div class="flex flex-row w-full m-3 items-center justify-start relative">
+                    <div class="mr-2 text-orange-500">
+                        <i class="fad fa-box-alt fa-lg"></i>
                     </div>
-
-                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
-                        <div class="text-center font-semibold text-gray-700 text-xl">
-                            <h1>TRS</h1>
-                        </div>
-                        <div id="subalmacenTRS"></div>
+                    <div class="font-medium text-xl text-gray-200">
+                        <h1>Sub Almacenes & Bodegas</h1>
                     </div>
+                    <div class="absolute right-0 mr-10">
+                        <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales();"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
+                            General</button>
+                        <button data-target="modalInformes" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
+                    </div>
+                </div>
 
-                    <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
-                        <div class="text-center font-semibold text-gray-700 text-xl">
-                            <h1>ZI</h1>
+                <div class="flex flex-col justify-start items-center w-full rounded-b-md bg-white p-3" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem; height: 80vh;">
+
+                    <div class="flex flex-col md:flex-row w-full">
+                        <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
+                            <div class="text-center font-semibold text-gray-700 text-xl">
+                                <h1>GP</h1>
+                            </div>
+                            <!-- Aquí se almacena la información obtenida.-->
+                            <div id="subalmacenGP"></div>
                         </div>
-                        <div id="subalmacenZI"></div>
+
+                        <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
+                            <div class="text-center font-semibold text-gray-700 text-xl">
+                                <h1>TRS</h1>
+                            </div>
+                            <div id="subalmacenTRS"></div>
+                        </div>
+
+                        <div class="w-full md:w-1/3 flex flex-col px-2 overflow-y-auto scrollbar" style="height: 77vh;">
+                            <div class="text-center font-semibold text-gray-700 text-xl">
+                                <h1>ZI</h1>
+                            </div>
+                            <div id="subalmacenZI"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,13 +112,15 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <!-- MODALES ------------------------------------------------------------------- -->
     <!-- MODAL EXISTENCIAS -->
     <div id="modalExistenciasSubalmacen" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1500px;">
+        <div class="modal-window rounded-md relative" style="width: 1300px;">
+
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalExistenciasSubalmacen')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
@@ -129,7 +136,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
@@ -180,7 +187,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                     <!-- TITULOS -->
 
                     <!-- Contenido -->
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
+                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 60vh;">
                         <div id="dataExistenciasSubalmacen"></div>
                     </div>
                     <!-- Fin Contenido -->
@@ -192,15 +199,17 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
     <!-- MODAL SALIDAS -->
     <div id="modalSalidasSubalmacen" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1400px;">
+        <div class="modal-window rounded-md" style="width: 1300px;">
+
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+
             <!-- MARCA Y UBICACION -->
-            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center pt-10">
                 <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
                     <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300">--</h1>
                 </div>
@@ -387,7 +396,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
     <!-- MODAL ENTRADAS -->
     <div id="modalSubalmacenEntradas" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1500px;">
+        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalSubalmacenEntradas');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -473,7 +482,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
     <!-- MODAL MOVER ITEMS -->
     <div id="modalMoverItems" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1500px;">
+        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalMoverItems')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -696,13 +705,15 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
     <!-- MODAL BUSQUEDA GENERAL -->
     <div id="modalBusquedaGeneral" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1500px;">
+        <div class="modal-window rounded-md relative" style="width: 1300px;">
+
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalBusquedaGeneral')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
@@ -718,7 +729,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
@@ -779,6 +790,97 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
         </div>
     </div>
+
+
+    <!-- MODAL CONFIRMAR ENTRADA -->
+    <div id="modalAgregarItem" class="modal">
+        <div class="modal-window rounded-md" style="width:600px;">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalAgregarItem')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-tl-md rounded-br-md">
+                    <h1>Agregar Item</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <div class="mt-10 sm:mt-0">
+                    <div class="shadow overflow-hidden sm:rounded-md">
+                        <div class="px-4 py-5 bg-white sm:p-6">
+                            <div class="grid grid-cols-6 gap-6">
+
+                                <div class="col-span-6">
+                                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                                    <input id="descripcionItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label class="block text-sm font-medium text-gray-700">Características</label>
+                                    <input id="caracteristicasItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">COD2BEND</label>
+                                    <input id="cod2bendItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Categoria</label>
+                                    <input id="categoriaItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label class="block text-sm font-medium text-gray-700">
+                                        Marca / Proveedor
+                                    </label>
+                                    <select id="marcaItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Gremio</label>
+                                    <select id="gremioItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">Unidad de Medida</label>
+                                    <select id="unidadItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                                    <label for="state" class="block text-sm font-medium text-gray-700">Stock Teorico</label>
+                                    <input id="stockTeoricoItems" type="number" min="1" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                                    <label class="block text-sm font-medium text-gray-700">
+                                        Stock Actual</label>
+                                    <input id="stockActualItems" type="number" min="1" autocomplete="off" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="px-4 py-3 bg-gray-50 sm:px-6 text-center">
+                            <button id="btnAgregarItems" type="submit" class="inline-flex justify-center py-2 px-4 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- MODALES ------------------------------------------------------------------- -->
 
 
@@ -789,7 +891,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     <script src="js/acordion.js"></script>
     <script src="js/subalmacenJS.js"></script>
     <script src="js/alertasSweet.js"></script>
-
+    <script src="js/complemento_menuJS.js"></script>
     <script>
         function expandir(id) {
             let idtoggle = id + 'toggle';

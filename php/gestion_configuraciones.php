@@ -621,5 +621,81 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
+    if ($action == "obtenerCargos") {
+        $idCargo = $_GET['idCargo'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestinoUsuario = "";
+        } else {
+            $filtroDestinoUsuario = "and t_users.id_usuario = $idDestino";
+        }
+
+        if ($idCargo > 0) {
+            $filtroCargo = "WHERE id = $idCargo";
+        } else {
+            $filtroCargo = "";
+        }
+
+        $query = "SELECT id, cargo, status FROM c_cargos $filtroCargo ORDER BY id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idCargo = $x["id"];
+                $cargo = $x["cargo"];
+                $status = $x["status"];
+
+                if ($status == "A" || $status == "ACTIVO") {
+                    $status = "ACTIVO";
+                } else {
+                    $status = "BAJA";
+                }
+
+                $totalAsignados = 0;
+                $query = "SELECT count(t_users.id) 'total' 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_colaboradores.id_cargo = $idCargo $filtroDestinoUsuario";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAsignados = $x["total"];
+                    }
+                }
+
+                $array[] =
+                    array(
+                        "idCargo" => intval($idCargo),
+                        "cargo" => $cargo,
+                        "totalAsignados" => intval($totalAsignados),
+                        "status" => $status
+                    );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "actualizarCargo") {
+        $idCargo = $_GET['idCargo'];
+        $cargo = $_GET['cargo'];
+        $status = $_GET['status'];
+        $resp;
+        if ($idCargo > 0 && $cargo != "" && $status != "") {
+            $query = "UPDATE c_cargos SET cargo = '$cargo', status = '$status' 
+            WHERE id = $idCargo";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($idCargo == 0 && $cargo != "" && $status != "") {
+            $query = "INSERT INTO c_cargos(id, cargo, status) VALUES(null, '$cargo', '$status')";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        } else {
+            $resp = 0;
+        }
+        echo json_encode($resp);
+    }
+
     // Final
 }

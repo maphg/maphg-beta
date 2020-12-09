@@ -4257,6 +4257,45 @@ if (isset($_POST['action'])) {
     }
 
 
+    if ($action == "obtenerAdjuntosEnergeticos") {
+        $idPendiente = $_POST["idPendiente"];
+        $array = array();
+
+        $query = "SELECT t_energeticos_adjuntos.id, t_energeticos_adjuntos.url, t_energeticos_adjuntos.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_energeticos_adjuntos 
+        INNER JOIN t_users ON t_energeticos_adjuntos.subido_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_energeticos_adjuntos.id_energetico = $idPendiente and 
+        t_energeticos_adjuntos.activo = 1";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idAdjunto = $x['id'];
+                $url = $x['url'];
+                $subidoPor = $x['nombre'] . " " . $x['apellido'];
+                $fecha = (new DateTime($x['fecha']))->format('d-m-Y');
+
+                if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+                    $tipo = "imagen";
+                } else {
+                    $tipo = "documento";
+                }
+
+                $array[] = array(
+                    "idAdjunto" => intval($idAdjunto),
+                    "fecha" => $fecha,
+                    "url" => $url,
+                    "tipo" => $tipo,
+                    "subidoPor" => $subidoPor
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+
+
 
     //Cierre de IF para action.
 }

@@ -399,6 +399,13 @@ function consultaEquiposLocales() {
     let filtroPalabra = document.getElementById("filtroPalabra").value;
     let load = document.getElementById("load");
 
+    // BOTON PARA CREAR EQUIPOS, SE OCULTA EN AME
+    if (filtroDestino != 10) {
+        document.getElementById("agregarEquipoLocal").classList.remove("hidden");
+    } else {
+        document.getElementById("agregarEquipoLocal").classList.add("hidden");
+    }
+
     const action = "consultaEquiposLocales";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
 
@@ -1182,6 +1189,170 @@ function expandir(id) {
 function toggleModalTailwind(idModal) {
     $("#" + idModal).toggleClass("open");
 }
+
+
+// AGREGAR EQUIPOS LOCALES
+function modalAgregarEquipo() {
+    let idDestino = document.getElementById("filtroDestino").value;
+    let idUsuario = localStorage.getItem('usuario');
+
+    document.getElementById("modalAgregarEquipo").classList.add('open');
+    document.getElementById("btnAgregarEquipo").setAttribute('onclick', 'agregarEquipoLocal();');
+
+    let contenedorDestino = document.getElementById("destinoXEquipo");
+    let contenedorSeccion = document.getElementById("seccionXEquipo");
+    let contenedorSubseccion = document.getElementById("subseccionXEquipo");
+    let contenedorTipo = document.getElementById("tipoXEquipo");
+    let contenedorMarca = document.getElementById("marcaXEquipo");
+    let contenedorEquipoLocal = document.getElementById("equipoXLocal");
+
+    let valorSeccion = contenedorSeccion.value;
+    let valorTipo = contenedorTipo.value;
+    let valorMarca = contenedorMarca.value;
+    let valorEquipo = contenedorEquipoLocal.value;
+
+    const action = "obtenerOpcionesEquipo";
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${contenedorSeccion.value}`;
+
+    console.log(URL);
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+
+            // LIMPIA CONTENEDORES
+            contenedorDestino.innerHTML = '';
+            contenedorSeccion.innerHTML = '';
+            contenedorSubseccion.innerHTML = '';
+            contenedorTipo.innerHTML = '';
+            contenedorMarca.innerHTML = '';
+            contenedorEquipoLocal.innerHTML = '';
+
+            // DESTINOS
+            if (array.destinos.length > 0) {
+                for (let x = 0; x < array.destinos.length; x++) {
+                    const idDestinoX = array.destinos[x].idDestino;
+                    const destino = array.destinos[x].destino;
+                    const codigo = `<option value="${idDestinoX}">${destino}</option>`;
+                    contenedorDestino.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            // SECCIONES
+            if (array.secciones.length > 0) {
+                for (let x = 0; x < array.secciones.length; x++) {
+                    const idSeccion = array.secciones[x].idSeccion;
+                    const seccion = array.secciones[x].seccion;
+                    const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+                    contenedorSeccion.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            // SUBSECCIONES
+            if (array.subsecciones.length > 0) {
+                for (let x = 0; x < array.subsecciones.length; x++) {
+                    const idSubseccion = array.subsecciones[x].idSubseccion;
+                    const subseccion = array.subsecciones[x].subseccion;
+                    const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                    contenedorSubseccion.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            // TIPOS
+            if (array.tipos.length > 0) {
+                for (let x = 0; x < array.tipos.length; x++) {
+                    const idTipo = array.tipos[x].idTipo;
+                    const tipo = array.tipos[x].tipo;
+                    const codigo = `<option value="${idTipo}">${tipo}</option>`;
+                    contenedorTipo.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            // MARCAS
+            if (array.marcas.length > 0) {
+                for (let x = 0; x < array.marcas.length; x++) {
+                    const idMarca = array.marcas[x].idMarca;
+                    const marca = array.marcas[x].marca;
+                    const codigo = `<option value="${idMarca}">${marca}</option>`;
+                    contenedorMarca.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+            // LOCAL O EQUIPO
+            if (array.tipoEquipo.length > 0) {
+                for (let x = 0; x < array.tipoEquipo.length; x++) {
+                    const idTipoEquipo = array.tipoEquipo[x].idTipoEquipo;
+                    const tipo = array.tipoEquipo[x].tipo;
+                    const codigo = `<option value="${idTipoEquipo}">${tipo}</option>`;
+                    contenedorEquipoLocal.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+        })
+        .then(() => {
+            contenedorSeccion.value = valorSeccion;
+            contenedorTipo.value = valorTipo;
+            contenedorMarca.value = valorMarca;
+            contenedorEquipoLocal.value = valorEquipo;
+        })
+        .catch(function (err) {
+            // LIMPIA CONTENEDORES
+            contenedorDestino.innerHTML = '';
+            contenedorSeccion.innerHTML = '';
+            contenedorSubseccion.innerHTML = '';
+            contenedorTipo.innerHTML = '';
+            contenedorMarca.innerHTML = '';
+            contenedorEquipoLocal.innerHTML = '';
+
+            fetch(APIERROR + err);
+        })
+}
+document.getElementById("agregarEquipoLocal").
+    addEventListener('click', modalAgregarEquipo);
+document.getElementById("seccionXEquipo").
+    addEventListener('change', modalAgregarEquipo);
+
+
+// FUNCIÓN PARA AGREGAR EQUIPO / LOCAL
+function agregarEquipoLocal() {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+
+    let equipo = document.getElementById("descripcionXEquipo").value;
+    let destino = document.getElementById("destinoXEquipo").value;
+    let seccion = document.getElementById("seccionXEquipo").value;
+    let subseccion = document.getElementById("subseccionXEquipo").value;
+    let tipo = document.getElementById("tipoXEquipo").value;
+    let marca = document.getElementById("marcaXEquipo").value;
+    let equipolocal = document.getElementById("equipoXLocal").value;
+    let modelo = document.getElementById("modeloXEquipo").value;
+
+    const action = "agregarEquipoLocal";
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo}&destino=${destino}&seccion=${seccion}&subseccion=${subseccion}&tipo=${tipo}&marca=${marca}&equipolocal=${equipolocal}&status=${status}&modelo=${modelo}`;
+    console.log(URL);
+
+    if (equipo != "" && destino != "" && seccion != "" && subseccion != "" && tipo != "" && marca != "" && equipolocal != "") {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                console.log(array);
+                if (array == 1) {
+                    consultaEquiposLocales();
+                    alertaImg(equipolocal + ' Agregado', '', 'success', 1200);
+                    document.getElementById("modalAgregarEquipo").classList.remove('open');
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1200);
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err + ' agregarEquipoLocal()');
+            })
+    } else {
+        alertaImg('Datos Incorrectos', '', 'info', 1200);
+    }
+}
+
+
 
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
 
