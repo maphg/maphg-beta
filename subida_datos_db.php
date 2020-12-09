@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
     <link rel="stylesheet" href="css/fontawesome/css/all.min.css"">
-    <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel=" stylesheet" href="css/alertify.min.css">
 
 </head>
 
@@ -291,7 +291,7 @@
             </div>
         </div>
     </div>
-<script src="js/alertify.min.js"></script>
+    <script src="js/alertify.min.js"></script>
     <script src="js/jquery-3.3.1.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/sweetalert2@9.js"></script>
@@ -739,6 +739,37 @@
                 document.getElementById("columna28").value = 'activo';
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
+            } else if (tabla == "t_subcontratas_america_materiales") {
+                document.getElementById("columna1").value = 'id_destino';
+                document.getElementById("columna2").value = 'centro_coste';
+                document.getElementById("columna3").value = 'texto_ceco';
+                document.getElementById("columna4").value = 'nombre_cuenta';
+                document.getElementById("columna5").value = 'fecha_contabilizacion';
+                document.getElementById("columna6").value = 'asignacion';
+                document.getElementById("columna7").value = 'texto';
+                document.getElementById("columna8").value = 'importe_usd';
+                document.getElementById("columna9").value = 'nombre_proveedor';
+                document.getElementById("columna10").value = 'documento_compras';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
             } else {
                 document.getElementById("columna1").value = '';
                 document.getElementById("columna2").value = '';
@@ -777,6 +808,6 @@
             document.getElementById("modalDataInfo").classList.remove('open');
         }
     </script>
-    </body>
+</body>
 
 </html>

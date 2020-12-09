@@ -28,15 +28,15 @@ if (isset($_GET['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $fecha = $x['fecha_contabilizacion'];
-                $importe = $x['importe_us'];
+                $importe = $x['importe_usd'];
                 $cc = $x['centro_coste'];
                 $asignacion = $x['asignacion'];
                 $texto = $x['texto'];
-                $nombreProveedorAF = $x['nombre_proveedor_af'];
-                $nombre_1 = $x['nombre_1'];
+                $nombreProveedorAF = $x['nombre_proveedor'];
+                $nombre_1 = $x['nombre_cuenta'];
                 $textoCeco = $x['texto_ceco'];
 
-                $arrayTemp = array(
+                $array[] = array(
                     "fecha" => $fecha,
                     "importe" => $importe,
                     "cc" => $cc,
@@ -46,7 +46,6 @@ if (isset($_GET['action'])) {
                     "nombre_1" => $nombre_1,
                     "textoCeco" => $textoCeco
                 );
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);

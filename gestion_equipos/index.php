@@ -916,7 +916,7 @@
 
                             <div class="col-span-6">
                                 <label for="state" class="block text-sm font-medium text-gray-700">Modelo</label>
-                                <input id="modeloXEquipo" type="text" class="mt-1 block w-full py-1 shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                                <input id="modeloXEquipo" type="text" class="mt-1 block w-full py-1 shadow-sm sm:text-sm border border-blue-400 rounded-md" autocomplete="off">
                             </div>
 
                         </div>

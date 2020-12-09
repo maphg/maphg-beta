@@ -806,6 +806,7 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
         alertaImg(' Entradas Finalizas', '', 'success', 3000);
         // $("#" + idItemGlobal).val(0);
         $('#modalSubalmacenEntradas').removeClass('open');
+        $('#modalConfirmacionEntradas').removeClass('open');
       } else {
         alertaImg('Intente de Nuevo', '', 'warning', 3000);
       }

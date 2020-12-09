@@ -375,7 +375,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT c_rel_destino_seccion.id_seccion, c_secciones.seccion
         FROM c_rel_destino_seccion
         INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
-        WHERE id_destino = $idDestino";
+        WHERE id_destino = $idDestino ORDER BY c_secciones.seccion ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idSeccionX = $x["id_seccion"];
@@ -395,7 +395,8 @@ if (isset($_GET['action'])) {
                 "subseccion" => ""
             );
         } else {
-            $query = "SELECT id, grupo FROM c_subsecciones WHERE id_seccion = $idSeccion";
+            $query = "SELECT id, grupo FROM c_subsecciones 
+            WHERE id_seccion = $idSeccion ORDER BY grupo ASC";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idSubseccion = $x["id"];
@@ -410,7 +411,7 @@ if (isset($_GET['action'])) {
         }
 
         // TIPOS DE EQUIPOS
-        $query = "SELECT id, tipo FROM c_tipos WHERE status = 'A'";
+        $query = "SELECT id, tipo FROM c_tipos WHERE status = 'A' ORDER BY tipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTipo = $x["id"];
@@ -424,7 +425,7 @@ if (isset($_GET['action'])) {
         }
 
         // MARCAS
-        $query = "SELECT id, marca FROM c_marcas WHERE status = 'A'";
+        $query = "SELECT id, marca FROM c_marcas WHERE status = 'A' ORDER BY marca ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idMarca = $x["id"];

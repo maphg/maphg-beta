@@ -123,8 +123,8 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="faseSubalmacen" class="font-medium text-base text-gray-300"></h1>
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
+                    <h1 id="faseSubalmacen" class="font-medium text-base text-gray-300 px-1"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
                     <h1 id="nombreSubalmacen"></h1>
@@ -209,9 +209,9 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
 
             <!-- MARCA Y UBICACION -->
-            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center pt-10">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300">--</h1>
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
+                    <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300 px-1">--</h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
                     <h1 id="nombreSalidaSubalmacen">--</h1>
@@ -223,7 +223,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
@@ -405,8 +405,8 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-gray-300">
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
+                    <h1 class="font-medium text-base text-gray-300 px-1">
                         <div id="subalmacenEntradasFase"></div>
                     </h1>
                 </div>
@@ -491,8 +491,8 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-gray-300"><i class="fas fa-random fa-lg"></i></h1>
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
+                    <h1 class="font-medium text-base text-gray-300 px-1"><i class="fas fa-random fa-lg"></i></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
                     <h1>MOVER ITEMS ENTRE ALMACENES & BODEGAS</h1>
@@ -716,8 +716,8 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-16 h-10 shadow-xs">
-                    <h1 class="font-medium text-base text-gray-300"> <i class="fas fa-search fa-lg"></i> </h1>
+                <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
+                    <h1 class="font-medium text-base text-gray-300 px-1"> <i class="fas fa-search fa-lg"></i> </h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
                     <h1>TODOS LOS SUBALMACENES & BODEGAS</h1>

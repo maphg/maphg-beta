@@ -135,10 +135,9 @@ if (isset($_POST['action'])) {
       $filtroDestino = "AND id_destino = $idDestinoSeleccionado AND id IN($subalmacenesAcceso)";
     }
 
-    $query = "SELECT 
-        id, id_destino, id_fase, nombre, fase, tipo 
-        FROM t_subalmacenes 
-        WHERE activo = 1 $filtroDestino ORDER BY tipo DESC";
+    $query = "SELECT id, id_destino, id_fase, nombre, fase, tipo 
+    FROM t_subalmacenes 
+    WHERE activo = 1 $filtroDestino ORDER BY tipo DESC";
     $result = mysqli_query($conn_2020, $query);
 
     while ($row = mysqli_fetch_array($result)) {
@@ -162,10 +161,14 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataGP .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\"
-            onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-            </div>
+              <div class=\"w-1/3  bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
+
+              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\"
+              onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+                <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+              </div>
             ";
           }
 
@@ -197,8 +200,13 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataGP .= "
-              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-              <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+
+              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
+
+              <div class=\"hidden w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+                <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
           }
@@ -233,8 +241,12 @@ if (isset($_POST['action'])) {
           ";
 
           if ($entradasPermiso == 1) {
-            $dataTRS .= "  
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            $dataTRS .= "        
+              <div class=\"w-1/3  bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
+
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
             <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
             </div>
             ";
@@ -270,9 +282,13 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataTRS .= "
-            <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-            </div>
+              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
+
+              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+                <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+              </div>
             ";
           }
 
@@ -307,14 +323,13 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataZI .= "
+              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
 
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-            <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-            </div>
-
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-            </div>
+              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+                <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+              </div>
             ";
           }
 
@@ -347,9 +362,13 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataZI .= "
-            <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
-            <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
-            </div>
+              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
+                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
+              </div>
+
+              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+                <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
+              </div>
             ";
           }
 

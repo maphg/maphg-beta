@@ -177,3 +177,86 @@ document.getElementById("palabraMateriales").addEventListener('keyup', function 
 
 document.getElementById("opcionServicios").addEventListener('click', obtenerServicios);
 document.getElementById("opcionMateriales").addEventListener('click', obtenerMateriales);
+
+document.getElementById("sidedestino").addEventListener('click', powerbi);
+
+function powerbi() {
+    let idDestino = localStorage.getItem('idDestino');
+    let powerbiURL =
+        [
+            {
+                "id": 11,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiNTUxM2E4MjktZWUxZS00ZWRlLTg0NTAtZDZmNTZjNTIxYzFiIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 1,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiMGIxMjI3ZTQtZDQ4ZS00NjUwLTkyMWQtZWE4YWUzNzNlOGE4IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 7,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiYTc5ODQzMDktNjZiNS00ZDJkLTllNDctOWU0ODU1YmNkZWI0IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 2,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiYjhkMWY3ZjItYzBmNS00M2UyLTg3ZWYtZWEwZDU5MTRlNTYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 6,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiMWNiMDM0NGUtYWQyNy00NmQ0LTgyN2ItNzE2NjBmY2FkZDBlIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 5,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiNjg0NTY2MjMtMWUwNy00MTYwLWE4NDctMmU0MTUxMjU2NzI3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 4,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiMDZhMjA1YjYtYmQ2Ny00OTFkLWIwOTAtNTc3MTA4Yjk4ZGIwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            },
+
+            {
+                "id": 3,
+                "URL": "https://app.powerbi.com/view?r=eyJrIjoiYzQ5MmQ1NTAtOTkwYS00OTNhLThlOGItNmQ4NTcwODE2NzcwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9"
+            }
+        ]
+
+    let contenedor = document.getElementById('contenedorPowerbi');
+    for (let x = 0; x < powerbiURL.length; x++) {
+        const id = powerbiURL[x].id;
+        if (document.getElementById("powerbi_" + id)) {
+            document.getElementById("powerbi_" + id).classList.add("hidden");
+            document.getElementById("powerbi_" + id).childNodes[1].setAttribute('src', '');
+        }
+    }
+
+    for (let x = 0; x < powerbiURL.length; x++) {
+        const id = powerbiURL[x].id;
+        const URL = powerbiURL[x].URL;
+
+        if (idDestino == 10) {
+            contenedor.className = 'bg-red-100 rounded grid grid-cols-3 gap-1 p-2';
+            if (document.getElementById("powerbi_" + id)) {
+                document.getElementById("powerbi_" + id).classList.remove("hidden");
+                document.getElementById("powerbi_" + id).childNodes[1].
+                    setAttribute('src', URL);
+            }
+        } else {
+            contenedor.className = 'bg-red-100 rounded grid grid-cols-1 gap-1 p-2';
+            if (document.getElementById("powerbi_" + idDestino) && idDestino == id) {
+                document.getElementById("powerbi_" + idDestino).classList.remove("hidden");
+                document.getElementById("powerbi_" + idDestino).childNodes[1].
+                    setAttribute('src', URL);
+            }
+        }
+    }
+
+}
+
+window.onload = function () {
+    powerbi();
+}
