@@ -18,13 +18,8 @@ if (isset($_GET['action'])) {
 
     if ($action == "obtenerServicios") {
         $array = array();
-        if ($idDestino == 10) {
-            $filtroDestino = "";
-        } else {
-            $filtroDestino = "and id_destino = $idDestino";
-        }
 
-        $query = "SELECT* FROM t_subcontratas_america_materiales WHERE activo = 1 $filtroDestino";
+        $query = "SELECT* FROM t_subcontratas_america_materiales WHERE activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $fecha = $x['fecha_contabilizacion'];
@@ -53,13 +48,9 @@ if (isset($_GET['action'])) {
 
     if ($action == "obtenerMateriales") {
         $array = array();
-        if ($idDestino == 10) {
-            $filtroDestino = "";
-        } else {
-            $filtroDestino = "and id_destino = $idDestino";
-        }
 
-        $query = "SELECT* FROM t_compras_america_materiales WHERE activo = 1 $filtroDestino";
+        $query = "SELECT* FROM t_compras_america_materiales 
+        WHERE activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $cc = $x['centro_coste'];
