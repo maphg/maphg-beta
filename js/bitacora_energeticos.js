@@ -1,4 +1,5 @@
-$("#opcion").val('ENERGETICOS');
+document.getElementById("opcion").value = 'ENERGETICOS';
+
 // Funcion para seleccionar fecha.
 const MONTH_NAMES = [
     "Enero",
@@ -95,7 +96,7 @@ var gelectricidad = new Chart(ctx, {
             backgroundColor: "rgb(254, 252, 191)",
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
-        }, ],
+        },],
     },
     options: {
         legend: {
@@ -122,7 +123,7 @@ var gagua = new Chart(ctx, {
             backgroundColor: "rgb(190, 227, 248)",
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
-        }, ],
+        },],
     },
     options: {
         legend: {
@@ -149,7 +150,7 @@ var ggas = new Chart(ctx, {
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
-        }, ],
+        },],
     },
     options: {
         legend: {
@@ -176,7 +177,7 @@ var gdiesel = new Chart(ctx, {
             backgroundColor: "rgb(254, 235, 200)",
             borderColor: "rgba(255, 99, 132, 1)",
             borderWidth: 1,
-        }, ],
+        },],
     },
     options: {
         legend: {
@@ -204,7 +205,7 @@ function consumoDia(idDestino, opcion, fechaSeleccionada) {
             fechaSeleccionada: fechaSeleccionada
         },
         dataType: 'json',
-        success: function(datos) {
+        success: function (datos) {
 
             // Se envian los resultados al HTML.
             $("#dataElectricidad").html(datos.dataElectricidad);
@@ -251,7 +252,7 @@ function consultaAcontecimientos(idDestino, opcion, fechaSeleccionada) {
             fechaSeleccionada: fechaSeleccionada
         },
         dataType: 'json',
-        success: function(datos) {
+        success: function (datos) {
             // console.log(datos);
 
             // Se envian los resultados al HTML.
@@ -294,7 +295,7 @@ function consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada) {
             fechaSeleccionada: fechaSeleccionada
         },
         dataType: 'json',
-        success: function(datos) {
+        success: function (datos) {
             // console.log(datos);
             // console.log('Inicio: ' + datos.semanaInicio);
             // console.log('Fin: ' + datos.semanaFin);
@@ -393,7 +394,7 @@ function agregarAcontecimiento(idDestino, opcion, fechaSeleccionada) {
             energetico: energetico
         },
         dataType: 'json',
-        success: function(datos) {
+        success: function (datos) {
             $("#acontecimientosTitulo").val('');
             $("#acontecimientosDescripcion").val('');
             alertInformacion('Acontecimiento Agregado.', 'success');
@@ -433,7 +434,7 @@ function eliminarAcontecimiento(idAcontecimiento, contenido) {
                 idAcontecimiento: idAcontecimiento
             },
             dataType: 'json',
-            success: function(datos) {
+            success: function (datos) {
                 llamarFuncion('consultaAcontecimientos');
                 llamarFuncion('consultaAcontecimientosSemana');
             },
@@ -449,9 +450,9 @@ function llamarFuncion(nombreFuncion) {
     var opcion = $("#opcion").val();
     var fechaSeleccionada = $("#dateGeneral").val();
 
-    var zona = opcion;
-
-    if (zona != "ENERGETICOS") {
+    if (opcion == "ANTICIPACION") {
+        location.href = "bitacora_anticipacion.php";
+    } else if (opcion == "ZI" || opcion == "TRS" || opcion == "GP") {
         location.href = "bitacora_mantto.php";
     }
 
@@ -462,17 +463,17 @@ function llamarFuncion(nombreFuncion) {
             consumoDia(idDestino, opcion, fechaSeleccionada);
             break;
 
-            // Llama a la función Acontecimiento del Día.
+        // Llama a la función Acontecimiento del Día.
         case (nombreFuncion = "consultaAcontecimientos"):
             consultaAcontecimientos(idDestino, opcion, fechaSeleccionada);
             break;
 
-            // Llama a la función Acontecimiento Semana.
+        // Llama a la función Acontecimiento Semana.
         case (nombreFuncion = "consultaAcontecimientosSemana"):
             consultaAcontecimientosSemana(idDestino, opcion, fechaSeleccionada);
             break;
 
-            // Llama a la función agregarAcontecimiento.
+        // Llama a la función agregarAcontecimiento.
         case (nombreFuncion = "agregarAcontecimiento"):
             agregarAcontecimiento(idDestino, opcion, fechaSeleccionada);
             break;
