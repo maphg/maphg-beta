@@ -38,7 +38,7 @@ date_default_timezone_set('America/Cancun');
         <!-- CONTENEDOR WIDGETS DE SECCION -->
         <div class="flex flex-row justify-center items-center w-full mt-4">
             <!-- ESPACIO DEL WIDGET -->
-            <h1 class="text-2xl font-light text-gray-700 text-center">Bitácora de <strong class=" font-semibold">ENERGÉTICOS</strong></h1>
+            <h1 class="text-2xl font-light text-gray-700 text-center">Bitácora de <strong class=" font-semibold">ANTICIPACIÓN</strong></h1>
         </div>
         <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2 hidden">
             <!-- ESPACIO DEL WIDGET -->
