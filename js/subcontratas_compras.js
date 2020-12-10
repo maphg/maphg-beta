@@ -16,8 +16,6 @@ function obtenerServicios() {
     document.getElementById("load").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-lg"></i>';
 
-    alertaImg('Obteniendo Registros...', '', 'info', 500);
-
     fetch(URL)
         .then(array => array.json())
         .then(array => {
