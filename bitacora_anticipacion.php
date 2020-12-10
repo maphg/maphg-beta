@@ -65,7 +65,7 @@ date_default_timezone_set('America/Cancun');
         <div class="flex flex-row justify-center items-center w-auto mt-4 mx-2">
             <!-- ESPACIO DEL WIDGET -->
             <div class="inline-block w-auto relative">
-                <select id="opcion" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
+                <select id="opcion" class="block appearance-none w-full bg-white border border-grey-light hover:border-grey px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline font-black text-gray-700" value="ANTICIPACION" onclick="llamarFuncion('consumoDia'); llamarFuncion('consultaAcontecimientos'); llamarFuncion('consultaAcontecimientosSemana');">
                     <option value="ZI">ZI</option>
                     <option value="GP">GP</option>
                     <option value="TRS">TRS</option>
@@ -173,7 +173,6 @@ date_default_timezone_set('America/Cancun');
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <!-- Libreria para llamar a las alerta prediseñadas con parametros -->
     <script src="js/alertasSweet.js"></script>
-    <script src="js/bitacora_energeticos.js"></script>
     <script src="js/refreshSession.js"></script>
 </body>
 
