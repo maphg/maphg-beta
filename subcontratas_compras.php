@@ -80,7 +80,8 @@
             </div>
             <h1 id="load" class="text-center font-bold"> </h1>
             <div class="py-5 px-10">
-                <div id="servicios" class="rounded hidden">
+
+                <div id="servicios" class="rounded hidden shadow">
 
                     <div class="mb-2 flex flex-row justify-end mt-2">
                         <div class="w-96 mt-1 relative rounded-md shadow-sm">
@@ -105,7 +106,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 55vh;">
+                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 75vh;">
                         <table id="tablaServicios" class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
                         shadow-md sm:rounded-lg p-4">
                             <thead class="redounded uppercase">
@@ -152,7 +153,7 @@
                     </div>
                 </div>
 
-                <div id="materiales" class="rounded hidden">
+                <div id="materiales" class="rounded hidden shadow">
 
                     <div class="mb-2 flex flex-row justify-end mt-2">
                         <div class="w-96 mt-1 relative rounded-md shadow-sm">
@@ -174,7 +175,7 @@
                             <h1>Exportar</h1>
                         </div>
                     </div>
-                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 55vh;">
+                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 75vh;">
                         <table class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
                         shadow-md sm:rounded-lg p-4">
                             <thead class="redounded uppercase">

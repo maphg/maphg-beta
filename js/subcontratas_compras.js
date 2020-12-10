@@ -98,6 +98,8 @@ function obtenerMateriales() {
     document.getElementById("load").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-lg"></i>';
 
+    console.log(URL);
+
     fetch(URL)
         .then(array => array.json())
         .then(array => {

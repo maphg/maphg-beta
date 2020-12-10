@@ -34,7 +34,8 @@
                 <option value="t_stock_america">Stock (t_stock_america)</option>
                 <option value="t_equipos">Equipos Tabla Antigua (t_equipos)</option>
                 <option value="t_mp_np">TAREAS (t_mp_np)</option>
-                <option value="t_subcontratas_america_materiales">Gastos Materiales (t_subcontratas_america_materiales)</option>
+                <option value="t_subcontratas_america_materiales">Subcontratas AME (t_subcontratas_america_materiales)</option>
+                <option value="t_compras_america_materiales">Compras AME (t_compras_america_materiales)</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -740,6 +741,37 @@
                 document.getElementById("columna29").value = '';
                 document.getElementById("columna30").value = '';
             } else if (tabla == "t_subcontratas_america_materiales") {
+                document.getElementById("columna1").value = 'id_destino';
+                document.getElementById("columna2").value = 'centro_coste';
+                document.getElementById("columna3").value = 'texto_ceco';
+                document.getElementById("columna4").value = 'nombre_cuenta';
+                document.getElementById("columna5").value = 'fecha_contabilizacion';
+                document.getElementById("columna6").value = 'asignacion';
+                document.getElementById("columna7").value = 'texto';
+                document.getElementById("columna8").value = 'importe_usd';
+                document.getElementById("columna9").value = 'nombre_proveedor';
+                document.getElementById("columna10").value = 'documento_compras';
+                document.getElementById("columna11").value = '';
+                document.getElementById("columna12").value = '';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+            } else if (tabla == "t_compras_america_materiales") {
                 document.getElementById("columna1").value = 'id_destino';
                 document.getElementById("columna2").value = 'centro_coste';
                 document.getElementById("columna3").value = 'texto_ceco';
