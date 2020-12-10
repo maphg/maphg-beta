@@ -1517,6 +1517,8 @@ function funcionNombre(nombreFuncion) {
 
     if (zona == "ENERGETICOS") {
         location.href = "bitacora-energeticos.php";
+    }else if(zona == "ANTICIPACION"){
+        location.href = "bitacora_anticipacion.php";
     }
 
     switch (nombreFuncion) {

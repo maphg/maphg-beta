@@ -14,7 +14,7 @@ function obtenerServicios() {
     document.getElementById("servicios").classList.remove("hidden");
 
     document.getElementById("load").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-lg"></i>';
+        '<i class="fa fa-spinner fa-spin fa-lg"></i>';
 
     fetch(URL)
         .then(array => array.json())
@@ -96,7 +96,7 @@ function obtenerMateriales() {
     document.getElementById("servicios").classList.add("hidden");
 
     document.getElementById("load").innerHTML =
-        '<i class="fa fa-spinner fa-pulse fa-lg"></i>';
+        '<i class="fa fa-spinner fa-spin fa-lg"></i>';
 
     fetch(URL)
         .then(array => array.json())

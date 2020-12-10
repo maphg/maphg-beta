@@ -19,7 +19,8 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerServicios") {
         $array = array();
 
-        $query = "SELECT* FROM t_subcontratas_america_materiales WHERE activo = 1 and id_destino = $idDestino";
+        $query = "SELECT* FROM t_subcontratas_america_materiales 
+        WHERE activo = 1 and id_destino = $idDestino ORDER BY fecha_contabilizacion DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $fecha = $x['fecha_contabilizacion'];
@@ -79,4 +80,5 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+    mysqli_close($conn_2020);
 }

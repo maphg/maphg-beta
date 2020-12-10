@@ -93,7 +93,7 @@
                                     <option value="2">ASIGNACIÓN</option>
                                     <option value="3">DESCRIPCIÓN</option>
                                     <option value="4">PROVEEDOR</option>
-                                    <option value="5">IMPORT</option>
+                                    <option value="5">IMPORTE</option>
                                     <option value="6">CUENTA</option>
                                 </select>
                             </div>
@@ -165,7 +165,7 @@
                                     <option value="2">ASIGNACIÓN</option>
                                     <option value="3">DESCRIPCIÓN</option>
                                     <option value="4">PROVEEDOR</option>
-                                    <option value="5">IMPORT</option>
+                                    <option value="5">IMPORTE</option>
                                     <option value="6">CUENTA</option>
                                 </select>
                             </div>
