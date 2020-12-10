@@ -21,9 +21,9 @@ function obtenerServicios() {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array)
             document.getElementById("dataServicios").innerHTML = '';
-            if (array) {
+            if (array.length > 0) {
+                alertaImg('Registros Obtenidos: ' + array.length, '', 'success', 1200);
                 for (let x = 0; x < array.length; x++) {
                     const fecha = array[x].fecha;
                     const importe = array[x].importe;
@@ -67,18 +67,20 @@ function obtenerServicios() {
 
                         </tr>
                     `;
-                    document.getElementById("dataServicios").insertAdjacentHTML('beforeend', codigo);
+                    document.getElementById("dataServicios").
+                        insertAdjacentHTML('beforeend', codigo);
                 }
+            } else {
+                alertaImg('Sin Registros', '', 'info', 1200);
             }
         })
         .then(function () {
             document.getElementById("load").innerHTML = '';
-            alertaImg('Carga Completada', '', 'success', 1000);
         })
         .catch(function (err) {
             fetch(APIERROR + err);
             document.getElementById("load").innerHTML = '';
-            document.getElementById("load").innerHTML = '';
+            document.getElementById("dataServicios").innerHTML = '';
         })
 }
 
@@ -98,14 +100,12 @@ function obtenerMateriales() {
     document.getElementById("load").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-lg"></i>';
 
-    console.log(URL);
-
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             document.getElementById("dataMateriales").innerHTML = '';
-            if (array) {
+            if (array.length > 0) {
+                alertaImg('Registros Obtenidos: ' + array.length, '', 'success', 1200);
                 for (let x = 0; x < array.length; x++) {
                     const fecha = array[x].fecha;
                     const importe = array[x].importe;
@@ -150,8 +150,11 @@ function obtenerMateriales() {
 
                         </tr>
                     `;
-                    document.getElementById("dataMateriales").insertAdjacentHTML('beforeend', codigo);
+                    document.getElementById("dataMateriales").
+                        insertAdjacentHTML('beforeend', codigo);
                 }
+            } else {
+                alertaImg('Sin Registros', '', 'info', 1200)
             }
         })
         .then(function () {
@@ -177,10 +180,6 @@ document.getElementById("palabraMateriales").addEventListener('keyup', function 
     buscadorTabla('dataMateriales', 'palabraMateriales', columna);
 });
 
-document.getElementById("opcionServicios").addEventListener('click', obtenerServicios);
-document.getElementById("opcionMateriales").addEventListener('click', obtenerMateriales);
-
-document.getElementById("sidedestino").addEventListener('click', powerbi);
 
 function powerbi() {
     let idDestino = localStorage.getItem('idDestino');
@@ -258,6 +257,17 @@ function powerbi() {
     }
 
 }
+
+
+// EVENTOS
+document.getElementById("opcionServicios").addEventListener('click', obtenerServicios);
+document.getElementById("opcionMateriales").addEventListener('click', obtenerMateriales);
+document.getElementById("sidedestino").addEventListener('click', () => {
+    powerbi();
+    document.getElementById("materiales").classList.add("hidden");
+    document.getElementById("servicios").classList.add("hidden");
+});
+
 
 window.onload = function () {
     powerbi();
