@@ -345,6 +345,25 @@ if (isset($_GET['action'])) {
     }
 
 
+    // Consulta posibles Equipos Jerarquicos
+    if ($action == "jerarquiaEquipo") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $array = array();
+
+        $query = "SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino and id_seccion = $idSubseccion and id_subseccion = $idSubseccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $equipo = $i['equipo'];
+
+                $array[] = array("idEquipo" => "$id", "equipo" => "$equipo");
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     // OBTIENE OPCIONES PARA CREAR EQUIPO / LOCAL
     if ($action == "obtenerOpcionesEquipo") {
         $array = array();
@@ -459,9 +478,15 @@ if (isset($_GET['action'])) {
         $marca = $_GET['marca'];
         $equipolocal = $_GET['equipolocal'];
         $modelo = $_GET['modelo'];
+        $jerarquia = $_GET['jerarquia'];
+        $equipoPadre = $_GET['equipoPadre'];
         $resp = 0;
 
-        $query = "INSERT INTO t_equipos_america(equipo, id_destino, id_seccion, id_subseccion, id_tipo, local_equipo, jerarquia, id_marca, modelo, id_fases, status, activo) VALUES('$equipo', $destino, $seccion, $subseccion, $tipo, '$equipolocal', 'PRINCIPAL', $marca, '$modelo', '', 'OPERATIVO', 1)";
+        if ($jerarquia == "PRINCIPAL") {
+            $equipoPadre = 0;
+        }
+
+        $query = "INSERT INTO t_equipos_america(id_equipo_principal, equipo, id_destino, id_seccion, id_subseccion, id_tipo, local_equipo, jerarquia, id_marca, modelo, id_fases, status, activo) VALUES($equipoPadre, '$equipo', $destino, $seccion, $subseccion, $tipo, '$equipolocal', '$jerarquia', $marca, '$modelo', '', 'OPERATIVO', 1)";
         if ($result = mysqli_query($conn_2020, $query)) {
             $resp = 1;
         }

@@ -1214,8 +1214,6 @@ function modalAgregarEquipo() {
     const action = "obtenerOpcionesEquipo";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${contenedorSeccion.value}`;
 
-    console.log(URL);
-
     fetch(URL)
         .then(array => array.json())
         .then(array => {
@@ -1312,6 +1310,47 @@ document.getElementById("agregarEquipoLocal").
 document.getElementById("seccionXEquipo").
     addEventListener('change', modalAgregarEquipo);
 
+// EVENTO PARA OPCIÓN DE JERARQUIA DE EQUIPO
+document.getElementById("jerarquiaXEquipo").addEventListener('change', () => {
+    let jerarquia = document.getElementById("jerarquiaXEquipo").value;
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = document.getElementById("destinoXEquipo").value;
+    let idSeccion = document.getElementById("seccionXEquipo").value;
+    let idSubseccion = document.getElementById("subseccionXEquipo").value;
+    let contenedor = document.getElementById("jerarquiaPadreXEquipo");
+    let contenedorEquipoPadre = document.getElementById("contenedorEquipoPadre");
+    const action = "jerarquiaEquipo";
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
+    if (idSeccion <= 0 && idSubseccion <= 0) {
+        alertaImg('Se requiere Sección y Subsección', '', 'success', 1200);
+    } else {
+        if (jerarquia == "SECUNDARIO") {
+            contenedorEquipoPadre.classList.remove('hidden');
+            fetch(URL)
+                .then(array => array.json())
+                .then(array => {
+                    contenedor.innerHTML = '';
+                    if (array.length > 0) {
+                        for (let x = 0; x < array.length; x++) {
+                            const idEquipo = array[x].idEquipo;
+                            const equipo = array[x].equipo;
+                            const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+                            contenedor.insertAdjacentHTML('beforeend', codigo);
+                        }
+                    } else {
+                        alertaImg('No se encontraron Equipos relacionados', '', 'success', 1200);
+                    }
+                })
+                .catch(function (err) {
+                    fetch(APIERROR + err);
+                })
+        } else {
+            contenedorEquipoPadre.classList.add('hidden');
+        }
+    }
+})
+
 
 // FUNCIÓN PARA AGREGAR EQUIPO / LOCAL
 function agregarEquipoLocal() {
@@ -1326,16 +1365,16 @@ function agregarEquipoLocal() {
     let marca = document.getElementById("marcaXEquipo").value;
     let equipolocal = document.getElementById("equipoXLocal").value;
     let modelo = document.getElementById("modeloXEquipo").value;
+    let jerarquia = document.getElementById("jerarquiaXEquipo").value;
+    let equipoPadre = document.getElementById("jerarquiaPadreXEquipo").value;
 
     const action = "agregarEquipoLocal";
-    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo}&destino=${destino}&seccion=${seccion}&subseccion=${subseccion}&tipo=${tipo}&marca=${marca}&equipolocal=${equipolocal}&status=${status}&modelo=${modelo}`;
-    console.log(URL);
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo}&destino=${destino}&seccion=${seccion}&subseccion=${subseccion}&tipo=${tipo}&marca=${marca}&equipolocal=${equipolocal}&status=${status}&modelo=${modelo}&jerarquia=${jerarquia}&equipoPadre=${equipoPadre}`;
 
-    if (equipo != "" && destino != "" && seccion != "" && subseccion != "" && tipo != "" && marca != "" && equipolocal != "") {
+    if (equipo != "" && destino != "" && seccion != "" && subseccion != "" && tipo != "" && marca != "" && equipolocal != "" && jerarquia != "") {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
-                console.log(array);
                 if (array == 1) {
                     consultaEquiposLocales();
                     alertaImg(equipolocal + ' Agregado', '', 'success', 1200);

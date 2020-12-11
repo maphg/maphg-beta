@@ -1422,7 +1422,6 @@ function obtenerEtiquetados(status) {
     document.getElementById("loadProyectosDEP").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
 
-    console.log(URL);
     fetch(URL)
         .then(array => array.json())
         .then(array => {

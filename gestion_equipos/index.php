@@ -914,6 +914,23 @@
                                 <select id="equipoXLocal" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
                             </div>
 
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Jerarquia
+                                </label>
+                                <select id="jerarquiaXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="PRINCIPAL">PRINCIPAL</option>
+                                    <option value="SECUNDARIO">SECUNDARIO</option>
+                                </select>
+                            </div>
+
+                            <div id="contenedorEquipoPadre" class="col-span-6 sm:col-span-3 hidden">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Equipo Principal
+                                </label>
+                                <select id="jerarquiaPadreXEquipo" class="mt-1 block w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
                             <div class="col-span-6">
                                 <label for="state" class="block text-sm font-medium text-gray-700">Modelo</label>
                                 <input id="modeloXEquipo" type="text" class="mt-1 block w-full py-1 shadow-sm sm:text-sm border border-blue-400 rounded-md" autocomplete="off">

@@ -616,7 +616,6 @@ function consultaSubsecciones(idDestino, idUsuario) {
          document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
          document.getElementById("columnasSeccionesEnergeticos").innerHTML = data.dataEnergeticos;
          calendarioSecciones();
-         console.log(data);
       },
    });
 }
@@ -2320,7 +2319,6 @@ function verEnPlanner(tipoPendiente, idPendiente) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          if (data != "") {
             document.getElementById("tipoPendienteVP").innerHTML = tipoPendiente + ': ' + data.idPendiente;
             document.getElementById("descripcionPendienteVP").innerHTML = data.actividad;

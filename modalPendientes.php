@@ -1821,7 +1821,6 @@ if ($result) {
 
     <script>
     function expandir(id) {
-        // console.log(id);
         let idtoggle = id + "toggle";
         let idtitulo = id + "titulo";
         var toggle = document.getElementById(idtoggle);
@@ -2134,8 +2133,6 @@ if ($result) {
             dataType: "JSON",
             success: function(data) {
                 // Llama a la Función para reflejar los cambios en los MC por Equipo.
-
-                // console.log(data);
                 // Status
                 document
                     .getElementById("statusUrgente")
@@ -2215,7 +2212,6 @@ if ($result) {
             },
             dataType: "JSON",
             success: function(data) {
-                // console.log(data);
                 alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
                 document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
                 document
@@ -2292,8 +2288,6 @@ if ($result) {
             },
             // dataType: "JSON",
             success: function(data) {
-                // console.log(data);
-
                 if (data == "MC") {
                     alertaImg("Responsable Actualizado", "", "success", 2500);
                     document.getElementById("modalUsuarios").classList.remove("open");
@@ -2350,8 +2344,6 @@ if ($result) {
             },
             dataType: "JSON",
             success: function(data) {
-                // console.log(data);
-
                 if (data.imagen != "") {
                     document.getElementById("dataImagenes").innerHTML = data.imagen;
                     document.getElementById("contenedorImagenes").classList.remove('hidden');
@@ -2427,7 +2419,6 @@ if ($result) {
                     } else {
                         alertaImg("Intente de Nuevo", "", "info", 3000);
                     }
-                    // console.log(data);
                 },
             });
         }
@@ -2628,8 +2619,6 @@ if ($result) {
             },
             dataType: "JSON",
             success: function(data) {
-                // console.log(data);
-
                 if (data.dataImagenes != "") {
                     document.getElementById("dataImagenes").innerHTML = data.dataImagenes;
                     document.getElementById("dataImagenes").classList.remove("justify-center");
@@ -2696,7 +2685,6 @@ if ($result) {
             ev,
             picker
         ) {
-            // console.log(picker);
             $(this).val("");
         });
     });
@@ -2753,7 +2741,6 @@ if ($result) {
             ev,
             picker
         ) {
-            // console.log(picker);
             $(this).val("");
         });
     });
@@ -2807,7 +2794,6 @@ if ($result) {
             ev,
             picker
         ) {
-            // console.log(picker);
             $(this).val("");
         });
     });

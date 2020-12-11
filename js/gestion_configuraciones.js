@@ -740,7 +740,6 @@ function actualizarCargo(idCargo) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             obtenerCargos(0);
             document.getElementById("modalEditarCargos").classList.remove("open");
             if (array == 1) {

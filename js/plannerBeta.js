@@ -1111,8 +1111,6 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array);
-
             contenedor.innerHTML = '';
             document.getElementById("textSeccionEnergeticos").
                 innerHTML = array.subseccion[0] + ' / PENDIENTES';
@@ -1246,7 +1244,6 @@ function agregarEnergetico(idSeccion, idSubseccion) {
             },
             dataType: "JSON",
             success: function (array) {
-                console.log(array);
                 if (array == 1) {
                     obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
                     alertaImg('PENDIENTE Agregado ', '', 'success', 1200);
@@ -1256,7 +1253,6 @@ function agregarEnergetico(idSeccion, idSubseccion) {
                 }
             },
             error: function (e) {
-                console.log(e);
             }
         })
     } else {
@@ -1286,7 +1282,6 @@ function obtenerResponsablesEnergeticos(idPendiente) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array);
             contenedor.innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
@@ -1362,7 +1357,6 @@ function obtenerAdjuntosEnergeticos(idPendiente) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array);
             contenedor.innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
@@ -1389,7 +1383,6 @@ function obtenerAdjuntosEnergeticos(idPendiente) {
             }
         },
         error: function (e) {
-            console.log(e);
             alertaImg('Intente de Nuevo', '', 'info', 1200);
         }
     })
@@ -1412,7 +1405,6 @@ function obtenerComentariosEnergeticos(idPendiente) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array.length);
             contenedor.innerHTML = '';
 
             if (array.length > 0) {
@@ -1433,7 +1425,6 @@ function obtenerComentariosEnergeticos(idPendiente) {
                         </div>
                     `;
                     contenedor.insertAdjacentHTML('beforeend', codigo);
-                    console.log(codigo);
                 }
             }
         },

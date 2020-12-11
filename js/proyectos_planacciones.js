@@ -540,7 +540,6 @@ function obtenerRangoFechaPlanaccion(idPlanaccion) {
     document.getElementById("btnAplicarRangoFecha").
         setAttribute('onclick', `actualizarPlanaccion(1, 'rango_fecha', ${idPlanaccion});`);
 
-    console.log(idPlanaccion);
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -1067,7 +1066,6 @@ function obtenerResponsablesPlanaccion(idPlanaccion) {
 
 // ACTUALIZAR PLANACCIÓN
 function actualizarPlanaccion(valor, columna, idPlanaccion) {
-    console.log(valor, columna, idPlanaccion);
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
     let idSeccion = localStorage.getItem("idSeccion");
@@ -1093,7 +1091,6 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         },
         // dataType: "JSON",
         success: function (data) {
-            console.log(data);
             obtenerPlanaccion(idProyecto);
             obtenerPlanaccionDEP(idProyecto);
             verEnPlanner('PLANACCION', idPlanaccion);

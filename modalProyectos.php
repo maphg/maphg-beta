@@ -811,7 +811,6 @@
                 },
                 dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
                     // alertaImg('Proyectos Pendientes: ' + data.totalProyectos, '', 'info', 4000);
                     document.getElementById("dataProyectos").innerHTML = data.dataProyectos;
                     document.getElementById("seccionProyectos").innerHTML = data.seccion;
@@ -1995,8 +1994,6 @@
                 },
                 // dataType: "JSON",
                 success: function(data) {
-                    // console.log(data);
-
                     let cantidad = document.getElementById("cantidad" + idPlanaccion).value;
                     let coste = document.getElementById("coste" + idPlanaccion).value;
                     document.getElementById("costeTotal" + idPlanaccion).value = cantidad * coste;

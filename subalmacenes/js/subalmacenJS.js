@@ -538,7 +538,6 @@ function confirmarSalidaCarrito() {
     },
     dataType: "json",
     success: function (data) {
-      console.log(data);
       let contadorLogintud = 1;
       var registro = data.idRegistro.split(',');
       let longitudCarrito = registro.length;
@@ -651,7 +650,6 @@ document.getElementById("confirmarSalidaCarrito").addEventListener("click", () =
   let idSubalmacen = localStorage.getItem('idSubalmacen');
   let tipoSalida = document.getElementById("carritoSalidaMotivo").value;
   let OT = document.getElementById("OTSalida").value;
-  console.log(tipoSalida, ' ', OT);
   const action = "finalizarCarrito";
   $.ajax({
     type: "GET",
@@ -679,7 +677,6 @@ document.getElementById("confirmarSalidaCarrito").addEventListener("click", () =
         recuperarCarrito();
       }
     }, error: function (err) {
-      console.log(err);
     }
   });
 })
@@ -1124,11 +1121,9 @@ function obtenerTodosItemsGlobales() {
 
   const action = "consultaTodosItems";
   const URL = `php/crud_subalmacen.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraBuscar=${palabraBuscar}`;
-  console.log(URL);
   fetch(URL)
     .then(array => array.json())
     .then(array => {
-      console.log(array);
       contenedor.innerHTML = '';
 
       if (array.length > 0) {
@@ -1208,7 +1203,6 @@ function modalAgregarItem(idSubalmacen) {
   let contenedorGremio = document.getElementById("gremioItems");
   let contenedorUnidad = document.getElementById("unidadItems");
 
-  console.log(URL);
   fetch(URL)
     .then(array => array.json())
     .then(array => {
@@ -1278,7 +1272,6 @@ function agregarItems(idSubalmacen) {
     fetch(URL)
       .then(array => array.json())
       .then(array => {
-        console.log(array);
         if (array == 1) {
           document.getElementById("modalAgregarItem").classList.remove('open');
           alertaImg('Item Agregado', '', 'success', 1200);
