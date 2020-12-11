@@ -156,7 +156,7 @@ async function editarSubalmacen(idSubalmacen, nombre) {
 
 // Función para buscar un Item de Subalmacén.
 function busquedaExisenciaSubalmacen() {
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let palabraBuscar = $("#inputPalabraBuscarSubalmacen").val();
 
   if (palabraBuscar != "") {
@@ -200,11 +200,10 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
 
 // Función para Preparar Carrito.
 function salidasSubalmacen() {
-  console.log("Buscando");
   $("#modalSalidasSubalmacen").addClass('open');
   let palabraBuscar = $("#inputPalabraBuscarSubalmacenSalida").val();
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
 
   document.getElementById("inputPalabraBuscarSubalmacenSalida").
     setAttribute('onkeyup', 'if(event.keyCode == 13) salidasSubalmacen()');
@@ -302,14 +301,14 @@ function consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen) {
 
 function recuperarCarrito() {
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   consultaCarritoSalida(idDestinoSeleccionado, idSubalmacen);
 }
 
 // FUNCIÓN PARA RESTABLECER CARRITO.
 function restablecerCarritoSalidasConfirmar() {
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   Swal.fire({
     toast: true,
     title: '¿Desea Eliminar los items del Carrito?',
@@ -526,7 +525,7 @@ function carritoSalidaMotivo(paso) {
 
 function confirmarSalidaCarrito() {
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
 
   var action = "consultaCarritoSalida";
   $.ajax({
@@ -539,6 +538,7 @@ function confirmarSalidaCarrito() {
     },
     dataType: "json",
     success: function (data) {
+      console.log(data);
       let contadorLogintud = 1;
       var registro = data.idRegistro.split(',');
       let longitudCarrito = registro.length;
@@ -644,6 +644,47 @@ function confirmarSalidaCarrito() {
   });
 }
 
+document.getElementById("confirmarSalidaCarrito").addEventListener("click", () => {
+
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
+  let tipoSalida = document.getElementById("carritoSalidaMotivo").value;
+  let OT = document.getElementById("OTSalida").value;
+  console.log(tipoSalida, ' ', OT);
+  const action = "finalizarCarrito";
+  $.ajax({
+    type: "GET",
+    url: "php/crud_subalmacen.php",
+    data: {
+      action: action,
+      idDestino: idDestino,
+      idUsuario: idUsuario,
+      idSubalmacen: idSubalmacen,
+      tipoSalida: tipoSalida,
+      OT: OT
+    },
+    dataType: "JSON",
+    success: function (data) {
+      if (data == 1) {
+        alertaImg('Carrito Finalizado', 'text-orange-300', 'success', 3000);
+        $("#confirmarSalidaCarrito").prop("disabled", false);
+        $("#spinnerConfirmarSalida").removeClass('visible');
+        $("#spinnerConfirmarSalida").addClass('invisible');
+        $("#justifiacionSalidaCarrito").removeClass('invisible');
+        recuperarCarrito();
+        $("#modalSalidasSubalmacen").toggleClass('open');
+      } else {
+        alertaImg('Intente de Nuevo', '', 'success', 3000);
+        recuperarCarrito();
+      }
+    }, error: function (err) {
+      console.log(err);
+    }
+  });
+})
+
+
 // Función para Obtener idSubalmacen, Fase, Nombre Subalmacén.
 function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
   // Limpia los resultados obtenidos para no repetir el ID de los Inputs
@@ -663,7 +704,7 @@ function idSubalmacenSeleccionado(idSubalmacen, fase, nombre) {
 function entradasSubalmacen() {
   $("#modalSubalmacenEntradas").addClass('open');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let palabraBuscar = $("#inputPablabraBuscarEntradas").val();
 
   if (palabraBuscar == "") {
@@ -694,7 +735,7 @@ function entradasSubalmacen() {
 function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
   let cantidadEntrada = $("#" + idItemGlobal).val();
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   cantidadEntrada = parseFloat(cantidadEntrada);
 
   if (cantidadEntrada > 0.0) {
@@ -735,7 +776,7 @@ function capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, canti
 }
 
 function consultaEntradaCarrito() {
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "consultaEntradaCarrito";
   $.ajax({
@@ -774,7 +815,7 @@ function consultaEntradaCarrito() {
 
 function confirmarEntradaCarrito() {
   $("#dataCarritoEntradas").html('');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let indexCantidadInput = $("#inputIndexEntradaCarrito").val().split(';');
   let contador = -1;
@@ -817,7 +858,7 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
 // FUNCIÓN PARA RESTABLECER CARRITO.
 function restablecerCarritoEntradasConfirmar() {
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   Swal.fire({
     toast: true,
     title: '¿Desea Eliminar los items del Carrito?',
@@ -858,7 +899,7 @@ function restablecerCarritoEntradas(idDestinoSeleccionado, idSubalmacen) {
 // Funciones para Movimientos Entre Bodegas.
 function movimientoExistenciasItems() {
   $("#dataMovimientosCarrito").html('');
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   let palabraBuscar = $("#inputBuscarMovimientos").val();
   const action = "consultaMoverExistenciasItems";
@@ -898,7 +939,7 @@ function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, descripcionI
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
   var cantidadEntrada = $("#" + idItemGlobal).val();
   // console.log('S;' + cantidadEntrada);
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   cantidadEntrada = parseFloat(cantidadEntrada);
   // console.log('C;' + cantidadEntrada);
 
@@ -944,7 +985,7 @@ function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, 
 
 
 function consultaMovimientoCarrito() {
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "consultaMovimientoCarrito";
   $.ajax({
@@ -986,7 +1027,7 @@ function consultaMovimientoCarrito() {
 }
 
 function confirmarMovimientoCarrito() {
-  let idSubalmacen = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let idOpcionSubalmacen = $("#idOpcionSubalmacenMovimientos").val();
   let seleccionadoSubalmacen = $("#idSubalmacenMovimientos").val();
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
@@ -1054,7 +1095,7 @@ function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSe
         $("#modalMoverItems").removeClass('open');
         $("#dataMovimientosCarrito").html('');
       } else {
-        alertaImg('Intente de Nuevo', '', 'question', 3000);
+        alertaImg('No se ha encontrado la OT', '', 'question', 3000);
       }
     }
   });
@@ -1270,7 +1311,7 @@ function generarXLSItems(tipoXLS) {
   // idInput.pop();
 
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacenSeleccionado = $("#inputIdSubalmacenSeleccionado").val();
+  let idSubalmacenSeleccionado = localStorage.getItem('idSubalmacen');
   let page = "";
 
   if (tipoXLS == "generalPorDestino") {

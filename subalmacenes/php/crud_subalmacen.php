@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
-include "conexion.php";
+include "../../php/conexion.php";
 session_start();
 
 if (isset($_POST['action'])) {
@@ -10,6 +10,7 @@ if (isset($_POST['action'])) {
   $idUsuario = $_SESSION['usuario'];
   $superAdmin = $_SESSION['super_admin'];
   $fechaActual = date('Y-m-d H:m:s');
+  $action = $_POST['action'];
 
   // Permisos Generales.
   $queryPermisos = "SELECT* FROM c_acciones_usuarios WHERE id_usuario = $idUsuario LIMIT 1";
@@ -30,7 +31,6 @@ if (isset($_POST['action'])) {
     }
   }
 
-  $action = $_POST['action'];
 
   if ($action == "Agregar") {
     $idFase = $_POST['idFase'];
@@ -992,8 +992,8 @@ if (isset($_POST['action'])) {
     $idRegistroSalida = $_POST['idRegistroSalida'];
     $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
 
-    $query = "SELECT* FROM t_subalmacenes_items_stock_salidas WHERE 
-    id = $idRegistroSalida 
+    $query = "SELECT* FROM t_subalmacenes_items_stock_salidas 
+    WHERE id = $idRegistroSalida 
     AND id_usuario = $idUsuario 
     AND id_destino = $idDestinoSeleccionado 
     AND status = 'ESPERA' AND activo = 1";
@@ -1762,8 +1762,164 @@ if (isset($_POST['action'])) {
   }
 
 
+  if ($action == "finalizarCarrito") {
+    $idDestino = $_GET["idDestino"];
+    $idUsuario = $_GET["idUsuario"];
+    $idSubalmacen = $_GET["idSubalmacen"];
+    $tipoSalida = $_GET["tipoSalida"];
+    $OT = $_GET["OT"];
+    $array = array();
+    $resp = 0;
+
+    // VARIABLES PARA EL TIPO DE SALIDAS
+    $idEquipo = 0;
+    $idMCE = 0;
+    $idMCTG = 0;
+    $idMP = 0;
+    $motivo = 0;
+    $gift = 0;
+    $existe = "NO";
 
 
+    if ($tipoSalida == "FALLA") {
+      $OT = preg_replace('([^0-9])', '', $OT);
+      $query = "SELECT t_mc.id 'idFalla', t_equipos_america.id 'idEquipo' 
+      FROM t_mc
+      INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
+      WHERE t_mc.id = $OT and t_mc.id_destino = $idDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idMCE = $x['idFalla'];
+          $idEquipo = $x['idEquipo'];
+          $existe = "SI";
+        }
+      }
+    } elseif ($tipoSalida == "TAREA") {
+      $OT = preg_replace('([^0-9])', '', $OT);
+      $query = "SELECT t_mp_np.id 'idTarea', t_equipos_america.id 'idEquipo' 
+      FROM t_mp_np
+      INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id 
+      WHERE t_mp_np.id = $OT and t_mp_np.id_destino = $idDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idMCTG = $x['idTarea'];
+          $idEquipo = $x['idEquipo'];
+          $existe = "SI";
+        }
+      }
+    } elseif ($tipoSalida == "TG") {
+      $OT = preg_replace('([^0-9])', '', $OT);
+      $query = "SELECT id 'idTarea' 
+      FROM t_mp_np
+      WHERE id = $OT and id_destino = $idDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idMCTG = $x['idTarea'];
+          $existe = "SI";
+        }
+      }
+    } elseif ($tipoSalida == "MP") {
+      $OT = preg_replace('([^0-9])', '', $OT);
+      $query = "SELECT t_mp_planificacion_iniciada.id 'idMP', t_equipos_america.id 'idEquipo' 
+      FROM t_mp_planificacion_iniciada
+      INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id 
+      WHERE t_mp_planificacion_iniciada.id = $OT and t_equipos_america.id_destino = $idDestino";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+          $idMP = $x['idMP'];
+          $idEquipo = $x['idEquipo'];
+          $existe = "SI";
+        }
+      }
+    } elseif ($tipoSalida == "GIFT") {
+      $existe = "SI";
+      $gift = $OT;
+    } elseif ($tipoSalida == "OTRO") {
+      $existe = "SI";
+      $motivo = $OT;
+    }
 
+    if ($existe === "SI") {
+      $query = "SELECT id, id_usuario, id_subalmacen, id_destino, id_item_global, stock_salida 
+      FROM t_subalmacenes_items_stock_salidas 
+      WHERE id_usuario = $idUsuario and id_destino = $idDestino and id_subalmacen = $idSubalmacen and status = 'ESPERA'";
+      if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+
+          // VALORES DE CARRITO
+          $idRegistro = $x["id"];
+          $idUsuarioX = $x["id_usuario"];
+          $idSubalmacenX = $x["id_subalmacen"];
+          $idDestinoX = $x["id_destino"];
+          $idItem = $x["id_item_global"];
+          $stockSalida = $x["stock_salida"];
+
+          // VALORES INICIALES
+          $idStock = 0;
+          $stockActual = 0;
+
+          // CONSULTA PARA RECURSOS DEL CARRITO
+          $query = "SELECT id, stock_actual, stock_teorico FROM t_subalmacenes_items_stock WHERE id_subalmacen = $idSubalmacenX and id_destino = $idDestinoX and id_item_global = $idItem LIMIT 1";
+          if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+              $idStock = $x['id'];
+              $stockActual = $x['stock_actual'];
+              $stockTeorico = $x['stock_teorico'];
+            }
+          }
+
+          // VALORES FINALES
+          $nuevaCantidad = $stockActual - $stockSalida;
+
+          if ($nuevaCantidad >= 0) {
+            // PROCESO PARA FINALIZAR CARRITO
+            $query = "UPDATE t_subalmacenes_items_stock SET 
+            stock_actual = $nuevaCantidad, 
+            stock_anterior = $stockActual,
+            fecha_movimiento = '$fechaActual'
+            WHERE id = $idStock";
+            if ($result = mysqli_query($conn_2020, $query)) {
+
+              // MARCA COMO FINALIZADOS LOS REGISTROS
+              $query = "UPDATE t_subalmacenes_items_stock_salidas SET
+             tipo_salida = '$tipoSalida',
+             id_equipo = $idEquipo,
+             id_MCE = $idMCE, 
+             id_MCTG = $idMCTG, 
+             id_MP = $idMP, 
+             motivo = '$motivo',
+             gift = '$gift',
+            status = 'FINALIZADO',  
+            fecha_movimiento = '$fechaActual'
+            WHERE id = $idRegistro";
+              if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+              }
+            }
+          }
+
+          // $array[] = array(
+          //   "idRegistro" => $idRegistro,
+          //   "idStock" => $idStock,
+          //   "idUsuario" => $idUsuarioX,
+          //   "idSubalmacen" => $idSubalmacenX,
+          //   "idDestino" => $idDestinoX,
+          //   "idItem" => $idItem,
+          //   "stockSalida" => $stockSalida,
+          //   "stockActual" => $stockActual,
+          //   "NuevaCantidad" => $nuevaCantidad,
+          //   "idMCE" => $idMCE,
+          //   "existe" => $existe,
+          //   "OT" => $OT,
+          //   "resp" => $resp
+          // );
+        }
+      }
+    }
+    echo json_encode($resp);
+  }
+
+
+  mysqli_close($conn_2020);
   //Fin $action.
 }

@@ -1,5 +1,5 @@
 <?php
-include 'php/conexion.php';
+include '../php/conexion.php';
 session_start();
 // Estas variables son Globales y nunca deben cambiar su valor, porque es la raiz de la session.
 $destinoT = $_SESSION['idDestino'];
@@ -26,7 +26,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
     $nombreUsuario = "ND";
 }
 
-
+mysqli_close($conn_2020);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -339,14 +339,28 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                         </div>
                         <div class="flex flex-row justify-center items-center w-full">
                             <div class="relative w-full">
-                                <select id="carritoSalidaMotivo" onclick="carritoSalidaMotivo('opcionSeccion');" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                    <option value="">Seleccione</option>
-                                    <option value="MCE">MANTENIMIENTO CORRECTIVO (Equipos)</option>
-                                    <option value="MP">MANTENIMIENTO PREVENTIVO</option>
-                                    <option value="MCTG">MANTENIMIENTO CORRECTIVO (Tareas Generales)</option>
-                                    <option value="GIFT">AVERIA DE GIFT</option>
-                                    <option value="OTRO">OTRO</option>
-                                </select>
+
+                                <!-- TIPO DE SALIDA -->
+                                <div class="relative">
+                                    <select id="carritoSalidaMotivo" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                        <option value="">Seleccione el Tipo de Salida</option>
+                                        <option value="FALLA">FALLAS (Equipos)</option>
+                                        <option value="TAREA">TAREAS (Equipos)</option>
+                                        <option value="TG">TAREAS GENERALES</option>
+                                        <option value="MP">MANTENIMIENTO PREVENTIVO</option>
+                                        <option value="GIFT">AVERIA DE GIFT</option>
+                                        <option value="OTRO">OTRO</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- NUMERO OT -->
+                                <input id="OTSalida" type="text" class="my-2 block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" autocomplete="off" placeholder="OT(Numero OT), GIF(Numero GIFT) U OTRO(Descripción)">
+
                                 <div id="carritoSalidaSeccion"></div>
                                 <div id="carritoSalidaSubseccion"></div>
                                 <div id="carritoSalidaEquipo"></div>
@@ -374,14 +388,10 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                    </svg>
-                                </div>
+
                             </div>
                         </div>
-                        <div class="mt-2 mb-3" onclick="confirmarSalidaCarrito();">
+                        <div class="mt-2 mb-3">
                             <button id="confirmarSalidaCarrito" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                                 Salida Carrito
                                 <i id="spinnerConfirmarSalida" class="invisible text-3xl fas fa-spinner fa-spin absolute" style="margin-top:-24px;"></i>
@@ -479,6 +489,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
         </div>
     </div>
+
 
     <!-- MODAL MOVER ITEMS -->
     <div id="modalMoverItems" class="modal">
@@ -640,6 +651,7 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
             </div>
         </div>
     </div>
+
 
     <!-- MODAL CONFIRMAR ENTRADA -->
     <div id="modalConfirmacionEntradas" class="modal">
@@ -885,13 +897,13 @@ if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
 
 
 
-    <script src="js/jquery-3.3.1.js"></script>
-    <script src="js/sweetalert2@9.js"></script>
-    <script src="js/modales.js"></script>
-    <script src="js/acordion.js"></script>
-    <script src="js/subalmacenJS.js"></script>
-    <script src="js/alertasSweet.js"></script>
-    <script src="js/complemento_menuJS.js"></script>
+    <script src="js/jquery-3.3.1.js" type="text/javascript"></script>
+    <script src="js/sweetalert2@9.js" type="text/javascript"></script>
+    <script src="../js/modales.js" type="text/javascript"></script>
+    <script src="js/acordion.js" type="text/javascript"></script>
+    <script src="js/subalmacenJS.js" type="text/javascript"></script>
+    <script src="js/alertasSweet.js" type="text/javascript"></script>
+    <script src="js/complemento_menuJS.js" type="text/javascript"></script>
     <script>
         function expandir(id) {
             let idtoggle = id + 'toggle';
