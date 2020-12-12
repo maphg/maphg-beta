@@ -99,7 +99,7 @@
                             </div>
                         </div>
 
-                        <div id="btnExportarServicios" onclick="exportTableExcel('dataServicios', 'dataServicios', 'tablaServicios.xls')" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex
+                        <div id="btnExportarServicios" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex
                         justify-center items-center mx-5 hover:bg-bluegray-200 p-2">
                             <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                             <h1>Exportar</h1>
@@ -176,7 +176,7 @@
                         </div>
                     </div>
                     <div class="w-full overflow-auto scrollbar shadow" style="max-height: 75vh;">
-                        <table class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
+                        <table id="tablaMateriales" class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
                         shadow-md sm:rounded-lg p-4">
                             <thead class="redounded uppercase">
                                 <tr class="rounded">
@@ -239,7 +239,7 @@
 <!-- JS PARA TABLAS -->
 
 <!-- JS MODULO -->
-<script src="js/subcontratas_compras.js"></script>
+<script src="js/gastos.js"></script>
 <!-- JS MODULO -->
 
 <!-- COMPLEMENTO MENU -->

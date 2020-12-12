@@ -267,6 +267,16 @@ document.getElementById("sidedestino").addEventListener('click', () => {
 });
 
 
+// EVENTOS PARA EXPORTAR
+document.getElementById("btnExportarServicios").addEventListener("click", () => {
+    tableToExcel('tablaServicios', 'excel');
+})
+
+// EVENTOS PARA EXPORTAR
+document.getElementById("btnExportarMateriales").addEventListener("click", () => {
+    tableToExcel('tablaMateriales', 'excel');
+})
+
 window.onload = function () {
     powerbi();
 }
