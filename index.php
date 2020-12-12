@@ -4767,9 +4767,6 @@ $tablaRanking .= "</div>";
                                         <div class="column">
                                             <p class="t-titulos"><strong>Status</strong></p>
                                         </div>
-                                        <div class="column">
-                                            <p class="t-titulos"><strong>Opción</strong></p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

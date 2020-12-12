@@ -1142,7 +1142,8 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
 
                     if (status == "PENDIENTE") {
                         estiloStatus = "is-danger";
-                        fStatus = ` 
+                        fStatus = `onclick="toggleModalBulma('modalStatusMC');"`;
+                        fStatusIcono = ` 
                             <p class="t-normal">
                             <i class="fad fa-exclamation-circle has-text-info fa-"></i>
                             </p>
@@ -1152,7 +1153,8 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
                         fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
                     } else {
                         estiloStatus = "is-success";
-                        fStatus = `<p class="t-solucionado" onclick="actualizarEnergetico(${id}, 'status', 'SOLUCIONADO')">Restaurar</p>`;
+                        fStatus = '';
+                        fStatusIcono = `<p class="t-solucionado" onclick="actualizarEnergetico(${id}, 'status', 'SOLUCIONADO')">Restaurar</p>`;
                         fResponsable = '';
                         fAdjuntos = `onclick="obtenerAdjuntosEnergeticos(${id})"`;
                         fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
@@ -1190,13 +1192,10 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
                                         <p class="t-normal">${comentariosX}</p>
                                     </div>
 
-                                    <div class="column">
-                                       ${fStatus}
+                                    <div class="column" ${fStatus}>
+                                       ${fStatusIcono}
                                     </div>
 
-                                    <div class="column">
-                                        <p class="t-normal">NA</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1538,3 +1537,10 @@ document.getElementById("inputAdjuntosEnergeticos").addEventListener('change', (
         },
     });
 })
+
+
+function toggleModalBulma(idModal) {
+    if (document.getElementById(idModal)) {
+        document.getElementById(idModal).classList.add('is-active');
+    }
+}
