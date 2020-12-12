@@ -4099,7 +4099,16 @@ if (isset($_POST['action'])) {
                 $nombre = $x['nombre'];
                 $fecha = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
                 $status = $x['status'];
+
+                // ADJUNTOS
                 $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM t_energeticos_adjuntos 
+                WHERE id_energetico = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
 
                 // COMENTARIOS
                 $totalComentarios = 0;
@@ -4291,6 +4300,19 @@ if (isset($_POST['action'])) {
             }
         }
         echo json_encode($array);
+    }
+
+
+    // ELIMINA ADJUNTOS DE ENERGETICOS
+    if ($action == "borrarAdjuntoEnergeticos") {
+        $idAdjunto = $_POST['idAdjunto'];
+        $resp = 0;
+
+        $query = "UPDATE t_energeticos_adjuntos SET activo = 0 WHERE id = $idAdjunto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
     }
 
 

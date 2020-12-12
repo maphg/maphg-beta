@@ -1344,6 +1344,7 @@ function actualizarEnergetico(idPendiente, columna, valor) {
 
 // OBTENER ADJUNTOS
 function obtenerAdjuntosEnergeticos(idPendiente) {
+    localStorage.setItem('idEnergetico', idPendiente);
     document.getElementById("modal-energeticos-pictures").classList.add("is-active");
     let contenedor = document.getElementById("dataAdjuntosEnergeticos");
     const action = "obtenerAdjuntosEnergeticos";
@@ -1360,7 +1361,7 @@ function obtenerAdjuntosEnergeticos(idPendiente) {
             contenedor.innerHTML = '';
             if (array.length > 0) {
                 for (let x = 0; x < array.length; x++) {
-                    const id = array[x].id;
+                    const idAdjunto = array[x].idAdjunto;
                     const url = array[x].url;
                     const subidoPor = array[x].subidoPor;
                     const fecha = array[x].fecha;
@@ -1370,7 +1371,7 @@ function obtenerAdjuntosEnergeticos(idPendiente) {
                             <div class="timeline-marker"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong> </strong>
-                                <button class="is-delete is-size-7 manita" onclick="borrarFotosMC(2328, 8215);">
+                                <button class="is-delete is-size-7 manita" onclick="borrarAdjuntoEnergeticos(${idAdjunto});">
                                     <a class="delete is-medium"></a>
                                     </button></p>
                                 <p class="heading"></p>
@@ -1384,6 +1385,38 @@ function obtenerAdjuntosEnergeticos(idPendiente) {
         },
         error: function (e) {
             alertaImg('Intente de Nuevo', '', 'info', 1200);
+        }
+    })
+}
+
+
+// BORRA ADJUNTOS DE ENERGETICOS
+function borrarAdjuntoEnergeticos(idAdjunto) {
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let idEnergetico = localStorage.getItem('idEnergetico');
+    const action = "borrarAdjuntoEnergeticos";
+
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idAdjunto: idAdjunto
+        },
+        dataType: "JSON",
+        success: function (data) {
+            if (data == 1) {
+                alertaImg('Adjunto Eliminado', '', 'success', 1200);
+                obtenerAdjuntosEnergeticos(idEnergetico);
+                obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        },
+        error: function (e) {
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+            obtenerAdjuntosEnergeticos(idEnergetico);
         }
     })
 }
@@ -1471,16 +1504,19 @@ function agregarComentariosEnergeticos(idPendiente) {
 }
 
 
+// SUBIR ADJUNTO   
+document.getElementById("inputAdjuntosEnergeticos").addEventListener('change', () => {
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let idEnergetico = localStorage.getItem('idEnergetico');
+    let file = document.getElementById("inputAdjuntosEnergeticos");
 
-function cargarAdjuntosEnergeticos(idEquipo) {
-    var inputFileImage = document.getElementById("inputAdjuntosEnergeticos");
-    var file = inputFileImage.files;
     var data = new FormData();
-    for (i = 0; i < file.length; i++) {
-        data.append("fileToUpload" + i, file[i]);
+    for (i = 0; i < file.files.length; i++) {
+        data.append("fileToUpload" + i, file.files[i]);
     }
-    data.append("idEquipo", idEquipo);
-    var url = "php/planner_uploadfiles_equipo.php";
+    data.append("idEnergetico", idEnergetico);
+    var url = "php/planner_uploadcot_energetico.php";
 
     $.ajax({
         url: url, // Url to which the request is send
@@ -1491,12 +1527,14 @@ function cargarAdjuntosEnergeticos(idEquipo) {
         processData: false, // To send DOMDocument or non processed data file it is set to false
 
         success: function (data) {
+            file.value = '';
             if (data == 1) {
                 alertaImg('Adjunto Agregado', '', 'success', 1200);
-                obtenerFotosEquipo(idEquipo);
+                obtenerAdjuntosEnergeticos(idEnergetico);
+                obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
             } else {
                 alertaImg('Intente de Nuevo', '', 'info', 1200);
             }
         },
     });
-}
+})

@@ -5730,7 +5730,7 @@ function obtenerPendientesUsuario() {
 
 
 
-// FUNCION XX
+// FUNCION PARA AGREGAR TEST DE EQUIPO
 function agregarTest() {
    document.getElementById("modalAgregarTest").classList.add('open');
    let idDestino = localStorage.getItem('idDestino');
