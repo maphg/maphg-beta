@@ -121,7 +121,7 @@
                 <a href="../pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="../gastos/gastos-beta.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
+                <a href="https://www.maphg.com/beta/gastos.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Empresas y proveedores</o>

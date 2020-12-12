@@ -5077,6 +5077,7 @@ const dataEquiposAmerica = params => {
    var fAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
    var fInfo = `onclick="informacionEquipo(${idEquipo});"`;
    var fCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
+   var fTest = `onclick="toggleModalTailwind('modalTest');"`;
 
    return `
         <tr id="${idEquipo}EquipoAmerica" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
@@ -5137,7 +5138,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fTest}>
                 <div class="font-semibold uppercase">
                     <h1>${valorTestR}</h1>
                 </div>
@@ -5724,6 +5725,28 @@ function obtenerPendientesUsuario() {
       .catch(function (err) {
          fetch(APIERROR + err + ': (obtenerPendientesUsuario)');
          document.getElementById("loadPendientes").innerHTML = '';
+      })
+}
+
+
+
+// FUNCION XX
+function agregarTest() {
+   document.getElementById("modalAgregarTest").classList.add('open');
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "";
+   const URL = "";
+
+   console.log(URL);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + 'funcion xx');
       })
 }
 

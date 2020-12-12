@@ -1,675 +1,249 @@
-<?php
-session_start();
-date_default_timezone_set('America/Mexico_City');
-setlocale(LC_MONETARY, 'en_US');
-include 'php/conexion.php';
-$conn = new Conexion();
-$conn->conectar();
-
-
-if (!isset($_SESSION['usuario'])) {
-    header('Location: login.php');
-} else {
-    //Variables Generales.
-    $nombreUsuario = "No Identificado.";
-    $avatar = "??";
-    $cargo = " - - ";
-    $conn->conectar();
-    $idUsuario = $_SESSION['usuario'];
-    //Obtener datos del usuario
-    $query = "SELECT * FROM t_users WHERE id = $idUsuario";
-    try {
-        $zhh = "";
-        $resp = $conn->obtDatos($query);
-        if ($conn->filasConsultadas > 0) {
-            foreach ($resp as $dts) {
-                $idColaborador = $dts['id_colaborador'];
-                $idPermiso = $dts['id_permiso'];
-                $idDestino = $dts['id_destino'];
-                $idFase = $dts['fase'];
-                $auto = 1;
-                $dec = 1;
-                $dep = 1;
-                $zha = 1;
-                $zhc = 1;
-                $zhh = 1;
-                $zhp = 1;
-                $zia = 1;
-                $zic = 1;
-                $zie = 1;
-                $zil = 1;
-                $oma = 0;
-                $seg = 0;
-                $dec = $dts['DECC'];
-                $zhagp = $dts['ZHAGP'];
-                $zhatrs = $dts['ZHATRS'];
-                $zhcgp = $dts['ZHCGP'];
-                $zhctrs = $dts['ZHCTRS'];
-                $zhhgp = $dts['ZHHGP'];
-                $zhhtrs = $dts['ZHHTRS'];
-                $zhpgp = $dts['ZHPGP'];
-                $zhptrs = $dts['ZHPTRS'];
-                $zia = $dts['ZIA'];
-                $zic = $dts['ZIC'];
-                $zie = $dts['ZIE'];
-                $zil = $dts['ZIL'];
-                //                $oma = $dts['OMA'];
-                $dep = $dts['DEP'];
-                $auto = $dts['AUTO'];
-                $zha = $dts['ZHA'];
-                $zhh = $dts['ZHH'];
-                $zhc = $dts['ZHC'];
-                $zhp = $dts['ZHP'];
-                //                $seg = $dts['SEG'];
-
-                $query = "SELECT * FROM c_permisos WHERE id = $idPermiso";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $permiso = $dts['permiso'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                //Obtener datos del colaborador
-                $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $nombre = $dts['nombre'];
-                            $apellido = $dts['apellido'];
-                            $telefono = $dts['telefono'];
-                            $email = $dts['email'];
-                            $idCargo = $dts['id_cargo'];
-                            $idSeccion = $dts['id_seccion'];
-                            if ($dts['foto'] != "") {
-                                $foto = $dts['foto'];
-                            } else {
-                                $foto = "";
-                            }
-                        }
-                        $nombreUsuario = $nombre . " " . $apellido;
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_cargos WHERE id = $idCargo";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $cargo = $dts['cargo'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_secciones WHERE id = $idSeccion";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $seccion = $dts['seccion'];
-                            $imgSeccion = $dts['url_image'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_destinos WHERE id = $idDestino";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $destino = $dts['destino'];
-                            $bandera = $dts['bandera'];
-                            $gp = $dts['gp'];
-                            $trs = $dts['trs'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-            }
-        }
-    } catch (Exception $ex) {
-        echo $ex;
-    }
-}
-
-if ($idDestino == 10) {
-    if (isset($_SESSION['idDestino'])) {
-        $idDestinoT = $_SESSION['idDestino'];
-    } else {
-        $idDestinoT = $idDestino;
-    }
-} else {
-    $idDestinoT = $idDestino;
-}
-
-$query = "SELECT * FROM c_destinos WHERE id = $idDestinoT";
-try {
-    $resp = $conn->obtDatos($query);
-    if ($conn->filasConsultadas > 0) {
-        foreach ($resp as $dts) {
-            $bandera = $dts['bandera'];
-            $destinoT = $dts['destino'];
-            $ubicacion = $dts['ubicacion'];
-            $gp = $dts['gp'];
-            $trs = $dts['trs'];
-            $division = $dts['division'];
-        }
-    }
-} catch (Exception $ex) {
-    echo $ex;
-}
-?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>MAPHG</title>
-
-    <link rel="icon" href="svg/logo6.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAPHG Subcontratas Compras</title>
+    <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
-    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel="stylesheet" href="css/animate.css">
 
-    <style>
-        .shadow-navbar {
-            -webkit-box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
-            -moz-box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
-            box-shadow: 0px 4px 22px -22px rgba(0, 0, 0, 0.98);
-        }
 
-        .my-iframe {
-            height: 700px !important;
-        }
-
-        .my-iframe-all {
-            height: 300px !important;
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-white scrollbar">
+    <!-- MENÚ -->
+    <div class="w-full absolute top-0">
+        <?php
+        include 'navbartopJS.php';
+        include 'menuJS.php';
+        ?>
+    </div>
+    <!-- MENÚ -->
 
-    <?php include 'navbartop.php' ?>
-    <?php include 'menu-sidebar.php' ?>
-    <br>
-    <div class="wrapper">
-        <div id="content" class="container mx-auto px-4">
-            <!--MENU-->
-            <section class="mt-2">
-                <div class="columns">
-                    <div class="column">
-                        <?php
-                        switch ($destinoT):
-                            case 'AME':
-                        ?>
-                                <!-- CAP -->
-                                <div class="flex flex-wrap">
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNTUxM2E4MjktZWUxZS00ZWRlLTg0NTAtZDZmNTZjNTIxYzFiIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
+    <div class="container-fluid mx-auto pt-16 bg-red-100">
+        <div class="flex flex-col">
 
-                                    <!-- RM -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMGIxMjI3ZTQtZDQ4ZS00NjUwLTkyMWQtZWE4YWUzNzNlOGE4IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
+            <div id="contenedorPowerbi" class="">
 
-                                    <!-- CMU -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYTc5ODQzMDktNjZiNS00ZDJkLTllNDctOWU0ODU1YmNkZWI0IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-
-                                    <!-- PVR -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYjhkMWY3ZjItYzBmNS00M2UyLTg3ZWYtZWEwZDU5MTRlNTYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-
-                                    <!-- MBJ -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMWNiMDM0NGUtYWQyNy00NmQ0LTgyN2ItNzE2NjBmY2FkZDBlIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-
-                                    <!-- PUJ -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNjg0NTY2MjMtMWUwNy00MTYwLWE4NDctMmU0MTUxMjU2NzI3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-
-                                    <!-- SSA -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMDZhMjA1YjYtYmQ2Ny00OTFkLWIwOTAtNTc3MTA4Yjk4ZGIwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-
-                                    <!-- SDQ -->
-                                    <div class="w-2/6">
-                                        <iframe class="my-iframe-all" width="90%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYzQ5MmQ1NTAtOTkwYS00OTNhLThlOGItNmQ4NTcwODE2NzcwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                                    </div>
-                                </div>
-                            <?php
-                                break;
-                            case 'CAP':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNTUxM2E4MjktZWUxZS00ZWRlLTg0NTAtZDZmNTZjNTIxYzFiIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'RM':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMGIxMjI3ZTQtZDQ4ZS00NjUwLTkyMWQtZWE4YWUzNzNlOGE4IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'CMU':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYTc5ODQzMDktNjZiNS00ZDJkLTllNDctOWU0ODU1YmNkZWI0IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'PVR':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYjhkMWY3ZjItYzBmNS00M2UyLTg3ZWYtZWEwZDU5MTRlNTYyIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'MBJ':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMWNiMDM0NGUtYWQyNy00NmQ0LTgyN2ItNzE2NjBmY2FkZDBlIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'PUJ':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiNjg0NTY2MjMtMWUwNy00MTYwLWE4NDctMmU0MTUxMjU2NzI3IiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'SSA':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiMDZhMjA1YjYtYmQ2Ny00OTFkLWIwOTAtNTc3MTA4Yjk4ZGIwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                            <?php
-                                break;
-                            case 'SDQ':
-                            ?>
-                                <iframe class="my-iframe" width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYzQ5MmQ1NTAtOTkwYS00OTNhLThlOGItNmQ4NTcwODE2NzcwIiwidCI6IjAzMDQ5MzNhLTA1YTItNDEwZC1iMjc5LWEyYTRhNTUxYTNlYSIsImMiOjh9" frameborder="0" allowFullScreen="true"></iframe>
-                        <?php
-                                break;
-                        endswitch;
-                        ?>
-                    </div>
+                <!-- CAP -->
+                <div id="powerbi_11" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
                 </div>
-            </section>
-            <br>
-            <div class="row my-4">
-                <div class="col-12 text-center">
-                    <div class="btn-group shadow-sm text-center" role="group" aria-label="Button group with nested dropdown">
-                        <button id="btnServicios" type="button" class="btn btn-no active2" onclick="ocultar('divServicios'); ">Servicios</button>
-                        <button id="btnMateriales" type="button" class="btn btn-no" onclick="ocultar('divMateriales'); ">Materiales</button>
-                    </div>
+
+                <!-- RM -->
+                <div id="powerbi_1" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+                <!-- CMU -->
+                <div id="powerbi_7" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+
+                <!-- PVR -->
+                <div id="powerbi_2" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+                <!-- MBJ -->
+                <div id="powerbi_6" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+                <!-- PUJ -->
+                <div id="powerbi_5" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+                <!-- SSA -->
+                <div id="powerbi_4" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
+                </div>
+
+                <!-- SDQ -->
+                <div id="powerbi_3" class="col-span-1 shadow rounded hidden">
+                    <iframe class="my-iframe-all" width="100%" height="500px" src="" frameborder="0" allowFullScreen="true"></iframe>
                 </div>
             </div>
 
-            <section class="my-4 container mx-auto px-4">
-                <div id="divServicios" class="row mt-4">
-                    <div class="col-12">
-                        <div class="row mt-4">
-                            <div class="col">
-                                <div class="table-responsive">
-                                    <table id="tablaGastosServicios" class="table table-bordered table-striped compact table-sm" style="width: 800px;">
-                                        <thead>
-                                            <tr>
-                                                <th style="display:none;">idDocumento</th>
-                                                <th class="">Destino</th>
-                                                <th class="">CECO</th>
-                                                <th class="">Fecha Cont.</th>
-                                                <th class="">Importe (USD)</th>
-                                                <th class="">Asignación</th>
-                                                <th class="">Descripción</th>
-                                                <th class="">Proveedor</th>
-                                                <th class="">Nombre</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th style="display:none;">idDocumento</th>
-                                                <th class="w-1/2">Destino</th>
-                                                <th class="">CECO</th>
-                                                <th class="">Fecha Cont.</th>
-                                                <th class="">Importe (USD)</th>
-                                                <th class="">Asignación</th>
-                                                <th class="">Descripción</th>
-                                                <th class="">Proveedor</th>
-                                                <th class="">Nombre</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody id="tableBodyServicios" class="fs-11">
-                                            <?php
-                                            //$query = "SELECT * FROM t_gastos_servicios WHERE division = '$division'";
-                                            $query = "CALL obtenerServicios($division)";
-                                            try {
-                                                $resp = $conn->obtDatos($query);
-                                                if ($conn->filasConsultadas > 0) {
-                                                    foreach ($resp as $dts) {
+            <div class="flex flex-row justify-center rounded mt-4 mb-1">
+                <h1 id="opcionServicios" class="shadow mx-4 cursor-pointer hover:bg-gray-200 rounded p-2 text-center font-ls font-bold uppercase">
+                    servicios</h1>
+                <h1 id="opcionMateriales" class="shadow mx-4 cursor-pointer hover:bg-gray-200 rounded p-2 text-center font-ls font-bold uppercase">
+                    materiales</h1>
+            </div>
+            <h1 id="load" class="text-center font-bold"> </h1>
+            <div class="py-5 px-10">
 
-                                                        $idDocumento = $dts['ID'];
-                                                        $numDocumento = $dts['NUMDOC'];
-                                                        $fechaConta = $dts['FECHACONT'];
-                                                        $fechaDocumento = $dts['FECHADOC'];
-                                                        $importe = $dts['IMPORTEML3'];
-                                                        $ceco = $dts['CECO'];
-                                                        $asignacion = $dts['ASIG'];
-                                                        $descripcion = $dts['TEXTO'];
-                                                        $proveedor = $dts['PROVEEDOR'];
-                                                        $nombreDocumento = $dts['NOMBRE1'];
-                                                        $destinoCECO = $dts['DESTINOCECO'];
-                                                        $nombreCECO = $dts['NOMBRECECO'];
-                                                        $textoCeco = $dts['texto_ceco'];
+                <div id="servicios" class="rounded hidden shadow">
 
-                                                        if (strpos($asignacion, 'OTRO CECO') !== false || strpos($asignacion, 'otro ceco') !== false || strpos($asignacion, 'CAPEX') !== false || strpos($asignacion, 'capex') !== false || strpos($asignacion, 'POBLADO') !== false || strpos($asignacion, 'poblado') !== false) {
-                                                        } else {
-                                                            if ($importe == "") {
-                                                                $importe = 0;
-                                                            }
-                                                            $year = date('Y');
-                                                            $fechaDocumento = strtotime($fechaConta);
-                                                            $fecha = date("F", $fechaDocumento);
-                                                            $añoDoc = date("Y", $fechaDocumento);
-                                                            if ($añoDoc == $year) {
-                                                                if ($idDestino == 10) {
-                                                                    echo "<tr>"
-                                                                        . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                        . "<td class=\"\">$destinoCECO</td>"
-                                                                        . "<td class=\"\">$textoCeco</td>"
-                                                                        . "<td>$fechaConta</td>"
-                                                                        . "<td> $importe</td>"
-                                                                        . "<td>$asignacion</td>"
-                                                                        . "<td>$descripcion</td>"
-                                                                        . "<td>$proveedor</td>"
-                                                                        . "<td>$nombreDocumento</td>"
-                                                                        . "</tr>";
-                                                                } else {
-                                                                    if ($destino == $destinoCECO) {
-                                                                        echo "<tr>"
-                                                                            . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                            . "<td class=\"w-2/2\">$destinoCECO</td>"
-                                                                            . "<td class=\"\">$textoCeco</td>"
-                                                                            . "<td>$fechaConta</td>"
-                                                                            . "<td>" . money_format("%.0n", $importe) . "</td>"
-                                                                            . "<td>$asignacion</td>"
-                                                                            . "<td>$descripcion</td>"
-                                                                            . "<td>$proveedor</td>"
-                                                                            . "<td>$nombreDocumento</td>"
-                                                                            . "</tr>";
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch (Exception $ex) {
-                                                echo $ex;
-                                            }
-                                            $conn->cerrar();
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <div class="mb-2 flex flex-row justify-end mt-2">
+                        <div class="w-96 mt-1 relative rounded-md shadow-sm">
+                            <input type="text" id="palabraServicios" class="block w-full pl-7 pr-12 focus:outline-none focus:ring focus:border-blue-300" placeholder="Buscar Por:">
+                            <div class="absolute inset-y-0 right-0 flex items-center bg-gray-100 rounded">
+                                <select id="columnaServicio" class="h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-600 sm:text-sm rounded-md">
+                                    <option value="0">FECHA</option>
+                                    <option value="1">CECO</option>
+                                    <option value="2">ASIGNACIÓN</option>
+                                    <option value="3">DESCRIPCIÓN</option>
+                                    <option value="4">PROVEEDOR</option>
+                                    <option value="5">IMPORTE</option>
+                                    <option value="6">CUENTA</option>
+                                </select>
                             </div>
                         </div>
+
+                        <div id="btnExportarServicios" onclick="exportTableExcel('dataServicios', 'dataServicios', 'tablaServicios.xls')" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex
+                        justify-center items-center mx-5 hover:bg-bluegray-200 p-2">
+                            <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                            <h1>Exportar</h1>
+                        </div>
+                    </div>
+
+                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 75vh;">
+                        <table id="tablaServicios" class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
+                        shadow-md sm:rounded-lg p-4">
+                            <thead class="redounded uppercase">
+                                <tr class="rounded">
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0 rounded-tl">
+                                        fecha
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0 rounded-tr">
+                                        ceco
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        asignación
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Descripción
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Proveedor AF
+                                    </th>
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        importe
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        cuenta mayor
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="dataServicios" class="bg-white divide-y divide-gray-200 text-right"></tbody>
+
+                        </table>
                     </div>
                 </div>
 
-                <div id="divMateriales" class="row mt-4" style="display:none;">
-                    <div class="col-12">
-                        <!-- <?php
-                                if ($importarGastos == 1) :
-                                ?>
-                            <div class="row mt-4">
-                                <div class="col-12 col-md-12 col-lg-12 text-center">
-                                    <div class="upload-btn-wrapper">
-                                        <button class="btn  bg-white text-negron fs-10">Adjuntar</button>
-                                        <input id="txtFileMateriales" type="file" name="txtFileMateriales" onchange="importarArchivoGastos('materiales');">
-                                    </div>
+                <div id="materiales" class="rounded hidden shadow">
 
-                                </div>
-
-                            </div>
-                        <?php
-                                endif;
-                        ?> -->
-
-                        <div class="row mt-4">
-                            <div class="col">
-                                <div class="table-responsive">
-                                    <table id="tablaGastosMateriales" class="table table-bordered table-striped compact table-sm" style="width: 800px;">
-                                        <thead>
-                                            <tr>
-                                                <th style="display:none;">idDocumento</th>
-                                                <th>Destino</th>
-                                                <th>CECO</th>
-                                                <th>Documento</th>
-                                                <th>Fecha Cont.</th>
-                                                <th>Importe (USD)</th>
-                                                <th>Asignación</th>
-                                                <th>Descripción</th>
-                                                <th>Proveedor</th>
-                                                <th>Nombre</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th style="display:none;">idDocumento</th>
-                                                <th>Destino</th>
-                                                <th>CECO</th>
-                                                <th>Documento</th>
-                                                <th>Fecha Cont.</th>
-                                                <th>Importe (USD)</th>
-                                                <th>Asignación</th>
-                                                <th>Descripción</th>
-                                                <th>Proveedor</th>
-                                                <th>Nombre</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody id="tableBodyMateriales" class="fs-11">
-                                            <?php
-                                            $conn->conectar();
-                                            //$query = "SELECT * FROM t_gastos_materiales WHERE division = '$division'";
-                                            $query = "CALL obtenerMateriales($division)";
-                                            try {
-                                                $resp = $conn->obtDatos($query);
-                                                if ($conn->filasConsultadas > 0) {
-                                                    foreach ($resp as $dts) {
-
-                                                        $idDocumento = $dts['ID'];
-                                                        $numDocumento = $dts['NUMDOC'];
-                                                        $fechaConta = $dts['FECHACONT'];
-                                                        $fechaDocumento = $dts['FECHADOC'];
-                                                        $importe = $dts['IMPORTEML3'];
-                                                        $ceco = $dts['CECO'];
-                                                        $asignacion = $dts['ASIG'];
-                                                        $descripcion = $dts['TEXTO'];
-                                                        $proveedor = $dts['PROVEEDOR'];
-                                                        $nombreDocumento = $dts['NOMBRE1'];
-                                                        $destinoCECO = $dts['DESTINOCECO'];
-                                                        $nombreCECO = $dts['NOMBRECECO'];
-                                                        $textoCeco = $dts['TEXTCECO'];
-                                                        $NOMBRE1 = $dts['NOMBRE1'];
-                                                        $DOCCOMPRAS = $dts['DOCCOMPRAS'];
-
-                                                        if (strpos($asignacion, 'OTRO CECO') !== false || strpos($asignacion, 'otro ceco') !== false || strpos($asignacion, 'CAPEX') !== false || strpos($asignacion, 'capex') !== false || strpos($asignacion, 'POBLADO') !== false || strpos($asignacion, 'poblado') !== false) {
-                                                        } else {
-                                                            if ($importe == "") {
-                                                                $importe = 0;
-                                                            }
-
-                                                            $fechaDocumento = strtotime($fechaConta);
-                                                            $fecha = date("F", $fechaDocumento);
-                                                            $añoDoc = date("Y", $fechaDocumento);
-                                                            if ($añoDoc == $year) {
-                                                                if ($idDestino == 10) {
-                                                                    echo "<tr>"
-                                                                        . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                        . "<td>$destinoCECO</td>"
-                                                                        . "<td class=\"fs-9\">$textoCeco</td>"
-                                                                        . "<td>$DOCCOMPRAS</td>"
-                                                                        . "<td>$fechaConta</td>"
-                                                                        . "<td>" . money_format("%.0n", $importe) . "</td>"
-                                                                        . "<td>$asignacion</td>"
-                                                                        . "<td>$descripcion</td>"
-                                                                        . "<td>$proveedor</td>"
-                                                                        . "<td>$NOMBRE1</td>"
-                                                                        . "</tr>";
-                                                                } else {
-                                                                    if ($destino == $destinoCECO) {
-                                                                        echo "<tr>"
-                                                                            . "<td style=\"display: none;\">$idDocumento</td>"
-                                                                            . "<td>$destinoCECO</td>"
-                                                                            . "<td class=\"fs-9\">$textoCeco</td>"
-                                                                            . "<td>$DOCCOMPRAS</td>"
-                                                                            . "<td>$fechaConta</td>"
-                                                                            . "<td>" . money_format("%.0n", $importe) . "</td>"
-                                                                            . "<td>$asignacion</td>"
-                                                                            . "<td>$descripcion</td>"
-                                                                            . "<td>$proveedor</td>"
-                                                                            . "<td>$NOMBRE1</td>"
-                                                                            . "</tr>";
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            } catch (Exception $ex) {
-                                                echo $ex;
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                    <div class="mb-2 flex flex-row justify-end mt-2">
+                        <div class="w-96 mt-1 relative rounded-md shadow-sm">
+                            <input type="text" id="palabraMateriales" class="block w-full pl-7 pr-12 focus:outline-none focus:ring focus:border-blue-300" placeholder="Buscar Por:">
+                            <div class="absolute inset-y-0 right-0 flex items-center bg-gray-100 rounded">
+                                <select id="columnaMateriales" class="h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-600 sm:text-sm rounded-md">
+                                    <option value="0">FECHA</option>
+                                    <option value="1">CECO</option>
+                                    <option value="2">ASIGNACIÓN</option>
+                                    <option value="3">DESCRIPCIÓN</option>
+                                    <option value="4">PROVEEDOR</option>
+                                    <option value="5">IMPORTE</option>
+                                    <option value="6">CUENTA</option>
+                                </select>
                             </div>
                         </div>
+                        <div id="btnExportarMateriales" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center mx-5 hover:bg-bluegray-200 px-2">
+                            <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                            <h1>Exportar</h1>
+                        </div>
+                    </div>
+                    <div class="w-full overflow-auto scrollbar shadow" style="max-height: 75vh;">
+                        <table class="min-w-full divide-y divide-gray-200 cursor-pointer border-b border-gray-200 sortable mx-auto
+                        shadow-md sm:rounded-lg p-4">
+                            <thead class="redounded uppercase">
+                                <tr class="rounded">
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0 rounded-tl">
+                                        fecha
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0 rounded-tr">
+                                        ceco
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        asignación
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Descripción
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Proveedor AF
+                                    </th>
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        importe
+                                    </th>
+
+                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4
+                                font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        cuenta mayor
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="dataMateriales" class="bg-white divide-y divide-gray-200 text-right">
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </section>
+
+            </div>
         </div>
+
     </div>
 </body>
-<script src="js/jquery-3.3.1.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="js/moment.js"></script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- JS PARA ALERTAS -->
+<script src="js/alertify.min.js"></script>
+<script src="js/alertasSweet.js"></script>
+<!-- JS PARA ALERTAS -->
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.1.1/jq-3.3.1/jszip-2.5.0/dt-1.10.21/af-2.3.5/b-1.6.2/b-colvis-1.6.2/b-flash-1.6.2/b-html5-1.6.2/b-print-1.6.2/fc-3.3.1/fh-3.1.7/kt-2.5.2/r-2.2.5/rg-1.1.2/rr-1.2.7/sc-2.0.2/sp-1.1.1/sl-1.3.1/datatables.js"></script>
+<!-- JS PARA TABLAS -->
+<script src="js/sorttable.js"></script>
+<script src="js/funciones_tablas.js"></script>
+<!-- JS PARA TABLAS -->
 
-<script src="js/plannerJS.js"></script>
-<script src="js/usuariosJS.js"></script>
-<script>
-    $(document).ready(function() {
-        var gastos = $('table.compact').DataTable({
-            select: true,
-            "scrollY": "350px",
-            "scrollX": true,
-            "scrollCollapse": true,
-            "paging": false,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-            },
+<!-- JS MODULO -->
+<script src="js/subcontratas_compras.js"></script>
+<!-- JS MODULO -->
 
-            dom: 'Bfrtip',
-            buttons: [{
-                extend: 'excel',
-                title: 'Reporte de gastos'
-            }],
-            initComplete: function() {
-                this.api().columns().every(function() {
-                    var column = this;
-                    var select = $('<select><option value=""></option></select>')
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function() {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function(d, j) {
-                        select.append('<option value="' + d + '">' + d + '</option>')
-                    });
-                });
-            }
-        });
-
-
-        setTimeout(function() {
-            $(".loader").fadeOut('slow');
-        }, 800);
-
-        $('#sidebarCollapse').on('click', function() {
-            //$('#sidebar').toggleClass('active');
-            $(this).toggleClass('active');
-        });
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal"
-        });
-
-        $('#sidebarCollapse').on('click', function() {
-            $('#sidebar, #content').toggleClass('active');
-            $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        });
-    });
-    $(document).ready(function() {
-        var pageloader = document.getElementById("loader");
-        if (pageloader) {
-
-            var pageloaderTimeout = setTimeout(function() {
-                pageloader.classList.toggle('is-active');
-                clearTimeout(pageloaderTimeout);
-            }, 3000);
-        }
-
-        $(window).scroll(function() {
-            var position = $(this).scrollTop();
-            if (position >= 200) {
-                $('#btnAncla').fadeIn('slow');
-            } else {
-                $('#btnAncla').fadeOut('slow');
-            }
-        });
-        $(function() {
-            $("#btnAncla").on('click', function() {
-                $("html, body").animate({
-                    scrollTop: 0
-                }, 1000);
-                return false;
-            });
-        });
-    });
-
-    function ocultar(id) {
-        if (id == "divServicios") {
-            $("#divMateriales").css('display', 'none');
-            $("#divServicios").css('display', 'block');
-
-        } else {
-            $("#divMateriales").css('display', 'block');
-            $("#divServicios").css('display', 'none');
-        }
-    }
-</script>
+<!-- COMPLEMENTO MENU -->
+<script src="js/complemento_menuJS.js"></script>
+<!-- COMPLEMENTO MENU -->
 
 </html>
