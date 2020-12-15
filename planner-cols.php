@@ -2831,7 +2831,7 @@
 
 
     <!-- MODAL AGREGAR TEST -->
-    <div id="modalAgregarTest" class="modal open">
+    <div id="modalAgregarTest" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 500px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
