@@ -6889,6 +6889,103 @@ $tablaRanking .= "</div>";
     <!-- Status TareasP -->
 
 
+
+    <!-- Status Energeticos -->
+    <div id="modalStatusEnergeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny has-background-white rounded">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+
+                                <button id="" class="button is-danger is-fullwidth">
+                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i> Es urgente!
+                                </button>
+
+                                <button class="button is-dark is-fullwidth mt-2" onclick=" toggleHidden('contenedorstatusMaterial');">
+                                    <span class="mr-4 fa-lg">
+                                        <strong> M </strong>
+                                    </span> No hay material
+                                </button>
+
+                                <div id="contenedorstatusMaterial" class="is-fullwidth is-centered mt-2 hidden">
+                                    <input id="inputCod2bendEnergetico" class="button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
+                                    <button id="btnStatusEnergetico" class="button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="">Aplicar</button>
+                                </div>
+
+                                <button class="button is-warning is-fullwidth mt-2" onclick="toggleHidden('contenedorEnergeticosToggle');">
+                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
+                                </button>
+                                <div id="contenedorEnergeticosToggle" class="has-background-light p-3 m-2 hidden">
+
+                                    <button id="btnStatusElectricidadEnergetico" class="button is-warning has-text-centered m-1">Electricidad</button>
+
+                                    <button id="btnStatusAguaEnergetico" class="button is-warning has-text-centered m-1">Agua</button>
+
+                                    <button id="btnStatusDieselEnergetico" class="button is-warning has-text-centered m-1">Diésel</button>
+
+                                    <button id="btnStatusGasEnergetico" class="button is-warning has-text-centered m-1">Gas</button>
+                                </div>
+
+                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleHidden('contenedorDepartamentosToggle');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
+                                </button>
+                                <div id="contenedorDepartamentosToggle" class="has-background-light p-3 m-2 hidden">
+
+                                    <button id="btnStatusCalidadEnergetico" class="button is-primary has-text-centered m-1">Calidad
+                                    </button>
+
+                                    <button id="btnStatusComprasEnergetico" class="button is-primary has-text-centered m-1">Compras
+                                    </button>
+
+                                    <button id="btnStatusDireccionEnergetico" class="button is-primary has-text-centered m-1">Dirección
+                                    </button>
+
+                                    <button id="btnStatusFinanzasEnergetico" class="button is-primary has-text-centered m-1">Finanzas
+                                    </button>
+
+                                    <button id="btnStatusRRHHEnergetico" class="button is-primary has-text-centered m-1">RRHH
+                                    </button>
+                                </div>
+
+                                <button id="btnStatusTrabajandoEnergetico" class="button is-info is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
+                                </button>
+
+                                <button id="btnStatusSolucionarEnergetico" class="button is-success is-fullwidth mt-2">
+                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
+                                </button>
+
+                                <div class="column has-text-centered">
+
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleHidden('nuevoTituloEnergeticos');">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEliminarEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+
+                                <div id="nuevoTituloEnergeticos" class="has-text-centered hidden">
+                                    <input id="inputTituloEnergetico" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnActualizarTituloEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Status Energeticos -->
+
+
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
     <div id="modal-proyectos" style="display: none;">
         <br>

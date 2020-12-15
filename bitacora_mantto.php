@@ -632,7 +632,7 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
                             <div class=" relative">
                                 <select id="gremio" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                                     <?php
-                                    $query_gremio = "SELECT* FROM bitacora_gremio";
+                                    $query_gremio = "SELECT* FROM bitacora_gremio ORDER BY nombre_gremio ASC";
                                     $result_gremio = mysqli_query($conn_2020, $query_gremio);
                                     while ($row_gremio = mysqli_fetch_array($result_gremio)) {
                                         $id = $row_gremio['id'];

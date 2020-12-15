@@ -4316,6 +4316,71 @@ if (isset($_POST['action'])) {
     }
 
 
+    if ($action == "actualizarDatosEnergetico") {
+        $idEnergetico = $_POST['idEnergetico'];
+        $columna = $_POST['columna'];
+        $titulo = $_POST['titulo'];
+        $valor = 1;
+        $cod2bend = $_POST['cod2bend'];
+        $resp = 0;
+
+        $query = "SELECT $columna FROM t_energeticos WHERE id = $idEnergetico";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $valor = $x[$columna];
+            }
+        }
+
+        if ($valor === "1") {
+            $valor = 0;
+        } elseif ($valor === "0") {
+            $valor = 1;
+        } elseif ($valor === "PENDIENTE") {
+            $valor = "SOLUCIONADO";
+        } elseif ($valor === "SOLUCIONADO") {
+            $valor = "PENDIENTE";
+        }
+
+        if ($columna == "status" && $valor == "SOLUCIONADO") {
+            $query = "UPDATE t_energeticos SET status = '$valor' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status" && $valor == "PENDIENTE") {
+            $query = "UPDATE t_energeticos SET status = '$valor' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        } elseif ($columna == "status_material" && $cod2bend != "") {
+            $query = "UPDATE t_energeticos SET status_material = '$valor', cod2bend = '$cod2bend' 
+            WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 3;
+            }
+        } elseif (
+            $columna === "status_trabajare" || $columna === "status_urgente" || $columna === "departamento_calidad" || $columna === "departamento_compras" || $columna === "departamento_direccion" || $columna === "departamento_finanzas" || $columna === "departamento_rrhh" || $columna === "energetico_electricidad" || $columna === "energetico_agua" || $columna === "energetico_diesel" || $columna === "energetico_gas"
+        ) {
+            $query = "UPDATE t_energeticos SET $columna = '$valor' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 4;
+            }
+        } elseif ($columna == "titulo") {
+            $query = "UPDATE t_energeticos SET actividad = '$titulo' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 5;
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_energeticos SET activo = '0' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 6;
+            }
+        } else {
+            $resp = 0;
+        }
+
+        echo json_encode($resp);
+    }
+
 
 
 

@@ -1142,7 +1142,7 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
 
                     if (status == "PENDIENTE") {
                         estiloStatus = "is-danger";
-                        fStatus = `onclick="toggleModalBulma('modalStatusMC');"`;
+                        fStatus = `onclick="toggleModalBulma('modalStatusEnergeticos'); obtenerStatusEnergetico(${id});"`;
                         fStatusIcono = ` 
                             <p class="t-normal">
                             <i class="fad fa-exclamation-circle has-text-info fa-"></i>
@@ -1543,4 +1543,107 @@ function toggleModalBulma(idModal) {
     if (document.getElementById(idModal)) {
         document.getElementById(idModal).classList.add('is-active');
     }
+}
+
+
+function toggleHidden(idElemento) {
+    if (document.getElementById(idElemento)) {
+        document.getElementById(idElemento).classList.toggle('hidden');
+    }
+}
+
+
+function obtenerStatusEnergetico(idEnergetico) {
+    let inputTitulo = document.getElementById("inputTituloEnergetico");
+    inputTitulo.value = '';
+
+    document.getElementById("btnStatusSolucionarEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'status')`);
+
+    document.getElementById("btnStatusEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'status_material');`);
+
+    document.getElementById("btnStatusElectricidadEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'energetico_electricidad');`);
+
+    document.getElementById("btnStatusAguaEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'energetico_agua');`);
+
+    document.getElementById("btnStatusDieselEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'energetico_diesel');`);
+
+    document.getElementById("btnStatusGasEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'energetico_gas');`);
+
+    document.getElementById("btnStatusCalidadEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'departamento_calidad');`);
+
+    document.getElementById("btnStatusComprasEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'departamento_compras');`);
+
+    document.getElementById("btnStatusDireccionEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'departamento_direccion');`);
+
+    document.getElementById("btnStatusFinanzasEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'departamento_finanzas');`);
+
+    document.getElementById("btnStatusRRHHEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'departamento_rrhh');`);
+
+    document.getElementById("btnEliminarEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'eliminar');`);
+
+    document.getElementById("btnActualizarTituloEnergetico").
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, 'titulo');`);
+
+    let titulo = document.getElementById("energetico_" + idEnergetico).childNodes[1].innerText;
+    inputTitulo.value = titulo;
+}
+
+
+// ACTUALIZAR INFORMACIÓN DE ENERGETICO
+function actualizarEnergetico(idEnergetico, columna) {
+    console.log(idEnergetico, columna);
+    let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let cod2bend = document.getElementById("inputCod2bendEnergetico").value;
+    let titulo = document.getElementById("inputTituloEnergetico");
+    const action = "actualizarDatosEnergetico";
+    $.ajax({
+        type: "post",
+        url: "php/crud.php",
+        data: {
+            action: action,
+            idEnergetico: idEnergetico,
+            columna: columna,
+            cod2bend: cod2bend,
+            titulo: titulo.value
+        },
+        dataType: "JSON",
+        success: function (array) {
+            console.log(array);
+            document.getElementById("modalStatusEnergeticos").classList.remove('is-active');
+            obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+            titulo.value = '';
+            if (array == 1) {
+                alertaImg('Pendiente Solucionado', '', 'success', 1200);
+            } else if (array == 2) {
+                alertaImg('Pendiente Restaurado', '', 'success', 1200);
+            } else if (array == 3) {
+                alertaImg('Status Material, Actualizado', '', 'success', 1200);
+            } else if (array == 4) {
+                alertaImg('Status Actualizado', '', 'success', 1200);
+            } else if (array == 5) {
+                alertaImg('Titulo Actualizado', '', 'success', 1200);
+            } else if (array == 6) {
+                alertaImg('Pendiente Eliminado', '', 'success', 1200);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1200);
+            }
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    })
 }
