@@ -1081,6 +1081,8 @@ function obtStatusTareas() {
 
 // FUNCIÓN PARA ENERGETICOS
 function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
+    localStorage.setItem('idSeccion', idSeccion);
+    localStorage.setItem('idSubseccion', idSubseccion);
     const action = "obtenerPendientesEnergeticos";
     document.getElementById("modal-energeticos").classList.add("is-active");
     let contenedor = document.getElementById("dataEnergeticos");
@@ -1111,6 +1113,7 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
         },
         dataType: "JSON",
         success: function (array) {
+            console.log(array);
             contenedor.innerHTML = '';
             document.getElementById("textSeccionEnergeticos").
                 innerHTML = array.subseccion[0] + ' / PENDIENTES';
@@ -1127,6 +1130,8 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
                     const adjuntos = array.pendientes[x].adjuntos;
                     const comentarios = array.pendientes[x].comentarios;
                     const status = array.pendientes[x].status;
+                    const sDepartamento = array.pendientes[x].sDepartamento;
+                    const sEnergetico = array.pendientes[x].sEnergetico;
 
                     if (comentarios <= 0) {
                         comentariosX = '<i class="fad fa-minus has-text-danger fa-1x"></i>';
@@ -1140,28 +1145,46 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
                         adjuntosX = adjuntos;
                     }
 
+                    if (sDepartamento >= 1 && status == "PENDIENTE") {
+                        iconoDepartamento = '<strong class="has-text-primary">D</strong>';
+                    } else {
+                        iconoDepartamento = '';
+                    }
+
+                    if (sEnergetico >= 1 && status == "PENDIENTE") {
+                        iconoEnergetico = '<strong class="has-text-warning">E</strong>';
+                    } else {
+                        iconoEnergetico = '';
+                    }
+
+                    if (status == "PENDIENTE" && sDepartamento < 1 && sEnergetico < 1) {
+                        fStatusIcono = '<i class="fad fa-exclamation-circle has-text-info fa-lg"></i>';
+                    } else {
+                        fStatusIcono = '';
+                    }
+
+                    if (status == "PENDIENTE") {
+                        restaurarIcono = '';
+                    } else {
+                        restaurarIcono = `<i class="fas fa-redo fa-lg has-text-danger" onclick="actualizarEnergetico(${id}, 'status', 'SOLUCIONADO')"></i>`;
+                    }
+
                     if (status == "PENDIENTE") {
                         estiloStatus = "is-danger";
                         fStatus = `onclick="toggleModalBulma('modalStatusEnergeticos'); obtenerStatusEnergetico(${id});"`;
-                        fStatusIcono = ` 
-                            <p class="t-normal">
-                            <i class="fad fa-exclamation-circle has-text-info fa-"></i>
-                            </p>
-                        `;
                         fResponsable = `onclick="obtenerResponsablesEnergeticos(${id})"`;
                         fAdjuntos = `onclick="obtenerAdjuntosEnergeticos(${id})"`;
                         fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
                     } else {
                         estiloStatus = "is-success";
                         fStatus = '';
-                        fStatusIcono = `<p class="t-solucionado" onclick="actualizarEnergetico(${id}, 'status', 'SOLUCIONADO')">Restaurar</p>`;
                         fResponsable = '';
                         fAdjuntos = `onclick="obtenerAdjuntosEnergeticos(${id})"`;
                         fComentarios = `onclick="obtenerComentariosEnergeticos(${id})"`;
                     }
 
                     const codigo = `
-                        <div id="energetico_${id}" class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
+                        <div id="energetico_${id}" class="columns is-gapless my-2 is-mobile hvr-grow-sm manita mx-2">
                             <div class="column is-half">
                                 <div class="columns">
                                     <div class="column">
@@ -1193,7 +1216,12 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
                                     </div>
 
                                     <div class="column" ${fStatus}>
-                                       ${fStatusIcono}
+                                        <p class="t-normal">
+                                            ${fStatusIcono}
+                                            ${iconoEnergetico}
+                                            ${iconoDepartamento}
+                                            ${restaurarIcono}
+                                        </p>
                                     </div>
 
                                 </div>
@@ -1215,6 +1243,7 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
             }
         },
         error: function (e) {
+            console.log(e);
             contenedor.innerHTML = '';
             document.getElementById("textSeccionEnergeticos").innerHTML = '';
             document.getElementById("textSubseccionEnergeticos").innerHTML = '';
@@ -1604,7 +1633,6 @@ function obtenerStatusEnergetico(idEnergetico) {
 // ACTUALIZAR INFORMACIÓN DE ENERGETICO
 function actualizarEnergetico(idEnergetico, columna) {
     console.log(idEnergetico, columna);
-    let idDestino = localStorage.getItem('idDestino');
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let cod2bend = document.getElementById("inputCod2bendEnergetico").value;

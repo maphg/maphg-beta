@@ -4086,8 +4086,20 @@ if (isset($_POST['action'])) {
         $array['subseccion'][0] = $subseccion;
 
         // INICIALIZA EL ARRAY, PARA EVITAR ERROR
-        $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.fecha_creacion, t_energeticos.status, t_colaboradores.nombre, t_colaboradores.apellido 
-        FROM t_energeticos 
+        $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.fecha_creacion,t_energeticos.status, t_colaboradores.nombre, t_colaboradores.apellido,
+        t_energeticos.status_material,
+        t_energeticos.status_trabajare,
+        t_energeticos.status_urgente,
+        t_energeticos.departamento_calidad,
+        t_energeticos.departamento_compras,
+        t_energeticos.departamento_direccion,
+        t_energeticos.departamento_finanzas,
+        t_energeticos.departamento_rrhh,
+        t_energeticos.energetico_electricidad,
+        t_energeticos.energetico_agua,
+        t_energeticos.energetico_diesel,
+        t_energeticos.energetico_gas
+        FROM t_energeticos
         LEFT JOIN t_users ON t_energeticos.responsable = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_energeticos.activo = 1 and t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion $filtroStatus $filtroDestino ORDER BY t_energeticos.id DESC";
@@ -4099,6 +4111,12 @@ if (isset($_POST['action'])) {
                 $nombre = $x['nombre'];
                 $fecha = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
                 $status = $x['status'];
+
+                // STATUS ENERGETICO
+                $sEnergetico = intval($x["energetico_electricidad"]) + intval($x["energetico_agua"]) + intval($x["energetico_diesel"]) + intval($x["energetico_gas"]);
+
+                // STATUS DEPARTAMENTO
+                $sDepartamento = intval($x["departamento_calidad"]) + intval($x["departamento_compras"]) + intval($x["departamento_direccion"]) + intval($x["departamento_finanzas"]) + intval($x["departamento_rrhh"]);
 
                 // ADJUNTOS
                 $totalAdjuntos = 0;
@@ -4134,7 +4152,9 @@ if (isset($_POST['action'])) {
                         "adjuntos" => $totalAdjuntos,
                         "comentarios" => $totalComentarios,
                         "status" => $status,
-                        "nombre" => $nombre
+                        "nombre" => $nombre,
+                        "sEnergetico" => $sEnergetico,
+                        "sDepartamento" => $sDepartamento
                     );
             }
         }
