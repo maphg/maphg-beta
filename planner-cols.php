@@ -1243,23 +1243,23 @@
 
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
-    <div id="modalTest" class="modal">
+    <div id="modalTestEquipo" class="modal">
         <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background:#DBEAFE; min-height: 60vh;">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalTest')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalTestEquipo')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div id="" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs bg-indigo-400">
-                    <h1 id="" class="font-medium text-base"></h1>
+                <div id="estiloSeccionTest" class="">
+                    <h1 id="seccionTest" class="font-bold text-black"></h1>
                 </div>
                 <div id="" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
-                    <h1 id="">. . .</h1>
+                    <h1 id="equipoTest"> </h1>
                 </div>
             </div>
 
@@ -1294,11 +1294,11 @@
             </div>
 
             <!-- CONTENIDO TAREAS FALLAS -->
-            <div id="pendientesFallasTareas" class="p-2 flex justify-center items-center flex-col w-full">
+            <div id="" class="p-2 flex justify-center items-center flex-col w-full">
 
                 <div class="overflow-x-auto scrollbar">
                     <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
-                        <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                        <table id="tablaTestEquipo" class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
                             <thead>
                                 <tr class="cursor-pointer bg-white">
 
@@ -1329,7 +1329,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="dataTest" class="bg-white divide-y divide-gray-200">
+                            <tbody id="dataTestEquipo" class="bg-white divide-y divide-gray-200">
                                 <!-- More rows... -->
                             </tbody>
 
@@ -1339,6 +1339,7 @@
 
             </div>
             <!-- CONTENIDO TAREAS FALLAS -->
+
         </div>
 
     </div>
@@ -2852,23 +2853,22 @@
             <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
                 <h1 class="mb-2 self-start">Equipo afectado:</h1>
                 <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
-                    <h1 id="nombreEquipoTest">Bomba de Agua</h1>
+                    <h1 id="nombreEquipoTest"></h1>
                 </div>
-                <h1 class="self-start mb-2">Descripción:</h1>
+                <h1 class="self-start mb-2">Descripción del Test:</h1>
 
                 <input id="descripcionTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
 
                 <div class="w-full py-3">
                     <h1 class="self-start mb-2">Test:</h1>
                     <div class="mt-1 relative rounded-md shadow-sm">
-                        <input type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01">
-                        
+                        <input id="valorTest" type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01">
+
                         <div class="absolute inset-y-0 right-0 flex items-center">
-                            <select id="Currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3">
-                                <option>Seleccione Tipo Medición</option>
-                                <option>VOLTAJE</option>
-                                <option>HMS</option>
-                                <option>KWdfdfgf</option>
+                            <select id="medidaTest" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3">
+                                <option value="1">Seleccione Tipo Medición</option>
+                                <option value="2">VOLTAJE</option>
+                                <option value="3">HMS</option>
                             </select>
                         </div>
                     </div>
@@ -2877,14 +2877,17 @@
                 <div class="flex w-full items-center justify-center">
 
                     <div class="w-1/2 flex flex-col pr-4">
-                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
-                        <input id="inputRangoFechaTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="---">
+                        <h1 class="self-start mb-2">
+                            Fecha inicio y Fecha tentativa de finalización:
+                        </h1>
+                        <input id="inputRangoFechaTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="DD/MM/AAAA - DD/MM/AAAA">
                     </div>
 
                     <div class="w-1/2 flex flex-col pl-4">
                         <h1 class="self-start mb-2">Responsable:</h1>
                         <div class="relative">
                             <select id="responsableTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                                <option value="0">Seleccion Responsable</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

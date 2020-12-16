@@ -962,5 +962,141 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
+    // OBTIENE IDEQUIPO, EQUIPO, DESTINO, SECCION Y SUBSECCION, POR ID DE EQUIPO
+    if ($action == "obtenerEDSS") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo 
+        FROM t_equipos_america
+        INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        WHERE t_equipos_america.id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipoX = $x['id'];
+                $equipo = $x['equipo'];
+                $seccion = $x['seccion'];
+                $subseccion = $x['grupo'];
+
+                $array =
+                    array(
+                        "idEquipo" => $idEquipoX,
+                        "equipo" => $equipo,
+                        "seccion" => $seccion,
+                        "subseccion" => $subseccion
+                    );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENE LOS TESTE DE EQUIPOS
+    if ($action == "obtenerTestEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT t_test_equipos.id, t_test_equipos.test, t_test_equipos.rango_fecha, t_test_equipos.responsable, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_test_equipos 
+        INNER JOIN t_users ON t_test_equipos.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_test_equipos.id_equipo = $idEquipo ORDER BY t_test_equipos.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTest = intval($x['id']);
+                $test = $x['test'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $rangoFecha = $x['rango_fecha'];
+                $responsable = intval($x['responsable']);
+
+                #RESPONSABLE
+                if ($responsable > 0) {
+                    $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $responsable";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $responsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                        }
+                    }
+                } else {
+                    $responsable = "";
+                }
+
+                #ADJUNTOS
+                $totalAdjuntos = 0;
+
+                #COMENTARIOS
+                $totalComentarios = 0;
+
+                #RANGO FECHA
+                $fechaInicio = "";
+                $fechaFin = "";
+
+                $array['test'][] =
+                    array(
+                        "idTest" => $idTest,
+                        "test" => $test,
+                        "creadoPor" => $creadoPor,
+                        "rangoFecha" => $rangoFecha,
+                        "fechaInicio" => $fechaInicio,
+                        "fechaFin" => $fechaFin,
+                        "responsable" => $responsable,
+                        "adjuntos" => intval($totalAdjuntos),
+                        "comentarios" => intval($totalComentarios)
+                    );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // AGREGAR TEST POR EQUIPO
+    if ($action == "agregarTestEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $test = $_GET['test'];
+        $valor = $_GET['valor'];
+        $idMedida = $_GET['idMedida'];
+        $rangoFecha = $_GET['rangoFecha'];
+        $responsable = $_GET['responsable'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_test_equipos(id_destino, id_equipo, test, valor, id_unidad_medida, fecha_creado, rango_fecha, creado_por, responsable, activo) VALUES($idDestino, $idEquipo, '$test', '$valor', $idMedida, '$fechaActual', '$rangoFecha', $idDestino, $responsable, 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTIENE USUARIOS SEGÚN DESTINO
+    if ($action == "obtenerUsuarios") {
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_users.id_destino = $idDestino";
+        }
+
+        $query = "
+        SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.status = 'A' $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuario = $x['id'];
+                $nombre = $x['nombre'];
+                $apellido = $x['apellido'];
+            }
+        }
+        echo json_encode($array);
+    }
+
     // CIERRE FINAL
 }

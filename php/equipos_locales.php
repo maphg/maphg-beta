@@ -179,6 +179,15 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #TEST
+                $query = "SELECT count(id) FROM t_test_equipos 
+                WHERE id_equipo = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $testR = $x['count(id)'];
+                    }
+                }
+
                 #PREVENTIVOS TEST SOLUCIONADOS POR EQUIPO
                 $ultimoTestFecha = 0;
                 $ultimoTestSemana = 0;
@@ -198,6 +207,7 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #DESPIECE 
                 $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
                 $totalDespiece = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
@@ -205,6 +215,8 @@ if (isset($_GET['action'])) {
                         $totalDespiece = $x['count(id)'];
                     }
                 }
+
+
 
                 $arrayTemp = array(
                     "filaNumero" => intval($contador),
@@ -242,7 +254,7 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
         $contador = 0;
-        
+
         $query = "SELECT id, equipo, local_equipo, status
         FROM t_equipos_america
         WHERE id_equipo_principal = $idEquipo and jerarquia = 'SECUNDARIO' and activo = 1";

@@ -5077,7 +5077,7 @@ const dataEquiposAmerica = params => {
    var fAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
    var fInfo = `onclick="informacionEquipo(${idEquipo});"`;
    var fCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
-   var fTest = `onclick="toggleModalTailwind('modalTest');"`;
+   var fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
 
    return `
         <tr id="${idEquipo}EquipoAmerica" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
@@ -5280,6 +5280,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+   let contenedor = document.getElementById("contenedorEquiposAmerica");
 
    document.getElementById("seccionSubseccionDestinoEquiposAmerica").
       innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
@@ -5296,7 +5297,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         document.getElementById("contenedorEquiposAmerica").innerHTML = '';
+         contenedor.innerHTML = '';
          if (array.length > 0) {
             for (let x = 0; x < array.length; x++) {
                const idEquipo = array[x].idEquipo;
@@ -5345,8 +5346,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                   totalDespiece: totalDespiece
                });
 
-               document.getElementById("contenedorEquiposAmerica").
-                  insertAdjacentHTML('beforeend', data);
+               contenedor.insertAdjacentHTML('beforeend', data);
             }
          } else {
             alertaImg('Sin Equipos/Locales', '', 'info', 1200);
@@ -5369,6 +5369,8 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
       })
       .catch(function (err) {
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
+         contenedor.innerHTML = '';
+         alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1200);
          fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
       });
 }
@@ -5660,6 +5662,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 }
 
 
+// OBTIENE LOS PENDIENTES DE LOS USUARIOS EN LAS COLUMNAS PRINCIPALES DE PLANNER
 function obtenerPendientesUsuario() {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -5729,24 +5732,156 @@ function obtenerPendientesUsuario() {
 }
 
 
-
-// FUNCION PARA AGREGAR TEST DE EQUIPO
-function agregarTest() {
-   document.getElementById("modalAgregarTest").classList.add('open');
+// FUNCION PARA AGREGAR TEST A EQUIPO
+function obtenerTestEquipo(idEquipo) {
+   localStorage.setItem('idEquipo', idEquipo);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
-   const action = "";
-   const URL = "";
+   const action = "obtenerTestEquipo";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
 
+   // CONTENEDORES PRINCIPALES
+   let estiloSeccion = document.getElementById("estiloSeccionTest");
+   let seccion = document.getElementById("seccionTest");
+   let equipo = document.getElementById("equipoTest");
+   let equipoAfectado = document.getElementById("nombreEquipoTest");
+   let contenedor = document.getElementById("dataTestEquipo");
+
+   document.getElementById("btnAgregarTest").setAttribute('onclick', 'agregarTestEquipo();');
+
+   // LIMPIA CONTENEDORES
+   estiloSeccion.className = '';
+   seccion.innerText = '';
+   equipo.innerText = '';
+   equipoAfectado.innerText = '';
+
+   fetch(`php/select_REST_planner.php?action=obtenerEDSS&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            seccion.innerText = array.seccion;
+            equipo.innerText = array.equipo;
+            let seccionClass = array.seccion.toLowerCase();
+            estiloSeccion.className = seccionClass + '-logo-modal flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs bg-indigo-400';
+            equipoAfectado.innerText = array.equipo;
+         }
+
+         fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+               contenedor.innerHTML = '';
+               console.log(array)
+               if (array.test.length > 0) {
+                  for (let x = 0; x < array.test.length; x++) {
+                     const idTest = array.test[x].idTest;
+                     const test = array.test[x].test;
+                     const creadoPor = array.test[x].creadoPor;
+                     const responsable = array.test[x].responsable;
+                     const fechaInicio = array.test[x].fechaInicio;
+                     const fechaFin = array.test[x].fechaFin;
+                     const adjuntos = array.test[x].adjuntos;
+                     const comentarios = array.test[x].comentarios;
+
+                     fComentarios = `onclick="toggleModalTailwind('modalComentarios')"`;
+                     fAdjuntos = `onclick="toggleModalTailwind('modalMedia')"`;
+                     fResponsables = `onclick="toggleModalTailwind('modalUsuarios')"`;
+
+                     const codigo = `
+                     
+                        <tr id="test_${idTest}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
+           
+                           <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
+                                 <div class="font-semibold uppercase leading-4" data-title="${test}">
+                                    <h1 class="truncate">${test}</h1>
+                                 </div>
+                                 <div class="text-gray-500 leading-3 flex">
+                                    <h1>Creado por: ${creadoPor}</h1>
+                                 </div>
+                              </td>
+
+                              <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+                                 <h1>12.1 VOLTS</h1>
+                              </td>
+                              
+                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsables}>
+                                 <h1>${responsable}</h1>
+                              </td>
+
+                              <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                                 <div class="leading-4">${fechaInicio}</div>
+                                 <div class="leading-3">${fechaFin}</div>
+                              </td>
+
+                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
+                                 <h1>${comentarios}</h1>
+                              </td>
+
+                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+                                 <h1>${adjuntos}</h1>
+                              </td>
+
+                              <td class="hidden whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                                 <h1><i class="fad fa-minus text-xl text-red-400"></i></h1>
+                              </td>
+
+                         </tr>
+                     `;
+                     contenedor.insertAdjacentHTML('beforeend', codigo);
+                  }
+               }
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + `1 agregarTestEquipo(${idEquipo})`);
+               contenedor.innerHTML = '';
+            })
+
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + `2 agregarTestEquipo(${idEquipo})`);
+         contenedor.innerHTML = '';
+      })
+}
+
+
+// EVENTO PARA BUSCAR EN LA TABLA DE TEST DE EQUIPO
+document.getElementById("palabraTest").addEventListener('keyup', function () {
+   buscadorTabla('dataTestEquipo', 'palabraTest', 0);
+});
+
+// FUNCION PARA AGREGAR TEST DE EQUIPO
+function agregarTestEquipo() {
+   document.getElementById("modalAgregarTest").classList.add('open');
+   let idDestino = localStorage.getItem('idDestino');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let idUsuario = localStorage.getItem('usuario');
+   let idEquipo = localStorage.getItem('idEquipo');
+
+   // VALORES
+   let test = document.getElementById("descripcionTest");
+   let idMedida = document.getElementById("medidaTest");
+   let valor = document.getElementById("valorTest");
+   let rangoFecha = document.getElementById("inputRangoFechaTest");
+   let responsable = document.getElementById("responsableTest");
+
+   const action = "agregarTestEquipo";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&test=${test.value}&idMedida=${idMedida.value}&valor=${valor.value}&rangoFecha=${rangoFecha.value}&responsable=${responsable.value}`;
    console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
          console.log(array)
+         if (array == 1) {
+            obtenerTestEquipo(idEquipo);
+            obtenerEquiposAmerica(idSeccion, idSubseccion);
+            alertaImg('Test Agregado', '', 'success', 1200);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1200);
+
+         }
       })
       .catch(function (err) {
-         fetch(APIERROR + err + 'funcion xx');
+         fetch(APIERROR + err + ' agregarTestEquipo()');
       })
 }
 
