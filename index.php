@@ -1856,7 +1856,7 @@ $tablaRanking .= "</div>";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
 
                             while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and activo=1 and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
+                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status='PENDIENTE' and activo = 1 and id_destino= $id_destino and id_seccion = $id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
                                 $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
                                 $row_cnt = mysqli_num_rows($result_t_mc);
 
