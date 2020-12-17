@@ -3032,17 +3032,17 @@
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
-    <script src="js/sweetalert2@9.js"></script>
+    <!-- <script src="js/sweetalert2@9.js"></script> -->
     <script src="js/alertasSweet.js"></script>
     <script src="js/plannerBetaJS.js"></script>
-    <script src="js/jPages.js"></script>
+    <!-- <script src="js/jPages.js"></script> -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/sorttable.js"></script>
     <!-- Librerias JS -->
 
     <!-- JS para los planes de los equipos -->
-    <script src="js/planes_equipo.js"></script>
+    <script src="js/planes_equipo.js" type="text/javascript"></script>
     <!-- JS para los planes de los equipos -->
 
     <!-- Librerias JS -->
@@ -3054,13 +3054,13 @@
     <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
 
     <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
-    <script src="js/proyectos_planacciones.js"></script>
-    <script src="js/funciones_tablas.js"></script>
-    <script src="js/proyectos_dep.js"></script>
+    <script src="js/proyectos_planacciones.js" type="text/javascript"></script>
+    <script src="js/funciones_tablas.js" type="text/javascript"></script>
+    <script src="js/proyectos_dep.js" type="text/javascript"></script>
     <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
 
     <!-- SEGURIDAD DE SESSION -->
-    <script src="js/seguridad_session.js"></script>
+    <script src="js/seguridad_session.js" type="text/javascript"></script>
     <!-- SEGURIDAD DE SESSION -->
 </body>
 

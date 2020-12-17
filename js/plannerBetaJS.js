@@ -62,13 +62,6 @@ function obtenerDatosUsuario(idDestino) {
 }
 
 
-// Función autoCall.
-(() => {
-   let idDestino = localStorage.getItem("idDestino");
-   obtenerDatosUsuario(idDestino);
-})();
-
-
 // FUNCION PARA ACTUALIZAR RANGO FECHA #rangoFechaX
 $(function () {
    $('input[name="rangoFechaX"]').daterangepicker({
@@ -5947,10 +5940,12 @@ function exportarEquipos(idDestino) {
 }
 
 
-window.onload = function () {
-   obtenerPendientesUsuario();
+window.addEventListener('load', () => {
+   let idDestino = localStorage.getItem("idDestino");
    comprobarSession();
-}
+   obtenerDatosUsuario(idDestino);
+   obtenerPendientesUsuario();
+});
 
 
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
