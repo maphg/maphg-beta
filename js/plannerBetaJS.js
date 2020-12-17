@@ -54,6 +54,10 @@ function obtenerDatosUsuario(idDestino) {
          // alertaImg("Destino: " + data.destino, "", "success", 2000);
          comprobarSession();
       },
+      error: function (err) {
+         comprobarSession();
+         fetch(APIERROR + ' ' + err);
+      }
    });
 }
 
@@ -5771,7 +5775,7 @@ function obtenerTestEquipo(idEquipo) {
             .then(array => {
                contenedor.innerHTML = '';
                console.log(array)
-               if (array.test.length > 0) {
+               if (array.test) {
                   for (let x = 0; x < array.test.length; x++) {
                      const idTest = array.test[x].idTest;
                      const test = array.test[x].test;
@@ -5788,43 +5792,43 @@ function obtenerTestEquipo(idEquipo) {
 
                      const codigo = `
                      
-                        <tr id="test_${idTest}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
+                        <tr id="test_${idTest}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
            
                            <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
-                                 <div class="font-semibold uppercase leading-4" data-title="${test}">
-                                    <h1 class="truncate">${test}</h1>
-                                 </div>
-                                 <div class="text-gray-500 leading-3 flex">
-                                    <h1>Creado por: ${creadoPor}</h1>
-                                 </div>
-                              </td>
+                              <div class="font-semibold uppercase leading-4" data-title="${test}">
+                                 <h1 class="truncate">${test}</h1>
+                              </div>
+                              <div class="text-gray-500 leading-3 flex">
+                                 <h1>Creado por: ${creadoPor}</h1>
+                              </div>
+                           </td>
 
-                              <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                                 <h1>12.1 VOLTS</h1>
-                              </td>
-                              
-                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsables}>
-                                 <h1>${responsable}</h1>
-                              </td>
+                           <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+                              <h1>12.1 VOLTS</h1>
+                           </td>
+                           
+                           <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsables}>
+                              <h1>${responsable}</h1>
+                           </td>
 
-                              <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
-                                 <div class="leading-4">${fechaInicio}</div>
-                                 <div class="leading-3">${fechaFin}</div>
-                              </td>
+                           <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                              <div class="leading-4">${fechaInicio}</div>
+                              <div class="leading-3">${fechaFin}</div>
+                           </td>
 
-                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
-                                 <h1>${comentarios}</h1>
-                              </td>
+                           <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
+                              <h1>${comentarios}</h1>
+                           </td>
 
-                              <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
-                                 <h1>${adjuntos}</h1>
-                              </td>
+                           <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+                              <h1>${adjuntos}</h1>
+                           </td>
 
-                              <td class="hidden whitespace-no-wrap border-b border-gray-200 text-center py-3">
-                                 <h1><i class="fad fa-minus text-xl text-red-400"></i></h1>
-                              </td>
+                           <td class="hidden whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                              <h1><i class="fad fa-minus text-xl text-red-400"></i></h1>
+                           </td>
 
-                         </tr>
+                        </tr>
                      `;
                      contenedor.insertAdjacentHTML('beforeend', codigo);
                   }
@@ -5942,8 +5946,11 @@ function exportarEquipos(idDestino) {
       })
 }
 
-comprobarSession();
-obtenerPendientesUsuario();
+
+window.onload = function () {
+   obtenerPendientesUsuario();
+   comprobarSession();
+}
 
 
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
