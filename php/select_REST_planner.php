@@ -999,18 +999,21 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
 
-        $query = "SELECT t_test_equipos.id, t_test_equipos.test, t_test_equipos.rango_fecha, t_test_equipos.responsable, t_colaboradores.nombre, t_colaboradores.apellido
+        $query = "SELECT t_test_equipos.id, t_test_equipos.test, t_test_equipos.rango_fecha, t_test_equipos.responsable, t_test_equipos.valor, t_colaboradores.nombre, t_colaboradores.apellido, t_unidades_medidas.medida
         FROM t_test_equipos 
         INNER JOIN t_users ON t_test_equipos.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN t_unidades_medidas ON t_test_equipos.id_unidad_medida = t_unidades_medidas.id
         WHERE t_test_equipos.id_equipo = $idEquipo ORDER BY t_test_equipos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTest = intval($x['id']);
                 $test = $x['test'];
+                $valor = $x['valor'];
                 $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                 $rangoFecha = $x['rango_fecha'];
                 $responsable = intval($x['responsable']);
+                $medida = $x['medida'];
 
                 #RESPONSABLE
                 if ($responsable > 0) {
@@ -1046,6 +1049,8 @@ if (isset($_GET['action'])) {
                         "fechaInicio" => $fechaInicio,
                         "fechaFin" => $fechaFin,
                         "responsable" => $responsable,
+                        "valor" =>$valor,
+                        "medida" => $medida,
                         "adjuntos" => intval($totalAdjuntos),
                         "comentarios" => intval($totalComentarios)
                     );
@@ -1083,8 +1088,7 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and t_users.id_destino = $idDestino";
         }
 
-        $query = "
-        SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_users.status = 'A' $filtroDestino";
@@ -1093,6 +1097,31 @@ if (isset($_GET['action'])) {
                 $idUsuario = $x['id'];
                 $nombre = $x['nombre'];
                 $apellido = $x['apellido'];
+
+                $array[] = array(
+                    "idUsuario" => intval($idUsuario),
+                    "nombre" => $nombre,
+                    "apellido" => $apellido
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENES TODAS LOS TIPOS DE MEDIDAS DE LA TABLA t_unidades_medidas
+    if ($action == "obtenerUnidadesMedidas") {
+        $array = array();
+        $query = "SELECT id, medida FROM  t_unidades_medidas WHERE activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idMedida = $x['id'];
+                $medida = $x['medida'];
+
+                $array[] = array(
+                    "idMedida" => intval($idMedida),
+                    "medida" => $medida
+                );
             }
         }
         echo json_encode($array);

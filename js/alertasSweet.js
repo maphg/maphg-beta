@@ -52,12 +52,13 @@ function alertaMSJ(title, msj, icon) {
 
 // Función de StweetAlert, que recibe parametros, e incluye el logo de MAPHG.
 function alertaImg(text, classColorText, icon, timeAlert) {
-    let duration = 10;
+    duration = 4;
     if (timeAlert > 0) {
-        duration = timeAlert / 1010;
+        duration = timeAlert / 1200;
     }
 
-    alertify.set('notifier', 'position', 'top-right', 'delay', duration);
+    alertify.set('notifier', 'position', 'top-right');
+    alertify.set('notifier', 'delay', duration);
 
     if (icon == "success") {
         alertify.success(text);

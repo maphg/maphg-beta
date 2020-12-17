@@ -299,7 +299,7 @@ function botones(idd) {
             break;
       }
    } else {
-      alertaImg("Acceso Denegado: " + nombreCol, "", "info", 1200);
+      alertaImg("Acceso Denegado: " + nombreCol, "", "info", 1500);
    }
 }
 
@@ -1344,7 +1344,7 @@ function agregarMC(idMC) {
                      .classList.remove("open");
                }, 1200);
             } else {
-               alertaImg("Intente de Nuevo", "", "question", 900);
+               alertaImg("Intente de Nuevo", "", "question", 1500);
                datosModalAgregarMC();
             }
          },
@@ -2112,17 +2112,17 @@ function agregarComentarioEquipo(idEquipo) {
          success: function (data) {
             if (data == 1) {
                obtenerComentariosEquipos(idEquipo);
-               alertaImg('Comentario Agregado', '', 'success', 1200);
+               alertaImg('Comentario Agregado', '', 'success', 1500);
                document.getElementById("inputComentario").value = '';
                obtenerEquiposAmerica(idSeccion, idSubseccion);
             } else {
-               alertaImg('Intente de Nuevo', '', 'info', 1200);
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
             }
             document.getElementById("dataComentarios").innerHTML = '';
          }
       })
    } else {
-      alertaImg('Intente de Nuevo', '', 'info', 1200);
+      alertaImg('Intente de Nuevo', '', 'info', 1500);
    }
 }
 
@@ -4090,13 +4090,13 @@ function actualizarActividadOT(idTipo, tipo, columna, idActividad) {
          document.getElementById("tooltipActividadesGeneral").classList.remove('hidden');
 
          if (array == "SOLUCIONADO") {
-            alertaImg('Actividad, Solucionada', '', 'success', 1200);
+            alertaImg('Actividad, Solucionada', '', 'success', 1500);
          } else if (array == "ELIMINADO") {
-            alertaImg('Actividad, Eliminada', '', 'success', 1200);
+            alertaImg('Actividad, Eliminada', '', 'success', 1500);
          } else if (array == "ACTIVIDAD") {
-            alertaImg('Actividad, Actualizada', '', 'success', 1200);
+            alertaImg('Actividad, Actualizada', '', 'success', 1500);
          } else {
-            alertaImg('Intente de Nuevo', '', 'info', 1200);
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
          }
 
          if (tipo == "FALLA") {
@@ -4123,9 +4123,9 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
          .then(array => {
             obtenerActividadesOT(idTipo, tipo);
             if (array == "AGREGADO") {
-               alertaImg('Actividad, Agregada', '', 'success', 1200);
+               alertaImg('Actividad, Agregada', '', 'success', 1500);
             } else {
-               alertaImg('Intente de Nuevo', '', 'info', 1200);
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
             }
          })
          .then(function () {
@@ -4141,14 +4141,14 @@ function agregarActividadOT(idTipo, tipo, columna, idActividad) {
             fetch(APIERROR + err + ': (agregarActividadOT)');
          })
    } else {
-      alertaImg('Actividad NO Valida', '', 'info', 1200);
+      alertaImg('Actividad NO Valida', '', 'info', 1500);
    }
 }
 
 
 // Cierra Sesión
 async function cerrarSession() {
-   alertaImg("Sessión Cerrada", "", "success", 1200);
+   alertaImg("Sessión Cerrada", "", "success", 1500);
    await localStorage.clear();
    await comprobarSession();
 }
@@ -4475,7 +4475,7 @@ function obtenerFallasSolucionados(idEquipo) {
          document.getElementsByClassName("S-SOLUCIONADO")[x].classList.remove('hidden');
       }
    } else {
-      alertaImg('Sin Solucionados', '', 'info', 1200);
+      alertaImg('Sin Solucionados', '', 'info', 1500);
    }
 }
 
@@ -4760,7 +4760,7 @@ function ganttTareas(idEquipo, status) {
                .setAttribute("style", "height:" + size + "px");
 
          } else {
-            alertaImg('No se Encontraron Datos', '', 'info', 1200);
+            alertaImg('No se Encontraron Datos', '', 'info', 1500);
          }
          return array;
       }).then(function (array) {
@@ -4850,7 +4850,7 @@ function ganttFallas(idEquipo, status) {
                .setAttribute("style", "height:" + size + "px");
 
          } else {
-            alertaImg('No se Encontraron Datos', '', 'info', 1200);
+            alertaImg('No se Encontraron Datos', '', 'info', 1500);
          }
          return array;
       }).then(function (array) {
@@ -5081,8 +5081,8 @@ const dataEquiposAmerica = params => {
             
             <td class="px-4 border-b border-gray-200truncate py-2" style="max-width: 360px;"
             ${fInfo}>
-                <div class="font-semibold uppercase text-sm">
-                    <h1>${params.equipo}</h1>
+                <div class="font-semibold uppercase text-sm" data-title="${params.equipo}">
+                    <h1 class="truncate">${params.equipo}</h1>
                 </div>
                 <div class="text-gray-500 leading-none flex text-xxs">
                     ${valorTipoEquipo}
@@ -5090,11 +5090,11 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fFallas}>
-                <div class="font-bold uppercase text-sm text-red-400">
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.fallasP}">
                     <h1>${valorFallasP}</h1>
                 </div>
-                <div class="font-semibold uppercase text-green-400">
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.fallasS}">
                     <h1>${valorFallasS}</h1>
                 </div>
             </td>
@@ -5248,7 +5248,7 @@ function obtenerDespieceEquipo(idEquipo) {
                      insertAdjacentHTML('beforeend', data);
                }
             } else {
-               alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1200);
+               alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1500);
             }
          })
          .then(function () {
@@ -5265,7 +5265,7 @@ function obtenerDespieceEquipo(idEquipo) {
             document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
          })
    } else {
-      alertaImg('Equipo Sin Despiece', '', 'info', 1200);
+      alertaImg('Equipo Sin Despiece', '', 'info', 1500);
    }
 }
 
@@ -5346,7 +5346,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                contenedor.insertAdjacentHTML('beforeend', data);
             }
          } else {
-            alertaImg('Sin Equipos/Locales', '', 'info', 1200);
+            alertaImg('Sin Equipos/Locales', '', 'info', 1500);
          }
       })
       .then(function () {
@@ -5367,7 +5367,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
       .catch(function (err) {
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
          contenedor.innerHTML = '';
-         alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1200);
+         alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1500);
          fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
       });
 }
@@ -5464,7 +5464,7 @@ function reporteEquipos() {
    const URL = `php/exportar_excel_GET.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
    window.location = URL;
    setTimeout(() => {
-      alertaImg('Generando Reporte...', '', 'success', 1200);
+      alertaImg('Generando Reporte...', '', 'success', 1500);
    }, 820);
 }
 
@@ -5476,7 +5476,7 @@ function reporteFallas(idEquipo) {
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
    window.location = URL;
    setTimeout(() => {
-      alertaImg('Generando Reporte...', '', 'success', 1200);
+      alertaImg('Generando Reporte...', '', 'success', 1500);
    }, 820);
 }
 
@@ -5490,7 +5490,7 @@ function reporteTareas(idEquipo) {
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
    window.location = URL;
    setTimeout(() => {
-      alertaImg('Generando Reporte...', '', 'success', 1200);
+      alertaImg('Generando Reporte...', '', 'success', 1500);
    }, 820);
 }
 
@@ -5776,6 +5776,8 @@ function obtenerTestEquipo(idEquipo) {
                      const responsable = array.test[x].responsable;
                      const fechaInicio = array.test[x].fechaInicio;
                      const fechaFin = array.test[x].fechaFin;
+                     const valor = array.test[x].valor;
+                     const medida = array.test[x].medida;
                      const adjuntos = array.test[x].adjuntos;
                      const comentarios = array.test[x].comentarios;
 
@@ -5797,7 +5799,7 @@ function obtenerTestEquipo(idEquipo) {
                            </td>
 
                            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                              <h1>12.1 VOLTS</h1>
+                              <h1>${valor + ' ' + medida}</h1>
                            </td>
                            
                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsables}>
@@ -5845,9 +5847,50 @@ document.getElementById("palabraTest").addEventListener('keyup', function () {
    buscadorTabla('dataTestEquipo', 'palabraTest', 0);
 });
 
+
+// INICIA MODAL PARA AGREGAR TEST
+document.getElementById("agregarTest").addEventListener('click', () => {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   document.getElementById("modalAgregarTest").classList.add('open');
+   let contenedorUsuarios = document.getElementById("responsableTest");
+   let contenedorMedidas = document.getElementById("medidaTest");
+
+   // LIMPIA CONTENEDORES
+   contenedorUsuarios.innerHTML = '<option value="0">Seleccione Responsable</option>';
+   contenedorMedidas.innerHTML = '<option value="0">Seleccione Medición</option>';
+
+   fetch(`php/select_REST_planner.php?action=obtenerUsuarios&idDestino=${idDestino}&idUsuario=${idUsuario}`)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idUsuario = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const codigo = `<option value="${idUsuario}"> ${nombre + ' ' + apellido}</option>`;
+               contenedorUsuarios.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+
+   fetch(`php/select_REST_planner.php?action=obtenerUnidadesMedidas&idDestino=${idDestino}&idUsuario=${idUsuario}`)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idMedida = array[x].idMedida;
+               const medida = array[x].medida;
+               const codigo = `<option value="${idMedida}"> ${medida}</option>`;
+               contenedorMedidas.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+})
+
+
 // FUNCION PARA AGREGAR TEST DE EQUIPO
 function agregarTestEquipo() {
-   document.getElementById("modalAgregarTest").classList.add('open');
    let idDestino = localStorage.getItem('idDestino');
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem('idSubseccion');
@@ -5863,23 +5906,28 @@ function agregarTestEquipo() {
 
    const action = "agregarTestEquipo";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&test=${test.value}&idMedida=${idMedida.value}&valor=${valor.value}&rangoFecha=${rangoFecha.value}&responsable=${responsable.value}`;
-   console.log(URL);
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         console.log(array)
-         if (array == 1) {
-            obtenerTestEquipo(idEquipo);
-            obtenerEquiposAmerica(idSeccion, idSubseccion);
-            alertaImg('Test Agregado', '', 'success', 1200);
-         } else {
-            alertaImg('Intente de Nuevo', '', 'info', 1200);
 
-         }
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err + ' agregarTestEquipo()');
-      })
+   if (test.value.length > 1 && idMedida.value > 0 && valor.value > 0 && rangoFecha.value.length > 22 && responsable.value > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            console.log(array)
+            if (array == 1) {
+               obtenerTestEquipo(idEquipo);
+               obtenerEquiposAmerica(idSeccion, idSubseccion);
+               alertaImg('Test Agregado', '', 'success', 1600);
+               document.getElementById("modalAgregarTest").classList.remove('open');
+
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ' agregarTestEquipo()');
+         })
+   } else {
+      alertaImg('Datos Incorrectos', '', 'info', 1500);
+   }
 }
 
 
@@ -5950,6 +5998,7 @@ window.addEventListener('load', () => {
 
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
 setInterval(function () {
+   alertaImg('Pendientes Actualizados', '', 'success', 500);
    obtenerPendientesUsuario();
    // comprobarSession();
 }, 180000);

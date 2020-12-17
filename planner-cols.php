@@ -1272,7 +1272,7 @@
                     </button>
                 </div>
 
-                <div id="agregarTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200" onclick="abrirmodal('modalAgregarTest');">
+                <div id="agregarTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
                     <i class="fas fa-plus mr-1 text-xs"></i>
                     <h1>Nuevo</h1>
                 </div>
@@ -2862,7 +2862,7 @@
                 <div class="w-full py-3">
                     <h1 class="self-start mb-2">Test:</h1>
                     <div class="mt-1 relative rounded-md shadow-sm">
-                        <input id="valorTest" type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01">
+                        <input id="valorTest" type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01" autocomplete="off">
 
                         <div class="absolute inset-y-0 right-0 flex items-center">
                             <select id="medidaTest" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3">
@@ -2880,7 +2880,7 @@
                         <h1 class="self-start mb-2">
                             Fecha inicio y Fecha tentativa de finalización:
                         </h1>
-                        <input id="inputRangoFechaTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="DD/MM/AAAA - DD/MM/AAAA">
+                        <input id="inputRangoFechaTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="DD/MM/AAAA - DD/MM/AAAA" autocomplete="off">
                     </div>
 
                     <div class="w-1/2 flex flex-col pl-4">
@@ -2899,7 +2899,7 @@
                 </div>
 
                 <h1 class="self-start mb-2">Comentario:</h1>
-                <input id="comentarioTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+                <input id="comentarioTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario (Opcional)" autocomplete="off">
 
                 <button id="btnAgregarTest" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
                     <i class="fas fa-check"></i> Crear
