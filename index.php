@@ -1856,7 +1856,7 @@ $tablaRanking .= "</div>";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
 
                             while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status='PENDIENTE' and activo = 1 and id_destino= $id_destino and id_seccion = $id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
+                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status = 'PENDIENTE' and activo = 1 and id_destino = $id_destino and id_seccion = $id_seccion and id_subseccion = " . $row_subseccion_nombre['id'] . "";
                                 $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
                                 $row_cnt = mysqli_num_rows($result_t_mc);
 
@@ -1880,7 +1880,7 @@ $tablaRanking .= "</div>";
                                 $subseccionX = $row_subsecciones['grupo'];
 
                                 if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total. " </p></div></div></a>";
                                 } else {
                                     echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                                 }
