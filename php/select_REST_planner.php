@@ -1242,5 +1242,21 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
+    // ELIMINAR ADJUNTO
+    if ($action == "eliminarAdjunto") {
+        $idAdjunto = $_GET['idAdjunto'];
+        $tipoAdjunto = $_GET['tipoAdjunto'];
+        $resp = 0;
+
+        if ($tipoAdjunto == "FALLA") {
+            $query = "UPDATE t_mc_adjuntos SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
     // CIERRE FINAL
 }

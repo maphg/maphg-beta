@@ -3193,7 +3193,7 @@ if (isset($_POST['action'])) {
 
         // Genera lista ID de Fallas.
         $query = "SELECT id FROM t_mc WHERE activo = 1 and (status = 'N' or status = 'PENDIENTE') $filtroTipoF";
-        $data["query1"] = $query; 
+        $data["query1"] = $query;
         if ($result = mysqli_query($conn_2020, $query)) {
             $totalResultados = mysqli_num_rows($result);
             $contador = 0;
@@ -3213,7 +3213,7 @@ if (isset($_POST['action'])) {
         // Genera lista ID Tareas
         $queryT = "SELECT t_mp_np.id FROM t_mp_np 
         LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P' OR t_mp_np.status = 'PENDIENTE') $filtroTipoT";
-        $data["query2"] = $queryT; 
+        $data["query2"] = $queryT;
         if ($resultT = mysqli_query($conn_2020, $queryT)) {
             $contador = 0;
             foreach ($resultT as $value) {
@@ -4548,6 +4548,7 @@ if (isset($_POST['action'])) {
         if ($resultAdjuntos = mysqli_query($conn_2020, $queryAdjuntos)) {
 
             foreach ($resultAdjuntos as $value) {
+                $idAdjunto = $value['id'];
                 $url = $value['url_adjunto'];
 
                 if (file_exists("../planner/tareas/adjuntos/$url")) {
@@ -4560,33 +4561,57 @@ if (isset($_POST['action'])) {
 
                 // Admite solo Imagenes.
                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
+
                     if (strpbrk($adjuntoURL, ' ')) {
                         $dataImagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
-                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                            <div id=\"adjunto_img_$idAdjunto\" class=\"relative\">
+
+                                <a href=\"$adjuntoURL\" target=\"_blank\" data-title=\"Clic para Abrir\">
+                                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md op2\">
+                                        <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+
+                                <div class=\"w-full absolute text-transparent hover:text-red-700\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'FALLA');\">
+                                    <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
                                 </div>
-                            </a>
+
+                            </div>
                         ";
                     } else {
                         $dataImagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                                <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                            <div id=\"adjunto_img_$idAdjunto\" class=\"relative\">
+
+                                <a href=\"$adjuntoURL\" target=\"_blank\" data-title=\"Clic para Abrir\">
+                                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                    </div>
+                                </a>
+
+                                <div class=\"w-full absolute text-transparent hover:text-red-700\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'FALLA');\">
+                                    <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
                                 </div>
-                            </a>
+
+                            </div>
                         ";
                     }
 
                     // Admite todo, menos lo anterior.
                 } else {
                     $dataAdjunto .= "
-                        <a href=\"$adjuntoURL\" target=\"_blank\">
-                            <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
-                                <i class=\"fad fa-file-alt fa-3x\"></i>
-                                <p class=\"text-sm font-normal ml-2\">$url
-                                </p>
+                        <div id=\"adjunto_img_$idAdjunto\" class=\"relative\">
+                           
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
+                                    <i class=\"fad fa-file-alt fa-3x\"></i>
+                                    <p class=\"text-sm font-normal ml-2\">$url
+                                    </p>
+                                </div>
+                            </a>     
+                            
+                            <div class=\"absolute text-red-700\" style=\"bottom: 22px; right: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'FALLA');\">
+                                <i class=\"fas fa-trash-alt fa-2x\"></i>
                             </div>
-                        </a>                    
+                        </div>
                     ";
                 }
             }
@@ -5432,10 +5457,16 @@ if (isset($_POST['action'])) {
                 // Admite solo Imagenes.
                 if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                     $dataImagenes .= "
-                    <a href=\"$adjuntoURL\" target=\"_blank\">
-                    <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
-                    </div>
-                    </a>
+                        <div id=\"adjunto_img_$idAdjunto\" class=\"relative\">
+                            <a href=\"$adjuntoURL\" target=\"_blank\">
+                                <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
+                                </div>
+                            </a>
+  <div class=\"w-full absolute text-transparent hover:text-red-700\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'FALLA');\">
+                                    <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
+                                </div>
+
+                        </div>
                     ";
 
                     // Admite todo, menos lo anterior.
@@ -6817,25 +6848,24 @@ if (isset($_POST['action'])) {
 
                     //ACTIVIDADES PLANACCION 
                     $queryPlanaccion = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos_planaccion.responsable, t_proyectos_planaccion.fecha_creacion,
-                t_proyectos_planaccion.status_urgente,
-                t_proyectos_planaccion.status_material,
-                t_proyectos_planaccion.status_trabajando,
-                t_proyectos_planaccion.energetico_electricidad,
-                t_proyectos_planaccion.energetico_agua,
-                t_proyectos_planaccion.energetico_diesel,
-                t_proyectos_planaccion.energetico_gas,
-                t_proyectos_planaccion.departamento_calidad,
-                t_proyectos_planaccion.departamento_compras,
-                t_proyectos_planaccion.departamento_direccion,
-                t_proyectos_planaccion.departamento_finanzas,
-                t_proyectos_planaccion.departamento_rrhh,
-                t_proyectos_planaccion.coste
-                FROM t_proyectos_planaccion
-                INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_proyectos_planaccion.activo = 1 AND t_proyectos_planaccion.id_proyecto = $idProyecto
-                ORDER BY t_proyectos_planaccion.id DESC
-                ";
+                    t_proyectos_planaccion.status_urgente,
+                    t_proyectos_planaccion.status_material,
+                    t_proyectos_planaccion.status_trabajando,
+                    t_proyectos_planaccion.energetico_electricidad,
+                    t_proyectos_planaccion.energetico_agua,
+                    t_proyectos_planaccion.energetico_diesel,
+                    t_proyectos_planaccion.energetico_gas,
+                    t_proyectos_planaccion.departamento_calidad,
+                    t_proyectos_planaccion.departamento_compras,
+                    t_proyectos_planaccion.departamento_direccion,
+                    t_proyectos_planaccion.departamento_finanzas,
+                    t_proyectos_planaccion.departamento_rrhh,
+                    t_proyectos_planaccion.coste
+                    FROM t_proyectos_planaccion
+                    INNER JOIN t_users ON t_proyectos_planaccion.creado_por = t_users.id
+                    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                    WHERE t_proyectos_planaccion.activo = 1 and t_proyectos_planaccion.id_proyecto = $idProyecto
+                    ORDER BY t_proyectos_planaccion.id DESC";
                     if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
                         foreach ($resultPlanaccion as $value) {
                             $idPlanaccion = $value['id'];
@@ -7815,14 +7845,14 @@ if (isset($_POST['action'])) {
         $data['documento'] = $documento;
 
         if ($tabla == "t_proyectos_adjuntos") {
+
             $query = "SELECT t_proyectos_adjuntos.id, t_proyectos_adjuntos.url_adjunto, 
             t_colaboradores.nombre, t_colaboradores.apellido
             FROM t_proyectos_adjuntos 
             LEFT JOIN t_users ON t_proyectos_adjuntos.subido_por = t_users.id 
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE id_proyecto = $idTabla AND t_proyectos_adjuntos.status = 1
-            ORDER BY t_proyectos_adjuntos.fecha DESC
-            ";
+            ORDER BY t_proyectos_adjuntos.fecha DESC";
 
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
@@ -9573,6 +9603,7 @@ if (isset($_POST['action'])) {
         }
     }
 
+
     if ($action == "programarMP") {
         $idEquipo = $_POST['idEquipo'];
         $idSemana = $_POST['idSemana'];
@@ -9927,6 +9958,7 @@ if (isset($_POST['action'])) {
         $data['totalActividades'] = $contador;
         echo json_encode($data);
     }
+
 
     if ($action == "consultarOpcionesEquipo") {
         $data = array();

@@ -6132,6 +6132,44 @@ function agregarAdjuntoTest(idTest) {
 }
 
 
+// ELIMINAR ADJUNTOS
+// 
+function eliminarAdjunto(idAdjunto, tipoAdjunto) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idEquipo = localStorage.getItem('idEquipo');
+   
+   const action = 'eliminarAdjunto';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array == 1) {
+            alertaImg('Adjunto Eliminado', '', 'success', 1500);
+
+            if (document.getElementById("adjunto_img_" + idAdjunto)) {
+               document.getElementById("adjunto_img_" + idAdjunto).innerHTML = '';
+            } else {
+               alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+            }
+
+            // ACTUALIZA DATOS
+            if (tipoAdjunto == "FALLA") {
+               obtenerFallas(idEquipo);
+            }
+
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ` eliminarAdjuntos(${idAdjunto}, ${tipoAdjunto})`);
+      })
+}
+
+
 // TRANFIERE EQUIPOS DE LA TABLA T_EQUIPOS -> T_EQUIPOS_AMERICA, POR DESTINO
 function exportarEquipos(idDestino) {
    let idUsuario = localStorage.getItem('usuario');
