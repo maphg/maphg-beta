@@ -638,7 +638,7 @@ if (isset($_GET['action'])) {
             $filtroCargo = "";
         }
 
-        $query = "SELECT id, cargo, status FROM c_cargos $filtroCargo ORDER BY id DESC";
+        $query = "SELECT id, cargo, status FROM c_cargos $filtroCargo ORDER BY cargo DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idCargo = $x["id"];
