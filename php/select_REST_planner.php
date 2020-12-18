@@ -1254,6 +1254,26 @@ if (isset($_GET['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
+        } elseif ($tipoAdjunto == "TAREA") {
+            $query = "UPDATE adjuntos_mp_np SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "PLANACCION") {
+            $query = "UPDATE t_proyectos_planaccion_adjuntos SET status = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "JUSTIFICACIONPROYECTO") {
+            $query = "UPDATE t_proyectos_justificaciones SET status = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "COTIZACIONPROYECTO") {
+            $query = "UPDATE t_proyectos_adjuntos SET status = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
         }
         echo json_encode($resp);
     }

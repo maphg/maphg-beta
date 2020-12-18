@@ -6138,6 +6138,8 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let idEquipo = localStorage.getItem('idEquipo');
+   let idProyecto = localStorage.getItem('idProyecto');
+   let idSeccion = localStorage.getItem('idSeccion');
    
    const action = 'eliminarAdjunto';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
@@ -6149,8 +6151,9 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
          if (array == 1) {
             alertaImg('Adjunto Eliminado', '', 'success', 1500);
 
-            if (document.getElementById("adjunto_img_" + idAdjunto)) {
-               document.getElementById("adjunto_img_" + idAdjunto).innerHTML = '';
+            // ELIMINA ADJUNTO DEL CONTENEDOR
+            if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
+               document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
             } else {
                alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
             }
@@ -6158,6 +6161,12 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
             // ACTUALIZA DATOS
             if (tipoAdjunto == "FALLA") {
                obtenerFallas(idEquipo);
+            } else if (tipoAdjunto == "TAREA") {
+               obtenerTareas(idEquipo);
+            } else if (tipoAdjunto == "PLANACCION") {
+               obtenerPlanaccion(idProyecto);
+            } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
+               obtenerProyectos(idSeccion, 'PENDIENTE');
             }
 
          } else {
