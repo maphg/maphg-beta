@@ -2238,9 +2238,9 @@
                 </div>
             </div>
             <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6 relative">
 
-                <div class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="max-height: 50vh;">
+                <div id="scrollDataComentarios" class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="max-height: 50vh;">
                     <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
@@ -3024,6 +3024,10 @@
 
 
     <!-- ***** TOOLTIPS ***** -->
+
+    <!-- SCRIPT PARA SORTABLE: SIRVE PARA MOVER ELEMENTOS) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- SCRIPT PARA SORTABLE: SIRVE PARA MOVER ELEMENTOS) -->
 
     <!-- Librerias JS -->
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>

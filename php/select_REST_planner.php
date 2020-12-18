@@ -1032,9 +1032,21 @@ if (isset($_GET['action'])) {
 
                 #ADJUNTOS
                 $totalAdjuntos = 0;
+                $query = "SELECT count(id) FROM t_test_equipos_adjuntos WHERE id_test = $idTest and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
 
                 #COMENTARIOS
                 $totalComentarios = 0;
+                $query = "SELECT count(id) FROM t_test_equipos_comentarios WHERE id_test = $idTest and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
 
                 #RANGO FECHA
                 $fechaInicio = "";
@@ -1042,14 +1054,14 @@ if (isset($_GET['action'])) {
 
                 $array['test'][] =
                     array(
-                        "idTest" => $idTest,
+                        "idTest" => intval($idTest),
                         "test" => $test,
                         "creadoPor" => $creadoPor,
                         "rangoFecha" => $rangoFecha,
                         "fechaInicio" => $fechaInicio,
                         "fechaFin" => $fechaFin,
                         "responsable" => $responsable,
-                        "valor" =>$valor,
+                        "valor" => $valor,
                         "medida" => $medida,
                         "adjuntos" => intval($totalAdjuntos),
                         "comentarios" => intval($totalComentarios)
@@ -1125,6 +1137,109 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($array);
+    }
+
+
+    // OBTIENE TODOS LOS COMENTARIOS DEL TEST SELECCIONADO
+    if ($action == "obtenerComentariosTest") {
+        $idTest = $_GET['idTest'];
+        $array = array();
+
+        $query = "SELECT t_test_equipos_comentarios.id, t_test_equipos_comentarios.comentario, t_test_equipos_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+        FROM t_test_equipos_comentarios
+        INNER JOIN t_users ON t_test_equipos_comentarios.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_test_equipos_comentarios.id_test = $idTest
+        ORDER BY t_test_equipos_comentarios.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idComentario = $x['id'];
+                $comentario = $x['comentario'];
+                $fecha = $x['fecha'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+
+                $array[] = array(
+                    "idComentario" => intval($idComentario),
+                    "comentario" => $comentario,
+                    "fecha" => $fecha,
+                    "creadoPor" => $creadoPor
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    // AGREGA COMENTAIOS A LOS TEST
+    if ($action == "agregarComentariosTest") {
+        $idTest = $_GET["idTest"];
+        $comentario = $_GET["comentario"];
+        $resp = 0;
+
+        $query = "INSERT INTO t_test_equipos_comentarios(id_test, comentario, creado_por, fecha,activo) VALUES ($idTest, '$comentario', $idUsuario, '$fechaActual', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTENER ADJUNTOS TEST
+    if ($action == "obtenerAdjuntosTest") {
+        $idTest = $_GET["idTest"];
+        $array = array();
+
+        $query = "SELECT t_test_equipos_adjuntos.id, t_test_equipos_adjuntos.url_adjunto, t_test_equipos_adjuntos.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_test_equipos_adjuntos 
+        INNER JOIN t_users ON t_test_equipos_adjuntos.subido_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_test_equipos_adjuntos.id_test = $idTest and t_test_equipos_adjuntos.activo = 1 ORDER BY t_test_equipos_adjuntos.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idAdjunto = $x['id'];
+                $url = $x['url_adjunto'];
+                $fecha = $x['fecha'];
+                $subidoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $extension = pathinfo($url, PATHINFO_EXTENSION);
+
+                if ($extension === "jpg" || $extension === "jpeg" || $extension === "png" || $extension === "JPG" || $extension === "JPEG" || $extension === "PNG") {
+                    $array['imagenes'][] = array(
+                        "idAdjunto" => $idAdjunto,
+                        "url" => $url,
+                        "fecha" => $fecha,
+                        "subidoPor" => $subidoPor,
+                        "tipo" => "imagenes"
+                    );
+                } else {
+                    $array['documentos'][] = array(
+                        "idAdjunto" => $idAdjunto,
+                        "url" => $url,
+                        "fecha" => $fecha,
+                        "subidoPor" => $subidoPor,
+                        "tipo" => "documentos"
+                    );
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "agregarAdjuntoTest") {
+        $idTest = $_GET['idTest'];
+        $resp = 0;
+
+        // VARIABLES DEL ADJUNTO
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+        $nombre = 'TEST_ID_' . $idTest . '_' . rand(50, 1500) . '.' . $extension;
+
+        if (move_uploaded_file($rutaTemporal, '../planner/test/' . $nombre)) {
+            $query = "INSERT INTO t_test_equipos_adjuntos(id_test, url_adjunto, subido_por, fecha, activo) VALUES($idTest, '$nombre', $idUsuario, '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
     }
 
     // CIERRE FINAL

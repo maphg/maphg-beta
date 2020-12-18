@@ -6,6 +6,9 @@ let idDestino = localStorage.getItem("idDestino");
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
+// ICONO LOADER
+const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+
 // Función principal.
 function comprobarSession() {
    let idUsuario = localStorage.getItem("usuario");
@@ -628,8 +631,7 @@ function pendientesSubsecciones(
 ) {
    document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = "";
    document.getElementById("modalPendientes").classList.add("open");
-   document.getElementById("estiloSeccion").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("estiloSeccion").innerHTML = iconoLoader;
    // document.getElementById("modalTituloSeccion").innerHTML = nombreSeccion;
    document.getElementById("dataSubseccionesPendientes").innerHTML =
       "Obteniendo Datos...";
@@ -1013,7 +1015,7 @@ function obtenerEquipos(idUsuario, idDestino, idSeccion, idSubseccion, rangoInic
 
    document.getElementById("dataEquipos").innerHTML = "";
    document.getElementById("seccionEquipos").innerHTML =
-      '<i class="fas fa-spinner fa-pulse fa-2x fa-fw" ></i > ';
+      '<i class="fas fa-spinner fa-pulse fa-2x fa-fw" ></i>';
    document.getElementById("modalEquipos").classList.add("open");
 
    let palabraEquipo = document.getElementById("inputPalabraEquipo").value;
@@ -1079,8 +1081,7 @@ function obtenerMCN(idEquipo) {
 
    document.getElementById("tipoPendientesX").innerHTML = "FALLAS PENDIENTES";
    document.getElementById("modalPendientesX").classList.add("open");
-   document.getElementById("seccionMCN").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionMCN").innerHTML = iconoLoader;
    document.getElementById("dataPendientes").innerHTML = "";
    document.getElementById("tipoPendiente").innerHTML = "FALLA";
    document.getElementById("agregarPendiente").innerHTML = "Agregar Falla";
@@ -1237,8 +1238,7 @@ function actualizarStatusMC(idMC, status, valorStatus) {
 function obtenerMCF(idEquipo) {
    document.getElementById("tipoSolucionadosX").innerHTML =
       "FALLAS SOLUCIONADAS";
-   document.getElementById("seccionMCF").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionMCF").innerHTML = iconoLoader;
    document.getElementById("modalSolucionadosX").classList.add("open");
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
@@ -1362,8 +1362,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
    let palabraUsuario = document.getElementById("palabraUsuario").value;
 
    document.getElementById("modalUsuarios").classList.add("open");
-   document.getElementById("dataUsuarios").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataUsuarios").innerHTML = iconoLoader;
 
    const action = "obtenerUsuarios";
    $.ajax({
@@ -1449,12 +1448,10 @@ function obtenerAdjuntosMC(idMC) {
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
 
-   document.getElementById("dataImagenes").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataImagenes").innerHTML = iconoLoader;
    document.getElementById("dataAdjuntos").classList.add("justify-center");
 
-   document.getElementById("dataAdjuntos").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataAdjuntos").innerHTML = iconoLoader;
    document.getElementById("dataImagenes").classList.add("justify-center");
    document.getElementById("modalMedia").classList.add("open");
    document.getElementById("contenedorImagenes").classList.add('hidden');
@@ -1577,8 +1574,7 @@ function obtenerTareasP(idEquipo) {
    let idSubseccion = localStorage.getItem("idSubseccion");
 
    document.getElementById("modalPendientesX").classList.add("open");
-   document.getElementById("seccionMCN").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionMCN").innerHTML = iconoLoader;
    document.getElementById("dataPendientes").innerHTML = "";
    document.getElementById("tipoPendiente").innerHTML = "TAREAS";
    document.getElementById("agregarPendiente").innerHTML = "Agregar Tarea";
@@ -1613,8 +1609,7 @@ function obtenerTareasP(idEquipo) {
 function obtenerTareasS(idEquipo) {
    document.getElementById("tipoSolucionadosX").innerHTML =
       "FALLAS SOLUCIONADAS";
-   document.getElementById("seccionMCF").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionMCF").innerHTML = iconoLoader;
    document.getElementById("modalSolucionadosX").classList.add("open");
    document.getElementById("tipoPendiente").value = "TAREAS";
 
@@ -1659,10 +1654,10 @@ function obtenerAdjuntosTareas(idTarea) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
 
-   document.getElementById("dataImagenes").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataImagenes").innerHTML = iconoLoader;
    document.getElementById("dataAdjuntos").classList.add("justify-center");
 
-   document.getElementById("dataAdjuntos").innerHTML = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataAdjuntos").innerHTML = iconoLoader;
    document.getElementById("dataImagenes").classList.add("justify-center");
    document.getElementById("modalMedia").classList.add("open");
    document.getElementById("contenedorImagenes").classList.add('hidden');
@@ -1706,8 +1701,7 @@ function obtenerComentariosTareas(idTarea) {
    let idDestino = localStorage.getItem("idDestino");
 
    document.getElementById("modalComentarios").classList.add("open");
-   document.getElementById("dataComentarios").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("dataComentarios").innerHTML = iconoLoader;
 
    const action = "obtenerComentariosTareas";
    $.ajax({
@@ -2220,8 +2214,7 @@ function subirImagenGeneral(idTabla, tabla) {
    for (let index = 0; index < img.length; index++) {
       let imgData = new FormData();
       const action = "subirImagenGeneral";
-      document.getElementById("cargandoAdjunto").innerHTML =
-         '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+      document.getElementById("cargandoAdjunto").innerHTML = iconoLoader;
 
       imgData.append("adjuntoUrl", img[index]);
       imgData.append("action", action);
@@ -4341,8 +4334,7 @@ function obtenerFallas(idEquipo = 0) {
    const action = "obtenerFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSubseccion=${idSubseccion}`;
 
-   document.getElementById("seccionFallaTarea").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionFallaTarea").innerHTML = iconoLoader;
    document.getElementById("contenedorPrincipalTareasFallas").
       setAttribute('style', 'background:#fc8181; min-height: 60vh;');
    document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
@@ -4518,8 +4510,7 @@ function obtenerTareas(idEquipo = 0) {
 
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
 
-   document.getElementById("seccionFallaTarea").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionFallaTarea").innerHTML = iconoLoader;
    document.getElementById("contenedorPrincipalTareasFallas").
       setAttribute('style', 'background:#fbd38d; min-height: 60vh;');
    document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
@@ -5279,8 +5270,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
    let idUsuario = localStorage.getItem('usuario');
    let contenedor = document.getElementById("contenedorEquiposAmerica");
 
-   document.getElementById("seccionSubseccionDestinoEquiposAmerica").
-      innerHTML = '<i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>';
+   document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = iconoLoader;
    document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
 
    const action = "obtenerEquiposAmerica";
@@ -5665,8 +5655,7 @@ function obtenerPendientesUsuario() {
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   document.getElementById("loadPendientes").innerHTML =
-      '<i class="fa fa-spinner fa-pulse fa-2x"></i>';
+   document.getElementById("loadPendientes").innerHTML = iconoLoader;
 
    fetch(URL)
       .then(array => array.json())
@@ -5682,7 +5671,7 @@ function obtenerPendientesUsuario() {
             document.getElementById("totalPendientesPDA").
                innerHTML = `PDA (${array.totalProyectos})`;
 
-            if (array.pendientes.length > 0) {
+            if (array.pendientes) {
                for (let x = 0; x < array.pendientes.length; x++) {
                   const idPendiente = array.pendientes[x].idPendiente;
                   const tipoPendiente = array.pendientes[x].tipoPendiente;
@@ -5767,7 +5756,6 @@ function obtenerTestEquipo(idEquipo) {
             .then(array => array.json())
             .then(array => {
                contenedor.innerHTML = '';
-               console.log(array)
                if (array.test) {
                   for (let x = 0; x < array.test.length; x++) {
                      const idTest = array.test[x].idTest;
@@ -5781,8 +5769,8 @@ function obtenerTestEquipo(idEquipo) {
                      const adjuntos = array.test[x].adjuntos;
                      const comentarios = array.test[x].comentarios;
 
-                     fComentarios = `onclick="toggleModalTailwind('modalComentarios')"`;
-                     fAdjuntos = `onclick="toggleModalTailwind('modalMedia')"`;
+                     fComentarios = `onclick="toggleModalTailwind('modalComentarios'); obtenerComentariosTest(${idTest})"`;
+                     fAdjuntos = `onclick="toggleModalTailwind('modalMedia'); obtenerAdjuntosTest(${idTest});"`;
                      fResponsables = `onclick="toggleModalTailwind('modalUsuarios')"`;
 
                      const codigo = `
@@ -5799,7 +5787,7 @@ function obtenerTestEquipo(idEquipo) {
                            </td>
 
                            <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                              <h1>${valor + ' ' + medida}</h1>
+                              <p class="underline font-bold">${valor} </p> ${medida}
                            </td>
                            
                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsables}>
@@ -5911,7 +5899,6 @@ function agregarTestEquipo() {
       fetch(URL)
          .then(array => array.json())
          .then(array => {
-            console.log(array)
             if (array == 1) {
                obtenerTestEquipo(idEquipo);
                obtenerEquiposAmerica(idSeccion, idSubseccion);
@@ -5927,6 +5914,220 @@ function agregarTestEquipo() {
          })
    } else {
       alertaImg('Datos Incorrectos', '', 'info', 1500);
+   }
+}
+
+
+// OBTENER COMENTARIOS
+function obtenerComentariosTest(idTest) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let contenedor = document.getElementById("dataComentarios");
+   const action = "obtenerComentariosTest";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}`;
+
+   document.getElementById("btnComentario").
+      setAttribute('onclick', `agregarComentariosTest(${idTest})`);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         contenedor.innerHTML = '';
+         if (array.length > 0) {
+            for (let x = 0; x < array.length; x++) {
+               const idComentario = array[x].idComentario;
+               const comentario = array[x].comentario;
+               const fecha = array[x].fecha;
+               const creadoPor = array[x].creadoPor;
+               const codigo = `
+                  <div class="flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer">
+                     <div class="flex items-center justify-center" style="width: 48px;">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=creadoPor" width="48" height="48">
+                     </div>
+                     <div class="flex flex-col justify-start items-start p-2 w-full">
+                           <div class="text-xs font-bold flex flex-row justify-between w-full">
+                              <div>
+                                 <h1>${creadoPor}</h1>
+                              </div>
+                              <div>
+                                 <p class="font-mono ml-2 text-gray-600">${fecha}</p>
+                              </div>
+                           </div>
+                           <div class="text-xs w-full">
+                              <p>${comentario}</p>
+                           </div>
+                     </div>
+                  </div>
+               `;
+               contenedor.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .then(() => {
+         let contenedorX = document.getElementById("scrollDataComentarios");
+         contenedorX.scrollTop = contenedorX.scrollHeight;
+      })
+      .catch(function (err) {
+         contenedor.innerHTML = '';
+         fetch(APIERROR + err + ' obtenerComentariosTest(${idTest})');
+      })
+}
+
+
+// AGREGAR COMENTARIOS
+function agregarComentariosTest(idTest) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let comentario = document.getElementById("inputComentario");
+   const action = "agregarComentariosTest";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}&comentario=${comentario.value}`;
+
+   if (comentario.value.length > 1) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Comentario Agregado', '', 'success', 1500);
+               comentario.value = '';
+               obtenerComentariosTest(idTest);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ` agregarComentariosTest(${idTest})`);
+         })
+   } else {
+      alertaImg('Intente de Nuevo', '', 'info', 1500);
+   }
+}
+
+
+// OBTENER ADJUNTOS DE TEST
+function obtenerAdjuntosTest(idTest) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerAdjuntosTest";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}`;
+
+   let contenedorImagenes = document.getElementById("contenedorImagenes");
+   let contenedorDocumentos = document.getElementById("contenedorDocumentos");
+   let dataImagenes = document.getElementById("dataImagenes");
+   let dataAdjuntos = document.getElementById("dataAdjuntos");
+   let cargandoAdjunto = document.getElementById("cargandoAdjunto");
+
+   contenedorImagenes.classList.add('hidden');
+   contenedorDocumentos.classList.add('hidden');
+   dataImagenes.innerHTML = '';
+   dataAdjuntos.innerHTML = '';
+   cargandoAdjunto.innerHTML = iconoLoader;
+
+   document.getElementById("inputAdjuntos").
+      setAttribute('onchange', `agregarAdjuntoTest(${idTest})`);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+
+            // IMAGENES
+            if (array.imagenes) {
+               contenedorImagenes.classList.remove('hidden');
+               for (let x = 0; x < array.imagenes.length; x++) {
+                  const idAdjunto = array.imagenes[x].idAdjunto;
+                  const url = array.imagenes[x].url;
+                  const subidoPor = array.imagenes[x].subidoPor;
+                  const fecha = array.imagenes[x].fecha;
+                  const tipo = array.imagenes[x].tipo;
+                  const codigo = `
+                     <a href="planner/test/${url}" target="_blank" data-title="${url}">
+                        <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer hover:shadow-2xl" style="background-image: url(planner/test/${url})">
+                        </div>
+                     </a>
+                  `;
+                  dataImagenes.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // ADJUNTOS
+            if (array.documentos) {
+               contenedorDocumentos.classList.remove('hidden');
+               for (let x = 0; x < array.documentos.length; x++) {
+                  const idAdjunto = array.documentos[x].idAdjunto;
+                  const url = array.documentos[x].url;
+                  const subidoPor = array.documentos[x].subidoPor;
+                  const fecha = array.documentos[x].fecha;
+                  const tipo = array.documentos[x].tipo;
+                  const codigo = `
+                     <a href="planner/test/${url}" target="_blank">
+                        <div class="hover:placeholder-gray-500 w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                            <i class="fad fa-file-alt fa-3x"></i>
+                           <p class="text-sm font-normal ml-2">${url}</p>
+                        </div>
+                     </a>
+                  `;
+                  dataAdjuntos.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+         }
+      })
+      .then(() => {
+         cargandoAdjunto.innerHTML = '';
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + `obtenerAdjuntosTest(${idTest})`);
+         dataImagenes.innerHTML = '';
+         dataAdjuntos.innerHTML = '';
+         cargandoAdjunto.innerHTML = '';
+      })
+}
+
+
+// AGREGAR ADJUNTO A TEST
+function agregarAdjuntoTest(idTest) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idEquipo = localStorage.getItem('idEquipo');
+   let cargandoAdjunto = document.getElementById("cargandoAdjunto");
+   cargandoAdjunto.innerHTML = iconoLoader;
+
+   const action = "agregarAdjuntoTest";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}`;
+
+   // VARIABLES DEL ADJUNTO
+   const files = document.querySelector("#inputAdjuntos");
+   const formData = new FormData()
+
+   if (files.files) {
+      for (let x = 0; x < files.files.length; x++) {
+         formData.append('file', files.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  obtenerTestEquipo(idEquipo);
+                  obtenerAdjuntosTest(idTest);
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               cargandoAdjunto.innerHTML = '';
+               files.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` agregarAdjuntoTest(${idTest})`)
+               cargandoAdjunto.innerHTML = '';
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               files.value = '';
+            })
+      }
    }
 }
 
@@ -6012,3 +6213,15 @@ document.getElementById("editarTitulo").addEventListener('keydown', event => {
       }
    }
 })
+
+// FUNCIONES PARA ANIMACION DE MOVER ELEMENTOS
+let sortableImagenesX = document.getElementById("dataImagenes");
+let sortableDocumentosX = document.getElementById("dataAdjuntos");
+new Sortable(sortableImagenesX, {
+   animation: 1000,
+   ghostClass: 'blue-background-class'
+});
+new Sortable(sortableDocumentosX, {
+   animation: 1000,
+   ghostClass: 'blue-background-class'
+});
