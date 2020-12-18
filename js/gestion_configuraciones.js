@@ -250,7 +250,7 @@ function obtenerUsuarios(configuracionIdUsuario) {
     const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&configuracionIdUsuario=${configuracionIdUsuario}`;
     let load = document.getElementById("load");
     let palabraUsuario = document.getElementById("palabraUsuario");
-
+    console.log(URL);
     load.innerHTML = iconSpin;
     if (configuracionIdUsuario > 0) {
         tablaUsuarios = document.getElementById("usuario_" + configuracionIdUsuario);
