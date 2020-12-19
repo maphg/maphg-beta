@@ -1346,6 +1346,110 @@
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
 
 
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalEnergeticos" class="modal">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background:#DBEAFE; min-height: 60vh;">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEnergeticos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="" class="">
+                    <h1 id="" class="font-bold text-black"></h1>
+                </div>
+                <div id="" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1 id=""> </h1>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Test</h1>
+                </div>
+
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200" id="exportarProyectos">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO TAREAS FALLAS -->
+            <div id="" class="p-2 flex justify-center items-center flex-col w-full">
+
+                <div class="overflow-x-auto scrollbar">
+                    <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
+                        <table id="" class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                            <thead>
+                                <tr class="cursor-pointer bg-white">
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Descripción
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Unidad de Medida
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Responsable
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Fechas
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Comentarios
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="" class="bg-white divide-y divide-gray-200">
+                                <!-- More rows... -->
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <!-- CONTENIDO TAREAS FALLAS -->
+
+        </div>
+
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+
+
     <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
     <div id="modalSolucionadosX" class="modal">
         <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12 h-full">
@@ -2897,9 +3001,6 @@
                         </div>
                     </div>
                 </div>
-
-                <h1 class="self-start mb-2">Comentario:</h1>
-                <input id="comentarioTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario (Opcional)" autocomplete="off">
 
                 <button id="btnAgregarTest" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
                     <i class="fas fa-check"></i> Crear

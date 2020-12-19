@@ -1051,6 +1051,10 @@ if (isset($_GET['action'])) {
                 #RANGO FECHA
                 $fechaInicio = "";
                 $fechaFin = "";
+                if ($rangoFecha != "") {
+                    $fechaInicio = substr($rangoFecha, -10);
+                    $fechaFin = substr($rangoFecha, -23, 10);
+                }
 
                 $array['test'][] =
                     array(
@@ -1271,6 +1275,11 @@ if (isset($_GET['action'])) {
             }
         } elseif ($tipoAdjunto == "COTIZACIONPROYECTO") {
             $query = "UPDATE t_proyectos_adjuntos SET status = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "TEST") {
+            $query = "UPDATE t_test_equipos_adjuntos SET activo = 0 WHERE id = $idAdjunto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }

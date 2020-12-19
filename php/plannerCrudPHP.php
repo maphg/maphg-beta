@@ -2128,7 +2128,7 @@ if (isset($_POST['action'])) {
                                     $dataEnergeticos .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                           onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerProyectos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
+                                           onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerEnergeticos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -4423,6 +4423,25 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
+            } elseif ($tipoAsginacion == "asignarTest") {
+                $totalUsuarios = mysqli_num_rows($resultUsuarios);
+                foreach ($resultUsuarios as $value) {
+                    $idUsuario = $value['idUsuario'];
+                    $nombre = $value['nombre'];
+                    $apellido = $value['apellido'];
+                    $cargo = $value['cargo'];
+                    $nombreCompleto = $nombre . " " . $apellido;
+
+                    $dataUsuarios .= "
+                        <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                        onclick=\"asignarUsuario($idUsuario, 'asignarTest', $idItem);\">
+                            <img src=\"https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%$apellido\" width=\"20\" height=\"20\" alt=\"\">
+                            <h1 class=\"ml-2\">$nombreCompleto</h1>
+                            <p class=\"font-bold mx-1\"> / </p>
+                            <h1 class=\"font-normal text-xs\">$cargo</h1>
+                        </div>
+                    ";
+                }
             } elseif ($tipoAsginacion == "asignarProyecto") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
@@ -4510,25 +4529,31 @@ if (isset($_POST['action'])) {
 
     // Asigna Responsable de la Falla
     if ($action == "asignarUsuario") {
-        $tipoAsginacion = $_POST['tipoAsginacion'];
+        $tipoAsignacion = $_POST['tipoAsignacion'];
         $idUsuarioSeleccionado = $_POST['idUsuarioSeleccionado'];
         $idItem = $_POST['idItem'];
+        $resp = "0";
 
-        if ($tipoAsginacion == "asignarMC") {
-            $query = "UPDATE t_mc SET responsable = $idUsuarioSeleccionado WHERE id = $idItem";
+        if ($tipoAsignacion == "asignarMC") {
+            $query = "UPDATE t_mc SET responsable = $idUsuarioSeleccionado 
+            WHERE id = $idItem";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo "MC";
-            } else {
-                echo "0";
+                $resp = "MC";
             }
-        } elseif ($tipoAsginacion == "asignarTarea") {
-            $query = "UPDATE t_mp_np SET responsable = '$idUsuarioSeleccionado' WHERE id = $idItem";
+        } elseif ($tipoAsignacion == "asignarTarea") {
+            $query = "UPDATE t_mp_np SET responsable = '$idUsuarioSeleccionado' 
+            WHERE id = $idItem";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo "TAREA";
-            } else {
-                echo "0";
+                $resp = "TAREA";
+            }
+        } elseif ($tipoAsignacion == "asignarTest") {
+            $query = "UPDATE t_test_equipos SET responsable = '$idUsuarioSeleccionado' 
+            WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "TEST";
             }
         }
+        echo json_encode($resp);
     }
 
 

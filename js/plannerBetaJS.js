@@ -65,6 +65,37 @@ function obtenerDatosUsuario(idDestino) {
 }
 
 
+// FUNCION PARA RANGO FECHA
+function rangoFechaX(idInput) {
+   let input = document.getElementById(idInput);
+
+   $('#' + idInput).daterangepicker({
+      autoUpdateInput: false,
+      showWeekNumbers: true,
+      locale: {
+         cancelLabel: "Cancelar",
+         applyLabel: "Aplicar",
+         fromLabel: "De",
+         toLabel: "A",
+         customRangeLabel: "Personalizado",
+         weekLabel: "S",
+         daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+         monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      },
+   });
+
+   $('#' + idInput).on("apply.daterangepicker", function (
+      ev,
+      picker
+   ) {
+      $(this).val(
+         picker.startDate.format("DD/MM/YYYY") +
+         " - " +
+         picker.endDate.format("DD/MM/YYYY")
+      );
+   });
+}
+
 // FUNCION PARA ACTUALIZAR RANGO FECHA #rangoFechaX
 $(function () {
    $('input[name="rangoFechaX"]').daterangepicker({
@@ -1388,9 +1419,11 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
 
 
 // Función para Asignar usuario.
-function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
+function asignarUsuario(idUsuarioSeleccionado, tipoAsignacion, idItem) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
+   let idEquipo = localStorage.getItem("idEquipo");
+   let modalUsuarios = document.getElementById("modalUsuarios");
 
    const action = "asignarUsuario";
    $.ajax({
@@ -1401,31 +1434,37 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsginacion, idItem) {
          idUsuario: idUsuario,
          idUsuarioSeleccionado: idUsuarioSeleccionado,
          idDestino: idDestino,
-         tipoAsginacion: tipoAsginacion,
+         tipoAsignacion: tipoAsignacion,
          idItem: idItem,
       },
-      // dataType: "JSON",
+      dataType: "JSON",
       success: function (data) {
-
+         console.log(data);
          if (data == "MC") {
             // FALLAS
-            alertaImg("Responsable Actualizado", "", "success", 2500);
-            document.getElementById("modalUsuarios").classList.remove("open");
+            alertaImg("Responsable Actualizado", "", "success", 1500);
+            modalUsuarios.classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
             obtenerFallas(idEquipo);
             verEnPlanner('FALLA', idItem);
 
          } else if (data == "TAREA") {
             // TAREAS
-            alertaImg("Responsable Actualizado", "", "success", 2500);
-            document.getElementById("modalUsuarios").classList.remove("open");
+            alertaImg("Responsable Actualizado", "", "success", 1500);
+            modalUsuarios.classList.remove("open");
             let idEquipo = localStorage.getItem("idEquipo");
             obtenerTareas(idEquipo);
             verEnPlanner('TAREA', idItem);
+
+         } else if (data == "TEST") {
+            // TEST
+            alertaImg("Responsable Actualizado", "", "success", 1500);
+            modalUsuarios.classList.remove("open");
+            obtenerTestEquipo(idEquipo);
          } else {
-            alertaImg("Intenete de Nuevo", "", "question", 2500);
+            alertaImg("Intenete de Nuevo", "", "question", 1500);
          }
-      },
+      }
    });
 }
 
@@ -5653,6 +5692,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 function obtenerPendientesUsuario() {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+   let contenedor = document.getElementById("dataPendientesUsuario");
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
    document.getElementById("loadPendientes").innerHTML = iconoLoader;
@@ -5661,7 +5701,7 @@ function obtenerPendientesUsuario() {
       .then(array => array.json())
       .then(array => {
 
-         document.getElementById("dataPendientesUsuario").innerHTML = '';
+         contenedor.innerHTML = '';
 
          if (array) {
             document.getElementById("totalPendientesFallas").
@@ -5699,8 +5739,7 @@ function obtenerPendientesUsuario() {
                         </div>   
                      `;
 
-                  document.getElementById("dataPendientesUsuario").
-                     insertAdjacentHTML('beforeend', codigo);
+                  contenedor.insertAdjacentHTML('beforeend', codigo);
                }
             } else {
                alertaImg('Sin Pendientes', '', 'success', 3000);
@@ -5712,8 +5751,9 @@ function obtenerPendientesUsuario() {
          document.getElementById("loadPendientes").innerHTML = '';
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ': (obtenerPendientesUsuario)');
+         fetch(APIERROR + err + ': (obtenerPendientesUsuario) ' + idUsuario);
          document.getElementById("loadPendientes").innerHTML = '';
+         contenedor.innerHTML = '';
       })
 }
 
@@ -5723,6 +5763,7 @@ function obtenerTestEquipo(idEquipo) {
    localStorage.setItem('idEquipo', idEquipo);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+   let iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
    const action = "obtenerTestEquipo";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
 
@@ -5766,12 +5807,20 @@ function obtenerTestEquipo(idEquipo) {
                      const fechaFin = array.test[x].fechaFin;
                      const valor = array.test[x].valor;
                      const medida = array.test[x].medida;
-                     const adjuntos = array.test[x].adjuntos;
-                     const comentarios = array.test[x].comentarios;
+                     let adjuntos = array.test[x].adjuntos;
+                     let comentarios = array.test[x].comentarios;
+
+                     if (adjuntos <= 0) {
+                        adjuntos = iconoDefault;
+                     }
+
+                     if (comentarios <= 0) {
+                        comentarios = iconoDefault;
+                     }
 
                      fComentarios = `onclick="toggleModalTailwind('modalComentarios'); obtenerComentariosTest(${idTest})"`;
                      fAdjuntos = `onclick="toggleModalTailwind('modalMedia'); obtenerAdjuntosTest(${idTest});"`;
-                     fResponsables = `onclick="toggleModalTailwind('modalUsuarios')"`;
+                     fResponsables = `onclick="toggleModalTailwind('modalUsuarios'); obtenerUsuarios('asignarTest', ${idTest});"`;
 
                      const codigo = `
                      
@@ -5844,6 +5893,9 @@ document.getElementById("agregarTest").addEventListener('click', () => {
    let contenedorUsuarios = document.getElementById("responsableTest");
    let contenedorMedidas = document.getElementById("medidaTest");
 
+   // INICIALIZA FUNCION PARA RANGO DE FECHAS
+   rangoFechaX("inputRangoFechaTest");
+
    // LIMPIA CONTENEDORES
    contenedorUsuarios.innerHTML = '<option value="0">Seleccione Responsable</option>';
    contenedorMedidas.innerHTML = '<option value="0">Seleccione Medición</option>';
@@ -5904,7 +5956,11 @@ function agregarTestEquipo() {
                obtenerEquiposAmerica(idSeccion, idSubseccion);
                alertaImg('Test Agregado', '', 'success', 1600);
                document.getElementById("modalAgregarTest").classList.remove('open');
-
+               test.value = '';
+               idMedida.value = '';
+               valor.value = '';
+               rangoFecha.value = '';
+               responsable.value = '';
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1500);
             }
@@ -6040,10 +6096,16 @@ function obtenerAdjuntosTest(idTest) {
                   const fecha = array.imagenes[x].fecha;
                   const tipo = array.imagenes[x].tipo;
                   const codigo = `
-                     <a href="planner/test/${url}" target="_blank" data-title="${url}">
-                        <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer hover:shadow-2xl" style="background-image: url(planner/test/${url})">
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+                        <a href="planner/test/${url}" target="_blank" data-title="${url}">
+                           <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer hover:shadow-2xl" style="background-image: url(planner/test/${url})">
+                           </div>
+                        </a>
+                        
+                        <div class="w-full absolute text-transparent hover:text-red-700" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'TEST');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
                         </div>
-                     </a>
+                     </div>
                   `;
                   dataImagenes.insertAdjacentHTML('beforeend', codigo);
                }
@@ -6059,12 +6121,20 @@ function obtenerAdjuntosTest(idTest) {
                   const fecha = array.documentos[x].fecha;
                   const tipo = array.documentos[x].tipo;
                   const codigo = `
-                     <a href="planner/test/${url}" target="_blank">
-                        <div class="hover:placeholder-gray-500 w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
-                            <i class="fad fa-file-alt fa-3x"></i>
-                           <p class="text-sm font-normal ml-2">${url}</p>
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+
+                        <a href="planner/test/${url}" target="_blank">
+                           <div class="hover:placeholder-gray-500 w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                              <i class="fad fa-file-alt fa-3x"></i>
+                              <p class="text-sm font-normal ml-2">${url}</p>
+                           </div>
+                        </a>
+                        
+                        <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'TEST');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
                         </div>
-                     </a>
+
+                     </div>
                   `;
                   dataAdjuntos.insertAdjacentHTML('beforeend', codigo);
                }
@@ -6132,15 +6202,34 @@ function agregarAdjuntoTest(idTest) {
 }
 
 
-// ELIMINAR ADJUNTOS
-// 
+
+// FUNCION PARA OBTENER LOS PENDIENTES DE ENERGETICOS
+function obtenerEnergeticos() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = '';
+   const URL = ``;
+
+   console.log(URL);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+// ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
 function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let idEquipo = localStorage.getItem('idEquipo');
    let idProyecto = localStorage.getItem('idProyecto');
    let idSeccion = localStorage.getItem('idSeccion');
-   
+
    const action = 'eliminarAdjunto';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
 
@@ -6167,6 +6256,8 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
                obtenerPlanaccion(idProyecto);
             } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
                obtenerProyectos(idSeccion, 'PENDIENTE');
+            } else if (tipoAdjunto == "TEST") {
+               obtenerTestEquipo(idEquipo);
             }
 
          } else {
@@ -6260,6 +6351,7 @@ document.getElementById("editarTitulo").addEventListener('keydown', event => {
       }
    }
 })
+
 
 // FUNCIONES PARA ANIMACION DE MOVER ELEMENTOS
 let sortableImagenesX = document.getElementById("dataImagenes");
