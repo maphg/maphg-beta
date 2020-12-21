@@ -69,8 +69,6 @@ function validarUsuario() {
 
                             if (data.idDestino == 2 || data.idDestino == 3 || data.idDestino == 11) {
                                 location.href = "planner-cols.php";
-                            } else if (data.idDestino == 4) {
-                                location.href = "msg.html";
                             } else {
                                 location.href = "index.php";
                             }
