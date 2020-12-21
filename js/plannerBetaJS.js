@@ -5898,7 +5898,7 @@ document.getElementById("agregarTest").addEventListener('click', () => {
 
    // LIMPIA CONTENEDORES
    contenedorUsuarios.innerHTML = '<option value="0">Seleccione Responsable</option>';
-   contenedorMedidas.innerHTML = '<option value="0">Seleccione Medición</option>';
+   contenedorMedidas.innerHTML = '<option value="0">Seleccione Magnitud</option>';
 
    fetch(`php/select_REST_planner.php?action=obtenerUsuarios&idDestino=${idDestino}&idUsuario=${idUsuario}`)
       .then(array => array.json())
@@ -6323,6 +6323,30 @@ function exportarEquipos(idDestino) {
       })
       .catch(function (err) {
          fetch(APIERROR + err + ': (exportarEquipos)');
+      })
+}
+
+
+// EXPORTAR TAREAS GENERALES POR DESTINO
+// 
+function exportarTareasGenerales() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = 'exportarTareasGenerales';
+   const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   console.log(URL);
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array == 1) {
+            alertaImg('Tareas exportadas', '', 'success', 1500);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
       })
 }
 

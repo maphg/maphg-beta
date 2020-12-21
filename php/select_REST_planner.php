@@ -50,7 +50,6 @@ if (isset($_GET['action'])) {
         }
     }
 
-
     // OBTIENES LAS TAREAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
     if ($action == "obtenerTareas") {
         $idEquipo = $_GET['idEquipo'];
@@ -222,7 +221,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
     if ($action == "obtenerFallas") {
         $idEquipo = $_GET['idEquipo'];
@@ -377,7 +375,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     #OBTIENE, SECCION, SUBSECCION, NOMBRE EQUIPO
     if ($action == "DestinoSeccionSubseccionEquipo") {
         $idEquipo = $_GET["idEquipo"];
@@ -423,7 +420,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     #GANTT PARA TAREAS (PENDIENTES Y SOLUCIONADOS)
     if ($action == "ganttTareas") {
@@ -488,7 +484,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     #GANTT PARA FALLAS (PENDIENTES Y SOLUCIONADOS)
     if ($action == "ganttFallas") {
         $idSeccion = $_GET['idSeccion'];
@@ -551,7 +546,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     #OBTIENE VALOR DE LOS STATUS((TAREAS, FALLAS, PREVENTIVOS, PROYECTOS) DONDE 1 = ACTIVO
     if ($action == "obtenerStatus") {
@@ -757,7 +751,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // Consulta los Destinos que tiene acceso el usuario.
     if ($action == "obtenerDatosUsuario") {
         $data = array();
@@ -815,7 +808,6 @@ if (isset($_GET['action'])) {
         $data['destinosOpcion'] = $destinosOpcion;
         echo json_encode($data);
     }
-
 
     if ($action == "obtenerPendientesUsuario") {
         $arrayIndex = array();
@@ -962,7 +954,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // OBTIENE IDEQUIPO, EQUIPO, DESTINO, SECCION Y SUBSECCION, POR ID DE EQUIPO
     if ($action == "obtenerEDSS") {
         $idEquipo = $_GET['idEquipo'];
@@ -992,7 +983,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     // OBTIENE LOS TESTE DE EQUIPOS
     if ($action == "obtenerTestEquipo") {
@@ -1075,7 +1065,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // AGREGAR TEST POR EQUIPO
     if ($action == "agregarTestEquipo") {
         $idEquipo = $_GET['idEquipo'];
@@ -1092,7 +1081,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
-
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
@@ -1124,7 +1112,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     // OBTIENES TODAS LOS TIPOS DE MEDIDAS DE LA TABLA t_unidades_medidas
     if ($action == "obtenerUnidadesMedidas") {
         $array = array();
@@ -1142,7 +1129,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     // OBTIENE TODOS LOS COMENTARIOS DEL TEST SELECCIONADO
     if ($action == "obtenerComentariosTest") {
@@ -1185,7 +1171,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
-
 
     // OBTENER ADJUNTOS TEST
     if ($action == "obtenerAdjuntosTest") {
@@ -1246,7 +1231,6 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-
     // ELIMINAR ADJUNTO
     if ($action == "eliminarAdjunto") {
         $idAdjunto = $_GET['idAdjunto'];
@@ -1286,6 +1270,5 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
-
     // CIERRE FINAL
 }

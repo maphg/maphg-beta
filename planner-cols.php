@@ -2964,16 +2964,12 @@
                 <input id="descripcionTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
 
                 <div class="w-full py-3">
-                    <h1 class="self-start mb-2">Test:</h1>
+                    <h1 class="self-start mb-2">Medición:</h1>
                     <div class="mt-1 relative rounded-md shadow-sm">
                         <input id="valorTest" type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01" autocomplete="off">
 
                         <div class="absolute inset-y-0 right-0 flex items-center">
-                            <select id="medidaTest" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3">
-                                <option value="1">Seleccione Tipo Medición</option>
-                                <option value="2">VOLTAJE</option>
-                                <option value="3">HMS</option>
-                            </select>
+                            <select id="medidaTest" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3"></select>
                         </div>
                     </div>
                 </div>
