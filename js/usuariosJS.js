@@ -67,7 +67,8 @@ function validarUsuario() {
 
                             fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
 
-                            if (data.idDestino == 2 || data.idDestino == 3 || data.idDestino == 11) {
+                            if (data.idDestino == 2 || data.idDestino == 3 ||
+                                data.idDestino == 11 || data.idDestino == 4) {
                                 location.href = "planner-cols.php";
                             } else {
                                 location.href = "index.php";
