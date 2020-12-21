@@ -651,7 +651,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
 
     document.getElementById("etiquetadoProyectosDEP").
         setAttribute('onclick', "obtenerEtiquetados('PENDIENTE');");
-        
+
     document.getElementById("exportarProyectosDEP").
         setAttribute('onclick', `exportarProyectosDEP(${idSubseccion});`);
     // Atributos Iniciales
@@ -954,9 +954,9 @@ function agregarPlanaccionDEP() {
                 idProyecto: idProyecto,
                 actividad: actividad
             },
-            // dataType: "JSON",
+            dataType: "JSON",
             success: function (data) {
-                if (data.length > 1) {
+                if (data == 1) {
                     document.getElementById("agregarPlanaccionDEP").value = '';
                     obtenerProyectosDEP(idSubseccion, 'PENDIENTE');
                     obtenerPlanaccionDEP(idProyecto);

@@ -7336,6 +7336,7 @@ if (isset($_POST['action'])) {
     if ($action == "agregarPlanaccion") {
         $idProyecto = $_POST['idProyecto'];
         $actividad = $_POST['actividad'];
+        $resp = 0;
 
         $query = "SELECT responsable, titulo, rango_fecha FROM t_proyectos WHERE id = $idProyecto";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -7347,13 +7348,10 @@ if (isset($_POST['action'])) {
             }
             $query = "INSERT INTO t_proyectos_planaccion(id_proyecto, actividad, status, creado_por, fecha_creacion, rango_fecha, responsable, activo) VALUES($idProyecto, '$actividad', 'N', $idUsuario, '$fechaActual', '$rangoFecha', $responsable, 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo $proyecto;
-            } else {
-                echo 0;
+                $resp = 1;
             }
-        } else {
-            echo 0;
         }
+        echo json_encode($resp);
     }
 
 
