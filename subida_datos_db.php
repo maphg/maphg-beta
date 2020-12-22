@@ -23,7 +23,7 @@
                 <option value="t_gastos_servicios">Subcontratas AME (t_gastos_servicios)</option>
                 <option value="t_gastos_materiales">Compras AME (t_gastos_materiales)</option>
                 <option value="t_pedidos_por_entregar">Pedidos CON Documento (t_pedidos_por_entregar)</option>
-                <option value="t_pedidos_sin_orden">Pedidos SIN Documento (t_pedidos_sin_orden)</option>
+                <option value="t_pedidos_sin_orden_compra">Pedidos SIN Documento (t_pedidos_sin_orden_compra)</option>
                 <option value="t_users">Usuarios (t_users)</option>
                 <option value="t_colaboradores">Colaboradores (t_colaboradores)</option>
                 <option value="t_subalmacenes">Subalmacenes (t_subalmacenes)</option>
@@ -512,6 +512,38 @@
                 document.getElementById("columna22").value = "nombre_1";
                 document.getElementById("columna23").value = "doc_compras";
                 document.getElementById("columna24").value = 'texto_ceco';
+                document.getElementById("columna25").value = '';
+                document.getElementById("columna26").value = '';
+                document.getElementById("columna27").value = '';
+                document.getElementById("columna28").value = '';
+                document.getElementById("columna29").value = '';
+                document.getElementById("columna30").value = '';
+
+            } else if (tabla == "t_pedidos_sin_orden_compra") {
+                document.getElementById("columna1").value = 'departamento';
+                document.getElementById("columna2").value = 'id_destino';
+                document.getElementById("columna3").value = 'ceco';
+                document.getElementById("columna4").value = 'solicitud_pedido';
+                document.getElementById("columna5").value = 'material';
+                document.getElementById("columna6").value = 'text_breve	';
+                document.getElementById("columna7").value = 'cantidad_solicitada';
+                document.getElementById("columna8").value = 'unidad_medida';
+                document.getElementById("columna9").value = 'grupo_articulo';
+                document.getElementById("columna10").value = 'centro';
+                document.getElementById("columna11").value = 'grupo_compras';
+                document.getElementById("columna12").value = 'organizacion_compras';
+                document.getElementById("columna13").value = 'fecha_solicitud';
+                document.getElementById("columna14").value = 'seccion';
+                document.getElementById("columna15").value = 'solicitud_borrada';
+                document.getElementById("columna16").value = '';
+                document.getElementById("columna17").value = '';
+                document.getElementById("columna18").value = '';
+                document.getElementById("columna19").value = '';
+                document.getElementById("columna20").value = '';
+                document.getElementById("columna21").value = '';
+                document.getElementById("columna22").value = '';
+                document.getElementById("columna23").value = '';
+                document.getElementById("columna24").value = '';
                 document.getElementById("columna25").value = '';
                 document.getElementById("columna26").value = '';
                 document.getElementById("columna27").value = '';
