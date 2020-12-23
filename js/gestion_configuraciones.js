@@ -134,7 +134,8 @@ const codigoUsuario = x => {
         <tr id="usuario_${id}">
 
             <td class="px-6 py-4 whitespace-nowrap">
-                    <img class="rounded-circle" src="https://ui-avatars.com/api/?uppercase=true&name=${nombre + ' ' + apellido}&background=d8e6ff&rounded=true&color=4886ff&size=100%" alt="" width="40px" height="40px" data-title="${nombre}">
+                <img class="rounded-circle" src="https://ui-avatars.com/api/?uppercase=true&name=${nombre + ' ' + apellido}&background=d8e6ff&rounded=true&color=4886ff&size=100%" alt="" width="40px" height="40px" data-title="${nombre}">
+                <div class="text-center text-xs font-semibold text-blue-400">ID: ${id}</div>
             </td>
 
             <td class="px-6 py-4 whitespace-nowrap">

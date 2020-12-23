@@ -1433,7 +1433,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody id="" class="bg-white divide-y divide-gray-200">
+                            <tbody id="dataEnergeticos" class="bg-white divide-y divide-gray-200">
                                 <!-- More rows... -->
                             </tbody>
 

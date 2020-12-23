@@ -14,8 +14,10 @@ if (isset($_POST['action'])) {
     $fechaActual = date("Y-m-d H:m:s");
     $semanaActual = date('W');
 
+
     // Array para Secciones.
     $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC", 0 => "", 1001 => "Energeticos");
+
 
     $queryPermisosUsuario = "SELECT* FROM t_users WHERE id = $idUsuario";
     if ($resultPermisos = mysqli_query($conn_2020, $queryPermisosUsuario)) {
@@ -48,6 +50,7 @@ if (isset($_POST['action'])) {
             $idDestinoUsuarioPermiso = $permiso['id_destino'];
         }
     }
+
 
     // Consulta los Destinos que tiene acceso el usuario.
     if ($action == "obtenerDatosUsuario") {
@@ -106,6 +109,7 @@ if (isset($_POST['action'])) {
         $data['destinosOpcion'] = $destinosOpcion;
         echo json_encode($data);
     }
+
 
     if ($action == "consultaSubsecciones") {
         // Variables tipo array para acumular los resultados de las secciones.
@@ -2128,7 +2132,7 @@ if (isset($_POST['action'])) {
                                     $dataEnergeticos .= "
                                         <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                             class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                           onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerEnergeticos($idSeccion, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos');\">
+                                           onclick=\"actualizarSeccionSubseccion($idSeccion, $idSubseccion); obtenerEnergeticos($idSeccion, $idSubseccion, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos');\">
                                             <h1 class=\"truncate mr-2\">$nombreSubseccion</h1>
                                             <div
                                                 class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -2358,81 +2362,81 @@ if (isset($_POST['action'])) {
                 AND t_mc.status = 'N' AND activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
 
-                $resultMCP = mysqli_query($conn_2020, $queryMCP);
-                foreach ($resultMCP as $pendiente) {
-                    $contadorTyF++;
+                if ($resultMCP = mysqli_query($conn_2020, $queryMCP)) {
+                    foreach ($resultMCP as $pendiente) {
+                        $contadorTyF++;
 
-                    $idMC = "";
-                    $actividad = "";
-                    $nombre = "";
-                    $apellido = "";
-                    $idMC = $pendiente['id'];
-                    $actividad = $pendiente['actividad'];
-                    $nombre = $pendiente['nombre'];
-                    $apellido = $pendiente['apellido'];
-                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+                        $idMC = "";
+                        $actividad = "";
+                        $nombre = "";
+                        $apellido = "";
+                        $idMC = $pendiente['id'];
+                        $actividad = $pendiente['actividad'];
+                        $nombre = $pendiente['nombre'];
+                        $apellido = $pendiente['apellido'];
+                        $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
-                    if ($nombreCompleto == "SIN RESPONSABLE") {
-                        $estiloResponsable = "text-red-600";
-                        $nombreCompleto = "SIN RESPONSABLE";
-                        $iconoResponsable = "";
-                    } else {
-                        $estiloResponsable = "text-gray-600";
-                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
-                    }
+                        if ($nombreCompleto == "SIN RESPONSABLE") {
+                            $estiloResponsable = "text-red-600";
+                            $nombreCompleto = "SIN RESPONSABLE";
+                            $iconoResponsable = "";
+                        } else {
+                            $estiloResponsable = "text-gray-600";
+                            $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                        }
 
-                    // Se obtiene los Adjuntos.
-                    $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
-                    $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
+                        // Se obtiene los Adjuntos.
+                        $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
+                        $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
-                        if (mysqli_num_rows($resultAdjuntoMC) > 0) {
-                            $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
+                            if (mysqli_num_rows($resultAdjuntoMC) > 0) {
+                                $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                            } else {
+                                $iconoAdjuntoMC = "";
+                            }
                         } else {
                             $iconoAdjuntoMC = "";
                         }
-                    } else {
-                        $iconoAdjuntoMC = "";
-                    }
 
 
-                    // Obtiene el ultimo Comentario.
-                    $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
-                    $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
+                        // Obtiene el ultimo Comentario.
+                        $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
+                        $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
-                        $comentarioMC = $rowComentarioMC['comentario'];
-                        $nombreMC = $rowComentarioMC['nombre'];
-                        $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
-                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
+                            $comentarioMC = $rowComentarioMC['comentario'];
+                            $nombreMC = $rowComentarioMC['nombre'];
+                            $apellidoMC = $rowComentarioMC['apellido'];
+                            $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                            $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
-                        if (mysqli_num_rows($resultComentarioMC) > 0) {
-                            $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
-                            $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            if (mysqli_num_rows($resultComentarioMC) > 0) {
+                                $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
+                                $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            } else {
+                                $iconoComentarioMC = "";
+                                $comentarioMC = "Sin Comentario";
+                                $AvatarNombre = "";
+                                $fechaMC = "";
+                                $nombreCompletoMC = "";
+                            }
                         } else {
                             $iconoComentarioMC = "";
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreMC = "";
+                            $apellidoMC = "";
                             $nombreCompletoMC = "";
                         }
-                    } else {
-                        $iconoComentarioMC = "";
-                        $comentarioMC = "Sin Comentario";
-                        $AvatarNombre = "";
-                        $fechaMC = "";
-                        $nombreMC = "";
-                        $apellidoMC = "";
-                        $nombreCompletoMC = "";
-                    }
 
 
-                    $data .= "
+                        $data .= "
                         <div id=\"" . $idMC . "P\" onclick=\"expandir(this.id)\"
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative\">
                             <!-- Titulo -->
@@ -2475,6 +2479,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     ";
+                    }
                 }
 
                 $queryTareas = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha_finalizado, t_colaboradores.nombre, t_colaboradores.apellido 
@@ -2484,7 +2489,6 @@ if (isset($_POST['action'])) {
                 INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
                 WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') 
                 $filtroSeccionT $filtroUsuarioT $filtroDestinoTareas";
-                // echo $queryTareas;
                 if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                     foreach ($resultTareas as $value) {
                         $contadorTyF++;
@@ -2616,132 +2620,132 @@ if (isset($_POST['action'])) {
                 AND(t_mc.departamento_calidad != '' OR t_mc.departamento_compras != '' OR t_mc.departamento_direccion != '' OR t_mc.departamento_finanzas != '' OR t_mc.departamento_rrhh != '') 
                 $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
-                $resultDEP = mysqli_query($conn_2020, $queryDEP);
-                foreach ($resultDEP as $dep) {
-                    $contadorDEP++;
-                    $idMC = $dep['id'];
-                    $actividad = $dep['actividad'];
-                    $nombre = $dep['nombre'];
-                    $apellido = $dep['apellido'];
-                    $calidad = $dep['departamento_calidad'];
-                    $compras = $dep['departamento_compras'];
-                    $direccion = $dep['departamento_direccion'];
-                    $finanzas = $dep['departamento_finanzas'];
-                    $rrhh = $dep['departamento_rrhh'];
-                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+                if ($resultDEP = mysqli_query($conn_2020, $queryDEP)) {
+                    foreach ($resultDEP as $dep) {
+                        $contadorDEP++;
+                        $idMC = $dep['id'];
+                        $actividad = $dep['actividad'];
+                        $nombre = $dep['nombre'];
+                        $apellido = $dep['apellido'];
+                        $calidad = $dep['departamento_calidad'];
+                        $compras = $dep['departamento_compras'];
+                        $direccion = $dep['departamento_direccion'];
+                        $finanzas = $dep['departamento_finanzas'];
+                        $rrhh = $dep['departamento_rrhh'];
+                        $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
-                    if ($nombreCompleto == "SIN RESPONSABLE") {
-                        $estiloResponsable = "text-red-600";
-                        $nombreCompleto = "SIN RESPONSABLE";
-                        $iconoResponsable = "";
-                    } else {
-                        $estiloResponsable = "text-gray-600";
-                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
-                    }
-
-                    if ($calidad != "") {
-                        $calidad = "CA";
-                    } else {
-                        $calidad = "";
-                    }
-                    if ($compras != "") {
-                        $compras = "CO";
-                    } else {
-                        $compras = "";
-                    }
-                    if ($direccion != "") {
-                        $direccion = "DI";
-                    } else {
-                        $direccion = "";
-                    }
-                    if ($finanzas != "") {
-                        $finanzas = "FI";
-                    } else {
-                        $finanzas = "";
-                    }
-                    if ($rrhh != "") {
-                        $rrhh = "RH";
-                    } else {
-                        $rrhh = "";
-                    }
-
-                    $departamentosMas = $calidad . $compras . $direccion . $finanzas . $rrhh;
-                    if (strlen($departamentosMas) > 2) {
-                        $iconoDepartamentos =
-                            "<p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-3 rounded-full\">
-                            $calidad $compras $direccion $finanzas $rrhh </p>";
-                    } else {
-                        if ($departamentosMas == "CA") {
-                            $iconoDepartamentos =
-                                "<p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-2 rounded-full\">Calidad</p>";
-                        } elseif ($departamentosMas == "CO") {
-                            $iconoDepartamentos =
-                                "<p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">Compras</p>";
-                        } elseif ($departamentosMas == "DI") {
-                            $iconoDepartamentos =
-                                "<p class=\"text-xs font-normal bg-purple-200 text-purple-500 py-1 px-2 rounded-full\">Dirección</p>";
-                        } elseif ($departamentosMas == "FI") {
-                            $iconoDepartamentos =
-                                "<p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">Compras</p>";
-                        } elseif ($departamentosMas == "RH") {
-                            $iconoDepartamentos =
-                                "<p class=\"text-xs font-normal bg-teal-200 text-teal-500 py-1 px-2 rounded-full\">RRHH</p>";
+                        if ($nombreCompleto == "SIN RESPONSABLE") {
+                            $estiloResponsable = "text-red-600";
+                            $nombreCompleto = "SIN RESPONSABLE";
+                            $iconoResponsable = "";
+                        } else {
+                            $estiloResponsable = "text-gray-600";
+                            $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
                         }
-                    }
+
+                        if ($calidad != "") {
+                            $calidad = "CA";
+                        } else {
+                            $calidad = "";
+                        }
+                        if ($compras != "") {
+                            $compras = "CO";
+                        } else {
+                            $compras = "";
+                        }
+                        if ($direccion != "") {
+                            $direccion = "DI";
+                        } else {
+                            $direccion = "";
+                        }
+                        if ($finanzas != "") {
+                            $finanzas = "FI";
+                        } else {
+                            $finanzas = "";
+                        }
+                        if ($rrhh != "") {
+                            $rrhh = "RH";
+                        } else {
+                            $rrhh = "";
+                        }
+
+                        $departamentosMas = $calidad . $compras . $direccion . $finanzas . $rrhh;
+                        if (strlen($departamentosMas) > 2) {
+                            $iconoDepartamentos =
+                                "<p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-3 rounded-full\">
+                            $calidad $compras $direccion $finanzas $rrhh </p>";
+                        } else {
+                            if ($departamentosMas == "CA") {
+                                $iconoDepartamentos =
+                                    "<p class=\"text-xs font-normal bg-blue-200 text-blue-500 py-1 px-2 rounded-full\">Calidad</p>";
+                            } elseif ($departamentosMas == "CO") {
+                                $iconoDepartamentos =
+                                    "<p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">Compras</p>";
+                            } elseif ($departamentosMas == "DI") {
+                                $iconoDepartamentos =
+                                    "<p class=\"text-xs font-normal bg-purple-200 text-purple-500 py-1 px-2 rounded-full\">Dirección</p>";
+                            } elseif ($departamentosMas == "FI") {
+                                $iconoDepartamentos =
+                                    "<p class=\"text-xs font-normal bg-red-200 text-red-500 py-1 px-2 rounded-full\">Compras</p>";
+                            } elseif ($departamentosMas == "RH") {
+                                $iconoDepartamentos =
+                                    "<p class=\"text-xs font-normal bg-teal-200 text-teal-500 py-1 px-2 rounded-full\">RRHH</p>";
+                            }
+                        }
 
 
-                    // Se obtiene los Adjuntos.
-                    $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
-                    $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
+                        // Se obtiene los Adjuntos.
+                        $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
+                        $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
-                        if (mysqli_num_rows($resultAdjuntoMC) > 0) {
-                            $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-3\"></i> ";
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
+                            if (mysqli_num_rows($resultAdjuntoMC) > 0) {
+                                $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-3\"></i> ";
+                            } else {
+                                $iconoAdjuntoMC = "";
+                            }
                         } else {
                             $iconoAdjuntoMC = "";
                         }
-                    } else {
-                        $iconoAdjuntoMC = "";
-                    }
 
 
-                    // Obtiene el ultimo Comentario.
-                    $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
-                    $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
+                        // Obtiene el ultimo Comentario.
+                        $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
+                        $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
-                        $comentarioMC = $rowComentarioMC['comentario'];
-                        $nombreMC = $rowComentarioMC['nombre'];
-                        $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
-                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
+                            $comentarioMC = $rowComentarioMC['comentario'];
+                            $nombreMC = $rowComentarioMC['nombre'];
+                            $apellidoMC = $rowComentarioMC['apellido'];
+                            $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                            $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
-                        if (mysqli_num_rows($resultComentarioMC) > 0) {
-                            $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
-                            $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            if (mysqli_num_rows($resultComentarioMC) > 0) {
+                                $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
+                                $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            } else {
+                                $iconoComentarioMC = "";
+                                $comentarioMC = "Sin Comentario";
+                                $AvatarNombre = "";
+                                $fechaMC = "";
+                                $nombreCompletoMC = "";
+                            }
                         } else {
                             $iconoComentarioMC = "";
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreMC = "";
+                            $apellidoMC = "";
                             $nombreCompletoMC = "";
                         }
-                    } else {
-                        $iconoComentarioMC = "";
-                        $comentarioMC = "Sin Comentario";
-                        $AvatarNombre = "";
-                        $fechaMC = "";
-                        $nombreMC = "";
-                        $apellidoMC = "";
-                        $nombreCompletoMC = "";
-                    }
 
 
-                    $data .= "
+                        $data .= "
                         <div id=\"" . $idMC . "D\" onclick=\"expandir(this.id)\"
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
@@ -2782,6 +2786,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     ";
+                    }
                 }
 
                 $data .= "
@@ -2805,76 +2810,76 @@ if (isset($_POST['action'])) {
                 WHERE t_mc.id_subseccion = $idSubseccion 
                 AND t_mc.status = 'N' AND activo = 1 AND t_mc.status_trabajare !='' $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
-                $resultT = mysqli_query($conn_2020, $queryT);
+                if ($resultT = mysqli_query($conn_2020, $queryT)) {
 
-                foreach ($resultT as $t) {
-                    $contadorT++;
-                    $idMC = $t['id'];
-                    $actidad = $t['actividad'];
-                    $nombre = $t['nombre'];
-                    $apellido = $t['apellido'];
-                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+                    foreach ($resultT as $t) {
+                        $contadorT++;
+                        $idMC = $t['id'];
+                        $actidad = $t['actividad'];
+                        $nombre = $t['nombre'];
+                        $apellido = $t['apellido'];
+                        $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
-                    if ($nombreCompleto == "SIN RESPONSABLE") {
-                        $estiloResponsable = "text-red-600";
-                        $nombreCompleto = "SIN RESPONSABLE";
-                        $iconoResponsable = "";
-                    } else {
-                        $estiloResponsable = "text-gray-600";
-                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
-                    }
+                        if ($nombreCompleto == "SIN RESPONSABLE") {
+                            $estiloResponsable = "text-red-600";
+                            $nombreCompleto = "SIN RESPONSABLE";
+                            $iconoResponsable = "";
+                        } else {
+                            $estiloResponsable = "text-gray-600";
+                            $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                        }
 
-                    // Se obtiene los Adjuntos.
-                    $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
-                    $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
+                        // Se obtiene los Adjuntos.
+                        $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
+                        $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
-                        if (mysqli_num_rows($resultAdjuntoMC) > 0) {
-                            $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
+                            if (mysqli_num_rows($resultAdjuntoMC) > 0) {
+                                $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                            } else {
+                                $iconoAdjuntoMC = "";
+                            }
                         } else {
                             $iconoAdjuntoMC = "";
                         }
-                    } else {
-                        $iconoAdjuntoMC = "";
-                    }
 
 
-                    // Obtiene el ultimo Comentario.
-                    $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
-                    $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
+                        // Obtiene el ultimo Comentario.
+                        $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
+                        $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
-                        $comentarioMC = $rowComentarioMC['comentario'];
-                        $nombreMC = $rowComentarioMC['nombre'];
-                        $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
-                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
+                            $comentarioMC = $rowComentarioMC['comentario'];
+                            $nombreMC = $rowComentarioMC['nombre'];
+                            $apellidoMC = $rowComentarioMC['apellido'];
+                            $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                            $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
-                        if (mysqli_num_rows($resultComentarioMC) > 0) {
-                            $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
-                            $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            if (mysqli_num_rows($resultComentarioMC) > 0) {
+                                $iconoComentarioMC = " <i class=\"fas fa-comment-dots mx-2\"></i> ";
+                                $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            } else {
+                                $iconoComentarioMC = "";
+                                $comentarioMC = "Sin Comentario";
+                                $AvatarNombre = "";
+                                $fechaMC = "";
+                                $nombreCompletoMC = "";
+                            }
                         } else {
                             $iconoComentarioMC = "";
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreMC = "";
+                            $apellidoMC = "";
                             $nombreCompletoMC = "";
                         }
-                    } else {
-                        $iconoComentarioMC = "";
-                        $comentarioMC = "Sin Comentario";
-                        $AvatarNombre = "";
-                        $fechaMC = "";
-                        $nombreMC = "";
-                        $apellidoMC = "";
-                        $nombreCompletoMC = "";
-                    }
 
-                    $data .= "
+                        $data .= "
                         <div id=\"" . $idMC . "T\" onclick=\"expandir(this.id)\"
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
@@ -2916,6 +2921,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     ";
+                    }
                 }
                 $data .= "
                             </div>
@@ -2939,75 +2945,74 @@ if (isset($_POST['action'])) {
                 WHERE t_mc.id_subseccion = $idSubseccion 
                 AND t_mc.status = 'F' AND activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
-                $resultT = mysqli_query($conn_2020, $queryT);
+                if ($resultT = mysqli_query($conn_2020, $queryT)) {
+                    foreach ($resultT as $t) {
+                        $contadorS++;
+                        $idMC = $t['id'];
+                        $actidad = $t['actividad'];
+                        $nombre = $t['nombre'];
+                        $apellido = $t['apellido'];
+                        $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
 
-                foreach ($resultT as $t) {
-                    $contadorS++;
-                    $idMC = $t['id'];
-                    $actidad = $t['actividad'];
-                    $nombre = $t['nombre'];
-                    $apellido = $t['apellido'];
-                    $nombreCompleto = strtok($nombre, ' ') . " " . strtok($apellido, ' ');
+                        if ($nombreCompleto == "SIN RESPONSABLE") {
+                            $estiloResponsable = "text-red-600";
+                            $nombreCompleto = "SIN RESPONSABLE";
+                            $iconoResponsable = "";
+                        } else {
+                            $estiloResponsable = "text-gray-600";
+                            $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
+                        }
 
-                    if ($nombreCompleto == "SIN RESPONSABLE") {
-                        $estiloResponsable = "text-red-600";
-                        $nombreCompleto = "SIN RESPONSABLE";
-                        $iconoResponsable = "";
-                    } else {
-                        $estiloResponsable = "text-gray-600";
-                        $iconoResponsable = "https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=$nombre%20$apellido";
-                    }
+                        // Se obtiene los Adjuntos.
+                        $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
+                        $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
 
-                    // Se obtiene los Adjuntos.
-                    $queryAdjuntoMC = "CALL obtenerAdjuntos_t_mc($idMC)";
-                    $resultAdjuntoMC = mysqli_query($conn_2020, $queryAdjuntoMC);
-
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
-                        if (mysqli_num_rows($resultAdjuntoMC) > 0) {
-                            $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowAdjuntoMC = mysqli_fetch_array($resultAdjuntoMC)) {
+                            if (mysqli_num_rows($resultAdjuntoMC) > 0) {
+                                $iconoAdjuntoMC = " <i class=\"fas fa-paperclip mx-2\"></i> ";
+                            } else {
+                                $iconoAdjuntoMC = "";
+                            }
                         } else {
                             $iconoAdjuntoMC = "";
                         }
-                    } else {
-                        $iconoAdjuntoMC = "";
-                    }
 
 
-                    // Obtiene el ultimo Comentario.
-                    $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
-                    $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
+                        // Obtiene el ultimo Comentario.
+                        $queryComentarioMC = "CALL obtenerComentario_t_mc($idMC)";
+                        $resultComentarioMC = mysqli_query($conn_2020, $queryComentarioMC);
 
-                    // Se libera la conexion.
-                    $conn_2020->next_result();
-                    if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
-                        $comentarioMC = $rowComentarioMC['comentario'];
-                        $nombreMC = $rowComentarioMC['nombre'];
-                        $apellidoMC = $rowComentarioMC['apellido'];
-                        $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
-                        $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
+                        // Se libera la conexion.
+                        $conn_2020->next_result();
+                        if ($rowComentarioMC = mysqli_fetch_array($resultComentarioMC)) {
+                            $comentarioMC = $rowComentarioMC['comentario'];
+                            $nombreMC = $rowComentarioMC['nombre'];
+                            $apellidoMC = $rowComentarioMC['apellido'];
+                            $fechaMC = (new DateTime($rowComentarioMC['fecha']))->format('d-m-y');
+                            $nombreCompletoMC = strtok($nombreMC, ' ') . " " . strtok($apellidoMC, ' ');
 
-                        if (mysqli_num_rows($resultComentarioMC) > 0) {
-                            $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
-                            $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            if (mysqli_num_rows($resultComentarioMC) > 0) {
+                                $iconoComentarioMC = " <i class=\"fas fa-comment-dots\"></i> ";
+                                $AvatarNombre = "https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=$nombreMC%$apellidoMC";
+                            } else {
+                                $iconoComentarioMC = "";
+                                $comentarioMC = "Sin Comentario";
+                                $AvatarNombre = "";
+                                $fechaMC = "";
+                                $nombreCompletoMC = "";
+                            }
                         } else {
                             $iconoComentarioMC = "";
                             $comentarioMC = "Sin Comentario";
                             $AvatarNombre = "";
                             $fechaMC = "";
+                            $nombreMC = "";
+                            $apellidoMC = "";
                             $nombreCompletoMC = "";
                         }
-                    } else {
-                        $iconoComentarioMC = "";
-                        $comentarioMC = "Sin Comentario";
-                        $AvatarNombre = "";
-                        $fechaMC = "";
-                        $nombreMC = "";
-                        $apellidoMC = "";
-                        $nombreCompletoMC = "";
-                    }
-                    $data .= "
+                        $data .= "
                         <div id=\"" . $idMC . "S\" onclick=\"expandir(this.id)\"
                             class=\"flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md\">
                             <!-- Titulo -->
@@ -3051,6 +3056,7 @@ if (isset($_POST['action'])) {
                             </div>
                         </div>
                     ";
+                    }
                 }
 
                 $data .= "
@@ -3136,6 +3142,7 @@ if (isset($_POST['action'])) {
             echo $data;
         }
     }
+
 
     if ($action == "consultaFinalExcel") {
         $data = array();
@@ -3229,6 +3236,7 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
+
 
     // Borrar.
     if ($action == "consultarPendientesSubseccionesExcel") {
@@ -4037,6 +4045,7 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
+
 
     // Se obtienen todos los MCN - Pendientes por Equipo y TG.
     if ($action == "obtenerMCN") {
@@ -9193,6 +9202,7 @@ if (isset($_POST['action'])) {
         echo json_encode($data);
     }
 
+
     // Agrega comentario según el tipo de pendiente
     if ($action == "comentarioVP") {
         $idPendiente = $_POST['idPendiente'];
@@ -9215,6 +9225,7 @@ if (isset($_POST['action'])) {
             }
         }
     }
+
 
     #****************** INFORMACIÓN DE EQUIPO Y MP ******************
 

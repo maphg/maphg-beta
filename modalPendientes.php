@@ -277,7 +277,7 @@ if ($result) {
         INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-        WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') 
+        WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P' or t_mp_np.status= 'SOLUCIONADO') 
         $filtroSeccionT $filtroUsuarioT $filtroDestinoTareas";
         // echo $queryTareas;
         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
@@ -407,7 +407,7 @@ if ($result) {
             INNER JOIN t_users ON t_mc.responsable = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
             WHERE t_mc.id_subseccion = $idSubseccion 
-            AND t_mc.status = 'N' AND activo = 1 
+            AND (t_mc.status = 'N' or t_mc.status = 'PENDIENTE') and activo = 1 
             AND(t_mc.departamento_calidad != '' OR t_mc.departamento_compras != '' OR t_mc.departamento_direccion != '' OR t_mc.departamento_finanzas != '' OR t_mc.departamento_rrhh != '') 
             $filtroUsuario $filtroSeccion $filtroDestinoMC
             ORDER BY t_mc.id DESC";
@@ -735,7 +735,7 @@ if ($result) {
             LEFT JOIN t_users ON t_mc.responsable = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
             WHERE t_mc.id_subseccion = $idSubseccion 
-            AND t_mc.status = 'F' AND activo = 1 AND t_mc.fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'
+            AND (t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO') AND activo = 1 AND t_mc.fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'
             $filtroUsuario $filtroSeccion $filtroDestinoMC  
 
             ORDER BY t_mc.id DESC";

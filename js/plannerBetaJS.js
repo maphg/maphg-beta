@@ -6,8 +6,10 @@ let idDestino = localStorage.getItem("idDestino");
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
-// ICONO LOADER
+// ICONOS 
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
+
 
 // Función principal.
 function comprobarSession() {
@@ -752,6 +754,7 @@ function pendientesSubsecciones(
          document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[9].innerHTML = 'Solucionados ' + '(' + data.contadorS + ')';
 
       },
+      error: function (err) { console.log(err) }
    });
 }
 
@@ -6202,25 +6205,110 @@ function agregarAdjuntoTest(idTest) {
 }
 
 
-
 // FUNCION PARA OBTENER LOS PENDIENTES DE ENERGETICOS
-function obtenerEnergeticos() {
+function obtenerEnergeticos(idSeccion, idSubseccion) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
-   const action = '';
-   const URL = ``;
+   let contenedor = document.getElementById("dataEnergeticos");
 
-   console.log(URL);
+   const action = 'obtenerEnergeticos';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
+
+         contenedor.innerHTML = '';
+
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idEnergetico = array[x].idEnergetico;
+               const actividad = array[x].actividad;
+               const creadoPor = array[x].creadoPor;
+               const responsable = array[x].responsable;
+               const fechaInicio = array[x].fechaInicio;
+               const fechaFin = array[x].fechaFin;
+               const status = array[x].status;
+               const statusTrabajare = array[x].statusTrabajare;
+               const sUrgente = array[x].sUrgente;
+               const sDepartamentos = array[x].sDepartamentos;
+               const sEnergeticos = array[x].sEnergeticos;
+               const adjuntos = array[x].adjuntos
+               const comentarios = array[x].comentarios;
+
+               if (adjuntos > 0) {
+                  adjuntosX = adjuntos;
+               } else {
+                  adjuntosX = iconoDefault;
+               }
+
+               if (comentarios > 0) {
+                  comentariosX = comentarios;
+               } else {
+                  comentariosX = iconoDefault;
+               }
+
+               const codigo = `
+                  <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
+           
+                     <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
+                        <div class="font-semibold uppercase leading-4" data-title="${actividad}">
+                           <h1 class="truncate">${actividad} </h1>
+                        </div>
+                        <div class="text-gray-500 leading-3 flex">
+                           <h1>Creado por: ${creadoPor}</h1>
+                        </div>
+                     </td>
+
+                     <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+                        <h1>0</h1>
+                     </td>
+                     
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" data-test="${responsable}">
+                        <h1>${responsable}</h1>
+                     </td>
+
+                     <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                        <div class="leading-4">${fechaInicio}</div>
+                        <div class="leading-3">${fechaFin}</div>
+                     </td>
+
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                        <h1>${comentariosX}</h1>
+                     </td>
+
+                     <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                        <h1>${adjuntosX}</h1>
+                     </td>
+
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
+                        <div class="text-sm flex justify-center items-center font-bold">
+                        </div>
+                     </td>
+                     
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                        <h1><a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#T5390" class="text-black" target="_blank">T5390</a></h1>
+                     </td>
+
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+                        <div class="px-2">
+                           <i class="fas fa-ellipsis-h  text-lg"></i>
+                        </div>
+                     </td>
+
+                  </tr>
+               `;
+               contenedor.insertAdjacentHTML('beforeend', codigo);
+            }
+
+         }
       })
       .catch(function (err) {
          fetch(APIERROR + err + ``);
+         contenedor.innerHTML = '';
       })
 }
+
 
 // ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
 function eliminarAdjunto(idAdjunto, tipoAdjunto) {

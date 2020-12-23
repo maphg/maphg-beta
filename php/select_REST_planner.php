@@ -1270,5 +1270,124 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
+
+    // OBTIENE LOS PENDIENTES DE ENERGETICOS
+    if ($action == "obtenerEnergeticos") {
+        $idSeccion = $_GET["idSeccion"];
+        $idSubseccion = $_GET["idSubseccion"];
+
+        $array = array();
+
+        $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.responsable,
+        t_energeticos.rango_fecha,
+        t_energeticos.status,
+        t_energeticos.status_trabajare,
+        t_energeticos.status_urgente,
+        t_energeticos.departamento_calidad,
+        t_energeticos.departamento_compras,
+        t_energeticos.departamento_direccion,
+        t_energeticos.departamento_finanzas,
+        t_energeticos.departamento_rrhh,
+        t_energeticos.energetico_electricidad,
+        t_energeticos.energetico_agua,
+        t_energeticos.energetico_diesel,
+        t_energeticos.energetico_gas,
+        t_energeticos.cod2bend,
+        t_energeticos.codsap,
+        t_energeticos.bitacora_gp,
+        t_energeticos.bitacora_trs,
+        t_energeticos.bitacora_zi,
+        t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_energeticos 
+        INNER JOIN t_users ON t_energeticos.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEnergetico = $x['id'];
+                $actividad = $x['actividad'];
+                $idResponsable = $x['responsable'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $rangoFecha = $x['rango_fecha'];
+                $status = $x['status'];
+                $sTrabajare = $x['status_trabajare'];
+                $sUrgente = $x['status_urgente'];
+                $cod2bend = $x['cod2bend'];
+                $codsap = $x['codsap'];
+                $bitacoraGP = $x['bitacora_gp'];
+                $bitacoraTRS = $x['bitacora_trs'];
+                $bitacoraZI = $x['bitacora_zi'];
+
+                $sDepartamentos = intval($x['departamento_calidad']) + intval($x['departamento_compras']);
+                +intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+
+                $sEnergeticos = $x['energetico_electricidad'] + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+
+                #RANGO FECHA
+                $fechaInicio = "";
+                $fechaFin = "";
+                if ($rangoFecha != "") {
+                    $fechaInicio = substr($rangoFecha, -10);
+                    $fechaFin = substr($rangoFecha, -23, 10);
+                }
+
+                #RESPONSABLE
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador  = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = strtok($x['nombre'], ' ') . " " .
+                            strtok($x['apellido'], ' ');
+                    }
+                }
+
+                # ADJUNTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'id' FROM t_energeticos_adjuntos 
+                WHERE id_energetico = $idEnergetico and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['id'];
+                    }
+                }
+
+                # COMENTARIOS
+                $totalComentarios = 0;
+                $query = "SELECT count(id) 'id' FROM t_energeticos_comentarios 
+                WHERE id_energetico = $idEnergetico and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['id'];
+                    }
+                }
+
+                $array[] = array(
+                    "idEnergetico" => intval($idEnergetico),
+                    "actividad" => $actividad,
+                    "creadoPor" => $creadoPor,
+                    "responsable" => $responsable,
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "status" => $status,
+                    "sTrabajare" => intval($sTrabajare),
+                    "sUrgente" => intval($sUrgente),
+                    "sEnergeticos" => intval($sEnergeticos),
+                    "sDepartamentos" => intval($sDepartamentos),
+                    "cod2bend" => $cod2bend,
+                    "codsap" => $codsap,
+                    "bitacoraGP" => $bitacoraGP,
+                    "bitacoraTRS" => $bitacoraTRS,
+                    "bitacoraZI" => $bitacoraZI,
+                    "comentarios" => intval($totalComentarios),
+                    "adjuntos" => intval($totalAdjuntos)
+                );
+            }
+        }
+        echo json_encode($array);
+    }
     // CIERRE FINAL
 }
