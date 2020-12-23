@@ -450,7 +450,7 @@ if (isset($_POST['action'])) {
                             $dataZIE .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos'); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -1289,7 +1289,7 @@ if (isset($_POST['action'])) {
                             $dataZHC .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos');\">
+                                    onclick=\"actualizarSeccionSubseccion($idSeccion, 200);  toggleModalTailwind('modalProyectos'); obtenerProyectos($idSeccion, 'PENDIENTE');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
@@ -2359,7 +2359,7 @@ if (isset($_POST['action'])) {
                 INNER JOIN t_users ON t_mc.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                 WHERE t_mc.id_subseccion = $idSubseccion 
-                AND t_mc.status = 'N' AND activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
+                AND t_mc.status = 'N' AND t_mc.activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
 
                 if ($resultMCP = mysqli_query($conn_2020, $queryMCP)) {
