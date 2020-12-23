@@ -886,7 +886,6 @@ if ($result) {
     $arrayData['exportarMisCreadosPDF'] = $exportarMisCreadosPDF;
     $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
     $arrayData['exportarSubseccionPDF'] = $exportarSubseccionPDF;
-    echo $queryT;
 }
 // echo json_encode($arrayData);
 ?>
