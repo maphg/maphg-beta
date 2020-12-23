@@ -735,7 +735,7 @@ if ($result) {
             LEFT JOIN t_users ON t_mc.responsable = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
             WHERE t_mc.id_subseccion = $idSubseccion 
-            AND (t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO') AND activo = 1 AND t_mc.fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'
+            AND (t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO' or t_mc.status = 'P') AND activo = 1 AND t_mc.fecha_creacion BETWEEN '$fechaFin' AND '$fechaActual'
             $filtroUsuario $filtroSeccion $filtroDestinoMC  
 
             ORDER BY t_mc.id DESC";
