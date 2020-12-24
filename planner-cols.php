@@ -1675,7 +1675,7 @@
 
             <!-- CONTENIDO PROYECTOS -->
             <div id="contenidoProyectos" class="flex flex-col mx-auto contenedor">
-                <div class="align-middle inline-block shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar w-auto mx-auto relative bg-white" style="min-height: 70vh; max-height: 80vh;">
+                <div class="align-middle inline-block shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar w-auto mx-auto relative bg-white" style="min-height: 79vh; max-height: 80vh;">
                     <table class="divide-y divide-gray-200  sortable">
                         <thead>
                             <tr class="cursor-pointer bg-white">
