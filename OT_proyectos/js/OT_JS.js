@@ -3,7 +3,7 @@ function validarOT() {
     const idOT = URL.replace(/#|P|/gi, '');
 
     if (idOT > 0) {
-        generarOT(idOT, 'TAREA');
+        generarOT(idOT);
         alertaImg('Generando OT #' + idOT, '', 'success', 1500);
     } else {
         alertaImg('No se Encontro OT #' + idOT, '', 'info', 1500);
@@ -11,19 +11,17 @@ function validarOT() {
 }
 
 
-
 function generarOT(idOT) {
     // OT -> idPlanaccion
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
-    const ruta = 'php/ot_crud.php?';
     const action = 'obtnerOTPlanaccion';
-    const URL = `${ruta}action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idOT=${idOT}`;
-    // const URL = 'php/ot_crud.php?action=obtnerOTPlanaccion&idDestino=10&idUsuario=1&ot=3217';
+    // const URL = `${ruta}action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idOT=${idOT}`;
+    const URL = `php/ot_crud.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idOT=${idOT}`;
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            if (array.length > 0 && array != undefined) {
+            if (array && array != undefined) {
 
                 document.getElementById("numeroOT").innerHTML = 'OT NÚMERO ' + array.idPlanaccion;
                 document.getElementById("idOTQR").innerHTML = array.idPlanaccion;
@@ -73,19 +71,6 @@ function generarOT(idOT) {
                         `;
                     }
                 }
-
-                // document.getElementById("logoClassOT").classList.remove();
-
-                // document.getElementById("comentarioOT").innerHTML = ''
-                // document.getElementById("periodicidadOT").innerHTML = '';
-                // document.getElementById("semanaOT").innerHTML = '';
-
-                // document.getElementById("añoOT").innerHTML = array.año;
-                // document.getElementById("equipoOT").innerHTML = array.equipo;
-                // document.getElementById("fechaOT").innerHTML = 'GENERADA EL ' + array.fechaCreacion;
-                // document.getElementById("dataMaterialesOT").innerHTML = '';
-                // document.getElementById("indicacionesAdicionalesOT").innerHTML = '';
-
             } else {
                 alertaImg('No se Encontro OT #' + idOT, '', 'info', 1000);
             }
