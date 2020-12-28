@@ -45,8 +45,8 @@ if (isset($_POST['action'])) {
         INNER JOIN c_tipos ON t_mp_planes_mantenimiento.tipo_local_equipo = c_tipos.id
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
         WHERE t_mp_planes_mantenimiento.status = 'ACTIVO' AND t_mp_planes_mantenimiento.activo = 1 $filtroDestino 
-        $filtroPalabraBuscar 
-        ";
+        $filtroPalabraBuscar
+        ORDER BY t_mp_planes_mantenimiento.id DESC";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
