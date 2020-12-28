@@ -1632,7 +1632,7 @@ function actualizarActividadPlanaccion(idActividad, parametro, columna) {
 function agregarPlanaccion() {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let actividad = document.getElementById("agregarPlanaccion").value;
+    let actividad = document.getElementById("agregarPlanaccion");
     let idProyecto = localStorage.getItem('idProyecto');
     if (actividad.length >= 1) {
         const action = "agregarPlanaccion";
@@ -1644,19 +1644,22 @@ function agregarPlanaccion() {
                 idUsuario: idUsuario,
                 idDestino: idDestino,
                 idProyecto: idProyecto,
-                actividad: actividad
+                actividad: actividad.value
             },
-            // dataType: "JSON",
+            dataType: "JSON",
             success: function (data) {
                 if (data.length > 1) {
                     document.getElementById("agregarPlanaccion").value = '';
                     obtenerProyectosGlobal('PENDIENTE');
                     obtenerPlanaccion(idProyecto);
                     alertaImg("Actividad Agregada", "", "success", 2500);
+                    actividad.value = '';
                 } else {
                     alertaImg("Intente de Nuevo", "", "info", 3000);
                 }
-            },
+            }, error: function (err) {
+                console.log(err);
+            }
         });
     } else {
         alertaImg("Intente de Nuevo", "", "info", 3000);

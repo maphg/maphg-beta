@@ -655,19 +655,16 @@ function consultaSubsecciones(idDestino, idUsuario) {
 
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
-function pendientesSubsecciones(
-   idSeccion,
-   tipoPendiente,
-   nombreSeccion,
-   idUsuario,
-   idDestino
-) {
-   document.getElementById("dataOpcionesSubseccionestoggle").innerHTML = "";
+function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+   let contenedorSubsecciones = document.getElementById("dataOpcionesSubseccionestoggle");
    document.getElementById("modalPendientes").classList.add("open");
    document.getElementById("estiloSeccion").innerHTML = iconoLoader;
    // document.getElementById("modalTituloSeccion").innerHTML = nombreSeccion;
    document.getElementById("dataSubseccionesPendientes").innerHTML =
       "Obteniendo Datos...";
+
+   // Valores iniciales
+   contenedorSubsecciones.innerHTML = "";
 
    const action = "consultarPendientesSubsecciones";
    $.ajax({
@@ -682,6 +679,10 @@ function pendientesSubsecciones(
       },
       dataType: "JSON",
       success: function (data) {
+
+         // OPCIONES PARA SUBSECCIONES
+         contenedorSubsecciones.innerHTML = data.dataOpcionesSubsecciones;
+
          // Tipo de Vista Seleccionado
          document.getElementById("tipoPendienteNombre").innerHTML =
             data.tipoPendienteNombre;
@@ -754,7 +755,6 @@ function pendientesSubsecciones(
          document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[9].innerHTML = 'Solucionados ' + '(' + data.contadorS + ')';
 
       },
-      error: function (err) { console.log(err) }
    });
 }
 

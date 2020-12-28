@@ -2278,13 +2278,11 @@ if (isset($_POST['action'])) {
             FROM c_subsecciones 
             INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
             WHERE c_subsecciones.id_seccion = $idSeccion";
-            $result = mysqli_query($conn_2020, $query);
         } else {
             $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
-            $result = mysqli_query($conn_2020, $query);
         }
 
-        if ($result) {
+        if ($result = mysqli_query($conn_2020, $query)) {
             $conn_2020->next_result();
             foreach ($result as $row) {
                 $data = "";
@@ -2359,7 +2357,7 @@ if (isset($_POST['action'])) {
                 INNER JOIN t_users ON t_mc.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                 WHERE t_mc.id_subseccion = $idSubseccion 
-                AND t_mc.status = 'N' AND t_mc.activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
+                AND (t_mc.status = 'N' or t_mc.status = 'PENDIENTE') AND t_mc.activo = 1 $filtroUsuario $filtroSeccion $filtroDestinoMC
                 ORDER BY t_mc.id DESC";
 
                 if ($resultMCP = mysqli_query($conn_2020, $queryMCP)) {
@@ -2483,12 +2481,11 @@ if (isset($_POST['action'])) {
                 }
 
                 $queryTareas = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.fecha_finalizado, t_colaboradores.nombre, t_colaboradores.apellido 
-                FROM t_mp_np 
+                FROM t_mp_np
                 INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-                WHERE t_equipos.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') 
-                $filtroSeccionT $filtroUsuarioT $filtroDestinoTareas";
+                LEFT JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
+                WHERE t_mp_np.id_seccion = $idSeccion and t_mp_np.id_subseccion = $idSubseccion AND t_mp_np.activo = 1 AND (t_mp_np.status= 'N' OR t_mp_np.status= 'P') $filtroUsuarioT $filtroDestinoTareas";
                 if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                     foreach ($resultTareas as $value) {
                         $contadorTyF++;
@@ -2612,7 +2609,7 @@ if (isset($_POST['action'])) {
 
                 $queryDEP = "SELECT 
                 t_mc.departamento_calidad, t_mc.departamento_compras, t_mc.departamento_direccion, t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.id, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido  
-                FROM t_mc 
+                FROM t_mc
                 INNER JOIN t_users ON t_mc.responsable = t_users.id 
                 INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
                 WHERE t_mc.id_subseccion = $idSubseccion 

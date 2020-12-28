@@ -1251,10 +1251,10 @@ function agregarComentarioPlanaccion(idPlanaccion) {
 function agregarPlanaccion() {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let actividad = document.getElementById("agregarPlanaccion").value;
+    let actividad = document.getElementById("agregarPlanaccion");
     let idSeccion = localStorage.getItem('idSeccion');
     let idProyecto = localStorage.getItem('idProyecto');
-    if (actividad.length >= 1) {
+    if (actividad.value.length >= 1) {
         const action = "agregarPlanaccion";
         $.ajax({
             type: "POST",
@@ -1264,15 +1264,16 @@ function agregarPlanaccion() {
                 idUsuario: idUsuario,
                 idDestino: idDestino,
                 idProyecto: idProyecto,
-                actividad: actividad
+                actividad: actividad.value
             },
-            // dataType: "JSON",
+            dataType: "JSON",
             success: function (data) {
-                if (data.length > 1) {
+                if (data == 1) {
                     document.getElementById("agregarPlanaccion").value = '';
                     obtenerProyectos(idSeccion, 'PENDIENTE');
                     obtenerPlanaccion(idProyecto);
                     alertaImg("Actividad Agregada", "", "success", 2500);
+                    actividad.value = '';
                 } else {
                     alertaImg("Intente de Nuevo", "", "info", 3000);
                 }
