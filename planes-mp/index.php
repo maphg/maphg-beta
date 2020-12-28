@@ -29,32 +29,32 @@
     <div class="flex flex-col container mx-auto scrollbar">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
             <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar"
-                style="max-height: 80vh;">
+                style="max-height: 65vh;">
                 <table id="tablaGestionPlanes" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead>
                         <tr class="cursor-pointer">
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Destino
                             </th>
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Marca
                             </th>
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Tipo equipo/local
                             </th>
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Tipo de plan
                             </th>
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Grado
                             </th>
                             <th
-                                class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Periodicidad
                             </th>
                         </tr>
@@ -378,7 +378,7 @@
                     </label>
                     <div class="relative">
                         <div class="relative">
-                            <input id="dataTiempoActividadPlanMP" placeholder="En minutos" type="number" name="" id=""
+                            <input id="dataTiempoActividadPlanMP" placeholder="En minutos" type="number"
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 min="0" value="1">
 
@@ -394,10 +394,6 @@
                         <div class="relative">
                             <select id="dataMedicionActividadPlanMP"
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">Seleccione...</option>
-                                <option value="VOLTAJE">Voltaje</option>
-                                <option value="VOLTAJE">HMS</option>
-                                <option value="VOLTAJE">KW</option>
                             </select>
 
                         </div>
