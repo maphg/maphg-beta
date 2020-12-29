@@ -875,7 +875,7 @@
 
                             <div class="col-span-6">
                                 <label class="block text-sm font-medium text-gray-700">Equipo / Local</label>
-                                <input id="descripcionXEquipo" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md" maxlength="60" pattern="[A-Za-z]{3}" title="(Max 60 Caracteres)" placeholder="Nombre De Equipo/Local">
+                                <input id="descripcionXEquipo" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md" maxlength="150" title="(Max 60 Caracteres)" placeholder="Nombre De Equipo/Local">
                             </div>
 
 
