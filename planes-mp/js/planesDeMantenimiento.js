@@ -559,9 +559,7 @@ function obtenerMaterialPlanMP() {
 }
 
 // Funciones Iniciales:
-window.onload = function () {
     obtenerPlanesMP();
-}
 
 document.getElementById("buscarPlanMP").
     addEventListener("keyup", function () {
