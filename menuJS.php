@@ -20,7 +20,7 @@
     <dav class="menu-contenedor-2">
         <dav class="menu-contenedor-3">
             <dav class="menu-contenedor-logo">
-                <img src="svg/logo-white.svg" alt="" class="menu-contenedor-logo-imagen">
+                <img src="https://www.maphg.com/beta/svg/logo-white.svg" alt="" class="menu-contenedor-logo-imagen">
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
@@ -34,10 +34,10 @@
                 <a href="https://www.maphg.com/beta/planner-cols.php" target="_blanck" class="menu-hijo-3 CA">TR Mantto</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora diaria</a>
+                <a href="https://www.maphg.com/beta/bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora diaria</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="lavanderia.php" target="_blanck" class="menu-hijo-3 CA">Lavanderiá</a>
+                <a href="https://www.maphg.com/beta/lavanderia.php" target="_blanck" class="menu-hijo-3 CA">Lavanderiá</a>
             </dav>
             <dav class="menu-hijo-2">
                 <o data-target="nieto1" data-toggle="hijo" href="#" class="menu-hijo-3 CA">Satisfacción</o>
@@ -101,7 +101,7 @@
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
-                <a href="energeticos.php" target="_blank" class="CA hover:text-black">Energéticos</a>
+                <a href="https://www.maphg.com/beta/energeticos.php" target="_blank" class="CA hover:text-black">Energéticos</a>
             </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
