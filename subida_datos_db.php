@@ -33,6 +33,7 @@
                 <option value="t_colaboradores">Cuentas Colaboradores (t_colaboradores)</option>
                 <option value="t_stock_america">Stock (t_stock_america)</option>
                 <option value="t_equipos">Equipos Tabla Antigua (t_equipos)</option>
+                <option value="t_equipos_america">Equipos (t_equipos_america)</option>
                 <option value="t_mp_np">TAREAS (t_mp_np)</option>
                 <option value="t_subcontratas_america_materiales">Subcontratas AME (t_subcontratas_america_materiales)</option>
                 <option value="t_compras_america_materiales">Compras AME (t_compras_america_materiales)</option>
