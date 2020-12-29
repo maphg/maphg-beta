@@ -63,9 +63,10 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and t_mp_np.id_destino = $idDestino";
         }
 
-        if ($idEquipo == 0) {
+        if ($idEquipo <= 0) {
             $filtroEquipo = "and t_mp_np.id_seccion = $idSeccion and 
-            t_mp_np.id_subseccion = $idSubseccion ";
+            t_mp_np.id_subseccion = $idSubseccion";
+            $idEquipo = 0;
         } else {
             $filtroEquipo = "";
         }
@@ -88,7 +89,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_mp_np.id_equipo = $idEquipo and t_mp_np.activo = 1 $filtroEquipo
+        WHERE t_mp_np.id_equipo = $idEquipo and t_mp_np.activo = 1 $filtroEquipo $filtroDestino
         ORDER BY t_mp_np.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {

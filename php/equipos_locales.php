@@ -480,7 +480,7 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and id_destino = '$idDestino'";
             $filtroDestinoTarea = "and t_equipos_america.id_destino = '$idDestino'";
             $filtroDestinoMP = "and t_equipos_america.id_destino = '$idDestino'";
-            $filtroDestinoTG = "and id_destino = '$idDestino'";
+            $filtroDestinoTG = "and id_destino = $idDestino";
             $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
         }
 
@@ -520,7 +520,7 @@ if (isset($_GET['action'])) {
 
         #TAREAS GENERALES SOLUCIONADAS
         $array['tareasGS'] = 0;
-        $query = "SELECT count(t_mp_np.id) 'id'
+        $query = "SELECT count(id) 'id'
         FROM t_mp_np
         WHERE activo = 1 and 
         (status = 'F' or status = 'SOLUCIONADO') and 
@@ -535,16 +535,17 @@ if (isset($_GET['action'])) {
 
         #TAREAS GENERALES PENDIENTES
         $array['tareasGP'] = 0;
-        $query = "SELECT count(t_mp_np.id) 'id'
+        $query = "SELECT count(id) 'id'
         FROM t_mp_np
         WHERE activo = 1 and 
-        (t_mp_np.status = 'N' or status = 'P' or status = 'PENDIENTE') and 
+        (status = 'N' or status = 'P' or status = 'PENDIENTE' or status = '') and 
         id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 
         $filtroDestinoTG";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalTareasGP = $x['id'];
-                $array['tareasGP'] = intval($totalTareasGP);
+                // $array['tareasGP'] = intval($totalTareasGP);
+                $array['tareasGP'] = $query;
             }
         }
 
