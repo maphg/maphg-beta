@@ -119,8 +119,6 @@ function obtenerPlanesMP() {
             // console.log(data);
             document.getElementById('contenedorDePlanes').innerHTML = '';
             data.forEach(element => {
-                // console.log(element);
-                // setTimeout(function () { $tablaPlanesDeMantto.innerHTML += datosPlanes(element); }, 90);
                 $tablaPlanesDeMantto.innerHTML += datosPlanes(element);
             });
         }

@@ -351,7 +351,7 @@ if (isset($_GET['action'])) {
         $idSubseccion = $_GET['idSubseccion'];
         $array = array();
 
-        $query = "SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino and id_seccion = $idSubseccion and id_subseccion = $idSubseccion";
+        $query = "SELECT id, equipo FROM t_equipos_america WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $id = $i['id'];
