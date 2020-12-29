@@ -1394,21 +1394,21 @@ function agregarEquipoLocal() {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
 
-    let equipo = document.getElementById("descripcionXEquipo").value;
-    let destino = document.getElementById("destinoXEquipo").value;
-    let seccion = document.getElementById("seccionXEquipo").value;
-    let subseccion = document.getElementById("subseccionXEquipo").value;
-    let tipo = document.getElementById("tipoXEquipo").value;
-    let marca = document.getElementById("marcaXEquipo").value;
-    let equipolocal = document.getElementById("equipoXLocal").value;
-    let modelo = document.getElementById("modeloXEquipo").value;
-    let jerarquia = document.getElementById("jerarquiaXEquipo").value;
-    let equipoPadre = document.getElementById("jerarquiaPadreXEquipo").value;
+    let equipo = document.getElementById("descripcionXEquipo");
+    let destino = document.getElementById("destinoXEquipo");
+    let seccion = document.getElementById("seccionXEquipo");
+    let subseccion = document.getElementById("subseccionXEquipo");
+    let tipo = document.getElementById("tipoXEquipo");
+    let marca = document.getElementById("marcaXEquipo");
+    let equipolocal = document.getElementById("equipoXLocal");
+    let modelo = document.getElementById("modeloXEquipo");
+    let jerarquia = document.getElementById("jerarquiaXEquipo");
+    let equipoPadre = document.getElementById("jerarquiaPadreXEquipo");
 
     const action = "agregarEquipoLocal";
-    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo}&destino=${destino}&seccion=${seccion}&subseccion=${subseccion}&tipo=${tipo}&marca=${marca}&equipolocal=${equipolocal}&status=${status}&modelo=${modelo}&jerarquia=${jerarquia}&equipoPadre=${equipoPadre}`;
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo.value}&destino=${destino.value}&seccion=${seccion.value}&subseccion=${subseccion.value}&tipo=${tipo.value}&marca=${marca.value}&equipolocal=${equipolocal.value}&status=${status.value}&modelo=${modelo.value}&jerarquia=${jerarquia.value}&equipoPadre=${equipoPadre.value}`;
 
-    if (equipo != "" && destino != "" && seccion != "" && subseccion != "" && tipo != "" && marca != "" && equipolocal != "" && jerarquia != "") {
+    if (equipo.value != "" && destino.value != "" && seccion.value != "" && subseccion.value != "" && tipo.value != "" && marca.value != "" && equipolocal.value != "" && jerarquia.value != "") {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
@@ -1416,6 +1416,16 @@ function agregarEquipoLocal() {
                     consultaEquiposLocales();
                     alertaImg(equipolocal + ' Agregado', '', 'success', 1200);
                     document.getElementById("modalAgregarEquipo").classList.remove('open');
+                    equipo.value = '';
+                    destino.value = '';
+                    seccion.value = '';
+                    subseccion.value = '';
+                    tipo.value = '';
+                    marca.value = '';
+                    equipolocal.value = '';
+                    modelo.value = '';
+                    jerarquia.value = '';
+                    equipoPadre.value = '';
                 } else {
                     alertaImg('Intente de Nuevo', '', 'info', 1200);
                 }
