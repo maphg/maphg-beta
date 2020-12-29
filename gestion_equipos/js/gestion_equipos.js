@@ -1331,7 +1331,6 @@ document.getElementById("jerarquiaXEquipo").addEventListener('change', () => {
                 .then(array => array.json())
                 .then(array => {
                     contenedor.innerHTML = '';
-                    console.log(array);
                     if (array.length > 0) {
                         for (let x = 0; x < array.length; x++) {
                             const idEquipo = array[x].idEquipo;
