@@ -544,8 +544,7 @@ if (isset($_GET['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalTareasGP = $x['id'];
-                // $array['tareasGP'] = intval($totalTareasGP);
-                $array['tareasGP'] = $query;
+                $array['tareasGP'] = intval($totalTareasGP);
             }
         }
 
