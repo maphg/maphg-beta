@@ -1,9 +1,5 @@
 'use strict'
 
-//Variables Globales.
-let idDestino = localStorage.getItem('idDestino');
-let idUsuario = localStorage.getItem('usuario');
-
 const $tablaPlanesDeMantto = document.getElementById('contenedorDePlanes');
 const datosPlanes = params => {
     var marca = params.marca;
@@ -101,9 +97,10 @@ function showInfoPlanMP() {
 
 
 function obtenerPlanesMP() {
-
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
     let palabraBuscar = document.getElementById("buscarPlanMP").value;
-    // console.log(palabraBuscar);
+
     const action = "obtenerPlanesMP";
     $.ajax({
         type: "POST",
@@ -116,7 +113,6 @@ function obtenerPlanesMP() {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             document.getElementById('contenedorDePlanes').innerHTML = '';
             data.forEach(element => {
                 $tablaPlanesDeMantto.innerHTML += datosPlanes(element);
@@ -142,7 +138,6 @@ function obtenerOpcionesPlanMP() {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             document.getElementById("dataOptionDestinosMP").innerHTML = data.dataDestinos;
             document.getElementById("dataOpcionFaseMP").innerHTML = data.dataFases;
             document.getElementById("dataOpcionTipoEquiposMP").innerHTML = data.dataTipos;
@@ -154,7 +149,6 @@ function obtenerOpcionesPlanMP() {
 
 // Funcion para Agregar un Plan MP.
 function AgregarPlanMP() {
-    // console.log('AgregarPlanMP');
     obtenerOpcionesPlanMP();
     document.getElementById("modalDetallesPlanMP").classList.add('open');
     alertaImg(' Debe contener al menos una ACTIVIDAD', '', 'question', 9000);
@@ -173,7 +167,6 @@ function AgregarPlanMP() {
         },
         // dataType: "JSON",
         success: function (data) {
-            // console.log('Data: ', data);
             if (data > 0) {
                 localStorage.setItem('idPlanMP', data);
                 obtenerDetallesPlanMP(data);
@@ -211,7 +204,6 @@ function obtenerDetallesPlanMP(idPlanMP) {
         },
         dataType: "JSON",
         success: function (data) {
-            // console.log(data);
             obtenerMaterialPlanMP();
             obtenerActividadesPlanMP();
             document.getElementById("dataOptionDestinosMP").value = data.idDestino;
@@ -246,7 +238,6 @@ function guardarCambiosPlanMP(status) {
     let personas = document.getElementById("dataPersonasPlanMP").value;
     let observacion = document.getElementById("dataObservacionesPlanMP").value;
 
-    // console.log(status, idDestinoSeleccionado, opcionFase, localEquipo, tipoEquipo, tipoPlan, gradoPlan, periodicidad, tiempoEjecucion, observacion);
 
     function limpiarCamposPlanMP() {
         document.getElementById("dataOptionDestinosMP").value = '';
@@ -284,7 +275,6 @@ function guardarCambiosPlanMP(status) {
             },
             dataType: "JSON",
             success: async function (data) {
-                // console.log(data);
                 if (data.respuesta == 1) {
                     alertaImg('Plan Actualizado', '', 'success', 2500);
                     localStorage.setItem('idPlanMP', 0);
@@ -569,8 +559,16 @@ function obtenerMaterialPlanMP() {
 }
 
 // Funciones Iniciales:
-obtenerPlanesMP();
+window.onload = function () {
+    obtenerPlanesMP();
+}
+
 document.getElementById("buscarPlanMP").
     addEventListener("keyup", function () {
         buscadorEquipo('tablaGestionPlanes', 'buscarPlanMP', 2);
     });
+
+
+document.getElementById("destinosSelecciona").addEventListener("click", () => {
+    obtenerPlanesMP();
+})
