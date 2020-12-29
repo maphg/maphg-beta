@@ -534,33 +534,38 @@ function toggleInputsEquipo(estadoInputs) {
 function actualizarEquipo(idEquipo) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
-    let nombreEquipo = document.getElementById("nombreEquipo").value;
-    let seccionEquipo = document.getElementById("seccionEquipo").value;
-    let subseccionEquipo = document.getElementById("subseccionEquipo").value;
-    let tipoEquipo = document.getElementById("tipoEquipo").value;
-    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
-    let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
-    let marcaEquipo = document.getElementById("marcaEquipo").value;
-    let modeloEquipo = document.getElementById("modeloEquipo").value;
-    let serieEquipo = document.getElementById("serieEquipo").value;
-    let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo").value;
-    let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo").value;
-    let largoEquipo = document.getElementById("largoEquipo").value;
-    let anchoEquipo = document.getElementById("anchoEquipo").value;
-    let altoEquipo = document.getElementById("altoEquipo").value;
-    let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo").value;
-    let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo").value;
-    let voltajeEquipo = document.getElementById("voltajeEquipo").value;
-    let frecuenciaEquipo = document.getElementById("frecuenciaEquipo").value;
-    let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo").value;
-    let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo").value;
-    let cargaMCAEquipo = document.getElementById("cargaMCAEquipo").value;
-    let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo").value;
-    let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo").value;
-    let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
-    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
-    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
-    let estadoEquipo = document.getElementById("estadoEquipo").value;
+    let nombreEquipo = document.getElementById("nombreEquipo");
+    let seccionEquipo = document.getElementById("seccionEquipo");
+    let subseccionEquipo = document.getElementById("subseccionEquipo");
+    let tipoEquipo = document.getElementById("tipoEquipo");
+    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo");
+    let equipoPrincipal = document.getElementById("dataOpcionesEquipos");
+    let marcaEquipo = document.getElementById("marcaEquipo");
+    let modeloEquipo = document.getElementById("modeloEquipo");
+    let serieEquipo = document.getElementById("serieEquipo");
+    let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo");
+    let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo");
+    let largoEquipo = document.getElementById("largoEquipo");
+    let anchoEquipo = document.getElementById("anchoEquipo");
+    let altoEquipo = document.getElementById("altoEquipo");
+    let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo");
+    let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo");
+    let voltajeEquipo = document.getElementById("voltajeEquipo");
+    let frecuenciaEquipo = document.getElementById("frecuenciaEquipo");
+    let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo");
+    let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo");
+    let cargaMCAEquipo = document.getElementById("cargaMCAEquipo");
+    let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo");
+    let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo");
+    let potenciaEnergeticaCalorKCALEquipo =
+        document.getElementById("potenciaEnergeticaCalorKCALEquipo");
+    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo");
+    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo");
+    let estadoEquipo = document.getElementById("estadoEquipo");
+    let idFaseEquipo = document.getElementById("idFaseEquipo");
+    let tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
+
+
     const action = "actualizarEquipo";
     $.ajax({
         type: "POST",
@@ -570,40 +575,72 @@ function actualizarEquipo(idEquipo) {
             idUsuario: idUsuario,
             idDestino: idDestino,
             idEquipo: idEquipo,
-            nombreEquipo: nombreEquipo,
-            seccionEquipo: seccionEquipo,
-            subseccionEquipo: subseccionEquipo,
-            tipoEquipo: tipoEquipo,
-            jerarquiaEquipo: jerarquiaEquipo,
-            equipoPrincipal: equipoPrincipal,
-            marcaEquipo: marcaEquipo,
-            modeloEquipo: modeloEquipo,
-            serieEquipo: serieEquipo,
-            codigoFabricanteEquipo: codigoFabricanteEquipo,
-            codigoInternoComprasEquipo: codigoInternoComprasEquipo,
-            largoEquipo: largoEquipo,
-            anchoEquipo: anchoEquipo,
-            altoEquipo: altoEquipo,
-            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
-            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
-            voltajeEquipo: voltajeEquipo,
-            frecuenciaEquipo: frecuenciaEquipo,
-            caudalAguaM3HEquipo: caudalAguaM3HEquipo,
-            caudalAguaGPHEquipo: caudalAguaGPHEquipo,
-            cargaMCAEquipo: cargaMCAEquipo,
-            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
-            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
-            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
-            caudalAireM3HEquipo: caudalAireM3HEquipo,
-            caudalAireCFMEquipo: caudalAireCFMEquipo,
-            estadoEquipo: estadoEquipo
+            nombreEquipo: nombreEquipo.value,
+            seccionEquipo: seccionEquipo.value,
+            subseccionEquipo: subseccionEquipo.value,
+            tipoEquipo: tipoEquipo.value,
+            jerarquiaEquipo: jerarquiaEquipo.value,
+            equipoPrincipal: equipoPrincipal.value,
+            marcaEquipo: marcaEquipo.value,
+            modeloEquipo: modeloEquipo.value,
+            serieEquipo: serieEquipo.value,
+            codigoFabricanteEquipo: codigoFabricanteEquipo.value,
+            codigoInternoComprasEquipo: codigoInternoComprasEquipo.value,
+            largoEquipo: largoEquipo.value,
+            anchoEquipo: anchoEquipo.value,
+            altoEquipo: altoEquipo.value,
+            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo.value,
+            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo.value,
+            voltajeEquipo: voltajeEquipo.value,
+            frecuenciaEquipo: frecuenciaEquipo.value,
+            caudalAguaM3HEquipo: caudalAguaM3HEquipo.value,
+            caudalAguaGPHEquipo: caudalAguaGPHEquipo.value,
+            cargaMCAEquipo: cargaMCAEquipo.value,
+            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo.value,
+            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo.value,
+            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo.value,
+            caudalAireM3HEquipo: caudalAireM3HEquipo.value,
+            caudalAireCFMEquipo: caudalAireCFMEquipo.value,
+            estadoEquipo: estadoEquipo.value,
+            idFaseEquipo: idFaseEquipo.value,
+            tipoLocalEquipo: tipoLocalEquipo.value
         },
         // dataType: "JSON",
         success: function (data) {
-            if (data = 1) {
+            if (data == 1) {
                 informacionEquipo(idEquipo);
                 alertaImg('Equipo Actualizado', '', 'success', 2500);
                 consultaEquiposLocales();
+                nombreEquipo.value = '';
+                seccionEquipo.value = '';
+                subseccionEquipo.value = '';
+                tipoEquipo.value = '';
+                jerarquiaEquipo.value = '';
+                equipoPrincipal.value = '';
+                marcaEquipo.value = '';
+                modeloEquipo.value = '';
+                serieEquipo.value = '';
+                codigoFabricanteEquipo.value = '';
+                codigoInternoComprasEquipo.value = '';
+                largoEquipo.value = '';
+                anchoEquipo.value = '';
+                altoEquipo.value = '';
+                potenciaElectricaHPEquipo.value = '';
+                potenciaElectricaKWEquipo.value = '';
+                voltajeEquipo.value = '';
+                frecuenciaEquipo.value = '';
+                caudalAguaM3HEquipo.value = '';
+                caudalAguaGPHEquipo.value = '';
+                cargaMCAEquipo.value = '';
+                PotenciaEnergeticaFrioKWEquipo.value = '';
+                potenciaEnergeticaFrioTREquipo.value = '';
+                potenciaEnergeticaCalorKCALEquipo.value = '';
+                caudalAireM3HEquipo.value = '';
+                caudalAireCFMEquipo.value = '';
+                estadoEquipo.value = '';
+                idFaseEquipo.value = '';
+                tipoLocalEquipo.value = '';
+                document.getElementById("modalMPEquipo").classList.remove('open');
             } else {
                 alertaImg('Intente de Nuevo', '', 'info', 3000);
             }

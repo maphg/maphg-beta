@@ -9344,6 +9344,10 @@ if (isset($_POST['action'])) {
         $idFaseEquipo = $_POST['idFaseEquipo'];
         $tipoLocalEquipo = $_POST['tipoLocalEquipo'];
 
+        if($idFaseEquipo<=0){
+            $idFaseEquipo = 0;
+        }
+
         if ($jerarquiaEquipo == "PRIMARIO") {
             $equipoPrincipal = 0;
         }
@@ -9357,7 +9361,7 @@ if (isset($_POST['action'])) {
         jerarquia = '$jerarquiaEquipo',
         id_marca = $marcaEquipo,
         modelo = '$modeloEquipo',
-        numero_serie = '$numero_serie',
+        numero_serie = '$serieEquipo',
         codigo_fabricante = '$codigoFabricanteEquipo',
         codigo_interno_compras = '$codigoInternoComprasEquipo',
         largo_cm = $largoEquipo,
@@ -9375,14 +9379,13 @@ if (isset($_POST['action'])) {
         potencia_energetica_calor_kcal = $potenciaEnergeticaCalorKCALEquipo,
         caudal_aire_m3h = $caudalAireM3HEquipo,
         status = '$estadoEquipo',
-        id_fases = $idFaseEquipo,
+        id_fases = '$idFaseEquipo',
         local_equipo = '$tipoLocalEquipo'
-
         WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
-            echo 0;
+            echo $query;
         }
     }
 
