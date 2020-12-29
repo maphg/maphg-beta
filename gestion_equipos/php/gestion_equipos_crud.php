@@ -470,16 +470,16 @@ if (isset($_GET['action'])) {
     }
 
     if ($action == "agregarEquipoLocal") {
-        $equipo = $_GET['equipo'];
-        $destino = $_GET['destino'];
-        $seccion = $_GET['seccion'];
-        $subseccion = $_GET['subseccion'];
-        $tipo = $_GET['tipo'];
-        $marca = $_GET['marca'];
-        $equipolocal = $_GET['equipolocal'];
-        $modelo = $_GET['modelo'];
-        $jerarquia = $_GET['jerarquia'];
-        $equipoPadre = $_GET['equipoPadre'];
+        $equipo = $_POST['equipo'];
+        $destino = $_POST['destino'];
+        $seccion = $_POST['seccion'];
+        $subseccion = $_POST['subseccion'];
+        $tipo = $_POST['tipo'];
+        $marca = $_POST['marca'];
+        $equipolocal = $_POST['equipolocal'];
+        $modelo = $_POST['modelo'];
+        $jerarquia = $_POST['jerarquia'];
+        $equipoPadre = $_POST['equipoPadre'];
         $resp = 0;
 
         if ($jerarquia == "PRINCIPAL") {
@@ -490,9 +490,9 @@ if (isset($_GET['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             $resp = 1;
         }
+
         echo json_encode($resp);
     }
-
 
 
 

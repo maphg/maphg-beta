@@ -1405,16 +1405,34 @@ function agregarEquipoLocal() {
     let jerarquia = document.getElementById("jerarquiaXEquipo");
     let equipoPadre = document.getElementById("jerarquiaPadreXEquipo");
 
+    const data = new FormData();
+
+
     const action = "agregarEquipoLocal";
-    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&equipo=${equipo.value}&destino=${destino.value}&seccion=${seccion.value}&subseccion=${subseccion.value}&tipo=${tipo.value}&marca=${marca.value}&equipolocal=${equipolocal.value}&status=${status.value}&modelo=${modelo.value}&jerarquia=${jerarquia.value}&equipoPadre=${equipoPadre.value}`;
+
+    data.append("equipo", equipo.value);
+    data.append("destino", destino.value);
+    data.append("seccion", seccion.value);
+    data.append("subseccion", subseccion.value);
+    data.append("tipo", tipo.value);
+    data.append("marca", marca.value);
+    data.append("equipolocal", equipolocal.value);
+    data.append("status", "OPERATIVO");
+    data.append("modelo", modelo.value);
+    data.append("jerarquia", jerarquia.value);
+    data.append("equipoPadre", equipoPadre.value);
 
     if (equipo.value != "" && destino.value != "" && seccion.value != "" && subseccion.value != "" && tipo.value != "" && marca.value != "" && equipolocal.value != "" && jerarquia.value != "") {
-        fetch(URL)
+
+        fetch(`php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`, {
+            method: 'POST',
+            body: data
+        })
             .then(array => array.json())
             .then(array => {
                 if (array == 1) {
                     consultaEquiposLocales();
-                    alertaImg(equipolocal + ' Agregado', '', 'success', 1200);
+                    alertaImg(equipolocal.value + ' Agregado', '', 'success', 1200);
                     document.getElementById("modalAgregarEquipo").classList.remove('open');
                     equipo.value = '';
                     destino.value = '';
