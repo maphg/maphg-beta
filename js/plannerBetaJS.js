@@ -2727,6 +2727,8 @@ function obtenerImagenesEquipo(idEquipo) {
             document.getElementById("dataImagenes").classList.remove("justify-center");
          } else {
             document.getElementById("contenedorImagenes").classList.add('hidden');
+            document.getElementById("dataImagenes").innerHTML = '';
+            document.getElementById("dataImagenesEquipo").innerHTML = '';
          }
 
          if (data.documento != "") {
