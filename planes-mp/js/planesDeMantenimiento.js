@@ -559,7 +559,11 @@ function obtenerMaterialPlanMP() {
 }
 
 // Funciones Iniciales:
+// CARGA CONTENIDO INICIAL, DESPUES DE QUE CARGA COMPLETAMENTE
+window.addEventListener("load", function () {
+    // Función inicial para mostrar información de Equipos (t_equipos_america).
     obtenerPlanesMP();
+})
 
 document.getElementById("buscarPlanMP").
     addEventListener("keyup", function () {

@@ -1806,3 +1806,7 @@ window.addEventListener("load", function () {
 
 // EVENTO PARA EXPORTA EQUIPOS
 document.getElementById("exportarPendientes").addEventListener('click', exportarEquipos);
+
+document.getElementById("destinosSelecciona").addEventListener("click", () => {
+    consultaEquiposLocales();
+})
