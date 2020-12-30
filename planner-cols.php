@@ -419,7 +419,7 @@
                             </table>
 
                             <!-- DESPIECE DE EQUIPOS AMERICA -->
-                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full border-solid border-4 border-gray-600 rounded hidden" style="max-height: 400px;">
+                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full border-solid border-4 border-gray-600 scrollbar overflow-y-auto rounded hidden" style="max-height: 40vh;">
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                     <thead>
                                         <tr class="cursor-pointer bg-white">
