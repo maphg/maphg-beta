@@ -1800,6 +1800,8 @@ function exportarEquipos() {
 // CARGA CONTENIDO INICIAL, DESPUES DE QUE CARGA COMPLETAMENTE
 window.addEventListener("load", function () {
     // Función inicial para mostrar información de Equipos (t_equipos_america).
+    let idDestino = localStorage.getItem("idDestino");
+    document.getElementById("filtroDestino").value = idDestino;
     consultaEquiposLocales();
 })
 
@@ -1808,5 +1810,7 @@ window.addEventListener("load", function () {
 document.getElementById("exportarPendientes").addEventListener('click', exportarEquipos);
 
 document.getElementById("destinosSelecciona").addEventListener("click", () => {
-    consultaEquiposLocales();
+    let idDestino = localStorage.getItem("idDestino");
+    document.getElementById("filtroDestino").value = idDestino;
+    location.reload();
 })
