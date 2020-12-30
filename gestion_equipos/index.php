@@ -26,7 +26,16 @@
     </style>
 </head>
 
-<body class=" bg-fondos-7 text-bluegray-800 scrollbar">
+<body class=" bg-fondos-7 text-bluegray-800 scrollbar pt-16">
+
+    <!-- MENÚ -->
+    <div class="w-full absolute top-0">
+        <?php
+        include '../navbartopJS.php';
+        include '../menuJS.php';
+        ?>
+    </div>
+    <!-- MENÚ -->
 
     <div class="flex flex-col container mx-auto font-light text-3xl">
         <h1>Equipos y Locales <span id="load"></span></h1>
@@ -207,7 +216,7 @@
                                     <option value="LOCAL">LOCAL</option>
                                 </select>
                             </h2>
-                        <h2 id="jerarquiaEquipo2"></h2>
+                            <h2 id="jerarquiaEquipo2"></h2>
                         </div>
                         <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
                             <i class="mr-1 text-blue-400">BITÁCORAS:</i>
@@ -951,18 +960,12 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 
     <!-- ***** MODALES SECUNDARIO ***** -->
 
-
-
-
-
-
+    
     <!-- LIBRERIAS JS -->
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/alertify.min.js"></script>
@@ -972,6 +975,7 @@
     <script src="../js/OT_JS.js"></script>
     <script src="../js/sorttable.js"></script>
     <script src="../js/funciones_tablas.js"></script>
+    <script src="../js/complemento_menuJS_externo.js"></script>
 </body>
 
 </html>
