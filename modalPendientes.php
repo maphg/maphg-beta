@@ -407,7 +407,7 @@ if ($result) {
             INNER JOIN t_users ON t_mc.responsable = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
             WHERE t_mc.id_subseccion = $idSubseccion 
-            AND (t_mc.status = 'N' or t_mc.status = 'PENDIENTE') and activo = 1 
+            AND (t_mc.status = 'N' or t_mc.status = 'PENDIENTE') and t_mc.activo = 1 
             AND(t_mc.departamento_calidad != '' OR t_mc.departamento_compras != '' OR t_mc.departamento_direccion != '' OR t_mc.departamento_finanzas != '' OR t_mc.departamento_rrhh != '') 
             $filtroUsuario $filtroSeccion $filtroDestinoMC
             ORDER BY t_mc.id DESC";
@@ -599,7 +599,7 @@ if ($result) {
         LEFT JOIN t_users ON t_mc.responsable = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mc.id_subseccion = $idSubseccion 
-        AND t_mc.status = 'N' AND activo = 1 AND t_mc.status_trabajare !='' $filtroUsuario $filtroSeccion $filtroDestinoMC
+        AND t_mc.status = 'N' AND t_mc.activo = 1 AND t_mc.status_trabajare !='' $filtroUsuario $filtroSeccion $filtroDestinoMC
         ORDER BY t_mc.id DESC";
 
         if ($resultT = mysqli_query($conn_2020, $queryT)) {

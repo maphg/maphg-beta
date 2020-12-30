@@ -1809,6 +1809,7 @@ window.addEventListener("load", function () {
 // EVENTO PARA EXPORTA EQUIPOS
 document.getElementById("exportarPendientes").addEventListener('click', exportarEquipos);
 
+
 document.getElementById("destinosSelecciona").addEventListener("click", () => {
     let idDestino = localStorage.getItem("idDestino");
     document.getElementById("filtroDestino").value = idDestino;
