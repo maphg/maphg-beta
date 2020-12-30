@@ -1627,12 +1627,20 @@ consultarSecciones();
 
 // Aplica Filtros Seleccionados
 document.getElementById("filtroSeccion").addEventListener("change", consultarSubsecciones);
-document.getElementById("filtroDestino").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSubseccion").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroTipo").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroStatus").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSemana").addEventListener("change", consultaEquiposLocales);
 document.getElementById("filtroSeccion").addEventListener("change", consultaEquiposLocales);
+
+// Cambia de destino en el FILTRO y en el MENU
+document.getElementById("filtroDestino").addEventListener("change", () => {
+    consultaEquiposLocales();
+    let idDestino = document.getElementById("filtroDestino").value;
+    localStorage.setItem('idDestino', idDestino);
+    location.reload();
+});
+
 document.getElementById("filtroPalabra").
     addEventListener("keyup", function () {
         buscadorEquipo('tablaGestionEquipos', 'filtroPalabra', 3);
