@@ -4964,6 +4964,11 @@ const dataEquiposAmerica = params => {
       valorstatusEquipo = '<div class="text-orange-400 bg-orange-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Taller</h1></div>';
    }
 
+   if (idEquipo > 0) {
+      idEquipoX = `<div class=" bg-gray-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="text-gray-600">ID: ${idEquipo}</h1></div>`;
+   } else {
+      idEquipoX = '';
+   }
 
    var ultimoMpFecha = params.ultimoMpFecha;
 
@@ -5122,6 +5127,7 @@ const dataEquiposAmerica = params => {
                 <div class="text-gray-500 leading-none flex text-xxs">
                     ${valorTipoEquipo}
                     ${valorstatusEquipo}
+                    ${idEquipoX}
                 </div>
             </td>
 
