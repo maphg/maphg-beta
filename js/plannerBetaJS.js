@@ -6424,7 +6424,6 @@ function exportarEquipos(idDestino) {
 
 
 // EXPORTAR TAREAS GENERALES POR DESTINO
-// 
 function exportarTareasGenerales() {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');

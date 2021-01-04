@@ -67,11 +67,11 @@ function validarUsuario() {
 
                             fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
 
-                            if (data.idDestino == 2 || data.idDestino == 3 ||
-                                data.idDestino == 11 || data.idDestino == 4) {
-                                location.href = "planner-cols.php";
+                            if (data.idDestino) {
+                                location.href = "https://www.maphg.com/beta/msg.html";
                             } else {
-                                location.href = "index.php";
+                                location.href = "https://www.maphg.com/beta/msg.html";
+                                // location.href = "index.php";
                             }
                         } else {
                             location.href = "login.php";
