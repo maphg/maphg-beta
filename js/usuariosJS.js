@@ -81,6 +81,7 @@ function validarUsuario() {
                         alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
                         fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                     } else if (data.respuesta == 3) {
+                        location.href = "https://www.maphg.com/beta/msg.html";
                         alertaImg('No existe el usuario', 'has-text-danger', 'error', 3000);
                         fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                     } else {
