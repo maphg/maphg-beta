@@ -216,14 +216,16 @@
             </div>
 
             <!-- Inicio Columna -->
-            <div id="columnasPendientes" class="flex items-center py-3">
-                <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10 scrollbar pb-24">
-                    <div id="" class="flex items-center py-3">
-                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-64 mr-4">
-                            <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
+            <div id="columnasPendientes" class="flex items-center relative">
+                <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
+                    <div class="flex items-center">
+                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-64">
+                            <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
                                 <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute  py-2 text-cyan-700 text-2xl" style="top: -20px;">
                                     <i class="fad fa-clipboard-list-check "></i>
-                                    <h1 class="text-xs ml-2">Mis pendientes <span id="loadPendientes" class="text-cyan-900 ml-2"></span></h1>
+                                    <h1 class="text-xs">
+                                        <span id="loadPendientes" class="text-cyan-900"></span>
+                                    </h1>
                                 </div>
                                 <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
                                     <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">

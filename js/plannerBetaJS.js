@@ -6424,12 +6424,10 @@ function exportarEquipos(idDestino) {
 
 
 // EXPORTAR TAREAS GENERALES POR DESTINO
-function exportarTareasGenerales() {
-   let idDestino = localStorage.getItem('idDestino');
+function exportarTareasGenerales(idDestino) {
    let idUsuario = localStorage.getItem('usuario');
    const action = 'exportarTareasGenerales';
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   console.log(URL);
    fetch(URL)
       .then(array => array.json())
       .then(array => {

@@ -92,9 +92,9 @@ if (isset($_GET['action'])) {
     if ($action == "exportarTareasGenerales") {
         $array = array();
 
-        $query = "SELECT * FROM t_mc 
+        $query = "SELECT * FROM t_mc
         WHERE id_equipo = 0 and id_destino = $idDestino and activo != 2";
-        // $query = "SELECT * FROM t_mc WHERE id = 14316";
+        
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTG = $x['id'];

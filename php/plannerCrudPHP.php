@@ -2030,7 +2030,7 @@ if (isset($_POST['action'])) {
                                 class=\"bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative\">
                                 <div
                                     class=\"absolute text-yellow-700 bg-yellow-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12\">
-                                    <h1 class=\"font-medium text-md truncate\">$seccion</h1>
+                                    <h1 class=\"font-medium text-md truncate\"><i class=\"fas fa-plug fa-lg\"></i></h1>
                                 </div>
                                 <div
                                     class=\"flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900\">
