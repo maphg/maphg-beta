@@ -74,7 +74,8 @@ function validarUsuario() {
                                 // location.href = "index.php";
                             }
                         } else {
-                            location.href = "login.php";
+                            location.href = "https://www.maphg.com/beta/msg.html";
+                            // location.href = "login.php";
                         }
                     } else if (data.respuesta == 2) {
                         alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
