@@ -13,7 +13,8 @@ if (isset($_GET['action'])) {
     $idUsuario = $_GET['idUsuario'];
 
     if ($action == "seguridad_session") {
-        $query = "SELECT count(id) FROM t_users WHERE id = $idUsuario and status ='A'";
+        $query = "SELECT count(id) FROM t_users 
+        WHERE id = $idUsuario and status ='A' and activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $id = intval($x['count(id)']);
