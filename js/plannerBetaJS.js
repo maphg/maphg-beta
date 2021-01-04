@@ -6375,6 +6375,7 @@ function exportarEquipos(idDestino) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
+         console.log(array);
          if (array.totalEquipos == 0) {
             alertify.confirm("Exportar Equipos a la Versión 3.0",
                function () {
