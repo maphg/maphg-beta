@@ -6268,10 +6268,6 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
                         </div>
                      </td>
 
-                     <td class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
-                        <h1>0</h1>
-                     </td>
-                     
                      <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" data-test="${responsable}">
                         <h1>${responsable}</h1>
                      </td>
@@ -6281,21 +6277,12 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
                         <div class="leading-3">${fechaFin}</div>
                      </td>
 
-                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
-                        <h1>${comentariosX}</h1>
-                     </td>
-
                      <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3">
                         <h1>${adjuntosX}</h1>
                      </td>
 
-                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
-                        <div class="text-sm flex justify-center items-center font-bold">
-                        </div>
-                     </td>
-                     
                      <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
-                        <h1><a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#T5390" class="text-black" target="_blank">T5390</a></h1>
+                        <h1>${comentariosX}</h1>
                      </td>
 
                      <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">

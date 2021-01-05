@@ -1364,8 +1364,8 @@
                 <div id="" class="">
                     <h1 id="" class="font-bold text-black"></h1>
                 </div>
-                <div id="" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
-                    <h1 id=""> </h1>
+                <div id="" class="ml-4 font-bold bg-yellow-400 text-yellow-700 text-xs py-1 px-2 rounded">
+                    <h1 id="tituloEnergeticos"><i class="fas fa-plug fa-lg"></i> Energéticos</h1>
                 </div>
             </div>
 
@@ -1385,15 +1385,15 @@
 
                 <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
                     <i class="fas fa-list mr-1 font-normal text-xs"></i>
-                    <h1>Test</h1>
+                    <h1>Energeticos</h1>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
                     <i class="fas fa-stream mr-1 font-normal text-xs"></i>
                     <h1>Gantt</h1>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200" id="exportarProyectos">
+                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden" id="exportarProyectos">
                     <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                     <h1>Exportar</h1>
                 </div>
@@ -1413,10 +1413,6 @@
                                     </th>
 
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Unidad de Medida
-                                    </th>
-
-                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                         Responsable
                                     </th>
 
@@ -1425,11 +1421,15 @@
                                     </th>
 
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                         Comentarios
                                     </th>
 
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Adjuntos
+
                                     </th>
 
                                 </tr>
