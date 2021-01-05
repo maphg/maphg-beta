@@ -727,37 +727,37 @@ $tablaRanking .= "</div>";
                                         </button>
                                     </p>
                                     <p class="control">
-                                        <div class="dropdown is-active">
-                                            <div class="dropdown-trigger">
-                                                <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-info-circle" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span>Información</span>
+                                    <div class="dropdown is-active">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                                </span>
+                                                <span>Información</span>
 
-                                                </button>
-                                            </div>
-                                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                                <div class="dropdown-content">
-                                                    <a id="link-auditorias" href="#" class="dropdown-item">
-                                                        AUDITORIAS - INFORMES
-                                                    </a>
-                                                    <a id="link-certificaciones" href="#" class="dropdown-item">
-                                                        CERTIFICACIONES - NORMATIVAS
-                                                    </a>
-                                                    <a id="link-cotizaciones" href="#" class="dropdown-item">
-                                                        COTIZACIONES - FACTURAS
-                                                    </a>
-                                                    <a id="link-planos" href="#" class="dropdown-item">
-                                                        PLANOS
-                                                    </a>
-                                                    <a id="link-otros" href="#" class="dropdown-item">
-                                                        OTROS
-                                                    </a>
-                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a id="link-auditorias" href="#" class="dropdown-item">
+                                                    AUDITORIAS - INFORMES
+                                                </a>
+                                                <a id="link-certificaciones" href="#" class="dropdown-item">
+                                                    CERTIFICACIONES - NORMATIVAS
+                                                </a>
+                                                <a id="link-cotizaciones" href="#" class="dropdown-item">
+                                                    COTIZACIONES - FACTURAS
+                                                </a>
+                                                <a id="link-planos" href="#" class="dropdown-item">
+                                                    PLANOS
+                                                </a>
+                                                <a id="link-otros" href="#" class="dropdown-item">
+                                                    OTROS
+                                                </a>
                                             </div>
                                         </div>
-                                        <!-- <a id="link-informes" class="button is-light">
+                                    </div>
+                                    <!-- <a id="link-informes" class="button is-light">
                                                 <<span class="icon is-small">
                                                 <i class="fas fa-info-circle"></i>
                                                 </span>
@@ -1880,7 +1880,7 @@ $tablaRanking .= "</div>";
                                 $subseccionX = $row_subsecciones['grupo'];
 
                                 if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total. " </p></div></div></a>";
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total . " </p></div></div></a>";
                                 } else {
                                     echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                                 }
@@ -8292,6 +8292,9 @@ $tablaRanking .= "</div>";
         $("." + idSeccion).toggle('hide');
         $(".btn-" + idSeccion).toggleClass('is-success');
     }
+
+    // ELIMINAR
+    location.href = "https://www.maphg.com/beta/planner-cols.php";
 </script>
 
 </html>
