@@ -68,7 +68,7 @@ function validarUsuario() {
                             fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
 
                             if (data.idDestino) {
-                                location.href = "https://www.maphg.com/beta/msg.html";
+                                location.href = "https://www.maphg.com/beta/planner-cols.php";
                             } else {
                                 location.href = "https://www.maphg.com/beta/msg.html";
                                 // location.href = "index.php";
@@ -93,26 +93,13 @@ function validarUsuario() {
                 }
             });
         } catch (ex) {
-            toastr.error(ex, 'Error', {
-                "closeButton": true,
-                "newestOnTop": true,
-                "positionClass": "toast-top-right",
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            });
+            alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
         }
-
     } else {
         alertaImg('Ingrese usuario y contraseña', 'has-text-info', 'question', 3000);
     }
-
 }
+
 
 function logout() {
     $.ajax({
