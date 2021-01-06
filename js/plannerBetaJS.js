@@ -5716,7 +5716,7 @@ function obtenerPendientesUsuario() {
 
          if (array) {
             document.getElementById("totalPendientesFallas").
-               innerHTML = `Fallas (${array.totalFallas})`;
+               innerHTML = `Incidencias (${array.totalFallas})`;
             document.getElementById("totalPendientesTareas").
                innerHTML = `Tareas (${array.totalTareasX})`;
             document.getElementById("totalPendientesPDA").
@@ -5739,9 +5739,9 @@ function obtenerPendientesUsuario() {
                   }
 
                   const codigo = `
-                        <div data-target="modal-subseccion" data-toggle="modal" class="ordenarHijosDEP p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center"
+                        <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_${tipoPendiente}"
                         ${fVerEnPlanner}>
-                           <h1 class="truncate mr-2">
+                           <h1 class="truncate mr-2" data-title="${actividad}">
                               ${seccion + ' - ' + tipoPendiente + ' - ' + actividad}
                            </h1>
                            <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
@@ -5767,6 +5767,54 @@ function obtenerPendientesUsuario() {
          contenedor.innerHTML = '';
       })
 }
+
+// EVENTOS PARA COLUMNA DE MIS PENDIETES
+document.getElementById("misPendientesIncidencias").addEventListener("click", () => {
+   let array = document.getElementsByClassName("misPendientes_");
+   for (let x = 0; x < array.length; x++) {
+
+      if (document.getElementsByClassName("misPendientes_")[x]) {
+         const elemento = document.getElementsByClassName("misPendientes_")[x];
+         if (elemento.classList.contains("misPendientes_FALLA")) {
+            elemento.classList.remove('hidden');
+         } else {
+            elemento.classList.add('hidden');
+         }
+      }
+   }
+})
+
+document.getElementById("misPendientesTareas").addEventListener("click", () => {
+   let array = document.getElementsByClassName("misPendientes_");
+   console.log(array.length);
+   for (let x = 0; x < array.length; x++) {
+
+      if (document.getElementsByClassName("misPendientes_")[x]) {
+         const elemento = document.getElementsByClassName("misPendientes_")[x];
+         if (elemento.classList.contains("misPendientes_TAREA") || elemento.classList.contains("misPendientes_TAREAGENERAL")) {
+            elemento.classList.remove('hidden');
+         } else {
+            elemento.classList.add('hidden');
+         }
+      }
+   }
+})
+
+
+document.getElementById("misPendientesPDA").addEventListener("click", () => {
+   let array = document.getElementsByClassName("misPendientes_");
+   for (let x = 0; x < array.length; x++) {
+
+      if (document.getElementsByClassName("misPendientes_")[x]) {
+         const elemento = document.getElementsByClassName("misPendientes_")[x];
+         if (elemento.classList.contains("misPendientes_PLANACCION")) {
+            elemento.classList.remove('hidden');
+         } else {
+            elemento.classList.add('hidden');
+         }
+      }
+   }
+})
 
 
 // FUNCION PARA AGREGAR TEST A EQUIPO

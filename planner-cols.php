@@ -139,7 +139,7 @@
     </div>
     <!-- MENÚ -->
 
-    <div class="flex flex-col justify-evenly items-center w-full h-screen pt-10">
+    <div class="flex flex-col justify-evenly items-center w-full h-screen pt-12">
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10 scrollbar pb-24">
 
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
@@ -219,23 +219,26 @@
             <div id="columnasPendientes" class="flex items-center relative">
                 <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
                     <div class="flex items-center">
-                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-64">
+                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-64 py-3">
                             <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
-                                <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute  py-2 text-cyan-700 text-2xl" style="top: -20px;">
-                                    <i class="fad fa-clipboard-list-check "></i>
+                                <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                    <i class="fad fa-clipboard-list-check"></i>
                                     <h1 class="text-xs">
                                         <span id="loadPendientes" class="text-cyan-900"></span>
                                     </h1>
                                 </div>
                                 <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
                                     <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
-                                        <div class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/3 text-center cursor-pointer">
-                                            <h1 id="totalPendientesFallas">Fallas (0)</h1>
+
+                                        <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/3 text-center cursor-pointer">
+                                            <h1 id="totalPendientesFallas">Incidencias (0)</h1>
                                         </div>
-                                        <div class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer">
+
+                                        <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer">
                                             <h1 id="totalPendientesTareas">Tareas (0)</h1>
                                         </div>
-                                        <div class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/3 text-center cursor-pointer">
+
+                                        <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/3 text-center cursor-pointer">
                                             <h1 id="totalPendientesPDA">PDA (0)</h1>
                                         </div>
 
@@ -1350,7 +1353,8 @@
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
     <div id="modalEnergeticos" class="modal">
-        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background:#DBEAFE; min-height: 60vh;">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background: rgb(252, 211, 77);
+ min-height: 60vh;">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
