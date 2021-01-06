@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
                         $equipo = "TAREA GENERAL";
                     }
 
-                    $arrayTemp = array(
+                    $array['datos'] = array(
                         "idOT" => $idOT,
                         "actividad" => $actividad,
                         "status" => $status,
@@ -55,8 +55,6 @@ if (isset($_GET['action'])) {
                         "subseccion" => $subseccion,
                         "tipo" => $tipo
                     );
-
-                    $array['datos'] = $arrayTemp;
 
                     $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = $idOT and activo = 1 ORDER BY id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
@@ -71,18 +69,15 @@ if (isset($_GET['action'])) {
                                 $statusX = "SOLUCIONADO";
                             }
 
-                            $actTemp = array(
+                            $array['actividades'][] = array(
                                 "idActividad" => $idActividad,
                                 "actividad" => $actividadX,
                                 "status" => $statusX
                             );
-                            $act[] = $actTemp;
                         }
                     }
                 }
             }
-
-            $array['actividades'] = $act;
         } elseif ($tipo == "FALLA") {
             $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_equipos_america.equipo, c_secciones.seccion, c_subsecciones.grupo, c_destinos.destino
             FROM t_mc
@@ -107,7 +102,7 @@ if (isset($_GET['action'])) {
                         $status = "SOLUCIONADO";
                     }
 
-                    $arrayTemp = array(
+                    $array['datos'] = array(
                         "idOT" => $idOT,
                         "actividad" => $actividad,
                         "status" => $status,
@@ -117,8 +112,6 @@ if (isset($_GET['action'])) {
                         "subseccion" => $subseccion,
                         "tipo" => $tipo,
                     );
-
-                    $array['datos'] = $arrayTemp;
 
                     $query = "SELECT id, actividad, status FROM t_mc_actividades_ot WHERE id_falla = $idOT and activo = 1 ORDER BY id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
@@ -133,16 +126,14 @@ if (isset($_GET['action'])) {
                                 $statusX = "SOLUCIONADO";
                             }
 
-                            $actTemp = array(
+                            $array['actividades'][] = array(
                                 "idActividad" => $idActividad,
                                 "actividad" => $actividadX,
                                 "status" => $statusX
                             );
-                            $act[] = $actTemp;
                         }
                     }
                 }
-                $array['actividades'] = $act;
             }
         }
     }
