@@ -88,13 +88,41 @@ if (isset($_GET['action'])) {
     }
 
 
+    if ($action == "actualizarTareasequipos") {
+        $array = array();
+
+        $query = "SELECT t_equipos.id_seccion, t_equipos.id_subseccion, t_mp_np.id 
+        FROM t_mp_np
+        INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+        WHERE id_equipo > 0 and (t_mp_np.id_seccion = 0 or t_mp_np.id_subseccion = 0)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x['id'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+                $resp = 0;
+
+                $query = "UPDATE t_mp_np SET id_seccion = $idSeccion, id_subseccion = $idSubseccion WHERE id = $id";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+                $array[] = array(
+                    "id" => $id,
+                    "resp" => $resp
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     // EXPORTA TAREAS GENERALES (T_MC -> T_MP_NP)  A LA NUEVA VERSIÓN
     if ($action == "exportarTareasGenerales") {
         $array = array();
 
         $query = "SELECT * FROM t_mc
         WHERE id_equipo = 0 and id_destino = $idDestino and activo != 2";
-        
+
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idTG = $x['id'];

@@ -22,8 +22,8 @@ if (isset($_GET['action'])) {
             FROM t_mp_np
             INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id
             LEFT JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
-            INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
-            INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+            INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_mp_np.id_subseccion = c_subsecciones.id
             WHERE t_mp_np.id = $idOT";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {

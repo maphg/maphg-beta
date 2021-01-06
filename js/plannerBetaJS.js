@@ -6459,6 +6459,23 @@ function exportarEquipos(idDestino) {
 }
 
 
+// 
+function actualizarTareasequipos() {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = 'actualizarTareasequipos';
+   const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   console.log(URL);
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + `actualizarTareasequipos()`);
+      })
+}
+
 // EXPORTAR TAREAS GENERALES POR DESTINO
 function exportarTareasGenerales(idDestino) {
    let idUsuario = localStorage.getItem('usuario');
