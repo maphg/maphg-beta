@@ -41,6 +41,10 @@ if (isset($_GET['action'])) {
                         $status = "SOLUCIONADO";
                     }
 
+                    if ($equipo == "") {
+                        $equipo = "TAREA GENERAL";
+                    }
+
                     $arrayTemp = array(
                         "idOT" => $idOT,
                         "actividad" => $actividad,
