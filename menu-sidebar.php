@@ -63,7 +63,7 @@
                 <a href="https://www.maphg.com/beta/planes-mp/index.php" class="menu-hijo-3 CA">Gestión de Planes</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="index.php" class="menu-hijo-3 CA">Planner</a>
+                <a href="https://www.maphg.com/beta/planner-cols.php" class="menu-hijo-3 CA">Planner</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
