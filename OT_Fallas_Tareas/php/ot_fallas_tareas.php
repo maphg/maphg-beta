@@ -57,12 +57,6 @@ if (isset($_GET['action'])) {
                         "query" => $query
                     );
 
-                    $array['actividades'][] = array(
-                        "idActividad" => "",
-                        "actividad" => "",
-                        "status" => ""
-                    );
-
                     $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = $idOT and activo = 1 ORDER BY id DESC";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {

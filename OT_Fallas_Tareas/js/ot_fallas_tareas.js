@@ -45,7 +45,7 @@ function generarOT(idOT, tipo) {
             document.getElementById("statusOT").innerHTML = array.datos.status;
             document.getElementById("statusOT").classList.add('bg-red');
 
-            if (array.actividades.length > 0) {
+            if (array.actividades) {
                 for (let x = 0; x < array.actividades.length; x++) {
                     const actividad = array.actividades[x].actividad;
                     const status = array.actividades[x].status;
