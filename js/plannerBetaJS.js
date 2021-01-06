@@ -5716,7 +5716,7 @@ function obtenerPendientesUsuario() {
 
          if (array) {
             document.getElementById("totalPendientesFallas").
-               innerHTML = `Incidencias (${array.totalFallas})`;
+               innerHTML = `Incidencia (${array.totalFallas})`;
             document.getElementById("totalPendientesTareas").
                innerHTML = `Tareas (${array.totalTareasX})`;
             document.getElementById("totalPendientesPDA").
@@ -5732,7 +5732,7 @@ function obtenerPendientesUsuario() {
 
                   if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
                      fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
-                  } else if (tipoPendiente == 'FALLA') {
+                  } else if (tipoPendiente == 'INCIDENCIA') {
                      fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   } else if (tipoPendiente == 'PLANACCION') {
                      fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
@@ -5775,7 +5775,7 @@ document.getElementById("misPendientesIncidencias").addEventListener("click", ()
 
       if (document.getElementsByClassName("misPendientes_")[x]) {
          const elemento = document.getElementsByClassName("misPendientes_")[x];
-         if (elemento.classList.contains("misPendientes_FALLA")) {
+         if (elemento.classList.contains("misPendientes_INCIDENCIA")) {
             elemento.classList.remove('hidden');
          } else {
             elemento.classList.add('hidden');

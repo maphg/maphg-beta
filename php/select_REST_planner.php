@@ -853,7 +853,7 @@ if (isset($_GET['action'])) {
 
                 $arrayTemp = array(
                     "idPendiente" => intval($idFalla),
-                    "tipoPendiente" => "FALLA",
+                    "tipoPendiente" => "INCIDENCIA",
                     "seccion" => $seccion,
                     "actividad" => $actividad
                 );
