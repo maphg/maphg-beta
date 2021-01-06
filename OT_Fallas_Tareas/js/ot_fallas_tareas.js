@@ -14,7 +14,7 @@ function validarOT() {
         }
         alertaImg('Generando OT #' + idOT, '', 'success', 1500);
     } else {
-        alertaImg('Generando OT #' + idOT, '', 'success', 1500);
+        alertaImg('No se Encontro #' + idOT, '', 'success', 1500);
     }
 }
 
@@ -80,7 +80,7 @@ function generarOT(idOT, tipo) {
 
         })
         .catch(function (err) {
-            fetch(APIERROR + err + ': (generarOT)');
+            fetch(APIERROR + err + ` generarOT(${idOT}, ${tipo})`);
         })
 }
 
