@@ -80,6 +80,7 @@ function generarOT(idOT, tipo) {
 
         })
         .catch(function (err) {
+            alertaImg('No se Encontro OT #' + idOT, '', 'success', 1500);
             fetch(APIERROR + err + ` generarOT(${idOT}, ${tipo})`);
         })
 }
