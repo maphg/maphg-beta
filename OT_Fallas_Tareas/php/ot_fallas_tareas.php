@@ -53,7 +53,8 @@ if (isset($_GET['action'])) {
                         "destino" => $destino,
                         "seccion" => $seccion,
                         "subseccion" => $subseccion,
-                        "tipo" => $tipo
+                        "tipo" => $tipo,
+                        "query" => $query
                     );
 
                     $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = $idOT and activo = 1 ORDER BY id DESC";
