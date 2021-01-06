@@ -980,3 +980,7 @@ document.getElementById("btnNuevoCargo").addEventListener("click", function () {
 window.onload = function () {
     obtenerUsuarios(0);
 }
+
+document.getElementById("destinosSelecciona").addEventListener('click', ()=>{
+    location.href = "gestion_configuraciones.php";
+})

@@ -339,7 +339,7 @@
 
                         <div class="flex items-center bg-red-300 rounded mb-2 cursor-pointer hover:bg-red-200 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-red-600 uppercase flex py-1">
-                                <h1>FALLAS</h1>
+                                <h1>INCIDENCIAS</h1>
                             </div>
                             <div id="totalesFallas" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
                                 <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
@@ -373,7 +373,7 @@
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            Fallas
+                                            Incidencias
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
@@ -434,7 +434,7 @@
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                                Fallas
+                                                Incidencias
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
@@ -532,10 +532,10 @@
                             <h1 id="tipoOrdenamientoNombreEquipo">EQUIPOS / LOCALES</h1>
                         </div>
                         <div class="w-16 h-full flex items-center justify-center cursor-pointer">
-                            <h1 id="tipoOrdenamientoMCN">FALLAS P</h1>
+                            <h1 id="tipoOrdenamientoMCN">Incidencias P</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center cursor-pointer">
-                            <h1 id="tipoOrdenamientoMCF">FALLAS S</h1>
+                            <h1 id="tipoOrdenamientoMCF">Incidencias S</h1>
                         </div>
                         <div class="w-16 flex h-full items-center justify-center">
                             <h1>TAREAS P</h1>
@@ -983,12 +983,12 @@
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
-                        <h1>Fallas Y Tareas</h1>
+                        <h1>Incidencias Y Tareas</h1>
                     </div>
 
                     <a class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="graficas_reportes_diario/">
                         <div>
-                            <h1>Reporte Fallas Y Tareas</h1>
+                            <h1>Reporte Incidencias Y Tareas</h1>
                         </div>
                     </a>
 

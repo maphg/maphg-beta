@@ -10,18 +10,28 @@
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/animate.css">
 
 </head>
 
-<body class="p-1 relative">
+<body class="relative">
 
-    <div id="btnConfiguraciones" class="absolute bg-blue-400 cursor-pointer rounded-full shadow-md text-center w-2/12">
+    <!-- MENÚ -->
+    <div class="w-full absolute top-0">
+        <?php
+        include 'navbartopJS.php';
+        include 'menuJS.php';
+        ?>
+    </div>
+    <!-- MENÚ -->
+
+    <div id="btnConfiguraciones" class="absolute bg-blue-400 cursor-pointer rounded-full shadow-md text-center w-2/12 hidden">
         <ul class="text-white px-3 p-1 text-sm font-medium uppercase">
             <i class="fa fa-cogs"></i> MENÚ Opciones
         </ul>
     </div>
 
-    <div class="flex flex-row p-1">
+    <div class="flex flex-row pt-12">
 
         <div id="menuConfiguraciones" class="mr-2 w-2/12 py-1 px-3 rounded-md shadow mt-8 border border-gray-400 relative h-auto">
 
@@ -121,7 +131,7 @@
 
                 </div>
 
-                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 80vh;">
+                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 75vh;">
                     <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
                         <thead class="bg-gray-200 cursor-pointer ">
                             <tr>
@@ -184,7 +194,7 @@
 
                 </div>
 
-                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 80vh;">
+                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 75vh;">
                     <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
                         <thead class="bg-gray-200 cursor-pointer ">
                             <tr>
@@ -502,7 +512,8 @@
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
@@ -528,5 +539,6 @@
 <script src="js/sorttable.js"></script>
 <script src="js/gestion_configuraciones.js"></script>
 <script src="js/funciones_tablas.js"></script>
+<script src="js/complemento_menuJS.js"></script>
 
 </html>
