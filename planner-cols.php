@@ -230,16 +230,16 @@
                                 <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
                                     <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
 
-                                        <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/3 text-center cursor-pointer">
+                                        <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
                                             <h1 id="totalPendientesFallas">Incidencias (0)</h1>
                                         </div>
 
-                                        <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer">
+                                        <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
                                             <h1 id="totalPendientesTareas">Tareas (0)</h1>
                                         </div>
 
-                                        <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/3 text-center cursor-pointer">
-                                            <h1 id="totalPendientesPDA">PDA (0)</h1>
+                                        <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
+                                            <h1 id="totalPendientesPDA">Proyectos (0)</h1>
                                         </div>
 
                                     </div>
