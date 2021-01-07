@@ -140,7 +140,7 @@
     <!-- MENÚ -->
 
     <!-- BOTON FLOTANTE -->
-    <div class="absolute bottom-0 right-0 flex flex-row items-end">
+    <div class="absolute bottom-0 right-0 flex flex-row items-end" style="z-index: 100;">
 
         <div id="btnFlotanteOpciones" class="flex flex-col-reverse items-end font-medium mb-4 animated hidden">
             <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencia</button>
