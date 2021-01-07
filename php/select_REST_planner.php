@@ -16,6 +16,7 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $semanaActual = date('W');
 
+
     #OBTIENE LOS PROYECTOS SEGÚN LA SECCIÓN Y DESTINO
     if ($action == "obtenerActividadesOT") {
         $idTipo = $_GET['idTipo'];
@@ -49,6 +50,7 @@ if (isset($_GET['action'])) {
             echo json_encode($array);
         }
     }
+
 
     // OBTIENES LAS TAREAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
     if ($action == "obtenerTareas") {
@@ -222,6 +224,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
     if ($action == "obtenerFallas") {
         $idEquipo = $_GET['idEquipo'];
@@ -376,6 +379,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     #OBTIENE, SECCION, SUBSECCION, NOMBRE EQUIPO
     if ($action == "DestinoSeccionSubseccionEquipo") {
         $idEquipo = $_GET["idEquipo"];
@@ -485,6 +489,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     #GANTT PARA FALLAS (PENDIENTES Y SOLUCIONADOS)
     if ($action == "ganttFallas") {
         $idSeccion = $_GET['idSeccion'];
@@ -547,6 +552,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     #OBTIENE VALOR DE LOS STATUS((TAREAS, FALLAS, PREVENTIVOS, PROYECTOS) DONDE 1 = ACTIVO
     if ($action == "obtenerStatus") {
@@ -752,6 +758,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // Consulta los Destinos que tiene acceso el usuario.
     if ($action == "obtenerDatosUsuario") {
         $data = array();
@@ -809,6 +816,7 @@ if (isset($_GET['action'])) {
         $data['destinosOpcion'] = $destinosOpcion;
         echo json_encode($data);
     }
+
 
     if ($action == "obtenerPendientesUsuario") {
         $arrayIndex = array();
@@ -955,6 +963,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // OBTIENE IDEQUIPO, EQUIPO, DESTINO, SECCION Y SUBSECCION, POR ID DE EQUIPO
     if ($action == "obtenerEDSS") {
         $idEquipo = $_GET['idEquipo'];
@@ -984,6 +993,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     // OBTIENE LOS TESTE DE EQUIPOS
     if ($action == "obtenerTestEquipo") {
@@ -1066,6 +1076,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // AGREGAR TEST POR EQUIPO
     if ($action == "agregarTestEquipo") {
         $idEquipo = $_GET['idEquipo'];
@@ -1082,6 +1093,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
@@ -1113,6 +1125,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // OBTIENES TODAS LOS TIPOS DE MEDIDAS DE LA TABLA t_unidades_medidas
     if ($action == "obtenerUnidadesMedidas") {
         $array = array();
@@ -1130,6 +1143,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     // OBTIENE TODOS LOS COMENTARIOS DEL TEST SELECCIONADO
     if ($action == "obtenerComentariosTest") {
@@ -1160,6 +1174,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // AGREGA COMENTAIOS A LOS TEST
     if ($action == "agregarComentariosTest") {
         $idTest = $_GET["idTest"];
@@ -1172,6 +1187,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
 
     // OBTENER ADJUNTOS TEST
     if ($action == "obtenerAdjuntosTest") {
@@ -1213,6 +1229,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     if ($action == "agregarAdjuntoTest") {
         $idTest = $_GET['idTest'];
         $resp = 0;
@@ -1231,6 +1248,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
 
     // ELIMINAR ADJUNTO
     if ($action == "eliminarAdjunto") {
@@ -1390,5 +1408,102 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+
+    //OBTIENES LAS SECCIONES SEGÚN EL DESTINO
+    if ($action == "obtenerSeccionesPorDestino") {
+        $array = array();
+
+        $query = "SELECT c_secciones.id, c_secciones.seccion 
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino 
+        ORDER BY c_secciones.seccion ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
+
+                $array[] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    //OBTIENES LAS SECCIONES SEGÚN EL DESTINO
+    if ($action == "obtenerSubseccionPorSeccion") {
+        $idSeccion = $_GET['idSeccion'];
+        $array = array();
+
+        $query = "SELECT id, grupo 
+        FROM c_subsecciones WHERE id_seccion = $idSeccion
+        ORDER BY grupo ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSubseccion = $x['id'];
+                $subseccion = $x['grupo'];
+
+                $array[] = array(
+                    "idSubseccion" => intval($idSubseccion),
+                    "subseccion" => $subseccion
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENE EQUIPOS TIPO LOCAL O EQUIPO, SEGUN DESTINO, SECCION Y SUBSECCION
+    if ($action == "obtenerEquipoLocal") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $tipo = $_GET['tipo'];
+        $array = array();
+
+        $query = "SELECT id, equipo FROM t_equipos_america 
+        WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and local_equipo = '$tipo' and status = 'OPERATIVO' and activo = 1
+        ORDER BY equipo ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
+
+                $array[] = array(
+                    "idEquipo" => $idEquipo,
+                    "equipo" => $equipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "agregarIncidencia") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $descripcion = $_GET['descripcion'];
+        $rangoFecha = $_GET['rangoFecha'];
+        $responsable = $_GET['responsable'];
+        $comentario = $_GET['comentario'];
+        $tipo = $_GET['tipo'];
+        $idEquipo = $_GET['idEquipo'];
+        $resp = 0;
+
+        if ($idEquipo > 0) {
+            $query = "INSERT INTO t_mc(actividad, tipo_incidencia, id_equipo, status, creado_por, responsable, fecha_creacion, id_destino, id_seccion, id_subseccion, rango_fecha, activo) VALUES('$descripcion', '$tipo', $idEquipo, 'N', $idUsuario, $responsable,'$fechaActual', $idDestino, $idSeccion, $idSubseccion, '$rangoFecha', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } else {
+            $resp = 2;
+        }
+
+        echo json_encode($resp);
+    }
+
     // CIERRE FINAL
 }

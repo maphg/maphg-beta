@@ -10,6 +10,40 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
 
+// ELEMENTOS BUTTOM ID
+const btnModalAgregarIncidencias = document.getElementById("btnModalAgregarIncidencias");
+const btnTGIncidencias = document.getElementById("btnTGIncidencias");
+const btnEquipoIncidencias = document.getElementById("btnEquipoIncidencias");
+const btnLocalIncidencias = document.getElementById("btnLocalIncidencias");
+const btnEmergenciaIncidencia = document.getElementById("btnEmergenciaIncidencia");
+const btnUrgenciaIncidencia = document.getElementById("btnUrgenciaIncidencia");
+const btnAlarmaIncidencia = document.getElementById("btnAlarmaIncidencia");
+const btnAlertaIncidencia = document.getElementById("btnAlertaIncidencia");
+const btnSeguimientoIncidencia = document.getElementById("btnSeguimientoIncidencia");
+const btnAgregarIncidencia = document.getElementById("btnAgregarIncidencia");
+const descripcionIncidencia = document.getElementById("descripcionIncidencia");
+const rangoFechaIncidencia = document.getElementById("rangoFechaIncidencia");
+const comentarioIncidencia = document.getElementById("comentarioIncidencia");
+const btnFlotante = document.getElementById("btnFlotante");
+const btnFlotanteOpciones = document.getElementById("btnFlotanteOpciones");
+// ELEMENTOS BUTTOM ID
+
+// ELEMENTOS <INPUTS> ID
+const seccionIncidencias = document.getElementById("seccionIncidencias");
+const subseccionIncidencias = document.getElementById("subseccionIncidencias");
+const equipoLocalIncidencias = document.getElementById("equipoLocalIncidencias");
+const responsablesIncidencias = document.getElementById("responsablesIncidencias");
+// ELEMENTOS <INPUTS> ID
+
+// CONTENEDORES DIV ID
+const contenedorEquipoLocalIncidencias = document.
+   getElementById("contenedorEquipoLocalIncidencias");
+// CONTENEDORES DIV ID
+
+// CONTENEDORES DIV CLASS
+const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia");
+// CONTENEDORES DIV CLASS
+
 
 // Función principal.
 function comprobarSession() {
@@ -1442,7 +1476,6 @@ function asignarUsuario(idUsuarioSeleccionado, tipoAsignacion, idItem) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          if (data == "MC") {
             // FALLAS
             alertaImg("Responsable Actualizado", "", "success", 1500);
@@ -2189,6 +2222,16 @@ function obtenerComentariosEquipos(idEquipo) {
                const comentario = array[x].comentario;
                const nombre = array[x].nombre;
                const fecha = array[x].fecha;
+               const tipo = array[x].tipo;
+
+               var estiloTipo =
+                  tipo == "EMERGENCIA" ? 'border border-red-500 text-red-500' :
+                     tipo == "URGENCIA" ? 'border border-orange-500 text-orange-500' :
+                        tipo == "ALARMA" ? 'border border-yellow-500 text-yellow-500' :
+                           tipo == "ALERTA" ? 'border border-blue-500 text-blue-500' :
+                              tipo == "SEGUIMIENTO" ? 'border border-teal-500 text-teal-500' :
+                                 'border border-black text-balck';
+
                const dataX = `
                   <div class=\"flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer\">
                      <div class=\"flex items-center justify-center\" style=\"width: 48px;\">
@@ -2201,6 +2244,7 @@ function obtenerComentariosEquipos(idEquipo) {
                               </div>
                               <div>
                                  <p class=\"font-mono ml-2 text-gray-600\">${fecha}</p>
+                                 <p class=\"font-mono text-center p-0 ${estiloTipo}\">${tipo}</p>
                               </div>
                            </div>
                            <div class=\"text-xs w-full\">
@@ -5191,7 +5235,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fCotizaciones}>
+            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300 hidden" ${fCotizaciones}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcotizaciones}</h1>
                 </div>
@@ -5786,7 +5830,6 @@ document.getElementById("misPendientesIncidencias").addEventListener("click", ()
 
 document.getElementById("misPendientesTareas").addEventListener("click", () => {
    let array = document.getElementsByClassName("misPendientes_");
-   console.log(array.length);
    for (let x = 0; x < array.length; x++) {
 
       if (document.getElementsByClassName("misPendientes_")[x]) {
@@ -6367,7 +6410,6 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array == 1) {
             alertaImg('Adjunto Eliminado', '', 'success', 1500);
 
@@ -6410,7 +6452,6 @@ function exportarEquipos(idDestino) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array);
          if (array.totalEquipos == 0) {
             alertify.confirm("Exportar Equipos a la Versión 3.0",
                function () {
@@ -6465,11 +6506,9 @@ function actualizarTareasequipos() {
    let idUsuario = localStorage.getItem('usuario');
    const action = 'actualizarTareasequipos';
    const URL = `php/update_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   console.log(URL);
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
       })
       .catch(function (err) {
          fetch(APIERROR + err + `actualizarTareasequipos()`);
@@ -6484,7 +6523,6 @@ function exportarTareasGenerales(idDestino) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array == 1) {
             alertaImg('Tareas exportadas', '', 'success', 1500);
          } else {
@@ -6534,3 +6572,278 @@ new Sortable(sortableDocumentosX, {
    animation: 1000,
    ghostClass: 'blue-background-class'
 });
+
+
+btnModalAgregarIncidencias.addEventListener('click', () => {
+   abrirmodal("modalAgregarIncidencias");
+   rangoFechaX('rangoFechaIncidencia');
+
+   //LIMPIAR CONTENIDO 
+   descripcionIncidencia.value = '';
+   responsablesIncidencias.value = 0;
+   comentarioIncidencia.value = '';
+   equipoLocalIncidencias.value = 0;
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   seccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+   seccionIncidencias.value = 0;
+
+   // DESBLOQUEA INPUTS
+   seccionIncidencias.removeAttribute('disabled');
+   subseccionIncidencias.removeAttribute('disabled');
+
+   // OBTIENES SECCIONES INICIALES
+   const action = "obtenerSeccionesPorDestino";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const seccion = array[x].seccion;
+               const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+
+               seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+
+   // OBTIENES USUARIOS INICIALES
+   responsablesIncidencias.innerHTML = '<option value="0">Seleccion Responsable</option>';
+   responsablesIncidencias.value = 0;
+   const action2 = "obtenerUsuarios";
+   const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   fetch(URL2)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idResponsable = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const codigo = `<option value="${idResponsable}">${nombre + ' ' + apellido}</option>`;
+
+               responsablesIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+});
+
+
+// BUSCA LAS POSIBLES OBSECCIONES CON LA SECCION
+seccionIncidencias.addEventListener('change', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   subseccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+   subseccionIncidencias.value = 0;
+
+   const action = "obtenerSubseccionPorSeccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${seccionIncidencias.value}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSubseccion = array[x].idSubseccion;
+               const subseccion = array[x].subseccion;
+               const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+
+               subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
+
+
+btnTGIncidencias.addEventListener('click', () => {
+   btnTGIncidencias.classList.add("bg-blue-600");
+   btnEquipoIncidencias.classList.remove("bg-blue-600");
+   btnLocalIncidencias.classList.remove("bg-blue-600");
+   equipoLocalIncidencias.innerHTML = '<option value="0">TG</option>';
+   equipoLocalIncidencias.value = 0;
+   contenedorEquipoLocalIncidencias.classList.add('hidden');
+})
+
+btnEquipoIncidencias.addEventListener('click', () => {
+   btnTGIncidencias.classList.remove("bg-blue-600");
+   btnEquipoIncidencias.classList.add("bg-blue-600");
+   btnLocalIncidencias.classList.remove("bg-blue-600");
+   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Equipo</option>';
+   contenedorEquipoLocalIncidencias.classList.remove('hidden');
+
+   const idSeccion = seccionIncidencias.value;
+   const idSubseccion = subseccionIncidencias.value;
+   const action = "obtenerEquipoLocal";
+
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=EQUIPO`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idEquipo = array[x].idEquipo;
+               const equipo = array[x].equipo;
+               const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+               equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
+
+btnLocalIncidencias.addEventListener('click', () => {
+   btnTGIncidencias.classList.remove("bg-blue-600");
+   btnEquipoIncidencias.classList.remove("bg-blue-600");
+   btnLocalIncidencias.classList.add("bg-blue-600");
+   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Local </option>';
+   contenedorEquipoLocalIncidencias.classList.remove('hidden');
+
+   const idSeccion = seccionIncidencias.value;
+   const idSubseccion = subseccionIncidencias.value;
+   const action = "obtenerEquipoLocal";
+
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=LOCAL`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idEquipo = array[x].idEquipo;
+               const equipo = array[x].equipo;
+               const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+               equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
+
+
+btnEmergenciaIncidencia.addEventListener('click', () => {
+
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+      }
+   }
+   btnEmergenciaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-red-600');
+})
+
+btnUrgenciaIncidencia.addEventListener('click', () => {
+
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+      }
+   }
+   btnUrgenciaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-orange-600');
+})
+
+btnAlarmaIncidencia.addEventListener('click', () => {
+
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+      }
+   }
+   btnAlarmaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-yellow-600');
+})
+
+btnAlertaIncidencia.addEventListener('click', () => {
+
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+      }
+   }
+   btnAlertaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-blue-600');
+})
+
+btnSeguimientoIncidencia.addEventListener('click', () => {
+
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+      }
+   }
+   btnSeguimientoIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-teal-600');
+})
+
+
+btnAgregarIncidencia.addEventListener('click', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = seccionIncidencias.value;
+   let idSubseccion = subseccionIncidencias.value;
+   let descripcion = descripcionIncidencia.value;
+   let rangoFecha = rangoFechaIncidencia.value;
+   let responsable = responsablesIncidencias.value;
+   let comentario = comentarioIncidencia.value;
+   let tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0].id;
+   let idEquipo = equipoLocalIncidencias.value;
+
+   tipo =
+      tipo == "btnEmergenciaIncidencia" ? 'EMERGENCIA' :
+         tipo == "btnUrgenciaIncidencia" ? 'URGENCIA' :
+            tipo == "btnAlarmaIncidencia" ? 'ALARMA' :
+               tipo == "btnAlertaIncidencia" ? 'ALERTA' :
+                  tipo == "btnSeguimientoIncidencia" ? 'SEGUIMIENTO' :
+                     '';
+
+   const action = "agregarIncidencia";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&descripcion=${descripcion}&rangoFecha=${rangoFecha}&responsable=${responsable}&comentario=${comentario}&idEquipo=${idEquipo}&tipo=${tipo}`;
+
+   console.log(URL);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array == 1) {
+            alertaImg('Incidencia Agregada', '', 'success', 1600);
+            cerrarmodal('modalAgregarIncidencias');
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1600);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
+
+
+btnFlotante.addEventListener('click', () => {
+   btnFlotanteOpciones.classList.remove('fadeOutLeft', 'fadeInLeft');
+
+   if (btnFlotante.childNodes[1].classList.contains('fa-plus-circle')) {
+
+      btnFlotanteOpciones.classList.remove('hidden');
+      btnFlotanteOpciones.classList.add('fadeInLeft');
+      btnFlotante.childNodes[1].classList.remove('fa-plus-circle');
+      btnFlotante.childNodes[1].classList.add('fa-times-circle');
+   } else {
+
+      btnFlotanteOpciones.classList.add('fadeOutLeft');
+      btnFlotante.childNodes[1].classList.remove('fa-times-circle');
+      btnFlotante.childNodes[1].classList.add('fa-plus-circle');
+   }
+})

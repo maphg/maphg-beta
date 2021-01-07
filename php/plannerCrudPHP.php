@@ -9344,7 +9344,7 @@ if (isset($_POST['action'])) {
         $idFaseEquipo = $_POST['idFaseEquipo'];
         $tipoLocalEquipo = $_POST['tipoLocalEquipo'];
 
-        if($idFaseEquipo<=0){
+        if ($idFaseEquipo <= 0) {
             $idFaseEquipo = 0;
         }
 
@@ -10154,8 +10154,7 @@ if (isset($_POST['action'])) {
         FROM t_equipos_america_comentarios 
         INNER JOIN t_users ON t_equipos_america_comentarios.id_usuario = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_equipos_america_comentarios.id_equipo = $idEquipo and t_equipos_america_comentarios.status = '1'
-        ORDER BY t_equipos_america_comentarios.id DESC";
+        WHERE t_equipos_america_comentarios.id_equipo = $idEquipo and t_equipos_america_comentarios.status = '1' ORDER BY t_equipos_america_comentarios.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idComentario = $x['id'];
@@ -10164,6 +10163,7 @@ if (isset($_POST['action'])) {
                 $fecha = (new DateTime($x['fecha']))->format('d/m/Y H:m:s');
                 $arrayTemp = array(
                     "idComentario" => $idComentario,
+                    "tipo" => "SEGUIMIENTO",
                     "comentario" => $comentario,
                     "nombre" => $nombre,
                     "fecha" => $fecha

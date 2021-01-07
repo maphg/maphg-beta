@@ -139,18 +139,41 @@
     </div>
     <!-- MENÚ -->
 
+    <!-- BOTON FLOTANTE -->
+    <div class="absolute bottom-0 right-0 flex flex-row items-end">
+
+        <div id="btnFlotanteOpciones" class="flex flex-col-reverse items-end font-medium mb-4 animated hidden">
+            <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencia</button>
+            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Proyecto</button>
+            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Checklist</button>
+            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">MP</button>
+            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Predictivo</button>
+        </div>
+
+        <div class="">
+            <button id="btnFlotante" class="text-red-500 text-5xl m-4 hover:text-red-400">
+                <i class="fad fa-plus-circle"></i>
+            </button>
+        </div>
+
+    </div>
+    <!-- BOTON FLOTANTE -->
+
+
     <div class="flex flex-col justify-evenly items-center w-full h-screen pt-12">
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-4 flex pt-10 scrollbar pb-24">
 
+
             <div class="flex flex-col flex-wrap justify-center items-center w-22rem leading-none text-bluegray-100 mr-4">
+
                 <div class="flex flex-row justify-center items-center w-full">
-                    <p id="dia" class="font-semibold dia">00</p>
+                    <p id="dia" class="font-semibold dia"></p>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full">
-                    <p id="mes" class="font-semibold dia">00</p>
+                    <p id="mes" class="font-semibold dia"></p>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full">
-                    <p id="hora" class="font-semibold text-md">00:00</p>
+                    <p id="hora" class="font-semibold text-md"></p>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full">
                     <p class="font-semibold text-md">
@@ -400,7 +423,7 @@
                                             Último Test
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
                                             Cot
                                         </th>
 
@@ -461,7 +484,7 @@
                                                 Último Test
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
                                                 Cot
                                             </th>
 
@@ -3010,6 +3033,148 @@
             </div>
         </div>
     </div>
+
+
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+    <div id="modalAgregarIncidencias" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarIncidencias')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1></h1>
+                    <h1>
+                        <i class="fas fa-plus mr-2"></i>
+                        INCIDENCIAS
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Sección:</h1>
+                        <div class="relative">
+                            <select id="seccionIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Subseccion:</h1>
+                        <div class="relative">
+                            <select id="subseccionIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="mb-2 self-start">Equipo/Local afectado:</h1>
+                <div class="flex flex-row cursor-pointer justify-start items-start">
+
+                    <button id="btnTGIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Tarea General
+                    </button>
+
+                    <button id="btnEquipoIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Equipo
+                    </button>
+
+                    <button id="btnLocalIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Local
+                    </button>
+                </div>
+
+                <div id="contenedorEquipoLocalIncidencias" class="relative w-1/2 hidden">
+                    <select id="equipoLocalIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="descripcionIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="rangoFechaIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="" name="datefilter">
+                    </div>
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsablesIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Clasifique la incidencia:</h1>
+                    <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
+                        <div class="w-full text-center">
+
+                            <button id="btnEmergenciaIncidencia" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                                Emergencia
+                            </button>
+
+                            <button id="btnUrgenciaIncidencia" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                                Urgencia
+                            </button>
+
+                            <button id="btnAlarmaIncidencia" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                                Alarma
+                            </button>
+
+                            <button id="btnAlertaIncidencia" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                                Alerta
+                            </button>
+
+                            <button id="btnSeguimientoIncidencia" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                                Seguimiento
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Comentario:</h1>
+                    <input id="comentarioIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+                </div>
+                <button id="btnAgregarIncidencia" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i>
+                    Crear
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
 
 
     <!-- Modales -->
