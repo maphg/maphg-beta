@@ -1,5 +1,6 @@
 <?php
 session_start();
+// session_refresh_expire.php
 include 'conexion.php';
 if (isset($_POST['action'])) {
     $action = $_POST['action'];
