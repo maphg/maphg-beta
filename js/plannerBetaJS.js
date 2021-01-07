@@ -6812,12 +6812,9 @@ btnAgregarIncidencia.addEventListener('click', () => {
    const action = "agregarIncidencia";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&descripcion=${descripcion}&rangoFecha=${rangoFecha}&responsable=${responsable}&comentario=${comentario}&idEquipo=${idEquipo}&tipo=${tipo}`;
 
-   console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array == 1) {
             alertaImg('Incidencia Agregada', '', 'success', 1600);
             cerrarmodal('modalAgregarIncidencias');
@@ -6835,15 +6832,33 @@ btnFlotante.addEventListener('click', () => {
    btnFlotanteOpciones.classList.remove('fadeOutLeft', 'fadeInLeft');
 
    if (btnFlotante.childNodes[1].classList.contains('fa-plus-circle')) {
-
       btnFlotanteOpciones.classList.remove('hidden');
       btnFlotanteOpciones.classList.add('fadeInLeft');
       btnFlotante.childNodes[1].classList.remove('fa-plus-circle');
       btnFlotante.childNodes[1].classList.add('fa-times-circle');
    } else {
-
       btnFlotanteOpciones.classList.add('fadeOutLeft');
       btnFlotante.childNodes[1].classList.remove('fa-times-circle');
       btnFlotante.childNodes[1].classList.add('fa-plus-circle');
+      setTimeout(() => {
+         btnFlotanteOpciones.classList.add('hidden');
+      }, 1000);
    }
 })
+
+
+function consultarPlanes(idDestino) {
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "obtenerPlanesX";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         fetch(APIERROR + 'PLANES EXPORTADOS');
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}

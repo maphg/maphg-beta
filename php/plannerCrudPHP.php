@@ -9688,16 +9688,22 @@ if (isset($_POST['action'])) {
                         }
                         $array['planes'] = $data;
                     } else {
+                        $array['creado'] = "NO";
+
                         $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
                         if ($result = mysqli_query($conn_2020, $query)) {
+
+                            // CREA POR DEFAUL LA PLANEACION ANTERIOR
+                            $query = "";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $array['creado'] = "SI";
+                            }
+
+                            // CREA POR DEFAUL LA PLANEACION
                             $query = "INSERT INTO t_mp_planeacion_proceso(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 $array['creado'] = "SI";
-                            } else {
-                                $array['creado'] = "NO";
                             }
-                        } else {
-                            $array['creado'] = "NO";
                         }
                     }
                 }

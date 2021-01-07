@@ -18,4 +18,4 @@ function storageUsuario() {
         }
     });
 }
-setInterval('storageUsuario()', 180000);
+// setInterval('storageUsuario()', 180000);

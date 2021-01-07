@@ -1842,8 +1842,6 @@
                 </div>
             </div>
             <!-- CONTENIDO GANTT -->
-
-
         </div>
     </div>
     <!-- MODAL PROYECTOS -->
@@ -2654,7 +2652,7 @@
     </div>
 
 
-    <!-- MODAL EDITAR FECHA EN FALLAS   -->
+    <!-- MODAL EDITAR FECHA EN FALLAS -->
     <div id="modalFechaMC" class="modal">
         <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
             <!-- BOTON CERRARL -->
@@ -3114,7 +3112,7 @@
                 <h1 class="self-start mb-2">Descripción:</h1>
                 <input id="descripcionIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
 
-                <div class="flex w-full items-center justify-center">
+                <div class="flex w-full items-center justify-center hidden">
                     <div class="w-1/2 flex flex-col pr-4">
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
                         <input id="rangoFechaIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="" name="datefilter">

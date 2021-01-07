@@ -1505,5 +1505,88 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
+    // CONSULTAR PLANES
+    if ($action == "obtenerPlanesX") {
+        $array = array();
+
+        $query = "SELECT id, id_destino, periodicidad, id_tipo_equipo FROM t_planes_mantto 
+        WHERE id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idPlan = $x['id'];
+                $periodicidad = $x['periodicidad'];
+                $idTipoEquipo = $x['id_tipo_equipo'];
+
+                if ($periodicidad == "Semanal") {
+                    $idPeriodicidad = 1;
+                } elseif ($periodicidad == "Mensual") {
+                    $idPeriodicidad = 2;
+                } elseif ($periodicidad == "Bimestral") {
+                    $idPeriodicidad = 3;
+                } elseif ($periodicidad == "Trimestral") {
+                    $idPeriodicidad = 4;
+                } elseif ($periodicidad == "Cuatrimestral") {
+                    $idPeriodicidad = 5;
+                } elseif ($periodicidad == "Semestral") {
+                    $idPeriodicidad = 6;
+                } elseif ($periodicidad == "Octamestral") {
+                    $idPeriodicidad = 7;
+                } elseif ($periodicidad == "Anual") {
+                    $idPeriodicidad = 8;
+                } elseif ($periodicidad == "Bianual") {
+                    $idPeriodicidad = 9;
+                } else {
+                    $idPeriodicidad = 10;
+                }
+
+                $arrayActividades = array();
+                $query = "SELECT actividad FROM t_planes_actividades WHERE id_mantto = $idPlan";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $actividad = $x['actividad'];
+                        $arrayActividades[] = array(
+                            "actividad" => $actividad
+                        );
+                    }
+                }
+                $array[] = array(
+                    "idPlan" => intval($idPlan),
+                    "periodicidad" => $idPeriodicidad,
+                    "idTipoEquipo" => intval($idTipoEquipo),
+                    "actividades" => $arrayActividades
+                );
+
+                $idPlanMax = 0;
+                $query = "SELECT max(id) 'id' FROM t_mp_planes_mantenimiento";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idPlanMax = intval($x['id']) + 1;
+                    }
+                }
+
+                if ($idPlanMax > 0) {
+
+                    $query = "INSERT INTO t_mp_planes_mantenimiento(id, id_fase, local_equipo, tipo_local_equipo, tipo_plan, grado, id_periodicidad, id_destino, numero_personas_requeridas, creado_por, fecha_creado, status, activo) VALUES($idPlanMax, 3, 'EQUIPO', $idTipoEquipo, 'PREVENTIVO', 'MAYOR', $idPeriodicidad, $idDestino, 1, $idUsuario, '$fechaActual', 'ACTIVO', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $query = "SELECT actividad FROM t_planes_actividades WHERE id_mantto = $idPlan";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $actividad = $x['actividad'];
+
+                                $query = "INSERT INTO t_mp_planes_actividades_preventivos(tipo_actividad, id_plan, descripcion_actividad, promedio_ejecucion, creado_por, fecha_creado, status, activo) VALUES('actividad', $idPlanMax, '$actividad', 1.0, $idUsuario, '$fechaActual', 'ACTIVO', 1)";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    $resp = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     // CIERRE FINAL
 }
