@@ -1510,13 +1510,14 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerPlanesX") {
         $array = array();
 
-        $query = "SELECT id, id_destino, periodicidad, id_tipo_equipo FROM t_planes_mantto 
-        WHERE id_destino = $idDestino";
+        $query = "SELECT id, id_destino, periodicidad, id_tipo_equipo, notas FROM t_planes_mantto 
+        WHERE id_destino = $idDestino and exportado = 'NO'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idPlan = $x['id'];
                 $periodicidad = $x['periodicidad'];
                 $idTipoEquipo = $x['id_tipo_equipo'];
+                $notas = $x['notas'];
 
                 if ($periodicidad == "Semanal") {
                     $idPeriodicidad = 1;
@@ -1567,16 +1568,22 @@ if (isset($_GET['action'])) {
 
                 if ($idPlanMax > 0) {
 
-                    $query = "INSERT INTO t_mp_planes_mantenimiento(id, id_fase, local_equipo, tipo_local_equipo, tipo_plan, grado, id_periodicidad, id_destino, numero_personas_requeridas, creado_por, fecha_creado, status, activo) VALUES($idPlanMax, 3, 'EQUIPO', $idTipoEquipo, 'PREVENTIVO', 'MAYOR', $idPeriodicidad, $idDestino, 1, $idUsuario, '$fechaActual', 'ACTIVO', 1)";
+                    $query = "INSERT INTO t_mp_planes_mantenimiento(id, id_fase, local_equipo, tipo_local_equipo, tipo_plan, grado, id_periodicidad, id_destino, descripcion, numero_personas_requeridas, creado_por, fecha_creado, status, activo) 
+                    VALUES($idPlanMax, 3, 'EQUIPO', $idTipoEquipo, 'PREVENTIVO', 'MAYOR', $idPeriodicidad, $idDestino, '$notas', 1, $idUsuario, '$fechaActual', 'ACTIVO', 1)";
                     if ($result = mysqli_query($conn_2020, $query)) {
-                        $query = "SELECT actividad FROM t_planes_actividades WHERE id_mantto = $idPlan";
+                        $query = "SELECT actividad FROM t_planes_actividades 
+                        WHERE id_mantto = $idPlan";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             foreach ($result as $x) {
                                 $actividad = $x['actividad'];
 
                                 $query = "INSERT INTO t_mp_planes_actividades_preventivos(tipo_actividad, id_plan, descripcion_actividad, promedio_ejecucion, creado_por, fecha_creado, status, activo) VALUES('actividad', $idPlanMax, '$actividad', 1.0, $idUsuario, '$fechaActual', 'ACTIVO', 1)";
                                 if ($result = mysqli_query($conn_2020, $query)) {
-                                    $resp = 1;
+                                    $query = "UPDATE t_planes_mantto SET exportado = 'SI' 
+                                    WHERE id = $idPlan";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        $resp = 1;
+                                    }
                                 }
                             }
                         }
