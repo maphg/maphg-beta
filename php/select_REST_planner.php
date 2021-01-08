@@ -1318,10 +1318,10 @@ if (isset($_GET['action'])) {
         t_energeticos.bitacora_trs,
         t_energeticos.bitacora_zi,
         t_colaboradores.nombre, t_colaboradores.apellido
-        FROM t_energeticos 
+        FROM t_energeticos
         INNER JOIN t_users ON t_energeticos.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1";
+        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1 ORDER BY t_energeticos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEnergetico = $x['id'];
@@ -1481,6 +1481,105 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+    // OBTIENE INFORMACION DE EQUIPO por ID
+    if ($action == "obtenerEquipoPorId") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT*  FROM t_equipos_america WHERE id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x['id'];
+                $id_equipo_principal = $x['id_equipo_principal'];
+                $equipo = $x['equipo'];
+                $cod2bend = $x['cod2bend'];
+                $matricula = $x['matricula'];
+                $serie = $x['serie'];
+                $id_destino = $x['id_destino'];
+                $id_seccion = $x['id_seccion'];
+                $id_subseccion = $x['id_subseccion'];
+                $id_tipo = $x['id_tipo'];
+                $id_ccoste = $x['id_ccoste'];
+                $id_hotel = $x['id_hotel'];
+                $id_area = $x['id_area'];
+                $id_localizacion = $x['id_localizacion'];
+                $id_ubicacion = $x['id_ubicacion'];
+                $id_sububicacion = $x['id_sububicacion'];
+                $categoria = $x['categoria'];
+                $local_equipo = $x['local_equipo'];
+                $jerarquia = $x['jerarquia'];
+                $id_marca = $x['id_marca'];
+                $modelo = $x['modelo'];
+                $numero_serie = $x['numero_serie'];
+                $codigo_fabricante = $x['codigo_fabricante'];
+                $codigo_interno_compras = $x['codigo_interno_compras'];
+                $largo_cm = $x['largo_cm'];
+                $ancho_cm = $x['ancho_cm'];
+                $alto_cm = $x['alto_cm'];
+                $potencia_electrica_hp = $x['potencia_electrica_hp'];
+                $potencia_electrica_kw = $x['potencia_electrica_kw'];
+                $voltaje_v = $x['voltaje_v'];
+                $frecuencia_hz = $x['frecuencia_hz'];
+                $caudal_agua_m3h = $x['caudal_agua_m3h'];
+                $caudal_agua_gph = $x['caudal_agua_gph'];
+                $carga_mca = $x['carga_mca'];
+                $potencia_energetica_frio_kw = $x['potencia_energetica_frio_kw'];
+                $potencia_energetica_frio_tr = $x['potencia_energetica_frio_tr'];
+                $potencia_energetica_calor_kcal = $x['potencia_energetica_calor_kcal'];
+                $caudal_aire_m3h = $x['caudal_aire_m3h'];
+                $caudal_aire_cfm = $x['caudal_aire_cfm'];
+                $coste = $x['coste'];
+                $id_fases = $x['id_fases'];
+                $status = $x['status'];
+
+                $array = array(
+                    "idEquipo" => intval($id),
+                    "idEquipo" => $equipo,
+                    "matricula" => $matricula,
+                    "cod2bend" => $cod2bend,
+                    "serie" => $serie,
+                    "idDestino" => intval($id_destino),
+                    "idSeccion" => intval($id_seccion),
+                    "idSubseccion" => intval($id_subseccion),
+                    "idTipo" => intval($id_tipo),
+                    "idCCoste" => intval($id_ccoste),
+                    "idHotel" => intval($id_hotel),
+                    "idArea" => intval($id_area),
+                    "idLocalizacion" => intval($id_localizacion),
+                    "idUbicacion" => intval($id_ubicacion),
+                    "idSububicacion" => intval($id_sububicacion),
+                    "categoria" => $categoria,
+                    "local_equipo" => $local_equipo,
+                    "jerrquia" => $jerarquia,
+                    "idMarca" => $id_marca,
+                    "modelo" => $modelo,
+                    "numeroSerie" => $numero_serie,
+                    "codigoFabricante" => $codigo_fabricante,
+                    "codigoInternoCompras" => $codigo_interno_compras,
+                    "largo" => $largo_cm,
+                    "ancho" => $ancho_cm,
+                    "alto" => $alto_cm,
+                    "potenciaElectricaHP" => $potencia_electrica_hp,
+                    "potenciaElectricaKW" => $potencia_electrica_kw,
+                    "voalteje" => $voltaje_v,
+                    "frecuencia" => $frecuencia_hz,
+                    "caudalAguaM3H" => $caudal_agua_m3h,
+                    "caudalAguaGPH" => $caudal_agua_gph,
+                    "cargaMCA" => $carga_mca,
+                    "potenciaEnergeticaFrioKM" => $potencia_energetica_frio_kw,
+                    "potenciaEnergeticaFrioTR" => $potencia_energetica_frio_tr,
+                    "potenciaEnergeticaFrioKCAL" => $potencia_energetica_calor_kcal,
+                    "caudalAireM3H" => $caudal_aire_m3h,
+                    "caudalAireCFM" => $caudal_aire_cfm,
+                    "coste" => $coste,
+                    "idFases" => intval($id_fases),
+                    "status" => $status
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
 
     if ($action == "agregarIncidencia") {
         $idSeccion = $_GET['idSeccion'];
@@ -1499,14 +1598,50 @@ if (isset($_GET['action'])) {
                 $resp = 1;
             }
         } else {
-            $resp = 2;
+            $query = "INSERT INTO t_mp_np(id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, tipo_incidencia, titulo, responsable, fecha, rango_fecha, status, activo) VALUES(0, $idUsuario, $idDestino, $idSeccion, $idSubseccion, '$tipo', '$descripcion', $responsable, '$fechaActual', '$rangoFecha', 'PENDIENTE', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "agregarEnergetico") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $titulo = $_GET['titulo'];
+        $rangoFecha = $_GET['rangoFecha'];
+        $responsable = $_GET['responsable'];
+        $comentario = $_GET['comentario'];
+        $resp = 0;
+
+        $idMax = 0;
+        $query = "SELECT max(id) 'id' FROM t_energeticos";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idMax = intval($x['id']) + 1;
+            }
+        }
+
+        if ($idMax > 0) {
+            $query = "INSERT INTO t_energeticos(id, id_destino, id_seccion, id_subseccion, actividad, creado_por, responsable, fecha_creacion, rango_fecha, status, activo) VALUES($idMax, $idDestino, $idSeccion, $idSubseccion, '$titulo', $idUsuario, $responsable, '$fechaActual', '$rangoFecha', 'PENDIENTE', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+                if ($comentario != "") {
+                    $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) VALUES($idMax, $idUsuario, '$fechaActual', '$comentario', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $resp = 2;
+                    }
+                }
+            }
         }
 
         echo json_encode($resp);
     }
 
 
-    // CONSULTAR PLANES
+    // CONSULTAR PLANES PARA MIGRAR
     if ($action == "obtenerPlanesX") {
         $array = array();
 
@@ -1593,6 +1728,8 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+
 
 
     // CIERRE FINAL

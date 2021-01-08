@@ -1376,8 +1376,7 @@
 
     <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
     <div id="modalEnergeticos" class="modal">
-        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background: rgb(252, 211, 77);
- min-height: 60vh;">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background: rgb(252, 211, 77);min-height: 60vh;">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -1399,13 +1398,13 @@
             <div class="flex justify-center items-center mb-5 relative pt-4">
 
                 <div class="relative text-gray-600 w-72">
-                    <input id="" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <input id="palabraEnergeticos" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
                     <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                         <i class="fad fa-search"></i>
                     </button>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                <div id="btnModalAgregarEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
                     <i class="fas fa-plus mr-1 text-xs"></i>
                     <h1>Nuevo</h1>
                 </div>
@@ -3112,12 +3111,12 @@
                 <h1 class="self-start mb-2">Descripción:</h1>
                 <input id="descripcionIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
 
-                <div class="flex w-full items-center justify-center hidden">
-                    <div class="w-1/2 flex flex-col pr-4">
+                <div class="flex w-full items-left justify-left">
+                    <div class="w-1/2 flex flex-col pr-4 hidden">
                         <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
                         <input id="rangoFechaIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="" name="datefilter">
                     </div>
-                    <div class="w-1/2 flex flex-col pl-4">
+                    <div class="w-1/2 flex flex-col">
                         <h1 class="self-start mb-2">Responsable:</h1>
                         <div class="relative">
                             <select id="responsablesIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
@@ -3173,6 +3172,67 @@
         </div>
     </div>
     <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+
+
+
+
+    <!-- MODAL AGREGAR ENERGETICO   -->
+    <div id="modalAgregarEnergeticos" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarEnergeticos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR Pendiente</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <h1 class="mb-2 self-start">subsección:</h1>
+                <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
+                    <h1 id="nombreSubseccionEnergeticos"></h1>
+                </div>
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="tituloPendienteEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+                <div class="flex w-full items-center justify-center">
+
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="rangoFechaEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Comentario:</h1>
+                <input id="comentarioEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+
+                <button id="btnAgregarEnergeticos" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL AGREGAR ENERGETICO   -->
 
 
     <!-- Modales -->

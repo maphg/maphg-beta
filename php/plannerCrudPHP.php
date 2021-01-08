@@ -2045,20 +2045,9 @@ if (isset($_POST['action'])) {
                     foreach ($result as $value) {
                         $idSubseccion = $value['id_subseccion'];
 
-                        $queryTareas = "SELECT count(t_mp_np.id) 
-                        FROM t_mp_np
-                        INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
-                        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
-                        $totalTareas = 0;
-                        if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
-                            foreach ($resultTareas as $x) {
-                                $totalTareas = $x['count(t_mp_np.id)'];
-                            }
-                        }
-
                         $queryTareas = "SELECT count(id) 
-                        FROM t_mp_np
-                        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 and activo = 1 and (status = 'PENDIENTE' or status = 'P' or status = 'N') and activo = 1 $filtroDestinoTG";
+                        FROM t_energeticos
+                        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and activo = 1 and (status = 'PENDIENTE' or status = 'P' or status = 'N') and activo = 1 $filtroDestinoTG";
                         $totalTareasGenerales = 0;
                         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                             foreach ($resultTareas as $x) {
@@ -2066,34 +2055,7 @@ if (isset($_POST['action'])) {
                             }
                         }
 
-                        $queryFallas = "SELECT count(t_mc.id) 
-                        FROM t_mc
-                        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-                        WHERE t_equipos_america.id_seccion = $idSeccion and 
-                        t_equipos_america.id_subseccion = $idSubseccion and 
-                        t_equipos_america.activo = 1 and
-                        (t_mc.status = 'PENDIENTE' or t_mc.status = 'N' or t_mc.status = 'P') 
-                        and t_mc.activo = 1 $filtroDestinoEquipo";
-                        $totalFallas = 0;
-                        if ($resultFallas = mysqli_query($conn_2020, $queryFallas)) {
-                            foreach ($resultFallas as $x) {
-                                $totalFallas = $x['count(t_mc.id)'];
-                            }
-                        }
-
-                        $queryPlanaccion = "SELECT count(t_proyectos_planaccion.id) 
-                        FROM t_proyectos
-                        INNER JOIN t_proyectos_planaccion ON t_proyectos.id = t_proyectos_planaccion.id_proyecto
-                        WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion and t_proyectos.activo = 1 and (t_proyectos.status = 'PENDIENTE' or t_proyectos.status = 'N' or t_proyectos.status = 'P') 
-                        and (t_proyectos_planaccion.status = 'PENDIENTE' or t_proyectos_planaccion.status = 'N' or t_proyectos_planaccion.status = 'P')$filtroDestinoPlanaccion";
-                        $totalPlanaccion = 0;
-                        if ($resultPlanaccion = mysqli_query($conn_2020, $queryPlanaccion)) {
-                            foreach ($resultPlanaccion as $x) {
-                                $totalPlanaccion = $x['count(t_proyectos_planaccion.id)'];
-                            }
-                        }
-
-                        $totalSubseccionOrdenEnergeticos[] = intval($totalFallas) + intval($totalTareas) + intval($totalTareasGenerales) + intval($totalPlanaccion);
+                        $totalSubseccionOrdenEnergeticos[] =  intval($totalTareasGenerales);
                         $idSubseccionOrdenEnergeticos[] = $idSubseccion;
                     }
                     array_multisort($totalSubseccionOrdenEnergeticos, SORT_DESC, $idSubseccionOrdenEnergeticos);

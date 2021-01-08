@@ -26,6 +26,8 @@ const rangoFechaIncidencia = document.getElementById("rangoFechaIncidencia");
 const comentarioIncidencia = document.getElementById("comentarioIncidencia");
 const btnFlotante = document.getElementById("btnFlotante");
 const btnFlotanteOpciones = document.getElementById("btnFlotanteOpciones");
+const btnAgregarEnergeticos = document.getElementById("btnAgregarEnergeticos");
+const palabraEnergeticos = document.getElementById("palabraEnergeticos");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -33,11 +35,17 @@ const seccionIncidencias = document.getElementById("seccionIncidencias");
 const subseccionIncidencias = document.getElementById("subseccionIncidencias");
 const equipoLocalIncidencias = document.getElementById("equipoLocalIncidencias");
 const responsablesIncidencias = document.getElementById("responsablesIncidencias");
+const tituloPendienteEnergeticos = document.getElementById("tituloPendienteEnergeticos");
+const rangoFechaEnergeticos = document.getElementById("rangoFechaEnergeticos");
+const responsableEnergeticos = document.getElementById("responsableEnergeticos");
+const comentarioEnergeticos = document.getElementById("comentarioEnergeticos");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
 const contenedorEquipoLocalIncidencias = document.
    getElementById("contenedorEquipoLocalIncidencias");
+const btnModalAgregarEnergeticos = document.getElementById("btnModalAgregarEnergeticos");
+const nombreSubseccionEnergeticos = document.getElementById("nombreSubseccionEnergeticos");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -1153,9 +1161,11 @@ function obtenerMCN(idEquipo) {
    document.getElementById("dataPendientes").innerHTML = "";
    document.getElementById("tipoPendiente").innerHTML = "FALLA";
    document.getElementById("agregarPendiente").innerHTML = "Agregar Falla";
-   document
-      .getElementById("btnAgregarPendiente")
-      .setAttribute("onclick", "datosModalAgregarMC()");
+   // document.getElementById("btnAgregarPendiente")
+   //    .setAttribute("onclick", "datosModalAgregarMC()");
+
+   document.getElementById("btnAgregarPendiente")
+      .setAttribute("onclick", "iniciarFormularioInicidencias()");
 
    const action = "obtenerMCN";
 
@@ -4430,7 +4440,9 @@ function obtenerFallas(idEquipo = 0) {
       setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
    document.getElementById("solucionadosFallaTarea").
       setAttribute('onclick', `obtenerFallasSolucionados(${idEquipo})`);
-   document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+   // document.getElementById("agregarFallaTarea").setAttribute('onclick', 'datosModalAgregarMC()');
+   document.getElementById("agregarFallaTarea").
+      setAttribute('onclick', 'iniciarFormularioInicidencias()');
    document.getElementById("ganttFallaTarea").
       setAttribute('onclick', `ganttFallas(${idEquipo}, 'PENDIENTE')`);
 
@@ -5375,10 +5387,14 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
    document.getElementById('reporteEquipos').
       setAttribute('onclick', 'reporteEquipos()');
+
+   // LIMPIA CONTENEDOR
+   contenedor.innerHTML = '';
+
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         contenedor.innerHTML = '';
+         console.log(array);
          if (array.length > 0) {
             for (let x = 0; x < array.length; x++) {
                const idEquipo = array[x].idEquipo;
@@ -6592,6 +6608,11 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
    // DESBLOQUEA INPUTS
    seccionIncidencias.removeAttribute('disabled');
    subseccionIncidencias.removeAttribute('disabled');
+   contenedorEquipoLocalIncidencias.classList.add('hidden');
+   btnTGIncidencias.removeAttribute('disabled', true);
+   btnEquipoIncidencias.removeAttribute('disabled', true);
+   btnLocalIncidencias.removeAttribute('disabled', true);
+   equipoLocalIncidencias.removeAttribute('disabled', true);
 
    // OBTIENES SECCIONES INICIALES
    const action = "obtenerSeccionesPorDestino";
@@ -6637,6 +6658,148 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
          fetch(APIERROR + err);
       })
 });
+
+
+function iniciarFormularioInicidencias() {
+   abrirmodal("modalAgregarIncidencias");
+   rangoFechaX('rangoFechaIncidencia');
+
+   //LIMPIAR CONTENIDO 
+   descripcionIncidencia.value = '';
+   responsablesIncidencias.value = 0;
+   comentarioIncidencia.value = '';
+   equipoLocalIncidencias.value = 0;
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let idEquipo = localStorage.getItem('idEquipo');
+
+   seccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+   seccionIncidencias.value = 0;
+
+   // DESBLOQUEA INPUTS
+   btnTGIncidencias.classList.remove('hidden');
+   btnEquipoIncidencias.classList.remove('hidden');
+   btnLocalIncidencias.classList.remove('hidden');
+
+   // ASIGNA VALORES POR DEFAULT
+
+   // OBTIENES SECCIONES INICIALES
+   const action = "obtenerSeccionesPorDestino";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const seccion = array[x].seccion;
+               const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+
+               seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .then(() => {
+         seccionIncidencias.value = idSeccion;
+      })
+      .then(() => {
+         const action2 = "obtenerSubseccionPorSeccion";
+         const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+         fetch(URL2)
+            .then(array => array.json())
+            .then(array => {
+               if (array) {
+                  for (let x = 0; x < array.length; x++) {
+                     const idSubseccion = array[x].idSubseccion;
+                     const subseccion = array[x].subseccion;
+                     const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                     subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+                  }
+               }
+            })
+            .then(() => {
+               subseccionIncidencias.value = idSubseccion;
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err);
+            })
+      })
+      .then(() => {
+         const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
+         console.log(URL4);
+         fetch(URL4)
+            .then(array => array.json())
+            .then(array => {
+               console.log(array);
+               if (array.local_equipo == "EQUIPO") {
+                  btnEquipoIncidencias.click();
+               } else {
+                  btnLocalIncidencias.click();
+               }
+            })
+      })
+      .then(() => {
+         const action3 = "obtenerEquipoLocal";
+         const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=EQUIPO`;
+
+         fetch(URL3)
+            .then(array => array.json())
+            .then(array => {
+               if (array) {
+                  for (let x = 0; x < array.length; x++) {
+                     const idEquipo = array[x].idEquipo;
+                     const equipo = array[x].equipo;
+                     const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+                     equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+                  }
+               }
+            })
+            .then(() => {
+               equipoLocalIncidencias.value = idEquipo;
+               contenedorEquipoLocalIncidencias.classList.remove('hidden');
+               seccionIncidencias.setAttribute('disabled', true);
+               subseccionIncidencias.setAttribute('disabled', true);
+               btnTGIncidencias.setAttribute('disabled', true);
+               btnEquipoIncidencias.setAttribute('disabled', true);
+               btnLocalIncidencias.setAttribute('disabled', true);
+               equipoLocalIncidencias.setAttribute('disabled', true);
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err);
+            })
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+
+   // OBTIENES USUARIOS INICIALES
+   responsablesIncidencias.innerHTML = '<option value="0">Seleccion Responsable</option>';
+   responsablesIncidencias.value = 0;
+   const action4 = "obtenerUsuarios";
+   const URL4 = `php/select_REST_planner.php?action=${action4}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   fetch(URL4)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idResponsable = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const codigo = `<option value="${idResponsable}">${nombre + ' ' + apellido}</option>`;
+
+               responsablesIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
 
 
 // BUSCA LAS POSIBLES OBSECCIONES CON LA SECCION
@@ -6798,33 +6961,43 @@ btnAgregarIncidencia.addEventListener('click', () => {
    let rangoFecha = rangoFechaIncidencia.value;
    let responsable = responsablesIncidencias.value;
    let comentario = comentarioIncidencia.value;
-   let tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0].id;
    let idEquipo = equipoLocalIncidencias.value;
 
-   tipo =
-      tipo == "btnEmergenciaIncidencia" ? 'EMERGENCIA' :
-         tipo == "btnUrgenciaIncidencia" ? 'URGENCIA' :
-            tipo == "btnAlarmaIncidencia" ? 'ALARMA' :
-               tipo == "btnAlertaIncidencia" ? 'ALERTA' :
-                  tipo == "btnSeguimientoIncidencia" ? 'SEGUIMIENTO' :
-                     '';
+   if (tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0]) {
+      let tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0].id;
+      tipo =
+         tipo == "btnEmergenciaIncidencia" ? 'EMERGENCIA' :
+            tipo == "btnUrgenciaIncidencia" ? 'URGENCIA' :
+               tipo == "btnAlarmaIncidencia" ? 'ALARMA' :
+                  tipo == "btnAlertaIncidencia" ? 'ALERTA' :
+                     tipo == "btnSeguimientoIncidencia" ? 'SEGUIMIENTO' :
+                        '';
+   } else {
+      alertaImg('Seleccion el tipo de Incidencia', '', 'info', 1600);
+   }
 
    const action = "agregarIncidencia";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&descripcion=${descripcion}&rangoFecha=${rangoFecha}&responsable=${responsable}&comentario=${comentario}&idEquipo=${idEquipo}&tipo=${tipo}`;
-
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         if (array == 1) {
-            alertaImg('Incidencia Agregada', '', 'success', 1600);
-            cerrarmodal('modalAgregarIncidencias');
-         } else {
-            alertaImg('Intente de Nuevo', '', 'info', 1600);
-         }
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err);
-      })
+   if (idDestino > 0 && idUsuario > 0 && idSeccion > 0 && idSubseccion > 0 && descripcion.length > 0 && responsable > 0 && tipo != '') {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Incidencia de Equipo, Agregada', '', 'success', 1600);
+               cerrarmodal('modalAgregarIncidencias');
+            } else if (array == 2) {
+               alertaImg('Incidencia General, Agregada', '', 'success', 1600);
+               cerrarmodal('modalAgregarIncidencias');
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1600);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Acomplete la Información Requerida', '', 'info', 1600);
+   }
 })
 
 
@@ -6862,3 +7035,84 @@ function consultarPlanes(idDestino) {
          fetch(APIERROR + err);
       })
 }
+
+
+// MODAL PARA FORMULARIO DE ENERGETICOS
+btnModalAgregarEnergeticos.addEventListener('click', () => {
+   abrirmodal('modalAgregarEnergeticos');
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+
+   //INICIALIZA VALORES 
+   responsableEnergeticos.innerHTML = '<option value="0">Seleccione Responsable</option>';
+   responsableEnergeticos.value = 0;
+   tituloPendienteEnergeticos.value = '';
+   rangoFechaEnergeticos.value = '';
+   comentarioEnergeticos.value = '';
+
+   fetch(`php/select_REST_planner.php?action=obtenerUsuarios&idDestino=${idDestino}&idUsuario=${idUsuario}`)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const id = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const codigo = `<option value="${id}">${nombre + apellido}</option>`;
+               responsableEnergeticos.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+
+   fetch(`php/select_REST_planner.php?action=DestinoSeccionSubseccionEquipo&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=0&idEquipo=0&tipoPendiente=0&idSubseccion=${idSubseccion}`)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            nombreSubseccionEnergeticos.innerText = array.subseccion;
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
+
+
+btnAgregarEnergeticos.addEventListener('click', () => {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+
+   const action = "agregarEnergetico";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&titulo=${tituloPendienteEnergeticos.value}&rangoFecha=${rangoFechaEnergeticos.value}&responsable=${responsableEnergeticos.value}&comentario=${comentarioEnergeticos.value}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   console.log(URL);
+   if (tituloPendienteEnergeticos.value != "" && rangoFechaEnergeticos.value != "" && responsableEnergeticos.value > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            console.log(array)
+            if (array == 1 || array == 2) {
+               alertaImg('Pendiente Agregado', '', 'success', 1500);
+               cerrarmodal('modalAgregarEnergeticos');
+               obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+               obtenerDatosUsuario(idDestino);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Acomplete la Información Requerida', '', 'info', 1500);
+   }
+})
+
+// BUSCADOR PARA TABLA DE ENERGETICOS
+palabraEnergeticos.addEventListener('keyup', () => {
+   buscadorTabla('dataEnergeticos', 'palabraEnergeticos', 0);
+})
