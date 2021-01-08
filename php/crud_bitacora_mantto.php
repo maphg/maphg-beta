@@ -510,19 +510,19 @@ if (isset($_POST['action'])) {
             // La función LIKE solo funciona para correctivos. 
             $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11) OR t_mc.zona LIKE '%ZI%')";
             $zonaFiltroMP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11, 12)";
-            $zonaFiltroMPNP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11, 12)";
+            $zonaFiltroMPNP = "AND t_mp_np.id_seccion IN(1, 24, 8, 9, 10, 11, 12)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_seccion IN(1, 24, 8, 9, 10, 11) OR t_proyectos.fase LIKE '%ZI%')";
         } elseif ($idDestino == 1 and $zona == "TRS") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($TRS)";
+            $zonaFiltroMPNP = "AND t_mp_np.id_subseccion IN($TRS)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
         } elseif ($idDestino == 1 and $zona == "GP") {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltroMPNP = "AND t_equipos.id_subseccion IN($GP)";
+            $zonaFiltroMPNP = "AND t_mp_np.id_subseccion IN($GP)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
 
             // PVR
