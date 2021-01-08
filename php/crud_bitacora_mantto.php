@@ -522,7 +522,7 @@ if (isset($_POST['action'])) {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltroMPNP = "AND (t_mp_np.id_subseccion IN($GP) or t_mp_np.bitacora_gp = 1)";
+            $zonaFiltroMPNP = "AND (t_mp_np.id_subseccion IN($GP) OR t_mp_np.bitacora_gp = 1)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
 
             // PVR
@@ -652,9 +652,9 @@ if (isset($_POST['action'])) {
             c_subsecciones.grupo, 
             t_equipos.equipo
             FROM t_mp_np
-            INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-            INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
-            INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
+            LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
+            INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_mp_np.id_subseccion = c_subsecciones.id
             WHERE t_mp_np.activo = 1 AND (t_mp_np.status='F' OR t_mp_np.status_trabajando = 1)
             $destinoMPNP
             $zonaFiltroMPNP
@@ -675,6 +675,10 @@ if (isset($_POST['action'])) {
             $titulo = $row_t_mp_np['titulo'];
             $status = $row_t_mp_np['status'];
             $sTrabajando = $row_t_mp_np['status_trabajando'];
+
+            if ($equipo == "") {
+                $equipo = "TG";
+            }
 
             $query_comentario_mp_np = "SELECT comentario FROM comentarios_mp_np WHERE id_mp_np=$id 
             ORDER BY fecha DESC LIMIT 1";
