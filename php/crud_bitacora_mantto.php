@@ -522,7 +522,7 @@ if (isset($_POST['action'])) {
 
             $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
-            $zonaFiltroMPNP = "AND t_mp_np.id_subseccion IN($GP)";
+            $zonaFiltroMPNP = "AND (t_mp_np.id_subseccion IN($GP) or t_mp_np.bitacora_gp = 1)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
 
             // PVR
@@ -689,15 +689,15 @@ if (isset($_POST['action'])) {
                 $comentario_mp_np = "Sin Comentario";
             }
 
-            if($sTrabajando == 1){
+            if ($sTrabajando == 1) {
                 $tag_statusT = "Trabajando";
-            }else{
+            } else {
                 $tag_statusT = "";
             }
-            
-            if($status == 'F'){
+
+            if ($status == 'F') {
                 $tag_statusF = "Finalizado";
-            }else{
+            } else {
                 $tag_statusF = "";
             }
 
