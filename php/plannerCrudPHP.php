@@ -3135,7 +3135,7 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisCreadosPDF") {
-            $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
             $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } elseif ($tipoExportar == "exportarMisPendientesPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
