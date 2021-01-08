@@ -5593,7 +5593,8 @@ if (isset($_POST['action'])) {
                 }
             }
         } elseif ($columna == "status" and $valor == "F") {
-            $update = "UPDATE t_mp_np SET status = 'F' WHERE id = $idTarea";
+            $update = "UPDATE t_mp_np SET status = 'F', fecha_finalizado = '$fechaActual'  
+            WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
                 echo 2;
             } else {
@@ -7352,7 +7353,7 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "status" and $valor == "F") {
-            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
+            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' ,fecha_realizado = '$fechaActual'  WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
 
                 $query = "SELECT id_proyecto FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
