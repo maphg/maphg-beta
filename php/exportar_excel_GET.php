@@ -41,6 +41,8 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('P1', 'PICS');
         $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'COMENTS');
         $objPHPExcel->getActiveSheet()->setCellValue('R1', 'DESPIECE');
+        $objPHPExcel->getActiveSheet()->setCellValue('S1', 'JERARQUIA');
+        $objPHPExcel->getActiveSheet()->setCellValue('T1', 'STATUS');
 
         if ($idDestino == 10) {
             $filtroDestinoEquipo = "";
@@ -49,15 +51,15 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
-        t_equipos_america.local_equipo, t_equipos_america.status
+        t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia
         FROM t_equipos_america
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and 
-        t_equipos_america.jerarquia = 'PRINCIPAL' $filtroDestinoEquipo";
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 $filtroDestinoEquipo";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
                 $equipo = $x['equipo'];
                 $statusEquipo = $x['status'];
+                $jerarquia = $x['jerarquia'];
                 $tipoEquipo = $x['local_equipo'];
                 $fila++;
 
@@ -245,6 +247,8 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $totalAdjuntos);
                 $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $totalComentarios);
                 $objPHPExcel->getActiveSheet()->setCellValue('R' . $fila, $totalDespiece);
+                $objPHPExcel->getActiveSheet()->setCellValue('S' . $fila, $jerarquia);
+                $objPHPExcel->getActiveSheet()->setCellValue('T' . $fila, $statusEquipo);
             }
         }
 
