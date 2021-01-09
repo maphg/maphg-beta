@@ -23,23 +23,24 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle("Reporte Equipos");
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'EQUIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'LOCAL/EQUIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'STATUS');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'FALLAS S');
-        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FALLAS P');
-        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'PREVENTIVO S');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'PREVENTIVO P');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'ULTIMO MP');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'PROXIMO MP');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'TAREAS S');
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TAREAS P');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'TEST');
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'ULTOMO TEST');
-        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COT');
-        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'PICS');
-        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'COMENTS');
-        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'DESPIECE');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'LOCAL/EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'FALLAS S');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'FALLAS P');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'PREVENTIVO S');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'PREVENTIVO P');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'ULTIMO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'PROXIMO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TAREAS S');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'TAREAS P');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'TEST');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'ULTOMO TEST');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'COT');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'PICS');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'COMENTS');
+        $objPHPExcel->getActiveSheet()->setCellValue('R1', 'DESPIECE');
 
         if ($idDestino == 10) {
             $filtroDestinoEquipo = "";
@@ -226,23 +227,24 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $equipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $tipoEquipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $statusEquipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $fallasSolucionadas);
-                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fallasPendientes);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $mpS);
-                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $mpP);
-                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $ultimoMpFecha);
-                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $proximoMpFecha);
-                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tareasSolucionadas);
-                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tareasPendientes);
-                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $testR);
-                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $ultimoTestFecha);
-                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalCotizaciones);
-                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
-                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $totalComentarios);
-                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $totalDespiece);
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $idEquipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $tipoEquipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $statusEquipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $fallasSolucionadas);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $fallasPendientes);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $mpS);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $mpP);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $ultimoMpFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $proximoMpFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tareasSolucionadas);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $tareasPendientes);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $testR);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $ultimoTestFecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalCotizaciones);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $totalAdjuntos);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $totalComentarios);
+                $objPHPExcel->getActiveSheet()->setCellValue('R' . $fila, $totalDespiece);
             }
         }
 
