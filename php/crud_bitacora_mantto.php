@@ -508,19 +508,19 @@ if (isset($_POST['action'])) {
         if ($idDestino == 1 and $zona == "ZI") {
             //En ZI admite solo: DEC(1) - AUTO(24) - ZIA(8) - ZIC(9) - ZIE(10) - ZIL(11) - ZHP(12).
             // La función LIKE solo funciona para correctivos. 
-            $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11) OR t_mc.zona LIKE '%ZI%')";
+            $zonaFiltroMC = "AND (t_mc.id_seccion IN(1, 24, 8, 9, 10, 11) OR t_mc.zona LIKE '%ZI%' OR t_mc.bitacora_zi = 1)";
             $zonaFiltroMP = "AND t_equipos.id_seccion IN(1, 24, 8, 9, 10, 11, 12)";
-            $zonaFiltroMPNP = "AND t_mp_np.id_seccion IN(1, 24, 8, 9, 10, 11, 12) OR t_mp_np.bitacora_zi = 1";
+            $zonaFiltroMPNP = "AND (t_mp_np.id_seccion IN(1, 24, 8, 9, 10, 11, 12) OR t_mp_np.bitacora_zi = 1)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_seccion IN(1, 24, 8, 9, 10, 11) OR t_proyectos.fase LIKE '%ZI%')";
         } elseif ($idDestino == 1 and $zona == "TRS") {
 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%')";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($TRS) OR t_mc.zona LIKE '%TRS%' OR t_mc.bitacora_trs = 1)";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($TRS)";
-            $zonaFiltroMPNP = "AND t_mp_np.id_subseccion IN($TRS) OR t_mp_np.bitacora_trs = 1";
+            $zonaFiltroMPNP = "AND (t_mp_np.id_subseccion IN($TRS) OR t_mp_np.bitacora_trs = 1)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($TRS) OR t_proyectos.fase LIKE '%TRS%')";
         } elseif ($idDestino == 1 and $zona == "GP") {
 
-            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%')";
+            $zonaFiltroMC = "AND (t_mc.id_subseccion IN($GP) OR t_mc.zona LIKE '%GP%' OR t_mc.bitacora_gp = 1)";
             $zonaFiltroMP = "AND t_equipos.id_subseccion IN($GP)";
             $zonaFiltroMPNP = "AND (t_mp_np.id_subseccion IN($GP) OR t_mp_np.bitacora_gp = 1)";
             $zonaFiltro = "AND (reporte_status_proyecto.id_subseccion IN($GP) OR t_proyectos.fase LIKE '%GP%')";
