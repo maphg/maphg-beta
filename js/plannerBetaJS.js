@@ -7212,10 +7212,13 @@ function iniciarFormularioInicidencias() {
    rangoFechaX('rangoFechaIncidencia');
 
    //LIMPIAR CONTENIDO 
+   seccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione</option>';
    descripcionIncidencia.value = '';
    responsablesIncidencias.value = 0;
    comentarioIncidencia.value = '';
    equipoLocalIncidencias.value = 0;
+   seccionIncidencias.value = 0;
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -7223,8 +7226,6 @@ function iniciarFormularioInicidencias() {
    let idSubseccion = localStorage.getItem('idSubseccion');
    let idEquipo = localStorage.getItem('idEquipo');
 
-   seccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
-   seccionIncidencias.value = 0;
 
    // DESBLOQUEA INPUTS
    btnTGIncidencias.classList.remove('hidden');
