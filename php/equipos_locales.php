@@ -61,52 +61,86 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                #TAREAS SOLUCIONADOS
-                $tareasSolucionadas = 0;
-                $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
-                    and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                #INCIDENCIA EMERCENCIA
+                $emergenciaS = 0;
+                $urgenciaS = 0;
+                $alarmaS = 0;
+                $alertaS = 0;
+                $seguimientoS = 0;
+                $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
-                        $tareasSolucionadas = $a['count(id)'];
+                        $tipoIncidencia = $a['tipo_incidencia'];
+
+                        if ($tipoIncidencia == "EMERGENCIA") {
+                            $emergenciaS++;
+                        } elseif ($tipoIncidencia == "URGENCIA") {
+                            $urgenciaS++;
+                        } elseif ($tipoIncidencia == "ALARMA") {
+                            $alarmaS++;
+                        } elseif ($tipoIncidencia == "ALERTA") {
+                            $alertaS++;
+                        } else {
+                            $seguimientoS++;
+                        }
                     }
                 }
+
+                #INCIDENCIA EMERCENCIA
+                $emergenciaP = 0;
+                $urgenciaP = 0;
+                $alarmaP = 0;
+                $alertaP = 0;
+                $seguimientoP = 0;
+                $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'N' or status = 'PENDIENTE' or status = 'P') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $tipoIncidencia = $a['tipo_incidencia'];
+
+                        if ($tipoIncidencia == "EMERGENCIA") {
+                            $emergenciaP++;
+                        } elseif ($tipoIncidencia == "URGENCIA") {
+                            $urgenciaP++;
+                        } elseif ($tipoIncidencia == "ALARMA") {
+                            $alarmaP++;
+                        } elseif ($tipoIncidencia == "ALERTA") {
+                            $alertaP++;
+                        } else {
+                            $seguimientoP++;
+                        }
+                    }
+                }
+
+                #TAREAS SOLUCIONADOS
+                $tareasSolucionadas = 0;
+                // $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                //     and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $tareasSolucionadas = $a['count(id)'];
+                //     }
+                // }
 
                 #TAREAS PENDIENTES
                 $tareasPendientes = 0;
-                $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
-                    and (status = 'N' or status = 'P' or status = 'PENDIENTE') and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $tareasPendientes = $a['count(id)'];
-                    }
-                }
+                // $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                //     and (status = 'N' or status = 'P' or status = 'PENDIENTE') and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $tareasPendientes = $a['count(id)'];
+                //     }
+                // }
 
                 #TOTAL COTIZACIONES POR EQUIPO
                 $totalCotizaciones = 0;
-                $query = "SELECT count(id) FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $totalCotizaciones = $a['count(id)'];
-                    }
-                }
-
-                #TOTAL ADJUNTOS POR EQUIPO
-                $totalAdjuntos = 0;
-                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $totalAdjuntos = $a['count(id)'];
-                    }
-                }
-
-                #TOTAL COMENTARIOS POR EQUIPO
-                $totalComentarios = 0;
-                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $totalComentarios = $a['count(id)'];
-                    }
-                }
+                // $query = "SELECT count(id) FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $totalCotizaciones = $a['count(id)'];
+                //     }
+                // }
 
                 #ULTIMO PREVENTIVO POR EQUIPO
                 $ultimoMpFecha = "";
@@ -123,7 +157,7 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                #PREVENTIVOS SOLUCIONADOS POR EQUIPO
+                #PREVENTIVOS SOLUCIONADOS POR AÑO Y POR EQUIPO
                 $mpS = 0;
                 $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
                 INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
@@ -188,35 +222,44 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                #PREVENTIVOS TEST SOLUCIONADOS POR EQUIPO
+                #TEST ULTIMO SOLUCIONADOS POR EQUIPO
                 $ultimoTestFecha = 0;
                 $ultimoTestSemana = 0;
-                $query = "SELECT t_mp_planificacion_iniciada.semana, 
-                t_mp_planificacion_iniciada.fecha_creacion 
-                FROM t_mp_planificacion_iniciada 
-                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
-                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST'";
+                $query = "SELECT fecha_creado FROM t_test_equipos 
+                WHERE id_equipo = $idEquipo and activo = 1 and fecha_creado !='' 
+                ORDER BY id DESC LIMIT 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $ultimoTestFecha = (new DateTime($x['fecha_creado']))->format('d/m/Y');
+                    }
+                }
+
+                #TOTAL ADJUNTOS POR EQUIPO
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
-                        $ultimoTestFecha = $a['fecha_creacion'];
-                        $ultimoTestSemana = $a['semana'];
-                        if ($ultimoTestFecha != "") {
-                            $ultimoTestFecha = (new DateTime($ultimoTestFecha))->format('d-m-Y');
-                        }
+                        $totalAdjuntos = $a['count(id)'];
+                    }
+                }
+
+                #TOTAL COMENTARIOS POR EQUIPO
+                $totalComentarios = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalComentarios = $a['count(id)'];
                     }
                 }
 
                 #DESPIECE 
-                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
                 $totalDespiece = 0;
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $totalDespiece = $x['count(id)'];
                     }
                 }
-
-
 
                 $arrayTemp = array(
                     "filaNumero" => intval($contador),
@@ -240,7 +283,17 @@ if (isset($_GET['action'])) {
                     "cotizaciones" => intval($totalCotizaciones),
                     "imagenes" => intval($totalAdjuntos),
                     "comentarios" => intval($totalComentarios),
-                    "totalDespiece" => intval($totalDespiece)
+                    "totalDespiece" => intval($totalDespiece),
+                    "emergenciaP" => intval($emergenciaP),
+                    "urgenciaP" => intval($urgenciaP),
+                    "alarmaP" => intval($alarmaP),
+                    "alertaP" => intval($alertaP),
+                    "seguimientoP" => intval($seguimientoP),
+                    "emergenciaS" => intval($emergenciaS),
+                    "urgenciaS" => intval($urgenciaS),
+                    "alarmaS" => intval($alarmaS),
+                    "alertaS" => intval($alertaS),
+                    "seguimientoS" => intval($seguimientoS)
                 );
                 $array[] = $arrayTemp;
             }
@@ -250,7 +303,7 @@ if (isset($_GET['action'])) {
 
 
     #OBTIENE EL DESPIECE POR EQUIPO
-    if ($action == "obtenerDespieceEquipo") {
+    if ($action == "obtenerDespieceEquipoX") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
         $contador = 0;
@@ -455,6 +508,283 @@ if (isset($_GET['action'])) {
                     "imagenes" => intval($totalAdjuntos),
                     "comentarios" => intval($totalComentarios),
                     "totalDespiece" => intval($totalDespiece)
+                );
+                $array[] = $arrayTemp;
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #OBTIENE TODOS LOS EQUIPO POR DESTINO->SECCION->SUBSECCION
+    if ($action == "obtenerDespieceEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+        $contador = 0;
+
+        $query = "SELECT id, equipo, local_equipo, status
+        FROM t_equipos_america
+        WHERE id_equipo_principal = $idEquipo and jerarquia = 'SECUNDARIO' and activo = 1";
+        if ($resultEquipo = mysqli_query($conn_2020, $query)) {
+            foreach ($resultEquipo as $x) {
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
+                $statusEquipo = $x['status'];
+                $tipoEquipo = $x['local_equipo'];
+                $contador++;
+
+                #FALLAS PENDIENTES
+                $fallasPendientes = 0;
+                $query = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'N' or status = '' or status = 'PENDIENTE' or status = 'P') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $fallasPendientes = $a['count(id)'];
+                    }
+                }
+
+                #FALLAS SOLUCIONADOS
+                $fallasSolucionadas = 0;
+                $query = "SELECT count(id) FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $fallasSolucionadas = $a['count(id)'];
+                    }
+                }
+
+                #INCIDENCIA EMERCENCIA
+                $emergenciaS = 0;
+                $urgenciaS = 0;
+                $alarmaS = 0;
+                $alertaS = 0;
+                $seguimientoS = 0;
+                $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $tipoIncidencia = $a['tipo_incidencia'];
+
+                        if ($tipoIncidencia == "EMERGENCIA") {
+                            $emergenciaS++;
+                        } elseif ($tipoIncidencia == "URGENCIA") {
+                            $urgenciaS++;
+                        } elseif ($tipoIncidencia == "ALARMA") {
+                            $alarmaS++;
+                        } elseif ($tipoIncidencia == "ALERTA") {
+                            $alertaS++;
+                        } else {
+                            $seguimientoS++;
+                        }
+                    }
+                }
+
+                #INCIDENCIA EMERCENCIA
+                $emergenciaP = 0;
+                $urgenciaP = 0;
+                $alarmaP = 0;
+                $alertaP = 0;
+                $seguimientoP = 0;
+                $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
+                and (status = 'N' or status = 'PENDIENTE' or status = 'P') and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $tipoIncidencia = $a['tipo_incidencia'];
+
+                        if ($tipoIncidencia == "EMERGENCIA") {
+                            $emergenciaP++;
+                        } elseif ($tipoIncidencia == "URGENCIA") {
+                            $urgenciaP++;
+                        } elseif ($tipoIncidencia == "ALARMA") {
+                            $alarmaP++;
+                        } elseif ($tipoIncidencia == "ALERTA") {
+                            $alertaP++;
+                        } else {
+                            $seguimientoP++;
+                        }
+                    }
+                }
+
+                #TAREAS SOLUCIONADOS
+                $tareasSolucionadas = 0;
+                // $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                //     and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $tareasSolucionadas = $a['count(id)'];
+                //     }
+                // }
+
+                #TAREAS PENDIENTES
+                $tareasPendientes = 0;
+                // $query = "SELECT count(id) FROM t_mp_np WHERE id_equipo = $idEquipo 
+                //     and (status = 'N' or status = 'P' or status = 'PENDIENTE') and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $tareasPendientes = $a['count(id)'];
+                //     }
+                // }
+
+                #TOTAL COTIZACIONES POR EQUIPO
+                $totalCotizaciones = 0;
+                // $query = "SELECT count(id) FROM t_equipos_cotizaciones WHERE id_equipo = $idEquipo and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $totalCotizaciones = $a['count(id)'];
+                //     }
+                // }
+
+                #ULTIMO PREVENTIVO POR EQUIPO
+                $ultimoMpFecha = "";
+                $ultimoMpSemana = 0;
+                $query = "SELECT semana, fecha_creacion FROM t_mp_planificacion_iniciada WHERE id_equipo = $idEquipo and status = 'SOLUCIONADO' and activo = 1
+                ORDER BY id DESC LIMIT 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $ultimoMpFecha = $a['fecha_creacion'];
+                        if ($ultimoMpFecha != "") {
+                            $ultimoMpFecha = (new DateTime($ultimoMpFecha))->format('d-m-Y');
+                        }
+                        $ultimoMpSemana = $a['semana'];
+                    }
+                }
+
+                #PREVENTIVOS SOLUCIONADOS POR AÑO Y POR EQUIPO
+                $mpS = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $mpS = $a['id'];
+                    }
+                }
+
+                #PREVENTIVOS PENDIENTES POR EQUIPO
+                $mpP = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id'
+                FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'PROCESO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $mpP = $a['id'];
+                    }
+                }
+
+                #MP PRIXIMO POR EQUIPO
+                $proximoMpFecha = "";
+                $proximoMpSemana = 0;
+                $query = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual' ORDER BY id DESC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $proximoMpFechaX = (new DateTime($a['ultima_modificacion']))
+                        ->format("d/m/Y");
+                        for ($x = 1; $x < 53; $x++) {
+                            $semana_x = $a['semana_' . $x];
+                            if ($semana_x == "PLANIFICADO") {
+                                $proximoMpSemana = $x;
+                                $proximoMpFecha = $proximoMpFechaX;
+                                $x = 52;
+                            }
+                        }
+                    }
+                }
+
+                #PREVENTIVOS SOLUCIONADOS POR EQUIPO
+                $testR = 0;
+                $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
+                INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                WHERE t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and 
+                t_mp_planificacion_iniciada.activo = 1 and año = '$añoActual' and t_mp_planes_mantenimiento.tipo_plan = 'TEST' ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $testR = $a['id'];
+                    }
+                }
+
+                #TEST
+                $query = "SELECT count(id) FROM t_test_equipos 
+                WHERE id_equipo = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $testR = $x['count(id)'];
+                    }
+                }
+
+                #TEST ULTIMO SOLUCIONADOS POR EQUIPO
+                $ultimoTestFecha = 0;
+                $ultimoTestSemana = 0;
+                $query = "SELECT fecha_creado FROM t_test_equipos 
+                WHERE id_equipo = $idEquipo and activo = 1 and fecha_creado !='' 
+                ORDER BY id DESC LIMIT 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $ultimoTestFecha = (new DateTime($x['fecha_creado']))->format('d/m/Y');
+                    }
+                }
+
+                #TOTAL ADJUNTOS POR EQUIPO
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalAdjuntos = $a['count(id)'];
+                    }
+                }
+
+                #TOTAL COMENTARIOS POR EQUIPO
+                $totalComentarios = 0;
+                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $a) {
+                        $totalComentarios = $a['count(id)'];
+                    }
+                }
+
+                #DESPIECE 
+                $totalDespiece = 0;
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalDespiece = $x['count(id)'];
+                    }
+                }
+
+                $arrayTemp = array(
+                    "filaNumero" => intval($contador),
+                    "idEquipo" => intval($idEquipo),
+                    "equipo" => $equipo,
+                    "tipoEquipo" => $tipoEquipo,
+                    "statusEquipo" => $statusEquipo,
+                    "fallasP" => intval($fallasPendientes),
+                    "fallasS" => intval($fallasSolucionadas),
+                    "mpP" => intval($mpP),
+                    "mpS" => intval($mpS),
+                    "ultimoMpFecha" => $ultimoMpFecha,
+                    "ultimoMpSemana" => $ultimoMpSemana,
+                    "proximoMpFecha" => $proximoMpFecha,
+                    "proximoMpSemana" => intval($proximoMpSemana),
+                    "tareasP" => intval($tareasPendientes),
+                    "tareasS" => intval($tareasSolucionadas),
+                    "testR" => intval($testR),
+                    "ultimoTestFecha" => $ultimoTestFecha,
+                    "ultimoTestSemana" => intval($ultimoTestSemana),
+                    "cotizaciones" => intval($totalCotizaciones),
+                    "imagenes" => intval($totalAdjuntos),
+                    "comentarios" => intval($totalComentarios),
+                    "totalDespiece" => intval($totalDespiece),
+                    "emergenciaP" => intval($emergenciaP),
+                    "urgenciaP" => intval($urgenciaP),
+                    "alarmaP" => intval($alarmaP),
+                    "alertaP" => intval($alertaP),
+                    "seguimientoP" => intval($seguimientoP),
+                    "emergenciaS" => intval($emergenciaS),
+                    "urgenciaS" => intval($urgenciaS),
+                    "alarmaS" => intval($alarmaS),
+                    "alertaS" => intval($alertaS),
+                    "seguimientoS" => intval($seguimientoS)
                 );
                 $array[] = $arrayTemp;
             }

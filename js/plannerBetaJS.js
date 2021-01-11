@@ -28,6 +28,11 @@ const btnFlotante = document.getElementById("btnFlotante");
 const btnFlotanteOpciones = document.getElementById("btnFlotanteOpciones");
 const btnAgregarEnergeticos = document.getElementById("btnAgregarEnergeticos");
 const palabraEnergeticos = document.getElementById("palabraEnergeticos");
+const btnEmergenciaEnergetico = document.getElementById("btnEmergenciaEnergetico");
+const btnUrgenciaEnergetico = document.getElementById("btnUrgenciaEnergetico");
+const btnAlarmaEnergetico = document.getElementById("btnAlarmaEnergetico");
+const btnAlertaEnergetico = document.getElementById("btnAlertaEnergetico");
+const btnSeguimientoEnergetico = document.getElementById("btnSeguimientoEnergetico");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -46,12 +51,56 @@ const contenedorEquipoLocalIncidencias = document.
    getElementById("contenedorEquipoLocalIncidencias");
 const btnModalAgregarEnergeticos = document.getElementById("btnModalAgregarEnergeticos");
 const nombreSubseccionEnergeticos = document.getElementById("nombreSubseccionEnergeticos");
+const btnColumnasInicdencias = document.getElementById("btnColumnasInicdencias");
+const btnColumnasPreventivos = document.getElementById("btnColumnasPreventivos");
+const btnColumnasPredictivos = document.getElementById("btnColumnasPredictivos");
+const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEquiposAmerica");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
 const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia");
+const columna = document.getElementsByClassName("columna_");
+const columna1 = document.getElementsByClassName("columna_1");
+const columna2 = document.getElementsByClassName("columna_2");
+const columna3 = document.getElementsByClassName("columna_3");
+const columna4 = document.getElementsByClassName("columna_4");
+const columna5 = document.getElementsByClassName("columna_5");
+const columna6 = document.getElementsByClassName("columna_6");
+const columna7 = document.getElementsByClassName("columna_7");
+const columna8 = document.getElementsByClassName("columna_8");
+const columna9 = document.getElementsByClassName("columna_9");
+const columna10 = document.getElementsByClassName("columna_10");
+const columna11 = document.getElementsByClassName("columna_11");
+const columna12 = document.getElementsByClassName("columna_12");
 // CONTENEDORES DIV CLASS
 
+// CONTENEDOR DE TABLAS
+const contenedorEquiposAmerica = document.getElementById("contenedorEquiposAmerica");
+const contenedorEquiposAmericaDespice = document.getElementById("contenedorEquiposAmericaDespice");
+// CONTENEDOR DE TABLAS
+
+
+// BOTONES PARA EL MODAL STATUS
+const btnStatusUrgente = document.getElementById("statusUrgente");
+const btnStatusMaterial = document.getElementById("btnStatusMaterial");
+const btnStatusTrabajare = document.getElementById("statusTrabajare")
+const btnStatusCalidad = document.getElementById("statusCalidad");
+const btnStatusCompras = document.getElementById("statusCompras");
+const btnStatusDireccion = document.getElementById("statusDireccion");
+const btnStatusFinanzas = document.getElementById("statusFinanzas");
+const btnStatusRRHH = document.getElementById("statusRRHH");
+const btnStatusElectricidad = document.getElementById("statusElectricidad");
+const btnStatusAgua = document.getElementById("statusAgua");
+const btnStatusDiesel = document.getElementById("statusDiesel");
+const btnStatusGas = document.getElementById("statusGas");
+const btnStatusFinalizar = document.getElementById("statusFinalizar");
+const btnStatusActivo = document.getElementById("statusActivo");
+const btnEditarTitulo = document.getElementById("btnEditarTitulo");
+const btnStatusGP = document.getElementById("statusGP");
+const btnStatusTRS = document.getElementById("statusTRS");
+const btnStatusZI = document.getElementById("statusZI");
+
+// BOTONES PARA EL MODAL STATUS
 
 // Función principal.
 function comprobarSession() {
@@ -918,13 +967,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
 
 
 // Funcion para Ver y Exportar los pendientes de las secciones.
-function exportarPendientes(
-   idUsuario,
-   idDestino,
-   idSeccion,
-   idSubseccion,
-   tipoExportar
-) {
+function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
    const action = "consultaFinalExcel";
    $.ajax({
       type: "POST",
@@ -1663,7 +1706,10 @@ function obtenerTareasP(idEquipo) {
    document.getElementById("dataPendientes").innerHTML = "";
    document.getElementById("tipoPendiente").innerHTML = "TAREAS";
    document.getElementById("agregarPendiente").innerHTML = "Agregar Tarea";
-   document.getElementById("btnAgregarPendiente").setAttribute("onclick", "datosAgregarTarea()");
+   // document.getElementById("btnAgregarPendiente").setAttribute("onclick", "datosAgregarTarea()");
+   document.getElementById("btnAgregarPendiente").
+      setAttribute("onclick", "iniciarFormularioInicidencias()");
+
    document.getElementById("btnAgregarMC").setAttribute("onclick", "agregarTarea()");
    const action = "obtenerTareasP";
 
@@ -2481,9 +2527,9 @@ function verEnPlanner(tipoPendiente, idPendiente) {
                   setAttribute('onclick', 'agregarComentarioPlanaccionVerEnPlanner(' + idPendiente + ')');
 
             }
-         } else {
-            document.getElementById("modalVerEnPlanner").classList.remove('open');
          }
+      },
+      error: function (err) {
       }
    });
 }
@@ -2883,8 +2929,6 @@ function actualizarEquipo(idEquipo) {
       }
    });
 }
-
-
 
 
 // Obtiene el Calendario de MP de los Equipos
@@ -4620,7 +4664,7 @@ function obtenerTareas(idEquipo = 0) {
       setAttribute('onclick', `obtenerTareasSolucionados(${idEquipo})`);
 
    document.getElementById("agregarFallaTarea").
-      setAttribute("onclick", "datosAgregarTarea();");
+      setAttribute("onclick", "iniciarFormularioInicidencias();");
    document.getElementById("btnAgregarMC").
       setAttribute("onclick", "agregarTarea();");
 
@@ -5164,6 +5208,42 @@ const dataEquiposAmerica = params => {
       fDespiece = `onclick="obtenerDespieceEquipo(${idEquipo})"`;
    }
 
+   // INCIDENCIAS
+   let emergenciaS = params.emergenciaS <= 0 ? icono : params.emergenciaS;
+   let urgenciaS = params.urgenciaS <= 0 ? icono : params.urgenciaS;
+   let alarmaS = params.alarmaS <= 0 ? icono : params.alarmaS;
+   let alertaS = params.alertaS <= 0 ? icono : params.alertaS;
+   let seguimientoS = params.seguimientoS <= 0 ? icono : params.seguimientoS;
+   let emergenciaP = params.emergenciaP <= 0 ? icono : params.emergenciaP;
+   let urgenciaP = params.urgenciaP <= 0 ? icono : params.urgenciaP;
+   let alarmaP = params.alarmaP <= 0 ? icono : params.alarmaP;
+   let alertaP = params.alertaP <= 0 ? icono : params.alertaP;
+   let seguimientoP = params.seguimientoP <= 0 ? icono : params.seguimientoP;
+   // INCIDENCIAS
+
+   if (params.emergenciaP <= 0 && params.emergenciaS <= 0) {
+      emergenciaS = '';
+   }
+
+   if (params.urgenciaS <= 0 && params.urgenciaP <= 0) {
+      urgenciaS = '';
+   }
+
+   if (params.alarmaS <= 0 && params.alarmaP <= 0) {
+      alarmaS = '';
+   }
+
+   if (params.alertaS <= 0 && params.alertaP <= 0) {
+      alertaS = '';
+   }
+
+   if (params.seguimientoS <= 0 && params.seguimientoP <= 0) {
+      seguimientoS = '';
+   }
+
+
+
+
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
    var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
    var fComentarios = `onclick="obtenerComentariosEquipos(${idEquipo}); toggleModalTailwind('modalComentarios');"`;
@@ -5187,7 +5267,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_1 hidden" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.fallasP}">
                     <h1>${valorFallasP}</h1>
                 </div>
@@ -5196,7 +5276,52 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_2 hidden" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.emergenciaP}">
+                    <h1>${emergenciaP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.emergenciaS}">
+                    <h1>${emergenciaS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_3 hidden" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.urgenciaP}">
+                    <h1>${urgenciaP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.urgenciaS}">
+                    <h1>${urgenciaS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_4 hidden" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alarmaP}">
+                    <h1>${alarmaP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.alarmaS}">
+                    <h1>${alarmaS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_5 hidden" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alertaP}">
+                    <h1>${alertaP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.alertaS}">
+                    <h1>${alertaS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_6 hidden" ${fFallas}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.seguimientoP}">
+                    <h1>${seguimientoP}</h1>
+                </div>
+                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.seguimientoS}">
+                    <h1>${seguimientoS}</h1>
+                </div>
+            </td>
+
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_7 hidden">
                 <div class="font-bold uppercase text-sm text-red-400">
                     <h1>${valormpP}</h1>
                 </div>
@@ -5205,7 +5330,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_8 hidden">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoMpFecha}</h1>
                 </div>
@@ -5214,7 +5339,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_9 hidden">
                 <div class="font-semibold uppercase">
                     <h1>${valorproximoMpFecha}</h1>
                 </div>
@@ -5223,7 +5348,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fTareas}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_10 hidden" ${fTareas}>
                 <div class="font-bold uppercase text-sm text-red-400">
                     <h1>${valorTareasP}</h1>
                 </div>
@@ -5232,13 +5357,13 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fTest}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_11 hidden" ${fTest}>
                 <div class="font-semibold uppercase">
                     <h1>${valorTestR}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_12 hidden">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoTestFecha}</h1>
                 </div>
@@ -5247,25 +5372,25 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300 hidden" ${fCotizaciones}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_13 hidden" ${fCotizaciones}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcotizaciones}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200truncate py-2 text-center leading-none hover:bg-gray-300" ${fAdjuntos}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_14" ${fAdjuntos}>
                 <div class="font-semibold uppercase">
                     <h1>${valorimagenes}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${fComentarios}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_15" ${fComentarios}>
                 <div class="font-semibold uppercase">
                     <h1>${valorcomentarios}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 truncate" ${fDespiece}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_16" ${fDespiece}>
                 <div class="font-semibold uppercase">
                     <h1>${valorDespiece}</h1>
                 </div>
@@ -5283,17 +5408,15 @@ function obtenerDespieceEquipo(idEquipo) {
    const action = "obtenerDespieceEquipo";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
 
-   document.getElementById("modalEquiposAmericaBG").
-      setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
+   document.getElementById("modalEquiposAmericaBG").removeAttribute('onclick');
+   contenedorEquiposAmericaDespice.innerHTML = '';
 
    if (idEquipo > 0) {
       fetch(URL)
          .then(array => array.json())
          .then(array => {
 
-            document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
-
-            if (array.length > 0) {
+            if (array) {
                for (let x = 0; x < array.length; x++) {
                   const idEquipo = array[x].idEquipo;
                   const equipo = array[x].equipo;
@@ -5316,8 +5439,18 @@ function obtenerDespieceEquipo(idEquipo) {
                   const imagenes = array[x].imagenes;
                   const comentarios = array[x].comentarios;
                   const totalDespiece = array[x].totalDespiece;
+                  const emergenciaS = array[x].emergenciaS;
+                  const urgenciaS = array[x].urgenciaS;
+                  const alarmaS = array[x].alarmaS;
+                  const alertaS = array[x].alertaS;
+                  const seguimientoS = array[x].seguimientoS;
+                  const emergenciaP = array[x].emergenciaP;
+                  const urgenciaP = array[x].urgenciaP;
+                  const alarmaP = array[x].alarmaP;
+                  const alertaP = array[x].alertaP;
+                  const seguimientoP = array[x].seguimientoP;
 
-                  const data = dataEquiposAmerica({
+                  const codigo = dataEquiposAmerica({
                      idEquipo: idEquipo,
                      equipo: equipo,
                      tipoEquipo: tipoEquipo,
@@ -5338,11 +5471,20 @@ function obtenerDespieceEquipo(idEquipo) {
                      cotizaciones: cotizaciones,
                      imagenes: imagenes,
                      comentarios: comentarios,
-                     totalDespiece: totalDespiece
+                     totalDespiece: totalDespiece,
+                     emergenciaS: emergenciaS,
+                     urgenciaS: urgenciaS,
+                     alarmaS: alarmaS,
+                     alertaS: alertaS,
+                     seguimientoS: seguimientoS,
+                     emergenciaP: emergenciaP,
+                     urgenciaP: urgenciaP,
+                     alarmaP: alarmaP,
+                     alertaP: alertaP,
+                     seguimientoP: seguimientoP
                   });
 
-                  document.getElementById("contenedorEquiposAmericaDespice").
-                     insertAdjacentHTML('beforeend', data);
+                  contenedorEquiposAmericaDespice.insertAdjacentHTML('beforeend', codigo);
                }
             } else {
                alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1500);
@@ -5356,10 +5498,13 @@ function obtenerDespieceEquipo(idEquipo) {
             Popper.createPopper(button, tooltip, {
                placement: 'bottom'
             });
+
+            document.getElementById("modalEquiposAmericaBG").
+               setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
          })
          .catch(function (err) {
             fetch(APIERROR + err + ': (obtenerDespieceEquipo)');
-            document.getElementById("contenedorEquiposAmericaDespice").innerHTML = '';
+            contenedorEquiposAmericaDespice.innerHTML = '';
          })
    } else {
       alertaImg('Equipo Sin Despiece', '', 'info', 1500);
@@ -5374,14 +5519,12 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
-   let contenedor = document.getElementById("contenedorEquiposAmerica");
 
    document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = iconoLoader;
    document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
 
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
-
    document.getElementById("tareasGeneralesEquipo").
       setAttribute('onclick', "obtenerTareas(0); toggleModalTailwind('modalTareasFallas');");
 
@@ -5389,13 +5532,24 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
       setAttribute('onclick', 'reporteEquipos()');
 
    // LIMPIA CONTENEDOR
-   contenedor.innerHTML = '';
+   contenedorEquiposAmerica.innerHTML = '';
+   columna1[0].classList.add('hidden');
+   columna2[0].classList.add('hidden');
+   columna3[0].classList.add('hidden');
+   columna4[0].classList.add('hidden');
+   columna5[0].classList.add('hidden');
+   columna6[0].classList.add('hidden');
+   columna7[0].classList.add('hidden');
+   columna8[0].classList.add('hidden');
+   columna9[0].classList.add('hidden');
+   columna10[0].classList.add('hidden');
+   columna11[0].classList.add('hidden');
+   columna12[0].classList.add('hidden');
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array);
-         if (array.length > 0) {
+         if (array) {
             for (let x = 0; x < array.length; x++) {
                const idEquipo = array[x].idEquipo;
                const equipo = array[x].equipo;
@@ -5418,8 +5572,18 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                const imagenes = array[x].imagenes;
                const comentarios = array[x].comentarios;
                const totalDespiece = array[x].totalDespiece;
+               const emergenciaS = array[x].emergenciaS;
+               const urgenciaS = array[x].urgenciaS;
+               const alarmaS = array[x].alarmaS;
+               const alertaS = array[x].alertaS;
+               const seguimientoS = array[x].seguimientoS;
+               const emergenciaP = array[x].emergenciaP;
+               const urgenciaP = array[x].urgenciaP;
+               const alarmaP = array[x].alarmaP;
+               const alertaP = array[x].alertaP;
+               const seguimientoP = array[x].seguimientoP;
 
-               const data = dataEquiposAmerica({
+               const codigo = dataEquiposAmerica({
                   idEquipo: idEquipo,
                   equipo: equipo,
                   tipoEquipo: tipoEquipo,
@@ -5440,10 +5604,20 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
                   cotizaciones: cotizaciones,
                   imagenes: imagenes,
                   comentarios: comentarios,
-                  totalDespiece: totalDespiece
+                  totalDespiece: totalDespiece,
+                  emergenciaS: emergenciaS,
+                  urgenciaS: urgenciaS,
+                  alarmaS: alarmaS,
+                  alertaS: alertaS,
+                  seguimientoS: seguimientoS,
+                  emergenciaP: emergenciaP,
+                  urgenciaP: urgenciaP,
+                  alarmaP: alarmaP,
+                  alertaP: alertaP,
+                  seguimientoP: seguimientoP
                });
 
-               contenedor.insertAdjacentHTML('beforeend', data);
+               contenedorEquiposAmerica.insertAdjacentHTML('beforeend', codigo);
             }
          } else {
             alertaImg('Sin Equipos/Locales', '', 'info', 1500);
@@ -5465,8 +5639,9 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
          obtenerTodosPendientes();
       })
       .catch(function (err) {
+         obtenerTodosPendientes();
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
-         contenedor.innerHTML = '';
+         contenedorEquiposAmerica.innerHTML = '';
          alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1500);
          fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
       });
@@ -5491,10 +5666,6 @@ function obtenerTodosPendientes() {
    test.innerHTML = '<i class="text-indigo-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    fallas.innerHTML = '<i class="text-red-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
    tareas.innerHTML = '<i class="text-orange-300 fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
-
-   setTimeout(function () {
-
-   }, 1100);
 
    const action = "obtenerTodosPendientes";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
@@ -6182,6 +6353,7 @@ function obtenerAdjuntosTest(idTest) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerAdjuntosTest";
+
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}`;
 
    let contenedorImagenes = document.getElementById("contenedorImagenes");
@@ -6363,6 +6535,18 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
                   comentariosX = iconoDefault;
                }
 
+               const fResponsable = status == "PENDIENTE" ?
+                  `onclick="obtenerResponsableEnergetico(${idEnergetico}); abrirmodal('modalUsuarios')"` : '';
+
+               const fRangoFecha = status == "PENDIENTE" ?
+                  `onclick="obtenerRangoFecha('${fechaInicio} - ${fechaFin}'); abrirmodal('modalFechaProyectos')"` : '';
+
+               const fAdjuntos = `onclick="obtenerAdjuntosEnergetico(${idEnergetico}); abrirmodal('modalMedia')"`;
+
+               const fComentarios = `onclick="obtenerComentariosEnergetico(${idEnergetico}); abrirmodal('modalComentarios')"`;
+
+               const fStatus = `onclick="obtenerStatusEnergetico(${idEnergetico}); abrirmodal('modalStatus')"`;
+
                const codigo = `
                   <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
            
@@ -6375,7 +6559,7 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
                         </div>
                      </td>
 
-                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" data-test="${responsable}">
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" data-title="${responsable}" ${fResponsable}>
                         <h1>${responsable}</h1>
                      </td>
 
@@ -6384,15 +6568,15 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
                         <div class="leading-3">${fechaFin}</div>
                      </td>
 
-                     <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                     <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
                         <h1>${adjuntosX}</h1>
                      </td>
 
-                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
                         <h1>${comentariosX}</h1>
                      </td>
 
-                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+                     <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
                         <div class="px-2">
                            <i class="fas fa-ellipsis-h  text-lg"></i>
                         </div>
@@ -6412,6 +6596,366 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
 }
 
 
+// ACTUALIZAR ENERGETICOS
+function actualizarEnergetico(idEnergetico, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let titulo = document.getElementById('editarTitulo');
+   let cod2bend = document.getElementById('inputCod2bend');
+
+   const action = 'actualizarEnergetico';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&columna=${columna}&valor=${valor}&titulo=${titulo.value}&cod2bend=${cod2bend.value}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+
+         if (array == "responsable") {
+            alertaImg('Responsable Actualizado', '', 'success', 1400);
+            cerrarmodal('modalUsuarios');
+         } else if (array == "titulo") {
+            alertaImg('Título Actualizado', '', 'success', 1400);
+         } else if (array == "trabajare") {
+            alertaImg('Status Trabajando, Actualizado', '', 'success', 1400);
+         } else if (array == "energetico") {
+            alertaImg('Status Energético, Actualizado', '', 'success', 1400);
+         } else if (array == "departamento") {
+            alertaImg('Status Departamento, Actualizado', '', 'success', 1400);
+         } else if (array == "bitacora") {
+            alertaImg('Bitácora Actualizada', '', 'success', 1400);
+         } else if (array == "solucionado") {
+            alertaImg('Energético Solucionado', '', 'success', 1400);
+            cerrarmodal('modalStatus');
+         } else if (array == "eliminado") {
+            alertaImg('Energético Eliminado', '', 'success', 1400);
+            cerrarmodal('modalStatus');
+         } else if (array == "pendiente") {
+            alertaImg('Energético Restaurado', '', 'success', 1400);
+         } else if (array == "material") {
+            alertaImg('Status Material, Actualizado', '', 'success', 1400);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1400);
+            cerrarmodal('modalStatus');
+         }
+
+         obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+         estiloModalStatus(idEnergetico, 'ENERGETICO');
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + `actualizarEnergetico(${idEnergetico}, ${columna}, ${valor})`);
+      })
+}
+
+
+// OBTENER STATUS ENERGETICOS
+function obtenerStatusEnergetico(idEnergetico) {
+
+   // FUNCIÓN PARA DARL ESTIOLO AL MODALSTATUS
+   estiloModalStatus(idEnergetico, 'ENERGETICO');
+
+   // La función actulizarTarea(?, ?, ?), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
+
+   // Status
+   btnStatusUrgente.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_urgente", 0)`);
+   btnStatusMaterial.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_material", 0)`);
+   btnStatusTrabajare.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_trabajare", 0)`);
+
+   // Status Departamento
+   btnStatusCalidad.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_calidad", 0)`);
+   btnStatusCompras.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_compras", 0)`);
+   btnStatusDireccion.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_direccion", 0)`);
+   btnStatusFinanzas.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_finanzas", 0)`);
+   btnStatusRRHH.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_rrhh", 0)`);
+
+   // Status Energéticos
+   btnStatusElectricidad.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_electricidad", 0)`);
+   btnStatusAgua.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_agua", 0)`);
+   btnStatusDiesel.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_diesel", 0)`);
+   btnStatusGas.
+      setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_gas", 0)`);
+
+   // Finalizar TAREA
+   btnStatusFinalizar.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status", "F")`);
+   // Activo TAREA
+   btnStatusActivo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "activo", 0)`);
+   // Titulo TAREA
+   btnEditarTitulo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "titulo", 0)`);
+
+   // Bitacoras
+   btnStatusGP.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_gp", 0)`);
+   btnStatusTRS.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_trs", 0)`);
+   btnStatusZI.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_zi", 0)`);
+}
+
+
+// OBTIENE RESPONSABLES
+function obtenerResponsableEnergetico(idEnergetico) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const contenedor = document.getElementById("dataUsuarios");
+   contenedor.innerHTML = '';
+   const action = "obtenerUsuariosEnergeticos";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idUsuarioX = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const puesto = array[x].puesto;
+
+               const codigo = `
+                  <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarEnergetico(${idEnergetico}, 'responsable', ${idUsuarioX});">
+                     <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre + ' ' + apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${puesto}</h1>
+                  </div>
+               `;
+               contenedor.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
+
+
+function obtenerRangoFecha(rangoFecha) {
+   console.log(rangoFecha);
+}
+
+
+// OBTENER COMENTARIOS
+function obtenerComentariosEnergetico(idEnergetico) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const contendor = document.getElementById("dataComentarios");
+   contendor.innerHTML = '';
+   let btnComentario = document.getElementById("btnComentario");
+   btnComentario.setAttribute('onclick', `agregarComentariosEnergetico(${idEnergetico})`);
+
+   const action = 'obtenerComentariosEnergetico';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idComentario = array[x].idComentario;
+               const comentario = array[x].comentario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const fecha = array[x].fecha;
+
+               codigo = `
+            <div class="flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer">
+               <div class="flex items-center justify-center" style="width: 48px;">
+                     <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="48" height="48" alt="">
+               </div>
+               <div class="flex flex-col justify-start items-start p-2 w-full">
+                     <div class="text-xs font-bold flex flex-row justify-between w-full">
+                        <div>
+                           <h1>${nombre + ' ' + apellido}</h1>
+                        </div>
+                        <div>
+                           <p class="font-mono ml-2 text-gray-600">${fecha}</p>
+                        </div>
+                     </div>
+                     <div class="text-xs w-full">
+                        <p>${comentario}</p>
+                     </div>
+               </div>
+            </div>         
+            `;
+               contendor.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+// AGREGA COMENTARIOS EN ENERGETICOS
+function agregarComentariosEnergetico(idEnergetico) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let comentario = document.getElementById("inputComentario");
+
+   const action = "agregarComentariosEnergetico";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&comentario=${comentario.value}`;
+
+   if (comentario.value.length > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Comentario Agregado', '', 'success', 1500);
+               obtenerComentariosEnergetico(idEnergetico);
+               obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+               comentario.value = '';
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Comentario Vacio', '', 'info', 1400);
+   }
+}
+
+
+// OBTENER ADJUNTOS ENERGETICOS
+function obtenerAdjuntosEnergetico(idEnergetico) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const contenedorImg = document.getElementById("dataImagenes");
+   const contenedorAdjuntos = document.getElementById("dataAdjuntos");
+   const contenedorImagenes = document.getElementById("contenedorImagenes");
+   const contenedorDocumentos = document.getElementById("contenedorDocumentos");
+   const inputAdjuntos = document.getElementById("inputAdjuntos");
+
+   inputAdjuntos.setAttribute('onchange', `agregarAdjuntosEnergetico(${idEnergetico})`);
+
+   // VALORES Y DESEÑO INICIAL
+   contenedorImg.innerHTML = '';
+   contenedorAdjuntos.innerHTML = '';
+   contenedorImagenes.classList.add('hidden');
+   contenedorDocumentos.classList.add('hidden');
+
+   const action = 'obtenerAdjuntosEnergetico';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idAdjunto = array[x].idAdjunto;
+               const url = array[x].url;
+               const tipo = array[x].tipo;
+
+               if (tipo == "jpg" || tipo == "png" || tipo == "jpeg") {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+
+                        <a href="planner/energeticos/${url}" target="_blank" data-title="Clic para Abrir">
+                           <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(planner/energeticos/${url})">
+                           </div>
+                        </a>
+
+                        <div class="w-full absolute text-transparent hover:text-red-700" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ENERGETICO');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                        </div>
+
+                     </div>               
+                  `;
+                  contenedorImg.insertAdjacentHTML('beforeend', codigo);
+                  contenedorImagenes.classList.remove('hidden');
+               } else {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+                           
+                        <a href="planner/energeticos/${url}" target="_blank">
+                           <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                              <i class="fad fa-file-alt fa-3x"></i>
+                              <p class="text-sm font-normal ml-2">${url}
+                              </p>
+                           </div>
+                        </a>
+                        
+                        <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ENERGETICO');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
+                        </div>
+                     </div>                  
+                  `;
+                  contenedorAdjuntos.insertAdjacentHTML('beforeend', codigo);
+                  contenedorDocumentos.classList.remove('hidden');
+               }
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+// AGREGAR ADJUNTO A ENERGETICOS
+function agregarAdjuntosEnergetico(idEnergetico) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let cargandoAdjunto = document.getElementById("cargandoAdjunto");
+   cargandoAdjunto.innerHTML = iconoLoader;
+
+   const action = "agregarAdjuntosEnergetico";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+   // VARIABLES DEL ADJUNTO
+   const files = document.querySelector("#inputAdjuntos");
+   const formData = new FormData()
+
+   if (files.files) {
+      for (let x = 0; x < files.files.length; x++) {
+         formData.append('file', files.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                  obtenerAdjuntosEnergetico(idEnergetico);
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               cargandoAdjunto.innerHTML = '';
+               files.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` agregarAdjuntoTest(${idEnergetico})`)
+               cargandoAdjunto.innerHTML = '';
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               files.value = '';
+            })
+      }
+   }
+}
+
+
 // ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
 function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    let idDestino = localStorage.getItem('idDestino');
@@ -6419,6 +6963,7 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    let idEquipo = localStorage.getItem('idEquipo');
    let idProyecto = localStorage.getItem('idProyecto');
    let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
 
    const action = 'eliminarAdjunto';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
@@ -6447,6 +6992,8 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
                obtenerProyectos(idSeccion, 'PENDIENTE');
             } else if (tipoAdjunto == "TEST") {
                obtenerTestEquipo(idEquipo);
+            } else if (tipoAdjunto == "ENERGETICO") {
+               obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
             }
 
          } else {
@@ -6454,7 +7001,7 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ` eliminarAdjuntos(${idAdjunto}, ${tipoAdjunto})`);
+         fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
       })
 }
 
@@ -6731,15 +7278,15 @@ function iniciarFormularioInicidencias() {
       })
       .then(() => {
          const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
-         console.log(URL4);
          fetch(URL4)
             .then(array => array.json())
             .then(array => {
-               console.log(array);
                if (array.local_equipo == "EQUIPO") {
                   btnEquipoIncidencias.click();
-               } else {
+               } else if (array.local_equipo == "LOCAL") {
                   btnLocalIncidencias.click();
+               } else {
+                  btnTGIncidencias.click();
                }
             })
       })
@@ -6902,55 +7449,73 @@ btnLocalIncidencias.addEventListener('click', () => {
 
 
 btnEmergenciaIncidencia.addEventListener('click', () => {
-
+   estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
       if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
-         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'text-white', 'opcionSeleccionadaIncidencia');
       }
    }
    btnEmergenciaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-red-600');
+   btnEmergenciaIncidencia.setAttribute('style', 'color: white');
 })
 
 btnUrgenciaIncidencia.addEventListener('click', () => {
-
+   estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
       if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
          btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
       }
    }
    btnUrgenciaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-orange-600');
+   btnUrgenciaIncidencia.setAttribute('style', 'color: white');
 })
 
 btnAlarmaIncidencia.addEventListener('click', () => {
-
+   estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
       if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
          btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
       }
    }
    btnAlarmaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-yellow-600');
+   btnAlarmaIncidencia.setAttribute('style', 'color: white');
 })
 
 btnAlertaIncidencia.addEventListener('click', () => {
-
+   estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
       if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
          btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
       }
    }
    btnAlertaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-blue-600');
+   btnAlertaIncidencia.setAttribute('style', 'color: white');
 })
 
 btnSeguimientoIncidencia.addEventListener('click', () => {
-
+   estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
       if (btnOpcionIncidencia[x].classList.contains('opcionSeleccionadaIncidencia')) {
          btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionSeleccionadaIncidencia');
       }
    }
    btnSeguimientoIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-teal-600');
+   btnSeguimientoIncidencia.setAttribute('style', 'color: white');
 })
 
+
+function estiloDefaultBotonesIncidencias() {
+   btnEmergenciaIncidencia.removeAttribute('style');
+   btnUrgenciaIncidencia.removeAttribute('style');
+   btnAlarmaIncidencia.removeAttribute('style');
+   btnAlertaIncidencia.removeAttribute('style');
+   btnSeguimientoIncidencia.removeAttribute('style');
+   btnEmergenciaEnergetico.removeAttribute('style');
+   btnUrgenciaEnergetico.removeAttribute('style');
+   btnAlarmaEnergetico.removeAttribute('style');
+   btnAlertaEnergetico.removeAttribute('style');
+   btnSeguimientoEnergetico.removeAttribute('style');
+}
 
 btnAgregarIncidencia.addEventListener('click', () => {
    let idDestino = localStorage.getItem('idDestino');
@@ -6963,21 +7528,23 @@ btnAgregarIncidencia.addEventListener('click', () => {
    let comentario = comentarioIncidencia.value;
    let idEquipo = equipoLocalIncidencias.value;
 
-   if (tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0]) {
-      let tipo = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0].id;
+   if (document.getElementsByClassName("opcionSeleccionadaIncidencia")[0]) {
+      let tipoX = document.getElementsByClassName("opcionSeleccionadaIncidencia")[0].id;
       tipo =
-         tipo == "btnEmergenciaIncidencia" ? 'EMERGENCIA' :
-            tipo == "btnUrgenciaIncidencia" ? 'URGENCIA' :
-               tipo == "btnAlarmaIncidencia" ? 'ALARMA' :
-                  tipo == "btnAlertaIncidencia" ? 'ALERTA' :
-                     tipo == "btnSeguimientoIncidencia" ? 'SEGUIMIENTO' :
-                        '';
+         tipoX == "btnEmergenciaIncidencia" ? 'EMERGENCIA' :
+            tipoX == "btnUrgenciaIncidencia" ? 'URGENCIA' :
+               tipoX == "btnAlarmaIncidencia" ? 'ALARMA' :
+                  tipoX == "btnAlertaIncidencia" ? 'ALERTA' :
+                     tipoX == "btnSeguimientoIncidencia" ? 'SEGUIMIENTO' :
+                        'SEGUIMIENTO';
    } else {
       alertaImg('Seleccion el tipo de Incidencia', '', 'info', 1600);
+      tipo = '';
    }
 
    const action = "agregarIncidencia";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&descripcion=${descripcion}&rangoFecha=${rangoFecha}&responsable=${responsable}&comentario=${comentario}&idEquipo=${idEquipo}&tipo=${tipo}`;
+
    if (idDestino > 0 && idUsuario > 0 && idSeccion > 0 && idSubseccion > 0 && descripcion.length > 0 && responsable > 0 && tipo != '') {
       fetch(URL)
          .then(array => array.json())
@@ -6985,9 +7552,11 @@ btnAgregarIncidencia.addEventListener('click', () => {
             if (array == 1) {
                alertaImg('Incidencia de Equipo, Agregada', '', 'success', 1600);
                cerrarmodal('modalAgregarIncidencias');
+               obtenerFallas(idEquipo);
             } else if (array == 2) {
                alertaImg('Incidencia General, Agregada', '', 'success', 1600);
                cerrarmodal('modalAgregarIncidencias');
+               obtenerTareas(0);
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1600);
             }
@@ -7087,14 +7656,28 @@ btnAgregarEnergeticos.addEventListener('click', () => {
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem('idSubseccion');
 
+   if (document.getElementsByClassName("opcionIncidenciaEnergetico")[0]) {
+      let tipoX = document.getElementsByClassName("opcionIncidenciaEnergetico")[0].id;
+      tipo =
+         tipoX == "btnEmergenciaEnergetico" ? 'EMERGENCIA' :
+            tipoX == "btnUrgenciaEnergetico" ? 'URGENCIA' :
+               tipoX == "btnAlarmaEnergetico" ? 'ALARMA' :
+                  tipoX == "btnAlertaEnergetico" ? 'ALERTA' :
+                     tipoX == "btnSeguimientoEnergetico" ? 'SEGUIMIENTO' :
+                        'SEGUIMIENTO';
+   } else {
+      alertaImg('Seleccion el tipo de Incidencia', '', 'info', 1600);
+      tipo = '';
+   }
+
    const action = "agregarEnergetico";
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&titulo=${tituloPendienteEnergeticos.value}&rangoFecha=${rangoFechaEnergeticos.value}&responsable=${responsableEnergeticos.value}&comentario=${comentarioEnergeticos.value}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
-   console.log(URL);
-   if (tituloPendienteEnergeticos.value != "" && rangoFechaEnergeticos.value != "" && responsableEnergeticos.value > 0) {
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&titulo=${tituloPendienteEnergeticos.value}&rangoFecha=${rangoFechaEnergeticos.value}&responsable=${responsableEnergeticos.value}&comentario=${comentarioEnergeticos.value}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=${tipo}`;
+
+   if (tituloPendienteEnergeticos.value != "" && rangoFechaEnergeticos.value != "" && responsableEnergeticos.value > 0 && tipo != "") {
+
       fetch(URL)
          .then(array => array.json())
          .then(array => {
-            console.log(array)
             if (array == 1 || array == 2) {
                alertaImg('Pendiente Agregado', '', 'success', 1500);
                cerrarmodal('modalAgregarEnergeticos');
@@ -7112,7 +7695,167 @@ btnAgregarEnergeticos.addEventListener('click', () => {
    }
 })
 
+
+btnEmergenciaEnergetico.addEventListener('click', () => {
+   estiloDefaultBotonesIncidencias();
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'text-white', 'opcionIncidenciaEnergetico');
+      }
+   }
+   btnEmergenciaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-red-600');
+   btnEmergenciaEnergetico.setAttribute('style', 'color: white');
+})
+
+btnUrgenciaEnergetico.addEventListener('click', () => {
+   estiloDefaultBotonesIncidencias();
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+      }
+   }
+   btnUrgenciaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-orange-600');
+   btnUrgenciaEnergetico.setAttribute('style', 'color: white');
+})
+
+btnAlarmaEnergetico.addEventListener('click', () => {
+   estiloDefaultBotonesIncidencias();
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+      }
+   }
+   btnAlarmaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-yellow-600');
+   btnAlarmaEnergetico.setAttribute('style', 'color: white');
+})
+
+btnAlertaEnergetico.addEventListener('click', () => {
+   estiloDefaultBotonesIncidencias();
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+      }
+   }
+   btnAlertaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-blue-600');
+   btnAlertaEnergetico.setAttribute('style', 'color: white');
+})
+
+btnSeguimientoEnergetico.addEventListener('click', () => {
+   estiloDefaultBotonesIncidencias();
+   for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+      if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+         btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+      }
+   }
+   btnSeguimientoEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-teal-600');
+   btnSeguimientoEnergetico.setAttribute('style', 'color: white');
+})
+
 // BUSCADOR PARA TABLA DE ENERGETICOS
 palabraEnergeticos.addEventListener('keyup', () => {
    buscadorTabla('dataEnergeticos', 'palabraEnergeticos', 0);
+})
+
+
+// FUNCION PARA MOSTRAR LAS COLUMNAS DE INCIDENCIAS EN MODALEQUIPOS
+btnColumnasInicdencias.addEventListener('click', () => {
+   alertaImg('Cargando Datos de Incidencias... ', '', 'success', 2500);
+   for (let x = 0; x < columna1.length; x++) {
+      const element1 = columna1[x];
+      const element2 = columna2[x];
+      const element3 = columna3[x];
+      const element4 = columna4[x];
+      const element5 = columna5[x];
+      const element6 = columna6[x];
+      const element7 = columna7[x];
+      const element8 = columna8[x];
+      const element9 = columna9[x];
+      const element10 = columna10[x];
+      const element11 = columna11[x];
+      const element12 = columna12[x];
+      element1.classList.remove('hidden');
+      element2.classList.remove('hidden');
+      element3.classList.remove('hidden');
+      element4.classList.remove('hidden');
+      element5.classList.remove('hidden');
+      element6.classList.remove('hidden');
+      element7.classList.add('hidden');
+      element8.classList.add('hidden');
+      element9.classList.add('hidden');
+      element10.classList.add('hidden');
+      element11.classList.add('hidden');
+      element12.classList.add('hidden');
+   }
+})
+
+
+// FUNCION PARA MOSTRAR LAS COLUMNAS DE PREVENTIVOS EN MODALEQUIPOS
+btnColumnasPreventivos.addEventListener('click', () => {
+   alertaImg('Cargando Datos de Preventivos... ', '', 'success', 2500);
+   for (let x = 0; x < columna1.length; x++) {
+      const element1 = columna1[x];
+      const element2 = columna2[x];
+      const element3 = columna3[x];
+      const element4 = columna4[x];
+      const element5 = columna5[x];
+      const element6 = columna6[x];
+      const element7 = columna7[x];
+      const element8 = columna8[x];
+      const element9 = columna9[x];
+      const element10 = columna10[x];
+      const element11 = columna11[x];
+      const element12 = columna12[x];
+
+      element1.classList.add('hidden');
+      element2.classList.add('hidden');
+      element3.classList.add('hidden');
+      element4.classList.add('hidden');
+      element5.classList.add('hidden');
+      element6.classList.add('hidden');
+      element7.classList.remove('hidden');
+      element8.classList.remove('hidden');
+      element9.classList.remove('hidden');
+      element10.classList.add('hidden');
+      element11.classList.add('hidden');
+      element12.classList.add('hidden');
+   }
+})
+
+
+// FUNCION PARA MOSTRAR LAS COLUMNAS DE PREDICTIVOS EN MODALEQUIPOS
+btnColumnasPredictivos.addEventListener('click', () => {
+   alertaImg('Cargando Datos de Predictivos... ', '', 'success', 2500);
+   for (let x = 0; x < columna1.length; x++) {
+      const element1 = columna1[x];
+      const element2 = columna2[x];
+      const element3 = columna3[x];
+      const element4 = columna4[x];
+      const element5 = columna5[x];
+      const element6 = columna6[x];
+      const element7 = columna7[x];
+      const element8 = columna8[x];
+      const element9 = columna9[x];
+      const element10 = columna10[x];
+      const element11 = columna11[x];
+      const element12 = columna12[x];
+
+      element1.classList.add('hidden');
+      element2.classList.add('hidden');
+      element3.classList.add('hidden');
+      element4.classList.add('hidden');
+      element5.classList.add('hidden');
+      element6.classList.add('hidden');
+      element7.classList.add('hidden');
+      element8.classList.add('hidden');
+      element9.classList.add('hidden');
+      element10.classList.remove('hidden');
+      element11.classList.remove('hidden');
+      element12.classList.remove('hidden');
+   }
+})
+
+
+// LIMPIA EL CONTENEDOR DE EQUIPOS EN MODALEQUIPO
+btnCerrarModalEquiposAmerica.addEventListener('click', () => {
+   dataEquiposAmerica
 })

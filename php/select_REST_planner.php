@@ -668,6 +668,29 @@ if (isset($_GET['action'])) {
                     $bitacoraZI = $x['bitacora_zi'];
                 }
             }
+        } elseif ($tipoRegistro == "ENERGETICO") {
+            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            FROM t_energeticos WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajare'];
+                    $sCalidad = $x['departamento_calidad'];
+                    $sCompras = $x['departamento_compras'];
+                    $sDireccion = $x['departamento_direccion'];
+                    $sFinanzas = $x['departamento_finanzas'];
+                    $sRRHH = $x['departamento_rrhh'];
+                    $sElectricidad = $x['energetico_electricidad'];
+                    $sAgua = $x['energetico_agua'];
+                    $sDiesel = $x['energetico_diesel'];
+                    $sGas = $x['energetico_gas'];
+                    $titulo = $x['actividad'];
+                    $cod2bend = $x['cod2bend'];
+                    $bitacoraGP = $x['bitacora_gp'];
+                    $bitacoraTRS = $x['bitacora_trs'];
+                    $bitacoraZI = $x['bitacora_zi'];
+                }
+            }
         } elseif ($tipoRegistro == "ACTIVIDADPLANACCION") {
             $query = "SELECT actividad FROM t_proyectos_planaccion_actividades 
             WHERE id = $idRegistro";
@@ -1286,6 +1309,11 @@ if (isset($_GET['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
+        } elseif ($tipoAdjunto == "ENERGETICO") {
+            $query = "UPDATE t_energeticos_adjuntos SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
         }
         echo json_encode($resp);
     }
@@ -1410,6 +1438,209 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTENER REPOSABLE ENERGETICOS
+    if ($action == "obtenerUsuariosEnergeticos") {
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_users.id_destino = $idDestino";
+        }
+
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        LEFT JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
+        WHERE t_users.status = 'A' and t_users.activo = 1 $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuario = $x['id'];
+                $nombre = $x['nombre'];
+                $apellido = $x['apellido'];
+                $puesto = $x['cargo'];
+
+                if ($puesto == "") {
+                    $puesto = "NA";
+                }
+
+                $array[] = array(
+                    "idUsuario" => intval($idUsuario),
+                    "nombre" => $nombre,
+                    "apellido" => $apellido,
+                    "puesto" => $puesto
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // ACTUALIZAR ENERGETICOS (IDENERGETICO, COLUMNA, VALOR)
+    if ($action == "actualizarEnergetico") {
+        $idEnergetico = $_GET['idEnergetico'];
+        $columna = $_GET['columna'];
+        $valor = $_GET['valor'];
+        $titulo = $_GET['titulo'];
+        $resp = "ninguno";
+        $cod2bend = $_GET['cod2bend'];
+
+        // BUSCA VALORES EN LOS STATUS PARA CREA EL TOGGLE
+        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "SELECT $columna FROM t_energeticos WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = intval($x[$columna]);
+                }
+            }
+
+            if ($valor == 0) {
+                $valor = 1;
+            } else {
+                $valor = 0;
+            }
+        }
+
+        if ($columna == "responsable") {
+            $query = "UPDATE t_energeticos SET responsable = $valor WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "responsable";
+            }
+        } elseif ($columna == "titulo") {
+            $query = "UPDATE t_energeticos SET actividad = '$titulo' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "titulo";
+            }
+        } elseif ($columna == "status_trabajare") {
+            $query = "UPDATE t_energeticos SET status_trabajare = $valor WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "trabajare";
+            }
+        } elseif ($columna == "status_material" and $cod2bend != "") {
+            $query = "UPDATE t_energeticos SET status_material = $valor, cod2bend = '$cod2bend' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "material";
+            }
+        } elseif ($columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
+            $query = "UPDATE t_energeticos SET $columna = $valor WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "departamento";
+            }
+        } elseif ($columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
+            $query = "UPDATE t_energeticos SET $columna = $valor WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "energetico";
+            }
+        } elseif ($columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "UPDATE t_energeticos SET $columna = $valor WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "bitacora";
+            }
+        } elseif ($columna == "status") {
+            $query = "UPDATE t_energeticos SET status = 'SOLUCIONADO' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "solucionado";
+            }
+        } elseif ($columna == "activo") {
+            $query = "UPDATE t_energeticos SET activo = 0 WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminado";
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "obtenerComentariosEnergetico") {
+        $idEnergetico = $_GET['idEnergetico'];
+        $array = array();
+
+        $query = "SELECT t_energeticos_comentarios.id, t_energeticos_comentarios.comentario, t_energeticos_comentarios.fecha_creado, t_colaboradores.nombre, t_colaboradores.apellido
+        FROM t_energeticos_comentarios 
+        INNER JOIN t_users ON t_energeticos_comentarios.creado_por = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_energeticos_comentarios.id_energetico = $idEnergetico and t_energeticos_comentarios.activo = 1
+        ORDER BY t_energeticos_comentarios.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idComentario = $x['id'];
+                $comentario = $x['comentario'];
+                $nombre = $x['nombre'];
+                $apellido = $x['apellido'];
+                $fecha = $x['fecha_creado'];
+
+                $array[] = array(
+                    "idComentario" => intval($idComentario),
+                    "comentario" => $comentario,
+                    "nombre" => $nombre,
+                    "apellido" => $apellido,
+                    "fecha" => $fecha
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // AGREGA COMENTARIOS EN ENERGETICOS
+    if ($action == "agregarComentariosEnergetico") {
+        $idEnergetico = $_GET['idEnergetico'];
+        $comentario = $_GET['comentario'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) VALUES($idEnergetico, $idUsuario, '$fechaActual', '$comentario', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA ADJUNTO EN ENERGETICOS
+    if ($action == "agregarAdjuntosEnergetico") {
+        $idEnergetico = $_GET['idEnergetico'];
+        $resp = 0;
+
+        // VARIABLES DEL ADJUNTO
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+        $nombre = 'ENERGETICO_ID_' . $idEnergetico . '_' . rand(50, 1500) . '.' . $extension;
+
+        if (move_uploaded_file($rutaTemporal, '../planner/energeticos/' . $nombre)) {
+            $query = "INSERT INTO t_energeticos_adjuntos(id_energetico, subido_por, fecha, url, activo) VALUES($idEnergetico, $idUsuario, '$fechaActual', '$nombre', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTENER ADJUNTOS
+    if ($action == "obtenerAdjuntosEnergetico") {
+        $idEnergetico = $_GET['idEnergetico'];
+        $array = array();
+
+        $query = "SELECT id, url FROM t_energeticos_adjuntos 
+        WHERE id_energetico = $idEnergetico and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idAdjunto = $x['id'];
+                $url = $x['url'];
+                $tipo = pathinfo($url, PATHINFO_EXTENSION);
+
+                $array[] = array(
+                    "idAdjunto" => intval($idAdjunto),
+                    "url" => $url,
+                    "tipo" => $tipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     //OBTIENES LAS SECCIONES SEGÚN EL DESTINO
     if ($action == "obtenerSeccionesPorDestino") {
         $array = array();
@@ -1480,6 +1711,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     // OBTIENE INFORMACION DE EQUIPO por ID
     if ($action == "obtenerEquipoPorId") {
@@ -1591,16 +1823,50 @@ if (isset($_GET['action'])) {
         $tipo = $_GET['tipo'];
         $idEquipo = $_GET['idEquipo'];
         $resp = 0;
+        $idMax = 0;
 
         if ($idEquipo > 0) {
-            $query = "INSERT INTO t_mc(actividad, tipo_incidencia, id_equipo, status, creado_por, responsable, fecha_creacion, id_destino, id_seccion, id_subseccion, rango_fecha, activo) VALUES('$descripcion', '$tipo', $idEquipo, 'N', $idUsuario, $responsable,'$fechaActual', $idDestino, $idSeccion, $idSubseccion, '$rangoFecha', 1)";
+            $query = "SELECT max(id) 'id' FROM t_mc";
             if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 1;
+                foreach ($result as $x) {
+                    $idMax = intval($x['id']) + 1;
+                }
+            }
+            if ($idMax > 0) {
+                $query = "INSERT INTO t_mc(id, actividad, tipo_incidencia, id_equipo, status, creado_por, responsable, fecha_creacion, id_destino, id_seccion, id_subseccion, rango_fecha, activo) VALUES($idMax, '$descripcion', '$tipo', $idEquipo, 'N', $idUsuario, $responsable,'$fechaActual', $idDestino, $idSeccion, $idSubseccion, '$rangoFecha', 1)";
+
+                if ($comentario != "") {
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idMax, '$comentario', $idUsuario, '$fechaActual', 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $resp = 1;
+                        }
+                    }
+                } else {
+                    $resp = 1;
+                }
             }
         } else {
-            $query = "INSERT INTO t_mp_np(id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, tipo_incidencia, titulo, responsable, fecha, rango_fecha, status, activo) VALUES(0, $idUsuario, $idDestino, $idSeccion, $idSubseccion, '$tipo', '$descripcion', $responsable, '$fechaActual', '$rangoFecha', 'PENDIENTE', 1)";
+
+            $query = "SELECT max(id) 'id' FROM t_mp_np";
             if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 2;
+                foreach ($result as $x) {
+                    $idMax = intval($x['id']) + 1;
+                }
+            }
+            if ($idMax > 0) {
+                $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, tipo_incidencia, titulo, responsable, fecha, rango_fecha, status, activo) VALUES($idMax, 0, $idUsuario, $idDestino, $idSeccion, $idSubseccion, '$tipo', '$descripcion', $responsable, '$fechaActual', '$rangoFecha', 'PENDIENTE', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+
+                    if ($comentario != "") {
+                        $query = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha, activo) VALUES($idMax, $idUsuario, '$comentario', '$fechaActual', 1)";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $resp = 2;
+                        }
+                    } else {
+                        $resp = 2;
+                    }
+                }
             }
         }
         echo json_encode($resp);
@@ -1614,6 +1880,7 @@ if (isset($_GET['action'])) {
         $rangoFecha = $_GET['rangoFecha'];
         $responsable = $_GET['responsable'];
         $comentario = $_GET['comentario'];
+        $tipo = $_GET['tipo'];
         $resp = 0;
 
         $idMax = 0;
@@ -1625,7 +1892,7 @@ if (isset($_GET['action'])) {
         }
 
         if ($idMax > 0) {
-            $query = "INSERT INTO t_energeticos(id, id_destino, id_seccion, id_subseccion, actividad, creado_por, responsable, fecha_creacion, rango_fecha, status, activo) VALUES($idMax, $idDestino, $idSeccion, $idSubseccion, '$titulo', $idUsuario, $responsable, '$fechaActual', '$rangoFecha', 'PENDIENTE', 1)";
+            $query = "INSERT INTO t_energeticos(id, id_destino, id_seccion, id_subseccion, actividad, creado_por, responsable, fecha_creacion, rango_fecha, tipo_incidencia, status, activo) VALUES($idMax, $idDestino, $idSeccion, $idSubseccion, '$titulo', $idUsuario, $responsable, '$fechaActual', '$rangoFecha', '$tipo', 'PENDIENTE', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
                 if ($comentario != "") {

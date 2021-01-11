@@ -228,7 +228,6 @@ if (isset($_POST['action'])) {
     }
 
 
-
     if ($action == "cantidadTurno") {
         $cantidadTurno_array = array();
         $idDestino = $_POST['idDestino'];
@@ -364,8 +363,6 @@ if (isset($_POST['action'])) {
         // Guarda toda la informacion obtenida para imprimir por id de elementos.
         echo json_encode($cantidadTurno_array);
     }
-
-
 
 
     if ($action == "graficaGremio") {
@@ -1149,6 +1146,7 @@ if (isset($_POST['action'])) {
         echo json_encode($MPMCPROYECTOS);
     }
 
+
     // Empresas Externas
     if ($action == "empresasExternasCaptura") {
         $empresa = $_POST['empresa'];
@@ -1230,7 +1228,6 @@ if (isset($_POST['action'])) {
         $bitacoraEmpresas['diaSemana'] = $arrayDia;
         echo json_encode($bitacoraEmpresas);
     }
-
 
 
     // Acontecimientos

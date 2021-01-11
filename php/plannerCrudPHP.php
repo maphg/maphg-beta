@@ -35,17 +35,17 @@ if (isset($_POST['action'])) {
             $ZIC_Permiso = $permiso['ZIC'];
             $ZIE_Permiso = $permiso['ZIE'];
             $ZHH_Permiso = $permiso['ZHH'];
-            // $ZIL_Permiso = 1;
-            // $AUTO_Permiso = 1;
-            // $DEC_Permiso = 1;
-            // $DEP_Permiso = 1;
-            // $OMA_Permiso = 1;
-            // $ZHA_Permiso = 1;
-            // $ZHC_Permiso = 1;
-            // $ZHP_Permiso = 1;
-            // $ZIA_Permiso = 1;;
-            // $ZIC_Permiso = 1;
-            // $ZIE_Permiso = 1;
+            $ZIL_Permiso = 1;
+            $AUTO_Permiso = 1;
+            $DEC_Permiso = 1;
+            $DEP_Permiso = 1;
+            $OMA_Permiso = 1;
+            $ZHA_Permiso = 1;
+            $ZHC_Permiso = 1;
+            $ZHP_Permiso = 1;
+            $ZIA_Permiso = 1;;
+            $ZIC_Permiso = 1;
+            $ZIE_Permiso = 1;
             $Energeticos_Permiso = 1;
             $idDestinoUsuarioPermiso = $permiso['id_destino'];
         }
@@ -4854,7 +4854,8 @@ if (isset($_POST['action'])) {
         $valorStatus = $_POST['valorStatus'];
         $tituloMC = $_POST['tituloMC'];
         $fechaFinalizado = "";
-
+        $cod2bend = "";
+        $resp = 0;
 
         if ($status == "status") {
             if ($valorStatus == "N") {
@@ -4883,8 +4884,16 @@ if (isset($_POST['action'])) {
                         $valorX = $x['status_material'];
                     }
 
+                    if ($valorStatus != "") {
+                        $query = "UPDATE t_mc SET cod2bend = '$cod2bend' WHERE id = $idMC";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $resp = 1;
+                        }
+                    }
+
                     if ($valorX == 0) {
                         $valorStatus = "1";
+                        $cod2bend = ", cod2bend= $valor";
                     } else {
                         $valorStatus = "0";
                     }
@@ -4902,10 +4911,10 @@ if (isset($_POST['action'])) {
 
         $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
-            echo 1;
-        } else {
-            echo 0;
+            $resp = 1;
         }
+
+        echo $resp;
     }
 
 
