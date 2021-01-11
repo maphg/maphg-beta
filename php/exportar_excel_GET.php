@@ -285,6 +285,11 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COMENTARIOS');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ADJUNTOS');
 
+        if ($idDestino == 10) {
+            $filtroDestino == "";
+        } else {
+            $filtroDestino == "and id_destino = $idDestino";
+        }
         $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
             t_mc.status_urgente,
             t_mc.status_material,
@@ -301,7 +306,8 @@ if (isset($_GET['action'])) {
             FROM t_mc 
             LEFT JOIN t_users ON t_mc.creado_por = t_users.id
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1 ORDER BY t_mc.id DESC";
+            WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1 $filtroDestino
+            ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idFalla = $x['id'];
