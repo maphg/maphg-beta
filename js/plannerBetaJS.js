@@ -7393,6 +7393,7 @@ btnEquipoIncidencias.addEventListener('click', () => {
    btnEquipoIncidencias.classList.add("bg-blue-600");
    btnLocalIncidencias.classList.remove("bg-blue-600");
    equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Equipo</option>';
+   equipoLocalIncidencias.value = 0;
    contenedorEquipoLocalIncidencias.classList.remove('hidden');
 
    const idSeccion = seccionIncidencias.value;
