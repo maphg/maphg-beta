@@ -63,13 +63,13 @@
                 <a href="https://www.maphg.com/beta/planes-mp/index.php" class="menu-hijo-3 CA">Gestión de Planes</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="index.php" class="menu-hijo-3 CA">Planner</a>
+                <a href="http://maphg.com/beta/planner-cols.php" class="menu-hijo-3 CA">Planner</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://amgift.palladiumhotelgroup.com/" target="_blanck" class="menu-hijo-3 CA">GIFT</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a data-target="nieto2" data-toggle="hijo" href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora</a>
+                <a data-target="nieto2" data-toggle="hijo" href="https://www.maphg.com/beta/bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora</a>
                 <i class="fal fa-angle-down menu-hijo-4"></i>
             </dav>
             <dav id="nieto2" class="menu-nieto-1 ocultalo">
@@ -118,7 +118,7 @@
                 <a href="https://www.maphg.com/beta/stock.php" target="_blanck" class="menu-hijo-3 CA">Stock</a>
             </dav>
             <dav class="menu-hijo-2">
-                <a href="../pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
+                <a href="https://www.maphg.com/pedidos-entregar-beta.php" target="_blanck" class="menu-hijo-3 CA">Pedidos</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="https://www.maphg.com/beta/gastos.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
