@@ -8276,7 +8276,7 @@ if (isset($_POST['action'])) {
         $dataAdjunto = "";
         $responsable = "";
 
-        if ($tipoPendiente == "FALLA") {
+        if ($tipoPendiente == "FALLA" || $tipoPendiente == "INCIDENCIA") {
             $query = "SELECT t_mc.id, t_equipos.equipo, t_mc.actividad, t_mc.rango_fecha, t_mc.responsable,
             t_mc.status_material, t_mc.status_trabajare, t_mc.status_urgente,
             t_mc.energetico_electricidad, t_mc.energetico_agua, t_mc.energetico_diesel, t_mc.energetico_gas,
