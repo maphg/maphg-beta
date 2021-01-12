@@ -793,8 +793,7 @@ if (isset($_GET['action'])) {
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
         INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1
-        ORDER BY t_colaboradores.nombre ASC";
+        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
