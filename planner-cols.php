@@ -418,23 +418,23 @@
                                             Equipo/Local
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1">
                                             Incidencias
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2">
                                             Emergencia
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3">
                                             Urgencia
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4">
                                             Alarma
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5">
                                             Alerta
                                         </th>
 
