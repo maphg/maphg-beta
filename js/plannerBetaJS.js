@@ -2691,10 +2691,7 @@ function informacionEquipoX(idEquipo) {
 
          document.getElementById("QREquipo").
             setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
-            
-         document.getElementById("idFaseEquipo").value = data.idFases;
-         document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
-         document.getElementById("marcaEquipo").value = data.id_marca;
+
          document.getElementById("nombreEquipo").value = data.equipo;
          document.getElementById("idFaseEquipo").value = data.idFases;
          document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
