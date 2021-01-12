@@ -434,7 +434,7 @@
                                             Alarma
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio ue obligue a modificar la PRIORIDAD">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
                                             Alerta
                                         </th>
 
@@ -3216,23 +3216,23 @@
                     <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
                         <div class="w-full text-center">
 
-                            <button id="btnEmergenciaIncidencia" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnEmergenciaIncidencia" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación INMEDIATA">
                                 Emergencia
                             </button>
 
-                            <button id="btnUrgenciaIncidencia" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnUrgenciaIncidencia" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación RÁPIDA(No Inmediata)">
                                 Urgencia
                             </button>
 
-                            <button id="btnAlarmaIncidencia" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnAlarmaIncidencia" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
                                 Alarma
                             </button>
 
-                            <button id="btnAlertaIncidencia" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnAlertaIncidencia" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
                                 Alerta
                             </button>
 
-                            <button id="btnSeguimientoIncidencia" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnSeguimientoIncidencia" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
                                 Seguimiento
                             </button>
 
@@ -3287,23 +3287,23 @@
                     <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
                         <div class="w-full text-center">
 
-                            <button id="btnEmergenciaEnergetico" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnEmergenciaEnergetico" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación INMEDIATA">
                                 Emergencia
                             </button>
 
-                            <button id="btnUrgenciaEnergetico" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnUrgenciaEnergetico" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación RÁPIDA(No Inmediata)">
                                 Urgencia
                             </button>
 
-                            <button id="btnAlarmaEnergetico" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnAlarmaEnergetico" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
                                 Alarma
                             </button>
 
-                            <button id="btnAlertaEnergetico" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnAlertaEnergetico" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
                                 Alerta
                             </button>
 
-                            <button id="btnSeguimientoEnergetico" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia">
+                            <button id="btnSeguimientoEnergetico" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
                                 Seguimiento
                             </button>
 
