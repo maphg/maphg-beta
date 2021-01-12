@@ -196,7 +196,7 @@
             <!-- ENCABEZADO -->
             <div class="flex flex-row w-full justify-start px-4 relative">
                 <div class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center">
-                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="Maquina de hielo edificio 1226 grand palladium" autocomplete="off">
+                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="" autocomplete="off">
                     <div class="flex mt-1">
                         <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4">
                             <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg"></i>
