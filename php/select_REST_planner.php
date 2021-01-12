@@ -1323,8 +1323,13 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerEnergeticos") {
         $idSeccion = $_GET["idSeccion"];
         $idSubseccion = $_GET["idSubseccion"];
-
         $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_energeticos.id_destino = $idDestino";
+        }
 
         $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.responsable,
         t_energeticos.rango_fecha,
@@ -1349,7 +1354,8 @@ if (isset($_GET['action'])) {
         FROM t_energeticos
         INNER JOIN t_users ON t_energeticos.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1 ORDER BY t_energeticos.id DESC";
+        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1  $filtroDestino
+        ORDER BY t_energeticos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idEnergetico = $x['id'];
