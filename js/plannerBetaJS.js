@@ -5267,7 +5267,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_1 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_1" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.fallasP}">
                     <h1>${valorFallasP}</h1>
                 </div>
@@ -5276,7 +5276,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_2 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_2" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.emergenciaP}">
                     <h1>${emergenciaP}</h1>
                 </div>
@@ -5285,7 +5285,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_3 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_3" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.urgenciaP}">
                     <h1>${urgenciaP}</h1>
                 </div>
@@ -5294,7 +5294,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_4 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_4" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alarmaP}">
                     <h1>${alarmaP}</h1>
                 </div>
@@ -5303,7 +5303,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_5 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_5" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alertaP}">
                     <h1>${alertaP}</h1>
                 </div>
@@ -5312,7 +5312,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_6 hidden" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_6" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.seguimientoP}">
                     <h1>${seguimientoP}</h1>
                 </div>
@@ -7858,7 +7858,7 @@ btnColumnasPredictivos.addEventListener('click', () => {
       element7.classList.add('hidden');
       element8.classList.add('hidden');
       element9.classList.add('hidden');
-      element10.classList.remove('hidden');
+      element10.classList.add('hidden');
       element11.classList.remove('hidden');
       element12.classList.remove('hidden');
    }
