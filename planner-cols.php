@@ -418,27 +418,27 @@
                                             Equipo/Local
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1" data-title="Incidencias Globales">
                                             Incidencias
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2" data-title="Requiere Actuación INMEDIATA">
                                             Emergencia
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3" data-title="Requiere Actuación RÁPIDA(No Inmediata)">
                                             Urgencia
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4" data-title="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
                                             Alarma
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5" data-title="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio ue obligue a modificar la PRIORIDAD">
                                             Alerta
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_6 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_6" data-title="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
                                             Seguimiento
                                         </th>
 
@@ -504,27 +504,27 @@
                                                 Equipo / Local
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1">
                                                 Incidencias
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2">
                                                 Emergencia
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3">
                                                 Urgencia
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4">
                                                 Alarma
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5">
                                                 Alerta
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_ hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_">
                                                 Seguimiento
                                             </th>
 

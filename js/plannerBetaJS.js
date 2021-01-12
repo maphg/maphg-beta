@@ -5533,12 +5533,12 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
 
    // LIMPIA CONTENEDOR
    contenedorEquiposAmerica.innerHTML = '';
-   columna1[0].classList.add('hidden');
-   columna2[0].classList.add('hidden');
-   columna3[0].classList.add('hidden');
-   columna4[0].classList.add('hidden');
-   columna5[0].classList.add('hidden');
-   columna6[0].classList.add('hidden');
+   // columna1[0].classList.remove('hidden');
+   // columna2[0].classList.remove('hidden');
+   // columna3[0].classList.remove('hidden');
+   // columna4[0].classList.remove('hidden');
+   // columna5[0].classList.remove('hidden');
+   // columna6[0].classList.add('hidden');
    columna7[0].classList.add('hidden');
    columna8[0].classList.add('hidden');
    columna9[0].classList.add('hidden');
