@@ -6758,7 +6758,6 @@ function obtenerComentariosEnergetico(idEnergetico) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array) {
             for (let x = 0; x < array.length; x++) {
                const idComentario = array[x].idComentario;
@@ -7155,7 +7154,6 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
    // DESBLOQUEA INPUTS
    seccionIncidencias.removeAttribute('disabled');
    subseccionIncidencias.removeAttribute('disabled');
-   contenedorEquipoLocalIncidencias.classList.add('hidden');
    btnTGIncidencias.removeAttribute('disabled', true);
    btnEquipoIncidencias.removeAttribute('disabled', true);
    btnLocalIncidencias.removeAttribute('disabled', true);
@@ -7211,21 +7209,27 @@ function iniciarFormularioInicidencias() {
    abrirmodal("modalAgregarIncidencias");
    rangoFechaX('rangoFechaIncidencia');
 
+   //DESBLOQUE BOTONES PARA LANZAR EVENTO CLIC() 
+   btnTGIncidencias.removeAttribute('disabled',);
+   btnEquipoIncidencias.removeAttribute('disabled',);
+   btnLocalIncidencias.removeAttribute('disabled',);
+
    //LIMPIAR CONTENIDO 
-   seccionIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+   seccionIncidencias.innerHTML = '<option value="0">Seleccione Sección</option>';
+   subseccionIncidencias.innerHTML = '<option value="0">Seleccione Subsección</option>';
    equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione</option>';
    descripcionIncidencia.value = '';
-   responsablesIncidencias.value = 0;
    comentarioIncidencia.value = '';
-   equipoLocalIncidencias.value = 0;
+   responsablesIncidencias.value = 0;
    seccionIncidencias.value = 0;
+   subseccionIncidencias.value = 0;
+   equipoLocalIncidencias.value = 0;
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem('idSubseccion');
    let idEquipo = localStorage.getItem('idEquipo');
-
 
    // DESBLOQUEA INPUTS
    btnTGIncidencias.classList.remove('hidden');
@@ -7282,18 +7286,21 @@ function iniciarFormularioInicidencias() {
          fetch(URL4)
             .then(array => array.json())
             .then(array => {
-               if (array.local_equipo == "EQUIPO") {
-                  btnEquipoIncidencias.click();
-               } else if (array.local_equipo == "LOCAL") {
-                  btnLocalIncidencias.click();
+               if (array) {
+                  if (array.local_equipo == "EQUIPO") {
+                     btnEquipoIncidencias.click();
+                  } else if (array.local_equipo == "LOCAL") {
+                     btnLocalIncidencias.click();
+                  } else {
+                     btnTGIncidencias.click();
+                  }
                } else {
-                  btnTGIncidencias.click();
                }
             })
       })
       .then(() => {
          const action3 = "obtenerEquipoLocal";
-         const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=EQUIPO`;
+         const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=LOCALEQUIPO`;
 
          fetch(URL3)
             .then(array => array.json())
@@ -7381,12 +7388,13 @@ seccionIncidencias.addEventListener('change', () => {
 
 
 btnTGIncidencias.addEventListener('click', () => {
+   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccion Equipo</option>';
    btnTGIncidencias.classList.add("bg-blue-600");
    btnEquipoIncidencias.classList.remove("bg-blue-600");
    btnLocalIncidencias.classList.remove("bg-blue-600");
-   equipoLocalIncidencias.innerHTML = '<option value="0">TG</option>';
    equipoLocalIncidencias.value = 0;
    contenedorEquipoLocalIncidencias.classList.add('hidden');
+   // equipoLocalIncidencias.classList.add('hidden');
 })
 
 btnEquipoIncidencias.addEventListener('click', () => {

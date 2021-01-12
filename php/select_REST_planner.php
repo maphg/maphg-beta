@@ -1695,8 +1695,16 @@ if (isset($_GET['action'])) {
         $tipo = $_GET['tipo'];
         $array = array();
 
+        if ($tipo == "EQUIPO") {
+            $filtroTipo = "and local_equipo = 'EQUIPO'";
+        } elseif ($tipo == "LOCAL") {
+            $filtroTipo = "and local_equipo = 'LOCAL'";
+        } else {
+            $filtroTipo = "";
+        }
+
         $query = "SELECT id, equipo FROM t_equipos_america 
-        WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and local_equipo = '$tipo' and status = 'OPERATIVO' and activo = 1
+        WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1 $filtroTipo
         ORDER BY equipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
