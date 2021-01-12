@@ -459,11 +459,11 @@
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11 hidden">
-                                            Test
+                                            Predictivo
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12 hidden">
-                                            Último Test
+                                            Último Predictivo
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_13 hidden">
@@ -545,11 +545,11 @@
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11 hidden">
-                                                Test
+                                                Predictivo
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12 hidden">
-                                                Último Test
+                                                Último Predictivo
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_13 hidden">
