@@ -228,7 +228,7 @@
                         </div>
                         <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer">
                             <i class="mr-1 text-red-300">R</i>
-                            <h2>REEMPLAZADO</h2>
+                            <h2></h2>
                         </div>
                     </div>
                 </div>

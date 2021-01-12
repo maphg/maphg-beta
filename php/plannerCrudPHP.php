@@ -9206,7 +9206,7 @@ if (isset($_POST['action'])) {
         // Valores por DEFAULT
         $data['equipo'] = "";
 
-        $query = "SELECT t_equipos_america.id, t_equipos_america.local_equipo, t_equipos_america.id_equipo_principal, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
+        $query = "SELECT t_equipos_america.id, t_equipos_america.local_equipo, t_equipos_america.id_equipo_principal, t_equipos_america.id_marca, c_secciones.id 'id_seccion', c_subsecciones.id 'id_subseccion', t_equipos_america.equipo, t_equipos_america.status, t_equipos_america.jerarquia, t_equipos_america.id_tipo, t_equipos_america.modelo, t_equipos_america.numero_serie, t_equipos_america.codigo_fabricante, t_equipos_america.codigo_interno_compras, t_equipos_america.largo_cm, t_equipos_america.ancho_cm, t_equipos_america.alto_cm, t_equipos_america.potencia_electrica_hp, 
         t_equipos_america.potencia_electrica_kw, t_equipos_america.voltaje_v, t_equipos_america.frecuencia_hz, t_equipos_america.caudal_agua_m3h, t_equipos_america.caudal_agua_gph, t_equipos_america.carga_mca, t_equipos_america.potencia_energetica_frio_kw, t_equipos_america.potencia_energetica_frio_tr, t_equipos_america.potencia_energetica_calor_kcal, t_equipos_america.caudal_aire_m3h, 
         t_equipos_america.coste, t_equipos_america.caudal_aire_cfm, t_equipos_america.id_fases
         FROM t_equipos_america 
@@ -9246,6 +9246,7 @@ if (isset($_POST['action'])) {
                 $tipo = $i['id_tipo'];
                 $idFases = $i['id_fases'];
                 $tipoLocalEquipo = $i['local_equipo'];
+                $id_marca = $i['id_marca'];
 
                 $data['idEquipo'] = $id;
                 $data['idEquipoPrincipal'] = $idEquipoPrincipal;
@@ -9278,6 +9279,7 @@ if (isset($_POST['action'])) {
                 $data['semanaActual'] = $semanaActual;
                 $data['idFases'] = $idFases;
                 $data['tipoLocalEquipo'] = $tipoLocalEquipo;
+                $data['id_marca'] = $id_marca;
             }
         }
         echo json_encode($data);
@@ -9917,7 +9919,7 @@ if (isset($_POST['action'])) {
                         if (mysqli_num_rows($result) > 0) {
                             $resultado = 10;
                         } else {
-                            $query = "INSERT INTO t_mp_planificacion_iniciada(id_plan, id_equipo, semana, año, fecha_creacion, creado_por, actividades_preventivo, actividades_test, actividades_check, status, activo) VALUES($idPlan, $idEquipo, $semanaX, '$año', '$fechaActual', $idUsuario, '$idActividadesPreventivos', '$idActividadesTest', '$idActividadesCheck', 'PROCESO', 1)";
+                            $query = "INSERT INTO t_mp_planificacion_iniciada(id_usuario, id_plan, id_equipo, semana, año, fecha_creacion, creado_por, actividades_preventivo, actividades_test, actividades_check, status, activo) VALUES($idUsuario, $idPlan, $idEquipo, $semanaX, '$año', '$fechaActual', $idUsuario, '$idActividadesPreventivos', '$idActividadesTest', '$idActividadesCheck', 'PROCESO', 1)";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 $programarMP = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = 'PROCESO' WHERE id_plan = $idPlan and id_equipo = $idEquipo and semana_$semanaX = '0' and activo = 1";
                                 if ($result = mysqli_query($conn_2020, $programarMP)) {

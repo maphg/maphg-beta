@@ -1,5 +1,38 @@
 'use strict';
 
+// INPUTS POR ID
+const e_estadoEquipo = document.getElementById("estadoEquipo");
+const e_tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
+const e_idFaseEquipo = document.getElementById("idFaseEquipo");
+const e_seccionEquipo = document.getElementById("seccionEquipo");
+const e_subseccionEquipo = document.getElementById("subseccionEquipo");
+const e_tipoEquipo = document.getElementById("tipoEquipo");
+const e_jerarquiaEquipo = document.getElementById("jerarquiaEquipo");
+const e_dataOpcionesEquipos = document.getElementById("dataOpcionesEquipos");
+const e_marcaEquipo = document.getElementById("marcaEquipo");
+const e_modeloEquipo = document.getElementById("modeloEquipo");
+const e_serieEquipo = document.getElementById("serieEquipo");
+const e_codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo");
+const e_codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo");
+const e_largoEquipo = document.getElementById("largoEquipo");
+const e_anchoEquipo = document.getElementById("anchoEquipo");
+const e_altoEquipo = document.getElementById("altoEquipo");
+const e_potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo");
+const e_potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo");
+const e_voltajeEquipo = document.getElementById("voltajeEquipo");
+const e_frecuenciaEquipo = document.getElementById("frecuenciaEquipo");
+const e_caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo");
+const e_caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo");
+const e_cargaMCAEquipo = document.getElementById("cargaMCAEquipo");
+const e_PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo");
+const e_potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo");
+const e_potenciaEnergeticaCalorKCALEquipo =
+    document.getElementById("potenciaEnergeticaCalorKCALEquipo");
+const e_caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo");
+const e_caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo");
+const e_dataDespieceEquipo = document.getElementById("dataDespieceEquipo");
+// INPUTS POR ID
+
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
@@ -71,7 +104,7 @@ const datosPlanes = params => {
 
     var result = `
             <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
-            onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id});">
+            onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id}); abrirmodal('modalMPEquipo')">
 
                 <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
                     <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
@@ -416,7 +449,7 @@ function consultaEquiposLocales() {
     fetch(URL)
         .then(res => res.json())
         .then(array => {
-            if (array.length > 0) {
+            if (array) {
                 // alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
                 for (let index = 0; index < array.length; index++) {
@@ -535,8 +568,8 @@ function actualizarEquipo(idEquipo) {
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
     let nombreEquipo = document.getElementById("nombreEquipo");
-    let seccionEquipo = document.getElementById("seccionEquipo");
-    let subseccionEquipo = document.getElementById("subseccionEquipo");
+    // let seccionEquipo = document.getElementById("seccionEquipo");
+    // let subseccionEquipo = document.getElementById("subseccionEquipo");
     let tipoEquipo = document.getElementById("tipoEquipo");
     let jerarquiaEquipo = document.getElementById("jerarquiaEquipo");
     let equipoPrincipal = document.getElementById("dataOpcionesEquipos");
@@ -1603,12 +1636,13 @@ function consultarSubsecciones() {
     }
 }
 
+
 // ********** FILTROS PARA EQUIPOS **********
 
 
 // Funciones Generales, para Abrir MODAL
-function openmodal(modal) {
-    var abrirmodal = document.getElementById(modal);
+function abrirmodal(idModal) {
+    var abrirmodal = document.getElementById(idModal);
     abrirmodal.classList.add("open");
 }
 
@@ -1663,7 +1697,7 @@ function QREquipo() {
 
 
 // Función para Obtener información de los equipos.
-function informacionEquipo(idEquipo) {
+function informacionEquipoX(idEquipo) {
     localStorage.setItem('idEquipo', idEquipo);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
@@ -1671,7 +1705,7 @@ function informacionEquipo(idEquipo) {
     document.getElementById("tooltipMP").classList.add('hidden');
 
     // Funciones principales
-    consultarOpcionesEquipo();
+    // consultarOpcionesEquipo();
 
     const action = "informacionEquipo";
     $.ajax({
@@ -1685,13 +1719,17 @@ function informacionEquipo(idEquipo) {
         },
         dataType: "JSON",
         success: function (data) {
+            console.log(data);
             document.getElementById("inputAdjuntos").
                 setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
 
             document.getElementById("QREquipo").
                 setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
-
+            
             document.getElementById("nombreEquipo").value = data.equipo;
+            document.getElementById("idFaseEquipo").value = data.idFases;
+            document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
+            document.getElementById("marcaEquipo").value = data.id_marca;
             document.getElementById("seccionEquipo").value = data.idSeccion;
             document.getElementById("subseccionEquipo").value = data.idSubseccion;
             document.getElementById("jerarquiaEquipo").value = data.jerarquia;
@@ -1749,13 +1787,113 @@ function informacionEquipo(idEquipo) {
             });
 
             // Funciones Secundarias
+            // toggleInputsEquipo(0);
+            // obtenerImagenesEquipo(idEquipo);
+            // consultarPlanEquipo(idEquipo);
+            // opcionesJerarquiaEquipo(idEquipo);
+        }
+    });
+}
+
+
+async function informacionEquipo(idEquipo) {
+    await consultarOpcionesEquipo();
+    await toggleInputsEquipo(0);
+    await obtenerImagenesEquipo(idEquipo);
+    await consultarPlanEquipo(idEquipo);
+    await opcionesJerarquiaEquipo(idEquipo);
+    await informacionEquipoX(idEquipo);
+}
+
+
+// OBTIENE INFORMACION POR EQUIPO
+function informacionEquipoxx(idEquipo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerEquipoPorId";
+    const URL = `../php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            consultarOpcionesEquipo();
+            return array;
+        })
+        .then(array => {
+            console.log(array)
+            if (array) {
+                const tipoLocalEquipo = array.local_equipo;
+                const estadoEquipo = array.status;
+                const idFaseEquipo = array.idFases;
+                const seccionEquipo = array.idSeccion;
+                const subseccionEquipo = array.idSubseccion;
+                const tipoEquipo = array.idTipo;
+                const jerarquiaEquipo = array.jerarquia;
+                const dataOpcionesEquipos = array.idEquipoPrincipal;
+                const marcaEquipo = array.idMarca;
+                const modeloEquipo = array.modelo;
+                const serieEquipo = array.serie;
+                const codigoFabricanteEquipo = array.codigoFabricante;
+                const codigoInternoComprasEquipo = array.codigoInternoCompras;
+                const largoEquipo = array.largo;
+                const anchoEquipo = array.ancho;
+                const altoEquipo = array.alto;
+                const potenciaElectricaHPEquipo = array.potenciaElectricaHP;
+                const potenciaElectricaKWEquipo = array.potenciaElectricaKW;
+                const voltajeEquipo = array.voalteje;
+                const frecuenciaEquipo = array.frecuencia;
+                const caudalAguaM3HEquipo = array.caudalAguaM3H;
+                const caudalAguaGPHEquipo = array.caudalAguaGPH;
+                const cargaMCAEquipo = array.cargaMCA;
+                const PotenciaEnergeticaFrioKWEquipo = array.potenciaEnergeticaFrioKM;
+                const potenciaEnergeticaFrioTREquipo = array.potenciaEnergeticaFrioTR;
+                const potenciaEnergeticaCalorKCALEquipo = array.potenciaEnergeticaFrioKCAL;
+                const caudalAireM3HEquipo = array.caudalAireM3H;
+                const caudalAireCFMEquipo = array.caudalAireCFM;
+                // const dataDespieceEquipo = array.x;
+                const dataDespieceEquipo = "";
+
+                e_estadoEquipo.value = estadoEquipo;
+                e_tipoLocalEquipo.value = tipoLocalEquipo;
+                e_idFaseEquipo.value = idFaseEquipo;
+                e_seccionEquipo.value = seccionEquipo;
+                e_subseccionEquipo.value = subseccionEquipo;
+                e_tipoEquipo.value = tipoEquipo;
+                e_jerarquiaEquipo.value = jerarquiaEquipo;
+                e_dataOpcionesEquipos.value = dataOpcionesEquipos;
+                e_marcaEquipo.value = marcaEquipo;
+                e_modeloEquipo.value = modeloEquipo;
+                e_serieEquipo.value = serieEquipo;
+                e_codigoFabricanteEquipo.value = codigoFabricanteEquipo;
+                e_codigoInternoComprasEquipo.value = codigoInternoComprasEquipo;
+                e_largoEquipo.value = largoEquipo;
+                e_anchoEquipo.value = anchoEquipo;
+                e_altoEquipo.value = altoEquipo;
+                e_potenciaElectricaHPEquipo.value = potenciaElectricaHPEquipo;
+                e_potenciaElectricaKWEquipo.value = potenciaElectricaKWEquipo;
+                e_voltajeEquipo.value = voltajeEquipo;
+                e_frecuenciaEquipo.value = frecuenciaEquipo;
+                e_caudalAguaM3HEquipo.value = caudalAguaM3HEquipo;
+                e_caudalAguaGPHEquipo.value = caudalAguaGPHEquipo;
+                e_cargaMCAEquipo.value = cargaMCAEquipo;
+                e_PotenciaEnergeticaFrioKWEquipo.value = PotenciaEnergeticaFrioKWEquipo;
+                e_potenciaEnergeticaFrioTREquipo.value = potenciaEnergeticaFrioTREquipo;
+                e_potenciaEnergeticaCalorKCALEquipo.value = potenciaEnergeticaCalorKCALEquipo;
+                e_caudalAireM3HEquipo.value = caudalAireM3HEquipo;
+                e_caudalAireCFMEquipo.value = caudalAireCFMEquipo;
+                e_dataDespieceEquipo.value = dataDespieceEquipo;
+
+            }
+        })
+        .then(() => {
             toggleInputsEquipo(0);
             obtenerImagenesEquipo(idEquipo);
             consultarPlanEquipo(idEquipo);
             opcionesJerarquiaEquipo(idEquipo);
-
-        }
-    });
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ``);
+        })
 }
 
 function indicadorSemanaActual(semana) {

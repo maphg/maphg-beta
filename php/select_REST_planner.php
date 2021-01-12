@@ -426,6 +426,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     #GANTT PARA TAREAS (PENDIENTES Y SOLUCIONADOS)
     if ($action == "ganttTareas") {
         $idSeccion = $_GET['idSeccion'];
@@ -792,8 +793,8 @@ if (isset($_GET['action'])) {
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
         INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1;
-        ";
+        WHERE t_users.id = $idUsuario AND t_users.status = 'A' LIMIT 1
+        ORDER BY t_colaboradores.nombre ASC";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $value) {
@@ -1131,7 +1132,8 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_users.status = 'A' $filtroDestino";
+        WHERE t_users.status = 'A' $filtroDestino
+        ORDER BY t_colaboradores.nombre ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idUsuario = $x['id'];
@@ -1458,7 +1460,8 @@ if (isset($_GET['action'])) {
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         LEFT JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.status = 'A' and t_users.activo = 1 $filtroDestino";
+        WHERE t_users.status = 'A' and t_users.activo = 1 $filtroDestino 
+        ORDER BY t_colaboradores.nombre ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idUsuario = $x['id'];
@@ -1780,7 +1783,8 @@ if (isset($_GET['action'])) {
 
                 $array = array(
                     "idEquipo" => intval($id),
-                    "idEquipo" => $equipo,
+                    "idEquipoPrincipal" => intval($id_equipo_principal),
+                    "equipo" => $equipo,
                     "matricula" => $matricula,
                     "cod2bend" => $cod2bend,
                     "serie" => $serie,
@@ -1796,7 +1800,7 @@ if (isset($_GET['action'])) {
                     "idSububicacion" => intval($id_sububicacion),
                     "categoria" => $categoria,
                     "local_equipo" => $local_equipo,
-                    "jerrquia" => $jerarquia,
+                    "jerarquia" => $jerarquia,
                     "idMarca" => $id_marca,
                     "modelo" => $modelo,
                     "numeroSerie" => $numero_serie,

@@ -2663,7 +2663,116 @@ function toggleInputsEquipo(estadoInputs) {
 
 
 // Función para Obtener información de los equipos.
-function informacionEquipo(idEquipo) {
+function informacionEquipoX(idEquipo) {
+   localStorage.setItem('idEquipo', idEquipo);
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   document.getElementById("modalMPEquipo").classList.add('open');
+   document.getElementById("tooltipMP").classList.add('hidden');
+
+   // Funciones principales
+   // consultarOpcionesEquipo();
+
+   const action = "informacionEquipo";
+   $.ajax({
+      type: "POST",
+      url: "../php/plannerCrudPHP.php",
+      data: {
+         action: action,
+         idUsuario: idUsuario,
+         idDestino: idDestino,
+         idEquipo: idEquipo
+      },
+      dataType: "JSON",
+      success: function (data) {
+         console.log(data);
+         document.getElementById("inputAdjuntos").
+            setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+
+         document.getElementById("QREquipo").
+            setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
+
+         document.getElementById("nombreEquipo").value = data.equipo;
+         document.getElementById("idFaseEquipo").value = data.idFases;
+         document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
+         document.getElementById("marcaEquipo").value = data.id_marca;
+         document.getElementById("seccionEquipo").value = data.idSeccion;
+         document.getElementById("subseccionEquipo").value = data.idSubseccion;
+         document.getElementById("jerarquiaEquipo").value = data.jerarquia;
+         document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
+         document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
+         document.getElementById("modeloEquipo").value = data.modelo;
+         document.getElementById("serieEquipo").value = data.numero_serie;
+         document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
+         document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
+         document.getElementById("largoEquipo").value = data.largo_cm;
+         document.getElementById("anchoEquipo").value = data.ancho_cm;
+         document.getElementById("altoEquipo").value = data.alto_cm;
+         document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
+         document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
+         document.getElementById("voltajeEquipo").value = data.voltaje_v;
+         document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
+         document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
+         document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
+         document.getElementById("cargaMCAEquipo").value = data.carga_mca;
+         document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
+         document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
+         document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
+         document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
+         document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
+         document.getElementById("estadoEquipo").value = data.status;
+         document.getElementById("tipoEquipo").value = data.tipo;
+         document.getElementById("idFaseEquipo").value = data.idFases;
+         document.getElementById("contenedorEstadoEquipo").classList.
+            remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
+         document.getElementById("iconEstadoEquipo").classList.
+            remove('text-red-400', 'text-green-400', 'text-orange-400');
+         document.getElementById("estadoEquipo").classList.
+            remove('text-red-400', 'text-green-400', 'text-orange-400');
+
+         if (data.status == "TALLER") {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
+            document.getElementById("estadoEquipo").classList.add('text-orange-400');
+         } else if (data.status == "BAJA") {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
+            document.getElementById("estadoEquipo").classList.add('text-red-400');
+         } else {
+            document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
+            document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
+            document.getElementById("estadoEquipo").classList.add('text-green-400');
+         }
+
+         // Eventos
+         document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+
+         document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
+            document.getElementById("modalMedia").classList.add('open');
+            obtenerImagenesEquipo(idEquipo);
+         });
+
+         // Funciones Secundarias
+         // toggleInputsEquipo(0);
+         // obtenerImagenesEquipo(idEquipo);
+         // consultarPlanEquipo(idEquipo);
+         // opcionesJerarquiaEquipo(idEquipo);
+      }
+   });
+}
+
+
+async function informacionEquipo(idEquipo) {
+   await consultarOpcionesEquipo();
+   await toggleInputsEquipo(0);
+   await obtenerImagenesEquipo(idEquipo);
+   await consultarPlanEquipo(idEquipo);
+   await opcionesJerarquiaEquipo(idEquipo);
+   await informacionEquipoX(idEquipo);
+}
+
+// Función para Obtener información de los equipos.
+function informacionEquipoxxx(idEquipo) {
    localStorage.setItem('idEquipo', idEquipo);
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
