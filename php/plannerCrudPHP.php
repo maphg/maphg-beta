@@ -46,6 +46,7 @@ if (isset($_POST['action'])) {
             $ZIA_Permiso = 1;;
             $ZIC_Permiso = 1;
             $ZIE_Permiso = 1;
+            $ZHH_Permiso = 1;
             $Energeticos_Permiso = 1;
             $idDestinoUsuarioPermiso = $permiso['id_destino'];
         }
