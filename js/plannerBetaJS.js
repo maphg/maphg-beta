@@ -2945,13 +2945,16 @@ function informacionEquipoX(idEquipo) {
 }
 
 
-async function informacionEquipo(idEquipo) {
-   await consultarOpcionesEquipo();
-   await toggleInputsEquipo(0);
-   await obtenerImagenesEquipo(idEquipo);
-   await consultarPlanEquipo(idEquipo);
-   await opcionesJerarquiaEquipo(idEquipo);
-   await informacionEquipoX(idEquipo);
+function informacionEquipo(idEquipo) {
+   consultarOpcionesEquipo();
+   toggleInputsEquipo(0);
+   obtenerImagenesEquipo(idEquipo);
+   consultarPlanEquipo(idEquipo);
+   opcionesJerarquiaEquipo(idEquipo);
+
+   setTimeout(() => {
+      informacionEquipoX(idEquipo);
+   }, 1300);
 }
 
 
