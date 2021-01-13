@@ -33,6 +33,9 @@ const btnUrgenciaEnergetico = document.getElementById("btnUrgenciaEnergetico");
 const btnAlarmaEnergetico = document.getElementById("btnAlarmaEnergetico");
 const btnAlertaEnergetico = document.getElementById("btnAlertaEnergetico");
 const btnSeguimientoEnergetico = document.getElementById("btnSeguimientoEnergetico");
+const inputComentarioPlanaccion = document.getElementById("inputComentarioPlanaccion");
+const btnAgregarComentarioPlanaccion = document.getElementById("btnAgregarComentarioPlanaccion");
+const btnAbrirOTPlanaccion = document.getElementById("btnAbrirOTPlanaccion");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -55,6 +58,9 @@ const btnColumnasInicdencias = document.getElementById("btnColumnasInicdencias")
 const btnColumnasPreventivos = document.getElementById("btnColumnasPreventivos");
 const btnColumnasPredictivos = document.getElementById("btnColumnasPredictivos");
 const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEquiposAmerica");
+const dataActividadesPlanaccion = document.getElementById("dataActividadesPlanaccion");
+const dataComentariosPlanaccion = document.getElementById("dataComentariosPlanaccion");
+const dataAdjutnosPlanaccion = document.getElementById("dataAdjutnosPlanaccion");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -2535,6 +2541,183 @@ function verEnPlanner(tipoPendiente, idPendiente) {
 }
 
 
+// OBTIENE INFORMACION DE LAS INCIDENCIAS
+function verEnPlannerIncidencias(idIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+
+   const action = 'obtenerInicidencia';
+   const URL = ``;
+
+   console.log(URL);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+// OBTIENE INFORMACION DE LAS INCIDENCIAS
+function verEnPlannerPlanaccion(idPlanaccion) {
+   localStorage.setItem('idPlanaccion', idPlanaccion);
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = 'obtenerPlanaccion';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}`;
+
+   // LIMPIA CONTENEDORES
+   dataActividadesPlanaccion.innerHTML = '';
+   dataComentariosPlanaccion.innerHTML = '';
+   dataAdjutnosPlanaccion.innerHTML = '';
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const idSubseccion = array[x].idSubseccion;
+               const idProyecto = array[x].idProyecto;
+               const idPlanaccion = array[x].idPlanaccion;
+               const proyectos = array[x].proyectos;
+               const planaccion = array[x].planaccion;
+            }
+
+            // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
+            for (let x = 0; x < array.adjuntos.length; x++) {
+               const idAdjunto = array.adjuntos[x].idAdjunto;
+               const url = 'https://www.maphg.com/beta/planner/proyectos/planaccion/' + array.adjuntos[x].url;
+               const tipo = array.adjuntos[x].tipo;
+
+               if (tipo == "jpg") {
+                  codigo = `
+                     <a href="${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${url})"></div>
+                     </a>
+                  `;
+               } else {
+                  codigo = `
+                     <a href="url" target="_blank">
+                        <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                           <i class="fad fa-file-alt fa-3x"></i>
+                           <p class="text-sm font-normal ml-2">
+                              ${url}
+                           </p>
+                        </div>
+                     </a>
+
+                  `;
+               }
+               dataAdjutnosPlanaccion.insertAdjacentHTML('beforeend', codigo);
+            }
+
+            // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
+            for (let x = 0; x < array.comentarios.length; x++) {
+               const idComentario = array.comentarios[x].idComentario;
+               const comentario = array.comentarios[x].comentario;
+               const fecha = array.comentarios[x].fecha;
+               const nombre = array.comentarios[x].nombre;
+               const apellido = array.comentarios[x].apellido;
+
+               const codigo = `
+                  <div class="flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative">
+
+                     <div class="flex items-center justify-center" style="width: 30px;">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="30" height="30" alt="">
+                     </div>
+                     <div class="flex flex-col justify-start items-start p-2 w-full">
+                        <div class="font-bold flex flex-row justify-between w-full text-xxs">
+                              <div>
+                                 <h1>${nombre + ' ' + apellido}</h1>
+                              </div>
+                              <div class="absolute bottom-0 right-0 mr-1 mb-1">
+                                 <p class="font-mono ml-2 text-teal-400">${fecha}</p>
+                              </div>
+                        </div>
+                        <div class="w-full text-xs text-justify">
+                              <p>${comentario}</p>
+                        </div>
+                     </div>
+                  </div>
+               `;
+               dataComentariosPlanaccion.insertAdjacentHTML('beforeend', codigo);
+               dataComentariosPlanaccion.scrollTop = dataComentariosPlanaccion.scrollHeight;
+            }
+
+            // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
+            for (let x = 0; x < array.actividades.length; x++) {
+               const idActividad = array.actividades[x].idActividad;
+               const actividad = array.actividades[x].actividad;
+               const status = array.actividades[x].status;
+
+               const codigo = `
+                  <div id="actividad_planaccion_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50 fila-actividad-select">
+                     <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
+                        <div class="text-justify w-full">
+                           <h1>${actividad}</h1>
+                        </div>
+                        <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" onclick="tooltipEditarEliminarSolucionar(${idActividad})">
+                           <i class="fas fa-ellipsis-h  text-sm"></i>
+                     </div>
+                  </div>
+               `;
+               dataActividadesPlanaccion.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+btnAgregarComentarioPlanaccion.addEventListener('click', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+   const action = "agregarComentarioPlanaccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}&comentario=${inputComentarioPlanaccion.value}`;
+
+   if (inputComentarioPlanaccion.value.length > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               inputComentarioPlanaccion.value = '';
+               verEnPlannerPlanaccion(idPlanaccion);
+               alertaImg('Comentario Agregado', '', 'success', 1400);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Comentario Vacio', '', 'info', 1400);
+   }
+})
+
+
+btnAbrirOTPlanaccion.addEventListener('click', () => {
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+   if (idPlanaccion > 0) {
+      window.open(`http://localhost/maphg-beta/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
+   } else {
+      alert(`OT #${idPlanaccion} No Encontrada`, 'info', 1500);
+   }
+})
+
+
 // AGREGAR COMENTARIO PLANACCION VER EN PLANNER
 // AGREGAR COMENTARIO PLAN DE ACCIÓN
 function agregarComentarioPlanaccionVerEnPlanner(idPlanaccion) {
@@ -2989,55 +3172,60 @@ function actualizarEquipo(idEquipo) {
    let idFaseEquipo = document.getElementById("idFaseEquipo").value;
    let tipoLocalEquipo = document.getElementById("tipoLocalEquipo").value;
    const action = "actualizarEquipo";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idEquipo: idEquipo,
-         nombreEquipo: nombreEquipo,
-         seccionEquipo: seccionEquipo,
-         subseccionEquipo: subseccionEquipo,
-         tipoEquipo: tipoEquipo,
-         jerarquiaEquipo: jerarquiaEquipo,
-         equipoPrincipal: equipoPrincipal,
-         marcaEquipo: marcaEquipo,
-         modeloEquipo: modeloEquipo,
-         serieEquipo: serieEquipo,
-         codigoFabricanteEquipo: codigoFabricanteEquipo,
-         codigoInternoComprasEquipo: codigoInternoComprasEquipo,
-         largoEquipo: largoEquipo,
-         anchoEquipo: anchoEquipo,
-         altoEquipo: altoEquipo,
-         potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
-         potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
-         voltajeEquipo: voltajeEquipo,
-         frecuenciaEquipo: frecuenciaEquipo,
-         caudalAguaM3HEquipo: caudalAguaM3HEquipo,
-         caudalAguaGPHEquipo: caudalAguaGPHEquipo,
-         cargaMCAEquipo: cargaMCAEquipo,
-         PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
-         potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
-         potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
-         caudalAireM3HEquipo: caudalAireM3HEquipo,
-         caudalAireCFMEquipo: caudalAireCFMEquipo,
-         estadoEquipo: estadoEquipo,
-         idFaseEquipo: idFaseEquipo,
-         tipoLocalEquipo: tipoLocalEquipo
-      },
-      // dataType: "JSON",
-      success: function (data) {
-         if (data = 1) {
-            informacionEquipo(idEquipo);
-            alertaImg('Equipo Actualizado', '', 'success', 2500);
-            obtenerEquiposAmerica(idSeccionX, idSubseccionX);
-         } else {
-            alertaImg('Intente de Nuevo', '', 'info', 3000);
+
+   if (seccionEquipo > 0 && subseccionEquipo > 0) {
+      $.ajax({
+         type: "POST",
+         url: "php/plannerCrudPHP.php",
+         data: {
+            action: action,
+            idUsuario: idUsuario,
+            idDestino: idDestino,
+            idEquipo: idEquipo,
+            nombreEquipo: nombreEquipo,
+            seccionEquipo: seccionEquipo,
+            subseccionEquipo: subseccionEquipo,
+            tipoEquipo: tipoEquipo,
+            jerarquiaEquipo: jerarquiaEquipo,
+            equipoPrincipal: equipoPrincipal,
+            marcaEquipo: marcaEquipo,
+            modeloEquipo: modeloEquipo,
+            serieEquipo: serieEquipo,
+            codigoFabricanteEquipo: codigoFabricanteEquipo,
+            codigoInternoComprasEquipo: codigoInternoComprasEquipo,
+            largoEquipo: largoEquipo,
+            anchoEquipo: anchoEquipo,
+            altoEquipo: altoEquipo,
+            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
+            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
+            voltajeEquipo: voltajeEquipo,
+            frecuenciaEquipo: frecuenciaEquipo,
+            caudalAguaM3HEquipo: caudalAguaM3HEquipo,
+            caudalAguaGPHEquipo: caudalAguaGPHEquipo,
+            cargaMCAEquipo: cargaMCAEquipo,
+            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
+            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
+            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
+            caudalAireM3HEquipo: caudalAireM3HEquipo,
+            caudalAireCFMEquipo: caudalAireCFMEquipo,
+            estadoEquipo: estadoEquipo,
+            idFaseEquipo: idFaseEquipo,
+            tipoLocalEquipo: tipoLocalEquipo
+         },
+         // dataType: "JSON",
+         success: function (data) {
+            if (data = 1) {
+               informacionEquipo(idEquipo);
+               alertaImg('Equipo Actualizado', '', 'success', 2500);
+               obtenerEquiposAmerica(idSeccionX, idSubseccionX);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 3000);
+            }
          }
-      }
-   });
+      });
+   } else {
+      alertaImg('Asigne Sección y Subsección', '', 'info', 3000);
+   }
 }
 
 
