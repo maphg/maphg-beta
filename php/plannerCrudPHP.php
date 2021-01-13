@@ -10050,6 +10050,7 @@ if (isset($_POST['action'])) {
         $tipos = "";
         $marcas = "";
 
+        $secciones .= "<option value=\"0\" class=\"truncate\">Seleccione</option>";
         $querySecciones = "SELECT id, seccion FROM c_secciones 
         WHERE status = 'A' ORDER BY seccion ASC";
         if ($result = mysqli_query($conn_2020, $querySecciones)) {
@@ -10061,6 +10062,7 @@ if (isset($_POST['action'])) {
             }
         }
 
+        $subsecciones .= "<option value=\"0\" class=\"truncate\">Seleccione</option>";
         $querySubsecciones = "SELECT id, grupo FROM c_subsecciones ORDER BY grupo ASC";
         if ($result = mysqli_query($conn_2020, $querySubsecciones)) {
             foreach ($result as $i) {
@@ -10071,6 +10073,7 @@ if (isset($_POST['action'])) {
             }
         }
 
+        $tipos .= "<option value=\"0\" class=\"truncate\">Seleccione</option>";
         $queryTipos = "SELECT id, tipo FROM c_tipos WHERE status = 'A' ORDER BY tipo ASC";
         if ($result = mysqli_query($conn_2020, $queryTipos)) {
             foreach ($result as $i) {
@@ -10081,6 +10084,7 @@ if (isset($_POST['action'])) {
             }
         }
 
+        $marcas .= "<option value=\"0\" class=\"truncate\">Seleccione</option>";
         $queryTipos = "SELECT id, marca FROM c_marcas WHERE status = 'A' ORDER BY marca ASC";
         if ($result = mysqli_query($conn_2020, $queryTipos)) {
             foreach ($result as $i) {
