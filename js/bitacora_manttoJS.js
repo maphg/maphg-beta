@@ -914,6 +914,7 @@ function MPMCPROYECTOS(idDestino, zona, dateGeneral) {
         },
         dataType: 'JSON',
         success: function (data) {
+            // console.log(data.bitacoraMP);
             // console.log(data.fecha);
             // console.log(data.dia);
             // console.log(data.diaSemana);
@@ -1517,7 +1518,7 @@ function funcionNombre(nombreFuncion) {
 
     if (zona == "ENERGETICOS") {
         location.href = "bitacora-energeticos.php";
-    }else if(zona == "ANTICIPACION"){
+    } else if (zona == "ANTICIPACION") {
         location.href = "bitacora_anticipacion.php";
     }
 
