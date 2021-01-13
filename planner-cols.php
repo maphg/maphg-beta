@@ -1732,6 +1732,168 @@
     <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
 
 
+    <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
+    <div id="modalVerEnPlannerPlanaccion" class="modal open">
+        <div class="modal-window rounded-md" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlannerPlanaccion')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Detalles</h1>
+                </div>
+            </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-100 text-teal-500 text-xs py-1 px-2 rounded-b-md">
+                    <h1>ACTIVIDAD DE PLAN DE ACCION</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;">
+                        Conocer Coste del Proyecto (1,600 kusd aprox)
+                    </h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium text-center" style="color: #ABADB7;">
+                        Fecha de
+                        creacion:
+                        <span class="uppercase ml-1">14/11/1989</span>
+                    </h1>
+                </div>
+                <div class="w-full  self-start flex flex-wrap border-b-2 border-gray-100">
+                    <div class="w-1/2 border-r-2 border-gray-100">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Creado por:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2">
+                                    <h1 class="font-medium">Pedro Rego</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div id="responsableVP" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                        <h1 class="font-medium">Eduardo Meneses</h1>
+                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarPlanaccion(0, 'asignarPlanaccion', 7);"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div id="responsableVP" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2">
+                                        <h1 class="font-medium">Material</h1>
+                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarPlanaccion(0, 'asignarPlanaccion', 7);"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solucion estimada:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
+                                    <span id="fechaVP" class="bg-purple-200" onclick="abrirmodal('modalRangoFechaX')">Sin Fecha asignada</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Proviene del proyecto:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 class="font-medium">Nombre del proyecto</h1>
+                                </div>
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 class="font-medium">CAPEX</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Subtareas:
+                                <div class="flex flex-wrap w-full justify-start items-center">
+                                    <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
+                                        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                                            <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
+                                                <div class="w-4 h-4  mr-2 flex-none"></div>
+                                                <div class=" text-justify w-full h-full ">
+                                                    <input id="input" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                                                </div>
+                                                <div id="btnAgregarActividadPlanaccion" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div id="btnAbrirOTPlanaccion" class="ml-2 flex items-center justify-center text-white cursor-pointer h-6 rounded px-2 flex-none text-sm bg-blue-500">
+                                                    <h1>Ver OT</h1>
+                                                </div>
+                                            </div>
+
+                                            <div id="dataActividadesPlanaccion" class="w-auto overflow-y-auto scrollbar" style="max-height: 200px;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full flex text-sm ">
+                    <div class="w-1/2 relative border-r-2 border-gray-100 px-2 mt-2">
+                        <h1 class="mb-2" style="color: #ABADB7;">Comentarios:</h1>
+
+                        <div id="dataComentariosPlanaccion" class="px-4 overflow-y-auto scrollbar flex flex-col w-full pb-10" style="min-height: 499px; min-height: 499px; max-height: 500px;">
+
+
+
+                        </div>
+                        <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
+                            <input id="inputComentarioPlanaccion" type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                            <button id="btnAgregarComentarioPlanaccion" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                <i class="fad fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 px-2 mt-2">
+                        <div class="flex items-center justify-start">
+                            <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
+                            <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm">
+                                    <i class="fas fa-plus"></i>
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjutnosPlanaccion" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 450px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
+
+
     <!-- MODAL PROYECTOS -->
     <div id="modalProyectos" class="modal">
         <div class="w-full h-screen bg-purple-400 relative">

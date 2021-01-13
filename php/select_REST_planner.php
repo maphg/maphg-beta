@@ -2014,7 +2014,135 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTIENE INFORMACION DE LAS INCIDENCIAS PARA VER EN PLANNER
+    if ($action == "obtenerIncidencia") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $array = array();
 
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, responsable, ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+
+                $array = array(
+                    "idIncidencia" => intval($x['id']),
+                    "tipo" => $x['tipo'],
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENE INFORMACIÓN DE PLANACCION DE LOS PROYECTO PARA VER EN PLANNER
+    if ($action == "obtenerPlanaccion") {
+        $idPlanaccion = $_GET['idPlanaccion'];
+        $array = array();
+
+        $query = "SELECT t_proyectos_planaccion.id 'idPlanaccion', t_proyectos_planaccion.actividad 'planaccion', t_proyectos_planaccion.rango_fecha , t_proyectos.id 'idProyecto', t_proyectos.titulo 'proyecto', c_secciones.id 'idSeccion', c_subsecciones.id 'idSubseccion'
+        FROM t_proyectos_planaccion
+        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+        INNER JOIN c_secciones  ON t_proyectos.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_proyectos.id_subseccion = c_subsecciones.id
+        WHERE t_proyectos_planaccion.id = $idPlanaccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idPlanaccion = $x['idPlanaccion'];
+                $idProyecto = $x['idProyecto'];
+                $proyecto = $x['proyecto'];
+                $planaccion = $x['planaccion'];
+                $idSeccion = $x['idSeccion'];
+                $idSubseccion = $x['idSubseccion'];
+
+                #ACTIVIDADES DE PLANACCION
+                $array['actividades'] = array();
+                $query = "SELECT id, actividad, status FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $idPlanaccion and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idActividad = $x['id'];
+                        $actividad = $x['actividad'];
+                        $status = $x['status'];
+
+                        $array['actividades'][] = array(
+                            "idActividad" => intval($idActividad),
+                            "actividad" => $actividad,
+                            "status" => $status
+                        );
+                    }
+                }
+
+                #ADJUNTOS
+                $array['adjuntos'] = array();
+                $query = "SELECT id, url_adjunto FROM t_proyectos_planaccion_adjuntos 
+                WHERE id_actividad = $idPlanaccion and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idAdjunto = $x['id'];
+                        $url = $x['url_adjunto'];
+                        $tipo = pathinfo($url, PATHINFO_EXTENSION);
+
+                        $array['adjuntos'][] = array(
+                            "idAdjunto" => intval($idAdjunto),
+                            "url" => $url,
+                            "tipo" => $tipo
+                        );
+                    }
+                }
+
+                #COMENTARIOS
+                $array['comentarios'] = array();
+                $query = "SELECT t_proyectos_planaccion_comentarios.id, t_proyectos_planaccion_comentarios.comentario, 
+                t_proyectos_planaccion_comentarios.fecha, t_colaboradores.nombre, 
+                t_colaboradores.apellido
+                FROM t_proyectos_planaccion_comentarios 
+                INNER JOIN t_users ON t_proyectos_planaccion_comentarios.usuario = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_proyectos_planaccion_comentarios.id_actividad = $idPlanaccion and t_proyectos_planaccion_comentarios.activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idComentario = $x['id'];
+                        $comentario = $x['comentario'];
+                        $fecha = $x['fecha'];
+                        $nombre = $x['nombre'];
+                        $apellido = $x['apellido'];
+
+                        $array['comentarios'][] = array(
+                            "idComentario" => intval($idComentario),
+                            "comentario" => $comentario,
+                            "fecha" => $fecha,
+                            "nombre" => $nombre,
+                            "apellido" => $apellido
+                        );
+                    }
+                }
+
+                $array = array(
+                    "idPlanaccion" => intval($idPlanaccion),
+                    "idProyecto" => intval($idProyecto),
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion),
+                    "proyecto" => $proyecto,
+                    "planaccion" => $planaccion,
+                    "actividades" => $array['actividades'],
+                    "adjuntos" => $array['adjuntos'],
+                    "comentarios" => $array['comentarios']
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    if ($action == "agregarComentarioPlanaccion") {
+        $idPlanaccion = $_GET['idPlanaccion'];
+        $comentario = $_GET['comentario'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_proyectos_planaccion_comentarios(id_actividad, comentario, usuario, fecha) VALUES($idPlanaccion, '$comentario', $idUsuario, '$fechaActual')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
 
     // CIERRE FINAL
 }

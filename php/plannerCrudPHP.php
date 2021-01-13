@@ -9359,7 +9359,7 @@ if (isset($_POST['action'])) {
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
         } else {
-            echo $query;
+            echo 0;
         }
     }
 
