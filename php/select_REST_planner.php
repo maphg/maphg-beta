@@ -1324,12 +1324,19 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerEnergeticos") {
         $idSeccion = $_GET["idSeccion"];
         $idSubseccion = $_GET["idSubseccion"];
+        $status = $_GET["status"];
         $array = array();
 
         if ($idDestino == 10) {
             $filtroDestino = "";
         } else {
             $filtroDestino = "and t_energeticos.id_destino = $idDestino";
+        }
+
+        if ($status == "PENDIENTE") {
+            $filtroStatus = "and t_energeticos.status = 'PENDIENTE'";
+        } else {
+            $filtroStatus = "and t_energeticos.status = 'SOLUCIONADO'";
         }
 
         $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.responsable,
@@ -1355,7 +1362,7 @@ if (isset($_GET['action'])) {
         FROM t_energeticos
         INNER JOIN t_users ON t_energeticos.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1  $filtroDestino
+        WHERE t_energeticos.id_seccion = $idSeccion and t_energeticos.id_subseccion = $idSubseccion and t_energeticos.activo = 1  $filtroDestino $filtroStatus
         ORDER BY t_energeticos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1550,6 +1557,11 @@ if (isset($_GET['action'])) {
                 $resp = "solucionado";
             }
         } elseif ($columna == "activo") {
+            $query = "UPDATE t_energeticos SET activo = 0 WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminado";
+            }
+        } elseif ($columna == "restaurar") {
             $query = "UPDATE t_energeticos SET activo = 0 WHERE id = $idEnergetico";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "eliminado";
@@ -1860,7 +1872,9 @@ if (isset($_GET['action'])) {
                         }
                     }
                 } else {
-                    $resp = 1;
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $resp = 1;
+                    }
                 }
             }
         } else {
@@ -2131,7 +2145,21 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+    // AGREGA COMENTARIOS DE LOS PLANES DE ACCION
+    if ($action == "agregarComentarioPlanaccion") {
+        $idPlanaccion = $_GET['idPlanaccion'];
+        $comentario = $_GET['comentario'];
+        $resp = 0;
 
+        $query = "INSERT INTO t_proyectos_planaccion_comentarios(id_actividad, comentario, usuario, fecha) VALUES($idPlanaccion, '$comentario', $idUsuario, '$fechaActual')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA ACTIVIDADES A LOS PLANES DE ACCION
     if ($action == "agregarComentarioPlanaccion") {
         $idPlanaccion = $_GET['idPlanaccion'];
         $comentario = $_GET['comentario'];
