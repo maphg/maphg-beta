@@ -1733,7 +1733,7 @@
 
 
     <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
-    <div id="modalVerEnPlannerPlanaccion" class="modal open">
+    <div id="modalVerEnPlannerPlanaccion" class="modal">
         <div class="modal-window rounded-md" style="width: 900px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0 z-30">
