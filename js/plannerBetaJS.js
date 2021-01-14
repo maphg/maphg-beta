@@ -36,6 +36,10 @@ const btnSeguimientoEnergetico = document.getElementById("btnSeguimientoEnergeti
 const inputComentarioPlanaccion = document.getElementById("inputComentarioPlanaccion");
 const btnAgregarComentarioPlanaccion = document.getElementById("btnAgregarComentarioPlanaccion");
 const btnAbrirOTPlanaccion = document.getElementById("btnAbrirOTPlanaccion");
+const btnAgregarActividadPlanaccionX = document.getElementById("btnAgregarActividadPlanaccionX");
+const btnAplicarRangoFecha = document.getElementById("btnAplicarRangoFecha");
+const btnStatusPlanaccion = document.getElementById("btnStatusPlanaccion");
+const btnResponsablePlanaccion = document.getElementById("btnResponsablePlanaccion");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -47,6 +51,11 @@ const tituloPendienteEnergeticos = document.getElementById("tituloPendienteEnerg
 const rangoFechaEnergeticos = document.getElementById("rangoFechaEnergeticos");
 const responsableEnergeticos = document.getElementById("responsableEnergeticos");
 const comentarioEnergeticos = document.getElementById("comentarioEnergeticos");
+const inputActividadPlanaccion = document.getElementById("inputActividadPlanaccion");
+const inputRangoFecha = document.getElementById("rangoFechaX");
+const inputCod2bend = document.getElementById("inputCod2bend");
+const inputFilePlanaccion = document.getElementById("inputFilePlanaccion");
+
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -61,6 +70,16 @@ const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEqui
 const dataActividadesPlanaccion = document.getElementById("dataActividadesPlanaccion");
 const dataComentariosPlanaccion = document.getElementById("dataComentariosPlanaccion");
 const dataAdjutnosPlanaccion = document.getElementById("dataAdjutnosPlanaccion");
+const tiluloPlanaccion = document.getElementById("tiluloPlanaccion");
+const fechaCreacionPlanaccion = document.getElementById("fechaCreacionPlanaccion");
+const creadoPorPlanaccion = document.getElementById("creadoPorPlanaccion");
+const rangoFechaPlanaccion = document.getElementById("rangoFechaPlanaccion");
+const proyectoPlanaccion = document.getElementById("proyectoPlanaccion");
+const tipoProyectoPlanaccion = document.getElementById("tipoProyectoPlanaccion");
+const dataStatusPlanaccion = document.getElementById("dataStatusPlanaccion");
+const dataResponsablesAsignadosPlanaccion =
+   document.getElementById("dataResponsablesAsignadosPlanaccion");
+
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -105,6 +124,7 @@ const btnEditarTitulo = document.getElementById("btnEditarTitulo");
 const btnStatusGP = document.getElementById("statusGP");
 const btnStatusTRS = document.getElementById("statusTRS");
 const btnStatusZI = document.getElementById("statusZI");
+const editarTitulo = document.getElementById("editarTitulo");
 
 // BOTONES PARA EL MODAL STATUS
 
@@ -2550,8 +2570,6 @@ function verEnPlannerIncidencias(idIncidencia) {
    const action = 'obtenerInicidencia';
    const URL = ``;
 
-   console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
@@ -2570,26 +2588,152 @@ function verEnPlannerPlanaccion(idPlanaccion) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
+   // EVENTOS
+   btnAplicarRangoFecha.setAttribute('onclick', `actualizarInfoPlanaccion(${idPlanaccion}, 'rangoFecha', 0);`)
+
    const action = 'obtenerPlanaccion';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}`;
-
-   // LIMPIA CONTENEDORES
-   dataActividadesPlanaccion.innerHTML = '';
-   dataComentariosPlanaccion.innerHTML = '';
-   dataAdjutnosPlanaccion.innerHTML = '';
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
+         // LIMPIA CONTENEDORES
+         dataActividadesPlanaccion.innerHTML = '';
+         dataComentariosPlanaccion.innerHTML = '';
+         dataAdjutnosPlanaccion.innerHTML = '';
+         tiluloPlanaccion.innerText = '';
+         fechaCreacionPlanaccion.innerText = '';
+         creadoPorPlanaccion.innerText = '';
+         dataStatusPlanaccion.innerHTML = '';
+         dataResponsablesAsignadosPlanaccion.innerHTML = '';
+         return array;
+      })
+      .then(array => {
          if (array) {
-            for (let x = 0; x < array.length; x++) {
-               const idSeccion = array[x].idSeccion;
-               const idSubseccion = array[x].idSubseccion;
-               const idProyecto = array[x].idProyecto;
-               const idPlanaccion = array[x].idPlanaccion;
-               const proyectos = array[x].proyectos;
-               const planaccion = array[x].planaccion;
-            }
+            const idSeccion = array.idSeccion;
+            const idSubseccion = array.idSubseccion;
+            const idProyecto = array.idProyecto;
+            const idPlanaccion = array.idPlanaccion;
+            const proyecto = array.proyecto;
+            const planaccion = array.planaccion;
+            const fechaCreacion = array.fechaCreacion;
+            const creadoPor = array.creadoPor;
+            const rangoFecha = array.rangoFecha;
+            const tipoProyecto = array.tipoProyecto;
+
+            const status_material = array.status_material == 0 ? ''
+               : `
+               <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'status_material', 0)">
+                     <h1 class="font-medium">Material</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const status_trabajando = array.status_trabajando == 0 ? ''
+               : `
+               <div class="text-blue-500 bg-blue-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'status_trabajando', 0)">
+                     <h1 class="font-medium">TRABAJANDO</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const departamento_calidad = array.departamento_calidad == 0 ? ''
+               : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_calidad', 0)">
+                     <h1 class="font-medium">CALIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const departamento_compras = array.departamento_compras == 0 ? ''
+               : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_compras', 0)">
+                     <h1 class="font-medium">COMPRAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const departamento_direccion = array.departamento_direccion == 0 ? ''
+               : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_direccion', 0)">
+                     <h1 class="font-medium">DIRECCIÓN</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const departamento_finanzas = array.departamento_finanzas == 0 ? ''
+               : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_finanzas', 0)">
+                     <h1 class="font-medium">FINANZAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const departamento_rrhh = array.departamento_rrhh == 0 ? ''
+               : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_rrhh', 0)">
+                     <h1 class="font-medium">RRHH</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const energetico_electricidad = array.energetico_electricidad == 0 ? ''
+               : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_electricidad', 0)">
+                     <h1 class="font-medium">ELECTRICIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const energetico_agua = array.energetico_agua == 0 ? ''
+               : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_agua', 0)">
+                     <h1 class="font-medium">AGUA</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const energetico_diesel = array.energetico_diesel == 0 ? ''
+               : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_diesel', 0)">
+                     <h1 class="font-medium">DIESEL</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            const energetico_gas = array.energetico_gas == 0 ? ''
+               : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_gas', 0)">
+                     <h1 class="font-medium">GAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', status_material);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', status_trabajando);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', departamento_calidad);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', departamento_compras);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', departamento_direccion);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', departamento_finanzas);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', departamento_rrhh);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', energetico_electricidad);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', energetico_agua);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', energetico_diesel);
+            dataStatusPlanaccion.insertAdjacentHTML('beforeend', energetico_gas);
+
+            tiluloPlanaccion.innerText = planaccion;
+            fechaCreacionPlanaccion.innerText = fechaCreacion;
+            creadoPorPlanaccion.innerText = creadoPor;
+            rangoFechaPlanaccion.innerText = rangoFecha
+            proyectoPlanaccion.innerText = proyecto;
+            tipoProyectoPlanaccion.innerText = tipoProyecto;
+
+            proyectoPlanaccion.setAttribute('onclick', `actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion});  toggleModalTailwind('modalProyectos'); obtenerProyectos(${idSeccion}, 'PENDIENTE');`);
+
+            document.getElementById("palabraProyecto").value = proyecto;
+            setTimeout(() => {
+               document.getElementById("palabraProyecto").click();
+            }, 3000);
 
             // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
             for (let x = 0; x < array.adjuntos.length; x++) {
@@ -2619,7 +2763,7 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                dataAdjutnosPlanaccion.insertAdjacentHTML('beforeend', codigo);
             }
 
-            // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
+            // REOCORRE LOS ELEMENTOS OBTENIDOS (COMENTARIOS)
             for (let x = 0; x < array.comentarios.length; x++) {
                const idComentario = array.comentarios[x].idComentario;
                const comentario = array.comentarios[x].comentario;
@@ -2652,7 +2796,7 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                dataComentariosPlanaccion.scrollTop = dataComentariosPlanaccion.scrollHeight;
             }
 
-            // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
+            // REOCORRE LOS ELEMENTOS OBTENIDOS (ACTIVIDADES)
             for (let x = 0; x < array.actividades.length; x++) {
                const idActividad = array.actividades[x].idActividad;
                const actividad = array.actividades[x].actividad;
@@ -2671,10 +2815,32 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                `;
                dataActividadesPlanaccion.insertAdjacentHTML('beforeend', codigo);
             }
+
+            // RECORRE LOS ELEMENTOS OBTENIDOS (REPSONSABLES)
+            for (let x = 0; x < array.responsables.length; x++) {
+               const idResponsable = array.responsables[x].idResponsable;
+               const responsable = array.responsables[x].responsable;
+               const codigo = `
+                  <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">${responsable}</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarInfoPlanaccion(${idPlanaccion}, 'responsable', ${idResponsable});"></i>
+                  </div>
+               `;
+               dataResponsablesAsignadosPlanaccion.insertAdjacentHTML('beforeend', codigo);
+            }
          }
       })
       .catch(function (err) {
          fetch(APIERROR + err + ``);
+         // LIMPIA CONTENEDORES
+         dataActividadesPlanaccion.innerHTML = '';
+         dataComentariosPlanaccion.innerHTML = '';
+         dataAdjutnosPlanaccion.innerHTML = '';
+         tiluloPlanaccion.innerText = '';
+         fechaCreacionPlanaccion.innerText = '';
+         creadoPorPlanaccion.innerText = '';
+         dataStatusPlanaccion.innerHTML = '';
+         dataResponsablesAsignadosPlanaccion.innerHTML = '';
       })
 }
 
@@ -2708,6 +2874,35 @@ btnAgregarComentarioPlanaccion.addEventListener('click', () => {
 })
 
 
+btnAgregarActividadPlanaccionX.addEventListener('click', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+   const action = "agregarActividadPlanaccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}&actividad=${inputActividadPlanaccion.value}`;
+
+   if (inputActividadPlanaccion.value.length > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               inputActividadPlanaccion.value = '';
+               verEnPlannerPlanaccion(idPlanaccion);
+               alertaImg('Actividad Agregada', '', 'success', 1400);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Actividad Vacia', '', 'info', 1400);
+   }
+})
+
+
 btnAbrirOTPlanaccion.addEventListener('click', () => {
    let idPlanaccion = localStorage.getItem('idPlanaccion');
    if (idPlanaccion > 0) {
@@ -2716,6 +2911,121 @@ btnAbrirOTPlanaccion.addEventListener('click', () => {
       alert(`OT #${idPlanaccion} No Encontrada`, 'info', 1500);
    }
 })
+
+
+btnStatusPlanaccion.addEventListener('click', () => {
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+   abrirmodal('modalStatus');
+   estiloModalStatus(idPlanaccion, 'PLANACCION');
+
+   btnStatusMaterial.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'status_material', 0);`);
+
+   btnStatusTrabajare.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'status_trabajando', 0);`);
+
+   btnStatusCalidad.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_calidad', 0);`);
+
+   btnStatusCompras.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_compras', 0);`);
+
+   btnStatusDireccion.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_direccion', 0);`);
+
+   btnStatusFinanzas.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_finanzas', 0);`);
+
+   btnStatusRRHH.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'departamento_rrhh', 0);`);
+
+   btnStatusElectricidad.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_electricidad', 0);`);
+
+   btnStatusAgua.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_agua', 0);`);
+
+   btnStatusDiesel.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_diesel', 0);`);
+
+   btnStatusGas.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'energetico_gas', 0);`);
+
+   btnStatusFinalizar.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'status', 0);`);
+
+   btnStatusActivo.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'activo', 0);`);
+
+   btnEditarTitulo.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'actividad', 0);`);
+
+   btnStatusGP.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'bitacora_gp', 0);`);
+
+   btnStatusTRS.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'bitacora_trs', 0);`);
+
+   btnStatusZI.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'bitacora_zi', 0);`);
+})
+
+
+btnResponsablePlanaccion.addEventListener('click', () => {
+   abrirmodal('modalUsuarios');
+})
+
+
+
+function actualizarInfoPlanaccion(idPlanaccion, columna, valor) {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   if (columna == "rangoFecha") {
+      valor = inputRangoFecha.value;
+   } else if (columna == "status_material") {
+      valor = inputCod2bend.value;
+   } else if (columna == "actividad") {
+      valor = editarTitulo.value;
+   }
+
+   const action = "actualizarInfoPlanaccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}&columna=${columna}&valor=${valor}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         verEnPlannerPlanaccion(idPlanaccion);
+         estiloModalStatus(idPlanaccion, 'PLANACCION');
+
+         if (array == "rangoFecha") {
+            cerrarmodal('modalRangoFechaX');
+            alertaImg('Rango de Fecha, Actualizado', '', 'success', 1500);
+         } else if (array == "material") {
+            alertaImg('Status Material, Actualizado', '', 'success', 1500);
+         } else if (array == "departamento") {
+            alertaImg('Status Departamento, Actualizado', '', 'success', 1500);
+         } else if (array == "energetico") {
+            alertaImg('Status Energetico, Actualizado', '', 'success', 1500);
+         } else if (array == "bitacora") {
+            alertaImg('Status Bitacora, Actualizado', '', 'success', 1500);
+         } else if (array == "solucionado") {
+            alertaImg('Planaccion Solucionado', '', 'success', 1500);
+         } else if (array == "actividad") {
+            alertaImg('Planaccion Solucionado', '', 'success', 1500);
+         } else if (array == "eliminado") {
+            alertaImg('Planaccion Solucionado', '', 'success', 1500);
+         } else if (array == "responsable") {
+            alertaImg('Resposable Actualizado', '', 'success', 1500);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'success', 1500);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
 
 
 // AGREGAR COMENTARIO PLANACCION VER EN PLANNER
@@ -2751,6 +3061,47 @@ function agregarComentarioPlanaccionVerEnPlanner(idPlanaccion) {
       alertaImg("Comentario NO Valido", "", "info", 2500);
    }
 }
+
+
+inputFilePlanaccion.addEventListener('change', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+   const action = "agregarAdjuntoPlanaccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idPlanaccion=${idPlanaccion}`;
+
+   // VARIABLES DEL ADJUNTO
+
+   if (inputFilePlanaccion.files) {
+      for (let x = 0; x < inputFilePlanaccion.files.length; x++) {
+         const formData = new FormData();
+         formData.append('file', inputFilePlanaccion.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  verEnPlannerPlanaccion(idPlanaccion);
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputFilePlanaccion.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` agregarAdjuntoTest(${idTest})`)
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputFilePlanaccion.value = '';
+            })
+      }
+   }
+})
 
 
 // Comentaio Ver en Planner
@@ -2868,7 +3219,6 @@ function informacionEquipoX(idEquipo) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("inputAdjuntos").
             setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
 
@@ -2954,7 +3304,7 @@ function informacionEquipo(idEquipo) {
 
    setTimeout(() => {
       informacionEquipoX(idEquipo);
-   }, 1300);
+   }, 2000);
 }
 
 
@@ -3072,6 +3422,7 @@ function opcionesJerarquiaEquipo(idEquipo) {
       fetch(URL)
          .then(res => res.json())
          .then(array => {
+
             let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
             if (array.length > 0) {
                for (let index = 0; index < array.length; index++) {
@@ -6078,7 +6429,6 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    let idUsuario = localStorage.getItem('usuario');
    const action = "obtenerStatus";
    const URL = `php/select_REST_planner.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idRegistro=${idRegistro}&tipoRegistro=${tipoRegistro}`;
-
    document.getElementById("statusenergeticostoggle").classList.add('hidden');
    document.getElementById("statusdeptoggle").classList.add('hidden');
    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
@@ -6267,7 +6617,7 @@ function obtenerPendientesUsuario() {
                   } else if (tipoPendiente == 'INCIDENCIA') {
                      fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
                   } else if (tipoPendiente == 'PLANACCION') {
-                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
+                     fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPendiente}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
                   }
 
                   const codigo = `
@@ -6794,13 +7144,13 @@ function agregarAdjuntoTest(idTest) {
 
 
 // FUNCION PARA OBTENER LOS PENDIENTES DE ENERGETICOS
-function obtenerEnergeticos(idSeccion, idSubseccion) {
+function obtenerEnergeticos(idSeccion, idSubseccion, status) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let contenedor = document.getElementById("dataEnergeticos");
 
    const action = 'obtenerEnergeticos';
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&status=${status}`;
 
    fetch(URL)
       .then(array => array.json())
@@ -6846,7 +7196,13 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
 
                const fComentarios = `onclick="obtenerComentariosEnergetico(${idEnergetico}); abrirmodal('modalComentarios')"`;
 
-               const fStatus = `onclick="obtenerStatusEnergetico(${idEnergetico}); abrirmodal('modalStatus')"`;
+               if (status == "PENDIENTE") {
+                  fStatus = `onclick="obtenerStatusEnergetico(${idEnergetico}); abrirmodal('modalStatus')"`;
+                  iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+               } else {
+                  fStatus = `onclick="actualizarEnergetico(${idEnergetico}, "restaurar", "F")"`;
+                  iconoStatus = '<i class="fas fa-redo-alt"></i>';
+               }
 
                const codigo = `
                   <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
@@ -6879,7 +7235,7 @@ function obtenerEnergeticos(idSeccion, idSubseccion) {
 
                      <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
                         <div class="px-2">
-                           <i class="fas fa-ellipsis-h  text-lg"></i>
+                           ${iconoStatus}
                         </div>
                      </td>
 
@@ -6990,6 +7346,7 @@ function obtenerStatusEnergetico(idEnergetico) {
 
    // Finalizar TAREA
    btnStatusFinalizar.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status", "F")`);
+
    // Activo TAREA
    btnStatusActivo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "activo", 0)`);
    // Titulo TAREA
@@ -7254,6 +7611,8 @@ function agregarAdjuntosEnergetico(idEnergetico) {
       }
    }
 }
+
+
 
 
 // ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)

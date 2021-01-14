@@ -262,7 +262,7 @@
                                         </div>
 
                                         <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
-                                            <h1 id="totalPendientesPDA">Proyectos (0)</h1>
+                                            <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
                                         </div>
 
                                     </div>
@@ -804,7 +804,7 @@
                             </select>
                         </div>
 
-                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4 hidden">
+                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
                             <select id="dataOpcionesEquipos" class="bg-fondos-4 font-semibold truncate w-24"></select>
                         </div>
@@ -1749,19 +1749,17 @@
             </div>
             <div class="absolute top-0 flex flex-row items-center justify-center w-full">
                 <div class="font-bold bg-teal-100 text-teal-500 text-xs py-1 px-2 rounded-b-md">
-                    <h1>ACTIVIDAD DE PLAN DE ACCION</h1>
+                    <h1>ACTIVIDAD DE PLAN DE ACCIÓN</h1>
                 </div>
             </div>
             <!-- CONTENIDO -->
             <div class="p-2 flex flex-col justify-center items-center w-full py-6">
                 <div class="mb-3 flex flex-col w-full leading-none">
-                    <h1 class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;">
-                        Conocer Coste del Proyecto (1,600 kusd aprox)
-                    </h1>
+                    <h1 id="tiluloPlanaccion" class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;"></h1>
                     <h1 class="px-2 py-1 w-full text-xs font-medium text-center" style="color: #ABADB7;">
                         Fecha de
                         creacion:
-                        <span class="uppercase ml-1">14/11/1989</span>
+                        <span id="fechaCreacionPlanaccion" class="uppercase ml-1"></span>
                     </h1>
                 </div>
                 <div class="w-full  self-start flex flex-wrap border-b-2 border-gray-100">
@@ -1770,47 +1768,44 @@
                             <h1 class="mb-1" style="color: #ABADB7;">Creado por:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2">
-                                    <h1 class="font-medium">Pedro Rego</h1>
+                                    <h1 id="creadoPorPlanaccion" class="font-medium"></h1>
                                 </div>
                             </div>
                         </div>
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
                             <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
-                                <div id="responsableVP" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+
+                                <div id="btnResponsablePlanaccion" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                     <h1 class="font-medium text-sm">
                                         <i class="fas fa-plus"></i>
                                     </h1>
                                 </div>
                                 <div>
-                                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
-                                        <h1 class="font-medium">Eduardo Meneses</h1>
-                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarPlanaccion(0, 'asignarPlanaccion', 7);"></i>
+                                    <div id="dataResponsablesAsignadosPlanaccion" class="flex flex-wrap w-full justify-start items-center">
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
                             <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
-                                <div id="responsableVP" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+                                <div id="btnStatusPlanaccion" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                     <h1 class="font-medium text-sm">
                                         <i class="fas fa-plus"></i>
                                     </h1>
                                 </div>
-                                <div>
-                                    <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2">
-                                        <h1 class="font-medium">Material</h1>
-                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarPlanaccion(0, 'asignarPlanaccion', 7);"></i>
-                                    </div>
-                                </div>
+
+                                <div id="dataStatusPlanaccion" class="flex flex-wrap w-full justify-start items-center"> </div>
+
                             </div>
                         </div>
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
                             <h1 class="mb-1" style="color: #ABADB7;">Fecha Solucion estimada:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
-                                    <span id="fechaVP" class="bg-purple-200" onclick="abrirmodal('modalRangoFechaX')">Sin Fecha asignada</span>
+                                    <span id="rangoFechaPlanaccion" class="bg-purple-200" onclick="abrirmodal('modalRangoFechaX')">Sin Fecha asignada</span>
                                 </div>
                             </div>
                         </div>
@@ -1818,10 +1813,10 @@
                             <h1 class="mb-1" style="color: #ABADB7;">Proviene del proyecto:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
-                                    <h1 class="font-medium">Nombre del proyecto</h1>
+                                    <h1 id="proyectoPlanaccion" class="font-medium"></h1>
                                 </div>
                                 <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
-                                    <h1 class="font-medium">CAPEX</h1>
+                                    <h1 id="tipoProyectoPlanaccion" class="font-medium"></h1>
                                 </div>
                             </div>
                         </div>
@@ -1835,9 +1830,9 @@
                                             <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
                                                 <div class="w-4 h-4  mr-2 flex-none"></div>
                                                 <div class=" text-justify w-full h-full ">
-                                                    <input id="input" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                                                    <input id="inputActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
                                                 </div>
-                                                <div id="btnAgregarActividadPlanaccion" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                                <div id="btnAgregarActividadPlanaccionX" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
                                                     <i class="fas fa-plus"></i>
                                                 </div>
                                                 <div id="btnAbrirOTPlanaccion" class="ml-2 flex items-center justify-center text-white cursor-pointer h-6 rounded px-2 flex-none text-sm bg-blue-500">
@@ -1873,13 +1868,15 @@
                     </div>
 
                     <div class="w-1/2 px-2 mt-2">
-                        <div class="flex items-center justify-start">
+                        <div class="flex items-center justify-start relative z-20">
                             <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
                             <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                 <h1 class="font-medium text-sm">
                                     <i class="fas fa-plus"></i>
                                 </h1>
+                                <input type="file" id="inputFilePlanaccion" multiple class="absolute top-0 opacity-0">
                             </div>
+
                         </div>
 
                         <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">

@@ -335,8 +335,7 @@ if (isset($_GET['action'])) {
                         $id = $i['id'];
                         $equipo = $i['equipo'];
 
-                        $arrayTemp = array("id" => "$id", "equipo" => "$equipo");
-                        $array[] = $arrayTemp;
+                        $array[] = array("id" => "$id", "equipo" => "$equipo");
                     }
                 }
             }
