@@ -2753,7 +2753,7 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
-                              <i class="fad fa-file-alt fa-3x"></i> ${url}
+                              ${url}
                            </p>
                         </div>
                      </a>
