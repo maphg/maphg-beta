@@ -2741,7 +2741,7 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                const url = array.adjuntos[x].url;
                const tipo = array.adjuntos[x].tipo;
 
-               if (tipo == "jpg") {
+               if (tipo == "jpg" || tipo == "png" || tipo == "jpeg") {
                   codigo = `
                      <a href="${'https://www.maphg.com/beta/planner/proyectos/planaccion/' + url}" target="_blank">
                         <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${'https://www.maphg.com/beta/planner/proyectos/planaccion/' + url})"></div>
