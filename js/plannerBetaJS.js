@@ -2906,7 +2906,7 @@ btnAgregarActividadPlanaccionX.addEventListener('click', () => {
 btnAbrirOTPlanaccion.addEventListener('click', () => {
    let idPlanaccion = localStorage.getItem('idPlanaccion');
    if (idPlanaccion > 0) {
-      window.open(`http://localhost/maphg-beta/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
+      window.open(`https://www.maphg.com/beta/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
    } else {
       alert(`OT #${idPlanaccion} No Encontrada`, 'info', 1500);
    }
