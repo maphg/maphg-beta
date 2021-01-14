@@ -488,6 +488,7 @@ if (isset($_POST['action'])) {
             $destinoMPNP = "AND t_mp_np.id_destino=$idDestino";
             $destino = "AND reporte_status_proyecto.id_destino=$idDestino";
             $filtroDestinoMP2 = "and id_equipo = $idDestino";
+            $filtroDestinoMP3 = "and t_equipos_america.id_destino = $idDestino";
         } else {
             // Filtro para seleccionar destino, según la session.
             $destinoMC = "";
@@ -495,6 +496,7 @@ if (isset($_POST['action'])) {
             $destinoMPNP = "";
             $destino = "";
             $filtroDestinoMP2 = "";
+            $filtroDestinoMP3 = "";
 
             // Filtros para subseccion de las Fases(ZI, GP, TRS).
             $zonaFiltroMC = "";
@@ -913,6 +915,7 @@ if (isset($_POST['action'])) {
 
 
         //QUERY MP Planificado.
+        $totalMP2 = 0;
         $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.comentario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos_america.equipo
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
@@ -922,9 +925,9 @@ if (isset($_POST['action'])) {
         WHERE t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and
         t_mp_planificacion_iniciada.fecha_finalizado 
         BETWEEN '$fecha_final_12' AND '$fecha_inicial_12'
-        $zonaFiltroMP2
-        ";
+        $zonaFiltroMP2 $filtroDestinoMP3";
         if ($result = mysqli_query($conn_2020, $query)) {
+            $totalMP2 = mysqli_num_rows($result);
             foreach ($result as $x) {
                 $idOTX = intval($x['id']);
                 $destinoX = $x['destino'];
@@ -1019,7 +1022,7 @@ if (isset($_POST['action'])) {
         }
 
         // Json 
-        $MPMCPROYECTOS['totalMP'] = $totalMP;
+        $MPMCPROYECTOS['totalMP'] = intval($totalMP) + intval($totalMP2);
         $MPMCPROYECTOS['bitacoraMP'] = $bitacoraMP;
 
 
