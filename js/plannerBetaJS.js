@@ -6602,7 +6602,7 @@ function obtenerPendientesUsuario() {
             document.getElementById("totalPendientesTareas").
                innerHTML = `Tareas (${array.totalTareasX})`;
             document.getElementById("totalPendientesPDA").
-               innerHTML = `Proyectos (${array.totalProyectos})`;
+               innerHTML = `PDA Proyectos (${array.totalProyectos})`;
 
             if (array.pendientes) {
                for (let x = 0; x < array.pendientes.length; x++) {
