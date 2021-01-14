@@ -1786,3 +1786,52 @@ document.getElementById("palabraProyecto").addEventListener('keyup', function ()
 });
 
 obtenerProyectosGlobal('PENDIENTE');
+
+// ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
+function eliminarAdjunto(idAdjunto, tipoAdjunto) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idEquipo = localStorage.getItem('idEquipo');
+    let idProyecto = localStorage.getItem('idProyecto');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+
+    const action = 'eliminarAdjunto';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array == 1) {
+                alertaImg('Adjunto Eliminado', '', 'success', 1500);
+
+                // ELIMINA ADJUNTO DEL CONTENEDOR
+                if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
+                    document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+                } else {
+                    alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+                }
+
+                // ACTUALIZA DATOS
+                if (tipoAdjunto == "FALLA") {
+                    obtenerFallas(idEquipo);
+                } else if (tipoAdjunto == "TAREA") {
+                    obtenerTareas(idEquipo);
+                } else if (tipoAdjunto == "PLANACCION") {
+                    obtenerPlanaccion(idProyecto);
+                } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
+                    obtenerProyectos(idSeccion, 'PENDIENTE');
+                } else if (tipoAdjunto == "TEST") {
+                    obtenerTestEquipo(idEquipo);
+                } else if (tipoAdjunto == "ENERGETICO") {
+                    obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                }
+
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
+        })
+}
