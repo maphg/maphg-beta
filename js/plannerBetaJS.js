@@ -40,6 +40,9 @@ const btnAgregarActividadPlanaccionX = document.getElementById("btnAgregarActivi
 const btnAplicarRangoFecha = document.getElementById("btnAplicarRangoFecha");
 const btnStatusPlanaccion = document.getElementById("btnStatusPlanaccion");
 const btnResponsablePlanaccion = document.getElementById("btnResponsablePlanaccion");
+const btnAplicarNuevoTituloPlanacciontoggle =
+   document.getElementById("btnAplicarNuevoTituloPlanacciontoggle");
+const btnEliminarActividadPlanaccion = document.getElementById("btnEliminarActividadPlanaccion");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -55,6 +58,7 @@ const inputActividadPlanaccion = document.getElementById("inputActividadPlanacci
 const inputRangoFecha = document.getElementById("rangoFechaX");
 const inputCod2bend = document.getElementById("inputCod2bend");
 const inputFilePlanaccion = document.getElementById("inputFilePlanaccion");
+const nuevoTituloPlanaccion = document.getElementById("nuevoTituloPlanaccion");
 
 // ELEMENTOS <INPUTS> ID
 
@@ -79,7 +83,12 @@ const tipoProyectoPlanaccion = document.getElementById("tipoProyectoPlanaccion")
 const dataStatusPlanaccion = document.getElementById("dataStatusPlanaccion");
 const dataResponsablesAsignadosPlanaccion =
    document.getElementById("dataResponsablesAsignadosPlanaccion");
-
+const dataPendientesUsuario = document.getElementById("dataPendientesUsuario");
+const loadPendientes = document.getElementById("loadPendientes");
+const totalPendientesFallas = document.getElementById("totalPendientesFallas");
+const totalPendientesPDA = document.getElementById("totalPendientesPDA");
+const tooltipOpcionesActividadPlanaccion =
+   document.getElementById("tooltipOpcionesActividadPlanaccion");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -181,6 +190,9 @@ function obtenerDatosUsuario(idDestino) {
          fetch(APIERROR + ' ' + err);
       }
    });
+
+   // ACTUALIZA LOS PENDIENTES POR USUARIO Y DESTINO
+   obtenerPendientesUsuario();
 }
 
 
@@ -2562,22 +2574,23 @@ function verEnPlanner(tipoPendiente, idPendiente) {
 
 
 // OBTIENE INFORMACION DE LAS INCIDENCIAS
-function verEnPlannerIncidencias(idIncidencia) {
+function verEnPlannerIncidencia(idIncidencia) {
+   alertaImg('Opción Bloqueada para Actualizar', '', 'info', 1800);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
 
-   const action = 'obtenerInicidencia';
-   const URL = ``;
+   // const action = 'obtenerInicidencia';
+   // const URL = ``;
 
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         console.log(array)
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err + ``);
-      })
+   // fetch(URL)
+   //    .then(array => array.json())
+   //    .then(array => {
+   //       console.log(array)
+   //    })
+   //    .catch(function (err) {
+   //       fetch(APIERROR + err + ``);
+   //    })
 }
 
 
@@ -2802,13 +2815,15 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                const actividad = array.actividades[x].actividad;
                const status = array.actividades[x].status;
 
+               const fOpciones = `onclick="mostrarOpcionesActividadPlanaccion(${idActividad})"`;
+
                const codigo = `
                   <div id="actividad_planaccion_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50 fila-actividad-select">
                      <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
                         <div class="text-justify w-full">
                            <h1>${actividad}</h1>
                         </div>
-                        <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" onclick="tooltipEditarEliminarSolucionar(${idActividad})">
+                        <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" ${fOpciones}>
                            <i class="fas fa-ellipsis-h  text-sm"></i>
                      </div>
                   </div>
@@ -3103,6 +3118,70 @@ inputFilePlanaccion.addEventListener('change', () => {
    }
 })
 
+
+// OPCIONES PARA ACTIVIDADES EN PLANACCION
+function mostrarOpcionesActividadPlanaccion(idActividad) {
+
+   btnAplicarNuevoTituloPlanacciontoggle.
+      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'titulo', 0)`);
+
+   btnEliminarActividadPlanaccion.
+      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'eliminar', 0)`);
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(`actividad_planaccion_${idActividad}`);
+   const tooltip = tooltipOpcionesActividadPlanaccion;
+   Popper.createPopper(button, tooltip, {
+      placement: 'bottom-end'
+   });
+
+   if (tooltipOpcionesActividadPlanaccion.classList.contains('hidden')) {
+      tooltipOpcionesActividadPlanaccion.classList.remove('hidden');
+   } else {
+      tooltipOpcionesActividadPlanaccion.classList.add('hidden');
+   }
+}
+
+
+// ACTUALIZA LA INFORMACION DE LA ACTIVIDADES DEL PLANA DE ACCION
+function actualizarActividadesPlanaccion(idActividad, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idPlanaccion = localStorage.getItem('idPlanaccion');
+
+   if (columna == "titulo") {
+      valor = nuevoTituloPlanaccion.value;
+   }
+
+   const action = "actualizarActividadesPlanaccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idActividad=${idActividad}&columna=${columna}&valor=${valor}`;
+
+   console.log(URL);
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         nuevoTituloPlanaccion.value = '';
+
+         if (array == "titulo") {
+            expandir('btnNuevoTituloPlanaccion');
+            expandir('btnAplicarNuevoTituloPlanaccion')
+            verEnPlannerPlanaccion(idPlanaccion);
+            alertaImg('Actividad Actuliaza', '', 'success', 1500)
+            mostrarOpcionesActividadPlanaccion(idActividad);
+         } else if (array == "eliminar") {
+            mostrarOpcionesActividadPlanaccion(idActividad);
+            verEnPlannerPlanaccion(idPlanaccion);
+            alertaImg('Actividad Eliminada', '', 'success', 1500)
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500)
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + `actualizarActividadesPlanaccion(${idActividad}, ${columna}, ${valor})`);
+      })
+}
 
 // Comentaio Ver en Planner
 function agregarComentarioVP(tipoPendiente, idPendiente) {
@@ -5131,7 +5210,7 @@ function obtenerFallas(idEquipo = 0) {
    document.getElementById("seccionFallaTarea").innerHTML = iconoLoader;
    document.getElementById("contenedorPrincipalTareasFallas").
       setAttribute('style', 'background:#fc8181; min-height: 60vh;');
-   document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
+   document.getElementById('tipoFallaTarea').innerHTML = 'INCIDENCIA';
    document.getElementById("pendienteFallaTarea").
       setAttribute('onclick', `obtenerFallasPendientes(${idEquipo})`);
    document.getElementById("solucionadosFallaTarea").
@@ -5233,7 +5312,7 @@ function obtenerFallas(idEquipo = 0) {
             }
 
             if (array.equipo) {
-               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + tipoPendiente;
+               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + 'INCIDENCIAS';
             }
          })
          .catch(function (err) {
@@ -5309,7 +5388,7 @@ function obtenerTareas(idEquipo = 0) {
    document.getElementById("seccionFallaTarea").innerHTML = iconoLoader;
    document.getElementById("contenedorPrincipalTareasFallas").
       setAttribute('style', 'background:#fbd38d; min-height: 60vh;');
-   document.getElementById('tipoFallaTarea').innerHTML = tipoPendiente;
+   document.getElementById('tipoFallaTarea').innerHTML = 'INCIDENCIA';
    document.getElementById("pendienteFallaTarea").
       setAttribute('onclick', `obtenerTareasPendientes(${idEquipo})`);
    document.getElementById("solucionadosFallaTarea").
@@ -5417,7 +5496,7 @@ function obtenerTareas(idEquipo = 0) {
             }
 
             if (array.equipo) {
-               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + tipoPendiente;
+               document.getElementById("equipoFallaTarea").innerHTML = array.equipo + ' / ' + 'INCIDENCIAS';
             }
          })
          .catch(function (err) {
@@ -5894,7 +5973,30 @@ const dataEquiposAmerica = params => {
    }
 
 
+   let emergenciaPTag = params.emergenciaP <= 0 ? ''
+      : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
+         <h1 class="text-white" data-title="Emergencia">${params.emergenciaP}</h1>
+      </div>`;
 
+   let urgenciaPTag = params.urgenciaP <= 0 ? ''
+      : `<div class="bg-orange-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
+         <h1 class="text-white" data-title-info="Urgencia">${params.urgenciaP}</h1>
+      </div>`;
+
+   let alarmaPTag = params.alarmaP <= 0 ? ''
+      : `<div class="bg-yellow-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
+         <h1 class="text-white" data-title-info="Alarma">${params.alarmaP}</h1>
+      </div>`;
+
+   let alertaPTag = params.alertaP <= 0 ? ''
+      : `<div class="bg-blue-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
+         <h1 class="text-white" data-title-info="Alerta">${params.alertaP}</h1>
+      </div>`;
+
+   let seguimientoPTag = params.seguimientoP <= 0 ? ''
+      : `<div class="bg-teal-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
+         <h1 class="text-white" data-title-info="Seguimiento">${params.seguimientoP}</h1>
+      </div>`;
 
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
    var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
@@ -5916,6 +6018,11 @@ const dataEquiposAmerica = params => {
                     ${valorTipoEquipo}
                     ${valorstatusEquipo}
                     ${idEquipoX}
+                    ${emergenciaPTag}
+                    ${urgenciaPTag}
+                    ${alarmaPTag}
+                    ${alertaPTag}
+                    ${seguimientoPTag}
                 </div>
             </td>
 
@@ -6585,24 +6692,22 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
 function obtenerPendientesUsuario() {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
-   let contenedor = document.getElementById("dataPendientesUsuario");
+
+   // LIMPIAR CONTENEDORES
+   loadPendientes.innerHTML = iconoLoader;
+
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   document.getElementById("loadPendientes").innerHTML = iconoLoader;
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-
-         contenedor.innerHTML = '';
+         dataPendientesUsuario.innerHTML = '';
+         return array;
+      })
+      .then(array => {
 
          if (array) {
-            document.getElementById("totalPendientesFallas").
-               innerHTML = `Incidencia (${array.totalFallas})`;
-            document.getElementById("totalPendientesTareas").
-               innerHTML = `Tareas (${array.totalTareasX})`;
-            document.getElementById("totalPendientesPDA").
-               innerHTML = `PDA Proyectos (${array.totalProyectos})`;
 
             if (array.pendientes) {
                for (let x = 0; x < array.pendientes.length; x++) {
@@ -6632,20 +6737,65 @@ function obtenerPendientesUsuario() {
                         </div>   
                      `;
 
-                  contenedor.insertAdjacentHTML('beforeend', codigo);
+                  dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
                }
-            } else {
-               alertaImg('Sin Pendientes', '', 'success', 3000);
             }
 
+            if (array.incidencias) {
+               console.log(array.incidencias);
+               totalPendientesFallas.innerHTML = `Incidencia (${array.incidencias.length})`;
+
+               for (let x = 0; x < array.incidencias.length; x++) {
+                  const idIncidencia = array.incidencias[x].idIncidencia;
+                  const actividad = array.incidencias[x].actividad;
+                  const equipo = array.incidencias[x].equipo;
+                  const tipoIncidencia = array.incidencias[x].tipoIncidencia;
+
+                  const fVerEnPlanner = `onclick="verEnPlannerIncidencia(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+
+                  const codigo = `
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_INCIDENCIA" data-title-100="${actividad}" ${fVerEnPlanner}>
+                        <h1 class="truncate mr-2">
+                        ${tipoIncidencia + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
+                        </h1>
+                     </div> 
+                  `;
+                  dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            if (array.planaccion) {
+               totalPendientesPDA.innerHTML = `PDA Proyectos (${array.planaccion.length})`;
+
+               for (let x = 0; x < array.planaccion.length; x++) {
+                  const idPlanaccion = array.planaccion[x].idPlanaccion;
+                  const tipoPendiente = array.planaccion[x].tipoPendiente;
+                  const proyecto = array.planaccion[x].proyecto;
+                  const actividad = array.planaccion[x].actividad;
+
+                  const fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPlanaccion}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
+
+                  const codigo = `
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_PLANACCION" data-title-100="${actividad}" ${fVerEnPlanner}>
+                        <h1 class="truncate mr-2">
+                        ${proyecto + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
+                        </h1>
+                     </div> 
+                  `;
+                  dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+         } else {
+            alertaImg('Sin Pendientes', '', 'success', 3000);
          }
       })
       .then(() => {
-         document.getElementById("loadPendientes").innerHTML = '';
+         loadPendientes.innerHTML = '';
       })
       .catch(function (err) {
          fetch(APIERROR + err + ': (obtenerPendientesUsuario) ' + idUsuario);
-         document.getElementById("loadPendientes").innerHTML = '';
+         loadPendientes.innerHTML = '';
          contenedor.innerHTML = '';
       })
 }

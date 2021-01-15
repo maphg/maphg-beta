@@ -242,7 +242,7 @@
             <div id="columnasPendientes" class="flex items-center relative">
                 <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
                     <div class="flex items-center">
-                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-64 py-3">
+                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
                             <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
                                 <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
                                     <i class="fad fa-clipboard-list-check"></i>
@@ -328,7 +328,7 @@
 
                         <div id="tareasGeneralesEquipo" class="flex-none flex items-center bg-white rounded mb-2 cursor-pointer hover:bg-gray-200 shadow-sm mr-6" data-title="Clic, para mostrar Tareas Generales">
                             <div class="text-sm px-3 leading-noene font-semibold text-bluegray-800 uppercase flex py-1">
-                                <h1><i class="fad fa-circle mr-2 text-red-400"></i>Tareas generales de área</h1>
+                                <h1><i class="fad fa-circle mr-2 text-red-400"></i>Incidencias generales de área</h1>
                             </div>
                             <div id="totalesTareasGenerales" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
                                 <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
@@ -1269,10 +1269,10 @@
                                 <tr class="cursor-pointer bg-white">
 
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Actividad
+                                        Incidencia
                                     </th>
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        SubTareas
+                                        Acciones
                                     </th>
                                     <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                         Responsable
@@ -1886,6 +1886,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- TOOLTIP -->
+            <div id="tooltipOpcionesActividadPlanaccion" role="tooltip" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+
+                    <div class="w-full flex flex-row">
+
+                        <button id="btnNuevoTituloPlanaccion" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="expandir('btnNuevoTituloPlanaccion'); expandir('btnAplicarNuevoTituloPlanaccion')">
+                            Editar <i class="fa fa-pencil mx-2"></i>
+                        </button>
+
+                        <button id="btnAplicarNuevoTituloPlanacciontoggle" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="expandir(this.id)">
+                            Aplicar <i class="fa fa-check-circle mx-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="btnNuevoTituloPlanacciontoggle" class="px-1 mb-4 hidden">
+                        <input id="nuevoTituloPlanaccion" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
+                    </div>
+
+                    <button id="btnEliminarActividadPlanaccion" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                        Eliminar <i class="fa fa-trash mx-2"></i>
+                    </button>
+
+                </div>
+            </div>
+            <!-- TOOLTIP -->
         </div>
     </div>
     <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
@@ -2023,10 +2050,10 @@
                                             <tr class="cursor-pointer bg-white">
 
                                                 <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                    Actividad
+                                                    Planacción
                                                 </th>
                                                 <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                    SubTareas
+                                                    Actividades
                                                 </th>
                                                 <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                                     Responsable
@@ -2222,10 +2249,10 @@
                                                     <tr class="cursor-pointer bg-white">
 
                                                         <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                            Actividad
+                                                            Planacción
                                                         </th>
                                                         <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                                            SubTareas
+                                                            Actividades
                                                         </th>
                                                         <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                                             Responsable
@@ -3618,7 +3645,6 @@
         </div>
     </div>
     <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
-
 
 
     <!-- ***** TOOLTIPS ***** -->

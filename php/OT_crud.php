@@ -269,7 +269,7 @@ if (isset($_GET['action'])) {
                     $idEquipo = $i['id_equipo'];
                     $año = $i['año'];
                 }
-                $query = "UPDATE t_mp_planificacion_iniciada SET status = 'SOLUCIONADO' WHERE id = $idOT and activo = 1";
+                $query = "UPDATE t_mp_planificacion_iniciada SET status = 'SOLUCIONADO', fecha_finalizado = '$fechaActual'  WHERE id = $idOT and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
 
                     $query = "UPDATE t_mp_planeacion_proceso SET semana_$semana = 'SOLUCIONADO' 

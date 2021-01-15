@@ -166,7 +166,7 @@ function consultaActividadesOT(idOT) {
                         actividades += `
                         <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
                             <div class="mr-2 flex flex-col leading-none">
-                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="Lectura" disabled>
+                                <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="" disabled>
                                 <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
                             </div>
                             <div class=" text-justify flex items-center">

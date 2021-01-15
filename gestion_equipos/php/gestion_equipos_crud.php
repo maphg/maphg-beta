@@ -99,7 +99,8 @@ if (isset($_GET['action'])) {
                 $contadorSolucionado = 0;
 
                 if ($filtroSemana <= 0 || $filtroSemana == "") {
-                    $mp = "SELECT* FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    $mp = "SELECT* FROM t_mp_planeacion_proceso 
+                    WHERE id_equipo = $id and activo = 1 and año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
 
                         foreach ($result as $x) {
@@ -127,7 +128,8 @@ if (isset($_GET['action'])) {
                         }
                     }
 
-                    $mp = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    $mp = "SELECT* FROM t_mp_planeacion_semana 
+                    WHERE id_equipo = $id and activo = 1 and año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
                         foreach ($result as $x) {
                             for ($i = $semanaActual; $i < 53; $i++) {

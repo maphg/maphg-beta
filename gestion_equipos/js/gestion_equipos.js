@@ -441,7 +441,7 @@ function consultaEquiposLocales() {
 
     const action = "consultaEquiposLocales";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
-
+    console.log(URL);
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDeEquipos').innerHTML = '';
     load.innerHTML = '<i class="fa fa-spinner fa-pulse fa-sm fa-fw"></i>';
@@ -735,6 +735,7 @@ function obtenerImagenesEquipo(idEquipo) {
             idDestino: idDestino,
             tabla: tabla,
             idTabla: idTabla
+           
         },
         dataType: "JSON",
         success: function (data) {
@@ -1725,7 +1726,7 @@ function informacionEquipoX(idEquipo) {
 
             document.getElementById("QREquipo").
                 setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
-            
+
             document.getElementById("nombreEquipo").value = data.equipo;
             document.getElementById("idFaseEquipo").value = data.idFases;
             document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;

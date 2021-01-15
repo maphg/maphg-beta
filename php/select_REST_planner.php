@@ -416,7 +416,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT equipo FROM t_equipos_america WHERE id = $idEquipo";
-        $array['equipo'] = "$tipoPendiente GENERAL";
+        $array['equipo'] = "INCIDENCIA GENERAL";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $equipo = $x['equipo'];
@@ -842,147 +842,58 @@ if (isset($_GET['action'])) {
 
 
     if ($action == "obtenerPendientesUsuario") {
-        $arrayIndex = array();
         $array = array();
-        $totalFallas = 0;
-        $totalTareas = 0;
-        $totalTareasGenerales = 0;
-        $totalProyectos = 0;
-        $totalMP = 0;
 
-        // $query = "SELECT id, id_equipo FROM t_mp_np WHERE id_seccion = 0";
-        // if ($result  = mysqli_query($conn_2020, $query)) {
-        //     foreach ($result as $x) {
-        //         $id = $x['id'];
-        //         $idEquipo = $x['id_equipo'];
-        //         $query = "SELECT id_seccion, id_subseccion FROM t_equipos WHERE id = $idEquipo";
-        //         if ($result = mysqli_query($conn_2020, $query)) {
-        //             foreach ($result as $x) {
-        //                 $idSeccion = $x['id_seccion'];
-        //                 $idSubseccion = $x['id_subseccion'];
+        if ($idDestino == 10) {
+            $filtroDestinoPlanaccion = "";
+            $filtroDestinoInicidencias = "";
+        } else {
+            $filtroDestinoPlanaccion = "and t_proyectos.id_destino = $idDestino";
+            $filtroDestinoInicidencias = "and t_mc.id_destino = $idDestino";
+        }
 
-        //                 $query = "UPDATE t_mp_np SET id_seccion = $idSeccion, id_subseccion = $idSubseccion WHERE id = $id";
-        //                 if ($result = mysqli_query($conn_2020, $query)) {
-        //                     echo 1;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        $query = "SELECT t_mc.id, t_mc.actividad, c_secciones.seccion
-        FROM t_mc 
-        INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
-        WHERE t_mc.responsable = $idUsuario and t_mc.activo = 1 and 
-        (t_mc.status = 'N' or t_mc.status = 'PENDIENTE' or t_mc.status = 'P')";
+        #PLANES DE ACCION
+        $array['planaccion'] = array();
+        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos.titulo
+        FROM t_proyectos_planaccion 
+        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+        WHERE t_proyectos_planaccion.responsable = $idUsuario and t_proyectos_planaccion.activo = 1 and (t_proyectos_planaccion.status='N' or t_proyectos_planaccion.status='PENDIENTE' or t_proyectos_planaccion.status='P' or t_proyectos_planaccion.status='PROCESO') $filtroDestinoPlanaccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $totalFallas++;
-                $idFalla = $x['id'];
-                $seccion = $x['seccion'];
+                $idPlanaccion = $x['id'];
                 $actividad = $x['actividad'];
+                $proyecto = $x['titulo'];
 
-                $arrayTemp = array(
-                    "idPendiente" => intval($idFalla),
-                    "tipoPendiente" => "INCIDENCIA",
-                    "seccion" => $seccion,
+                $array['planaccion'][] = array(
+                    "idPlanaccion" => intval($idPlanaccion),
+                    "tipoPendiente" => "PLANACCION",
+                    "proyecto" => $proyecto,
                     "actividad" => $actividad
                 );
-                $arrayIndex[] = $arrayTemp;
             }
         }
 
-        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.id_equipo, c_secciones.seccion 
-        FROM t_mp_np 
-        LEFT JOIN c_secciones  ON t_mp_np.id_seccion = c_secciones.id 
-        WHERE t_mp_np.responsable = $idUsuario and t_mp_np.activo = 1 and 
-        (t_mp_np.status='N' or t_mp_np.status='PENDIENTE' or t_mp_np.status='P')";
+        #INCIDENCIAS
+        $array['incidencias'] = array();
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_equipos_america.equipo 
+        FROM  t_mc
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+        WHERE t_mc.responsable = $idUsuario and (t_mc.status = 'P' or t_mc.status = 'N' or t_mc.status = 'PENDIENTE') and t_mc.activo = 1 $filtroDestinoInicidencias";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idTarea = $x['id'];
-                $seccion = $x['seccion'];
-                $actividad = $x['titulo'];
-                $idEquipo = intval($x['id_equipo']);
-
-                if ($idEquipo > 0) {
-                    $tipoPendiente = "TAREA";
-                    $totalTareas++;
-                } else {
-                    $tipoPendiente = "TAREAGENERAL";
-                    $totalTareasGenerales++;
-                }
-
-                $arrayTemp = array(
-                    "idPendiente" => intval($idTarea),
-                    "tipoPendiente" => $tipoPendiente,
-                    "seccion" => $seccion,
-                    "actividad" => $actividad,
-                );
-                $arrayIndex[] = $arrayTemp;
-            }
-        }
-
-        $query = "SELECT id, id_plan FROM t_mp_planificacion_iniciada WHERE id_responsables IN($idUsuario) and activo = 1 
-        and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalMP++;
-                $idMP = $x['id'];
-                $actividad = $x['id_plan'];
-
-                $arrayTemp = array(
-                    "idPendiente" => intval($idMP),
-                    "tipoPendiente" => "MP",
-                    "seccion" => "MP",
-                    "actividad" => "MP",
-                );
-                // $arrayIndex[] = $arrayTemp;
-            }
-        }
-
-        $query = "SELECT id, titulo FROM t_proyectos WHERE responsable = $idUsuario and activo = 1 
-        and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalProyectos++;
-                $idProyecto = $x['id'];
-                $actividad = $x['titulo'];
-
-                $arrayTemp = array(
-                    "idPendiente" => intval($idProyecto),
-                    "tipoPendiente" => "PLANACCION",
-                    "seccion" => "PROYECTO",
-                    "actividad" => $actividad,
-                );
-                // $arrayIndex[] = $arrayTemp;
-            }
-        }
-
-        $query = "SELECT id, actividad FROM t_proyectos_planaccion WHERE responsable = $idUsuario and activo = 1 and (status='N' or status='PENDIENTE' or status='P' or status='PROCESO')";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $totalProyectos++;
-                $idProyecto = $x['id'];
+                $idIncidencia = $x['id'];
                 $actividad = $x['actividad'];
+                $equipo = $x['equipo'];
+                $tipoIncidencia = $x['tipo_incidencia'];
 
-                $arrayTemp = array(
-                    "idPendiente" => intval($idProyecto),
-                    "tipoPendiente" => "PLANACCION",
-                    "seccion" => "PROYECTO",
+                $array['incidencias'][] = array(
+                    "idIncidencia" => intval($idIncidencia),
                     "actividad" => $actividad,
+                    "equipo" => $equipo,
+                    "tipoIncidencia" => $tipoIncidencia
                 );
-                $arrayIndex[] = $arrayTemp;
             }
         }
-
-        $array['totalFallas'] = $totalFallas;
-        $array['totalTareas'] = $totalTareas;
-        $array['totalTareasGenerales'] = $totalTareasGenerales;
-        $array['totalTareasX'] = $totalTareas + $totalTareasGenerales;
-        $array['totalProyectos'] = $totalProyectos;
-        $array['totalMP'] = $totalMP;
-        $array['pendientes'] = $arrayIndex;
-
         echo json_encode($array);
     }
 
@@ -2363,6 +2274,30 @@ if (isset($_GET['action'])) {
             $query = "INSERT INTO t_proyectos_planaccion_adjuntos(id_actividad, url_adjunto, subido_por, fecha_creado, status) VALUES($idPlanaccion, '$nombre', $idUsuario, '$fechaActual', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // ACTUALIZA LA INFORMACIÓN DE LAS ACTIVIDADES DEL PLAN DE ACCIÓN
+    if ($action == "actualizarActividadesPlanaccion") {
+        $idActividad = $_GET['idActividad'];
+        $columna = $_GET['columna'];
+        $valor = $_GET['valor'];
+        $resp = "NO";
+
+        if ($columna == "titulo" and $valor != "") {
+            $query = "UPDATE t_proyectos_planaccion_actividades SET actividad = '$valor' 
+            WHERE id = $idActividad";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "titulo";
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_proyectos_planaccion_actividades SET activo = 0 
+            WHERE id = $idActividad";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminar";
             }
         }
         echo json_encode($resp);
