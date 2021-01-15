@@ -7635,7 +7635,7 @@ if (isset($_POST['action'])) {
             }
         } elseif ($tabla == "t_equipos_america_adjuntos") {
             $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
-            $ruta = "../img/equipos/";
+            $ruta = "../planner/equipos/";
 
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
