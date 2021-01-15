@@ -4503,8 +4503,7 @@ if (isset($_POST['action'])) {
         $resp = "0";
 
         if ($tipoAsignacion == "asignarMC") {
-            $query = "UPDATE t_mc SET responsable = $idUsuarioSeleccionado 
-            WHERE id = $idItem";
+            $query = "UPDATE t_mc SET responsable = $idUsuarioSeleccionado, ultima_modificacion = '$fechaActual' WHERE id = $idItem";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "MC";
             }
@@ -4885,7 +4884,7 @@ if (isset($_POST['action'])) {
                     }
 
                     if ($valorStatus != "") {
-                        $query = "UPDATE t_mc SET cod2bend = '$cod2bend' WHERE id = $idMC";
+                        $query = "UPDATE t_mc SET cod2bend = '$cod2bend', ultima_modificacion = '$fechaActual' WHERE id = $idMC";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $resp = 1;
                         }
@@ -4909,9 +4908,16 @@ if (isset($_POST['action'])) {
             }
         }
 
-        $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado WHERE id = $idMC";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            $resp = 1;
+        if ($status == "status_trabajare") {
+            $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual', fecha_realizado = '$fechaActual' WHERE id = $idMC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } else {
+            $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado WHERE id = $idMC";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
         }
 
         echo $resp;
