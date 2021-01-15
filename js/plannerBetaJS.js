@@ -5972,7 +5972,6 @@ const dataEquiposAmerica = params => {
       seguimientoS = '';
    }
 
-
    let emergenciaPTag = params.emergenciaP <= 0 ? ''
       : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
          <h1 class="text-white" data-title="Emergencia">${params.emergenciaP}</h1>
@@ -5980,22 +5979,22 @@ const dataEquiposAmerica = params => {
 
    let urgenciaPTag = params.urgenciaP <= 0 ? ''
       : `<div class="bg-orange-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title-info="Urgencia">${params.urgenciaP}</h1>
+         <h1 class="text-white" data-title="Urgencia">${params.urgenciaP}</h1>
       </div>`;
 
    let alarmaPTag = params.alarmaP <= 0 ? ''
       : `<div class="bg-yellow-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title-info="Alarma">${params.alarmaP}</h1>
+         <h1 class="text-white" data-title="Alarma">${params.alarmaP}</h1>
       </div>`;
 
    let alertaPTag = params.alertaP <= 0 ? ''
       : `<div class="bg-blue-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title-info="Alerta">${params.alertaP}</h1>
+         <h1 class="text-white" data-title="Alerta">${params.alertaP}</h1>
       </div>`;
 
    let seguimientoPTag = params.seguimientoP <= 0 ? ''
       : `<div class="bg-teal-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title-info="Seguimiento">${params.seguimientoP}</h1>
+         <h1 class="text-white" data-title="Seguimiento">${params.seguimientoP}</h1>
       </div>`;
 
    var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
