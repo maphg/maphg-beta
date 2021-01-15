@@ -7726,7 +7726,7 @@ if (isset($_POST['action'])) {
             if ($extension == "png" || $extension == "jpg" || $extension == "jpeg" || $extension == "gif" || $extension == "PNG" || $extension == "JPG" || $extension == "JPEG" || $extension == "GIF") {
                 if ($img['name'] != "") {
                     if (($img['size'] / 1000) < 100000) {
-                        if (move_uploaded_file($img['tmp_name'], "$ruta$imgNombre")) {
+                        if (move_uploaded_file($img['tmp_name'], "$ruta" . "$imgNombre")) {
                             $query = "INSERT INTO t_equipos_america_adjuntos(id_equipo, url_adjunto, fecha, subido_por, activo) VALUES($idTabla, '$imgNombre', '$fechaActual', $idUsuario, 1)";
                             if ($result = mysqli_query($conn_2020, $query)) {
                                 echo 9;
