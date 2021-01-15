@@ -8028,6 +8028,9 @@ if (isset($_POST['action'])) {
                         $adjuntoURL = "";
                     }
 
+                    // RUTA ABSOLUTA
+                    $adjuntoURL = "https://www.maphg.com/beta/$url";
+
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                         if (strpbrk($adjuntoURL, ' ')) {
@@ -8205,6 +8208,8 @@ if (isset($_POST['action'])) {
                         $adjuntoURL = "../planner/equipos/$url";
                         $adjuntoURL_beta = "../../planner/equipos/$url";
                     }
+                    $adjuntoURL = "https://www.maphg.com/beta/$url";
+                    $adjuntoURL_beta = "https://www.maphg.com/$url";
 
                     // Admite solo Imagenes.
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "gif") || strpos($url, "PNG")) {
