@@ -364,7 +364,7 @@
 
                         <div id="btnColumnasPredictivos" class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6" data-title="Clic, para mostrar Columnas Predictivos">
                             <div class="text-sm px-3 leading-noene font-semibold text-indigo-600 uppercase flex py-1">
-                                <h1>PREDICTIVOS</h1>
+                                <h1>PREDICTIVOS</h1> 
                             </div>
                             <div id="totalesTest" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
                                 <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
@@ -386,7 +386,7 @@
 
                         <div class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-blue-600 uppercase flex py-1">
-                                <h1>Info</h1>
+                                <h1>INFO</h1>
                             </div>
                             <div class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
                                 <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
