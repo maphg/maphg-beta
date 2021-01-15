@@ -735,7 +735,7 @@ function obtenerImagenesEquipo(idEquipo) {
             idDestino: idDestino,
             tabla: tabla,
             idTabla: idTabla
-           
+
         },
         dataType: "JSON",
         success: function (data) {
@@ -1803,7 +1803,10 @@ async function informacionEquipo(idEquipo) {
     await obtenerImagenesEquipo(idEquipo);
     await consultarPlanEquipo(idEquipo);
     await opcionesJerarquiaEquipo(idEquipo);
-    await informacionEquipoX(idEquipo);
+
+    setTimeout(() => {
+        informacionEquipoX(idEquipo);
+    }, 1600);
 }
 
 
