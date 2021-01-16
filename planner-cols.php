@@ -364,7 +364,7 @@
 
                         <div id="btnColumnasPredictivos" class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6" data-title="Clic, para mostrar Columnas Predictivos">
                             <div class="text-sm px-3 leading-noene font-semibold text-indigo-600 uppercase flex py-1">
-                                <h1>PREDICTIVOS</h1> 
+                                <h1>PREDICTIVOS</h1>
                             </div>
                             <div id="totalesTest" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
                                 <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
@@ -1089,7 +1089,7 @@
                         <h1>Incidencias Y Tareas</h1>
                     </div>
 
-                    <a class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="graficas_reportes_diario/">
+                    <a id="btnGraficasReportesDiario" class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="#">
                         <div>
                             <h1>Reporte Incidencias Y Tareas</h1>
                         </div>
@@ -1916,6 +1916,188 @@
         </div>
     </div>
     <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
+
+
+    <!-- MODAL VER EN PLANNER PARA LAS INCIDENCIAS -->
+    <div id="modalVerEnPlannerIncidencia" class="modal">
+        <div class="modal-window rounded-md" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlannerIncidencia')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Detalles</h1>
+                </div>
+            </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-100 text-teal-500 text-xs py-1 px-2 rounded-b-md mr-2">
+                    <h1>INCIDENCIA</h1>
+                </div>
+                <div class="font-bold bg-red-100 text-red-500 text-xs py-1 px-2 rounded-b-md">
+                    <h1>ALERTA</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;">
+                        Conocer Coste del Proyecto (1,600 kusd aprox)
+                    </h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium text-center" style="color: #ABADB7;">
+                        Fecha de
+                        creacion:
+                        <span class="uppercase ml-1">14/11/1989</span>
+                    </h1>
+                </div>
+                <div class="w-full  self-start flex flex-wrap border-b-2 border-gray-100">
+                    <div class="w-1/2 border-r-2 border-gray-100">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Creado por:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2">
+                                    <h1 class="font-medium">Pedro Rego</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                        <h1 class="font-medium">Eduardo Meneses</h1>
+                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarPlanaccion(0, 'asignarPlanaccion', 7);"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2">
+                                        <h1 class="font-medium">Material</h1>
+                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solucion estimada:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
+                                    <span class="bg-purple-200">Sin Fecha asignada</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Asociada a:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 class="font-medium">Nombre del equipo o si es tarea general</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Subtareas:
+                                <div class="flex flex-wrap w-full justify-start items-center">
+                                    <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
+                                        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                                            <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
+                                                <div class="w-4 h-4  mr-2 flex-none"></div>
+                                                <div class=" text-justify w-full h-full ">
+                                                    <input type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                                                </div>
+                                                <div class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div class="ml-2 flex items-center justify-center text-white cursor-pointer h-6 rounded px-2 flex-none text-sm bg-blue-500">
+                                                    <h1>Ver OT</h1>
+                                                </div>
+                                            </div>
+                                            <div id="dataActividadesIncidencia" class="w-auto overflow-y-auto scrollbar" style="max-height: 200px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex text-sm ">
+                    <div class="w-1/2 relative border-r-2 border-gray-100 px-2 mt-2">
+                        <h1 class="mb-2" style="color: #ABADB7;">Comentarios:</h1>
+
+                        <div id="dataComentariosIncidencia" class="px-4 overflow-y-auto scrollbar flex flex-col w-full pb-10" style="min-height: 499px; min-height: 499px; max-height: 500px;"></div>
+
+                        <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
+                            <input type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                            <button class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md" onclick="agregarComentarioPlanaccionVerEnPlanner(691)">
+                                <i class="fad fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-1/2 px-2 mt-2">
+                        <div class="flex items-center justify-start">
+                            <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
+                            <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="obtenerResponsablesPlanaccion(7)">
+                                <h1 class="font-medium text-sm">
+                                    <i class="fas fa-plus"></i>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjuntosIncidencia" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 450px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLTIP -->
+            <div id="tooltipOpcionesActividadIncidencias" role="tooltip" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+
+                    <div class="w-full flex flex-row">
+
+                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="expandir(''); expandir('')">
+                            Editar <i class="fa fa-pencil mx-2"></i>
+                        </button>
+
+                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="expandir(this.id)">
+                            Aplicar <i class="fa fa-check-circle mx-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="" class="px-1 mb-4 hidden">
+                        <input id="" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
+                    </div>
+
+                    <button id="" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                        Eliminar <i class="fa fa-trash mx-2"></i>
+                    </button>
+
+                </div>
+            </div>
+            <!-- TOOLTIP -->
+
+        </div>
+    </div>
+    <!-- MODAL VER EN PLANNER PARA LAS INCIDENCIAS -->
+
+
 
 
     <!-- MODAL PROYECTOS -->

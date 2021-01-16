@@ -43,6 +43,7 @@ const btnResponsablePlanaccion = document.getElementById("btnResponsablePlanacci
 const btnAplicarNuevoTituloPlanacciontoggle =
    document.getElementById("btnAplicarNuevoTituloPlanacciontoggle");
 const btnEliminarActividadPlanaccion = document.getElementById("btnEliminarActividadPlanaccion");
+const btnGraficasReportesDiario = document.getElementById("btnGraficasReportesDiario");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -89,6 +90,11 @@ const totalPendientesFallas = document.getElementById("totalPendientesFallas");
 const totalPendientesPDA = document.getElementById("totalPendientesPDA");
 const tooltipOpcionesActividadPlanaccion =
    document.getElementById("tooltipOpcionesActividadPlanaccion");
+const dataAdjuntosIncidencia = document.getElementById("dataAdjuntosIncidencia");
+const dataComentariosIncidencia = document.getElementById("dataComentariosIncidencia");
+const tooltipOpcionesActividadIncidencias =
+   document.getElementById("tooltipOpcionesActividadIncidencias");
+const dataActividadesIncidencia = document.getElementById("dataActividadesIncidencia");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -114,6 +120,11 @@ const contenedorEquiposAmericaDespice = document.getElementById("contenedorEquip
 // CONTENEDOR DE TABLAS
 
 
+// MODALES
+const modalVerEnPlannerIncidencia = document.getElementById("modalVerEnPlannerIncidencia");
+// MODALES
+
+
 // BOTONES PARA EL MODAL STATUS
 const btnStatusUrgente = document.getElementById("statusUrgente");
 const btnStatusMaterial = document.getElementById("btnStatusMaterial");
@@ -134,7 +145,6 @@ const btnStatusGP = document.getElementById("statusGP");
 const btnStatusTRS = document.getElementById("statusTRS");
 const btnStatusZI = document.getElementById("statusZI");
 const editarTitulo = document.getElementById("editarTitulo");
-
 // BOTONES PARA EL MODAL STATUS
 
 // Función principal.
@@ -2574,23 +2584,142 @@ function verEnPlanner(tipoPendiente, idPendiente) {
 
 
 // OBTIENE INFORMACION DE LAS INCIDENCIAS
-function verEnPlannerIncidencia(idIncidencia) {
+function obtenerIncidenciaEquipos(idIncidencia) {
    alertaImg('Opción Bloqueada para Actualizar', '', 'info', 1800);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
+   const action = 'obtenerIncidenciaEquipos';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}`;
 
-   // const action = 'obtenerInicidencia';
-   // const URL = ``;
+   console.log(URL);
 
-   // fetch(URL)
-   //    .then(array => array.json())
-   //    .then(array => {
-   //       console.log(array)
-   //    })
-   //    .catch(function (err) {
-   //       fetch(APIERROR + err + ``);
-   //    })
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array) {
+
+            // DATOS
+            for (let x = 0; x < array.incidencia.length; x++) {
+               const idIncidencia = array.incidencia[x].idIncidencia;
+               const actividad = array.incidencia[x].actividad;
+               const equipos = array.incidencia[x].equipos;
+               const tipoIncidencia = array.incidencia[x].tipoIncidencia;
+               const fecha = array.incidencia[x].fecha;
+               const creadoPor = array.incidencia[x].creadoPor;
+               const responsable = array.incidencia[x].responsable;
+
+            }
+
+            // COMENTARIOS
+            for (let x = 0; x < array.comentarios.length; x++) {
+               const idComentario = array.comentarios[x].idComentario;
+               const comentario = array.comentarios[x].comentario;
+               const nombre = array.comentarios[x].nombre;
+               const apellido = array.comentarios[x].apellido;
+               const fecha = array.comentarios[x].fecha;
+               const codigo = `
+                  <div class="flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative">
+                     <div class="flex items-center justify-center" style="width: 30px;">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="30" height="30" alt="">
+                     </div>
+                     <div class="flex flex-col justify-start items-start p-2 w-full">
+                        <div class="font-bold flex flex-row justify-between w-full text-xxs">
+                              <div>
+                                 <h1>${nombre + ' ' + apellido}</h1>
+                              </div>
+                              <div class="absolute bottom-0 right-0 mr-1 mb-1">
+                                 <p class="font-mono ml-2 text-teal-400">${fecha}</p>
+                              </div>
+                        </div>
+                        <div class="w-full text-xs text-justify">
+                              <p>${comentario}</p>
+                        </div>
+                     </div>
+                  </div>
+               `;
+               dataComentariosIncidencia.insertAdjacentHTML('beforeend', codigo);
+               dataComentariosIncidencia.scrollTop = dataComentariosIncidencia.scrollHeight;
+
+            }
+
+            // ADJUNTO
+            for (let x = 0; x < array.adjuntos.length; x++) {
+               const idAdjunto = array.adjuntos[x].idAdjunto;
+               const url = array.adjuntos[x].url;
+               const extension = array.adjuntos[x].extension;
+
+               if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+                  codigo = `
+                     <a href="https://www.maphg.com/beta/planner/proyectos/planaccion/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/proyectos/planaccion/${url})"></div>
+                     </a>
+                  `;
+               } else {
+                  codigo = `
+                     <a href="https://www.maphg.com/beta/planner/proyectos/planaccion/${url}" target="_blank">
+                        <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                           <i class="fad fa-file-alt fa-3x"></i>
+                           <p class="text-sm font-normal ml-2">
+                           ${url}
+                           </p>
+                        </div>
+                     </a>
+                  `;
+               }
+               dataAdjuntosIncidencia.insertAdjacentHTML('beforeend', codigo);
+            }
+
+            // ACTIVIDADES
+            for (let x = 0; x < array.actividades.length; x++) {
+               const idActividad = array.actividades[x].idActividad;
+               const actividad = array.actividades[x].actividad;
+               const status = array.actividades[x].status;
+               const fOpciones = `onclick="mostrarOpcionesActividadIncidencias(${idActividad})"`;
+
+               const codigo = `
+                  <div id="actividad_incidencia_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50">
+                     <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
+                     <div class="text-justify w-full">
+                        <h1>${actividad}</h1>
+                     </div>
+                     <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" ${fOpciones}>
+                        <i class="fas fa-ellipsis-h  text-sm"></i>
+                     </div>
+                  </div>
+               `;
+               dataActividadesIncidencia.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+// OPCIONES PARA ACTIVIDADES EN INCIDENCIAS
+function mostrarOpcionesActividadIncidencias(idActividad) {
+
+   btnAplicarNuevoTituloPlanacciontoggle.
+      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'titulo', 0)`);
+
+   btnEliminarActividadPlanaccion.
+      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'eliminar', 0)`);
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(`actividad_incidencia_${idActividad}`);
+   const tooltip = tooltipOpcionesActividadIncidencias;
+   Popper.createPopper(button, tooltip, {
+      placement: 'bottom-end'
+   });
+
+   if (tooltipOpcionesActividadIncidencias.classList.contains('hidden')) {
+      tooltipOpcionesActividadIncidencias.classList.remove('hidden');
+   } else {
+      tooltipOpcionesActividadIncidencias.classList.add('hidden');
+   }
 }
 
 
@@ -2818,7 +2947,7 @@ function verEnPlannerPlanaccion(idPlanaccion) {
                const fOpciones = `onclick="mostrarOpcionesActividadPlanaccion(${idActividad})"`;
 
                const codigo = `
-                  <div id="actividad_planaccion_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50 fila-actividad-select">
+                  <div id="actividad_planaccion_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50">
                      <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
                         <div class="text-justify w-full">
                            <h1>${actividad}</h1>
@@ -2990,7 +3119,6 @@ btnStatusPlanaccion.addEventListener('click', () => {
 btnResponsablePlanaccion.addEventListener('click', () => {
    abrirmodal('modalUsuarios');
 })
-
 
 
 function actualizarInfoPlanaccion(idPlanaccion, columna, valor) {
@@ -6750,12 +6878,23 @@ function obtenerPendientesUsuario() {
                   const equipo = array.incidencias[x].equipo;
                   const tipoIncidencia = array.incidencias[x].tipoIncidencia;
 
-                  const fVerEnPlanner = `onclick="verEnPlannerIncidencia(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+                  const estiloTipoIncidencia =
+                     tipoIncidencia == 'URGENCIA' ?
+                        `<span class="text-red-500 text-xs">${tipoIncidencia}</span>`
+                        : tipoIncidencia == "EMERGENCIA" ?
+                           `<span class="text-orange-500 text-xs">${tipoIncidencia}</span>`
+                           : tipoIncidencia == "ALARMA" ?
+                              `<span class="text-yellow-500 text-xs">${tipoIncidencia}</span>`
+                              : tipoIncidencia == "ALERTA" ?
+                                 `<span class="text-blue-500 text-xs">${tipoIncidencia}</span>`
+                                 : `<span class="text-teal-500 text-xs">${tipoIncidencia}</span>`;
+
+                  const fVerEnPlanner = `onclick="obtenerIncidenciaEquipos(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
 
                   const codigo = `
                      <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_INCIDENCIA" data-title-100="${actividad}" ${fVerEnPlanner}>
                         <h1 class="truncate mr-2">
-                        ${tipoIncidencia + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
+                        ${estiloTipoIncidencia + ' <i class="fas fa-arrow-right mx-1"></i> ' + equipo + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
                         </h1>
                      </div> 
                   `;
@@ -8677,4 +8816,81 @@ btnColumnasPredictivos.addEventListener('click', () => {
 // LIMPIA EL CONTENEDOR DE EQUIPOS EN MODALEQUIPO
 btnCerrarModalEquiposAmerica.addEventListener('click', () => {
    dataEquiposAmerica
+})
+
+
+btnGraficasReportesDiario.addEventListener('click', () => {
+
+      alertify.Gift || alertify.dialog('Gift', function () {
+         var iframe;
+         return {
+            // dialog constructor function, this will be called when the user calls alertify.Gift(videoId)
+            main: function (videoId) {
+               //set the videoId setting and return current instance for chaining.
+               return this.set({
+                  'videoId': videoId
+               });
+            },
+            // we only want to override two options (padding and overflow).
+            setup: function () {
+               return {
+                  options: {
+                     //disable both padding and overflow control.
+                     padding: !1,
+                     overflow: !1,
+                  }
+               };
+            },
+            // This will be called once the DOM is ready and will never be invoked again.
+            // Here we create the iframe to embed the video.
+            build: function () {
+               // create the iframe element
+               iframe = document.createElement('iframe');
+               iframe.frameBorder = "no";
+               iframe.width = "100%";
+               iframe.height = "100%";
+               // add it to the dialog
+               this.elements.content.appendChild(iframe);
+
+               //give the dialog initial height (half the screen height).
+               this.elements.body.style.minHeight = screen.height * .5 + 'px';
+            },
+            // dialog custom settings
+            settings: {
+               videoId: undefined
+            },
+            // listen and respond to changes in dialog settings.
+            settingUpdated: function (key, oldValue, newValue) {
+               switch (key) {
+                  case 'videoId':
+                     iframe.src = "https://www.maphg.com/beta/graficas_reportes_diario/";
+                     break;
+               }
+            },
+            hooks: {
+               // triggered when the dialog is closed, this is seperate from user defined onclose
+               onclose: function () {
+                  iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+               },
+               // triggered when a dialog option gets update.
+               // warning! this will not be triggered for settings updates.
+               onupdate: function (option, oldValue, newValue) {
+                  switch (option) {
+                     case 'resizable':
+                        if (newValue) {
+                           this.elements.content.removeAttribute('style');
+                           iframe && iframe.removeAttribute('style');
+                        } else {
+                           this.elements.content.style.minHeight = 'inherit';
+                           iframe && (iframe.style.minHeight = 'inherit');
+                        }
+                        break;
+                  }
+               }
+            }
+         };
+      });
+      //show the dialog
+      alertify.Gift('GODhPuM5cEE').set({ frameless: true });
+   
 })
