@@ -14,6 +14,7 @@ function cargarSeccionEstilosGraficas(idDestino, idSeccion) {
     },
     // dataType: "json",
     success: function (data) {
+  
       let estiloSeccion = data.toLowerCase() + '-logo';
       document.getElementById("dataSeccion").classList.remove('zil-logo', 'zie-logo', 'auto-logo', 'dec-logo', 'dep-logo', 'zha-logo', 'zhc-logo', 'zhp-logo', 'zia-logo', 'zic-logo', 'zhh-logo');
       document.getElementById("dataSeccion").classList.add(estiloSeccion);
@@ -421,7 +422,7 @@ function CuadrosUltimaSemana(idDestino, idSeccion) {
 }
 
 
-function recargarGraficasReportesDiario() {
+window.onload = function () {
   let idDestino = localStorage.getItem('idDestino');
   let idSeccion = localStorage.getItem('idSeccion');
 
@@ -432,4 +433,3 @@ function recargarGraficasReportesDiario() {
   graficaResponsables(idDestino, idSeccion);
   CuadrosUltimaSemana(idDestino, idSeccion);
 }
-recargarGraficasReportesDiario();
