@@ -1596,7 +1596,7 @@ if (isset($_GET['action'])) {
     }
 
 
-    //OBTIENES LAS SECCIONES SEGÚN EL DESTINO
+    //OBTIENES LAS SUBSECCIONES SEGÚN EL DESTINO
     if ($action == "obtenerSubseccionPorSeccion") {
         $idSeccion = $_GET['idSeccion'];
         $array = array();
@@ -1615,6 +1615,107 @@ if (isset($_GET['action'])) {
                 );
             }
         }
+        echo json_encode($array);
+    }
+
+
+    //OBTIENES LAS SECCIONES, SUBSECCION SEGÚN EL DESTINO
+    if ($action == "obtenerSeccionesSubseccionPorDestino") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        // SECCIONES Y SUBSECCIONES
+        $query = "SELECT c_secciones.id, c_secciones.seccion 
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino 
+        ORDER BY c_secciones.seccion ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
+
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
+                );
+
+                $query = "SELECT id, grupo 
+                FROM c_subsecciones WHERE id_seccion = $idSeccion
+                ORDER BY grupo ASC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idSubseccion = $x['id'];
+                        $subseccion = $x['grupo'];
+
+                        $array['subsecciones'][] = array(
+                            "idSubseccion" => intval($idSubseccion),
+                            "subseccion" => $subseccion
+                        );
+                    }
+                }
+            }
+        }
+
+        // TIPOS DE EQUIPOS
+        $array['tipos'] = array();
+        $query = "SELECT id, tipo FROM c_tipos 
+        WHERE status = 'A' ORDER BY tipo ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTipo = $x['id'];
+                $tipo = $x['tipo'];
+
+                $array['tipos'][] = array(
+                    "idTipo" => intval($idTipo),
+                    "tipo" => $tipo
+                );
+            }
+        }
+
+        // EQUIPOS PADRES
+        $array['equipos'] = array();
+        $query = "SELECT id_destino, id_seccion, id_subseccion 
+        FROM t_equipos_america
+        WHERE id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEquipo = $x['id_destino'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+
+                $query = "SELECT id, equipo FROM t_equipos_america 
+                WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idEquipo = $x['id'];
+                        $equipo = $x['equipo'];
+
+                        $array['equipos'][] = array(
+                            "idEquipo" => intval($idEquipo),
+                            "equipo" => $equipo
+                        );
+                    }
+                }
+            }
+        }
+
+        // MARCAS
+        $array['marcas'] = array();
+        $query = "SELECT id, marca FROM c_marcas WHERE status = 'A' ORDER BY marca ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idMarca = $x["id"];
+                $marca = $x["marca"];
+
+                $array['marcas'][] = array(
+                    "idMarca" => intval($idMarca),
+                    "marca" => $marca
+                );
+            }
+        }
+
+
         echo json_encode($array);
     }
 
@@ -1657,13 +1758,14 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
 
-        $query = "SELECT*  FROM t_equipos_america WHERE id = $idEquipo";
+        $query = "SELECT*  FROM t_equipos_america WHERE id = $idEquipo and activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $id = $x['id'];
-                $id_equipo_principal = $x['id_equipo_principal'];
+                $id  = $x['id'];
+                $id_equipo_principal  = $x['id_equipo_principal'];
                 $equipo = $x['equipo'];
                 $cod2bend = $x['cod2bend'];
+                $cantidad = $x['cantidad'];
                 $matricula = $x['matricula'];
                 $serie = $x['serie'];
                 $id_destino = $x['id_destino'];
@@ -1702,54 +1804,141 @@ if (isset($_GET['action'])) {
                 $coste = $x['coste'];
                 $id_fases = $x['id_fases'];
                 $status = $x['status'];
+                $activo = $x['activo'];
+
 
                 $array = array(
                     "idEquipo" => intval($id),
                     "idEquipoPrincipal" => intval($id_equipo_principal),
                     "equipo" => $equipo,
-                    "matricula" => $matricula,
                     "cod2bend" => $cod2bend,
+                    "cantidad" => $cantidad,
+                    "matricula" => $matricula,
                     "serie" => $serie,
                     "idDestino" => intval($id_destino),
                     "idSeccion" => intval($id_seccion),
                     "idSubseccion" => intval($id_subseccion),
                     "idTipo" => intval($id_tipo),
-                    "idCCoste" => intval($id_ccoste),
+                    "idCcoste" => intval($id_ccoste),
                     "idHotel" => intval($id_hotel),
                     "idArea" => intval($id_area),
                     "idLocalizacion" => intval($id_localizacion),
                     "idUbicacion" => intval($id_ubicacion),
                     "idSububicacion" => intval($id_sububicacion),
                     "categoria" => $categoria,
-                    "local_equipo" => $local_equipo,
+                    "localEquipo" => $local_equipo,
                     "jerarquia" => $jerarquia,
                     "idMarca" => $id_marca,
                     "modelo" => $modelo,
                     "numeroSerie" => $numero_serie,
                     "codigoFabricante" => $codigo_fabricante,
                     "codigoInternoCompras" => $codigo_interno_compras,
-                    "largo" => $largo_cm,
-                    "ancho" => $ancho_cm,
-                    "alto" => $alto_cm,
-                    "potenciaElectricaHP" => $potencia_electrica_hp,
-                    "potenciaElectricaKW" => $potencia_electrica_kw,
-                    "voalteje" => $voltaje_v,
-                    "frecuencia" => $frecuencia_hz,
-                    "caudalAguaM3H" => $caudal_agua_m3h,
-                    "caudalAguaGPH" => $caudal_agua_gph,
-                    "cargaMCA" => $carga_mca,
-                    "potenciaEnergeticaFrioKM" => $potencia_energetica_frio_kw,
-                    "potenciaEnergeticaFrioTR" => $potencia_energetica_frio_tr,
-                    "potenciaEnergeticaFrioKCAL" => $potencia_energetica_calor_kcal,
-                    "caudalAireM3H" => $caudal_aire_m3h,
-                    "caudalAireCFM" => $caudal_aire_cfm,
+                    "largo_cm" => $largo_cm,
+                    "ancho_cm" => $ancho_cm,
+                    "alto_cm" => $alto_cm,
+                    "potencia_electrica_hp" => $potencia_electrica_hp,
+                    "potencia_electrica_kw" => $potencia_electrica_kw,
+                    "voltaje_v" => $voltaje_v,
+                    "frecuencia_hz" => $frecuencia_hz,
+                    "caudal_agua_m3h" => $caudal_agua_m3h,
+                    "caudal_agua_gph" => $caudal_agua_gph,
+                    "carga_mca" => $carga_mca,
+                    "potencia_energetica_frio_kw" => $potencia_energetica_frio_kw,
+                    "potencia_energetica_frio_tr" => $potencia_energetica_frio_tr,
+                    "potencia_energetica_calor_kcal" => $potencia_energetica_calor_kcal,
+                    "caudal_aire_m3h" => $caudal_aire_m3h,
+                    "caudal_aire_cfm" => $caudal_aire_cfm,
                     "coste" => $coste,
-                    "idFases" => intval($id_fases),
-                    "status" => $status
+                    "idFases" => $id_fases,
+                    "status" => $status,
+                    "activo" => intval($activo)
                 );
             }
         }
         echo json_encode($array);
+    }
+
+    if ($action == "actualizarEquipo") {
+        $idEquipo = $_POST['idEquipo'];
+        $equipo = $_POST['equipo'];
+        $status = $_POST['status'];
+        $localEquipo = $_POST['localEquipo'];
+        $idFases = $_POST['idFases'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $idTipo = $_POST['idTipo'];
+        $jerarquia = $_POST['jerarquia'];
+        $idEquipoPrincipal = $_POST['idEquipoPrincipal'];
+        $idMarca = $_POST['idMarca'];
+        $modelo = $_POST['modelo'];
+        $serie = $_POST['serie'];
+        $codigoFabricante = $_POST['codigoFabricante'];
+        $codigoInternoCompras = $_POST['codigoInternoCompras'];
+        $cantidad = $_POST['cantidad'];
+        $largo_cm = $_POST['largo_cm'];
+        $ancho_cm = $_POST['ancho_cm'];
+        $alto_cm = $_POST['alto_cm'];
+        $potencia_electrica_hp = $_POST['potencia_electrica_hp'];
+        $potencia_electrica_kw = $_POST['potencia_electrica_kw'];
+        $voltaje_v = $_POST['voltaje_v'];
+        $frecuencia_hz = $_POST['frecuencia_hz'];
+        $caudal_agua_m3h = $_POST['caudal_agua_m3h'];
+        $caudal_agua_gph = $_POST['caudal_agua_gph'];
+        $carga_mca = $_POST['carga_mca'];
+        $potencia_energetica_frio_kw = $_POST['potencia_energetica_frio_kw'];
+        $potencia_energetica_frio_tr = $_POST['potencia_energetica_frio_tr'];
+        $potencia_energetica_calor_kcal = $_POST['potencia_energetica_calor_kcal'];
+        $caudal_aire_m3h = $_POST['caudal_aire_m3h'];
+        $caudal_aire_cfm = $_POST['caudal_aire_cfm'];
+
+        $resp = 0;
+
+        if ($jerarquia == "PRINCIPAL" || $jerarquia == "0" || $jerarquia == "") {
+            $idEquipoPrincipal = 0;
+            $jerarquia = "PRINCIPAL";
+        } elseif ($jerarquia == "SECUNDARIO" and $idEquipoPrincipal <= 0) {
+            $idEquipoPrincipal = 0;
+            $jerarquia = "PRINCIPAL";
+        }
+
+        $query = "UPDATE t_equipos_america SET 
+                id_equipo_principal = '$idEquipoPrincipal',
+                equipo = '$equipo',
+                cantidad = '$cantidad',
+                serie = '$serie',
+                id_seccion = '$idSeccion',
+                id_subseccion = '$idSubseccion',
+                id_tipo = '$idTipo',
+                local_equipo = '$localEquipo',
+                jerarquia = '$jerarquia',
+                id_marca = '$idMarca',
+                modelo = '$modelo',
+                numero_serie = '$serie',
+                codigo_fabricante = '$codigoFabricante',
+                codigo_interno_compras = '$codigoInternoCompras',
+                largo_cm = '$largo_cm',
+                ancho_cm = '$ancho_cm',
+                alto_cm = '$alto_cm',
+                potencia_electrica_hp = '$potencia_electrica_hp',
+                potencia_electrica_kw = '$potencia_electrica_kw',
+                voltaje_v = '$voltaje_v',
+                frecuencia_hz = '$frecuencia_hz',
+                caudal_agua_m3h = '$caudal_agua_m3h',
+                caudal_agua_gph = '$caudal_agua_gph',
+                carga_mca = '$carga_mca',
+                potencia_energetica_frio_kw = '$potencia_energetica_frio_kw',
+                potencia_energetica_frio_tr = '$potencia_energetica_frio_tr',
+                potencia_energetica_calor_kcal = '$potencia_energetica_calor_kcal',
+                caudal_aire_m3h = '$caudal_aire_m3h',
+                caudal_aire_cfm = '$caudal_aire_cfm',
+                id_fases = '$idFases',
+                status = '$status'
+        WHERE id = $idEquipo";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
     }
 
 
@@ -2260,6 +2449,7 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
     if ($action == "agregarAdjuntoPlanaccion") {
         $idPlanaccion = $_GET['idPlanaccion'];
         $resp = 0;
@@ -2301,6 +2491,93 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($resp);
+    }
+
+
+    // OBTIENE LAS INCIDENCIAS EN T_MC
+    if ($action == "obtenerIncidenciaEquipos") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $array = array();
+
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_equipos_america.equipo
+        FROM t_mc 
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
+        WHERE t_mc.id = $idIncidencia";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idIncidencia = $x['id'];
+                $actividad = $x['actividad'];
+                $equipo = $x['equipo'];
+
+                $array['incidencia'][] = array(
+                    "idIncidencia" => intval($idIncidencia),
+                    "actividad" => $actividad,
+                    "equipo" => $equipo,
+                );
+
+                #COMENTARIOS
+                $array['comentarios'] = array();
+                $query = "SELECT t_mc_comentarios.id, t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_mc_comentarios 
+                INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                WHERE t_mc_comentarios.id_mc = $idIncidencia and t_mc_comentarios.activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idComentario = $x['id'];
+                        $comentario = $x['comentario'];
+                        $nombre = $x['nombre'];
+                        $apellido = $x['apellido'];
+                        $fecha = $x['fecha'];
+
+                        $array['comentarios'][] = array(
+                            "idComentario" => intval($idComentario),
+                            "comentario" => $comentario,
+                            "nombre" => $nombre,
+                            "apellido" => $apellido,
+                            "fecha" => $fecha
+                        );
+                    }
+                }
+
+                #ADJUNTOS
+                $array['adjuntos'] = array();
+                $query = "SELECT t_mc_adjuntos.id, t_mc_adjuntos.url_adjunto, t_mc_adjuntos.fecha FROM t_mc_adjuntos 
+                WHERE t_mc_adjuntos.id_mc = $idIncidencia and t_mc_adjuntos.activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idAdjunto = $x['id'];
+                        $url = $x['url_adjunto'];
+                        $extension = pathinfo($url, PATHINFO_EXTENSION);
+
+                        $array['adjuntos'][] = array(
+                            "idAdjunto" => intval($idAdjunto),
+                            "url" => $url,
+                            "extension" => $extension
+                        );
+                    }
+                }
+
+                #ACTIVIDADES
+                $array['actividades'] = array();
+                $query = "SELECT id, actividad, status FROM t_mc_actividades_ot 
+                WHERE id_falla = $idIncidencia and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idActividad = $x['id'];
+                        $actividad = $x['actividad'];
+                        $status = $x['status'];
+
+                        $array['actividades'][] = array(
+                            "idActividad" => intval($idActividad),
+                            "actividad" => $actividad,
+                            "status" => $status
+                        );
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
     }
 
     // CIERRE FINAL

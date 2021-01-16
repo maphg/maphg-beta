@@ -31,12 +31,21 @@ const e_potenciaEnergeticaCalorKCALEquipo =
 const e_caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo");
 const e_caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo");
 const e_dataDespieceEquipo = document.getElementById("dataDespieceEquipo");
+const e_contenedorDataOpcionesEquipos = document.getElementById("contenedorDataOpcionesEquipos");
+const e_cantidadEquipo = document.getElementById("cantidadEquipo");
+const e_nombreEquipo = document.getElementById("nombreEquipo");
+const btnEditarEquipo = document.getElementById("btnEditarEquipo");
+const btnGuardarEquipo = document.getElementById("btnGuardarEquipo");
+const btnCancelarEquipo = document.getElementById("btnCancelarEquipo");
+
 // INPUTS POR ID
+
 
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
 const datosPlanes = params => {
+    var idEquipo = params.idEquipo;
     var status = params.status;
     var claseStatus = ';'
     var claseequipoLocal = ';'
@@ -103,8 +112,8 @@ const datosPlanes = params => {
     }
 
     var result = `
-            <tr id="equipo_${params.id}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
-            onclick="informacionEquipo(${params.id}); despieceEquipos(${params.id}); abrirmodal('modalMPEquipo')">
+            <tr id="equipo_${idEquipo}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
+            onclick="informacionEquipo(${idEquipo}); despieceEquipos(${idEquipo}); abrirmodal('modalMPEquipo')">
 
                 <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
                     <div class=" leading-5 text-gray-900 font-bold">${params.destino}</div>
@@ -123,7 +132,7 @@ const datosPlanes = params => {
                 
                 <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
                     <div class=" leading-5 text-gray-900 w-18 texto-equipo" data-title="${params.equipo}"> <p class="truncate"> ${params.equipo}</p></div>
-                    <div class=" leading-5 text-gray-500">ID: ${params.id}</div>
+                    <div class=" leading-5 text-gray-500">ID: ${idEquipo}</div>
                 </td> 
 
                 <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200  leading-5 uppercase font-semibold">
@@ -441,7 +450,7 @@ function consultaEquiposLocales() {
 
     const action = "consultaEquiposLocales";
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
-    console.log(URL);
+
     // limpia el contendor, para nuevo resultado
     document.getElementById('contenedorDeEquipos').innerHTML = '';
     load.innerHTML = '<i class="fa fa-spinner fa-pulse fa-sm fa-fw"></i>';
@@ -452,24 +461,24 @@ function consultaEquiposLocales() {
             if (array) {
                 // alertaImg(`Equipos Obtenidos: ${array.length}`, '', 'info', 2000);
 
-                for (let index = 0; index < array.length; index++) {
+                for (let x = 0; x < array.length; x++) {
                     const equiposX = datosPlanes({
-                        id: array[index].id,
-                        destino: array[index].destino,
-                        equipo: array[index].equipo,
-                        seccion: array[index].seccion,
-                        subseccion: array[index].subseccion,
-                        marca: array[index].marca,
-                        tipoEquipo: array[index].tipoEquipo,
-                        status: array[index].status,
-                        marcaEquipo: array[index].marcaEquipo,
-                        modelo: array[index].modelo,
-                        equipoLocal: array[index].equipoLocal,
-                        ubicacion: array[index].ubicacion,
-                        proximoMP: array[index].proximoMP,
-                        proceso: array[index].proceso,
-                        solucionado: array[index].solucionado,
-                        planificado: array[index].planificado
+                        idEquipo: array[x].idEquipo,
+                        destino: array[x].destino,
+                        equipo: array[x].equipo,
+                        seccion: array[x].seccion,
+                        subseccion: array[x].subseccion,
+                        marca: array[x].marca,
+                        tipoEquipo: array[x].tipoEquipo,
+                        status: array[x].status,
+                        marcaEquipo: array[x].marcaEquipo,
+                        modelo: array[x].modelo,
+                        equipoLocal: array[x].equipoLocal,
+                        ubicacion: array[x].ubicacion,
+                        proximoMP: array[x].proximoMP,
+                        proceso: array[x].proceso,
+                        solucionado: array[x].solucionado,
+                        planificado: array[x].planificado
                     });
                     document.getElementById("contenedorDeEquipos")
                         .insertAdjacentHTML('beforeend', equiposX);
@@ -513,11 +522,12 @@ function consultaEquiposLocales() {
 
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
 // Función para los inptus de modalMPEquipos
-function toggleInputsEquipo(estadoInputs) {
+function toggleDisabledEditarEquipo(estadoInputs) {
     let idEquipo = localStorage.getItem('idEquipo');
+
     const arrayBtnEquipo =
         [
-            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo'
+            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos'
         ]
 
     arrayBtnEquipo.forEach(element => {
@@ -528,191 +538,28 @@ function toggleInputsEquipo(estadoInputs) {
         }
     });
 
+    btnEditarEquipo.setAttribute('onclick', 'toggleDisabledEditarEquipo(1)');
+    btnCancelarEquipo.
+        setAttribute('onclick', `toggleDisabledEditarEquipo(2); cancelarInformacionEquipo(${idEquipo})`);
+    btnGuardarEquipo.setAttribute('onclick', `actualizarEquipo(${idEquipo})`);
+
     if (estadoInputs == 1) {
         alertaImg('Editar Equipo, Habilitado', '', 'info', 1500);
-        document.getElementById("btnEditarEquipo").classList.remove('hidden');
-        document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-        document.getElementById("btnGuardarEquipo").classList.remove('hidden');
-        document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-        document.getElementById("btnCancelarEquipo").classList.remove('hidden');
-        document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+        btnEditarEquipo.classList.add('hidden');
+        btnGuardarEquipo.classList.remove('hidden');
+        btnCancelarEquipo.classList.remove('hidden');
     } else if (estadoInputs == 0) {
-        document.getElementById("btnEditarEquipo").classList.remove('hidden');
-        document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-        document.getElementById("btnGuardarEquipo").classList.add('hidden');
-        document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-        document.getElementById("btnCancelarEquipo").classList.add('hidden');
-        document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
-    } else {
-        let idEquipo = localStorage.getItem('idEquipo');
-        informacionEquipo(idEquipo)
-        alertaImg('Editar Equipo, Cancelado', '', 'error', 500);
-        document.getElementById("btnEditarEquipo").classList.remove('hidden');
-        document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-        document.getElementById("btnGuardarEquipo").classList.add('hidden');
-        document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-        document.getElementById("btnCancelarEquipo").classList.add('hidden');
-        document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+        btnEditarEquipo.classList.remove('hidden');
+        btnGuardarEquipo.classList.add('hidden');
+        btnCancelarEquipo.classList.add('hidden');
+    } else if (estadoInputs == 2) {
+        alertaImg('Restaurando Datos...', '', 'info', 1500);
+        btnEditarEquipo.classList.remove('hidden');
+        btnGuardarEquipo.classList.add('hidden');
+        btnCancelarEquipo.classList.add('hidden');
     }
 }
 
-
-// Actualiza la información de los Equipos
-function actualizarEquipo(idEquipo) {
-    let idUsuario = localStorage.getItem('usuario');
-    let idDestino = localStorage.getItem('idDestino');
-    let nombreEquipo = document.getElementById("nombreEquipo");
-    // let seccionEquipo = document.getElementById("seccionEquipo");
-    // let subseccionEquipo = document.getElementById("subseccionEquipo");
-    let tipoEquipo = document.getElementById("tipoEquipo");
-    let jerarquiaEquipo = document.getElementById("jerarquiaEquipo");
-    let equipoPrincipal = document.getElementById("dataOpcionesEquipos");
-    let marcaEquipo = document.getElementById("marcaEquipo");
-    let modeloEquipo = document.getElementById("modeloEquipo");
-    let serieEquipo = document.getElementById("serieEquipo");
-    let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo");
-    let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo");
-    let largoEquipo = document.getElementById("largoEquipo");
-    let anchoEquipo = document.getElementById("anchoEquipo");
-    let altoEquipo = document.getElementById("altoEquipo");
-    let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo");
-    let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo");
-    let voltajeEquipo = document.getElementById("voltajeEquipo");
-    let frecuenciaEquipo = document.getElementById("frecuenciaEquipo");
-    let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo");
-    let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo");
-    let cargaMCAEquipo = document.getElementById("cargaMCAEquipo");
-    let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo");
-    let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo");
-    let potenciaEnergeticaCalorKCALEquipo =
-        document.getElementById("potenciaEnergeticaCalorKCALEquipo");
-    let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo");
-    let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo");
-    let estadoEquipo = document.getElementById("estadoEquipo");
-    let idFaseEquipo = document.getElementById("idFaseEquipo");
-    let tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
-
-
-    const action = "actualizarEquipo";
-    $.ajax({
-        type: "POST",
-        url: "../php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idEquipo: idEquipo,
-            nombreEquipo: nombreEquipo.value,
-            seccionEquipo: seccionEquipo.value,
-            subseccionEquipo: subseccionEquipo.value,
-            tipoEquipo: tipoEquipo.value,
-            jerarquiaEquipo: jerarquiaEquipo.value,
-            equipoPrincipal: equipoPrincipal.value,
-            marcaEquipo: marcaEquipo.value,
-            modeloEquipo: modeloEquipo.value,
-            serieEquipo: serieEquipo.value,
-            codigoFabricanteEquipo: codigoFabricanteEquipo.value,
-            codigoInternoComprasEquipo: codigoInternoComprasEquipo.value,
-            largoEquipo: largoEquipo.value,
-            anchoEquipo: anchoEquipo.value,
-            altoEquipo: altoEquipo.value,
-            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo.value,
-            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo.value,
-            voltajeEquipo: voltajeEquipo.value,
-            frecuenciaEquipo: frecuenciaEquipo.value,
-            caudalAguaM3HEquipo: caudalAguaM3HEquipo.value,
-            caudalAguaGPHEquipo: caudalAguaGPHEquipo.value,
-            cargaMCAEquipo: cargaMCAEquipo.value,
-            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo.value,
-            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo.value,
-            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo.value,
-            caudalAireM3HEquipo: caudalAireM3HEquipo.value,
-            caudalAireCFMEquipo: caudalAireCFMEquipo.value,
-            estadoEquipo: estadoEquipo.value,
-            idFaseEquipo: idFaseEquipo.value,
-            tipoLocalEquipo: tipoLocalEquipo.value
-        },
-        // dataType: "JSON",
-        success: function (data) {
-            if (data == 1) {
-                informacionEquipo(idEquipo);
-                alertaImg('Equipo Actualizado', '', 'success', 2500);
-                consultaEquiposLocales();
-                nombreEquipo.value = '';
-                seccionEquipo.value = '';
-                subseccionEquipo.value = '';
-                tipoEquipo.value = '';
-                jerarquiaEquipo.value = '';
-                equipoPrincipal.value = '';
-                marcaEquipo.value = '';
-                modeloEquipo.value = '';
-                serieEquipo.value = '';
-                codigoFabricanteEquipo.value = '';
-                codigoInternoComprasEquipo.value = '';
-                largoEquipo.value = '';
-                anchoEquipo.value = '';
-                altoEquipo.value = '';
-                potenciaElectricaHPEquipo.value = '';
-                potenciaElectricaKWEquipo.value = '';
-                voltajeEquipo.value = '';
-                frecuenciaEquipo.value = '';
-                caudalAguaM3HEquipo.value = '';
-                caudalAguaGPHEquipo.value = '';
-                cargaMCAEquipo.value = '';
-                PotenciaEnergeticaFrioKWEquipo.value = '';
-                potenciaEnergeticaFrioTREquipo.value = '';
-                potenciaEnergeticaCalorKCALEquipo.value = '';
-                caudalAireM3HEquipo.value = '';
-                caudalAireCFMEquipo.value = '';
-                estadoEquipo.value = '';
-                idFaseEquipo.value = '';
-                tipoLocalEquipo.value = '';
-                document.getElementById("modalMPEquipo").classList.remove('open');
-            } else {
-                alertaImg('Intente de Nuevo', '', 'info', 3000);
-            }
-        }
-    });
-}
-
-
-function opcionesJerarquiaEquipo(idEquipo) {
-
-    let jerarquia = document.getElementById("jerarquiaEquipo").value;
-    let idUsuario = localStorage.getItem("usuario");
-    let idDestino = localStorage.getItem("idDestino");
-    const action = "opcionesJerarquiaEquipo";
-    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
-
-    if (jerarquia == "SECUNDARIO") {
-        fetch(URL)
-            .then(res => res.json())
-            .then(array => {
-                let opcionesEquipo = `<option value="0">Equipo Principal </option>`;
-                if (array.length > 0) {
-                    for (let index = 0; index < array.length; index++) {
-                        var id = array[index].id;
-                        var equipo = array[index].equipo;
-                        opcionesEquipo += `<option value="${id}">${equipo} </option>`;
-                    }
-                    return opcionesEquipo;
-                }
-            }).then(opcionesEquipo => {
-                document.getElementById("dataOpcionesEquipos").innerHTML = opcionesEquipo;
-                document.getElementById("contenedorDataOpcionesEquipos").classList.remove('hidden');
-            });
-
-    } else {
-        document.getElementById("contenedorDataOpcionesEquipos").classList.add('hidden');
-        document.getElementById("dataOpcionesEquipos").value = 0;
-    }
-}
 
 
 // Obtiene Images de los Equipos
@@ -1026,30 +873,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
             } else {
                 alertaImg(`Semana ${semanaX}, Sin Proceso`, '', 'error', 3000);
             }
-        }
-    });
-}
-
-
-// Obtiene las posibles opciones del Equipo para Actualizarlo
-function consultarOpcionesEquipo() {
-    let idUsuario = localStorage.getItem('usuario');
-    let idDestino = localStorage.getItem('idDestino');
-    const action = "consultarOpcionesEquipo";
-    $.ajax({
-        type: "POST",
-        url: "../php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino
-        },
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById("seccionEquipo").innerHTML = data.secciones;
-            document.getElementById("subseccionEquipo").innerHTML = data.subsecciones;
-            document.getElementById("tipoEquipo").innerHTML = data.tipos;
-            document.getElementById("marcaEquipo").innerHTML = data.marcas;
         }
     });
 }
@@ -1697,209 +1520,6 @@ function QREquipo() {
 }
 
 
-// Función para Obtener información de los equipos.
-function informacionEquipoX(idEquipo) {
-    localStorage.setItem('idEquipo', idEquipo);
-    let idUsuario = localStorage.getItem('usuario');
-    let idDestino = localStorage.getItem('idDestino');
-    document.getElementById("modalMPEquipo").classList.add('open');
-    document.getElementById("tooltipMP").classList.add('hidden');
-
-    // Funciones principales
-    // consultarOpcionesEquipo();
-
-    const action = "informacionEquipo";
-    $.ajax({
-        type: "POST",
-        url: "../php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idEquipo: idEquipo
-        },
-        dataType: "JSON",
-        success: function (data) {
-            console.log(data);
-            document.getElementById("inputAdjuntos").
-                setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
-
-            document.getElementById("QREquipo").
-                setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
-
-            document.getElementById("nombreEquipo").value = data.equipo;
-            document.getElementById("idFaseEquipo").value = data.idFases;
-            document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
-            document.getElementById("marcaEquipo").value = data.id_marca;
-            document.getElementById("seccionEquipo").value = data.idSeccion;
-            document.getElementById("subseccionEquipo").value = data.idSubseccion;
-            document.getElementById("jerarquiaEquipo").value = data.jerarquia;
-            document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
-            document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
-            document.getElementById("modeloEquipo").value = data.modelo;
-            document.getElementById("serieEquipo").value = data.numero_serie;
-            document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
-            document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
-            document.getElementById("largoEquipo").value = data.largo_cm;
-            document.getElementById("anchoEquipo").value = data.ancho_cm;
-            document.getElementById("altoEquipo").value = data.alto_cm;
-            document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
-            document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
-            document.getElementById("voltajeEquipo").value = data.voltaje_v;
-            document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
-            document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
-            document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
-            document.getElementById("cargaMCAEquipo").value = data.carga_mca;
-            document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
-            document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
-            document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
-            document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
-            document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
-            document.getElementById("estadoEquipo").value = data.status;
-            document.getElementById("tipoEquipo").value = data.tipo;
-            document.getElementById("idFaseEquipo").value = data.idFases;
-            document.getElementById("contenedorEstadoEquipo").classList.
-                remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
-            document.getElementById("iconEstadoEquipo").classList.
-                remove('text-red-400', 'text-green-400', 'text-orange-400');
-            document.getElementById("estadoEquipo").classList.
-                remove('text-red-400', 'text-green-400', 'text-orange-400');
-
-            if (data.status == "TALLER") {
-                document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
-                document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
-                document.getElementById("estadoEquipo").classList.add('text-orange-400');
-            } else if (data.status == "BAJA") {
-                document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
-                document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
-                document.getElementById("estadoEquipo").classList.add('text-red-400');
-            } else {
-                document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
-                document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
-                document.getElementById("estadoEquipo").classList.add('text-green-400');
-            }
-
-            // Eventos
-            document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
-
-            document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
-                document.getElementById("modalMedia").classList.add('open');
-                obtenerImagenesEquipo(idEquipo);
-            });
-
-            // Funciones Secundarias
-            // toggleInputsEquipo(0);
-            // obtenerImagenesEquipo(idEquipo);
-            // consultarPlanEquipo(idEquipo);
-            // opcionesJerarquiaEquipo(idEquipo);
-        }
-    });
-}
-
-
-async function informacionEquipo(idEquipo) {
-    await consultarOpcionesEquipo();
-    await toggleInputsEquipo(0);
-    await obtenerImagenesEquipo(idEquipo);
-    await consultarPlanEquipo(idEquipo);
-    await opcionesJerarquiaEquipo(idEquipo);
-
-    setTimeout(() => {
-        informacionEquipoX(idEquipo);
-    }, 1600);
-}
-
-
-// OBTIENE INFORMACION POR EQUIPO
-function informacionEquipoxx(idEquipo) {
-    let idDestino = localStorage.getItem('idDestino');
-    let idUsuario = localStorage.getItem('usuario');
-    const action = "obtenerEquipoPorId";
-    const URL = `../php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
-
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-            consultarOpcionesEquipo();
-            return array;
-        })
-        .then(array => {
-            console.log(array)
-            if (array) {
-                const tipoLocalEquipo = array.local_equipo;
-                const estadoEquipo = array.status;
-                const idFaseEquipo = array.idFases;
-                const seccionEquipo = array.idSeccion;
-                const subseccionEquipo = array.idSubseccion;
-                const tipoEquipo = array.idTipo;
-                const jerarquiaEquipo = array.jerarquia;
-                const dataOpcionesEquipos = array.idEquipoPrincipal;
-                const marcaEquipo = array.idMarca;
-                const modeloEquipo = array.modelo;
-                const serieEquipo = array.serie;
-                const codigoFabricanteEquipo = array.codigoFabricante;
-                const codigoInternoComprasEquipo = array.codigoInternoCompras;
-                const largoEquipo = array.largo;
-                const anchoEquipo = array.ancho;
-                const altoEquipo = array.alto;
-                const potenciaElectricaHPEquipo = array.potenciaElectricaHP;
-                const potenciaElectricaKWEquipo = array.potenciaElectricaKW;
-                const voltajeEquipo = array.voalteje;
-                const frecuenciaEquipo = array.frecuencia;
-                const caudalAguaM3HEquipo = array.caudalAguaM3H;
-                const caudalAguaGPHEquipo = array.caudalAguaGPH;
-                const cargaMCAEquipo = array.cargaMCA;
-                const PotenciaEnergeticaFrioKWEquipo = array.potenciaEnergeticaFrioKM;
-                const potenciaEnergeticaFrioTREquipo = array.potenciaEnergeticaFrioTR;
-                const potenciaEnergeticaCalorKCALEquipo = array.potenciaEnergeticaFrioKCAL;
-                const caudalAireM3HEquipo = array.caudalAireM3H;
-                const caudalAireCFMEquipo = array.caudalAireCFM;
-                // const dataDespieceEquipo = array.x;
-                const dataDespieceEquipo = "";
-
-                e_estadoEquipo.value = estadoEquipo;
-                e_tipoLocalEquipo.value = tipoLocalEquipo;
-                e_idFaseEquipo.value = idFaseEquipo;
-                e_seccionEquipo.value = seccionEquipo;
-                e_subseccionEquipo.value = subseccionEquipo;
-                e_tipoEquipo.value = tipoEquipo;
-                e_jerarquiaEquipo.value = jerarquiaEquipo;
-                e_dataOpcionesEquipos.value = dataOpcionesEquipos;
-                e_marcaEquipo.value = marcaEquipo;
-                e_modeloEquipo.value = modeloEquipo;
-                e_serieEquipo.value = serieEquipo;
-                e_codigoFabricanteEquipo.value = codigoFabricanteEquipo;
-                e_codigoInternoComprasEquipo.value = codigoInternoComprasEquipo;
-                e_largoEquipo.value = largoEquipo;
-                e_anchoEquipo.value = anchoEquipo;
-                e_altoEquipo.value = altoEquipo;
-                e_potenciaElectricaHPEquipo.value = potenciaElectricaHPEquipo;
-                e_potenciaElectricaKWEquipo.value = potenciaElectricaKWEquipo;
-                e_voltajeEquipo.value = voltajeEquipo;
-                e_frecuenciaEquipo.value = frecuenciaEquipo;
-                e_caudalAguaM3HEquipo.value = caudalAguaM3HEquipo;
-                e_caudalAguaGPHEquipo.value = caudalAguaGPHEquipo;
-                e_cargaMCAEquipo.value = cargaMCAEquipo;
-                e_PotenciaEnergeticaFrioKWEquipo.value = PotenciaEnergeticaFrioKWEquipo;
-                e_potenciaEnergeticaFrioTREquipo.value = potenciaEnergeticaFrioTREquipo;
-                e_potenciaEnergeticaCalorKCALEquipo.value = potenciaEnergeticaCalorKCALEquipo;
-                e_caudalAireM3HEquipo.value = caudalAireM3HEquipo;
-                e_caudalAireCFMEquipo.value = caudalAireCFMEquipo;
-                e_dataDespieceEquipo.value = dataDespieceEquipo;
-
-            }
-        })
-        .then(() => {
-            toggleInputsEquipo(0);
-            obtenerImagenesEquipo(idEquipo);
-            consultarPlanEquipo(idEquipo);
-            opcionesJerarquiaEquipo(idEquipo);
-        })
-        .catch(function (err) {
-            fetch(APIERROR + err + ``);
-        })
-}
-
 function indicadorSemanaActual(semana) {
     let totalElementos = document.getElementsByClassName("semana_" + semana);
     let codigo = '';
@@ -1965,3 +1585,412 @@ document.getElementById("destinosSelecciona").addEventListener("click", () => {
     document.getElementById("filtroDestino").value = idDestino;
     location.reload();
 })
+
+
+function informacionEquipo(idEquipo) {
+    localStorage.setItem("idEquipo", idEquipo);
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+
+
+    // FUNCIONES INICIALES
+    obtenerImagenesEquipo(idEquipo);
+    consultarPlanEquipo(idEquipo);
+    toggleDisabledEditarEquipo(0);
+
+    const URL = `../php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+    let promesa = new Promise((resolve, reject) => {
+        console.log(1);
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                // LIMPIA CONTENEDORES DE OPCIONES
+                e_seccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_subseccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_tipoEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_dataOpcionesEquipos.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_jerarquiaEquipo.value = 0;
+
+                return array;
+            })
+            .then(array => {
+                if (array) {
+
+                    // OBTIENES SECCIONES
+                    for (let x = 0; x < array.secciones.length; x++) {
+                        const idSeccion = array.secciones[x].idSeccion;
+                        const seccion = array.secciones[x].seccion;
+
+                        const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+                        e_seccionEquipo.insertAdjacentHTML('beforeend', codigo);
+
+                    }
+
+                    // OBTIENES SUBSECCIONES
+                    for (let x = 0; x < array.subsecciones.length; x++) {
+                        const idSubseccion = array.subsecciones[x].idSubseccion;
+                        const subseccion = array.subsecciones[x].subseccion;
+
+                        const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                        e_subseccionEquipo.insertAdjacentHTML('beforeend', codigo);
+                    }
+
+                    // OBTIENE TIPOS
+                    for (let x = 0; x < array.tipos.length; x++) {
+                        const idTipo = array.tipos[x].idTipo;
+                        const tipo = array.tipos[x].tipo;
+
+                        const codigo = `<option value="${idTipo}">${tipo}</option>`;
+                        e_tipoEquipo.insertAdjacentHTML('beforeend', codigo);
+                    }
+
+                    // EQUIPOS PADRE
+                    for (let x = 0; x < array.equipos.length; x++) {
+                        const idEquipo = array.equipos[x].idEquipo;
+                        const equipo = array.equipos[x].equipo;
+
+                        const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+                        e_dataOpcionesEquipos.insertAdjacentHTML('beforeend', codigo);
+                    }
+
+                    // MARCAS
+                    for (let x = 0; x < array.marcas.length; x++) {
+                        const idMarca = array.marcas[x].idMarca;
+                        const marca = array.marcas[x].marca;
+
+                        const codigo = `<option value="${idMarca}">${marca}</option>`;
+                        e_marcaEquipo.insertAdjacentHTML('beforeend', codigo);
+                    }
+
+                } else {
+                    alert('No se Encontraron Datos..', '', 'info', 1200);
+                }
+
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err + ' < ' + URL + ' >');
+
+                // LIMPIA CONTENEDORES DE OPCIONES
+                e_seccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_subseccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_tipoEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_dataOpcionesEquipos.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+                e_jerarquiaEquipo.value = 0;
+            })
+        resolve(resolve, reject)
+    })
+
+
+    promesa.then((resolve, reject) => {
+
+        const URL2 = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+        console.log(URL2);
+
+        fetch(URL2)
+            .then(array => array.json())
+            .then(array => {
+                e_nombreEquipo.value = '';
+                e_estadoEquipo.value = '';
+                e_tipoLocalEquipo.value = '';
+                e_idFaseEquipo.value = '';
+                e_seccionEquipo.value = '';
+                e_subseccionEquipo.value = '';
+                e_tipoEquipo.value = '';
+                e_jerarquiaEquipo.value = '';
+                e_dataOpcionesEquipos.value = '';
+                e_marcaEquipo.value = '';
+                e_modeloEquipo.value = '';
+                e_serieEquipo.value = '';
+                e_codigoFabricanteEquipo.value = '';
+                e_codigoInternoComprasEquipo.value = '';
+                e_cantidadEquipo.value = '';
+                e_largoEquipo.value = '';
+                e_anchoEquipo.value = '';
+                e_altoEquipo.value = '';
+                e_potenciaElectricaHPEquipo.value = '';
+                e_potenciaElectricaKWEquipo.value = '';
+                e_voltajeEquipo.value = '';
+                e_frecuenciaEquipo.value = '';
+                e_caudalAguaM3HEquipo.value = '';
+                e_caudalAguaGPHEquipo.value = '';
+                e_cargaMCAEquipo.value = '';
+                e_PotenciaEnergeticaFrioKWEquipo.value = '';
+                e_potenciaEnergeticaFrioTREquipo.value = '';
+                e_potenciaEnergeticaCalorKCALEquipo.value = '';
+                e_caudalAireM3HEquipo.value = '';
+                e_caudalAireCFMEquipo.value = '';
+
+                return array;
+            })
+            .then(array => {
+                if (array) {
+                    e_nombreEquipo.value = array.equipo;
+                    e_estadoEquipo.value = array.status;
+                    e_tipoLocalEquipo.value = array.localEquipo;
+                    e_idFaseEquipo.value = array.idFases;
+
+                    e_seccionEquipo.value = array.idSeccion;
+                    e_subseccionEquipo.value = array.idSubseccion;
+                    e_tipoEquipo.value = array.idTipo;
+                    e_jerarquiaEquipo.value = array.jerarquia;
+                    e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
+
+                    e_marcaEquipo.value = array.idMarca;
+                    e_modeloEquipo.value = array.modelo;
+                    e_serieEquipo.value = array.serie;
+                    e_codigoFabricanteEquipo.value = array.codigoFabricante;
+                    e_codigoInternoComprasEquipo.value = array.codigoInternoCompras;
+
+                    e_cantidadEquipo.value = array.cantidad;
+                    e_largoEquipo.value = array.largo_cm;
+                    e_anchoEquipo.value = array.ancho_cm;
+                    e_altoEquipo.value = array.alto_cm;
+
+                    e_potenciaElectricaHPEquipo.value = array.potencia_electrica_hp;
+                    e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
+                    e_voltajeEquipo.value = array.voltaje_v;
+                    e_frecuenciaEquipo.value = array.frecuencia_hz;
+
+                    e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
+                    e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
+                    e_cargaMCAEquipo.value = array.carga_mca;
+
+                    e_PotenciaEnergeticaFrioKWEquipo.value = array.potencia_energetica_frio_kw;
+                    e_potenciaEnergeticaFrioTREquipo.value = array.potencia_energetica_frio_tr;
+
+                    e_potenciaEnergeticaCalorKCALEquipo.value =
+                        array.potencia_energetica_calor_kcal;
+
+                    e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
+                    e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err);
+                e_nombreEquipo.value = '';
+                e_estadoEquipo.value = '';
+                e_tipoLocalEquipo.value = '';
+                e_idFaseEquipo.value = '';
+                e_seccionEquipo.value = '';
+                e_subseccionEquipo.value = '';
+                e_tipoEquipo.value = '';
+                e_jerarquiaEquipo.value = '';
+                e_dataOpcionesEquipos.value = '';
+                e_marcaEquipo.value = '';
+                e_modeloEquipo.value = '';
+                e_serieEquipo.value = '';
+                e_codigoFabricanteEquipo.value = '';
+                e_codigoInternoComprasEquipo.value = '';
+                e_cantidadEquipo.value = '';
+                e_largoEquipo.value = '';
+                e_anchoEquipo.value = '';
+                e_altoEquipo.value = '';
+                e_potenciaElectricaHPEquipo.value = '';
+                e_potenciaElectricaKWEquipo.value = '';
+                e_voltajeEquipo.value = '';
+                e_frecuenciaEquipo.value = '';
+                e_caudalAguaM3HEquipo.value = '';
+                e_caudalAguaGPHEquipo.value = '';
+                e_cargaMCAEquipo.value = '';
+                e_PotenciaEnergeticaFrioKWEquipo.value = '';
+                e_potenciaEnergeticaFrioTREquipo.value = '';
+                e_potenciaEnergeticaCalorKCALEquipo.value = '';
+                e_caudalAireM3HEquipo.value = '';
+                e_caudalAireCFMEquipo.value = '';
+            })
+    })
+    promesa.catch((err) => {
+        fetch(APIERROR + err);
+    })
+}
+
+
+function cancelarInformacionEquipo(idEquipo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const URL = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            e_nombreEquipo.value = '';
+            e_estadoEquipo.value = '';
+            e_tipoLocalEquipo.value = '';
+            e_idFaseEquipo.value = '';
+            e_seccionEquipo.value = '';
+            e_subseccionEquipo.value = '';
+            e_tipoEquipo.value = '';
+            e_jerarquiaEquipo.value = '';
+            e_dataOpcionesEquipos.value = '';
+            e_marcaEquipo.value = '';
+            e_modeloEquipo.value = '';
+            e_serieEquipo.value = '';
+            e_codigoFabricanteEquipo.value = '';
+            e_codigoInternoComprasEquipo.value = '';
+            e_cantidadEquipo.value = '';
+            e_largoEquipo.value = '';
+            e_anchoEquipo.value = '';
+            e_altoEquipo.value = '';
+            e_potenciaElectricaHPEquipo.value = '';
+            e_potenciaElectricaKWEquipo.value = '';
+            e_voltajeEquipo.value = '';
+            e_frecuenciaEquipo.value = '';
+            e_caudalAguaM3HEquipo.value = '';
+            e_caudalAguaGPHEquipo.value = '';
+            e_cargaMCAEquipo.value = '';
+            e_PotenciaEnergeticaFrioKWEquipo.value = '';
+            e_potenciaEnergeticaFrioTREquipo.value = '';
+            e_potenciaEnergeticaCalorKCALEquipo.value = '';
+            e_caudalAireM3HEquipo.value = '';
+            e_caudalAireCFMEquipo.value = '';
+
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                e_nombreEquipo.value = array.equipo;
+                e_estadoEquipo.value = array.status;
+                e_tipoLocalEquipo.value = array.localEquipo;
+                e_idFaseEquipo.value = array.idFases;
+
+                e_seccionEquipo.value = array.idSeccion;
+                e_subseccionEquipo.value = array.idSubseccion;
+                e_tipoEquipo.value = array.idTipo;
+                e_jerarquiaEquipo.value = array.jerarquia;
+                e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
+
+                e_marcaEquipo.value = array.idMarca;
+                e_modeloEquipo.value = array.modelo;
+                e_serieEquipo.value = array.serie;
+                e_codigoFabricanteEquipo.value = array.codigoFabricante;
+                e_codigoInternoComprasEquipo.value = array.codigoInternoCompras;
+
+                e_cantidadEquipo.value = array.cantidad;
+                e_largoEquipo.value = array.largo_cm;
+                e_anchoEquipo.value = array.ancho_cm;
+                e_altoEquipo.value = array.alto_cm;
+
+                e_potenciaElectricaHPEquipo.value = array.potencia_electrica_hp;
+                e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
+                e_voltajeEquipo.value = array.voltaje_v;
+                e_frecuenciaEquipo.value = array.frecuencia_hz;
+
+                e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
+                e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
+                e_cargaMCAEquipo.value = array.carga_mca;
+
+                e_PotenciaEnergeticaFrioKWEquipo.value = array.potencia_energetica_frio_kw;
+                e_potenciaEnergeticaFrioTREquipo.value = array.potencia_energetica_frio_tr;
+
+                e_potenciaEnergeticaCalorKCALEquipo.value =
+                    array.potencia_energetica_calor_kcal;
+
+                e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
+                e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+            e_nombreEquipo.value = '';
+            e_estadoEquipo.value = '';
+            e_tipoLocalEquipo.value = '';
+            e_idFaseEquipo.value = '';
+            e_seccionEquipo.value = '';
+            e_subseccionEquipo.value = '';
+            e_tipoEquipo.value = '';
+            e_jerarquiaEquipo.value = '';
+            e_dataOpcionesEquipos.value = '';
+            e_marcaEquipo.value = '';
+            e_modeloEquipo.value = '';
+            e_serieEquipo.value = '';
+            e_codigoFabricanteEquipo.value = '';
+            e_codigoInternoComprasEquipo.value = '';
+            e_cantidadEquipo.value = '';
+            e_largoEquipo.value = '';
+            e_anchoEquipo.value = '';
+            e_altoEquipo.value = '';
+            e_potenciaElectricaHPEquipo.value = '';
+            e_potenciaElectricaKWEquipo.value = '';
+            e_voltajeEquipo.value = '';
+            e_frecuenciaEquipo.value = '';
+            e_caudalAguaM3HEquipo.value = '';
+            e_caudalAguaGPHEquipo.value = '';
+            e_cargaMCAEquipo.value = '';
+            e_PotenciaEnergeticaFrioKWEquipo.value = '';
+            e_potenciaEnergeticaFrioTREquipo.value = '';
+            e_potenciaEnergeticaCalorKCALEquipo.value = '';
+            e_caudalAireM3HEquipo.value = '';
+            e_caudalAireCFMEquipo.value = '';
+        })
+}
+
+// ACTUALIZA INFORMACIÓN DE LOS EQUIPOS
+function actualizarEquipo(idEquipo) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "actualizarEquipo";
+    const URL = `../php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    const data = new FormData()
+    data.append('idEquipo', idEquipo);
+    data.append('equipo', e_nombreEquipo.value);
+    data.append('status', e_estadoEquipo.value);
+    data.append('localEquipo', e_tipoLocalEquipo.value);
+    data.append('idFases', e_idFaseEquipo.value);
+    data.append('idSeccion', e_seccionEquipo.value);
+    data.append('idSubseccion', e_subseccionEquipo.value);
+    data.append('idTipo', e_tipoEquipo.value);
+    data.append('jerarquia', e_jerarquiaEquipo.value);
+    data.append('idEquipoPrincipal', e_dataOpcionesEquipos.value);
+    data.append('idMarca', e_marcaEquipo.value);
+    data.append('modelo', e_modeloEquipo.value);
+    data.append('serie', e_serieEquipo.value);
+    data.append('codigoFabricante', e_codigoFabricanteEquipo.value);
+    data.append('codigoInternoCompras', e_codigoInternoComprasEquipo.value);
+    data.append('cantidad', e_cantidadEquipo.value);
+    data.append('largo_cm', e_largoEquipo.value);
+    data.append('ancho_cm', e_anchoEquipo.value);
+    data.append('alto_cm', e_altoEquipo.value);
+    data.append('potencia_electrica_hp', e_potenciaElectricaHPEquipo.value);
+    data.append('potencia_electrica_kw', e_potenciaElectricaKWEquipo.value);
+    data.append('voltaje_v', e_voltajeEquipo.value);
+    data.append('frecuencia_hz', e_frecuenciaEquipo.value);
+    data.append('caudal_agua_m3h', e_caudalAguaM3HEquipo.value);
+    data.append('caudal_agua_gph', e_caudalAguaGPHEquipo.value);
+    data.append('carga_mca', e_cargaMCAEquipo.value);
+    data.append('potencia_energetica_frio_kw', e_PotenciaEnergeticaFrioKWEquipo.value);
+    data.append('potencia_energetica_frio_tr', e_potenciaEnergeticaFrioTREquipo.value);
+    data.append('potencia_energetica_calor_kcal', e_potenciaEnergeticaCalorKCALEquipo.value);
+    data.append('caudal_aire_m3h', e_caudalAireM3HEquipo.value);
+    data.append('caudal_aire_cfm', e_caudalAireCFMEquipo.value);
+
+    if (e_nombreEquipo.value.length > 0 && e_estadoEquipo.value != ""
+        && e_tipoLocalEquipo.value != "" && e_seccionEquipo.value > 0
+        && e_subseccionEquipo.value > 0 && e_tipoEquipo.value > 0 && e_jerarquiaEquipo.value != "") {
+
+        fetch(URL, {
+            method: "POST",
+            body: data
+        })
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Datos Actualizados', '', 'success', 1200)
+                    informacionEquipo(idEquipo)
+                } else {
+                    alertaImg('No se Guardaron los Cambios', '', 'info', 1400)
+                    informacionEquipo(idEquipo)
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err);
+                informacionEquipo(idEquipo)
+            })
+    } else {
+        alertaImg('Datos NO Validos', '', 'info', 1200);
+    }
+}

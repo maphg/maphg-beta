@@ -254,6 +254,7 @@
                 <button id="btnGuardarEquipo" class="text-xxs px-2 bg-green-300 ml-3 rounded font-semibold hover:shadow">Guardar</button>
 
                 <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 ml-3 rounded font-semibold hover:shadow">Cancelar</button>
+
             </div>
 
             <div class="flex flex-row w-full bg-fondos-4">
@@ -281,14 +282,15 @@
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
                             <select id="jerarquiaEquipo" class="bg-fondos-4 font-semibold truncate w-24">
+                                <option value="0">No Seleccionado</option>
                                 <option value="PRINCIPAL">PRINCIPAL</option>
                                 <option value="SECUNDARIO">SECUNDARIO</option>
                             </select>
                         </div>
 
-                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4 hidden">
+                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
-                            <select id="dataOpcionesEquipos" class="bg-fondos-4 font-semibold truncate w-24"></select>
+                            <select id="dataOpcionesEquipos" class="bg-fondos-4 font-semibold truncate w-24" disabled></select>
                         </div>
 
                     </div>
@@ -304,40 +306,45 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">Modelo</h1>
-                            <input type="text" delo" value="-" id="modeloEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="modeloEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">Número de Serie</h1>
-                            <input type="text" value="-" id="serieEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="serieEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">Código Fabricante</h1>
-                            <input type="text" value="-" id="codigoFabricanteEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="codigoFabricanteEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">Código Interno Compras</h1>
-                            <input type="text" value="-" id="codigoInternoComprasEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="codigoInternoComprasEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                     </div>
                     <div class="flex-none w-1/6">
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">LARGO</h1>
-                            <input type="text" value="-" id="largoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
+                            <input id="cantidadEquipo" type="text" placeholder="0" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">ANCHO</h1>
-                            <input type="text" value="-" id="anchoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <h1 class="font-bold text-bluegray-900 uppercase">LARGO (cm)</h1>
+                            <input type="text" placeholder="0.0" id="largoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">ALTO</h1>
-                            <input type="text" value="-" id="altoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <h1 class="font-bold text-bluegray-900 uppercase">ANCHO (cm)</h1>
+                            <input type="text" placeholder="0.0" id="anchoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                        </div>
+
+                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                            <h1 class="font-bold text-bluegray-900 uppercase">ALTO (cm)</h1>
+                            <input type="text" placeholder="0.0" id="altoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
                     </div>
 
@@ -345,22 +352,22 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
-                            <input type="text" value="-" id="potenciaElectricaHPEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="potenciaElectricaHPEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (KW)</h1>
-                            <input type="text" value="-" id="potenciaElectricaKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="potenciaElectricaKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">VOLTAJE (V)</h1>
-                            <input type="text" value="-" id="voltajeEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="voltajeEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">FRECUENCIA (HZ)</h1>
-                            <input type="text" value="-" id="frecuenciaEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="frecuenciaEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                     </div>
@@ -368,17 +375,17 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
-                            <input type="text" value="-" id="caudalAguaM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="caudalAguaM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (GPH)</h1>
-                            <input type="text" value="-" id="caudalAguaGPHEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="caudalAguaGPHEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">CARGA (M.C.A)</h1>
-                            <input type="text" value="-" id="cargaMCAEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="cargaMCAEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                     </div>
@@ -386,27 +393,27 @@
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
-                            <input type="text" value="-" id="PotenciaEnergeticaFrioKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="PotenciaEnergeticaFrioKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(TR)</h1>
-                            <input type="text" value="-" id="potenciaEnergeticaFrioTREquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="potenciaEnergeticaFrioTREquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA CALOR (KCAL)</h1>
-                            <input type="text" value="-" id="potenciaEnergeticaCalorKCALEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="potenciaEnergeticaCalorKCALEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(M3/H)</h1>
-                            <input type="text" value="-" id="caudalAireM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="caudalAireM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                         <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                             <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(CFM)</h1>
-                            <input type="text" value="-" id="caudalAireCFMEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                            <input type="text" placeholder="0.0" id="caudalAireCFMEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
                         </div>
 
                     </div>
@@ -965,7 +972,7 @@
 
     <!-- ***** MODALES SECUNDARIO ***** -->
 
-    
+
     <!-- LIBRERIAS JS -->
     <script src="../js/jquery-3.3.1.js"></script>
     <script src="../js/alertify.min.js"></script>

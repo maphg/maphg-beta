@@ -78,7 +78,7 @@ if (isset($_GET['action'])) {
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
-                $id = $i['id'];
+                $idEquipo = $i['id'];
                 $equipo = $i['equipo'];
                 $local_equipo = $i['local_equipo'];
                 $status = $i['status'];
@@ -100,7 +100,7 @@ if (isset($_GET['action'])) {
 
                 if ($filtroSemana <= 0 || $filtroSemana == "") {
                     $mp = "SELECT* FROM t_mp_planeacion_proceso 
-                    WHERE id_equipo = $id and activo = 1 and año = '$añoActual'";
+                    WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
 
                         foreach ($result as $x) {
@@ -129,7 +129,7 @@ if (isset($_GET['action'])) {
                     }
 
                     $mp = "SELECT* FROM t_mp_planeacion_semana 
-                    WHERE id_equipo = $id and activo = 1 and año = '$añoActual'";
+                    WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
                         foreach ($result as $x) {
                             for ($i = $semanaActual; $i < 53; $i++) {
@@ -153,7 +153,8 @@ if (isset($_GET['action'])) {
                     }
                 } else {
                     $filtroSemana = intval($filtroSemana);
-                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_proceso WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_proceso 
+                    WHERE id_equipo = $idEquipo AND activo = 1 AND año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
 
                         foreach ($result as $x) {
@@ -175,7 +176,8 @@ if (isset($_GET['action'])) {
                         }
                     }
 
-                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_semana WHERE id_equipo = $id AND activo = 1 AND año = '$añoActual'";
+                    $mp = "SELECT semana_$filtroSemana FROM t_mp_planeacion_semana 
+                    WHERE id_equipo = $idEquipo AND activo = 1 AND año = '$añoActual'";
                     if ($result = mysqli_query($conn_2020, $mp)) {
                         foreach ($result as $x) {
                             $semana = $x['semana_' . $filtroSemana];
@@ -213,7 +215,7 @@ if (isset($_GET['action'])) {
                 }
 
                 $arrayTemp = array(
-                    "id" => "$id",
+                    "idEquipo" => intval($idEquipo),
                     "destino" => "$destino",
                     "equipo" => "$equipo",
                     "seccion" => "$seccion",
