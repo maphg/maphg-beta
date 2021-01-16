@@ -1687,7 +1687,7 @@ function informacionEquipo(idEquipo) {
     promesa.then((resolve, reject) => {
 
         const URL2 = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
-        console.log(URL2);
+        console.log(2);
 
         fetch(URL2)
             .then(array => array.json())
