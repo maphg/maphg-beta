@@ -1692,40 +1692,6 @@ function informacionEquipo(idEquipo) {
         fetch(URL2)
             .then(array => array.json())
             .then(array => {
-                e_nombreEquipo.value = '';
-                e_estadoEquipo.value = '';
-                e_tipoLocalEquipo.value = '';
-                e_idFaseEquipo.value = '';
-                e_seccionEquipo.value = '';
-                e_subseccionEquipo.value = '';
-                e_tipoEquipo.value = '';
-                e_jerarquiaEquipo.value = '';
-                e_dataOpcionesEquipos.value = '';
-                e_marcaEquipo.value = '';
-                e_modeloEquipo.value = '';
-                e_serieEquipo.value = '';
-                e_codigoFabricanteEquipo.value = '';
-                e_codigoInternoComprasEquipo.value = '';
-                e_cantidadEquipo.value = '';
-                e_largoEquipo.value = '';
-                e_anchoEquipo.value = '';
-                e_altoEquipo.value = '';
-                e_potenciaElectricaHPEquipo.value = '';
-                e_potenciaElectricaKWEquipo.value = '';
-                e_voltajeEquipo.value = '';
-                e_frecuenciaEquipo.value = '';
-                e_caudalAguaM3HEquipo.value = '';
-                e_caudalAguaGPHEquipo.value = '';
-                e_cargaMCAEquipo.value = '';
-                e_PotenciaEnergeticaFrioKWEquipo.value = '';
-                e_potenciaEnergeticaFrioTREquipo.value = '';
-                e_potenciaEnergeticaCalorKCALEquipo.value = '';
-                e_caudalAireM3HEquipo.value = '';
-                e_caudalAireCFMEquipo.value = '';
-
-                return array;
-            })
-            .then(array => {
                 if (array) {
                     e_nombreEquipo.value = array.equipo;
                     e_estadoEquipo.value = array.status;
