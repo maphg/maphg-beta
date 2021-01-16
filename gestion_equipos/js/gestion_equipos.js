@@ -1734,6 +1734,10 @@ function informacionEquipo(idEquipo) {
                     e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
                 }
             })
+            .then(() => {
+                console.log(3);
+                cancelarInformacionEquipo(idEquipo);
+            })
             .catch(function (err) {
                 fetch(APIERROR + err);
                 e_nombreEquipo.value = '';
