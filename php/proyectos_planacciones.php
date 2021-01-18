@@ -420,7 +420,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
-        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
         t_proyectos.tipo, t_proyectos.status
         FROM t_proyectos
         LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
@@ -441,6 +441,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = (new DateTime($p['fecha_creacion']))->format('d/m/Y');
                 $justificacion = $p['justificacion'];
                 $coste = $p['coste'];
+                $presupuesto = $p['presupuesto'];
                 $tipo = $p['tipo'];
                 $status = $p['status'];
 
@@ -575,6 +576,7 @@ if (isset($_GET['action'])) {
                     "justificacion" => $justificacion,
                     "comentarios" => $totalComentarios,
                     "coste" => $coste,
+                    "presupuesto" => $presupuesto,
                     "status" => $status,
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),

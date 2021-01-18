@@ -99,6 +99,7 @@ const datosProyectosDEP = params => {
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto}, 'tipo');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'coste');"`;
+        var fPresupuesto = `onclick="hiddenVista('tooltipProyectosDEP'); toggleModalTailwind('modalPresupuestoProyecto');"`;
         var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
         var fStatus = `onclick="hiddenVista('tooltipProyectosDEP'); statusProyectoDEP(${idProyecto});"`;
 
@@ -111,6 +112,7 @@ const datosProyectosDEP = params => {
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP');"`;
+        var fPresupuesto = `onclick="hiddenVista('tooltipProyectosDEP');"`;
         var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         var fStatus = `onclick="actualizarProyectosDEP('N', 'status', ${idProyecto});"`;
     }
@@ -161,6 +163,11 @@ const datosProyectosDEP = params => {
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fCoste}>
                 <h1>$ ${params.coste}</h1>
+            </td>
+
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3"
+            ${fPresupuesto}>
+                <h1>$ ${params.presupuesto}</h1>
             </td>
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
@@ -697,6 +704,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
                     const tipo = array[x].tipo;
                     const justificacion = array[x].justificacion;
                     const coste = array[x].coste;
+                    const presupuesto = array[x].presupuesto;
                     const status = array[x].status;
                     const materiales = array[x].materiales;
                     const energeticos = array[x].energeticos;
@@ -716,6 +724,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
                         tipo: tipo,
                         justificacion: justificacion,
                         coste: coste,
+                        presupuesto: presupuesto,
                         status: status,
                         materiales: materiales,
                         energeticos: energeticos,

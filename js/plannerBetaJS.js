@@ -745,7 +745,7 @@ setInterval("hora()", 70000);
 // toggleClass Modal TailWind con la clase OPEN.
 function toggleModalTailwind(idModal) {
    if (document.getElementById(idModal)) {
-      document.getElementById(idModal).classList.add("open");
+      document.getElementById(idModal).classList.toggle("open");
    }
 }
 
