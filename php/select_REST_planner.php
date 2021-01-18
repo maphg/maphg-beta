@@ -2583,8 +2583,10 @@ if (isset($_GET['action'])) {
     // TAREAS A INCIDENCIAS
     if ($action == "exportarTareasAIncidencias") {
         $resp = 0;
+        $resp1 = 0;
+        $resp2 = 0;
 
-        $query = "SELECT* FROM t_mp_np WHERE id_destino = '$idDestino' and id_equipo > 0";
+        $query = "SELECT* FROM t_mp_np WHERE id_destino = '$idDestino' and id_equipo > 0 and activo IN(1, 0)";
         // $query = "SELECT* FROM t_mp_np WHERE id = 16358";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -2635,7 +2637,7 @@ if (isset($_GET['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $query = "UPDATE t_mp_np SET activo = 2 WHERE id = $id";
                         if ($result = mysqli_query($conn_2020, $query)) {
-                            $resp = "registro";
+                            $resp++;
 
                             $query = "SELECT* FROM adjuntos_mp_np 
                             WHERE id_mp_np = $id and activo = 1";
@@ -2649,7 +2651,7 @@ if (isset($_GET['action'])) {
 
                                     $query = "INSERT INTO t_mc_adjuntos(id_mc, url_adjunto, fecha, subido_por, activo) VALUES($idMax, '$url', '$fecha', '$idUsuario', $activo)";
                                     if ($result = mysqli_query($conn_2020, $query)) {
-                                        $resp = "adjunto";
+                                        $resp1 = "adjunto";
                                     }
                                 }
                             }
@@ -2666,7 +2668,7 @@ if (isset($_GET['action'])) {
 
                                     $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idMax, '$comentario', $id_usuario, '$fecha', $activo)";
                                     if ($result = mysqli_query($conn_2020, $query)) {
-                                        $resp = "comentario";
+                                        $resp2 = "comentario";
                                     }
                                 }
                             }

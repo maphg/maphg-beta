@@ -2594,12 +2594,9 @@ function obtenerIncidenciaEquipos(idIncidencia) {
    const action = 'obtenerIncidenciaEquipos';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}`;
 
-   console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array) {
 
             // DATOS
@@ -3286,12 +3283,9 @@ function actualizarActividadesPlanaccion(idActividad, columna, valor) {
    const action = "actualizarActividadesPlanaccion";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idActividad=${idActividad}&columna=${columna}&valor=${valor}`;
 
-   console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          nuevoTituloPlanaccion.value = '';
 
          if (array == "titulo") {
@@ -6871,7 +6865,6 @@ function obtenerPendientesUsuario() {
             }
 
             if (array.incidencias) {
-               console.log(array.incidencias);
                totalPendientesFallas.innerHTML = `Incidencia (${array.incidencias.length})`;
 
                for (let x = 0; x < array.incidencias.length; x++) {
@@ -8899,7 +8892,6 @@ btnGraficasReportesDiario.addEventListener('click', () => {
 
 const exportarTareasAIncidencias = (idDestino) => {
    let idUsuario = localStorage.getItem('usuario');
-   console.log(`php/select_REST_planner.php?action=exportarTareasAIncidencias&idDestino=${idDestino}&idUsuario=${idUsuario}`);
 
    fetch(`php/select_REST_planner.php?action=exportarTareasAIncidencias&idDestino=${idDestino}&idUsuario=${idUsuario}`)
       .then(array => array.json())
