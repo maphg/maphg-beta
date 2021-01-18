@@ -195,10 +195,13 @@ function obtenerDetallesPlanMP(idPlanMP) {
     let promesa = new Promise((resolve, reject) => {
         // Sirve solo para mostrar las diferentes opciones que puede tener el Plan.
         obtenerOpcionesPlanMP();
-        console.log(1);
         resolve(resolve, reject)
     })
     promesa.then((resolve, reject) => {
+
+        // FUNCIONES COMPLEMENTARIAS
+        obtenerMaterialPlanMP();
+        obtenerActividadesPlanMP();
 
         $.ajax({
             type: "POST",
@@ -211,18 +214,17 @@ function obtenerDetallesPlanMP(idPlanMP) {
             },
             dataType: "JSON",
             success: function (data) {
-                console.log(2);
-                obtenerMaterialPlanMP();
-                obtenerActividadesPlanMP();
-                document.getElementById("dataOptionDestinosMP").value = data.idDestino;
-                document.getElementById("dataOpcionFaseMP").value = data.idFase;
-                document.getElementById("equipoLocalPlanMP").value = data.local_equipo;
-                document.getElementById("dataOpcionTipoPlan").value = data.tipoPlan;
-                document.getElementById("dataOpcionGradoPlanMP").value = data.grado;
-                document.getElementById("dataOpcionTipoEquiposMP").value = data.tipo_local_equipo;
-                document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
-                document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
-                document.getElementById("dataPersonasPlanMP").value = data.personas;
+                setTimeout(() => {
+                    document.getElementById("dataOptionDestinosMP").value = data.idDestino;
+                    document.getElementById("dataOpcionFaseMP").value = data.idFase;
+                    document.getElementById("equipoLocalPlanMP").value = data.local_equipo;
+                    document.getElementById("dataOpcionTipoPlan").value = data.tipoPlan;
+                    document.getElementById("dataOpcionGradoPlanMP").value = data.grado;
+                    document.getElementById("dataOpcionTipoEquiposMP").value = data.tipo_local_equipo;
+                    document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
+                    document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
+                    document.getElementById("dataPersonasPlanMP").value = data.personas;
+                }, 1000);
             }
         });
     })
