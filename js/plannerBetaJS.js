@@ -8896,3 +8896,17 @@ btnGraficasReportesDiario.addEventListener('click', () => {
    alertify.Gift('GODhPuM5cEE').set({ frameless: true });
 
 })
+
+const exportarTareasAIncidencias = (idDestino) => {
+   let idUsuario = localStorage.getItem('usuario');
+   console.log(`php/select_REST_planner.php?action=exportarTareasAIncidencias&idDestino=${idDestino}&idUsuario=${idUsuario}`);
+
+   fetch(`php/select_REST_planner.php?action=exportarTareasAIncidencias&idDestino=${idDestino}&idUsuario=${idUsuario}`)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}

@@ -2580,5 +2580,103 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+    // TAREAS A INCIDENCIAS
+    if ($action == "exportarTareasAIncidencias") {
+        $resp = 0;
+
+        $query = "SELECT* FROM t_mp_np WHERE id_destino = '$idDestino' and id_equipo > 0";
+        // $query = "SELECT* FROM t_mp_np WHERE id = 16358";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $id = $x['id'];
+                $id_equipo = $x['id_equipo'];
+                $id_usuario = $x['id_usuario'];
+                $id_destino = $x['id_destino'];
+                $id_seccion = $x['id_seccion'];
+                $id_subseccion = $x['id_subseccion'];
+                $tipo_incidencia = $x['tipo_incidencia'];
+                $titulo = $x['titulo'];
+                $responsable = $x['responsable'];
+                $fecha = $x['fecha'];
+                $fecha_finalizado = $x['fecha_finalizado'];
+                $rango_fecha = $x['rango_fecha'];
+                $status = $x['status'];
+                $status_urgente = $x['status_urgente'];
+                $status_material = $x['status_material'];
+                $status_trabajando = $x['status_trabajando'];
+                $energetico_electricidad = $x['energetico_electricidad'];
+                $energetico_agua = $x['energetico_agua'];
+                $energetico_diesel = $x['energetico_diesel'];
+                $energetico_gas = $x['energetico_gas'];
+                $departamento_calidad = $x['departamento_calidad'];
+                $departamento_compras = $x['departamento_compras'];
+                $departamento_direccion = $x['departamento_direccion'];
+                $departamento_finanzas = $x['departamento_finanzas'];
+                $departamento_rrhh = $x['departamento_rrhh'];
+                $cod2bend = $x['cod2bend'];
+                $codsap = $x['codsap'];
+                $bitacora_gp = $x['bitacora_gp'];
+                $bitacora_trs = $x['bitacora_trs'];
+                $bitacora_zi = $x['bitacora_zi'];
+                $activo = $x['activo'];
+
+                $idMax = 0;
+                $query = "SELECT max(id) 'id' FROM t_mc";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idMax = intval($x['id']) + 1;
+                    }
+                }
+
+                if ($idMax > 0) {
+                    $query = "INSERT INTO t_mc(id, id_tarea, id_equipo, actividad, tipo_incidencia, status, creado_por, responsable, fecha_inicio, fecha_realizado, realizado_por, fecha_creacion, ultima_modificacion, id_destino, id_seccion, id_subseccion, id_categoria, id_subcategoria, semana_inicio, semana_fin, fecha_fin, rango_fecha, compartir, status_default, status_material, status_trabajare, status_urgente, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, zona, cod2bend, codsap, bitacora_gp, bitacora_trs, bitacora_zi, activo)  
+                    VALUES('$idMax','$id','$id_equipo','$titulo','$tipo_incidencia','$status','$id_usuario','$responsable','$fecha','$fecha_finalizado','$responsable','$fecha','$fechaActual','$id_destino','$id_seccion','$id_subseccion','0','0','0','0','$fecha_finalizado','$rango_fecha','','0','$status_material','$status_trabajando','$status_urgente','$departamento_calidad','$departamento_compras','$departamento_direccion','$departamento_finanzas','$departamento_rrhh','$energetico_electricidad','$energetico_agua','$energetico_diesel','$energetico_gas','NA','$cod2bend','$codsap','$bitacora_gp','$bitacora_trs','$bitacora_zi','$activo'
+                    )";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $query = "UPDATE t_mp_np SET activo = 2 WHERE id = $id";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $resp = "registro";
+
+                            $query = "SELECT* FROM adjuntos_mp_np 
+                            WHERE id_mp_np = $id and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                foreach ($result as $x) {
+                                    $idUsuario = $x['id'];
+                                    $id_mp_np = $x['id_mp_np'];
+                                    $url = $x['url'];
+                                    $fecha = $x['fecha'];
+                                    $activo = $x['activo'];
+
+                                    $query = "INSERT INTO t_mc_adjuntos(id_mc, url_adjunto, fecha, subido_por, activo) VALUES($idMax, '$url', '$fecha', '$idUsuario', $activo)";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        $resp = "adjunto";
+                                    }
+                                }
+                            }
+
+                            $query = "SELECT* FROM comentarios_mp_np 
+                            WHERE id_mp_np = $id and activo = 1";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                foreach ($result as $x) {
+                                    $id_mp_np = $x['id_mp_np'];
+                                    $id_usuario = $x['id_usuario'];
+                                    $comentario = $x['comentario'];
+                                    $fecha = $x['fecha'];
+                                    $activo = $x['activo'];
+
+                                    $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idMax, '$comentario', $id_usuario, '$fecha', $activo)";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        $resp = "comentario";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        echo json_encode($resp);
+    }
+
     // CIERRE FINAL
 }
