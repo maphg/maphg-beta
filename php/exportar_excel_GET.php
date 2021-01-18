@@ -489,12 +489,12 @@ if (isset($_GET['action'])) {
                 // $array[] = $arrayTemp;
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $fecha);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cc);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $textoCeco);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $asignacion);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $nombre_1);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $texto);
                 $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $nombreProveedorAF);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $importe);
-                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $documentoCompras);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, '$' + $importe);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $nombre_1);
             }
         }
 

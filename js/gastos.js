@@ -279,7 +279,7 @@ document.getElementById("btnExportarMateriales").addEventListener("click", () =>
     let idUsuario = localStorage.getItem('usuario');
 
     alertaImg('Exportando Datos...', '', 'info', 1500);
-    window.open(`php/exportar_excel_GET.php?action=exportarExcelGastos&idDestino=${idDestino}&idUsuario=${idUsuario}`, "Exportar Gastos", "width=300, height=200")
+    location.href = `php/exportar_excel_GET.php?action=exportarExcelGastos&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 })
 
 window.onload = function () {
