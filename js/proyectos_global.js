@@ -193,6 +193,7 @@ const datosProyectos = params => {
 
             <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fCoste}>
+            
                 $ ${params.coste}
             </td>
 

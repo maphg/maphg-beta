@@ -1682,8 +1682,6 @@ function informacionEquipo(idEquipo) {
             })
         resolve(resolve, reject)
     })
-
-
     promesa.then((resolve, reject) => {
 
         const URL2 = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;

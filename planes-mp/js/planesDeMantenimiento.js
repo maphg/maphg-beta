@@ -180,44 +180,53 @@ function AgregarPlanMP() {
 
 // Funcion para obtener detalles de un plan MP al darle clic en la lista.
 function obtenerDetallesPlanMP(idPlanMP) {
+
+    // Datos Basicos.
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
     // Operaciones Iniciales.
     localStorage.setItem('idPlanMP', idPlanMP);
     document.getElementById("modalDetallesPlanMP").classList.add('open');
     alertaImg(' Debe contener al menos una ACTIVIDAD', '', 'question', 5000);
 
     // Sirve solo para mostrar las diferentes opciones que puede tener el Plan.
-    obtenerOpcionesPlanMP();
 
-    // Datos Basicos.
-    let idDestino = localStorage.getItem('idDestino');
-    let idUsuario = localStorage.getItem('usuario');
+    let promesa = new Promise((resolve, reject) => {
+        obtenerOpcionesPlanMP();
+    })
+    promesa.then((resolve, reject) => {
 
-    const action = "obtenerDetallesPlanMP";
-    $.ajax({
-        type: "POST",
-        url: "php/planes_mantenimiento_crud.php",
-        data: {
-            action: action,
-            idDestino: idDestino,
-            idUsuario: idUsuario,
-            idPlanMP: idPlanMP
-        },
-        dataType: "JSON",
-        success: function (data) {
-            obtenerMaterialPlanMP();
-            obtenerActividadesPlanMP();
-            document.getElementById("dataOptionDestinosMP").value = data.idDestino;
-            document.getElementById("dataOpcionFaseMP").value = data.idFase;
-            document.getElementById("equipoLocalPlanMP").value = data.local_equipo;
-            document.getElementById("dataOpcionTipoPlan").value = data.tipoPlan;
-            document.getElementById("dataOpcionGradoPlanMP").value = data.grado;
-            document.getElementById("dataOpcionTipoEquiposMP").value = data.tipo_local_equipo;
-            document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
-            document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
-            document.getElementById("dataPersonasPlanMP").value = data.personas;
+        const action = "obtenerDetallesPlanMP";
+        $.ajax({
+            type: "POST",
+            url: "php/planes_mantenimiento_crud.php",
+            data: {
+                action: action,
+                idDestino: idDestino,
+                idUsuario: idUsuario,
+                idPlanMP: idPlanMP
+            },
+            dataType: "JSON",
+            success: function (data) {
+                obtenerMaterialPlanMP();
+                obtenerActividadesPlanMP();
+                document.getElementById("dataOptionDestinosMP").value = data.idDestino;
+                document.getElementById("dataOpcionFaseMP").value = data.idFase;
+                document.getElementById("equipoLocalPlanMP").value = data.local_equipo;
+                document.getElementById("dataOpcionTipoPlan").value = data.tipoPlan;
+                document.getElementById("dataOpcionGradoPlanMP").value = data.grado;
+                document.getElementById("dataOpcionTipoEquiposMP").value = data.tipo_local_equipo;
+                document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
+                document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
+                document.getElementById("dataPersonasPlanMP").value = data.personas;
 
-        }
-    });
+            }
+        });
+    })
+    promesa.catch((err) => {
+        fetch(APIERROR + err);
+    })
 }
 
 
