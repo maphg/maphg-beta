@@ -1512,7 +1512,7 @@ if (isset($_GET['action'])) {
                 $año = (new DateTime($x['fecha_creacion']))->format('Y');
                 $justificacion = $x['justificacion'];
                 $coste = $x['coste'];
-                $xresupuesto = $x['presupuesto'];
+                $presupuesto = $x['presupuesto'];
                 $tipo = $x['tipo'];
 
                 #Rango Fecha

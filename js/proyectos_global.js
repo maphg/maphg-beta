@@ -1,6 +1,11 @@
 'use strict'
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
+// INPUTS
+const btnPresupuestoProyecto = document.getElementById("btnPresupuestoProyecto");
+const presupuestoProyecto = document.getElementById("presupuestoProyecto");
+
+
 const datosProyectos = params => {
 
     var idProyecto = params.id;
@@ -104,17 +109,29 @@ const datosProyectos = params => {
     var fCoste = '';
     var fToolTip = '';
     var iconoStatus = '';
+    var fPresupuesto = '';
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="obtenerResponsablesProyectos(${idProyecto})"`;
+
         fStatus = `onclick="statusProyecto(${idProyecto});"`;
+
         fRangoFecha = `onclick="obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
+
         fCotizaciones = `onclick="cotizacionesProyectos(${idProyecto});"`;
+
         fTipo = `onclick="obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
+
         fJustificacion = `onclick="obtenerDatoProyectos(${idProyecto},'justificacion');"`;
+
         fCoste = `onclick="obtenerDatoProyectos(${idProyecto},'coste');"`;
+
         fToolTip = `onclick="tooltipProyectos(${idProyecto}); obtenerPlanaccion(${idProyecto});"`;
+
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+
+        fPresupuesto = `onclick="obtenerPresupuestoProyecto(${idProyecto}); toggleModalTailwind('modalPresupuestoProyecto')"`;
+
     } else {
         iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
@@ -177,6 +194,11 @@ const datosProyectos = params => {
             <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fCoste}>
                 $ ${params.coste}
+            </td>
+
+            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
+            ${fPresupuesto}>
+                $ ${params.presupuesto}
             </td>
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
@@ -397,6 +419,7 @@ function obtenerProyectosGlobal(statusProyectos) {
                     const tipo = array[x].tipo;
                     const justificacion = array[x].justificacion;
                     const coste = array[x].coste;
+                    const presupuesto = array[x].presupuesto;
                     const status = array[x].status;
                     const materiales = array[x].materiales;
                     const energeticos = array[x].energeticos;
@@ -417,6 +440,7 @@ function obtenerProyectosGlobal(statusProyectos) {
                         tipo: tipo,
                         justificacion: justificacion,
                         coste: coste,
+                        presupuesto: presupuesto,
                         status: status,
                         materiales: materiales,
                         energeticos: energeticos,
@@ -584,6 +608,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
     let justificacion = document.getElementById("justificacionProyecto").value;
     let coste = document.getElementById("costeProyecto").value;
     let titulo = document.getElementById("inputEditarTituloX").value;
+    let presupuesto = presupuestoProyecto.value;
     const action = "actualizarProyectos";
     $.ajax({
         type: "POST",
@@ -599,6 +624,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
             tipo: tipo,
             coste: coste,
             titulo: titulo,
+            presupuesto: presupuesto
         },
         // dataType: "JSON",
         success: function (data) {
@@ -627,22 +653,26 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 alertaImg("Fecha Actualizada", "", "success", 2000);
             } else if (data == 6) {
                 obtenerProyectosGlobal("PENDIENTE");
-                document.getElementById("modalTituloEliminar").classList.remove("open");
+                toggleModalTailwind('modalTituloEliminar');
                 alertaImg("Proyecto Eliminado", "", "success", 2000);
             } else if (data == 7) {
                 obtenerProyectosGlobal("PENDIENTE");
-                document.getElementById("modalTituloEliminar").classList.remove("open");
+                toggleModalTailwind('modalTituloEliminar');
                 alertaImg("Título Actualizado", "", "success", 2000);
             } else if (data == 8) {
                 obtenerProyectosGlobal("PENDIENTE");
-                document.getElementById("modalTituloEliminar").classList.remove("open");
+                toggleModalTailwind('modalTituloEliminar');
                 alertaImg("Proyecto Finalizado", "", "success", 2000);
             } else if (data == 9) {
                 obtenerProyectosGlobal("PENDIENTE");
-                document.getElementById("modalTituloEliminar").classList.remove("open");
+                toggleModalTailwind('modalTituloEliminar');
                 alertaImg("Proyecto Restaurado", "", "success", 2000);
             } else if (data == 10) {
                 alertaImg("Solucione todas las actividades", "", "warning", 4000);
+            } else if (data == 11) {
+                obtenerProyectosGlobal("PENDIENTE");
+                toggleModalTailwind('modalPresupuestoProyecto');
+                alertaImg("Presupuesto Actualizado", "", "success", 2000);
             } else {
                 alertaImg("Intente de Nuevo", "", "info", 3000);
             }
@@ -1834,4 +1864,36 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
         .catch(function (err) {
             fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
         })
+}
+
+
+// OBTIENE EL PRESUPUESTO
+const obtenerPresupuestoProyecto = (idProyecto) => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('idUsuario');
+
+    btnPresupuestoProyecto.
+        setAttribute('onclick', `actualizarProyectos(0, 'presupuesto', ${idProyecto})`);
+
+    const action = "obtenerProyectoPorID";
+    const URL = `php/proyectos_planacciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const presupuesto = array[x].presupuesto;
+                    presupuestoProyecto.value = presupuesto;
+                }
+            }
+        })
+}
+
+
+// toggleClass Modal TailWind con la clase OPEN.
+function toggleModalTailwind(idModal) {
+    if (document.getElementById(idModal)) {
+        document.getElementById(idModal).classList.toggle("open");
+    }
 }
