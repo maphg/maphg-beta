@@ -38,7 +38,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
-        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.tipo
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.tipo
         FROM t_proyectos 
         LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         LEFT JOIN t_users ON t_proyectos.creado_por = t_users.id
@@ -59,6 +59,7 @@ if (isset($_GET['action'])) {
                 $fechaCreacion = (new DateTime($p['fecha_creacion']))->format('d/m/Y');
                 $justificacion = $p['justificacion'];
                 $coste = $p['coste'];
+                $presupuesto = $p['presupuesto'];
                 $tipo = $p['tipo'];
 
                 #Rango Fecha
@@ -192,6 +193,7 @@ if (isset($_GET['action'])) {
                     "justificacion" => $justificacion,
                     "comentarios" => $totalComentarios,
                     "coste" => $coste,
+                    "presupuesto" => $presupuesto,
                     "status" => $status,
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),
@@ -1489,7 +1491,7 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
         t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, 
-        t_proyectos.coste, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
+        t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
         t_proyectos.tipo, c_secciones.seccion
         FROM t_proyectos 
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
@@ -1498,19 +1500,20 @@ if (isset($_GET['action'])) {
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_proyectos.activo = 1 $filtroDestino  $filtroStatus ORDER BY t_proyectos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $p) {
-                $idProyecto = $p['id'];
-                $creadoPor = $p['nombre'] . " " . $p['apellido'];
-                $destino = $p['destino'];
-                $seccion = $p['seccion'];
-                $titulo = $p['titulo'];
-                $idResponsable = $p['responsable'];
-                $rangoFecha = $p['rango_fecha'];
-                $fechaCreacion = (new DateTime($p['fecha_creacion']))->format('d/m/Y');
-                $año = (new DateTime($p['fecha_creacion']))->format('Y');
-                $justificacion = $p['justificacion'];
-                $coste = $p['coste'];
-                $tipo = $p['tipo'];
+            foreach ($result as $x) {
+                $idProyecto = $x['id'];
+                $creadoPor = $x['nombre'] . " " . $x['apellido'];
+                $destino = $x['destino'];
+                $seccion = $x['seccion'];
+                $titulo = $x['titulo'];
+                $idResponsable = $x['responsable'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format('d/m/Y');
+                $año = (new DateTime($x['fecha_creacion']))->format('Y');
+                $justificacion = $x['justificacion'];
+                $coste = $x['coste'];
+                $xresupuesto = $x['presupuesto'];
+                $tipo = $x['tipo'];
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -1646,6 +1649,7 @@ if (isset($_GET['action'])) {
                     "justificacion" => $justificacion,
                     "comentarios" => $totalComentarios,
                     "coste" => $coste,
+                    "presupuesto" => $presupuesto,
                     "status" => $status,
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),
@@ -1657,4 +1661,44 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+
+    #OBTENER DATOS DE PROYECTO POR ID
+    if ($action == "obtenerProyectoPorID") {
+        $idProyecto = $_GET['idProyecto'];
+        $array = array();
+
+        $query = "SELECT id, titulo, justificacion, fecha_creacion, rango_fecha, status, tipo, coste, presupuesto, año FROM t_proyectos WHERE id = $idProyecto";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idProyecto = $x['id'];
+                $titulo = $x['titulo'];
+                $justificacion = $x['justificacion'];
+                $fechaCreacion = $x['fecha_creacion'];
+                $rangoFecha = $x['rango_fecha'];
+                $status = $x['status'];
+                $tipo = $x['tipo'];
+                $coste = $x['coste'];
+                $presupuesto = $x['presupuesto'];
+                $año = $x['año'];
+
+                $array[] = array(
+                    "idProyecto" => intval($idProyecto),
+                    "titulo" => $titulo,
+                    "justificacion" => $justificacion,
+                    "fechaCreacion" => $fechaCreacion,
+                    "rangoFecha" => $rangoFecha,
+                    "status" => $status,
+                    "tipo" => $tipo,
+                    "coste" => $coste,
+                    "presupuesto" => $presupuesto,
+                    "año" => $año
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // CIERRE FINAL
 }

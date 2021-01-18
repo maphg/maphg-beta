@@ -44,6 +44,8 @@ const btnAplicarNuevoTituloPlanacciontoggle =
    document.getElementById("btnAplicarNuevoTituloPlanacciontoggle");
 const btnEliminarActividadPlanaccion = document.getElementById("btnEliminarActividadPlanaccion");
 const btnGraficasReportesDiario = document.getElementById("btnGraficasReportesDiario");
+const btnPresupuestoProyecto = document.getElementById("btnPresupuestoProyecto");
+
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -60,7 +62,7 @@ const inputRangoFecha = document.getElementById("rangoFechaX");
 const inputCod2bend = document.getElementById("inputCod2bend");
 const inputFilePlanaccion = document.getElementById("inputFilePlanaccion");
 const nuevoTituloPlanaccion = document.getElementById("nuevoTituloPlanaccion");
-
+const presupuestoProyecto = document.getElementById("presupuestoProyecto");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID

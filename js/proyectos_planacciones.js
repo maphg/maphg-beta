@@ -98,20 +98,30 @@ const datosProyectos = params => {
     var fTipo = '';
     var fJustificacion = '';
     var fCoste = '';
+    var fPresupuesto = '';
     var fToolTip = '';
     var iconoStatus = '';
     var ocultarActividades = `onclick="hiddenVista('tooltipActividadesPlanaccion'); hiddenVista('tooltipEditarEliminarSolucionar');"`;
 
     if (params.status == "PENDIENTE" || params.status == "N") {
         fResponsable = `onclick="hiddenVista('tooltipProyectos'); obtenerResponsablesProyectos(${idProyecto})"`;
+
         fStatus = `onclick="hiddenVista('tooltipProyectos'); statusProyecto(${idProyecto});"`;
         fRangoFecha = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
+
         fCotizaciones = `onclick="hiddenVista('tooltipProyectos'); cotizacionesProyectos(${idProyecto});"`;
+
         fTipo = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
+
         fJustificacion = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'justificacion');"`;
+
         fCoste = `onclick="hiddenVista('tooltipProyectos'); obtenerDatoProyectos(${idProyecto},'coste');"`;
+
+        fPresupuesto = `onclick="hiddenVista('tooltipProyectos'); obtenerPresupuestoProyecto(${idProyecto}); toggleModalTailwind('modalPresupuestoProyecto')"`;
+
         fToolTip = `onclick="tooltipProyectos(${idProyecto}); obtenerPlanaccion(${idProyecto});"`;
         iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+
     } else {
         iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
         fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
@@ -155,8 +165,14 @@ const datosProyectos = params => {
                 ${valorjustificacion}
             </td>
 
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fCoste}>
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" 
+            ${fCoste}>
                 <h1>$ ${params.coste}</h1>
+            </td>
+
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" 
+            ${fPresupuesto}>
+                <h1>$ ${params.presupuesto}</h1>
             </td>
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
@@ -462,6 +478,7 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                     const tipo = array[x].tipo;
                     const justificacion = array[x].justificacion;
                     const coste = array[x].coste;
+                    const presupuesto = array[x].presupuesto;
                     const status = array[x].status;
                     const materiales = array[x].materiales;
                     const energeticos = array[x].energeticos;
@@ -480,6 +497,7 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                         tipo: tipo,
                         justificacion: justificacion,
                         coste: coste,
+                        presupuesto: presupuesto,
                         status: status,
                         materiales: materiales,
                         energeticos: energeticos,
@@ -568,6 +586,8 @@ function actualizarProyectos(valor, columna, idProyecto) {
     let justificacion = document.getElementById("justificacionProyecto").value;
     let coste = document.getElementById("costeProyecto").value;
     let titulo = document.getElementById("inputEditarTitulo").value;
+    let presupuesto = presupuestoProyecto.value;
+
     const action = "actualizarProyectos";
     $.ajax({
         type: "POST",
@@ -583,6 +603,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
             tipo: tipo,
             coste: coste,
             titulo: titulo,
+            presupuesto: presupuesto
         },
         // dataType: "JSON",
         success: function (data) {
@@ -626,6 +647,10 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 obtenerProyectos(idSeccion, "PENDIENTE");
                 document.getElementById("modalTituloEliminar").classList.remove("open");
                 alertaImg("Proyecto Restaurado", "", "success", 2000);
+            } else if (data == 11) {
+                obtenerProyectos(idSeccion, "PENDIENTE");
+                document.getElementById("modalTituloEliminar").classList.remove("open");
+                alertaImg("Presupuesto Actualizado", "", "success", 2000);
             } else if (data == 10) {
                 alertaImg("Solucione todas las actividades para poder Solucionar el Proyecto", "", "warning", 4000);
             } else {
@@ -700,6 +725,28 @@ function obtenerDatoProyectos(idProyecto, columna) {
     });
 }
 
+
+const obtenerPresupuestoProyecto = (idProyecto) => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('idUsuario');
+
+    btnPresupuestoProyecto.
+        setAttribute('onclick', `actualizarProyectos(0, 'presupuesto', ${idProyecto})`);
+
+    const action = "obtenerProyectoPorID";
+    const URL = `php/proyectos_planacciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const presupuesto = array[x].presupuesto;
+                    presupuestoProyecto.value = presupuesto;
+                }
+            }
+        })
+}
 
 // Obtener Opciones de Responsables para Proyectos
 function datosAgregarProyecto() {

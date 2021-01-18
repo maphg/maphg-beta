@@ -7192,35 +7192,28 @@ if (isset($_POST['action'])) {
         $coste = $_POST['coste'];
         $tipo = $_POST['tipo'];
         $titulo = $_POST['titulo'];
+        $resp = 0;
 
         if ($columna == "asignarProyecto") {
             $columna = "responsable";
             $query = "UPDATE t_proyectos SET responsable = '$valor' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 1;
-            } else {
-                echo 0;
+                $resp = 1;
             }
         } elseif ($columna == "justificacion" and $justificacion != "") {
             $query = "UPDATE t_proyectos SET justificacion = '$justificacion' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 2;
-            } else {
-                echo 0;
+                $resp = 2;
             }
         } elseif ($columna == "coste" and $coste > 0) {
             $query = "UPDATE t_proyectos SET coste = '$coste' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 3;
-            } else {
-                echo 0;
+                $resp = 3;
             }
         } elseif ($columna == "tipo" and $tipo != "") {
             $query = "UPDATE t_proyectos SET tipo = '$tipo' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 4;
-            } else {
-                echo 0;
+                $resp = 4;
             }
         } elseif ($columna == "rango_fecha" and $valor != "") {
             // Obtiene el año apartir del rengo de fecha
@@ -7229,23 +7222,17 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos SET rango_fecha = '$valor', año = '$año' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
 
-                echo 5;
-            } else {
-                echo 0;
+                $resp = 5;
             }
         } elseif ($columna == "eliminar" and $valor == 0) {
             $query = "UPDATE t_proyectos SET activo = '0' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 6;
-            } else {
-                echo 0;
+                $resp = 6;
             }
         } elseif ($columna == "titulo" and $titulo != "") {
             $query = "UPDATE t_proyectos SET titulo = '$titulo' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 7;
-            } else {
-                echo 0;
+                $resp = 7;
             }
         } elseif ($columna == "status" and $valor == "F") {
             $query = "SELECT count(id) FROM t_proyectos_planaccion 
@@ -7262,29 +7249,28 @@ if (isset($_POST['action'])) {
                         $query = "UPDATE t_proyectos_planaccion SET status = 'F', realizado_por = $idUsuario 
                         WHERE id_proyecto = $idProyecto AND activo = 1 AND status != 'F'";
                         if ($result = mysqli_query($conn_2020, $query)) {
-                            echo 8;
-                        } else {
-                            echo 0;
+                            $resp = 8;
                         }
-                    } else {
-                        echo 0;
                     }
-                } else {
-                    echo 10;
                 }
-            } else {
-                echo 0;
             }
         } elseif ($columna == "status" and $valor == "N") {
             $query = "UPDATE t_proyectos SET status = 'N' WHERE id = $idProyecto AND activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
-                echo 9;
-            } else {
-                echo 0;
+                $resp = 9;
+            }
+        } elseif ($columna == 'presupuesto') {
+            $presupuesto = $_POST['presupuesto'];
+            $query = "UPDATE t_proyectos SET presupuesto = '$presupuesto' 
+            WHERE id = $idProyecto and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 11;
             }
         } else {
-            echo 0;
+            $resp = 0;
         }
+
+        echo $resp;
     }
 
 
