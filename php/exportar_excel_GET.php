@@ -260,6 +260,7 @@ if (isset($_GET['action'])) {
         $objWriter->save('PHP://output');
     }
 
+
     if ($action == "reporteFallas") {
         // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
         $idEquipo = $_GET['idEquipo'];
@@ -439,6 +440,71 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+
+    // EXPORTA GASTOS MATERIALES EN GASTOS.PHP
+    if ($action == "exportarExcelGastos") {
+
+        $fila = 1;
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Materiales");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'FECHA');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'CECO');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'ASIGNACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'DESCRIPCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'PROVEEDOR AF');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'IMPORTE');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'CUENTA MAYOR');
+
+        $query = "SELECT* FROM t_compras_america_materiales 
+            WHERE activo = 1 and id_destino = $idDestino";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+
+                $fecha = $x['fecha_contabilizacion'];
+                $cc = $x['centro_coste'];
+                $asignacion = $x['asignacion'];
+                $textoCeco = $x['texto_ceco'];
+                $nombre_1 = $x['nombre_cuenta'];
+                $texto = $x['texto'];
+                $importe = $x['importe_usd'];
+                $nombreProveedorAF = $x['nombre_proveedor'];
+                $documentoCompras = $x['documento_compras'];
+
+                // $arrayTemp = array(
+                //     "fecha" => $fecha,
+                //     "importe" => $importe,
+                //     "cc" => $cc,
+                //     "asignacion" => $asignacion,
+                //     "texto" => $texto,
+                //     "nombreProveedorAF" => $nombreProveedorAF,
+                //     "nombre_1" => $nombre_1,
+                //     "documentoCompras" => $documentoCompras,
+                //     "textoCeco" => $textoCeco
+                // );
+                // $array[] = $arrayTemp;
+                
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $fecha);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cc);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $asignacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $nombre_1);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $nombreProveedorAF);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $importe);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $documentoCompras);
+            }
+        }
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_MATERIALES_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
+
 
     if ($action == "reporteTareas") {
 
@@ -630,6 +696,7 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
 
     if ($action == "reporteProyectosGlobal") {
         $array = array();

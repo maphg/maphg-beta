@@ -274,7 +274,12 @@ document.getElementById("btnExportarServicios").addEventListener("click", () => 
 
 // EVENTOS PARA EXPORTAR
 document.getElementById("btnExportarMateriales").addEventListener("click", () => {
-    tableToExcel('tablaMateriales', 'excel');
+    // tableToExcel('tablaMateriales', 'excel');
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    alertaImg('Exportando Datos...', '', 'info', 1500);
+    window.open(`php/exportar_excel_GET.php?action="exportarExcelGastos&idDestino=${idDestino}&idUsuario=${idUsuario}"`, "Exportar Gastos", "width=300, height=200")
 })
 
 window.onload = function () {
