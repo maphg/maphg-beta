@@ -444,7 +444,6 @@ if (isset($_GET['action'])) {
 
     // EXPORTA GASTOS MATERIALES EN GASTOS.PHP
     if ($action == "exportarExcelGastos") {
-
         $fila = 1;
 
         $objPHPExcel = new PHPExcel();
@@ -474,6 +473,7 @@ if (isset($_GET['action'])) {
                 $importe = $x['importe_usd'];
                 $nombreProveedorAF = $x['nombre_proveedor'];
                 $documentoCompras = $x['documento_compras'];
+                $fila++;
 
                 // $arrayTemp = array(
                 //     "fecha" => $fecha,
@@ -487,7 +487,7 @@ if (isset($_GET['action'])) {
                 //     "textoCeco" => $textoCeco
                 // );
                 // $array[] = $arrayTemp;
-                
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $fecha);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cc);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $asignacion);
