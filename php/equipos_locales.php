@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
         t_equipos_america.local_equipo, t_equipos_america.status
         FROM t_equipos_america
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and 
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and 
         t_equipos_america.jerarquia = 'PRINCIPAL' $filtroDestinoEquipo";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
@@ -680,7 +680,7 @@ if (isset($_GET['action'])) {
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $proximoMpFechaX = (new DateTime($a['ultima_modificacion']))
-                        ->format("d/m/Y");
+                            ->format("d/m/Y");
                         for ($x = 1; $x < 53; $x++) {
                             $semana_x = $a['semana_' . $x];
                             if ($semana_x == "PLANIFICADO") {

@@ -99,7 +99,7 @@ const datosProyectosDEP = params => {
         var fTipo = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto}, 'tipo');"`;
         var fJustificacion = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'justificacion');"`;
         var fCoste = `onclick="hiddenVista('tooltipProyectosDEP'); obtenerDatoProyectosDEP(${idProyecto},'coste');"`;
-        var fPresupuesto = `onclick="hiddenVista('tooltipProyectosDEP'); toggleModalTailwind('modalPresupuestoProyecto');"`;
+        var fPresupuesto = `onclick="hiddenVista('tooltipProyectosDEP'); toggleModalTailwind('modalPresupuestoProyecto'); obtenerPresupuestoDEP(${idProyecto})"`;
         var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
         var fStatus = `onclick="hiddenVista('tooltipProyectosDEP'); statusProyectoDEP(${idProyecto});"`;
 
@@ -1006,6 +1006,7 @@ function actualizarProyectosDEP(valor, columna, idProyecto) {
             tipo: tipo,
             coste: coste,
             titulo: titulo,
+            presupuesto: presupuestoProyecto.value
         },
         // dataType: "JSON",
         success: function (data) {
@@ -1051,12 +1052,44 @@ function actualizarProyectosDEP(valor, columna, idProyecto) {
                 alertaImg("Proyecto Restaurado", "", "success", 2000);
             } else if (data == 10) {
                 alertaImg("Solucione todas las actividades para poder Solucionar el Proyecto", "", "warning", 4000);
+            } else if (data == 11) {
+                obtenerProyectosDEP(idSubseccion, "PENDIENTE");
+                toggleModalTailwind('modalPresupuestoProyecto');
+                alertaImg("Presupuesto Actualizado", "", "success", 2000);
             } else {
                 alertaImg("Intente de Nuevo", "", "info", 3000);
             }
-        },
+        }
     });
 }
+
+
+// OBTIENE PRESUPUESTO
+function obtenerPresupuestoDEP(idProyecto) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    btnPresupuestoProyecto.
+        setAttribute('onclick', `actualizarProyectosDEP(0, 'presupuesto', ${idProyecto})`);
+
+    const action = "obtenerProyectoPorID";
+    const URL = `php/proyectos_planacciones.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const presupuesto = array[x].presupuesto;
+                    presupuestoProyecto.value = presupuesto;
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+}
+
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectosDEP(idProyecto) {
