@@ -184,20 +184,22 @@ function obtenerDetallesPlanMP(idPlanMP) {
     // Datos Basicos.
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerDetallesPlanMP";
 
     // Operaciones Iniciales.
     localStorage.setItem('idPlanMP', idPlanMP);
     document.getElementById("modalDetallesPlanMP").classList.add('open');
     alertaImg(' Debe contener al menos una ACTIVIDAD', '', 'question', 5000);
 
-    // Sirve solo para mostrar las diferentes opciones que puede tener el Plan.
 
     let promesa = new Promise((resolve, reject) => {
+        // Sirve solo para mostrar las diferentes opciones que puede tener el Plan.
         obtenerOpcionesPlanMP();
+        console.log(1);
+        resolve(resolve, reject)
     })
     promesa.then((resolve, reject) => {
 
-        const action = "obtenerDetallesPlanMP";
         $.ajax({
             type: "POST",
             url: "php/planes_mantenimiento_crud.php",
@@ -209,6 +211,7 @@ function obtenerDetallesPlanMP(idPlanMP) {
             },
             dataType: "JSON",
             success: function (data) {
+                console.log(2);
                 obtenerMaterialPlanMP();
                 obtenerActividadesPlanMP();
                 document.getElementById("dataOptionDestinosMP").value = data.idDestino;
@@ -220,7 +223,6 @@ function obtenerDetallesPlanMP(idPlanMP) {
                 document.getElementById("dataOpcionFrecuenciaMP").value = data.idPeriodicidad;
                 document.getElementById("dataObservacionesPlanMP").value = data.descripcion;
                 document.getElementById("dataPersonasPlanMP").value = data.personas;
-
             }
         });
     })
