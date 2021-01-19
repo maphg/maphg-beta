@@ -2617,6 +2617,7 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
    const action = 'obtenerIncidenciaEquipos';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}`;
+   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
