@@ -2710,6 +2710,7 @@ function obtenerIncidenciaEquipos(idIncidencia) {
             }
 
             // ADJUNTO
+
             for (let x = 0; x < array.adjuntos.length; x++) {
                const idAdjunto = array.adjuntos[x].idAdjunto;
                const url = array.adjuntos[x].url;
@@ -6966,37 +6967,37 @@ function obtenerPendientesUsuario() {
 
          if (array) {
 
-            if (array.pendientes) {
-               for (let x = 0; x < array.pendientes.length; x++) {
-                  const idPendiente = array.pendientes[x].idPendiente;
-                  const tipoPendiente = array.pendientes[x].tipoPendiente;
-                  const seccion = array.pendientes[x].seccion;
-                  const actividad = array.pendientes[x].actividad;
-                  let fVerEnPlanner = '';
+            // if (array.pendientes) {
+            //    for (let x = 0; x < array.pendientes.length; x++) {
+            //       const idPendiente = array.pendientes[x].idPendiente;
+            //       const tipoPendiente = array.pendientes[x].tipoPendiente;
+            //       const seccion = array.pendientes[x].seccion;
+            //       const actividad = array.pendientes[x].actividad;
+            //       let fVerEnPlanner = '';
 
-                  if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
-                     fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
-                  } else if (tipoPendiente == 'INCIDENCIA') {
-                     fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
-                  } else if (tipoPendiente == 'PLANACCION') {
-                     fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPendiente}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
-                  }
+            //       if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
+            //          fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
+            //       } else if (tipoPendiente == 'INCIDENCIA') {
+            //          fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
+            //       } else if (tipoPendiente == 'PLANACCION') {
+            //          fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPendiente}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
+            //       }
 
-                  const codigo = `
-                        <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_${tipoPendiente}"
-                        ${fVerEnPlanner}>
-                           <h1 class="truncate mr-2" data-title="${actividad}">
-                              ${seccion + ' - ' + tipoPendiente + ' - ' + actividad}
-                           </h1>
-                           <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-                              <h1>1</h1>
-                           </div>
-                        </div>   
-                     `;
+            //       const codigo = `
+            //             <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_${tipoPendiente}"
+            //             ${fVerEnPlanner}>
+            //                <h1 class="truncate mr-2" data-title="${actividad}">
+            //                   ${seccion + ' - ' + tipoPendiente + ' - ' + actividad}
+            //                </h1>
+            //                <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
+            //                   <h1>1</h1>
+            //                </div>
+            //             </div>   
+            //          `;
 
-                  dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
-               }
-            }
+            //       dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
+            //    }
+            // }
 
             if (array.incidencias) {
                totalPendientesFallas.innerHTML = `Incidencia (${array.incidencias.length})`;
