@@ -9910,7 +9910,7 @@ if (isset($_POST['action'])) {
                     }
 
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                         AND id_plan = $idPlan AND semana_$semanaX = 'PROCESO' AND activo = 1";
+                    AND id_plan = $idPlan AND año = '$año' AND semana_$semanaX IN ('PROCESO', 'SOLUCIONADO') AND activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
