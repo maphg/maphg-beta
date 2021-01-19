@@ -1823,14 +1823,14 @@
                     </div>
                     <div class="w-1/2">
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
-                            <h1 class="mb-1" style="color: #ABADB7;">Subtareas:
+                            <h1 class="mb-1" style="color: #ABADB7;">Acciones:
                                 <div class="flex flex-wrap w-full justify-start items-center">
                                     <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
                                         <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
                                             <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
                                                 <div class="w-4 h-4  mr-2 flex-none"></div>
                                                 <div class=" text-justify w-full h-full ">
-                                                    <input id="inputActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                                                    <input id="inputActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Acción" autocomplete="off">
                                                 </div>
                                                 <div id="btnAgregarActividadPlanaccionX" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
                                                     <i class="fas fa-plus"></i>
@@ -2012,14 +2012,14 @@
                     </div>
                     <div class="w-1/2">
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
-                            <h1 class="mb-1" style="color: #ABADB7;">Subtareas:
+                            <h1 class="mb-1" style="color: #ABADB7;">Acciones:
                                 <div class="flex flex-wrap w-full justify-start items-center">
                                     <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
                                         <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
                                             <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
                                                 <div class="w-4 h-4  mr-2 flex-none"></div>
                                                 <div class=" text-justify w-full h-full ">
-                                                    <input id="actividadVerEnPlanner" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                                                    <input id="actividadVerEnPlanner" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Acción" autocomplete="off">
                                                 </div>
                                                 <div id="btnAgregarActividadVerEnPlanner" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
                                                     <i class="fas fa-plus"></i>

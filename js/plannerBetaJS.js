@@ -5351,6 +5351,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
       var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
+      var fStatus1 = `onclick="obtenerstatusMC(${idRegistro});"`;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
@@ -5362,6 +5363,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
       var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
+      var fStatus1 = ``;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
@@ -5373,6 +5375,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
       var fStatus = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
+      var fStatus1 = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
@@ -5384,6 +5387,7 @@ const datosFallasTareas = params => {
       var fAdjuntos = '';
       var fComentarios = '';
       var fStatus = `onclick="actualizarTareas(${idRegistro},  'status', 'P');"`;
+      var fStatus1 = ``;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
@@ -5429,7 +5433,7 @@ const datosFallasTareas = params => {
             <h1>${valoradjuntos}</h1>
          </td>
 
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
+         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3" ${fStatus1}>
             <div class="text-sm flex justify-center items-center font-bold">
                ${materialesx}
                ${energeticosx}

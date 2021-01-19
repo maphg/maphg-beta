@@ -2044,7 +2044,7 @@ if (isset($_GET['action'])) {
         $array = array();
 
         $query = "SELECT id, id_destino, periodicidad, id_tipo_equipo, notas FROM t_planes_mantto 
-        WHERE id_destino = $idDestino and exportado = 'NO'";
+        WHERE id_destino = $idDestino and exportado = 'NO' and id_tipo_equipo IN(30, 29)";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idPlan = $x['id'];
