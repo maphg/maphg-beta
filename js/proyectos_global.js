@@ -153,7 +153,7 @@ const datosProyectos = params => {
             </td>
 
             <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
-                <div class="font-semibold uppercase leading-4" data-title="${params.proyecto}">
+                <div class="font-semibold uppercase leading-4" data-title-info="${params.proyecto}">
                     <h1 class="truncate">${params.proyecto}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
@@ -322,7 +322,7 @@ const datosPlanes = params => {
     <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion}" ${ocultarActividades}>
             <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;" 
             ${fToolTip}>
-                <div class="font-semibold uppercase leading-4" data-title="${params.actividad}">
+                <div class="font-semibold uppercase leading-4" data-title-info="${params.actividad}">
                     <h1 id="AP${idPlanaccion}" class="truncate">${params.actividad}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
