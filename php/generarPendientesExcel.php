@@ -20,17 +20,15 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     }
 
     //FALLAS Generales
-    $queryF = "
-        SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
-        FROM t_mc 
-        INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
-        INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
-        INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id 
-        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
-        LEFT JOIN t_users ON t_mc.responsable = t_users.id 
-        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-        WHERE t_mc.activo = 1 $filtroF
-    ";
+    $queryF = " SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
+    FROM t_mc 
+    INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
+    INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
+    INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id 
+    INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
+    LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+    WHERE t_mc.activo = 1 $filtroF";
     //Fin Tipo de Pendiente es MC ahora -> Fallas.
 
     //Inicio Tipo Tareas.
@@ -60,7 +58,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte Fallas y Tareas");
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setTitle("Reporte Fallas y Tareas");
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Incidencias");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', 'Destino');
         $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Sección');
         $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Subsección');
@@ -241,7 +239,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         }
         $fecha = date('d-m-Y H:m:s');
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header('Content-Disposition: attachment;filename="Reporte_FallasYTareas ' . $nombreCompletoG . ' ' . $fecha . '.xlsx"');
+        header('Content-Disposition: attachment;filename="Reporte_INCIDENCIAS ' . $nombreCompletoG . ' ' . $fecha . '.xlsx"');
         header('Cache-Control: max-age=0');
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');

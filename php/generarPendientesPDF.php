@@ -213,7 +213,7 @@ if (isset($_GET['listaIdF'])) {
             }
 
             if ($equipo == "") {
-                $equipo = "Tareas Generales";
+                $equipo = "Incidencias Generales";
             }
 
             if ($responsable == "") {
@@ -286,7 +286,7 @@ if (isset($_GET['listaIdF'])) {
 
                     <div class="ml-2 font-light text-4xl flex flex-col leading-none">
                         <div>
-                            <h1 class="">FALLAS Y TAREAS PENDIENTES</h1>
+                            <h1 class="">INCIDENCIAS PENDIENTES</h1>
                         </div>
                         <div class="flex flex-col ml-2 font-light text-base  justify-center items-center">
                             <h1 class="mt-1">Total: <span class="font-bold"><?= $totalResultados; ?></span></h1>

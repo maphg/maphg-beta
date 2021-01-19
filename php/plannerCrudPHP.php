@@ -199,7 +199,7 @@ if (isset($_POST['action'])) {
 
                         $queryTareas = "SELECT count(id) 
                         FROM t_mp_np
-                        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 and activo = 1 and (status = 'PENDIENTE' or status = 'P' or status = 'N') and activo = 1 $filtroDestinoTG";
+                        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 and activo = 1 and (status = 'PENDIENTE' or status = 'P' or status = 'N') $filtroDestinoTG";
                         $totalTareasGenerales = 0;
                         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
                             foreach ($resultTareas as $x) {
@@ -3153,8 +3153,8 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
             $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoT";
         } else {
-            $filtroTipoF = "activo = 2";
-            $filtroTipoT = "t_mp_np.activo = 2";
+            $filtroTipoF = "activo = 29";
+            $filtroTipoT = "t_mp_np.activo = 29";
         }
 
         // Genera lista ID de Fallas.
