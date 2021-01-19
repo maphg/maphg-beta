@@ -2502,7 +2502,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_equipos_america.equipo, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.tipo_incidencia, t_mc.fecha_creacion, t_mc.rango_fecha
         FROM t_mc 
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
-        INNER JOIN t_users ON t_mc.creado_por = t_users.id = t_users.id
+        INNER JOIN t_users ON t_mc.creado_por = t_users.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mc.id = $idIncidencia";
         if ($result = mysqli_query($conn_2020, $query)) {
