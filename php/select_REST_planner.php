@@ -2499,20 +2499,30 @@ if (isset($_GET['action'])) {
         $idIncidencia = $_GET['idIncidencia'];
         $array = array();
 
-        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_equipos_america.equipo
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_equipos_america.equipo, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.tipo_incidencia, t_mc.fecha_creacion, t_mc.rango_fecha
         FROM t_mc 
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
+        INNER JOIN t_users ON t_mc.creado_por = t_users.id = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mc.id = $idIncidencia";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idIncidencia = $x['id'];
                 $actividad = $x['actividad'];
                 $equipo = $x['equipo'];
+                $fecha = (new DateTime($x['fecha_creacion']))->format('Y-m-d');
+                $rangoFecha = $x['rango_fecha'];
+                $creadoPor = $x['nombre'] . " " . $x['apellido'];
+                $tipoIncidencia = $x['tipo_incidencia'];
 
                 $array['incidencia'][] = array(
                     "idIncidencia" => intval($idIncidencia),
                     "actividad" => $actividad,
                     "equipo" => $equipo,
+                    "fecha" => $fecha,
+                    "rangoFecha" => $rangoFecha,
+                    "creadoPor" => $creadoPor,
+                    "tipoIncidencia" => $tipoIncidencia
                 );
 
                 #COMENTARIOS
@@ -2676,6 +2686,34 @@ if (isset($_GET['action'])) {
                     }
                 }
             }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA ACTIVIDADES EN INCIDENCIAS
+    if ($action == "agregarActividadesIncidencias") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $actividad = $_GET['actividad'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_mc_actividades_ot(id_falla, actividad, status, activo) VALUES($idIncidencia, '$actividad', 'SOLUCIONADO', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA COMENTARIOS EN INCIDENCIAS
+    if ($action == "agregarComentarioIncidencia") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $comentario = $_GET['comentario'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idIncidencia, '$comentario', $idUsuario, '$fechaActual', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
         }
         echo json_encode($resp);
     }

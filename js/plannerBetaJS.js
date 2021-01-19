@@ -45,6 +45,14 @@ const btnAplicarNuevoTituloPlanacciontoggle =
 const btnEliminarActividadPlanaccion = document.getElementById("btnEliminarActividadPlanaccion");
 const btnGraficasReportesDiario = document.getElementById("btnGraficasReportesDiario");
 const btnPresupuestoProyecto = document.getElementById("btnPresupuestoProyecto");
+const btnModalAgregarEnergeticos = document.getElementById("btnModalAgregarEnergeticos");
+const btnColumnasInicdencias = document.getElementById("btnColumnasInicdencias");
+const btnColumnasPreventivos = document.getElementById("btnColumnasPreventivos");
+const btnColumnasPredictivos = document.getElementById("btnColumnasPredictivos");
+const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEquiposAmerica");
+const btnAgregarActividadVerEnPlanner = document.getElementById("btnAgregarActividadVerEnPlanner");
+const btnAgregarComentarioVerEnPlanner =
+   document.getElementById("btnAgregarComentarioVerEnPlanner");
 
 // ELEMENTOS BUTTOM ID
 
@@ -63,17 +71,15 @@ const inputCod2bend = document.getElementById("inputCod2bend");
 const inputFilePlanaccion = document.getElementById("inputFilePlanaccion");
 const nuevoTituloPlanaccion = document.getElementById("nuevoTituloPlanaccion");
 const presupuestoProyecto = document.getElementById("presupuestoProyecto");
+const actividadVerEnPlanner = document.getElementById("actividadVerEnPlanner");
+const comentarioIncidenciaVerEnPlanner =
+   document.getElementById("comentarioIncidenciaVerEnPlanner");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
 const contenedorEquipoLocalIncidencias = document.
    getElementById("contenedorEquipoLocalIncidencias");
-const btnModalAgregarEnergeticos = document.getElementById("btnModalAgregarEnergeticos");
 const nombreSubseccionEnergeticos = document.getElementById("nombreSubseccionEnergeticos");
-const btnColumnasInicdencias = document.getElementById("btnColumnasInicdencias");
-const btnColumnasPreventivos = document.getElementById("btnColumnasPreventivos");
-const btnColumnasPredictivos = document.getElementById("btnColumnasPredictivos");
-const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEquiposAmerica");
 const dataActividadesPlanaccion = document.getElementById("dataActividadesPlanaccion");
 const dataComentariosPlanaccion = document.getElementById("dataComentariosPlanaccion");
 const dataAdjutnosPlanaccion = document.getElementById("dataAdjutnosPlanaccion");
@@ -92,11 +98,25 @@ const totalPendientesFallas = document.getElementById("totalPendientesFallas");
 const totalPendientesPDA = document.getElementById("totalPendientesPDA");
 const tooltipOpcionesActividadPlanaccion =
    document.getElementById("tooltipOpcionesActividadPlanaccion");
-const dataAdjuntosIncidencia = document.getElementById("dataAdjuntosIncidencia");
-const dataComentariosIncidencia = document.getElementById("dataComentariosIncidencia");
 const tooltipOpcionesActividadIncidencias =
    document.getElementById("tooltipOpcionesActividadIncidencias");
-const dataActividadesIncidencia = document.getElementById("dataActividadesIncidencia");
+
+const tipoIncidenciaVerEnPlanner = document.getElementById("tipoIncidenciaVerEnPlanner");
+const tituloVerEnPlanner = document.getElementById("tituloVerEnPlanner");
+const fechaVerEnPlanner = document.getElementById("fechaVerEnPlanner");
+const creadoPorVerEnPlanner = document.getElementById("creadoPorVerEnPlanner");
+const responsablesVerEnPlanner = document.getElementById("responsablesVerEnPlanner");
+const statusVerEnPlanner = document.getElementById("statusVerEnPlanner");
+const rangoFechaVerEnPlanner = document.getElementById("rangoFechaVerEnPlanner");
+const asignadoAVerEnPlanner = document.getElementById("asignadoAVerEnPlanner");
+const btnVerOTVerEnPlanner = document.getElementById("btnVerOTVerEnPlanner");
+const dataActividadesIncidenciaVerEnPlanner =
+   document.getElementById("dataActividadesIncidenciaVerEnPlanner");
+const dataComentariosIncidenciaVerEnPlanner =
+   document.getElementById("dataComentariosIncidenciaVerEnPlanner");
+const dataAdjuntosIncidenciaVerEnPlanner =
+   document.getElementById("dataAdjuntosIncidenciaVerEnPlanner");
+
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -2601,18 +2621,59 @@ function obtenerIncidenciaEquipos(idIncidencia) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
+         tipoIncidenciaVerEnPlanner.className = '';
+         tipoIncidenciaVerEnPlanner.innerHTML = '';
+         tituloVerEnPlanner.innerText = '';
+         fechaVerEnPlanner.innerText = '';
+         creadoPorVerEnPlanner.innerText = '';
+         rangoFechaVerEnPlanner.innerText = '';
+         asignadoAVerEnPlanner.innerText = '';
+         dataComentariosIncidenciaVerEnPlanner.innerHTML = '';
+         dataAdjuntosIncidenciaVerEnPlanner.innerHTML = '';
+         dataActividadesIncidenciaVerEnPlanner.innerHTML = '';
+         return array;
+      })
+      .then(array => {
          if (array) {
 
             // DATOS
             for (let x = 0; x < array.incidencia.length; x++) {
                const idIncidencia = array.incidencia[x].idIncidencia;
                const actividad = array.incidencia[x].actividad;
-               const equipos = array.incidencia[x].equipos;
+               const equipo = array.incidencia[x].equipo;
                const tipoIncidencia = array.incidencia[x].tipoIncidencia;
                const fecha = array.incidencia[x].fecha;
                const creadoPor = array.incidencia[x].creadoPor;
                const responsable = array.incidencia[x].responsable;
+               const rangoFecha = array.incidencia[x].rangoFecha;
 
+               const estiloTipoIncidencia =
+                  tipoIncidencia == "URGENCIA" ? 'text-red-500 bg-red-200' :
+                     tipoIncidencia == "EMERGENCIA" ? 'text-orange-500 bg-orange-200' :
+                        tipoIncidencia == "ALARMA" ? 'text-yellow-500 bg-yellow-200' :
+                           tipoIncidencia == "ALERTA" ? 'text-blue-500 bg-blue-200' :
+                              'text-teal-500 bg-teal-200';
+
+
+               tipoIncidenciaVerEnPlanner.innerHTML = `<h1>${tipoIncidencia}</h1>`;
+               tipoIncidenciaVerEnPlanner.
+                  className = 'font-bold text-xs py-1 px-2 rounded-b-md ' + estiloTipoIncidencia;
+               tituloVerEnPlanner.innerHTML = actividad;
+               fechaVerEnPlanner.innerText = fecha;
+               creadoPorVerEnPlanner.innerText = creadoPor;
+               rangoFechaVerEnPlanner.innerText = rangoFecha;
+               asignadoAVerEnPlanner.innerText = equipo;
+               // responsablesVerEnPlanner
+               // statusVerEnPlanner
+
+               btnVerOTVerEnPlanner.
+                  setAttribute('onclick', `redireccionarOTVerEnPlanner('INCIDENCIA', ${idIncidencia})`);
+
+               btnAgregarActividadVerEnPlanner.
+                  setAttribute('onclick', `agregarActividadesIncidencias(${idIncidencia})`);
+
+               btnAgregarComentarioVerEnPlanner.
+                  setAttribute('onclick', `agregarComentarioIncidencia(${idIncidencia});`);
             }
 
             // COMENTARIOS
@@ -2642,8 +2703,9 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                      </div>
                   </div>
                `;
-               dataComentariosIncidencia.insertAdjacentHTML('beforeend', codigo);
-               dataComentariosIncidencia.scrollTop = dataComentariosIncidencia.scrollHeight;
+               dataComentariosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+               dataComentariosIncidenciaVerEnPlanner.
+                  scrollTop = dataComentariosIncidenciaVerEnPlanner.scrollHeight;
 
             }
 
@@ -2671,7 +2733,7 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                      </a>
                   `;
                }
-               dataAdjuntosIncidencia.insertAdjacentHTML('beforeend', codigo);
+               dataAdjuntosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
             }
 
             // ACTIVIDADES
@@ -2692,7 +2754,7 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                      </div>
                   </div>
                `;
-               dataActividadesIncidencia.insertAdjacentHTML('beforeend', codigo);
+               dataActividadesIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
             }
          }
       })
@@ -2701,6 +2763,74 @@ function obtenerIncidenciaEquipos(idIncidencia) {
       })
 }
 
+
+// ABRE OT DE INCIDENCIAS E INCICDENCIAS GENERALES
+function redireccionarOTVerEnPlanner(tipoOT, idOT) {
+   if (tipoOT == "INCIDENCIA") {
+      window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#F${idOT}`, 'OT');
+   } else {
+      window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#T${idOT}`, 'OT');
+   }
+}
+
+
+
+function agregarActividadesIncidencias(idIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarActividadesIncidencias";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&actividad=${actividadVerEnPlanner.value}`;
+
+   if (actividadVerEnPlanner.value.length > 1) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               actividadVerEnPlanner.value = '';
+               alertaImg('Actividad Agregada', '', 'success', 1400);
+               obtenerIncidenciaEquipos(idIncidencia);
+
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Actividad NO Valida', '', 'info', 1400);
+   }
+}
+
+
+function agregarComentarioIncidencia(idIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarComentarioIncidencia";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&comentario=${comentarioIncidenciaVerEnPlanner.value}`;
+
+   if (comentarioIncidenciaVerEnPlanner.value.length) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               comentarioIncidenciaVerEnPlanner.value = '';
+               alertaImg('Comentario Agregado', '', 'success', 1400);
+               obtenerIncidenciaEquipos(idIncidencia);
+
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Comentario Vacio', '', 'info', 1400);
+   }
+}
 
 // OPCIONES PARA ACTIVIDADES EN INCIDENCIAS
 function mostrarOpcionesActividadIncidencias(idActividad) {
