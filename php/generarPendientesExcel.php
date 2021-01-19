@@ -21,12 +21,12 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
     //FALLAS Generales
     $queryF = "
-        SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
+        SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_mc 
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
         INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id 
-        LEFT JOIN t_equipos ON t_mc.id_equipo = t_equipos.id 
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
         LEFT JOIN t_users ON t_mc.responsable = t_users.id 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
         WHERE t_mc.activo = 1 $filtroF
@@ -41,17 +41,16 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     }
 
     //TAREAS Generales
-    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos.equipo, t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
+    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, t_mp_np.tipo_incidencia, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, 
+    t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
     FROM t_mp_np
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
-    INNER JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id
-    INNER JOIN c_secciones ON t_equipos.id_seccion = c_secciones.id
-    INNER JOIN c_subsecciones ON t_equipos.id_subseccion = c_subsecciones.id
+    INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
+    INNER JOIN c_subsecciones ON t_mp_np.id_subseccion = c_subsecciones.id
     -- id_usuario, hace referencia quíen lo Creo.
     INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
     INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_mp_np.activo = 1 $filtroT
-    ";
+    WHERE t_mp_np.activo = 1 $filtroT";
     //Fin Tipo Tareas.
 
 
@@ -71,7 +70,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Creado Por');
         $objPHPExcel->getActiveSheet()->setCellValue('H1', 'U. Comentario');
         $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Comentario de:');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo Pendiente');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo Incidencia');
         $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Material');
         $objPHPExcel->getActiveSheet()->setCellValue('L1', 'CODSAP');
         $objPHPExcel->getActiveSheet()->setCellValue('M1', 'COD2BEND');
@@ -89,6 +88,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $materialF = $row['status_material'];
             $codsapF = $row['codsap'];
             $cod2bendF = $row['cod2bend'];
+            $tipoIncidencia = $row['tipo_incidencia'];
 
             if ($materialF != 0) {
                 $materialF = "SI";
@@ -141,7 +141,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $nombreCreadoF);
             $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $comentario);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $realizoComentario);
-            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Fallas');
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipoIncidencia);
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialF);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapF);
             $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendF);
@@ -155,13 +155,14 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $destino = $rowT['destino'];
             $seccion = $rowT['seccion'];
             $subseccion = $rowT['grupo'];
-            $equipo = $rowT['equipo'];
+            $equipo = "Incidencia General";
             $titulo = $rowT['titulo'];
             $responsable = $rowT['nombre'] . " " . $rowT['apellido'];
             $creadoPorT = $rowT['id_usuario'];
             $materialT = $row['status_material'];
             $codsapT = $row['codsap'];
             $cod2bendT = $row['cod2bend'];
+            $tipoIncidenciaT = $row['tipo_incidencia'];
 
             if ($materialT != 0) {
                 $materialT = "SI";
@@ -215,7 +216,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $nombreCreado);
             $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $comentarioT);
             $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentarioDeT);
-            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, 'Tareas');
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipoIncidenciaT);
             $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialT);
             $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapT);
             $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendT);

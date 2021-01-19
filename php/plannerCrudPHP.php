@@ -3124,34 +3124,34 @@ if (isset($_POST['action'])) {
         // Filtros para Generar Reporte Fallas.
         if ($tipoExportar == "exportarMisPendientes") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccion") {
             $filtroTipoF = "AND id_seccion = $idSeccion $filtroDestinoF";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion $filtroDestinoT";
+            $filtroTipoT = "AND id_seccion = $idSeccion $filtroDestinoT";
         } elseif ($tipoExportar == "exportarSubseccion") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_equipos.id_subseccion = $idSubseccion $filtroDestinoT";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoT";
         } elseif ($tipoExportar == "exportarPorResponsable") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisCreadosPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } elseif ($tipoExportar == "exportarMisPendientesPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarCreadosPorPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
         } elseif ($tipoExportar == "exportarMisCreados") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } elseif ($tipoExportar == "exportarCreadosDe") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } elseif ($tipoExportar == "exportarSubseccionPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
-            $filtroTipoT = "AND t_equipos.id_seccion = $idSeccion AND t_equipos.id_subseccion = $idSubseccion $filtroDestinoT";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoT";
         } else {
             $filtroTipoF = "activo = 2";
             $filtroTipoT = "t_mp_np.activo = 2";
@@ -3178,7 +3178,7 @@ if (isset($_POST['action'])) {
 
         // Genera lista ID Tareas
         $queryT = "SELECT t_mp_np.id FROM t_mp_np 
-        LEFT JOIN t_equipos ON t_mp_np.id_equipo = t_equipos.id WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P' OR t_mp_np.status = 'PENDIENTE') $filtroTipoT";
+        WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P' OR t_mp_np.status = 'PENDIENTE') $filtroTipoT";
         $data["query2"] = $queryT;
         if ($resultT = mysqli_query($conn_2020, $queryT)) {
             $contador = 0;
