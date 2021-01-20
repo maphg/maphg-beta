@@ -310,7 +310,8 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT id, equipo, local_equipo, status
         FROM t_equipos_america
-        WHERE id_equipo_principal = $idEquipo and jerarquia = 'SECUNDARIO' and activo = 1";
+        WHERE id_equipo_principal = $idEquipo and jerarquia = 'SECUNDARIO' and activo = 1 
+        and status IN('OPERATIVO', 'TALLER')";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
