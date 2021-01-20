@@ -5414,7 +5414,15 @@ function hiddenVista(idVista) {
 
 // toggle clase HIDDEN
 function toggleHidden(idVista) {
-   document.getElementById(idVista).classList.toggle('hidden');
+   if (document.getElementById(idVista)) {
+      let idVistaX = document.getElementById(idVista);
+
+      if (idVistaX.classList.contains('hidden')) {
+         idVistaX.classList.remove('hidden');
+      } else {
+         idVistaX.classList.add('hidden');
+      }
+   }
 }
 
 
