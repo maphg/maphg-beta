@@ -827,8 +827,10 @@ function consultaSubsecciones(idDestino, idUsuario) {
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
    localStorage.setItem('idSeccion', idSeccion);
 
+   btnPendientesModal('btnPendientesIncidencias');
+
    btnPendientesIncidencias.
-      setAttribute('onclick', `pendientesSubsecciones(${idSeccion}, ${tipoPendiente}, ${nombreSeccion}, ${idUsuario}, ${idDestino})`);
+      setAttribute('onclick', `pendientesSubsecciones(${idSeccion}, '${tipoPendiente}', '${nombreSeccion}', ${idUsuario}, ${idDestino})`);
 
    let contenedorSubsecciones = document.getElementById("dataOpcionesSubseccionestoggle");
    document.getElementById("modalPendientes").classList.add("open");
@@ -938,6 +940,8 @@ btnPendientesPreventivos.addEventListener('click', () => {
    let idUsuario = localStorage.getItem('usuario');
    let idSeccion = localStorage.getItem('idSeccion');
 
+   btnPendientesModal('btnPendientesPreventivos');
+
    const action = "obtenerPendientesMP";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
 
@@ -1015,34 +1019,50 @@ btnPendientesPreventivos.addEventListener('click', () => {
                   '<i class="fas fa-paperclip mx-2"></i>' : '';
 
                const iconoT = sTrabajando == 1 ?
-                  '<p class="text-xs font-black bg-blue-200 text-blue-500 py-1 px-2 w-6 rounded">T</p>' : '';
+                  '<p class="text-xs font-black bg-blue-200 text-blue-500 px-1 rounded">T</p>' : '';
 
                const iconoS = status == 'SOLUCIONADO' ?
-                  '<p class="text-xs font-black bg-green-200 text-green-500 py-1 px-2 mx-2 rounded">F</p >' : '';
+                  '<p class="text-xs font-black bg-green-200 text-green-500 px-1 mx-2 rounded">F</p >' : '';
 
                const iconoDEP = sDEP > 0 ?
-                  '<p class="text-xs font-black bg-black text-white py-1 px-2 mx-2 rounded">DEP</p >' : '';
+                  '<p class="text-xs font-black bg-black text-white px-1 mx-2 rounded">DEP</p >' : '';
+
+               const btnOpcion = status == "PROCESO" ?
+                  `
+                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
+                  <i class="fas fa-edit mr-1 text-sm"></i>Editar</button>
+                  
+                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})">
+                  <i class="fas fa-file-pdf mr-1  text-xsm"></i>PDF</button>
+                  `
+                  : `
+                  <button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold" onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})">
+                  <i class="fas fa-file-pdf mr-1  text-xsm"></i>PDF</button>                  
+                  `;
 
                const codigo = `
-                  <div id="${idMP + '_MP_I_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+                  <div id="${idMP + '_MP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
 
                      <div class="my-1">
-                        <p id="${idMP + '_MP_I_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
+                        <p id="${idMP + '_MP_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
                      </div>
 
-                     <div class="flex flex-row justify-between items-center text-sm">
-                        <div class="flex flex-row">
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
                            <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
                            <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
                         </div>
-                        <div class="text-gray-600 flex flex-row">
+                        <div class="text-gray-600 flex flex-row justify-end">
                               ${iconoComentario}
                               ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
                         </div>
                      </div>
 
                      <!-- Toogle -->
-                     <div id="${idMP + '_MP_I_toggle'}" class="mt-2 hidden">
+                     <div id="${idMP + '_MP_toggle'}" class="mt-2 hidden">
                         <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
                            <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
                            <p class="uppercase">${comentario} </p>
@@ -1050,12 +1070,10 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                         <div class="flex flex-row mt-1 self-center">
                            <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
-                        </div>
-
-                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
-                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
-                        </button>
-
+                           </div>
+                           <div class="flex flex-row items-center justify-center">
+                              ${btnOpcion}
+                           </div>
                      </div>
                   </div>               
                `;
@@ -1067,14 +1085,16 @@ btnPendientesPreventivos.addEventListener('click', () => {
                         <p id="${idMP + '_MP_DEP_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
                      </div>
 
-                     <div class="flex flex-row justify-between items-center text-sm">
-                        <div class="flex flex-row">
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
                            <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
                            <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
                         </div>
-                        <div class="text-gray-600 flex flex-row">
+                        <div class="text-gray-600 flex flex-row justify-end">
                               ${iconoComentario}
                               ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
                               ${iconoDEP}
                         </div>
                      </div>
@@ -1088,12 +1108,10 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                         <div class="flex flex-row mt-1 self-center">
                            <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
-                        </div>
-
-                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
-                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
-                        </button>
-
+                           </div>
+                           <div class="flex flex-row items-center justify-center">
+                              ${btnOpcion}
+                           </div>
                      </div>
                   </div>               
                `;
@@ -1105,15 +1123,17 @@ btnPendientesPreventivos.addEventListener('click', () => {
                         <p id="${idMP + '_MP_T_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
                      </div>
 
-                     <div class="flex flex-row justify-between items-center text-sm">
-                        <div class="flex flex-row">
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
                            <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
                            <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
                         </div>
-                        <div class="text-gray-600 flex flex-row">
+                        <div class="text-gray-600 flex flex-row justify-end">
                               ${iconoComentario}
                               ${iconoAdjunto}
                               ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
                         </div>
                      </div>
 
@@ -1126,12 +1146,10 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                         <div class="flex flex-row mt-1 self-center">
                            <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
-                        </div>
-
-                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
-                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
-                        </button>
-
+                           </div>
+                           <div class="flex flex-row items-center justify-center">
+                              ${btnOpcion}
+                           </div>
                      </div>
                   </div>               
                `;
@@ -1143,15 +1161,17 @@ btnPendientesPreventivos.addEventListener('click', () => {
                         <p id="${idMP + '_MP_S_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
                      </div>
 
-                     <div class="flex flex-row justify-between items-center text-sm">
-                        <div class="flex flex-row">
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
                            <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
-                           <p class="text-xs font-bold ml-1 text-gray-600 flex flex-row">${responsableX}</p>
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
                         </div>
-                        <div class="text-gray-600 flex flex-row">
+                        <div class="text-gray-600 flex flex-row justify-end">
                               ${iconoComentario}
                               ${iconoAdjunto}
+                              ${iconoT}
                               ${iconoS}
+                              ${iconoDEP}
                         </div>
                      </div>
 
@@ -1164,11 +1184,10 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                         <div class="flex flex-row mt-1 self-center">
                            <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
-                        </div>
-                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})">
-                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
-                        </button>
-
+                           </div>
+                           <div class="flex flex-row items-center justify-center">
+                              ${btnOpcion}
+                           </div>
                      </div>
                   </div>               
                `;
@@ -1207,6 +1226,24 @@ btnPendientesPreventivos.addEventListener('click', () => {
          fetch(APIERROR + err);
       })
 })
+
+
+// ACTIVDA BOTON
+const btnPendientesModal = (btn) => {
+
+   if (btn == "btnPendientesIncidencias") {
+
+      btnPendientesIncidencias.className = 'py-1 px-2 text-red-900 bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+
+      btnPendientesPreventivos.className = 'py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+
+   } else if (btn == "btnPendientesPreventivos") {
+
+      btnPendientesPreventivos.className = 'py-1 px-2 text-red-900 bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+
+      btnPendientesIncidencias.className = 'py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+   }
+}
 
 
 function toggleSubseccionesTipo(mostrar, ocultar) {
@@ -5236,6 +5273,7 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
 
 // Proceso para Ver OT
 function VerOTMPSolucionado(idEquipo, semanaX, idPlan) {
+   localStorage.setItem('URL', '');
 
    if (idEquipo != "" && semanaX != "") {
       localStorage.setItem('URL', `0;0;${idEquipo};${semanaX};${idPlan}`);
