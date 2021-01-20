@@ -1085,18 +1085,18 @@
                     </h1>
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
-                    <div class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
-                        <h1>Incidencias Y Tareas</h1>
+                    <div id="btnPendientesIncidencias" class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
+                        <h1>Incidencias</h1>
                     </div>
 
                     <a id="btnGraficasReportesDiario" class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="#">
                         <div>
-                            <h1>Reporte Incidencias Y Tareas</h1>
+                            <h1>Reporte Incidencias</h1>
                         </div>
                     </a>
 
-                    <div class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
-                        <h1>Preventivo</h1>
+                    <div id="btnPendientesPreventivos" class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <h1>Preventivos</h1>
                     </div>
                     <div class="py-1 px-2 rounded-r-md bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
                         <h1>Proyectos</h1>
@@ -1108,11 +1108,11 @@
                 <table id="tablaPendientes" class="table-auto text-xs text-center w-full">
                     <thead>
                         <tr class="cursor pointer">
-                            <th class="px-4 py-2">Subsección</th>
-                            <th class="px-4 py-2">Pendientes</th>
-                            <th class="px-4 py-2">Pendiente DEP</th>
-                            <th class="px-4 py-2">Trabajando</th>
-                            <th class="px-4 py-2">Solucionado</th>
+                            <th class="px-4 py-2 cursor-pointer">Subsección</th>
+                            <th class="px-4 py-2 cursor-pointer">Pendientes</th>
+                            <th class="px-4 py-2 cursor-pointer">Pendiente DEP</th>
+                            <th class="px-4 py-2 cursor-pointer">Trabajando</th>
+                            <th class="px-4 py-2 cursor-pointer" data-title-info="Ultimos 10 Días">Solucionado</th>
                         </tr>
                     </thead>
                     <tbody id="dataSubseccionesPendientes" class="divide-y">

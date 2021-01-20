@@ -1482,6 +1482,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTIENE LOS COMENTARIOS DE LAS SUBSECCIONES DE ENERGETICOS
     if ($action == "obtenerComentariosEnergetico") {
         $idEnergetico = $_GET['idEnergetico'];
         $array = array();
@@ -1858,6 +1859,8 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
+    // NUEVO METODO PARA ACTUALIZAR INFORMACIÓN DE LOS EQUIPOS
     if ($action == "actualizarEquipo") {
         $idEquipo = $_POST['idEquipo'];
         $equipo = $_POST['equipo'];
@@ -1942,6 +1945,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // AGREGA LAS INCIDENCIAS DESDE LAS COLUMNAS PRINCIPALES DE PLANNER
     if ($action == "agregarIncidencia") {
         $idSeccion = $_GET['idSeccion'];
         $idSubseccion = $_GET['idSubseccion'];
@@ -2004,6 +2008,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // AGREGA INCIDENCIAS EN ENERGETICOS
     if ($action == "agregarEnergetico") {
         $idSeccion = $_GET['idSeccion'];
         $idSubseccion = $_GET['idSubseccion'];
@@ -2044,7 +2049,7 @@ if (isset($_GET['action'])) {
         $array = array();
 
         $query = "SELECT id, id_destino, periodicidad, id_tipo_equipo, notas FROM t_planes_mantto 
-        WHERE id_destino = $idDestino and exportado = 'NO' and id_tipo_equipo IN(30, 29)";
+        WHERE id_destino = $idDestino and exportado = 'NO'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idPlan = $x['id'];
@@ -2314,6 +2319,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // AGREGA COMENTARIOS DE LOS PLANES DE ACCION
     if ($action == "agregarComentarioPlanaccion") {
         $idPlanaccion = $_GET['idPlanaccion'];
@@ -2342,6 +2348,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // ACTUALIZAR LA INFORMACIÓN DE LOS PLANES DE ACCION EN PROYECTOS (ID, COLUMNA, VALOR)
     if ($action == "actualizarInfoPlanaccion") {
         $idPlanaccion = $_GET['idPlanaccion'];
         $columna = $_GET['columna'];
@@ -2450,6 +2457,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // AGREGA ADJUNTOS EN LOS PLANES DE ACCION
     if ($action == "agregarAdjuntoPlanaccion") {
         $idPlanaccion = $_GET['idPlanaccion'];
         $resp = 0;
@@ -2590,6 +2598,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
     // TAREAS A INCIDENCIAS
     if ($action == "exportarTareasAIncidencias") {
         $resp = 0;
@@ -2716,6 +2725,153 @@ if (isset($_GET['action'])) {
             $resp = 1;
         }
         echo json_encode($resp);
+    }
+
+
+    // OBTIENE LOS PENDIENTES TRABAJANDO DE MP
+    if ($action == "obtenerPendientesMP") {
+        $idSeccion = $_GET['idSeccion'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_equipos_america.id_destino = $idDestino";
+        }
+
+        // SECCIONES Y SUBSECCIONES
+        $array['secciones'] = array();
+        $query = "SELECT c_secciones.id, c_secciones.seccion 
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino and c_secciones.id = $idSeccion
+        ORDER BY c_secciones.seccion ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
+
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
+                );
+
+                $array['subsecciones'] = array();
+                $query = "SELECT id, grupo 
+                FROM c_subsecciones WHERE id_seccion = $idSeccion
+                ORDER BY grupo ASC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idSubseccion = $x['id'];
+                        $subseccion = $x['grupo'];
+
+                        $array['subsecciones'][] = array(
+                            "idSubseccion" => intval($idSubseccion),
+                            "subseccion" => $subseccion
+                        );
+                    }
+                }
+
+                $array['mp'] = array();
+                $query = "SELECT id, grupo 
+                FROM c_subsecciones WHERE id_seccion = $idSeccion
+                ORDER BY grupo ASC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idSubseccion = $x['id'];
+                        $subseccion = $x['grupo'];
+
+                        #OBTIENES LOS TRABAJANDO MP
+                        #DATOS PARA OT: idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP
+                        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planes_mantenimiento.tipo_plan, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.id_equipo, t_mp_planificacion_iniciada.semana, t_mp_planificacion_iniciada.id_plan, t_mp_planificacion_iniciada.fecha_creacion, t_mp_planificacion_iniciada.status, 
+                        t_mp_planificacion_iniciada.status_trabajando,
+                        t_mp_planificacion_iniciada.departamento_calidad,
+                        t_mp_planificacion_iniciada.departamento_compras,
+                        t_mp_planificacion_iniciada.departamento_direccion,
+                        t_mp_planificacion_iniciada.departamento_finanzas,
+                        t_mp_planificacion_iniciada.departamento_rrhh,
+                        t_mp_planificacion_iniciada.id_responsables, t_equipos_america.equipo, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido
+                        FROM t_mp_planificacion_iniciada
+                        INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
+                        INNER JOIN t_users ON t_mp_planificacion_iniciada.creado_por = t_users.id
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                        INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+                        INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+                        WHERE t_mp_planificacion_iniciada.activo = 1 
+                        and (t_mp_planificacion_iniciada.status = 'PROCESO' or (t_mp_planificacion_iniciada.status = 'SOLUCIONADO')) 
+                        and t_equipos_america.id_subseccion = $idSubseccion $filtroDestino
+                        ORDER BY t_mp_planificacion_iniciada.id ASC";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $idMP = $x['id'];
+                                $tipoPlan = $x['tipo_plan'];
+                                $comentario = $x['comentario'];
+                                $creadoPor = strtok($x['nombre'], ' ') . " " .
+                                    strtok($x['apellido'], ' ');
+                                $idResponsable = $x['id_responsables'];
+                                $fecha = (new DateTime($x['fecha_creacion']))->format('Y-m-d');
+                                $equipo = $x['equipo'];
+                                $destino = $x['destino'];
+                                $status = $x['status'];
+                                $sTrabajando = $x['status_trabajando'];
+                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+
+                                #DATOS PARA ABRIR OT
+                                $idEquipo = $x['id_equipo'];
+                                $idPlan = $x['id_plan'];
+                                $semana = $x['semana'];
+
+                                #ADJUNTOS
+                                $totalAdjuntos = 0;
+                                $query = "SELECT count(id) 'id' FROM t_mp_planificacion_iniciada_adjuntos 
+                                WHERE id_planificacion_iniciada = $idMP and activo = 1";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $totalAdjuntos = $x['id'];
+                                    }
+                                }
+
+                                #RESPONSABLE
+                                $responsable = "";
+                                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido FROM t_users
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE t_users.id IN($idResponsable)";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $responsable = strtok($x['nombre'], ' ') . " " .
+                                            strtok($x['apellido'], ' ');
+                                    }
+                                }
+
+                                #DATOS
+                                $array['mp'][] = array(
+                                    "idMP" => intval($idMP),
+                                    "tipoPlan" => $tipoPlan,
+                                    "creadoPor" => $creadoPor,
+                                    "responsable" => $responsable,
+                                    "comentario" => $comentario,
+                                    "fecha" => $fecha,
+                                    "adjuntos" => intval($totalAdjuntos),
+                                    "idSubseccion" => intval($idSubseccion),
+                                    "subseccion" => $subseccion,
+                                    "equipo" => $equipo,
+                                    "destino" => $destino,
+                                    "idEquipo" => $idEquipo,
+                                    "idPlan" => $idPlan,
+                                    "semana" => $semana,
+                                    "status" => $status,
+                                    "sDEP" => intval($sDEP),
+                                    "sTrabajando" => intval($sTrabajando)
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        echo json_encode($array);
     }
 
     // CIERRE FINAL

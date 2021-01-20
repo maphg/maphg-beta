@@ -53,6 +53,8 @@ const btnCerrarModalEquiposAmerica = document.getElementById("btnCerrarModalEqui
 const btnAgregarActividadVerEnPlanner = document.getElementById("btnAgregarActividadVerEnPlanner");
 const btnAgregarComentarioVerEnPlanner =
    document.getElementById("btnAgregarComentarioVerEnPlanner");
+const btnPendientesIncidencias = document.getElementById("btnPendientesIncidencias");
+const btnPendientesPreventivos = document.getElementById("btnPendientesPreventivos");
 
 // ELEMENTOS BUTTOM ID
 
@@ -139,6 +141,7 @@ const columna12 = document.getElementsByClassName("columna_12");
 // CONTENEDOR DE TABLAS
 const contenedorEquiposAmerica = document.getElementById("contenedorEquiposAmerica");
 const contenedorEquiposAmericaDespice = document.getElementById("contenedorEquiposAmericaDespice");
+const dataSubseccionesPendientes = document.getElementById("dataSubseccionesPendientes");
 // CONTENEDOR DE TABLAS
 
 
@@ -779,7 +782,10 @@ function mostrarOcultar(claseMostrar, claseOcultar) {
 
 // toggle Inivisible Generico.
 function toggleInivisble(id) {
-   $("#" + id).toggleClass("modal");
+   // $("#" + id).toggleClass("modal");
+   if (document.getElementById(id)) {
+      document.getElementById(id).classList.toggle("hidden");
+   }
 }
 
 
@@ -821,12 +827,14 @@ function consultaSubsecciones(idDestino, idUsuario) {
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
    localStorage.setItem('idSeccion', idSeccion);
 
+   btnPendientesIncidencias.
+      setAttribute('onclick', `pendientesSubsecciones(${idSeccion}, ${tipoPendiente}, ${nombreSeccion}, ${idUsuario}, ${idDestino})`);
+
    let contenedorSubsecciones = document.getElementById("dataOpcionesSubseccionestoggle");
    document.getElementById("modalPendientes").classList.add("open");
    document.getElementById("estiloSeccion").innerHTML = iconoLoader;
    // document.getElementById("modalTituloSeccion").innerHTML = nombreSeccion;
-   document.getElementById("dataSubseccionesPendientes").innerHTML =
-      "Obteniendo Datos...";
+   dataSubseccionesPendientes.innerHTML = "Obteniendo Datos...";
 
    // Valores iniciales
    contenedorSubsecciones.innerHTML = "";
@@ -857,7 +865,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 
          // Función para darle diseño del Logo según la Sección.
          estiloSeccion("estiloSeccion", data.estiloSeccion);
-         document.getElementById("dataSubseccionesPendientes").innerHTML = data.resultData;
+         dataSubseccionesPendientes.innerHTML = data.resultData;
          document.getElementById("dataExportarSubseccionesEXCEL").innerHTML = data.exportarSubseccion;
          document.getElementById("dataExportarSubseccionesPDF").innerHTML = data.exportarSubseccionPDF;
 
@@ -922,6 +930,283 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
       },
    });
 }
+
+
+// OBTIENE LOS PENDIENTES MARCADOS COMO TRABAJANDO
+btnPendientesPreventivos.addEventListener('click', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+
+   const action = "obtenerPendientesMP";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataSubseccionesPendientes.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+
+         if (array) {
+            for (let x = 0; x < array.subsecciones.length; x++) {
+               const idSubseccion = array.subsecciones[x].idSubseccion;
+               const subseccion = array.subsecciones[x].subseccion;
+               const codigo = `
+                  <tr id="row_subseccion_${idSubseccion}" class="hover:shadow-md cursor-pointer">
+                     
+                     <td id="row_subseccion_${idSubseccion}_" class="px-2 py-3 font-semibold text-xs text-center text-gray-800">
+                           <h1>${subseccion}</h1>
+                     </td>
+                
+                    <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_MP" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                    </td>
+                    
+                     <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_DEP" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                     </td>
+                
+                     <td class="px-2 py-3">
+                           <div id="row_subseccion_${idSubseccion}_T" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                           </div>
+                     </td>
+                
+                     <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_S" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                    </td>
+                
+                  </tr>
+               `;
+
+               // CREA FILAS DE LAS SUBSECCIONES
+               dataSubseccionesPendientes.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+
+         if (array) {
+
+            for (let x = 0; x < array.mp.length; x++) {
+               const idMP = array.mp[x].idMP;
+               const adjuntos = array.mp[x].adjuntos;
+               const comentario = array.mp[x].comentario;
+               const creadoPor = array.mp[x].creadoPor;
+               const fecha = array.mp[x].fecha;
+               const responsable = array.mp[x].responsable;
+               const tipoPlan = array.mp[x].tipoPlan;
+               const idSubseccion = array.mp[x].idSubseccion;
+               const idEquipo = array.mp[x].idEquipo;
+               const idPlan = array.mp[x].idPlan;
+               const semana = array.mp[x].semana;
+               const status = array.mp[x].status;
+               const sDEP = array.mp[x].sDEP;
+               const sTrabajando = array.mp[x].sTrabajando;
+
+               const responsableX = responsable.length > 1 ? responsable : creadoPor;
+
+               const iconoComentario = comentario.length > 1 ?
+                  '<i class="fas fa-comment-dots"></i>' : '';
+
+               const iconoAdjunto = adjuntos >= 1 ?
+                  '<i class="fas fa-paperclip mx-2"></i>' : '';
+
+               const iconoT = sTrabajando == 1 ?
+                  '<p class="text-xs font-black bg-blue-200 text-blue-500 py-1 px-2 w-6 rounded">T</p>' : '';
+
+               const iconoS = status == 'SOLUCIONADO' ?
+                  '<p class="text-xs font-black bg-green-200 text-green-500 py-1 px-2 mx-2 rounded">F</p >' : '';
+
+               const iconoDEP = sDEP > 0 ?
+                  '<p class="text-xs font-black bg-black text-white py-1 px-2 mx-2 rounded">DEP</p >' : '';
+
+               const codigo = `
+                  <div id="${idMP + '_MP_I_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1">
+                        <p id="${idMP + '_MP_I_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
+                     </div>
+
+                     <div class="flex flex-row justify-between items-center text-sm">
+                        <div class="flex flex-row">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idMP + '_MP_I_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                        </div>
+
+                        <div class="flex flex-row mt-1 self-center">
+                           <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
+                        </div>
+
+                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
+                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
+                        </button>
+
+                     </div>
+                  </div>               
+               `;
+
+               const codigoDEP = `
+                  <div id="${idMP + '_MP_DEP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1">
+                        <p id="${idMP + '_MP_DEP_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
+                     </div>
+
+                     <div class="flex flex-row justify-between items-center text-sm">
+                        <div class="flex flex-row">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoDEP}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idMP + '_MP_DEP_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                        </div>
+
+                        <div class="flex flex-row mt-1 self-center">
+                           <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
+                        </div>
+
+                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
+                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
+                        </button>
+
+                     </div>
+                  </div>               
+               `;
+
+               const codigoT = `
+                  <div id="${idMP + '_MP_T_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1">
+                        <p id="${idMP + '_MP_T_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
+                     </div>
+
+                     <div class="flex flex-row justify-between items-center text-sm">
+                        <div class="flex flex-row">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoT}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idMP + '_MP_T_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                        </div>
+
+                        <div class="flex flex-row mt-1 self-center">
+                           <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
+                        </div>
+
+                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})">
+                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
+                        </button>
+
+                     </div>
+                  </div>               
+               `;
+
+               const codigoS = `
+                  <div id="${idMP + '_MP_S_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1">
+                        <p id="${idMP + '_MP_S_titulo'}" class="truncate">${tipoPlan + ' OT: #' + idMP}</p>
+                     </div>
+
+                     <div class="flex flex-row justify-between items-center text-sm">
+                        <div class="flex flex-row">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600 flex flex-row">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoS}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idMP + '_MP_S_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                        </div>
+
+                        <div class="flex flex-row mt-1 self-center">
+                           <p class="text-xs font-bold ml-6 text-gray-600">${fecha}</p>
+                        </div>
+                        <button class="py-1 px-2 my-2 rounded-md bg-red-200 text-red-500 hover:shadow-sm w-full font-semibold" onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})">
+                           <i class="fas fa-eye mr-1  text-sm"></i>Ver más
+                        </button>
+
+                     </div>
+                  </div>               
+               `;
+
+               if (status == "PROCESO")
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_MP`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_MP`).
+                        insertAdjacentHTML('beforeend', codigo);
+                  }
+
+               if (sDEP > 0) {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
+                        insertAdjacentHTML('beforeend', codigoDEP);
+                  }
+               }
+
+               if (sTrabajando == 1) {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_T`).
+                        insertAdjacentHTML('beforeend', codigoT);
+                  }
+               }
+
+               if (status == "SOLUCIONADO") {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_S`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_S`).
+                        insertAdjacentHTML('beforeend', codigoS);
+                  }
+               }
+
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+})
 
 
 function toggleSubseccionesTipo(mostrar, ocultar) {
@@ -2617,7 +2902,6 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
    const action = 'obtenerIncidenciaEquipos';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}`;
-   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
@@ -4626,14 +4910,14 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
       setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
 
    document.getElementById("solucionarOTMP").
-      setAttribute('onclick', `obtenerOTDigital(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "SOLUCIONAROT")`);
+      setAttribute('onclick', `obtenerOTDigital(${idEquipo}, ${semanaX}, ${idPlan})`);
 
    document.getElementById("cancelarOTMP").
       setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
 }
 
 
-function obtenerOTDigital(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
+function obtenerOTDigital(idEquipo, semanaX, idPlan) {
    document.getElementById("modalSolucionarOT").classList.add('open');
    document.getElementById("tooltipMP").classList.add('hidden');
    let idDestino = localStorage.getItem('idDestino');
@@ -4941,10 +5225,26 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
          if (data == 10 || data == 13) {
             localStorage.setItem('URL', `${idSemana};${idProceso};${idEquipo};${semanaX};${idPlan}`);
             window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
+         } else {
+            alertaImg('No se encontro la OT', '', 'info', 1400);
          }
       }
    });
 }
+
+
+
+// Proceso para Ver OT
+function VerOTMPSolucionado(idEquipo, semanaX, idPlan) {
+
+   if (idEquipo != "" && semanaX != "") {
+      localStorage.setItem('URL', `0;0;${idEquipo};${semanaX};${idPlan}`);
+      window.open('OT/index.php', "OT", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=1200px, height=650px");
+   } else {
+      alertaImg('No se encontro la OT', '', 'info', 1400);
+   }
+}
+
 
 
 // Habilita los Botones del Menu
