@@ -494,7 +494,7 @@ function consultaEquiposLocales() {
             let option = document.getElementById("filtroTipo");
 
             option.innerHTML = '<option value="">Tipo Equipo Seleccionado</option>';
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idtipoEquipo = array[x].idtipoEquipo;
                     const tipoEquipo = array[x].tipoEquipo;
