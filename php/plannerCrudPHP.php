@@ -2282,6 +2282,136 @@ if (isset($_POST['action'])) {
                         <h1 class=\"ml-2\">$nombreSubseccion</h1>
                     </div>                
                 ";
+            }
+
+            $arrayData['misPendientesUsuario'] = $misPendientesUsuario;
+            $arrayData['misPendientesCreados'] = $misPendientesCreados;
+            $arrayData['misPendientesSinUsuario'] = $misPendientesSinUsuario;
+            $arrayData['misPendientesSeccion'] = $misPendientesSeccion;
+
+            $arrayData['exportarSubseccion'] = $exportarSubseccion;
+            $arrayData['exportarSeccion'] = $exportarSeccion;
+            $arrayData['exportarMisPendientes'] = $exportarMisPendientes;
+            $arrayData['exportarCreadosDe'] = $exportarCreadosDe;
+            $arrayData['exportarPorResponsable'] = $exportarPorResponsable;
+            $arrayData['exportarMisCreados'] = $exportarMisCreados;
+            $arrayData['exportarCreadosPorPDF'] = $exportarCreadosPorPDF;
+            $arrayData['exportarMisCreadosPDF'] = $exportarMisCreadosPDF;
+            $arrayData['exportarMisPendientesPDF'] = $exportarMisPendientesPDF;
+            $arrayData['exportarSubseccionPDF'] = $exportarSubseccionPDF;
+        }
+        echo json_encode($arrayData);
+    }
+
+    // Pendientes Por Subsecciones
+    if ($action == "consultarPendientesSubseccionesOriginal") {
+        // Variables recibidad de Ajax.
+        $idSeccion = $_POST['idSeccion'];
+        $tipoPendiente = $_POST['tipoPendiente'];
+
+        $arrayData = array();
+        $data = "";
+        $resultData = "";
+        $dataOpcionesSubsecciones = "";
+        $exportarSubseccion = "";
+        $exportarSubseccionPDF = "";
+        $exportarSeccion = "";
+        $exportarMisPendientes = "";
+
+        // Contadores
+        $contadorTyF = 0;
+        $contadorDEP = 0;
+        $contadorT = 0;
+        $contadorS = 0;
+
+        // Identifica si el filtro es en General, Usuario o Seccion.
+        $filtroSeccion = "";
+        $filtroUsuario = "";
+        $filtroSeccionT = "";
+        $filtroUsuarioT = "";
+
+        if ($tipoPendiente == "MCU") {
+            $arrayData['tipoPendienteNombre'] = "Mis Pendientes";
+            $filtroUsuario = "AND t_mc.responsable = $idUsuario AND t_mc.id_seccion = $idSeccion";
+            $filtroUsuarioT = "AND t_mp_np.responsable = $idUsuario AND t_equipos.id_seccion = $idSeccion";
+        } elseif ($tipoPendiente == "MCU0") {
+            $arrayData['tipoPendienteNombre'] = "Sin Responsable";
+            $filtroUsuario = "AND (t_mc.responsable = 0 OR t_mc.responsable = '')";
+            $filtroUsuarioT = "AND (t_mp_np.responsable = 0 OR t_mp_np.responsable = '')";
+        } elseif ($tipoPendiente == "MCS") {
+            $arrayData['tipoPendienteNombre'] = "Todos";
+            $filtroSeccion = "AND t_mc.id_seccion = $idSeccion";
+            $filtroSeccionT = "AND t_equipos.id_seccion = $idSeccion";
+        } elseif ($tipoPendiente == "MCC") {
+            $arrayData['tipoPendienteNombre'] = "Creados Por Mi";
+            $filtroUsuario = "AND t_mc.creado_por = $idUsuario AND t_mc.id_seccion = $idSeccion";
+            $filtroUsuarioT = "AND t_mp_np.id_usuario = $idUsuario AND t_equipos.id_seccion = $idSeccion";
+        } else {
+            $arrayData['tipoPendienteNombre'] = "";
+            $filtroSeccion = "AND t_mc.id_seccion = 0";
+            $filtroUsuario = "";
+            $filtroSeccionT = "AND t_equipos.id_seccion = 0";
+            $filtroUsuarioT = "";
+        }
+
+
+        if ($idDestino == 10) {
+            $filtroDestinoMC = "";
+            $filtroDestinoTareas = "";
+        } else {
+            $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
+            $filtroDestinoTareas = "AND t_mp_np.id_destino = $idDestino";
+        }
+
+        // Query para obtener todas las subsecciones, según la sección.
+        if ($idDestino == 10) {
+            $query = "SELECT c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, 
+            c_secciones.seccion  
+            FROM c_subsecciones 
+            INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
+            WHERE c_subsecciones.id_seccion = $idSeccion";
+        } else {
+            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
+        }
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $conn_2020->next_result();
+            foreach ($result as $row) {
+                $data = "";
+                $subseccion = $row['grupo'];
+                $idSubseccion = $row['id_subseccion'];
+                $nombreSeccion = $row['seccion'];
+                $nombreSubseccion = $row['grupo'];
+
+                // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
+                $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesCreados = "$idSeccion, 'MCC', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesSinUsuario = "$idSeccion, 'MCU0', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesSeccion = "$idSeccion, 'MCS', '$nombreSeccion', $idUsuario, $idDestino";
+
+                // Exportar Pendientes.
+                $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
+                $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
+                $exportarCreadosDe = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosDe'";
+                $exportarPorResponsable = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarPorResponsable'";
+                $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
+                $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
+                $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
+                $exportarMisCreadosPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreadosPDF'";
+
+                $exportarSubseccion .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
+                        <h1 class=\"ml-2\">$nombreSubseccion</h1>
+                    </div>                
+                ";
+
+                $exportarSubseccionPDF .= "
+                    <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
+                    onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccionPDF');\">
+                        <h1 class=\"ml-2\">$nombreSubseccion</h1>
+                    </div>                
+                ";
 
 
                 $estiloSeccion = $nombreSeccion;
@@ -3126,14 +3256,14 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
             $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarSeccion") {
-            $filtroTipoF = "AND id_seccion = $idSeccion $filtroDestinoF";
-            $filtroTipoT = "AND id_seccion = $idSeccion $filtroDestinoT";
+            $filtroTipoF = "AND id_seccion = $idSeccion";
+            $filtroTipoT = "AND id_seccion = $idSeccion";
         } elseif ($tipoExportar == "exportarSubseccion") {
-            $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
-            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoT";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
         } elseif ($tipoExportar == "exportarPorResponsable") {
-            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
-            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarMisCreadosPDF") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
             $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
@@ -3141,8 +3271,8 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
             $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarCreadosPorPDF") {
-            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario $filtroDestinoF";
-            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario $filtroDestinoT";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND responsable = $idUsuario";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.responsable = $idUsuario";
         } elseif ($tipoExportar == "exportarMisCreados") {
             $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
             $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
@@ -3150,15 +3280,15 @@ if (isset($_POST['action'])) {
             $filtroTipoF = "AND id_seccion = $idSeccion AND creado_por = $idUsuario";
             $filtroTipoT = "AND id_seccion = $idSeccion AND t_mp_np.id_usuario = $idUsuario";
         } elseif ($tipoExportar == "exportarSubseccionPDF") {
-            $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoF";
-            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion $filtroDestinoT";
+            $filtroTipoF = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
+            $filtroTipoT = "AND id_seccion = $idSeccion AND id_subseccion = $idSubseccion";
         } else {
             $filtroTipoF = "activo = 29";
             $filtroTipoT = "t_mp_np.activo = 29";
         }
 
         // Genera lista ID de Fallas.
-        $query = "SELECT id FROM t_mc WHERE activo = 1 and (status = 'N' or status = 'PENDIENTE') $filtroTipoF";
+        $query = "SELECT id FROM t_mc WHERE activo = 1 and status IN('N', 'PENDIENTE', 'P') $filtroTipoF $filtroDestinoF";
         $data["query1"] = $query;
         if ($result = mysqli_query($conn_2020, $query)) {
             $totalResultados = mysqli_num_rows($result);
@@ -3178,7 +3308,8 @@ if (isset($_POST['action'])) {
 
         // Genera lista ID Tareas
         $queryT = "SELECT t_mp_np.id FROM t_mp_np 
-        WHERE t_mp_np.activo = 1 AND (t_mp_np.status = 'N' OR t_mp_np.status = 'P' OR t_mp_np.status = 'PENDIENTE') $filtroTipoT";
+        WHERE t_mp_np.activo = 1 AND t_mp_np.status IN('N', 'P', 'PENDIENTE') 
+        $filtroTipoT $filtroDestinoT";
         $data["query2"] = $queryT;
         if ($resultT = mysqli_query($conn_2020, $queryT)) {
             $contador = 0;

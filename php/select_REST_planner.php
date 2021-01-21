@@ -2790,6 +2790,7 @@ if (isset($_GET['action'])) {
                         t_mp_planificacion_iniciada.departamento_direccion,
                         t_mp_planificacion_iniciada.departamento_finanzas,
                         t_mp_planificacion_iniciada.departamento_rrhh,
+                        t_mp_planificacion_iniciada.status_material,
                         t_mp_planificacion_iniciada.id_responsables, t_equipos_america.equipo, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido
                         FROM t_mp_planificacion_iniciada
                         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
@@ -2814,7 +2815,7 @@ if (isset($_GET['action'])) {
                                 $destino = $x['destino'];
                                 $status = $x['status'];
                                 $sTrabajando = $x['status_trabajando'];
-                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']) + intval($x['status_material']);
 
                                 #DATOS PARA ABRIR OT
                                 $idEquipo = $x['id_equipo'];
@@ -2862,6 +2863,288 @@ if (isset($_GET['action'])) {
                                     "status" => $status,
                                     "sDEP" => intval($sDEP),
                                     "sTrabajando" => intval($sTrabajando)
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        echo json_encode($array);
+    }
+
+
+    // OBTIENE LOS PENDIENTES TRABAJANDO DE MP
+    if ($action == "obtenerPendientesIncidencias") {
+        $idSeccion = $_GET['idSeccion'];
+        $tipoBusqueda = $_GET['tipoBusqueda'];
+        $rango = date("Y-m-d", strtotime($fechaActual . "- 10 days"));
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+            $filtroDestinoIG = "";
+        } else {
+            $filtroDestino = "and t_mc.id_destino = $idDestino";
+            $filtroDestinoIG = "and t_mp_np.id_destino = $idDestino";
+        }
+
+
+        if ($tipoBusqueda == "MISPENDIENTES") {
+            $filtroIncidenciasTipoBusqueda = "and t_mc.responsable = $idUsuario";
+            $filtroIncidenciasGTipoBusqueda = "and t_mp_np.responsable = $idUsuario";
+        } elseif ($tipoBusqueda == "MISCREADOS") {
+            $filtroIncidenciasTipoBusqueda = "and t_mc.creado_por = $idUsuario";
+            $filtroIncidenciasGTipoBusqueda = "and t_mp_np.id_usuario = $idUsuario";
+        } elseif ($tipoBusqueda == "SINASIGNAR") {
+            $filtroIncidenciasTipoBusqueda = "and t_mc.responsable = 0";
+            $filtroIncidenciasGTipoBusqueda = "and t_mp_np.responsable = 0";
+        } else {
+            $filtroIncidenciasTipoBusqueda = "";
+            $filtroIncidenciasGTipoBusqueda = "";
+        }
+
+        // SECCIONES Y SUBSECCIONES
+        $array['secciones'] = array();
+        $query = "SELECT c_secciones.id, c_secciones.seccion 
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino and c_secciones.id = $idSeccion
+        ORDER BY c_secciones.seccion ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
+
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
+                );
+
+                $array['subsecciones'] = array();
+                $query = "SELECT id, grupo 
+                FROM c_subsecciones WHERE id_seccion = $idSeccion
+                ORDER BY grupo ASC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idSubseccion = $x['id'];
+                        $subseccion = $x['grupo'];
+
+                        $array['subsecciones'][] = array(
+                            "idSubseccion" => intval($idSubseccion),
+                            "subseccion" => $subseccion
+                        );
+                    }
+                }
+
+                $array['mp'] = array();
+                $query = "SELECT id, grupo 
+                FROM c_subsecciones WHERE id_seccion = $idSeccion
+                ORDER BY grupo ASC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idSubseccion = $x['id'];
+                        $subseccion = $x['grupo'];
+
+                        // INCIDENCIAS DE EQUIPOS
+                        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_mc.responsable, t_mc.fecha_creacion, t_mc.rango_fecha,
+                        t_mc.status_trabajare, t_mc.departamento_calidad, t_mc.status_material,
+                        t_mc.departamento_compras, t_mc.departamento_direccion, 
+                        t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino
+                        FROM t_mc
+                        INNER JOIN t_users ON t_mc.creado_por = t_users.id
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
+                        WHERE t_mc.id_seccion = $idSeccion and t_mc.id_subseccion = $idSubseccion 
+                        and t_mc.activo = 1 and ((t_mc.status IN('N', 'PENDIENTE', 'P')) or 
+                        (t_mc.fecha_realizado BETWEEN '$rango' and '$fechaActual' 
+                        and t_mc.status IN('SOLUCIONADO', 'F'))) 
+                        $filtroDestino $filtroIncidenciasTipoBusqueda
+                        ORDER BY t_mc.id ASC";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $idIncidencia = $x['id'];
+                                $actividad = $x['actividad'];
+                                $tipoIncidencia = $x['tipo_incidencia'];
+                                $creadoPor = strtok($x['nombre'], ' ') . " " .
+                                    strtok($x['apellido'], ' ');
+                                $idResponsable = $x['responsable'];
+                                $fecha = (new DateTime($x['fecha_creacion']))->format('Y-m-d');
+                                $destino = $x['destino'];
+                                $status = $x['status'];
+                                $sTrabajando = $x['status_trabajare'];
+                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']) + intval($x['status_material']);
+
+                                if ($status == "N" or $status == "P" or $status == "PENDIENTE") {
+                                    $status = "PENDIENTE";
+                                } else {
+                                    $status = "SOLUCIONADO";
+                                }
+
+                                #ADJUNTOS
+                                $totalAdjuntos = 0;
+                                $query = "SELECT count(id) 'id' FROM t_mc_adjuntos 
+                                WHERE id_mc = $idIncidencia and activo = 1";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $totalAdjuntos = $x['id'];
+                                    }
+                                }
+
+                                #ULTIMO COMENTARIOS
+                                $comentario = "";
+                                $nombreComentario = "";
+                                $fechaComentario = "";
+                                $query = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+                                FROM t_mc_comentarios
+                                INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE t_mc_comentarios.id_mc = $idIncidencia and t_mc_comentarios.activo = 1 ORDER BY t_mc_comentarios.id ASC LIMIT 1";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $comentario = $x['comentario'];
+                                        $fechaComentario =
+                                            (new DateTime($x['fecha']))->format('Y-m-d');
+                                        $nombreComentario = strtok($x['nombre'], ' ') .
+                                            " " . strtok($x['apellido'], ' ');
+                                    }
+                                }
+
+                                #RESPONSABLE
+                                $responsable = "";
+                                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido FROM t_users
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE t_users.id IN($idResponsable)";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $responsable = strtok($x['nombre'], ' ') . " " .
+                                            strtok($x['apellido'], ' ');
+                                    }
+                                }
+
+                                #DATOS
+                                $array['incidencias'][] = array(
+                                    "idIncidencia" => intval($idIncidencia),
+                                    "actividad" => $actividad,
+                                    "tipoIncidencia" => $tipoIncidencia,
+                                    "creadoPor" => $creadoPor,
+                                    "responsable" => $responsable,
+                                    "comentario" => $comentario,
+                                    "nombreComentario" => $nombreComentario,
+                                    "fechaComentario" => $fechaComentario,
+                                    "fecha" => $fecha,
+                                    "adjuntos" => intval($totalAdjuntos),
+                                    "idSubseccion" => intval($idSubseccion),
+                                    "subseccion" => $subseccion,
+                                    "destino" => $destino,
+                                    "status" => $status,
+                                    "sDEP" => intval($sDEP),
+                                    "sTrabajando" => intval($sTrabajando),
+                                    "tipo" => "F"
+                                );
+                            }
+                        }
+
+                        // INCIDENCIAS GENERALES
+                        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.tipo_incidencia, t_mp_np.status, t_mp_np.responsable, t_mp_np.fecha, t_mp_np.rango_fecha,
+                        t_mp_np.status_trabajando, t_mp_np.departamento_calidad, 
+                        t_mp_np.status_material, t_mp_np.departamento_compras, 
+                        t_mp_np.departamento_direccion, t_mp_np.departamento_finanzas, 
+                        t_mp_np.departamento_rrhh, t_colaboradores.nombre, 
+                        t_colaboradores.apellido, c_destinos.destino
+                        FROM t_mp_np
+                        INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id
+                        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+                        INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id
+                        WHERE t_mp_np.id_seccion = $idSeccion and t_mp_np.id_subseccion = $idSubseccion 
+                        and t_mp_np.activo = 1 and ((t_mp_np.status IN('N', 'PENDIENTE', 'P')) or 
+                        (t_mp_np.fecha_finalizado BETWEEN '$rango' and '$fechaActual' 
+                        and t_mp_np.status IN('SOLUCIONADO', 'F'))) 
+                        $filtroIncidenciasGTipoBusqueda $filtroDestinoIG
+                        ORDER BY t_mp_np.id ASC";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $idIncidencia = $x['id'];
+                                $actividad = $x['titulo'];
+                                $tipoIncidencia = $x['tipo_incidencia'];
+                                $creadoPor = strtok($x['nombre'], ' ') . " " .
+                                    strtok($x['apellido'], ' ');
+                                $idResponsable = $x['responsable'];
+                                $fecha = (new DateTime($x['fecha']))->format('Y-m-d');
+                                $destino = $x['destino'];
+                                $status = $x['status'];
+                                $sTrabajando = $x['status_trabajando'];
+                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']) + intval($x['status_material']);
+
+                                if ($status == "N" or $status == "P" or $status == "PENDIENTE") {
+                                    $status = "PENDIENTE";
+                                } else {
+                                    $status = "SOLUCIONADO";
+                                }
+
+                                #ADJUNTOS
+                                $totalAdjuntos = 0;
+                                $query = "SELECT count(id) 'id' FROM adjuntos_mp_np 
+                                WHERE id_mp_np = $idIncidencia and activo = 1";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $totalAdjuntos = $x['id'];
+                                    }
+                                }
+
+                                #ULTIMO COMENTARIOS
+                                $comentario = "";
+                                $nombreComentario = "";
+                                $fechaComentario = "";
+                                $query = "SELECT comentarios_mp_np.comentario, comentarios_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido 
+                                FROM comentarios_mp_np
+                                INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE comentarios_mp_np.id_mp_np = $idIncidencia and comentarios_mp_np.activo = 1 
+                                ORDER BY comentarios_mp_np.id ASC LIMIT 1";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $comentario = $x['comentario'];
+                                        $fechaComentario =
+                                            (new DateTime($x['fecha']))->format('Y-m-d');
+                                        $nombreComentario = strtok($x['nombre'], ' ') .
+                                            " " . strtok($x['apellido'], ' ');
+                                    }
+                                }
+
+                                #RESPONSABLE
+                                $responsable = "";
+                                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido FROM t_users
+                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                WHERE t_users.id IN($idResponsable)";
+                                if ($result = mysqli_query($conn_2020, $query)) {
+                                    foreach ($result as $x) {
+                                        $responsable = strtok($x['nombre'], ' ') . " " .
+                                            strtok($x['apellido'], ' ');
+                                    }
+                                }
+
+                                #DATOS
+                                $array['incidencias'][] = array(
+                                    "idIncidencia" => intval($idIncidencia),
+                                    "actividad" => $actividad,
+                                    "tipoIncidencia" => $tipoIncidencia,
+                                    "creadoPor" => $creadoPor,
+                                    "responsable" => $responsable,
+                                    "comentario" => $comentario,
+                                    "nombreComentario" => $nombreComentario,
+                                    "fechaComentario" => $fechaComentario,
+                                    "fecha" => $fecha,
+                                    "adjuntos" => intval($totalAdjuntos),
+                                    "idSubseccion" => intval($idSubseccion),
+                                    "subseccion" => $subseccion,
+                                    "destino" => $destino,
+                                    "status" => $status,
+                                    "sDEP" => intval($sDEP),
+                                    "sTrabajando" => intval($sTrabajando),
+                                    "tipo" => "T"
                                 );
                             }
                         }

@@ -19,18 +19,6 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $filtroF = "AND t_mc.id IN(0)";
     }
 
-    //FALLAS Generales
-    $queryF = " SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
-    FROM t_mc 
-    INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
-    INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
-    INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id 
-    INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
-    LEFT JOIN t_users ON t_mc.responsable = t_users.id 
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
-    WHERE t_mc.activo = 1 $filtroF";
-    //Fin Tipo de Pendiente es MC ahora -> Fallas.
-
     //Inicio Tipo Tareas.
     if ($listaIdT != "") {
         $filtroT = "AND t_mp_np.id IN($listaIdT)";
@@ -38,21 +26,19 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $filtroT = "AND t_mp_np.id IN(0)";
     }
 
-    //TAREAS Generales
-    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, t_mp_np.tipo_incidencia, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, 
-    t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
-    FROM t_mp_np
-    INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
-    INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
-    INNER JOIN c_subsecciones ON t_mp_np.id_subseccion = c_subsecciones.id
-    -- id_usuario, hace referencia quíen lo Creo.
-    INNER JOIN t_users ON t_mp_np.responsable = t_users.id 
-    INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-    WHERE t_mp_np.activo = 1 $filtroT";
-    //Fin Tipo Tareas.
+    //FALLAS Generales
+    $queryF = " SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
+    FROM t_mc 
+    INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id 
+    INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id 
+    INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id 
+    LEFT JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
+    LEFT JOIN t_users ON t_mc.responsable = t_users.id 
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+    WHERE t_mc.activo = 1 $filtroF";
+    //Fin Tipo de Pendiente es MC ahora -> Fallas.
 
-
-    if ($resultF = mysqli_query($conn_2020, $queryF) and $resulT = mysqli_query($conn_2020, $queryT)) {
+    if ($resultF = mysqli_query($conn_2020, $queryF)) {
 
         // Titulos XLS
         $objPHPExcel = new PHPExcel();
@@ -126,7 +112,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             }
 
             if ($equipo == "") {
-                $equipo = "Tarea General";
+                $equipo = "INCIDENCIA";
             }
 
 
@@ -147,13 +133,27 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             //Contador de Celdas
             $fila++;
         }
+    }
 
+
+    //TAREAS Generales
+    $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, t_mp_np.tipo_incidencia, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, 
+    t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
+    FROM t_mp_np
+    INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
+    INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
+    INNER JOIN c_subsecciones ON t_mp_np.id_subseccion = c_subsecciones.id
+    LEFT JOIN t_users ON t_mp_np.responsable = t_users.id 
+    LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+    WHERE t_mp_np.activo = 1 $filtroT";
+    //Fin Tipo Tareas.
+    if ($resulT = mysqli_query($conn_2020, $queryT)) {
         while ($rowT = mysqli_fetch_array($resulT)) {
             $idT = $rowT['id'];
             $destino = $rowT['destino'];
             $seccion = $rowT['seccion'];
             $subseccion = $rowT['grupo'];
-            $equipo = "Incidencia General";
+            $equipo = "INCIDENCIA GENERAL";
             $titulo = $rowT['titulo'];
             $responsable = $rowT['nombre'] . " " . $rowT['apellido'];
             $creadoPorT = $rowT['id_usuario'];

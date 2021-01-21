@@ -1051,9 +1051,9 @@
 
                         </div>
                     </div>
-                    <div class="ml-3" (Excel)>
+                    <div class="ml-3 w-32" (Excel)>
                         <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
-                            <i class="fas fa-eye mr-1"></i><span id="tipoPendienteNombre"></span>
+                            <i class="fas fa-eye mr-1"></i><span id="tipoPendienteNombre">Todos</span>
                         </button>
                         <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
 
@@ -1070,7 +1070,7 @@
 
                         </div>
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-3 w-48">
                         <button id="dataOpcionesSubsecciones" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-orange-200 text-orange-500 hover:shadow-sm font-normal relative">
                             <i class="fas fa-eye mr-1"></i>Subsecciones
                         </button>
@@ -1080,9 +1080,7 @@
                 </div>
 
                 <div class="text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
-                    <h1 id="estiloSeccion" class="font-medium text-md">
-                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                    </h1>
+                    <h1 id="estiloSeccion" class="font-medium text-md"></h1>
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
                     <div id="btnPendientesIncidencias" class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
@@ -1105,14 +1103,19 @@
             </div>
 
             <div class="px-2 mt-12">
-                <table id="tablaPendientes" class="table-auto text-xs text-center w-full">
+                <table id="tablaPendientes" class="table-auto text-xs text-center w-full sortable">
                     <thead>
                         <tr class="cursor pointer">
-                            <th class="px-4 py-2 cursor-pointer">Subsección</th>
-                            <th class="px-4 py-2 cursor-pointer">Pendientes</th>
-                            <th class="px-4 py-2 cursor-pointer">Pendiente DEP</th>
-                            <th class="px-4 py-2 cursor-pointer">Trabajando</th>
-                            <th class="px-4 py-2 cursor-pointer" data-title-info="Ultimos 10 Días">Solucionado</th>
+                            <th id="tablaPendientesSubseccion" class="px-4 py-2 cursor-pointer">SUBSECCIONES
+                            </th>
+                            <th id="tablaPendientesPendientes" class="px-4 py-2 cursor-pointer">PENDIENTES
+                            </th>
+                            <th id="tablaPendientesPendientesDEP" class="px-4 py-2 cursor-pointer">PENDIENTES DEP
+                            </th>
+                            <th id="tablaPendientesTrabajando" class="px-4 py-2 cursor-pointer">TRABAJANDO
+                            </th>
+                            <th id="tablaPendientesSolucionado" class="px-4 py-2 cursor-pointer" data-title-info="Ultimos 10 Días">SOLUCIONADOS
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="dataSubseccionesPendientes" class="divide-y">
@@ -2873,10 +2876,6 @@
                         <h1>M</h1>
                     </div>
                 </div>
-                <!-- 
-                <div id="statusMaterialCod2bend" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs hidden">
-                    <input type="text" placeholder="Ingrese COD2BEND" class="w-full h-full text-center rounded border border-red-400 font-bold text-gray-500 autocomplet="off">
-                </div> -->
 
                 <div id="statusMaterialCod2bend" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs hidden">
 

@@ -54,7 +54,10 @@ const btnAgregarActividadVerEnPlanner = document.getElementById("btnAgregarActiv
 const btnAgregarComentarioVerEnPlanner =
    document.getElementById("btnAgregarComentarioVerEnPlanner");
 const btnPendientesIncidencias = document.getElementById("btnPendientesIncidencias");
-const btnPendientesPreventivos = document.getElementById("btnPendientesPreventivos");
+const misPendientesUsuario = document.getElementById("misPendientesUsuario");
+const misPendientesCreados = document.getElementById("misPendientesCreados");
+const misPendientesSinUsuario = document.getElementById("misPendientesSinUsuario");
+const misPendientesSeccion = document.getElementById("misPendientesSeccion");
 
 // ELEMENTOS BUTTOM ID
 
@@ -82,6 +85,7 @@ const comentarioIncidenciaVerEnPlanner =
 const contenedorEquipoLocalIncidencias = document.
    getElementById("contenedorEquipoLocalIncidencias");
 const nombreSubseccionEnergeticos = document.getElementById("nombreSubseccionEnergeticos");
+const dataOpcionesSubseccionestoggle = document.getElementById("dataOpcionesSubseccionestoggle");
 const dataActividadesPlanaccion = document.getElementById("dataActividadesPlanaccion");
 const dataComentariosPlanaccion = document.getElementById("dataComentariosPlanaccion");
 const dataAdjutnosPlanaccion = document.getElementById("dataAdjutnosPlanaccion");
@@ -118,6 +122,7 @@ const dataComentariosIncidenciaVerEnPlanner =
    document.getElementById("dataComentariosIncidenciaVerEnPlanner");
 const dataAdjuntosIncidenciaVerEnPlanner =
    document.getElementById("dataAdjuntosIncidenciaVerEnPlanner");
+const estiloSeccion = document.getElementById("estiloSeccion");
 
 // CONTENEDORES DIV ID
 
@@ -143,6 +148,14 @@ const contenedorEquiposAmerica = document.getElementById("contenedorEquiposAmeri
 const contenedorEquiposAmericaDespice = document.getElementById("contenedorEquiposAmericaDespice");
 const dataSubseccionesPendientes = document.getElementById("dataSubseccionesPendientes");
 // CONTENEDOR DE TABLAS
+
+// THEADS DE TABLAS
+const tablaPendientesSubseccion = document.getElementById("tablaPendientesSubseccion");
+const tablaPendientesPendientes = document.getElementById("tablaPendientesPendientes");
+const tablaPendientesPendientesDEP = document.getElementById("tablaPendientesPendientesDEP");
+const tablaPendientesTrabajando = document.getElementById("tablaPendientesTrabajando");
+const tablaPendientesSolucionado = document.getElementById("tablaPendientesSolucionado");
+// THEADS DE TABLAS
 
 
 // MODALES
@@ -827,19 +840,16 @@ function consultaSubsecciones(idDestino, idUsuario) {
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
    localStorage.setItem('idSeccion', idSeccion);
 
+   btnPendientesIncidencias.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
+   misPendientesUsuario.setAttribute('onclick', "obtenerPendientesIncidencias('MISPENDIENTES')");
+   misPendientesCreados.setAttribute('onclick', "obtenerPendientesIncidencias('MISCREADOS')");
+   misPendientesSinUsuario.setAttribute('onclick', "obtenerPendientesIncidencias('SINASIGNAR')");
+   misPendientesSeccion.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
+
    btnPendientesModal('btnPendientesIncidencias');
+   obtenerPendientesIncidencias('TODOS');
 
-   btnPendientesIncidencias.
-      setAttribute('onclick', `pendientesSubsecciones(${idSeccion}, '${tipoPendiente}', '${nombreSeccion}', ${idUsuario}, ${idDestino})`);
-
-   let contenedorSubsecciones = document.getElementById("dataOpcionesSubseccionestoggle");
    document.getElementById("modalPendientes").classList.add("open");
-   document.getElementById("estiloSeccion").innerHTML = iconoLoader;
-   // document.getElementById("modalTituloSeccion").innerHTML = nombreSeccion;
-   dataSubseccionesPendientes.innerHTML = "Obteniendo Datos...";
-
-   // Valores iniciales
-   contenedorSubsecciones.innerHTML = "";
 
    const action = "consultarPendientesSubsecciones";
    $.ajax({
@@ -855,34 +865,18 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
       dataType: "JSON",
       success: function (data) {
 
-         // OPCIONES PARA SUBSECCIONES
-         contenedorSubsecciones.innerHTML = data.dataOpcionesSubsecciones;
-
          // Tipo de Vista Seleccionado
          document.getElementById("tipoPendienteNombre").innerHTML =
             data.tipoPendienteNombre;
 
-         // Resultado de Consulta.
-         document.getElementById("estiloSeccion").innerHTML = data.estiloSeccion;
-
          // Función para darle diseño del Logo según la Sección.
-         estiloSeccion("estiloSeccion", data.estiloSeccion);
-         dataSubseccionesPendientes.innerHTML = data.resultData;
-         document.getElementById("dataExportarSubseccionesEXCEL").innerHTML = data.exportarSubseccion;
-         document.getElementById("dataExportarSubseccionesPDF").innerHTML = data.exportarSubseccionPDF;
 
-         // Pestañas para Mostrar Pendientes.
-         document.getElementById("misPendientesUsuario")
-            .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesUsuario + ")");
+         document.getElementById("dataExportarSubseccionesEXCEL").
+            innerHTML = data.exportarSubseccion;
 
-         document.getElementById("misPendientesCreados")
-            .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesCreados + ")");
+         document.getElementById("dataExportarSubseccionesPDF").
+            innerHTML = data.exportarSubseccionPDF;
 
-         document.getElementById("misPendientesSinUsuario")
-            .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesSinUsuario + ")");
-
-         document.getElementById("misPendientesSeccion")
-            .setAttribute("onclick", "pendientesSubsecciones(" + data.misPendientesSeccion + ")");
 
          // Pestaña Exportar
          document.getElementById("exportarMisPendientes")
@@ -919,36 +913,37 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
          // Colaborador PDF
          document.getElementById("exportarCreadosPorPDF")
             .setAttribute("onclick", "exportarPorUsuario(" + data.exportarMisCreadosPDF + ")");
-
-         // Resultado Contador
-         document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[3].innerHTML = 'Pendientes ' + '(' + data.contadorTyF + ')';
-
-         document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[5].innerHTML = 'Pendientes DEP ' + '(' + data.contadorDEP + ')';
-
-         document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[7].innerHTML = 'Trabajando ' + '(' + data.contadorT + ')';
-
-         document.getElementById("tablaPendientes").childNodes[1].childNodes[1].childNodes[9].innerHTML = 'Solucionados ' + '(' + data.contadorS + ')';
-
       },
    });
 }
 
 
 // OBTIENE LOS PENDIENTES MARCADOS COMO TRABAJANDO
-btnPendientesPreventivos.addEventListener('click', () => {
+const obtenerPendientesIncidencias = (tipoBusqueda) => {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let idSeccion = localStorage.getItem('idSeccion');
 
-   btnPendientesModal('btnPendientesPreventivos');
+   let pendientesI = 0;
+   let pendientesDEP = 0;
+   let pendientesT = 0;
+   let pendientesS = 0;
 
-   const action = "obtenerPendientesMP";
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+   btnPendientesModal('btnPendientesIncidencias');
+   estiloSeccion.innerHTML = iconoLoader;
+
+   const action = "obtenerPendientesIncidencias";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&tipoBusqueda=${tipoBusqueda}`;
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
          dataSubseccionesPendientes.innerHTML = '';
+         dataOpcionesSubseccionestoggle.innerHTML = '';
+         tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
+         tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+         tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+         tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
          return array;
       })
       .then(array => {
@@ -989,6 +984,397 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                // CREA FILAS DE LAS SUBSECCIONES
                dataSubseccionesPendientes.insertAdjacentHTML('beforeend', codigo);
+            }
+
+            for (let x = 0; x < array.subsecciones.length; x++) {
+               const idSubseccion = array.subsecciones[x].idSubseccion;
+               const subseccion = array.subsecciones[x].subseccion;
+               const codigo = `
+               <div class="py-1 px-2 w-full hover:bg-gray-700" onchange="toggleInivisble('row_subseccion_${idSubseccion}');">
+                        <div class="py-1 px-2 w-full hover:bg-gray-700"></div>
+                        <label class="md:w-2/3 block text-gray-500 font-bold">
+                            <input class="leading-tight" type="checkbox" checked="">
+                            <span class="">
+                                ${subseccion}
+                            </span>
+                        </label>
+                    </div>
+               `;
+               dataOpcionesSubseccionestoggle.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+
+         if (array) {
+            for (let x = 0; x < array.incidencias.length; x++) {
+               const idIncidencia = array.incidencias[x].idIncidencia;
+               const actividad = array.incidencias[x].actividad;
+               const adjuntos = array.incidencias[x].adjuntos;
+               const comentario = array.incidencias[x].comentario;
+               const nombreComentario = array.incidencias[x].nombreComentario;
+               const fechaComentario = array.incidencias[x].fechaComentario;
+               const creadoPor = array.incidencias[x].creadoPor;
+               const fecha = array.incidencias[x].fecha;
+               const responsable = array.incidencias[x].responsable;
+               const tipoIncidencia = array.incidencias[x].tipoIncidencia;
+               const idSubseccion = array.incidencias[x].idSubseccion;
+               const status = array.incidencias[x].status;
+               const sDEP = array.incidencias[x].sDEP;
+               const sTrabajando = array.incidencias[x].sTrabajando;
+               const tipo = array.incidencias[x].tipo;
+
+               const responsableX = responsable.length > 1 ? responsable : creadoPor;
+
+               const iconoComentario = comentario.length >= 1 ?
+                  '<i class="fas fa-comment-dots"></i>' : '';
+
+               const iconoNombreComentario = comentario.length >= 1 ?
+                  '<img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombreComentario}" width="20" height="20">' : '';
+
+               const iconoAdjunto = adjuntos >= 1 ?
+                  '<i class="fas fa-paperclip mx-1"></i>' : '';
+
+               const iconoT = sTrabajando == 1 ?
+                  '<p class="text-xs font-black bg-blue-200 text-blue-500 px-1 rounded mx-1">T</p>' : '';
+
+               const iconoS = status == 'SOLUCIONADO' ?
+                  '<p class="text-xs font-black bg-green-200 text-green-500 px-1 mx-1 rounded">F</p >' : '';
+
+               const iconoDEP = sDEP > 0 ?
+                  '<p class="text-xs font-black bg-black text-white px-1 mx-1 rounded">DEP</p >' : '';
+
+               const btnOpcion = status == "PENDIENTE" ?
+                  `
+                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="">
+                  <i class="fas fa-edit mr-1 text-sm"></i>Editar</button>
+                  
+                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
+                  <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                  </button>
+                  `
+                  : `
+                  <button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold">
+                  <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                  </button>                  
+                  `;
+
+               //PENDIENTE INCIDENCIAS 
+               const codigo = `
+                  <div id="${idIncidencia + '_MP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1" data-title-300="${actividad}">
+                        <p id="${idIncidencia + '_MP_titulo'}" class="truncate">${actividad}</p>
+                     </div>
+
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row justify-end">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idIncidencia + '_MP_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario}</p>
+                           <div class="flex flex-row self-center mt-1">
+                              ${iconoNombreComentario}
+                              <p class="text-xs font-bold text-gray-600 mx-1">
+                                 ${nombreComentario}
+                              </p>
+                              <p class="text-xs font-bold text-gray-600 mx-2">
+                                 ${fechaComentario}
+                              </p>
+                           </div>
+                        </div>
+                        <div class="flex flex-row mt-1 justify-center">
+                           ${btnOpcion}
+                        </div>
+                     </div>
+                  </div>               
+               `;
+
+               // PENDIENTES DEP
+               const codigoDEP = `
+                  <div id="${idIncidencia + '_MP_DEP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1" data-title-300="${actividad}">
+                        <p id="${idIncidencia + '_MP_DEP_titulo'}" class="truncate">${actividad}</p>
+                     </div>
+
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row justify-end">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idIncidencia + '_MP_DEP_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                           <div class="flex flex-row self-center mt-1">
+                              ${iconoNombreComentario}
+                              <p class="text-xs font-bold text-gray-600 mx-1">
+                                 ${nombreComentario}
+                              </p>
+                              <p class="text-xs font-bold text-gray-600 mx-2">
+                                 ${fechaComentario}
+                              </p>
+                           </div>
+                        </div>
+                        <div class="flex flex-row mt-1 justify-center">
+                           ${btnOpcion}
+                        </div>
+                     </div>
+                  </div>               
+               `;
+
+               // PENDIENTES TRABAJANDO
+               const codigoT = `
+                  <div id="${idIncidencia + '_MP_T_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1" data-title-300="${actividad}">
+                        <p id="${idIncidencia + '_MP_T_titulo'}" class="truncate">${actividad}</p>
+                     </div>
+
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row justify-end">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idIncidencia + '_MP_T_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                           <div class="flex flex-row self-center mt-1">
+                              ${iconoNombreComentario}
+                              <p class="text-xs font-bold text-gray-600 mx-1">
+                                 ${nombreComentario}
+                              </p>
+                              <p class="text-xs font-bold text-gray-600 mx-2">
+                                 ${fechaComentario}
+                              </p>
+                           </div>
+                        </div>
+                        <div class="flex flex-row mt-1 justify-center">
+                           ${btnOpcion}
+                        </div>
+                     </div>
+                  </div>               
+               `;
+
+               // PENDIENTES SOLUCIONADOS
+               const codigoS = `
+                  <div id="${idIncidencia + '_MP_S_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+
+                     <div class="my-1" data-title-300="${actividad}">
+                        <p id="${idIncidencia + '_MP_S_titulo'}" class="truncate">${actividad}</p>
+                     </div>
+
+                     <div class="flex flex-col justify-between text-sm">
+                        <div class="flex flex-row justify-start">
+                           <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${responsableX}" width="20" height="20" alt="">
+                           <p class="text-xs font-bold ml-1 text-gray-600">${responsableX}</p>
+                        </div>
+                        <div class="text-gray-600 flex flex-row justify-end">
+                              ${iconoComentario}
+                              ${iconoAdjunto}
+                              ${iconoT}
+                              ${iconoS}
+                              ${iconoDEP}
+                        </div>
+                     </div>
+
+                     <!-- Toogle -->
+                     <div id="${idIncidencia + '_MP_S_toggle'}" class="mt-2 hidden">
+                        <div class="flex flex-col flex-wrap text-justify p-2 bg-white rounded-md font-normal">
+                           <h1 class="text-left font-bold text-left mb-1">Último comentario:</h1>
+                           <p class="uppercase">${comentario} </p>
+                           <div class="flex flex-row self-center mt-1">
+                              ${iconoNombreComentario}
+                              <p class="text-xs font-bold text-gray-600 mx-1">
+                                 ${nombreComentario}
+                              </p>
+                              <p class="text-xs font-bold text-gray-600 mx-2">
+                                 ${fechaComentario}
+                              </p>
+                           </div>
+                        </div>
+                        <div class="flex flex-row mt-1 justify-center">
+                           ${btnOpcion}
+                        </div>
+                     </div>
+                  </div>               
+               `;
+
+               if (status == "PENDIENTE")
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_MP`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_MP`).
+                        insertAdjacentHTML('beforeend', codigo);
+                     pendientesI++;
+                     tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
+                  }
+
+               if (sDEP > 0) {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
+                        insertAdjacentHTML('beforeend', codigoDEP);
+                     pendientesDEP++;
+                     tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+                  }
+               }
+
+               if (sTrabajando == 1) {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_T`).
+                        insertAdjacentHTML('beforeend', codigoT);
+                     pendientesT++;
+                     tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+                  }
+               }
+
+               if (status == "SOLUCIONADO") {
+                  if (document.getElementById(`row_subseccion_${idSubseccion}_S`)) {
+                     document.getElementById(`row_subseccion_${idSubseccion}_S`).
+                        insertAdjacentHTML('beforeend', codigoS);
+                     pendientesS++;
+                     tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
+                  }
+               }
+
+            }
+         }
+
+         return array.secciones;
+      })
+      .then(array => {
+         for (let x = 0; x < array.length; x++) {
+            const idSeccion = array[x].idSeccion;
+            const seccion = array[x].seccion;
+            estiloSeccionPendientes("estiloSeccion", seccion);
+            estiloSeccion.innerText = seccion;
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+         dataSubseccionesPendientes.innerHTML = '';
+         dataOpcionesSubseccionestoggle.innerHTML = '';
+         tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
+         tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+         tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+         tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
+      })
+}
+
+
+// OBTIENE LOS PENDIENTES MARCADOS COMO TRABAJANDO
+btnPendientesPreventivos.addEventListener('click', () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idSeccion = localStorage.getItem('idSeccion');
+
+   let pendientesI = 0;
+   let pendientesDEP = 0;
+   let pendientesT = 0;
+   let pendientesS = 0;
+
+   btnPendientesModal('btnPendientesPreventivos');
+   estiloSeccion.innerHTML = iconoLoader;
+   const action = "obtenerPendientesMP";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataSubseccionesPendientes.innerHTML = '';
+         dataOpcionesSubseccionestoggle.innerHTML = '';
+         tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
+         tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+         tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+         tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
+         return array;
+      })
+      .then(array => {
+
+         if (array) {
+            for (let x = 0; x < array.subsecciones.length; x++) {
+               const idSubseccion = array.subsecciones[x].idSubseccion;
+               const subseccion = array.subsecciones[x].subseccion;
+               const codigo = `
+                  <tr id="row_subseccion_${idSubseccion}" class="hover:shadow-md cursor-pointer">
+                     
+                     <td id="row_subseccion_${idSubseccion}_" class="px-2 py-3 font-semibold text-xs text-center text-gray-800">
+                           <h1>${subseccion}</h1>
+                     </td>
+                
+                    <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_MP" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                    </td>
+                    
+                     <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_DEP" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                     </td>
+                
+                     <td class="px-2 py-3">
+                           <div id="row_subseccion_${idSubseccion}_T" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                           </div>
+                     </td>
+                
+                     <td class="px-2 py-3">
+                        <div id="row_subseccion_${idSubseccion}_S" ondblclick="expandirpapa(this.id)" class="h-40 overflow-y-auto scrollbar px-2 rounded-md  mx-auto" style="width: 270px;">
+                        </div>
+                    </td>
+                
+                  </tr>
+               `;
+
+               // CREA FILAS DE LAS SUBSECCIONES
+               dataSubseccionesPendientes.insertAdjacentHTML('beforeend', codigo);
+            }
+
+            for (let x = 0; x < array.subsecciones.length; x++) {
+               const idSubseccion = array.subsecciones[x].idSubseccion;
+               const subseccion = array.subsecciones[x].subseccion;
+               const codigo = `
+               <div class="py-1 px-2 w-full hover:bg-gray-700" onchange="toggleInivisble('row_subseccion_${idSubseccion}');">
+                        <div class="py-1 px-2 w-full hover:bg-gray-700"></div>
+                        <label class="md:w-2/3 block text-gray-500 font-bold">
+                            <input class="leading-tight" type="checkbox" checked="">
+                            <span class="">
+                                ${subseccion}
+                            </span>
+                        </label>
+                    </div>
+               `;
+               dataOpcionesSubseccionestoggle.insertAdjacentHTML('beforeend', codigo);
             }
          }
 
@@ -1196,12 +1582,16 @@ btnPendientesPreventivos.addEventListener('click', () => {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_MP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_MP`).
                         insertAdjacentHTML('beforeend', codigo);
+                     pendientesI++;
+                     tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
                   }
 
                if (sDEP > 0) {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
                         insertAdjacentHTML('beforeend', codigoDEP);
+                     pendientesDEP++;
+                     tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
                   }
                }
 
@@ -1209,6 +1599,8 @@ btnPendientesPreventivos.addEventListener('click', () => {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_T`).
                         insertAdjacentHTML('beforeend', codigoT);
+                     pendientesT++;
+                     tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
                   }
                }
 
@@ -1216,14 +1608,31 @@ btnPendientesPreventivos.addEventListener('click', () => {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_S`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_S`).
                         insertAdjacentHTML('beforeend', codigoS);
+                     pendientesS++;
+                     tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
                   }
                }
 
             }
          }
+         return array.secciones;
+      })
+      .then(array => {
+         for (let x = 0; x < array.length; x++) {
+            const idSeccion = array[x].idSeccion;
+            const seccion = array[x].seccion;
+            estiloSeccionPendientes("estiloSeccion", seccion);
+            estiloSeccion.innerText = seccion;
+         }
       })
       .catch(function (err) {
          fetch(APIERROR + err);
+         dataSubseccionesPendientes.innerHTML = '';
+         dataOpcionesSubseccionestoggle.innerHTML = '';
+         tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
+         tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
+         tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
+         tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
       })
 })
 
@@ -1233,7 +1642,7 @@ const btnPendientesModal = (btn) => {
 
    if (btn == "btnPendientesIncidencias") {
 
-      btnPendientesIncidencias.className = 'py-1 px-2 text-red-900 bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+      btnPendientesIncidencias.className = 'py-1 px-2 text-red-900 bg-red-200 hover:text-red-500 font-normal cursor-pointer rounded-l';
 
       btnPendientesPreventivos.className = 'py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer';
 
@@ -1241,7 +1650,7 @@ const btnPendientesModal = (btn) => {
 
       btnPendientesPreventivos.className = 'py-1 px-2 text-red-900 bg-red-200 hover:text-red-500 font-normal cursor-pointer';
 
-      btnPendientesIncidencias.className = 'py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer';
+      btnPendientesIncidencias.className = 'py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer rounded-l';
    }
 }
 
@@ -1307,36 +1716,16 @@ function exportarPorUsuario(
 // El estilo se aplica DIV>H1(class="zie-logo").
 function estiloSeccionModal(padreSeccion, seccion = 0) {
    let seccionClase = seccion.toLowerCase() + "-logo-modal";
-   document.getElementById(padreSeccion).classList.remove("zil-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zie-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("auto-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("dec-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("dep-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zha-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zhc-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zhp-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zia-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zic-logo-modal");
-   document.getElementById(padreSeccion).classList.remove("zhh-logo-modal");
+   document.getElementById(padreSeccion).classList.remove("zil-logo-modal", "zie-logo-modal", "auto-logo-modal", "dec-logo-modal", "dep-logo-modal", "zha-logo-modal", "zhc-logo-modal", "zhp-logo-modal", "zia-logo-modal", "zic-logo-modal", "zhh-logo-modal");
 
    document.getElementById(padreSeccion).classList.add(seccionClase);
 }
 
 
 // El estilo se aplica DIV>H1(class="zie-logo").
-function estiloSeccion(padreSeccion, seccion) {
+function estiloSeccionPendientes(padreSeccion, seccion) {
    let seccionClase = seccion.toLowerCase() + "-logo";
-   document.getElementById(padreSeccion).classList.remove("zil-logo");
-   document.getElementById(padreSeccion).classList.remove("zie-logo");
-   document.getElementById(padreSeccion).classList.remove("auto-logo");
-   document.getElementById(padreSeccion).classList.remove("dec-logo");
-   document.getElementById(padreSeccion).classList.remove("dep-logo");
-   document.getElementById(padreSeccion).classList.remove("zha-logo");
-   document.getElementById(padreSeccion).classList.remove("zhc-logo");
-   document.getElementById(padreSeccion).classList.remove("zhp-logo");
-   document.getElementById(padreSeccion).classList.remove("zia-logo");
-   document.getElementById(padreSeccion).classList.remove("zic-logo");
-   document.getElementById(padreSeccion).classList.remove("zhh-logo");
+   document.getElementById(padreSeccion).classList.remove("zil-logo", "zie-logo", "auto-logo", "dec-logo", "dep-logo", "zha-logo", "zhc-logo", "zhp-logo", "zia-logo", "zic-logo", "zhh-logo");
 
    document.getElementById(padreSeccion).classList.add(seccionClase);
 }
@@ -1364,6 +1753,7 @@ function exportarListarUsuarios(idUsuario, idDestino, idSeccion) {
 
 // Funcion para Ver y Exportar los pendientes de las secciones.
 function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
+   let usuarioSession = localStorage.getItem("usuario");
    const action = "consultaFinalExcel";
    $.ajax({
       type: "POST",
@@ -1378,8 +1768,6 @@ function exportarPendientes(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
       },
       dataType: "JSON",
       success: function (data) {
-         let usuarioSession = localStorage.getItem("usuario");
-
          if (tipoExportar == "exportarMisPendientes") {
             page =
                "php/generarPendientesExcel.php?listaIdT=" +
@@ -7477,7 +7865,7 @@ function obtenerTestEquipo(idEquipo) {
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
 
    // CONTENEDORES PRINCIPALES
-   let estiloSeccion = document.getElementById("estiloSeccionTest");
+   let estiloSeccionTest = document.getElementById("estiloSeccionTest");
    let seccion = document.getElementById("seccionTest");
    let equipo = document.getElementById("equipoTest");
    let equipoAfectado = document.getElementById("nombreEquipoTest");
@@ -7486,7 +7874,7 @@ function obtenerTestEquipo(idEquipo) {
    document.getElementById("btnAgregarTest").setAttribute('onclick', 'agregarTestEquipo();');
 
    // LIMPIA CONTENEDORES
-   estiloSeccion.className = '';
+   estiloSeccionTest.className = '';
    seccion.innerText = '';
    equipo.innerText = '';
    equipoAfectado.innerText = '';
@@ -7498,7 +7886,7 @@ function obtenerTestEquipo(idEquipo) {
             seccion.innerText = array.seccion;
             equipo.innerText = array.equipo;
             let seccionClass = array.seccion.toLowerCase();
-            estiloSeccion.className = seccionClass + '-logo-modal flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs bg-indigo-400';
+            estiloSeccionTest.className = seccionClass + '-logo-modal flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs bg-indigo-400';
             equipoAfectado.innerText = array.equipo;
          }
 
@@ -9190,6 +9578,7 @@ btnSeguimientoEnergetico.addEventListener('click', () => {
    btnSeguimientoEnergetico.setAttribute('style', 'color: white');
 })
 
+
 // BUSCADOR PARA TABLA DE ENERGETICOS
 palabraEnergeticos.addEventListener('keyup', () => {
    buscadorTabla('dataEnergeticos', 'palabraEnergeticos', 0);
@@ -9375,6 +9764,7 @@ btnGraficasReportesDiario.addEventListener('click', () => {
    alertify.Gift('GODhPuM5cEE').set({ frameless: true });
 
 })
+
 
 const exportarTareasAIncidencias = (idDestino) => {
    let idUsuario = localStorage.getItem('usuario');
