@@ -2068,8 +2068,7 @@ if (isset($_GET['action'])) {
         FROM t_stock_items
         INNER JOIN c_destinos ON t_stock_items.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_stock_items.id_seccion = c_secciones.id
-        WHERE t_stock_items.id_destino = $idDestino  and t_stock_items.activo = 1
-        $filtroDestino";
+        WHERE t_stock_items.activo = 1 $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
