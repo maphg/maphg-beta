@@ -857,7 +857,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos.titulo
         FROM t_proyectos_planaccion 
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-        WHERE t_proyectos_planaccion.responsable = $idUsuario and t_proyectos_planaccion.activo = 1 and (t_proyectos_planaccion.status='N' or t_proyectos_planaccion.status='PENDIENTE' or t_proyectos_planaccion.status='P' or t_proyectos_planaccion.status='PROCESO') $filtroDestinoPlanaccion";
+        WHERE t_proyectos_planaccion.responsable = $idUsuario and t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1 and (t_proyectos_planaccion.status='N' or t_proyectos_planaccion.status='PENDIENTE' or t_proyectos_planaccion.status='P' or t_proyectos_planaccion.status='PROCESO') $filtroDestinoPlanaccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idPlanaccion = $x['id'];
@@ -1039,9 +1039,11 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and t_users.id_destino = $idDestino";
         }
 
-        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido, 
+        c_cargos.cargo
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        LEFT JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
         WHERE t_users.status = 'A' $filtroDestino
         ORDER BY t_colaboradores.nombre ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -1049,11 +1051,13 @@ if (isset($_GET['action'])) {
                 $idUsuario = $x['id'];
                 $nombre = $x['nombre'];
                 $apellido = $x['apellido'];
+                $cargo = $x['cargo'];
 
                 $array[] = array(
                     "idUsuario" => intval($idUsuario),
                     "nombre" => $nombre,
-                    "apellido" => $apellido
+                    "apellido" => $apellido,
+                    "cargo" => $cargo
                 );
             }
         }
@@ -1473,9 +1477,9 @@ if (isset($_GET['action'])) {
                 $resp = "eliminado";
             }
         } elseif ($columna == "restaurar") {
-            $query = "UPDATE t_energeticos SET activo = 0 WHERE id = $idEnergetico";
+            $query = "UPDATE t_energeticos SET status = 'PENDIENTE' WHERE id = $idEnergetico";
             if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = "eliminado";
+                $resp = "restaurar";
             }
         }
         echo json_encode($resp);
@@ -2507,7 +2511,19 @@ if (isset($_GET['action'])) {
         $idIncidencia = $_GET['idIncidencia'];
         $array = array();
 
-        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_equipos_america.equipo, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.tipo_incidencia, t_mc.fecha_creacion, t_mc.rango_fecha
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status,
+        t_equipos_america.id 'idEquipo', t_equipos_america.equipo, t_colaboradores.nombre, t_colaboradores.apellido, t_mc.tipo_incidencia, t_mc.fecha_creacion, t_mc.rango_fecha, t_mc.responsable,
+        t_mc.status_material,
+        t_mc.status_trabajare,
+        t_mc.departamento_calidad,
+        t_mc.departamento_compras,
+        t_mc.departamento_direccion,
+        t_mc.departamento_finanzas,
+        t_mc.departamento_rrhh,
+        t_mc.energetico_electricidad,
+        t_mc.energetico_agua,
+        t_mc.energetico_diesel,
+        t_mc.energetico_gas
         FROM t_mc 
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
         INNER JOIN t_users ON t_mc.creado_por = t_users.id
@@ -2518,19 +2534,57 @@ if (isset($_GET['action'])) {
                 $idIncidencia = $x['id'];
                 $actividad = $x['actividad'];
                 $equipo = $x['equipo'];
+                $idEquipo = $x['idEquipo'];
                 $fecha = (new DateTime($x['fecha_creacion']))->format('Y-m-d');
                 $rangoFecha = $x['rango_fecha'];
                 $creadoPor = $x['nombre'] . " " . $x['apellido'];
                 $tipoIncidencia = $x['tipo_incidencia'];
+                $responsable = $x['responsable'];
+                $status_material = $x['status_material'];
+                $status_trabajare = $x['status_trabajare'];
+                $departamento_calidad = $x['departamento_calidad'];
+                $departamento_compras = $x['departamento_compras'];
+                $departamento_direccion = $x['departamento_direccion'];
+                $departamento_finanzas = $x['departamento_finanzas'];
+                $departamento_rrhh = $x['departamento_rrhh'];
+                $energetico_electricidad = $x['energetico_electricidad'];
+                $energetico_agua = $x['energetico_agua'];
+                $energetico_diesel = $x['energetico_diesel'];
+                $energetico_gas = $x['energetico_gas'];
+
+                #RESPONSABLE 
+                $nombreResponsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $responsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $nombreResponsable = $x['nombre'] . " " . $x['apellido'];
+                    }
+                }
 
                 $array['incidencia'][] = array(
                     "idIncidencia" => intval($idIncidencia),
                     "actividad" => $actividad,
                     "equipo" => $equipo,
+                    "idEquipo" => intval($idEquipo),
                     "fecha" => $fecha,
                     "rangoFecha" => $rangoFecha,
                     "creadoPor" => $creadoPor,
-                    "tipoIncidencia" => $tipoIncidencia
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "nombreResponsable" => $nombreResponsable,
+                    "status_material" => intval($status_material),
+                    "status_trabajare" => intval($status_trabajare),
+                    "departamento_calidad" => intval($departamento_calidad),
+                    "departamento_compras" => intval($departamento_compras),
+                    "departamento_direccion" => intval($departamento_direccion),
+                    "departamento_finanzas" => intval($departamento_finanzas),
+                    "departamento_rrhh" => intval($departamento_rrhh),
+                    "energetico_electricidad" => intval($energetico_electricidad),
+                    "energetico_agua" => intval($energetico_agua),
+                    "energetico_diesel" => intval($energetico_diesel),
+                    "energetico_gas" => intval($energetico_gas)
                 );
 
                 #COMENTARIOS
@@ -3155,6 +3209,219 @@ if (isset($_GET['action'])) {
 
 
         echo json_encode($array);
+    }
+
+
+    // ACTUALIZA LA INFORMACIÓN DE INCIDENCIAS (t_mc)
+    if ($action == "actualizarStatusIncidencia") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $columna = $_GET['columna'];
+        $valor = $_GET['valor'];
+        $resp = "error";
+        $cod2bend = $_GET['cod2bend'];
+
+        // BUSCA VALORES EN LOS STATUS PARA CREA EL TOGGLE
+        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "SELECT $columna FROM t_mc WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = intval($x[$columna]);
+                }
+            }
+
+            if ($valor == 0) {
+                $valor = 1;
+            } else {
+                $valor = 0;
+            }
+        }
+
+        if ($columna == "responsable") {
+            $query = "UPDATE t_mc SET responsable = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "responsable";
+            }
+        } elseif ($columna == "titulo") {
+            $query = "UPDATE t_mc SET actividad = '$valor' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "titulo";
+            }
+        } elseif ($columna == "status_trabajare") {
+            $query = "UPDATE t_mc SET status_trabajare = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "trabajare";
+            }
+        } elseif ($columna == "status_material" and $cod2bend != "") {
+            $query = "UPDATE t_mc SET status_material = $valor, cod2bend = '$cod2bend' 
+            WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "material";
+            }
+        } elseif ($columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "departamento";
+            }
+        } elseif ($columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "energetico";
+            }
+        } elseif ($columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "bitacora";
+            }
+        } elseif ($columna == "status") {
+            $query = "UPDATE t_mc SET status = 'SOLUCIONADO' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "solucionado";
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_mc SET activo = 0 WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminado";
+            }
+        } elseif ($columna == "restaurar") {
+            $query = "UPDATE t_mc SET status = 'PENDIENTE' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "restaurado";
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // ACTUALIZA LA INFORMACIÓN DE INCIDENCIAS (t_mp_np)
+    if ($action == "actualizarStatusIncidenciaG") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $columna = $_GET['columna'];
+        $valor = $_GET['valor'];
+        $resp = "error";
+
+        // BUSCA VALORES EN LOS STATUS PARA CREA EL TOGGLE
+        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "SELECT $columna FROM t_mc WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = intval($x[$columna]);
+                }
+            }
+
+            if ($valor == 0) {
+                $valor = 1;
+            } else {
+                $valor = 0;
+            }
+        }
+
+        if ($columna == "responsable") {
+            $query = "UPDATE t_mp_np SET responsable = $valor, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "responsable";
+            }
+        } elseif ($columna == "titulo") {
+            $query = "UPDATE t_mp_np SET actividad = '$valor', ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "titulo";
+            }
+        } elseif ($columna == "status_trabajare") {
+            $query = "UPDATE t_mp_np SET status_trabajare = $valor, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "trabajare";
+            }
+        } elseif ($columna == "status_material" and $cod2bend != "") {
+            $cod2bend = $_GET['cod2bend'];
+            $query = "UPDATE t_mp_np SET status_material = $valor, cod2bend = '$cod2bend', ultima_modificacion = '$fechaActual' 
+            WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "material";
+            }
+        } elseif ($columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
+            $query = "UPDATE t_mp_np SET $columna = $valor, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "departamento";
+            }
+        } elseif ($columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
+            $query = "UPDATE t_mp_np SET $columna = $valor, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "energetico";
+            }
+        } elseif ($columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "UPDATE t_mp_np SET $columna = $valor, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "bitacora";
+            }
+        } elseif ($columna == "status") {
+            $query = "UPDATE t_mp_np SET status = 'SOLUCIONADO', fecha_realizado = '$fechaActual', ultima_modificacion = '$fechaActual'  WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "solucionado";
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_mp_np SET activo = 0, ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminado";
+            }
+        } elseif ($columna == "restaurar") {
+            $query = "UPDATE t_mp_np SET status = 'PENDIENTE', ultima_modificacion = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "restaurado";
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA ADJUNTOS EN LAS INCIDENCAS (t_mc y t_mp_np)
+    if ($action == "agregarAdjuntosIncidenicas") {
+        $idIncidencia = $_GET['idIncidencia'];
+        $tipoIncidencia = $_GET['tipoIncidencia'];
+        $resp = "ERROR";
+
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+
+        if ($tipoIncidencia == "INCIDENCIA") {
+            $nombre = 'INCIDENCIA_ID_' . $idIncidencia . '_' . rand(50, 1500) . '.' . $extension;
+            if (move_uploaded_file($rutaTemporal, '../planner/tareas/adjuntos/' . $nombre)) {
+                $query = "INSERT INTO t_mc_adjuntos(id_mc, url_adjunto, fecha, subido_por, activo) VALUES($idIncidencia, '$nombre', '$fechaActual', $idUsuario, 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = "INCIDENCIA";
+                }
+            }
+        } elseif ($tipoIncidencia == "INCIDENCIAG") {
+            $nombre = 'INCIDENCIAG_ID_' . $idIncidencia . '_' . rand(50, 1500) . '.' . $extension;
+            if (move_uploaded_file($rutaTemporal, '../planner/tareas/adjuntos/' . $nombre)) {
+                $query = "INSERT INTO adjuntos_mp_np(id_usuario, id_mp_np, url, fecha, activo) VALUES($idUsuario, $idIncidencia, '$nombre', '$fechaActual', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = "INCIDENCIAG";
+                }
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // ACTULIZA LAS ACTIVIDADES DE INCIDENCIAS
+    if ($action == "actualizarActividadesIncidencia") {
+        $idActividad = $_GET['idActividad'];
+        $columna = $_GET['columna'];
+        $valor = $_GET['valor'];
+        $resp = "error";
+
+        if ($columna == "titulo" && $valor != "" && $valor != " ") {
+            $query = "UPDATE t_mc_actividades_ot SET actividad = '$valor' WHERE id = $idActividad";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "titulo";
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_mc_actividades_ot SET activo = 0 WHERE id = $idActividad";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "eliminado";
+            }
+        }
+        echo json_encode($resp);
     }
 
     // CIERRE FINAL

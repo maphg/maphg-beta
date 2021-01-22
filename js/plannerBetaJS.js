@@ -58,10 +58,15 @@ const misPendientesUsuario = document.getElementById("misPendientesUsuario");
 const misPendientesCreados = document.getElementById("misPendientesCreados");
 const misPendientesSinUsuario = document.getElementById("misPendientesSinUsuario");
 const misPendientesSeccion = document.getElementById("misPendientesSeccion");
+const btnStatusVerEnPlanner = document.getElementById("btnStatusVerEnPlanner");
+const btnResponsablesIncidencias = document.getElementById("btnResponsablesIncidencias");
+const aplicarTituloIncidenca = document.getElementById("aplicarTituloIncidenca");
+const btnEliminarActividadIncidencia = document.getElementById("btnEliminarActividadIncidencia");
 
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
+const nuevoTituloIncidencia = document.getElementById("nuevoTituloIncidencia");
 const seccionIncidencias = document.getElementById("seccionIncidencias");
 const subseccionIncidencias = document.getElementById("subseccionIncidencias");
 const equipoLocalIncidencias = document.getElementById("equipoLocalIncidencias");
@@ -79,6 +84,9 @@ const presupuestoProyecto = document.getElementById("presupuestoProyecto");
 const actividadVerEnPlanner = document.getElementById("actividadVerEnPlanner");
 const comentarioIncidenciaVerEnPlanner =
    document.getElementById("comentarioIncidenciaVerEnPlanner");
+const palabraFallaTarea = document.getElementById("palabraFallaTarea");
+const palabraProyecto = document.getElementById("palabraProyecto");
+const inputFileIncidencias = document.getElementById("inputFileIncidencias");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -123,7 +131,7 @@ const dataComentariosIncidenciaVerEnPlanner =
 const dataAdjuntosIncidenciaVerEnPlanner =
    document.getElementById("dataAdjuntosIncidenciaVerEnPlanner");
 const estiloSeccion = document.getElementById("estiloSeccion");
-
+const dataUsuarios = document.getElementById("dataUsuarios");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -2096,8 +2104,8 @@ function actualizarStatusMC(idMC, status, valorStatus) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
-   let tituloMC = document.getElementById("editarTitulo").value;
-   let cod2bend = document.getElementById("inputCod2bend").value;
+   let tituloMC = editarTitulo.value;
+   let cod2bend = inputCod2bend.value;
    const action = "actualizarStatusMC";
 
    $.ajax({
@@ -2267,7 +2275,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
    let palabraUsuario = document.getElementById("palabraUsuario").value;
 
    document.getElementById("modalUsuarios").classList.add("open");
-   document.getElementById("dataUsuarios").innerHTML = iconoLoader;
+   dataUsuarios.innerHTML = iconoLoader;
 
    const action = "obtenerUsuarios";
    $.ajax({
@@ -2284,7 +2292,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
       dataType: "JSON",
       success: function (data) {
          // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
-         document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
+         dataUsuarios.innerHTML = data.dataUsuarios;
          document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
          );
       },
@@ -2757,11 +2765,11 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
 
 // Actualiza Datos de las Tareas
 function actualizarTareas(idTarea, columna, valor) {
-   let tituloNuevo = document.getElementById("editarTitulo").value;
+   let tituloNuevo = editarTitulo.value;
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    let idEquipo = localStorage.getItem("idEquipo");
-   let cod2bend = document.getElementById("inputCod2bend").value;
+   let cod2bend = inputCod2bend.value;
    const action = "actualizarTareas";
    $.ajax({
       type: "POST",
@@ -3321,7 +3329,7 @@ function verEnPlanner(tipoPendiente, idPendiente) {
 
 // OBTIENE INFORMACION DE LAS INCIDENCIAS
 function obtenerIncidenciaEquipos(idIncidencia) {
-   alertaImg('Opción Bloqueada para Actualizar', '', 'info', 1800);
+   localStorage.setItem('idIncidencia', idIncidencia);
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
@@ -3341,6 +3349,8 @@ function obtenerIncidenciaEquipos(idIncidencia) {
          dataComentariosIncidenciaVerEnPlanner.innerHTML = '';
          dataAdjuntosIncidenciaVerEnPlanner.innerHTML = '';
          dataActividadesIncidenciaVerEnPlanner.innerHTML = '';
+         responsablesVerEnPlanner.innerHTML = '';
+         statusVerEnPlanner.innerHTML = '';
          return array;
       })
       .then(array => {
@@ -3351,10 +3361,11 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                const idIncidencia = array.incidencia[x].idIncidencia;
                const actividad = array.incidencia[x].actividad;
                const equipo = array.incidencia[x].equipo;
+               const idEquipo = array.incidencia[x].idEquipo;
                const tipoIncidencia = array.incidencia[x].tipoIncidencia;
                const fecha = array.incidencia[x].fecha;
                const creadoPor = array.incidencia[x].creadoPor;
-               const responsable = array.incidencia[x].responsable;
+               const nombreResponsable = array.incidencia[x].nombreResponsable;
                const rangoFecha = array.incidencia[x].rangoFecha;
 
                const estiloTipoIncidencia =
@@ -3363,6 +3374,106 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                         tipoIncidencia == "ALARMA" ? 'text-yellow-500 bg-yellow-200' :
                            tipoIncidencia == "ALERTA" ? 'text-blue-500 bg-blue-200' :
                               'text-teal-500 bg-teal-200';
+
+               const status_material = array.incidencia[x].status_material == 0 ? ''
+                  : `
+               <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'status_material', 0)">
+                     <h1 class="font-medium">Material</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const status_trabajando = array.incidencia[x].status_trabajare == 0 ? ''
+                  : `
+               <div class="text-blue-500 bg-blue-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'status_trabajare', 0)">
+                     <h1 class="font-medium">TRABAJANDO</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_calidad = array.incidencia[x].departamento_calidad == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_calidad', 0)">
+                     <h1 class="font-medium">CALIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_compras = array.incidencia[x].departamento_compras == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_compras', 0)">
+                     <h1 class="font-medium">COMPRAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_direccion = array.incidencia[x].departamento_direccion == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_direccion', 0)">
+                     <h1 class="font-medium">DIRECCIÓN</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_finanzas = array.incidencia[x].departamento_finanzas == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_finanzas', 0)">
+                     <h1 class="font-medium">FINANZAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_rrhh = array.incidencia[x].departamento_rrhh == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_rrhh', 0)">
+                     <h1 class="font-medium">RRHH</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_electricidad = array.incidencia[x].energetico_electricidad == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_electricidad', 0)">
+                     <h1 class="font-medium">ELECTRICIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_agua = array.incidencia[x].energetico_agua == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_agua', 0)">
+                     <h1 class="font-medium">AGUA</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_diesel = array.incidencia[x].energetico_diesel == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_diesel', 0)">
+                     <h1 class="font-medium">DIESEL</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_gas = array.incidencia[x].energetico_gas == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_gas', 0)">
+                     <h1 class="font-medium">GAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_material);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_trabajando);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_calidad);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_compras);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_direccion);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_finanzas);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_rrhh);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_electricidad);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_agua);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_diesel);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_gas);
 
 
                tipoIncidenciaVerEnPlanner.innerHTML = `<h1>${tipoIncidencia}</h1>`;
@@ -3373,8 +3484,16 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                creadoPorVerEnPlanner.innerText = creadoPor;
                rangoFechaVerEnPlanner.innerText = rangoFecha;
                asignadoAVerEnPlanner.innerText = equipo;
-               // responsablesVerEnPlanner
-               // statusVerEnPlanner
+               asignadoAVerEnPlanner.
+                  setAttribute('onclick', `obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas'); cerrarmodal('modalVerEnPlannerIncidencia');`)
+               palabraFallaTarea.value = actividad;
+               dispatchEvent(new Event('keyup'));
+               responsablesVerEnPlanner.innerHTML = `
+                  <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">${nombreResponsable}</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', 0);"></i>
+                  </div>
+               `;
 
                btnVerOTVerEnPlanner.
                   setAttribute('onclick', `redireccionarOTVerEnPlanner('INCIDENCIA', ${idIncidencia})`);
@@ -3384,6 +3503,15 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
                btnAgregarComentarioVerEnPlanner.
                   setAttribute('onclick', `agregarComentarioIncidencia(${idIncidencia});`);
+
+               btnStatusVerEnPlanner.
+                  setAttribute('onclick', `obtenerStatusIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalStatus');`);
+
+               btnResponsablesIncidencias.
+                  setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalUsuarios');`);
+
+               inputFileIncidencias.
+                  setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIA');`);
             }
 
             // COMENTARIOS
@@ -3428,13 +3556,13 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
                if (extension == "png" || extension == "jpg" || extension == "jpeg") {
                   codigo = `
-                     <a href="https://www.maphg.com/beta/planner/proyectos/planaccion/${url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/proyectos/planaccion/${url})"></div>
+                     <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/tareas/adjuntos/${url})"></div>
                      </a>
                   `;
                } else {
                   codigo = `
-                     <a href="https://www.maphg.com/beta/planner/proyectos/planaccion/${url}" target="_blank">
+                     <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -3475,6 +3603,193 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 }
 
 
+// OBTIENE DISEÑO DE MODAL STATUS Y AGREGA
+function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
+
+   if (tipoIncidencia == "INCIDENCIA") {
+      estiloModalStatus(idIncidencia, 'FALLA');
+
+      // OPCIONES PARA APLICAR STATUS
+      btnStatusUrgente.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status_urgente', 0)`);
+      btnStatusMaterial.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status_material', 0)`);
+      btnStatusTrabajare.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status_trabajare', 0)`);
+      btnStatusCalidad.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'departamento_calidad', 0)`);
+      btnStatusCompras.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'departamento_compras', 0)`);
+      btnStatusDireccion.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'departamento_direccion', 0)`);
+      btnStatusFinanzas.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'departamento_finanzas', 0)`);
+      btnStatusRRHH.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'departamento_rrhh', 0)`);
+      btnStatusElectricidad.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'energetico_electricidad', 0)`);
+      btnStatusAgua.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'energetico_agua', 0)`);
+      btnStatusDiesel.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'energetico_diesel', 0)`);
+      btnStatusGas.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'energetico_gas', 0)`);
+      btnStatusFinalizar.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status', 0)`);
+      btnStatusActivo.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'eliminar', 0)`);
+      btnStatusGP.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'bitacora_gp', 0)`);
+      btnStatusTRS.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'bitacora_trs', 0)`);
+      btnStatusZI.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'bitacora_zi', 0)`);
+      btnEditarTitulo.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'titulo', 0)`);
+
+   } else if (tipoIncidencia == "INCIDENCIAGENERAL") {
+      estiloModalStatus(idIncidencia, 'TAREA');
+
+      // OPCIONES PARA APLICAR STATUS
+      btnStatusUrgente.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_urgente', 0)`);
+      btnStatusMaterial.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_material', 0)`);
+      btnStatusTrabajare.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_trabajare', 0)`);
+      btnStatusCalidad.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_calidad', 0)`);
+      btnStatusCompras.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_compras', 0)`);
+      btnStatusDireccion.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_direccion', 0)`);
+      btnStatusFinanzas.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_finanzas', 0)`);
+      btnStatusRRHH.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_rrhh', 0)`);
+      btnStatusElectricidad.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_electricidad', 0)`);
+      btnStatusAgua.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_agua', 0)`);
+      btnStatusDiesel.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_diesel', 0)`);
+      btnStatusGas.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_gas', 0)`);
+      btnStatusFinalizar.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'solucionar', 0)`);
+      btnStatusActivo.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'eliminar', 0)`);
+      btnStatusGP.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_gp', 0)`);
+      btnStatusTRS.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_trs', 0)`);
+      btnStatusZI.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_zi', 0)`);
+      btnEditarTitulo.
+         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'titulo', 0)`);
+
+   }
+
+}
+
+
+// OBTIENE RESPONSABLES PARA ASIGNA EN INCIDENCIAS
+function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = 'obtenerUsuarios';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idUsuario = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const cargo = array[x].cargo;
+
+               if (tipoIncidencia == "INCIDENCIA") {
+                  fResponsable = `onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', ${idUsuario});"`
+               } else if (tipoIncidencia == "INCIDENCIAG") {
+                  fResponsable = `onclick="X(${idIncidencia}, 'responsable', ${idUsuario});"`
+               }
+               const codigo = `
+               <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" ${fResponsable}>
+                  <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                     <h1 class="ml-2">${nombre + ' ' + apellido}</h1>
+                     <p class="font-bold mx-1"> / </p>
+                     <h1 class="font-normal text-xs">${cargo}</h1>
+               </div>              
+              `;
+               dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
+
+// ACTUALIZA LOS STATUS E INFORMACIÓN
+function actualizarStatusIncidencia(idIncidencia, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   if (columna == "titulo") {
+      valor = editarTitulo.value;
+   }
+
+   const action = 'actualizarStatusIncidencia';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&columna=${columna}&valor=${valor}&cod2bend=${inputCod2bend.value}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         obtenerIncidenciaEquipos(idIncidencia);
+         estiloModalStatus(idIncidencia, 'FALLA');
+         if (array == "responsable") {
+            alertaImg('Responsable Actualizado', '', 'success', 1500);
+            cerrarmodal('modalUsuarios');
+         } else if (array == "titulo") {
+            alertaImg('Título Trabajando, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "trabajare") {
+            alertaImg('Status Trabajando, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "material") {
+            alertaImg('Status Matarial, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "departamento") {
+            alertaImg('Status Departamento, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "energetico") {
+            alertaImg('Status Energético, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "bitacora") {
+            alertaImg('Bitacora Actualizada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "solucionado") {
+            obtenerPendientesUsuario();
+            alertaImg('Incidencia Solucionada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+            cerrarmodal('modalVerEnPlannerIncidencia');
+         } else if (array == "eliminado") {
+            alertaImg('Incidencia Eliminada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "restaurado") {
+            alertaImg('Incidencia Restaurada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ``);
+      })
+}
+
 // ABRE OT DE INCIDENCIAS E INCICDENCIAS GENERALES
 function redireccionarOTVerEnPlanner(tipoOT, idOT) {
    if (tipoOT == "INCIDENCIA") {
@@ -3484,6 +3799,46 @@ function redireccionarOTVerEnPlanner(tipoOT, idOT) {
    }
 }
 
+
+// AGREGA ADJUNTOS EN INCIDENCIAS
+function agregarAdjuntosIncidenicas(idIncidencia, tipoIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarAdjuntosIncidenicas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&tipoIncidencia=${tipoIncidencia}`;
+   const formData = new FormData();
+
+   if (inputFileIncidencias.files) {
+      for (let x = 0; x < inputFileIncidencias.files.length; x++) {
+         formData.append('file', inputFileIncidencias.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == "INCIDENCIA") {
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+                  obtenerIncidenciaEquipos(idIncidencia);
+               } else if (array == "INCIDENCIAG") {
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputFileIncidencias.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` agregarAdjuntosIncidenicas(${idIncidencia}, ${tipoIncidencia}) `)
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputFileIncidencias.value = '';
+            })
+      }
+   }
+}
 
 
 function agregarActividadesIncidencias(idIncidencia) {
@@ -3543,14 +3898,15 @@ function agregarComentarioIncidencia(idIncidencia) {
    }
 }
 
+
 // OPCIONES PARA ACTIVIDADES EN INCIDENCIAS
 function mostrarOpcionesActividadIncidencias(idActividad) {
 
-   btnAplicarNuevoTituloPlanacciontoggle.
-      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'titulo', 0)`);
+   aplicarTituloIncidenca.
+      setAttribute('onclick', `actualizarActividadesIncidencia(${idActividad}, 'titulo', 0)`);
 
-   btnEliminarActividadPlanaccion.
-      setAttribute('onclick', `actualizarActividadesPlanaccion(${idActividad}, 'eliminar', 0)`);
+   btnEliminarActividadIncidencia.
+      setAttribute('onclick', `actualizarActividadesIncidencia(${idActividad}, 'eliminar', 0)`);
 
    // Propiedades para el tooltip
    const button = document.getElementById(`actividad_incidencia_${idActividad}`);
@@ -3564,6 +3920,39 @@ function mostrarOpcionesActividadIncidencias(idActividad) {
    } else {
       tooltipOpcionesActividadIncidencias.classList.add('hidden');
    }
+}
+
+
+// ACTUALIZA LAS ACTIVIDADES DE LAS INCIDENCIAS
+function actualizarActividadesIncidencia(idActividad, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idIncidencia = localStorage.getItem('idIncidencia');
+
+   if (columna == 'titulo') {
+      valor = nuevoTituloIncidencia.value;
+   }
+
+   const action = 'actualizarActividadesIncidencia';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idActividad=${idActividad}&columna=${columna}&valor=${valor}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         obtenerIncidenciaEquipos(idIncidencia);
+         toggleHidden('tooltipOpcionesActividadIncidencias');
+         if (array == "titulo") {
+            nuevoTituloIncidencia.value = '';
+            alertaImg('Actividad Actualizada', '', 'success', 1400);
+         } else if (array == "eliminado") {
+            alertaImg('Actividad Eliminada', '', 'success', 1400);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1400);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ` actualizarActividadesIncidencia(${idActividad}, ${columna}, ${valor})`);
+      })
 }
 
 
@@ -3716,10 +4105,8 @@ function verEnPlannerPlanaccion(idPlanaccion) {
 
             proyectoPlanaccion.setAttribute('onclick', `actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion});  toggleModalTailwind('modalProyectos'); obtenerProyectos(${idSeccion}, 'PENDIENTE');`);
 
-            document.getElementById("palabraProyecto").value = proyecto;
-            setTimeout(() => {
-               document.getElementById("palabraProyecto").click();
-            }, 3000);
+            palabraProyecto.value = proyecto;
+            palabraProyecto.dispatchEvent(new Event('keyup'));
 
             // REOCORRE LOS ELEMENTOS OBTENIDOS (ADJUNTOS)
             for (let x = 0; x < array.adjuntos.length; x++) {
@@ -6597,7 +6984,7 @@ function ganttTareas(idEquipo, status) {
    let idDestino = localStorage.getItem("idDestino");
    let idSeccion = localStorage.getItem("idSeccion");
    let idSubseccion = localStorage.getItem("idSubseccion");
-   let palabraEquipo = document.getElementById("palabraFallaTarea").value;
+   let palabraEquipo = palabraFallaTarea.value;
    const action = "ganttTareas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=${idEquipo}&status=${status}&palabraEquipo=${palabraEquipo}`;
 
@@ -6688,7 +7075,7 @@ function ganttFallas(idEquipo, status) {
    let idDestino = localStorage.getItem("idDestino");
    let idSeccion = localStorage.getItem("idSeccion");
    let idSubseccion = localStorage.getItem("idSubseccion");
-   let palabraEquipo = document.getElementById("palabraFallaTarea").value;
+   let palabraEquipo = palabraFallaTarea.value;
    const action = "ganttFallas";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&idEquipo=${idEquipo}&status=${status}&palabraEquipo=${palabraEquipo}`;
    document.getElementById("pendienteFallaTarea").
@@ -7469,7 +7856,7 @@ function obtenerTodosPendientes() {
 
 // FUNCION UNIVERSAL PARA LA TABLA #dataPendientesX
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
-document.getElementById("palabraFallaTarea").addEventListener('keyup', function () {
+palabraFallaTarea.addEventListener('keyup', function () {
    buscadorTabla('dataPendientesX', 'palabraFallaTarea', 0);
 });
 
@@ -7666,15 +8053,15 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
             }
 
             if (array[0].titulo) {
-               document.getElementById("editarTitulo").value = array[0].titulo;
+               editarTitulo.value = array[0].titulo;
             } else {
-               document.getElementById("editarTitulo").value = '';
+               editarTitulo.value = '';
             }
 
             if (array[0].cod2bend) {
-               document.getElementById("inputCod2bend").value = array[0].cod2bend;
+               inputCod2bend.value = array[0].cod2bend;
             } else {
-               document.getElementById("inputCod2bend").value = '';
+               inputCod2bend.value = '';
             }
          }
 
@@ -7705,38 +8092,6 @@ function obtenerPendientesUsuario() {
       .then(array => {
 
          if (array) {
-
-            // if (array.pendientes) {
-            //    for (let x = 0; x < array.pendientes.length; x++) {
-            //       const idPendiente = array.pendientes[x].idPendiente;
-            //       const tipoPendiente = array.pendientes[x].tipoPendiente;
-            //       const seccion = array.pendientes[x].seccion;
-            //       const actividad = array.pendientes[x].actividad;
-            //       let fVerEnPlanner = '';
-
-            //       if (tipoPendiente == 'TAREA' || tipoPendiente == 'TAREAGENERAL') {
-            //          fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
-            //       } else if (tipoPendiente == 'INCIDENCIA') {
-            //          fVerEnPlanner = `onclick="verEnPlanner('${tipoPendiente}', ${idPendiente}); toggleModalTailwind('modalVerEnPlanner');"`;
-            //       } else if (tipoPendiente == 'PLANACCION') {
-            //          fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPendiente}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
-            //       }
-
-            //       const codigo = `
-            //             <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_${tipoPendiente}"
-            //             ${fVerEnPlanner}>
-            //                <h1 class="truncate mr-2" data-title="${actividad}">
-            //                   ${seccion + ' - ' + tipoPendiente + ' - ' + actividad}
-            //                </h1>
-            //                <div class="flex-none bg-red-400 text-red-700 text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center">
-            //                   <h1>1</h1>
-            //                </div>
-            //             </div>   
-            //          `;
-
-            //       dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
-            //    }
-            // }
 
             if (array.incidencias) {
                totalPendientesFallas.innerHTML = `Incidencia (${array.incidencias.length})`;
@@ -8416,11 +8771,10 @@ function actualizarEnergetico(idEnergetico, columna, valor) {
    let idUsuario = localStorage.getItem('usuario');
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem('idSubseccion');
-   let titulo = document.getElementById('editarTitulo');
    let cod2bend = document.getElementById('inputCod2bend');
 
    const action = 'actualizarEnergetico';
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&columna=${columna}&valor=${valor}&titulo=${titulo.value}&cod2bend=${cod2bend.value}`;
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&columna=${columna}&valor=${valor}&titulo=${editarTitulo.value}&cod2bend=${cod2bend.value}`;
 
    fetch(URL)
       .then(array => array.json())
@@ -8521,8 +8875,7 @@ function obtenerResponsableEnergetico(idEnergetico) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
-   const contenedor = document.getElementById("dataUsuarios");
-   contenedor.innerHTML = '';
+   dataUsuarios.innerHTML = '';
    const action = "obtenerUsuariosEnergeticos";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
    fetch(URL)
@@ -8543,7 +8896,7 @@ function obtenerResponsableEnergetico(idEnergetico) {
                         <h1 class="font-normal text-xs">${puesto}</h1>
                   </div>
                `;
-               contenedor.insertAdjacentHTML('beforeend', codigo);
+               dataUsuarios.insertAdjacentHTML('beforeend', codigo);
             }
          }
       })
@@ -8931,9 +9284,9 @@ setInterval(function () {
 
 
 // CONTADOR DE CARACTERES EN #editarTitulo
-document.getElementById("editarTitulo").addEventListener('keydown', event => {
+editarTitulo.addEventListener('keydown', event => {
    if (event.keyCode > 47 && event.keyCode < 91) {
-      if (document.getElementById('editarTitulo').value.length >= 60) {
+      if (editarTitulo.value.length >= 60) {
          alertaImg('60 Caracteres como Máximo', '', 'info', 500);
       }
    }

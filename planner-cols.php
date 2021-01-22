@@ -1871,7 +1871,7 @@
                     </div>
 
                     <div class="w-1/2 px-2 mt-2">
-                        <div class="flex items-center justify-start relative z-20">
+                        <div class="flex items-center justify-start relative">
                             <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
                             <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                 <h1 class="font-medium text-sm">
@@ -1879,7 +1879,6 @@
                                 </h1>
                                 <input type="file" id="inputFilePlanaccion" multiple class="absolute top-0 opacity-0">
                             </div>
-
                         </div>
 
                         <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
@@ -1941,7 +1940,7 @@
                     <h1>INCIDENCIA</h1>
                 </div>
                 <div id="tipoIncidenciaVerEnPlanner" class="">
-                    <h1>ALERTA</h1>
+                    <h1></h1>
                 </div>
             </div>
             <!-- CONTENIDO -->
@@ -1966,7 +1965,7 @@
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
                             <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
-                                <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <div id="btnResponsablesIncidencias" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                     <h1 class="font-medium text-sm">
                                         <i class="fas fa-plus"></i>
                                     </h1>
@@ -1982,21 +1981,16 @@
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
                             <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
-                                <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <div id="btnStatusVerEnPlanner" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                     <h1 class="font-medium text-sm">
                                         <i class="fas fa-plus"></i>
                                     </h1>
                                 </div>
-                                <div id="statusVerEnPlanner">
-                                    <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2 hidden">
-                                        <h1 class="font-medium">Material</h1>
-                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
-                                    </div>
-                                </div>
+                                <div id="statusVerEnPlanner" class="flex flex-wrap w-full justify-start items-center"></div>
                             </div>
                         </div>
                         <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
-                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solucion estimada:</h1>
+                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solución estimada:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
                                     <span id="rangoFechaVerEnPlanner" class="bg-purple-200">
@@ -2052,12 +2046,13 @@
                         </div>
                     </div>
                     <div class="w-1/2 px-2 mt-2">
-                        <div class="flex items-center justify-start">
+                        <div class="flex items-center justify-start relative">
                             <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
                             <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                                 <h1 class="font-medium text-sm">
                                     <i class="fas fa-plus"></i>
                                 </h1>
+                                <input type="file" id="inputFileIncidencias" multiple class="absolute top-0 opacity-0">
                             </div>
                         </div>
                         <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
@@ -2073,20 +2068,20 @@
 
                     <div class="w-full flex flex-row">
 
-                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="expandir(''); expandir('')">
+                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="toggleHidden('aplicarTituloIncidenca'); toggleHidden('nuevoTituloIncidenciaToggle')">
                             Editar <i class="fa fa-pencil mx-2"></i>
                         </button>
 
-                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="expandir(this.id)">
+                        <button id="aplicarTituloIncidenca" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="toggleHidden('aplicarTituloIncidenca'); toggleHidden('nuevoTituloIncidenciaToggle')">
                             Aplicar <i class="fa fa-check-circle mx-2"></i>
                         </button>
                     </div>
 
-                    <div id="" class="px-1 mb-4 hidden">
-                        <input id="" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
+                    <div id="nuevoTituloIncidenciaToggle" class="px-1 mb-4 hidden">
+                        <input id="nuevoTituloIncidencia" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
                     </div>
 
-                    <button id="" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                    <button id="btnEliminarActividadIncidencia" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
                         Eliminar <i class="fa fa-trash mx-2"></i>
                     </button>
 
