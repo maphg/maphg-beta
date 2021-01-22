@@ -434,6 +434,8 @@
             </div>
 
             <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4" style="height:300px; max-height:305px;">
+                <h1 class="font-bold text-2xl text-center">TRABAJANDO...</h1>
+
             </div>
             <!-- PLANES MP -->
         </div>
