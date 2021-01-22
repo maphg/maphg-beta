@@ -44,7 +44,7 @@
     </style>
 </head>
 
-<body style="font-family: 'Source Sans Pro', sans-serif;" class="bg-orange-400 scrollbar">
+<body style="font-family: 'Source Sans Pro', sans-serif;" class="scrollbar">
 
     <!-- MENÚ -->
     <div class="w-full absolute top-0 relative">
@@ -55,83 +55,112 @@
     </div>
     <!-- MENÚ -->
 
-    <!-- INICIA MODAL 100% -->
-    <div class="w-full h-auto">
+
+    <div class="w-full h-screen bg-white pt-20">
 
         <div class="flex justify-center items-center mb-5 relative pt-4">
-            <div class="font-light text-3xl ml-3 leading-none text-orange-600 absolute left-0">
-                <h1>Stock</h1>
+            <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
+                <h1>Items
+                    <span id="loadProyectos" class="text-center ml-4 text-2xl"></span>
+                </h1>
             </div>
+
             <div class="relative text-gray-600 w-72">
-                <input id="palabraMaterial" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Material" autocomplete="off">
+                <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Item" autocomplete="off">
                 <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                     <i class="fad fa-search"></i>
                 </button>
             </div>
 
+            <div id="btnProyectos" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2">
+                <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                <h1>Items</h1>
+            </div>
 
+            <div id="btnGantt" class="text-white text-sm cursor-pointer bg-bluegray-200 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-bluegray-200 px-2 hidden">
+                <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                <h1>Gantt</h1>
+            </div>
 
-            <div id="exportarStock" class="text-orange-400 text-sm cursor-pointer bg-orange-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-orange-200 px-2">
+            <div id="btnPendientes" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2 hidden">
+                <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                <h1>Pendientes</h1>
+            </div>
+
+            <div id="btnSolucionados" class="text-white text-sm cursor-pointer bg-bluegray-200 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-bluegray-200 px-2 hidden">
+                <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                <h1>Solucionados</h1>
+            </div>
+
+            <div id="btnExportar" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2">
                 <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                 <h1>Exportar</h1>
             </div>
         </div>
 
         <div class="w-full h-auto">
-            <div class="flex flex-col contenedor mx-auto scrollbar">
-                <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                    <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 80vh;">
-                        <table id="tablaStock" class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+            <div class="flex flex-col container mx-auto scrollbar">
+                <div class="-my-2 py-2 overflow-x-auto relative scrollbar">
+                    <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 50vh;">
+
+                        <table id="dataProyectos" class="w-full divide-y divide-gray-200 table table-fixed sortable">
                             <thead>
-                                <tr class="cursor-pointer bg-white">
-
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Sección
+                                <tr class="cursor-pointer bg-bluegray-50">
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:65px;">
+                                        DESTINO
                                     </th>
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Área
-                                    </th>
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Descripción
-                                    </th>
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Marca
-                                    </th>
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Modelo
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:65px;">
+                                        COD2BEND
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Características
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:80px;">
+                                        DESC. 2BEND
+                                    </th>
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:220px;">
+                                        DESC. SSTT
+                                    </th>
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        SECCIÓN
+                                    </th>
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        ÁREA
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Código
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        CATEGORIA
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Categoría
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        STOCK T
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Status
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        STOCK R
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Fecha
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:110px;">
+                                        MARCA
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Stock Real
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        MODELO
                                     </th>
 
-                                    <th class="px-1 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                        Stock Teórico
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        CARACT.
+                                    </th>
+
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        SUBFAMILIA
+                                    </th>
+
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                        SUBALMACÉN
                                     </th>
 
                                 </tr>
                             </thead>
-                            <tbody id="contenedorDeMateriales" class="bg-white divide-y divide-gray-200">
+                            <tbody id="contenedorDeProyectos" class="bg-white divide-y divide-gray-200">
                                 <!-- More rows... -->
                             </tbody>
                         </table>
@@ -140,6 +169,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
     <script src="js/complemento_menuJS.js"></script>
     <script src="js/funciones_tablas.js"></script>
@@ -147,7 +177,7 @@
     <script src="js/seguridad_session.js"></script>
     <script src="js/alertasSweet.js"></script>
     <script src="js/alertify.min.js"></script>
-    <script src="js/stock.js"></script>
+    <!-- <script src="js/stock.js"></script> -->
 </body>
 
 </html>
