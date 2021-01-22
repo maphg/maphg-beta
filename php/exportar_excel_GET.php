@@ -2029,4 +2029,89 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+
+    // EXPORTA ITEMS DE stock.php 
+    if ($action == "reporteItems") {
+        $fila = 1;
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_stock_items.id_destino = $idDestino";
+        }
+
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte STOCK");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'DESTINO');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'COD2BEND');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'DESCRIPCIÓN COD2BEND');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'DESCRIPCIÓN SSTT');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'ÁREA');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'CATEGORIA');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'STOCK TEORICO');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'STOCK REAL');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'MARCA');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'MODELO');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'CARACTERISTICAS');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'SUBFAMILIA');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'SUBALMACÉN');
+
+        $query = "SELECT t_stock_items.id, t_stock_items.cod2bend, 
+        t_stock_items.descripcion_cod2bend, t_stock_items.descripcion_sstt, t_stock_items.area, t_stock_items.categoria, t_stock_items.stock_teorico, t_stock_items.stock_real, t_stock_items.marca, t_stock_items.modelo, t_stock_items.caracteristicas, 
+        t_stock_items.subfamilia, t_stock_items.subalmacen, t_stock_items.activo, 
+        c_destinos.destino, c_secciones.seccion
+        FROM t_stock_items
+        INNER JOIN c_destinos ON t_stock_items.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON t_stock_items.id_seccion = c_secciones.id
+        WHERE t_stock_items.id_destino = $idDestino  and t_stock_items.activo = 1
+        $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['id'];
+                $cod2bend = $x['cod2bend'];
+                $descripcion_cod2bend = $x['descripcion_cod2bend'];
+                $descripcion_sstt = $x['descripcion_sstt'];
+                $area = $x['area'];
+                $categoria = $x['categoria'];
+                $stock_teorico = $x['stock_teorico'];
+                $stock_real = $x['stock_real'];
+                $marca = $x['marca'];
+                $modelo = $x['modelo'];
+                $caracteristicas = $x['caracteristicas'];
+                $subfamilia = $x['subfamilia'];
+                $subalmacen = $x['subalmacen'];
+                $activo = $x['activo'];
+                $destino = $x['destino'];
+                $seccion = $x['seccion'];
+                $fila++;
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, intval($idItem));
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $cod2bend);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $descripcion_cod2bend);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $descripcion_sstt);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $area);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $categoria);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $stock_teorico);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $stock_real);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $marca);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $modelo);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $caracteristicas);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $subfamilia);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $subalmacen);
+            }
+        }
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_STOCK_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
 }

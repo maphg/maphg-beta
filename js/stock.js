@@ -1,6 +1,8 @@
 'use strict';
-const destinosSelecciona = document.createElement('destinosSelecciona');
-const contenedorDeItems = document.createElement('contenedorDeItems');
+const destinosSelecciona = document.getElementById('destinosSelecciona');
+const contenedorDeItems = document.getElementById('contenedorDeItems');
+const palabraItems = document.getElementById('palabraItems');
+const btnExportarItems = document.getElementById('btnExportarItems');
 
 const consultarStock = () => {
     let idDestino = localStorage.getItem('idDestino');
@@ -9,12 +11,13 @@ const consultarStock = () => {
     const action = "consultarStock";
     const URL = `php/stock.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
 
-    contenedorDeItems.innerHTML = '';
-
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array)
+            contenedorDeItems.innerHTML = '';
+            return array;
+        })
+        .then(array => {
             if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idItem = array[x].idItem;
@@ -22,7 +25,7 @@ const consultarStock = () => {
                     const descripcionCod2bend = array[x].descripcionCod2bend;
                     const descripcionSstt = array[x].descripcionSstt;
                     const area = array[x].area;
-                    const categoria = array[x].categoria;
+                    const categoria = array[x].categoria.toUpperCase();
                     const stockTeorico = array[x].stockTeorico;
                     const stockReal = array[x].stockReal;
                     const marca = array[x].marca;
@@ -33,6 +36,13 @@ const consultarStock = () => {
                     const activo = array[x].activo;
                     const destino = array[x].destino;
                     const seccion = array[x].seccion;
+
+                    const estiloCategoria = categoria == 'BAJA' ? `yellow`
+                        : categoria == 'ALTA' ? `red`
+                            : categoria == 'MEIDA' ? `orange`
+                                : categoria == 'BLUE' ? `blue`
+                                    : `gray`;
+
 
                     const codigo = `
                         <tr id="item_ID_${idItem}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 fila-proyectos-select">
@@ -62,15 +72,13 @@ const consultarStock = () => {
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${categoria}
+                                <div class="px-2 bg-${estiloCategoria}-300 text-${estiloCategoria}-600 rounded-full uppercase">
+                                    <h1>${categoria}</h1>
+                                </div>    
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
                                 ${stockTeorico}
-                            </td>
-                            
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${stockActual}
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
@@ -100,17 +108,27 @@ const consultarStock = () => {
                         </tr>    
                     `;
                     contenedorDeItems.insertAdjacentHTML('beforeend', codigo);
-                    console.log(codigo);
                 }
             }
         })
         .catch(function (err) {
             contenedorDeItems.innerHTML = '';
+            console.log(err);
         })
 }
 
-destinosSelecciona.addEventListener('click', consultarStock);
+palabraItems.addEventListener('keyup', () => {
+    buscadorTabla('dataItems', 'palabraItems', 0);
+})
+
+
+destinosSelecciona.addEventListener('click', consultarStock());
+btnExportarItems.addEventListener('click', () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    location.href = `php/exportar_excel_GET.php?action=reporteItems&idUsuario=${idUsuario}&idDestino=${idDestino}`;
+})
 
 // INICIALIZA LA FUNCIÓN PRINCIPAL
 window.onload(consultarStock());
-

@@ -66,7 +66,7 @@
             </div>
 
             <div class="relative text-gray-600 w-72">
-                <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Item" autocomplete="off">
+                <input id="palabraItems" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Item" autocomplete="off">
                 <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                     <i class="fad fa-search"></i>
                 </button>
@@ -92,7 +92,7 @@
                 <h1>Solucionados</h1>
             </div>
 
-            <div id="btnExportar" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2">
+            <div id="btnExportarItems" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2">
                 <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
                 <h1>Exportar</h1>
             </div>
