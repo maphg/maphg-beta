@@ -12,42 +12,54 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $idUsuario = $_GET['idUsuario'];
     $idDestino = $_GET['idDestino'];
-    $array = array();
 
     if ($action == "consultarStock") {
-        $query = "SELECT id, seccion, area, descripcion, marca, modelo, caracteristicas, codigo, categoria, status, fecha, stock_real, stock_teorico   FROM t_stock_america WHERE id_destino = $idDestino  and activo =1";
+        $array = array();
+        $query = "SELECT t_stock_items.id, t_stock_items.cod2bend, 
+        t_stock_items.descripcion_cod2bend, t_stock_items.descripcion_sstt, t_stock_items.area, t_stock_items.categoria, t_stock_items.stock_teorico, t_stock_items.stock_real, t_stock_items.marca, t_stock_items.modelo, t_stock_items.caracteristicas, 
+        t_stock_items.subfamilia, t_stock_items.subalmacen, t_stock_items.activo, 
+        c_destinos.destino, c_secciones.seccion
+        FROM t_stock_america
+        INNER JOIN c_destinos ON t_stock_items.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON t_stock_items.id_seccion = c_secciones.id
+        WHERE id_destino = $idDestino  and activo =1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $id = $x['id'];
-                $seccion = $x['seccion'];
+                $cod2bend = $x['cod2bend'];
+                $descripcion_cod2bend = $x['descripcion_cod2bend'];
+                $descripcion_sstt = $x['descripcion_sstt'];
                 $area = $x['area'];
-                $descripcion = $x['descripcion'];
+                $categoria = $x['categoria'];
+                $stock_teorico = $x['stock_teorico'];
+                $stock_real = $x['stock_real'];
                 $marca = $x['marca'];
                 $modelo = $x['modelo'];
                 $caracteristicas = $x['caracteristicas'];
-                $codigo = $x['codigo'];
-                $categoria = $x['categoria'];
-                $status = $x['status'];
-                $fecha = $x['fecha'];
-                $stock_real = $x['stock_real'];
-                $stock_teorico = $x['stock_teorico'];
+                $subfamilia = $x['subfamilia'];
+                $subalmacen = $x['subalmacen'];
+                $activo = $x['activo'];
+                $destino = $x['destino'];
+                $seccion = $x['seccion'];
 
-                $arrayTemp = array(
-                    "id" => $id,
-                    "seccion" => "$seccion",
+                $array[] = array(
+                    "idItem" => intval($id),
+                    "cod2bend" => "$cod2bend",
+                    "descripcionCod2bend" => "$descripcion_cod2bend",
+                    "descripcionSstt" => "$descripcion_sstt",
                     "area" => "$area",
-                    "descripcion" => "$descripcion",
+                    "categoria" => "$categoria",
+                    "stockTeorico" => "$stock_teorico",
+                    "stockReak" => "$stock_real",
                     "marca" => "$marca",
                     "modelo" => "$modelo",
                     "caracteristicas" => "$caracteristicas",
-                    "codigo" => "$codigo",
-                    "categoria" => "$categoria",
-                    "status" => "$status",
-                    "fecha" => "$fecha",
-                    "stock_real" => "$stock_real",
-                    "stock_teorico" => "$stock_teorico"
+                    "subfamilia" => "$subfamilia",
+                    "subalmacen" => "$subalmacen",
+                    "activo" => "$activo",
+                    "destino" => "$destino",
+                    "seccion" => "$seccion"
                 );
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);

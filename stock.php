@@ -177,7 +177,7 @@
     <script src="js/seguridad_session.js"></script>
     <script src="js/alertasSweet.js"></script>
     <script src="js/alertify.min.js"></script>
-    <!-- <script src="js/stock.js"></script> -->
+    <script src="js/stock.js"></script>
 </body>
 
 </html>

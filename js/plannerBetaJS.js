@@ -824,6 +824,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
       },
       dataType: "JSON",
       success: function (data) {
+         console.log(data);
          document.getElementById("columnasSeccionesZIL").innerHTML = data.dataZIL;
          document.getElementById("columnasSeccionesZIE").innerHTML = data.dataZIE;
          document.getElementById("columnasSeccionesAUTO").innerHTML = data.dataAUTO;
@@ -4744,7 +4745,7 @@ function informacionEquipo(idEquipo) {
    consultarOpcionesEquipo();
    toggleInputsEquipo(0);
    obtenerImagenesEquipo(idEquipo);
-   // consultarPlanEquipo(idEquipo);
+   consultarPlanEquipo(idEquipo);
    opcionesJerarquiaEquipo(idEquipo);
 
    setTimeout(() => {

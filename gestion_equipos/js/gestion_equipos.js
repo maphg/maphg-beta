@@ -763,7 +763,7 @@ function consultarPlanEquipo(idEquipo) {
                     if (data.creado == "SI") {
                         alertaImg('Creando Plan MP', '', 'success', 1900);
                         setTimeout(function () {
-                            // consultarPlanEquipo(idEquipo);
+                            consultarPlanEquipo(idEquipo);
                         }, 1100)
                     } else {
                         document.getElementById("contenedorPlanesEquipo").innerHTML = '';
@@ -1596,7 +1596,7 @@ function informacionEquipo(idEquipo) {
 
     // FUNCIONES INICIALES
     obtenerImagenesEquipo(idEquipo);
-    // consultarPlanEquipo(idEquipo);
+    consultarPlanEquipo(idEquipo);
     toggleDisabledEditarEquipo(0);
 
     const URL = `../php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;

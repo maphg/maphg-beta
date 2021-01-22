@@ -941,8 +941,7 @@
 
             <!-- PLANES MP -->
             <div class="text-xs uppercase font-bold w-full px-2 my-2">
-                <!-- <h1>Planes Preventivos</h1> -->
-                <h1 class="font-bold text-2xl text-center">TRABAJANDO...</h1>
+                <h1>Planes Preventivos</h1>
             </div>
 
             <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar" style="max-height:300.5px; min-height:150px;">
