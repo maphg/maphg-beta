@@ -1050,19 +1050,28 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                const iconoDEP = sDEP > 0 ?
                   '<p class="text-xs font-black bg-black text-white px-1 mx-1 rounded">DEP</p >' : '';
 
-               const btnOpcion = status == "PENDIENTE" ?
+               const btnOpcion = status ==
+                  "PENDIENTE" && tipo == "F" ?
                   `
-                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="">
+                  <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="obtenerIncidenciaEquipos(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');">
                   <i class="fas fa-edit mr-1 text-sm"></i>Editar</button>
                   
                   <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
                   <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                   </button>
                   `
-                  : `
-                  <button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold">
-                  <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
-                  </button>                  
+                  : status == "PENDIENTE" && tipo == "T" ?
+                     `<button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="">
+                        <i class="fas fa-edit mr-1 text-sm"></i>Editar
+                     </button>
+
+                     <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
+                        <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                     </button>`
+                     :
+                     `<button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold">
+                        <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                     </button>                  
                   `;
 
                //PENDIENTE INCIDENCIAS 
