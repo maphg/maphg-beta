@@ -56,9 +56,9 @@
     <!-- MENÚ -->
 
 
-    <div class="w-full h-screen bg-white pt-20">
+    <div class="w-full h-screen bg-white" style="height: calc(100% - 20px);">
 
-        <div class="flex justify-center items-center mb-5 relative pt-4">
+        <div class="flex justify-center items-center relative py-8">
             <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
                 <h1>Items
                     <span id="loadProyectos" class="text-center ml-4 text-2xl"></span>
@@ -103,20 +103,20 @@
                 <div class="-my-2 py-2 overflow-x-auto relative scrollbar">
                     <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 50vh;">
 
-                        <table id="dataProyectos" class="w-full divide-y divide-gray-200 table table-fixed sortable">
+                        <table id="dataItems" class="w-full divide-y divide-gray-200 table table-fixed sortable">
                             <thead>
                                 <tr class="cursor-pointer bg-bluegray-50">
-                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:65px;">
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         DESTINO
                                     </th>
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:65px;">
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         COD2BEND
                                     </th>
 
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:80px;">
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         DESC. 2BEND
                                     </th>
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:220px;">
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         DESC. SSTT
                                     </th>
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
@@ -138,7 +138,7 @@
                                         STOCK R
                                     </th>
 
-                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10" style="width:110px;">
+                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         MARCA
                                     </th>
 
@@ -160,7 +160,7 @@
 
                                 </tr>
                             </thead>
-                            <tbody id="contenedorDeProyectos" class="bg-white divide-y divide-gray-200">
+                            <tbody id="contenedorDeItems" class="bg-white divide-y divide-gray-200">
                                 <!-- More rows... -->
                             </tbody>
                         </table>
