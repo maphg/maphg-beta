@@ -72,7 +72,7 @@
                 </button>
             </div>
 
-            <div id="btnProyectos" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2">
+            <div id="btnProyectos" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2 hidden">
                 <i class="fas fa-list mr-1 font-normal text-xs"></i>
                 <h1>Items</h1>
             </div>
