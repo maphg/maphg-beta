@@ -278,7 +278,7 @@ if (isset($_POST['action'])) {
                             $dataOMA .= "
                                 <div data-target=\"modal-subseccion\" data-toggle=\"modal\"
                                     class=\"ordenarHijos$seccion p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center\" 
-                                    onclick=\"actualizarSeccionSubseccion(19, 200); obtenerProyectos(11, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
+                                    onclick=\"actualizarSeccionSubseccion(19, 200); obtenerProyectos(19, 'PENDIENTE'); toggleModalTailwind('modalProyectos');\">
                                     <h1 class=\"truncate mr-2\">PROYECTOS</h1>
                                     <div
                                         class=\"$estiloSubseccion text-xxs h-5 w-5 rounded-md font-bold flex flex-row justify-center items-center\">
