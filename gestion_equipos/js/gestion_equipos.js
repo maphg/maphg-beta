@@ -763,7 +763,7 @@ function consultarPlanEquipo(idEquipo) {
                     if (data.creado == "SI") {
                         alertaImg('Creando Plan MP', '', 'success', 1900);
                         setTimeout(function () {
-                            consultarPlanEquipo(idEquipo);
+                            // consultarPlanEquipo(idEquipo);
                         }, 1100)
                     } else {
                         document.getElementById("contenedorPlanesEquipo").innerHTML = '';
