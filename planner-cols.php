@@ -277,12 +277,12 @@
                 </div>
             </div>
             <div id="columnasSeccionesEnergeticos" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
             <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>
             <div id="columnasSeccionesDEC" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZHA" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZHC" class="flex items-center py-3"></div>
             <div id="columnasSeccionesZHH" class="flex items-center py-3"></div>
