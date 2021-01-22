@@ -122,7 +122,8 @@ palabraItems.addEventListener('keyup', () => {
 })
 
 
-destinosSelecciona.addEventListener('click', consultarStock());
+destinosSelecciona.addEventListener('click', consultarStock);
+
 btnExportarItems.addEventListener('click', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
