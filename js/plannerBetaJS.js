@@ -3607,7 +3607,8 @@ function obtenerIncidenciaEquipos(idIncidencia) {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ``);
+         fetch(APIERROR + err + ` obtenerIncidenciaEquipos(${idIncidencia})`);
+         toggleModalTailwind('modalVerEnPlannerIncidencia');
       })
 }
 
