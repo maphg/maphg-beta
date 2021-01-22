@@ -4744,7 +4744,7 @@ function informacionEquipo(idEquipo) {
    consultarOpcionesEquipo();
    toggleInputsEquipo(0);
    obtenerImagenesEquipo(idEquipo);
-   consultarPlanEquipo(idEquipo);
+   // consultarPlanEquipo(idEquipo);
    opcionesJerarquiaEquipo(idEquipo);
 
    setTimeout(() => {
@@ -6711,10 +6711,10 @@ function obtenerFallas(idEquipo = 0) {
             }
          })
          .catch(function (err) {
-            fetch(APIERROR + err + ': (complementosFallasTareas)');
+            fetch(APIERROR + err + ': (complementosFallasTareas) ' + URL2);
          })
    }
-};
+}
 
 
 function obtenerFallasSolucionados(idEquipo) {
