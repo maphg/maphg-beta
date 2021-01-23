@@ -3,6 +3,9 @@ let idUsuario = localStorage.getItem("usuario");
 let idDestino = localStorage.getItem("idDestino");
 // VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
 
+// ALERTA EN CONSOLE
+console.log('%cSTOP!', 'color:red; font-weight: bold; font-size: 4.3rem');
+
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
@@ -62,7 +65,6 @@ const btnStatusVerEnPlanner = document.getElementById("btnStatusVerEnPlanner");
 const btnResponsablesIncidencias = document.getElementById("btnResponsablesIncidencias");
 const aplicarTituloIncidenca = document.getElementById("aplicarTituloIncidenca");
 const btnEliminarActividadIncidencia = document.getElementById("btnEliminarActividadIncidencia");
-
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -174,7 +176,7 @@ const modalVerEnPlannerIncidencia = document.getElementById("modalVerEnPlannerIn
 // BOTONES PARA EL MODAL STATUS
 const btnStatusUrgente = document.getElementById("statusUrgente");
 const btnStatusMaterial = document.getElementById("btnStatusMaterial");
-const btnStatusTrabajare = document.getElementById("statusTrabajare")
+const btnStatusTrabajare = document.getElementById("statusTrabajare");
 const btnStatusCalidad = document.getElementById("statusCalidad");
 const btnStatusCompras = document.getElementById("statusCompras");
 const btnStatusDireccion = document.getElementById("statusDireccion");
@@ -193,6 +195,7 @@ const btnStatusZI = document.getElementById("statusZI");
 const editarTitulo = document.getElementById("editarTitulo");
 // BOTONES PARA EL MODAL STATUS
 
+
 // Función principal.
 function comprobarSession() {
    let idUsuario = localStorage.getItem("usuario");
@@ -207,6 +210,7 @@ function comprobarSession() {
       location.replace("login.php");
    }
 }
+
 
 document.getElementById("destinosSelecciona").addEventListener('click', () => {
    botonDestino();
@@ -824,7 +828,6 @@ function consultaSubsecciones(idDestino, idUsuario) {
       },
       dataType: "JSON",
       success: function (data) {
-         console.log(data);
          document.getElementById("columnasSeccionesZIL").innerHTML = data.dataZIL;
          document.getElementById("columnasSeccionesZIE").innerHTML = data.dataZIE;
          document.getElementById("columnasSeccionesAUTO").innerHTML = data.dataAUTO;
@@ -2975,6 +2978,7 @@ function obtenerMediaEquipo(idEquipo) {
    });
 }
 
+
 // Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
 function obtenerCotizacionesEquipo(idEquipo) {
    document.getElementById("modalMedia").classList.add("open");
@@ -3118,6 +3122,7 @@ function obtenerComentariosEquipos(idEquipo) {
       }
    })
 }
+
 
 // ---------- PROYECTOS ----------
 
@@ -3522,6 +3527,12 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
                inputFileIncidencias.
                   setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIA');`);
+
+               rangoFechaVerEnPlanner.
+                  setAttribute('onclick', `toggleModalTailwind('modalRangoFechaX');`);
+
+               btnAplicarRangoFecha.
+                  setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'rango_fecha', 0)`);
             }
 
             // COMENTARIOS
@@ -3614,6 +3625,363 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 }
 
 
+// OBTIENE INFORMACIÓN DE LAS INCIDENCIAS GENERALES
+const obtenerIncidenciaGeneral = (idIncidencia) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   localStorage.setItem('idIncidencia', idIncidencia);
+
+   const action = 'obtenerIncidenciaGeneral';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         tipoIncidenciaVerEnPlanner.className = '';
+         tipoIncidenciaVerEnPlanner.innerHTML = '';
+         tituloVerEnPlanner.innerText = '';
+         fechaVerEnPlanner.innerText = '';
+         creadoPorVerEnPlanner.innerText = '';
+         rangoFechaVerEnPlanner.innerText = '';
+         asignadoAVerEnPlanner.innerText = '';
+         dataComentariosIncidenciaVerEnPlanner.innerHTML = '';
+         dataAdjuntosIncidenciaVerEnPlanner.innerHTML = '';
+         dataActividadesIncidenciaVerEnPlanner.innerHTML = '';
+         responsablesVerEnPlanner.innerHTML = '';
+         statusVerEnPlanner.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+
+            // DATOS
+            for (let x = 0; x < array.incidencia.length; x++) {
+               const idIncidencia = array.incidencia[x].idIncidencia;
+               const actividad = array.incidencia[x].actividad;
+               const tipoIncidencia = array.incidencia[x].tipoIncidencia;
+               const fecha = array.incidencia[x].fecha;
+               const creadoPor = array.incidencia[x].creadoPor;
+               const nombreResponsable = array.incidencia[x].nombreResponsable;
+               const rangoFecha = array.incidencia[x].rangoFecha;
+               const idSeccion = array.incidencia[x].idSeccion;
+               const idSubseccion = array.incidencia[x].idSubseccion;
+
+               localStorage.setItem('idSeccion', idSeccion);
+               localStorage.setItem('idSubseccion', idSubseccion);
+
+               const estiloTipoIncidencia =
+                  tipoIncidencia == "URGENCIA" ? 'text-red-500 bg-red-200' :
+                     tipoIncidencia == "EMERGENCIA" ? 'text-orange-500 bg-orange-200' :
+                        tipoIncidencia == "ALARMA" ? 'text-yellow-500 bg-yellow-200' :
+                           tipoIncidencia == "ALERTA" ? 'text-blue-500 bg-blue-200' :
+                              'text-teal-500 bg-teal-200';
+
+               const status_material = array.incidencia[x].status_material == 0 ? ''
+                  : `
+               <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_material', 0)">
+                     <h1 class="font-medium">Material</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const status_trabajando = array.incidencia[x].status_trabajando == 0 ? ''
+                  : `
+               <div class="text-blue-500 bg-blue-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_trabajando', 0)">
+                     <h1 class="font-medium">TRABAJANDO</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_calidad = array.incidencia[x].departamento_calidad == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_calidad', 0)">
+                     <h1 class="font-medium">CALIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_compras = array.incidencia[x].departamento_compras == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_compras', 0)">
+                     <h1 class="font-medium">COMPRAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_direccion = array.incidencia[x].departamento_direccion == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_direccion', 0)">
+                     <h1 class="font-medium">DIRECCIÓN</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_finanzas = array.incidencia[x].departamento_finanzas == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_finanzas', 0)">
+                     <h1 class="font-medium">FINANZAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const departamento_rrhh = array.incidencia[x].departamento_rrhh == 0 ? ''
+                  : `
+               <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_rrhh', 0)">
+                     <h1 class="font-medium">RRHH</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_electricidad = array.incidencia[x].energetico_electricidad == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_electricidad', 0)">
+                     <h1 class="font-medium">ELECTRICIDAD</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_agua = array.incidencia[x].energetico_agua == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_agua', 0)">
+                     <h1 class="font-medium">AGUA</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_diesel = array.incidencia[x].energetico_diesel == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_diesel', 0)">
+                     <h1 class="font-medium">DIESEL</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               const energetico_gas = array.incidencia[x].energetico_gas == 0 ? ''
+                  : `
+               <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_gas', 0)">
+                     <h1 class="font-medium">GAS</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
+               </div>
+            `;
+
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_material);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_trabajando);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_calidad);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_compras);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_direccion);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_finanzas);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_rrhh);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_electricidad);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_agua);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_diesel);
+               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_gas);
+
+               tipoIncidenciaVerEnPlanner.innerHTML = `<h1>${tipoIncidencia}</h1>`;
+
+               tipoIncidenciaVerEnPlanner.
+                  className = 'font-bold text-xs py-1 px-2 rounded-b-md ' + estiloTipoIncidencia;
+
+               tituloVerEnPlanner.innerHTML = actividad;
+
+               fechaVerEnPlanner.innerText = fecha;
+
+               creadoPorVerEnPlanner.innerText = creadoPor;
+
+               rangoFechaVerEnPlanner.innerText = rangoFecha;
+
+               asignadoAVerEnPlanner.innerText = 'INCIDENCIA GENERAL';
+
+               asignadoAVerEnPlanner.
+                  setAttribute('onclick', `obtenerTareas(0); toggleModalTailwind('modalTareasFallas'); cerrarmodal('modalVerEnPlannerIncidencia');`)
+
+               palabraFallaTarea.value = actividad;
+
+               dispatchEvent(new Event('keyup'));
+
+               responsablesVerEnPlanner.innerHTML = `
+                  <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">${nombreResponsable}</h1>
+                     <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'responsable', 0);"></i>
+                  </div>
+               `;
+
+               btnVerOTVerEnPlanner.
+                  setAttribute('onclick', `redireccionarOTVerEnPlanner('INCIDENCIAGENERAL', ${idIncidencia})`);
+
+               btnAgregarActividadVerEnPlanner.
+                  setAttribute('onclick', `agregarActividadesIncidenciaGeneral(${idIncidencia})`);
+
+               btnAgregarComentarioVerEnPlanner.
+                  setAttribute('onclick', `agregarComentarioIncidenciaGeneral(${idIncidencia});`);
+
+               btnStatusVerEnPlanner.
+                  setAttribute('onclick', `obtenerStatusIncidencias(${idIncidencia}, 'INCIDENCIAGENERAL'); toggleModalTailwind('modalStatus');`);
+
+               btnResponsablesIncidencias.
+                  setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIAG'); toggleModalTailwind('modalUsuarios');`);
+
+               inputFileIncidencias.
+                  setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIAGENERAL');`);
+
+               rangoFechaVerEnPlanner.
+                  setAttribute('onclick', `toggleModalTailwind('modalRangoFechaX');`);
+
+               btnAplicarRangoFecha.
+                  setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'rango_fecha', 0)`);
+            }
+
+            // COMENTARIOS
+            for (let x = 0; x < array.comentarios.length; x++) {
+               const idComentario = array.comentarios[x].idComentario;
+               const comentario = array.comentarios[x].comentario;
+               const nombre = array.comentarios[x].nombre;
+               const apellido = array.comentarios[x].apellido;
+               const fecha = array.comentarios[x].fecha;
+               const codigo = `
+                  <div class="flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative">
+                     <div class="flex items-center justify-center" style="width: 30px;">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="30" height="30" alt="">
+                     </div>
+                     <div class="flex flex-col justify-start items-start p-2 w-full">
+                        <div class="font-bold flex flex-row justify-between w-full text-xxs">
+                              <div>
+                                 <h1>${nombre + ' ' + apellido}</h1>
+                              </div>
+                              <div class="absolute bottom-0 right-0 mr-1 mb-1">
+                                 <p class="font-mono ml-2 text-teal-400">${fecha}</p>
+                              </div>
+                        </div>
+                        <div class="w-full text-xs text-justify">
+                              <p>${comentario}</p>
+                        </div>
+                     </div>
+                  </div>
+               `;
+               dataComentariosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+               dataComentariosIncidenciaVerEnPlanner.
+                  scrollTop = dataComentariosIncidenciaVerEnPlanner.scrollHeight;
+
+            }
+
+            // ADJUNTO
+            for (let x = 0; x < array.adjuntos.length; x++) {
+               const idAdjunto = array.adjuntos[x].idAdjunto;
+               const url = array.adjuntos[x].url;
+               const extension = array.adjuntos[x].extension;
+
+               if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+                  codigo = `
+                     <a href="https://www.maphg.com/beta/img/equipos/mpnp/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/img/equipos/mpnp/${url})"></div>
+                     </a>
+                  `;
+               } else {
+                  codigo = `
+                     <a href="https://www.maphg.com/beta/img/equipos/mpnp/${url}" target="_blank">
+                        <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                           <i class="fad fa-file-alt fa-3x"></i>
+                           <p class="text-sm font-normal ml-2">
+                           ${url}
+                           </p>
+                        </div>
+                     </a>
+                  `;
+               }
+               dataAdjuntosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+            }
+
+            // ACTIVIDADES
+            for (let x = 0; x < array.actividades.length; x++) {
+               const idActividad = array.actividades[x].idActividad;
+               const actividad = array.actividades[x].actividad;
+               const status = array.actividades[x].status;
+               const fOpciones = `onclick="mostrarOpcionesActividadIncidenciaGeneral(${idActividad})"`;
+
+               const codigo = `
+                  <div id="actividad_incidencia_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50">
+                     <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
+                     <div class="text-justify w-full">
+                        <h1>${actividad}</h1>
+                     </div>
+                     <div class="px-2 text-gray-400 hover:text-purple-500 cursor-pointer" ${fOpciones}>
+                        <i class="fas fa-ellipsis-h  text-sm"></i>
+                     </div>
+                  </div>
+               `;
+               dataActividadesIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ` obtenerIncidenciaEquipos(${idIncidencia})`);
+         toggleModalTailwind('modalVerEnPlannerIncidencia');
+      })
+}
+
+
+// ACTUALIZA LOS STATUS E INFORMACIÓN
+function actualizarDatosIncidenciaGeneral(idIncidencia, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   if (columna == "titulo") {
+      valor = editarTitulo.value;
+   } else if (columna == "rango_fecha") {
+      valor = inputRangoFecha.value;
+   }
+
+   const action = 'actualizarDatosIncidenciaGeneral';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&columna=${columna}&valor=${valor}&cod2bend=${inputCod2bend.value}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         obtenerIncidenciaGeneral(idIncidencia);
+         estiloModalStatus(idIncidencia, 'TAREA');
+         if (array == "responsable") {
+            alertaImg('Responsable Actualizado', '', 'success', 1500);
+            cerrarmodal('modalUsuarios');
+         } else if (array == "titulo") {
+            alertaImg('Título Trabajando, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "trabajare") {
+            alertaImg('Status Trabajando, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "material") {
+            alertaImg('Status Matarial, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "departamento") {
+            alertaImg('Status Departamento, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "energetico") {
+            alertaImg('Status Energético, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "bitacora") {
+            alertaImg('Bitacora Actualizada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "solucionado") {
+            obtenerPendientesUsuario();
+            alertaImg('Incidencia Solucionada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+            cerrarmodal('modalVerEnPlannerIncidencia');
+         } else if (array == "eliminado") {
+            alertaImg('Incidencia Eliminada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "restaurado") {
+            alertaImg('Incidencia Restaurada', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else if (array == "rangoFecha") {
+            alertaImg('Rango de Fecha Actualizado', '', 'success', 1500);
+            cerrarmodal('modalRangoFechaX');
+            inputRangoFecha.value = '';
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ` actualizarDatosIncidenciaGeneral(${idIncidencia}, ${columna}, ${valor})`);
+      })
+}
+
+
 // OBTIENE DISEÑO DE MODAL STATUS Y AGREGA
 function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
 
@@ -3663,41 +4031,41 @@ function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
 
       // OPCIONES PARA APLICAR STATUS
       btnStatusUrgente.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_urgente', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_urgente', 0)`);
       btnStatusMaterial.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_material', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_material', 0)`);
       btnStatusTrabajare.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'status_trabajare', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_trabajando', 0)`);
       btnStatusCalidad.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_calidad', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_calidad', 0)`);
       btnStatusCompras.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_compras', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_compras', 0)`);
       btnStatusDireccion.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_direccion', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_direccion', 0)`);
       btnStatusFinanzas.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_finanzas', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_finanzas', 0)`);
       btnStatusRRHH.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'departamento_rrhh', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'departamento_rrhh', 0)`);
       btnStatusElectricidad.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_electricidad', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_electricidad', 0)`);
       btnStatusAgua.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_agua', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_agua', 0)`);
       btnStatusDiesel.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_diesel', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_diesel', 0)`);
       btnStatusGas.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'energetico_gas', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_gas', 0)`);
       btnStatusFinalizar.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'solucionar', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'solucionar', 0)`);
       btnStatusActivo.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'eliminar', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'eliminar', 0)`);
       btnStatusGP.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_gp', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'bitacora_gp', 0)`);
       btnStatusTRS.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_trs', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'bitacora_trs', 0)`);
       btnStatusZI.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'bitacora_zi', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'bitacora_zi', 0)`);
       btnEditarTitulo.
-         setAttribute('onclick', `actualizarStatusIncidenciaG(${idIncidencia}, 'titulo', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'titulo', 0)`);
 
    }
 
@@ -3725,7 +4093,7 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
                if (tipoIncidencia == "INCIDENCIA") {
                   fResponsable = `onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', ${idUsuario});"`
                } else if (tipoIncidencia == "INCIDENCIAG") {
-                  fResponsable = `onclick="X(${idIncidencia}, 'responsable', ${idUsuario});"`
+                  fResponsable = `onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'responsable', ${idUsuario});"`
                }
                const codigo = `
                <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" ${fResponsable}>
@@ -3752,6 +4120,8 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
 
    if (columna == "titulo") {
       valor = editarTitulo.value;
+   } else if (columna == "rango_fecha") {
+      valor = inputRangoFecha.value;
    }
 
    const action = 'actualizarStatusIncidencia';
@@ -3794,12 +4164,17 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
          } else if (array == "restaurado") {
             alertaImg('Incidencia Restaurada', '', 'success', 1500);
             cerrarmodal('modalStatus');
+         } else if (array == "rangoFecha") {
+            alertaImg('Rango Fecha Actualizado', '', 'success', 1500);
+            cerrarmodal('modalRangoFechaX');
+            inputRangoFecha.value = '';
          }
       })
       .catch(function (err) {
          fetch(APIERROR + err + ``);
       })
 }
+
 
 // ABRE OT DE INCIDENCIAS E INCICDENCIAS GENERALES
 function redireccionarOTVerEnPlanner(tipoOT, idOT) {
@@ -3833,8 +4208,9 @@ function agregarAdjuntosIncidenicas(idIncidencia, tipoIncidencia) {
                if (array == "INCIDENCIA") {
                   alertaImg('Adjunto Agregado', '', 'success', 1500);
                   obtenerIncidenciaEquipos(idIncidencia);
-               } else if (array == "INCIDENCIAG") {
+               } else if (array == "INCIDENCIAGENERAL") {
                   alertaImg('Adjunto Agregado', '', 'success', 1500);
+                  obtenerIncidenciaGeneral(idIncidencia);
                } else {
                   alertaImg('Intente de Nuevo', '', 'info', 1500);
                }
@@ -3865,9 +4241,8 @@ function agregarActividadesIncidencias(idIncidencia) {
          .then(array => {
             if (array == 1) {
                actividadVerEnPlanner.value = '';
-               alertaImg('Actividad Agregada', '', 'success', 1400);
+               alertaImg('Acción Agregada', '', 'success', 1400);
                obtenerIncidenciaEquipos(idIncidencia);
-
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1400);
             }
@@ -3881,6 +4256,35 @@ function agregarActividadesIncidencias(idIncidencia) {
 }
 
 
+function agregarActividadesIncidenciaGeneral(idIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarActividadesIncidenciaGeneral";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&actividad=${actividadVerEnPlanner.value}`;
+
+   if (actividadVerEnPlanner.value.length > 1) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               actividadVerEnPlanner.value = '';
+               alertaImg('Acción Agregada', '', 'success', 1400);
+               obtenerIncidenciaGeneral(idIncidencia);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Actividad NO Valida', '', 'info', 1400);
+   }
+}
+
+
+// AGREGA COMENTARIO EN LA INCIDENCIA
 function agregarComentarioIncidencia(idIncidencia) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -3896,7 +4300,35 @@ function agregarComentarioIncidencia(idIncidencia) {
                comentarioIncidenciaVerEnPlanner.value = '';
                alertaImg('Comentario Agregado', '', 'success', 1400);
                obtenerIncidenciaEquipos(idIncidencia);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Comentario Vacio', '', 'info', 1400);
+   }
+}
 
+
+// AGREGA COMENTARIO EN LA INCIDENCIA GENRAL
+function agregarComentarioIncidenciaGeneral(idIncidencia) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarComentarioIncidenciaGeneral";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&comentario=${comentarioIncidenciaVerEnPlanner.value}`;
+
+   if (comentarioIncidenciaVerEnPlanner.value.length) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               comentarioIncidenciaVerEnPlanner.value = '';
+               alertaImg('Comentario Agregado', '', 'success', 1400);
+               obtenerIncidenciaGeneral(idIncidencia);
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1400);
             }
@@ -3934,6 +4366,30 @@ function mostrarOpcionesActividadIncidencias(idActividad) {
 }
 
 
+// OPCIONES PARA ACTIVIDADES EN INCIDENCIAS
+function mostrarOpcionesActividadIncidenciaGeneral(idActividad) {
+
+   aplicarTituloIncidenca.
+      setAttribute('onclick', `actualizarActividadesIncidenciaGeneral(${idActividad}, 'titulo', 0)`);
+
+   btnEliminarActividadIncidencia.
+      setAttribute('onclick', `actualizarActividadesIncidenciaGeneral(${idActividad}, 'eliminar', 0)`);
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(`actividad_incidencia_${idActividad}`);
+   const tooltip = tooltipOpcionesActividadIncidencias;
+   Popper.createPopper(button, tooltip, {
+      placement: 'bottom-end'
+   });
+
+   if (tooltipOpcionesActividadIncidencias.classList.contains('hidden')) {
+      tooltipOpcionesActividadIncidencias.classList.remove('hidden');
+   } else {
+      tooltipOpcionesActividadIncidencias.classList.add('hidden');
+   }
+}
+
+
 // ACTUALIZA LAS ACTIVIDADES DE LAS INCIDENCIAS
 function actualizarActividadesIncidencia(idActividad, columna, valor) {
    let idDestino = localStorage.getItem('idDestino');
@@ -3951,6 +4407,39 @@ function actualizarActividadesIncidencia(idActividad, columna, valor) {
       .then(array => array.json())
       .then(array => {
          obtenerIncidenciaEquipos(idIncidencia);
+         toggleHidden('tooltipOpcionesActividadIncidencias');
+         if (array == "titulo") {
+            nuevoTituloIncidencia.value = '';
+            alertaImg('Actividad Actualizada', '', 'success', 1400);
+         } else if (array == "eliminado") {
+            alertaImg('Actividad Eliminada', '', 'success', 1400);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1400);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err + ` actualizarActividadesIncidencia(${idActividad}, ${columna}, ${valor})`);
+      })
+}
+
+
+// ACTUALIZA LAS ACTIVIDADES DE LAS INCIDENCIAS
+function actualizarActividadesIncidenciaGeneral(idActividad, columna, valor) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let idIncidencia = localStorage.getItem('idIncidencia');
+
+   if (columna == 'titulo') {
+      valor = nuevoTituloIncidencia.value;
+   }
+
+   const action = 'actualizarActividadesIncidenciaGeneral';
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idActividad=${idActividad}&columna=${columna}&valor=${valor}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         obtenerIncidenciaGeneral(idIncidencia);
          toggleHidden('tooltipOpcionesActividadIncidencias');
          if (array == "titulo") {
             nuevoTituloIncidencia.value = '';
@@ -4549,6 +5038,7 @@ function actualizarActividadesPlanaccion(idActividad, columna, valor) {
          fetch(APIERROR + err + `actualizarActividadesPlanaccion(${idActividad}, ${columna}, ${valor})`);
       })
 }
+
 
 // Comentaio Ver en Planner
 function agregarComentarioVP(tipoPendiente, idPendiente) {
@@ -6020,6 +6510,7 @@ function consultarOpcionesEquipo() {
    });
 }
 
+
 // Proceso para Ver OT
 function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
    let idUsuario = localStorage.getItem('usuario');
@@ -6054,7 +6545,6 @@ function VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
       }
    });
 }
-
 
 
 // Proceso para Ver OT
@@ -6946,6 +7436,7 @@ function obtenerTareasPendientes(idEquipo) {
       }
    }
 }
+
 
 // FUNCION ARRAY PARA ESTILO DE OPCIONES EN MODAL #modalTareasFallas
 // RECIBE 2 ARRAS PARA ACTIVOS E INACTIVOS
@@ -7877,7 +8368,6 @@ document.getElementById("palabraEquipoAmerica").addEventListener('keyup', functi
 });
 
 
-
 // FUNCIONES PARA GENERAR REPORTES
 function reporteEquipos() {
    let idDestino = localStorage.getItem('idDestino');
@@ -7893,6 +8383,7 @@ function reporteEquipos() {
    }, 820);
 }
 
+
 function reporteFallas(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -7904,6 +8395,7 @@ function reporteFallas(idEquipo) {
       alertaImg('Generando Reporte...', '', 'success', 1500);
    }, 820);
 }
+
 
 function reporteTareas(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
@@ -8104,8 +8596,31 @@ function obtenerPendientesUsuario() {
 
          if (array) {
 
+            // PEDIENTES PLANES DE ACCIÓN
+            if (array.planaccion) {
+               totalPendientesPDA.innerHTML = `PDA Proyectos (${array.planaccion.length})`;
+
+               for (let x = 0; x < array.planaccion.length; x++) {
+                  const idPlanaccion = array.planaccion[x].idPlanaccion;
+                  const tipoPendiente = array.planaccion[x].tipoPendiente;
+                  const proyecto = array.planaccion[x].proyecto;
+                  const actividad = array.planaccion[x].actividad;
+
+                  const fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPlanaccion}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
+
+                  const codigo = `
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_PLANACCION" data-title-100="${actividad}" ${fVerEnPlanner}>
+                        <h1 class="truncate mr-2">
+                        ${proyecto + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
+                        </h1>
+                     </div> 
+                  `;
+                  dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // PENDIENTES INCIDENCIAS DE EQUIPOS
             if (array.incidencias) {
-               totalPendientesFallas.innerHTML = `Incidencia (${array.incidencias.length})`;
 
                for (let x = 0; x < array.incidencias.length; x++) {
                   const idIncidencia = array.incidencias[x].idIncidencia;
@@ -8137,27 +8652,51 @@ function obtenerPendientesUsuario() {
                }
             }
 
-            if (array.planaccion) {
-               totalPendientesPDA.innerHTML = `PDA Proyectos (${array.planaccion.length})`;
+            // PENDIENTES INCIDENCIAS GENERALES
+            if (array.incidenciasG) {
 
-               for (let x = 0; x < array.planaccion.length; x++) {
-                  const idPlanaccion = array.planaccion[x].idPlanaccion;
-                  const tipoPendiente = array.planaccion[x].tipoPendiente;
-                  const proyecto = array.planaccion[x].proyecto;
-                  const actividad = array.planaccion[x].actividad;
+               for (let x = 0; x < array.incidenciasG.length; x++) {
+                  const idIncidencia = array.incidenciasG[x].idIncidencia;
+                  const actividad = array.incidenciasG[x].actividad;
+                  const tipoIncidencia = array.incidenciasG[x].tipoIncidencia;
 
-                  const fVerEnPlanner = `onclick="verEnPlannerPlanaccion(${idPlanaccion}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
+                  const estiloTipoIncidencia =
+                     tipoIncidencia == 'URGENCIA' ?
+                        `<span class="text-red-500 text-xs">${tipoIncidencia}</span>`
+                        : tipoIncidencia == "EMERGENCIA" ?
+                           `<span class="text-orange-500 text-xs">${tipoIncidencia}</span>`
+                           : tipoIncidencia == "ALARMA" ?
+                              `<span class="text-yellow-500 text-xs">${tipoIncidencia}</span>`
+                              : tipoIncidencia == "ALERTA" ?
+                                 `<span class="text-blue-500 text-xs">${tipoIncidencia}</span>`
+                                 : `<span class="text-teal-500 text-xs">${tipoIncidencia}</span>`;
+
+                  const fVerEnPlanner = `onclick="obtenerIncidenciaGeneral(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
 
                   const codigo = `
-                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_PLANACCION" data-title-100="${actividad}" ${fVerEnPlanner}>
-                        <h1 class="truncate mr-2">
-                        ${proyecto + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_INCIDENCIA" data-title-info="${actividad}" ${fVerEnPlanner}>
+                        <h1 class="truncate mr-2 uppercase">
+                        ${estiloTipoIncidencia} <i class="fas fa-arrow-right mx-1"></i> Incidencia General <i class="fas fa-arrow-right mx-1"></i> ${actividad}
                         </h1>
                      </div> 
                   `;
                   dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
                }
             }
+
+            // TOTAL INCIDENCIAS
+            let TI = 0;
+            let TIG = 0;
+
+            if (array.incidencias) {
+               TI = array.incidencias.length;
+            }
+
+            if (array.incidenciasG) {
+               TIG = array.incidenciasG.length;
+            }
+
+            totalPendientesFallas.innerHTML = `Incidencias (${TI + TIG})`;
 
          } else {
             alertaImg('Sin Pendientes', '', 'success', 3000);
@@ -8172,6 +8711,7 @@ function obtenerPendientesUsuario() {
          contenedor.innerHTML = '';
       })
 }
+
 
 // EVENTOS PARA COLUMNA DE MIS PENDIETES
 document.getElementById("misPendientesIncidencias").addEventListener("click", () => {
@@ -8188,6 +8728,7 @@ document.getElementById("misPendientesIncidencias").addEventListener("click", ()
       }
    }
 })
+
 
 document.getElementById("misPendientesTareas").addEventListener("click", () => {
    let array = document.getElementsByClassName("misPendientes_");
@@ -9258,6 +9799,7 @@ function actualizarTareasequipos() {
       })
 }
 
+
 // EXPORTAR TAREAS GENERALES POR DESTINO
 function exportarTareasGenerales(idDestino) {
    let idUsuario = localStorage.getItem('usuario');
@@ -9650,6 +10192,7 @@ btnEmergenciaIncidencia.addEventListener('click', () => {
    btnEmergenciaIncidencia.setAttribute('style', 'color: white');
 })
 
+
 btnUrgenciaIncidencia.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
@@ -9660,6 +10203,7 @@ btnUrgenciaIncidencia.addEventListener('click', () => {
    btnUrgenciaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-orange-600');
    btnUrgenciaIncidencia.setAttribute('style', 'color: white');
 })
+
 
 btnAlarmaIncidencia.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
@@ -9672,6 +10216,7 @@ btnAlarmaIncidencia.addEventListener('click', () => {
    btnAlarmaIncidencia.setAttribute('style', 'color: white');
 })
 
+
 btnAlertaIncidencia.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
@@ -9682,6 +10227,7 @@ btnAlertaIncidencia.addEventListener('click', () => {
    btnAlertaIncidencia.classList.add('opcionSeleccionadaIncidencia', 'bg-blue-600');
    btnAlertaIncidencia.setAttribute('style', 'color: white');
 })
+
 
 btnSeguimientoIncidencia.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
@@ -9707,6 +10253,7 @@ function estiloDefaultBotonesIncidencias() {
    btnAlertaEnergetico.removeAttribute('style');
    btnSeguimientoEnergetico.removeAttribute('style');
 }
+
 
 btnAgregarIncidencia.addEventListener('click', () => {
    let idDestino = localStorage.getItem('idDestino');
@@ -9898,6 +10445,7 @@ btnEmergenciaEnergetico.addEventListener('click', () => {
    btnEmergenciaEnergetico.setAttribute('style', 'color: white');
 })
 
+
 btnUrgenciaEnergetico.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
@@ -9908,6 +10456,7 @@ btnUrgenciaEnergetico.addEventListener('click', () => {
    btnUrgenciaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-orange-600');
    btnUrgenciaEnergetico.setAttribute('style', 'color: white');
 })
+
 
 btnAlarmaEnergetico.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
@@ -9920,6 +10469,7 @@ btnAlarmaEnergetico.addEventListener('click', () => {
    btnAlarmaEnergetico.setAttribute('style', 'color: white');
 })
 
+
 btnAlertaEnergetico.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();
    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
@@ -9930,6 +10480,7 @@ btnAlertaEnergetico.addEventListener('click', () => {
    btnAlertaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-blue-600');
    btnAlertaEnergetico.setAttribute('style', 'color: white');
 })
+
 
 btnSeguimientoEnergetico.addEventListener('click', () => {
    estiloDefaultBotonesIncidencias();

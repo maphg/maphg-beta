@@ -1994,7 +1994,7 @@
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
                                     <span id="rangoFechaVerEnPlanner" class="bg-purple-200">
-                                        Sin Fecha asignada</span>
+                                        Sin Fecha Asignada</span>
                                 </div>
                             </div>
                         </div>
@@ -2002,7 +2002,7 @@
                             <h1 class="mb-1" style="color: #ABADB7;">Asociada a:</h1>
                             <div class="flex flex-wrap w-full justify-start items-center">
                                 <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
-                                    <h1 id="asignadoAVerEnPlanner" class="font-medium">/h1>
+                                    <h1 id="asignadoAVerEnPlanner" class="font-medium"></h1>
                                 </div>
                             </div>
                         </div>
