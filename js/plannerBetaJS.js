@@ -6992,7 +6992,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
-      var fVerEnPlanner = `onclick="verEnPlanner('FALLA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
+      var fVerEnPlanner = `onclick="obtenerIncidenciaEquipos(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "FALLA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = '';
@@ -7004,7 +7004,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `FALLA${idRegistro}`;
-      var fVerEnPlanner = `onclick="verEnPlanner('FALLA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
+      var fVerEnPlanner = ``;
    } else if (params.status == "PENDIENTE" && params.tipo == "TAREA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -7016,7 +7016,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
-      var fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
+      var fVerEnPlanner = `onclick="obtenerIncidenciaGeneral(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
    } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
@@ -7028,7 +7028,7 @@ const datosFallasTareas = params => {
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
       var enlaceToltip = `TAREA${idRegistro}`;
-      var fVerEnPlanner = `onclick="verEnPlanner('TAREA', ${idRegistro}); toggleModalTailwind('modalVerEnPlanner');"`;
+      var fVerEnPlanner = ``;
    }
 
    return `
