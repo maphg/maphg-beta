@@ -1054,6 +1054,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                const iconoDEP = sDEP > 0 ?
                   '<p class="text-xs font-black bg-black text-white px-1 mx-1 rounded">DEP</p >' : '';
 
+               // OPCIONES PARA EDITAR Y PDF
                const btnOpcion = status ==
                   "PENDIENTE" && tipo == "F" ?
                   `
@@ -1065,7 +1066,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                   </button>
                   `
                   : status == "PENDIENTE" && tipo == "T" ?
-                     `<button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="">
+                     `<button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold" onclick="obtenerIncidenciaGeneral(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');">
                         <i class="fas fa-edit mr-1 text-sm"></i>Editar
                      </button>
 
@@ -1078,9 +1079,23 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                      </button>                  
                   `;
 
+               // ESTILO DE BORDE PARA INDENTIDICAR TIPOS DE INCIDENCIAS
+               const estiloBorde =
+                  tipoIncidencia == 'URGENCIA' ?
+                     `border-4 border-red-500`
+                     : tipoIncidencia == "EMERGENCIA" ?
+                        `border-4 border-orange-500`
+                        : tipoIncidencia == "ALARMA" ?
+                           `border-4 border-yellow-500`
+                           : tipoIncidencia == "ALERTA" ?
+                              `border-4 border-blue-500`
+                              : `border-4 border-teal-500`;
+
+
+
                //PENDIENTE INCIDENCIAS 
                const codigo = `
-                  <div id="${idIncidencia + '_MP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+                  <div id="${idIncidencia + '_MP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative ${estiloBorde}">
 
                      <div class="my-1" data-title-300="${actividad}">
                         <p id="${idIncidencia + '_MP_titulo'}" class="truncate">${actividad}</p>
@@ -1124,7 +1139,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
 
                // PENDIENTES DEP
                const codigoDEP = `
-                  <div id="${idIncidencia + '_MP_DEP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+                  <div id="${idIncidencia + '_MP_DEP_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative ${estiloBorde}">
 
                      <div class="my-1" data-title-300="${actividad}">
                         <p id="${idIncidencia + '_MP_DEP_titulo'}" class="truncate">${actividad}</p>
@@ -1168,7 +1183,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
 
                // PENDIENTES TRABAJANDO
                const codigoT = `
-                  <div id="${idIncidencia + '_MP_T_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+                  <div id="${idIncidencia + '_MP_T_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative ${estiloBorde}">
 
                      <div class="my-1" data-title-300="${actividad}">
                         <p id="${idIncidencia + '_MP_T_titulo'}" class="truncate">${actividad}</p>
@@ -1212,7 +1227,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
 
                // PENDIENTES SOLUCIONADOS
                const codigoS = `
-                  <div id="${idIncidencia + '_MP_S_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative">
+                  <div id="${idIncidencia + '_MP_S_'}" onclick="expandir(this.id)" class="flex flex-col w-full my-2 px-3 py-1 rounded-md cursor-pointer bg-gray-200 text-gray-800 text-left font-medium hover:shadow-md relative ${estiloBorde}">
 
                      <div class="my-1" data-title-300="${actividad}">
                         <p id="${idIncidencia + '_MP_S_titulo'}" class="truncate">${actividad}</p>
@@ -1262,7 +1277,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                      tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
                   }
 
-               if (sDEP > 0) {
+               if (sDEP > 0 && status == "PENDIENTE") {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
                         insertAdjacentHTML('beforeend', codigoDEP);
@@ -1271,7 +1286,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                   }
                }
 
-               if (sTrabajando == 1) {
+               if (sTrabajando == 1 && status == "PENDIENTE") {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_T`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_T`).
                         insertAdjacentHTML('beforeend', codigoT);
