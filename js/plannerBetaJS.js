@@ -1082,14 +1082,14 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                // ESTILO DE BORDE PARA INDENTIDICAR TIPOS DE INCIDENCIAS
                const estiloBorde =
                   tipoIncidencia == 'URGENCIA' ?
-                     `border-4 border-red-500`
+                     `border-2 border-red-500`
                      : tipoIncidencia == "EMERGENCIA" ?
-                        `border-4 border-orange-500`
+                        `border-2 border-orange-500`
                         : tipoIncidencia == "ALARMA" ?
-                           `border-4 border-yellow-500`
+                           `border-2 border-yellow-500`
                            : tipoIncidencia == "ALERTA" ?
-                              `border-4 border-blue-500`
-                              : `border-4 border-teal-500`;
+                              `border-2 border-blue-500`
+                              : `border-2 border-teal-500`;
 
 
 
