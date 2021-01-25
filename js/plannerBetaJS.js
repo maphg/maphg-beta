@@ -1409,8 +1409,6 @@ btnPendientesPreventivos.addEventListener('click', () => {
    const action = "obtenerPendientesMP";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
 
-   console.log(URL);
-
    fetch(URL)
       .then(array => array.json())
       .then(array => {
@@ -4213,8 +4211,6 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
 
    const action = 'obtenerUsuarios';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario.value}`;
-
-   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
@@ -8732,8 +8728,6 @@ function obtenerPendientesUsuario() {
 
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-
-   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
