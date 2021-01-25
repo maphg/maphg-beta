@@ -4187,7 +4187,7 @@ function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
       btnStatusGas.
          setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_gas', 0)`);
       btnStatusFinalizar.
-         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'solucionar', 0)`);
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status', 0)`);
       btnStatusActivo.
          setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'eliminar', 0)`);
       btnStatusGP.

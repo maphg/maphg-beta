@@ -3598,7 +3598,7 @@ if (isset($_GET['action'])) {
                 $resp = "bitacora";
             }
         } elseif ($columna == "status") {
-            $query = "UPDATE t_mp_np SET status = 'SOLUCIONADO' WHERE id = $idIncidencia";
+            $query = "UPDATE t_mp_np SET status = 'SOLUCIONADO', fecha_finalizado = '$fechaActual'  WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "solucionado";
             }
