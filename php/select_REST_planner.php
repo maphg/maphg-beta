@@ -847,9 +847,11 @@ if (isset($_GET['action'])) {
         if ($idDestino == 10) {
             $filtroDestinoPlanaccion = "";
             $filtroDestinoInicidencias = "";
+            $filtroDestinoInicidenciasG = "";
         } else {
             $filtroDestinoPlanaccion = "and t_proyectos.id_destino = $idDestino";
             $filtroDestinoInicidencias = "and t_mc.id_destino = $idDestino";
+            $filtroDestinoInicidenciasG = "and t_mp_np.id_destino = $idDestino";
         }
 
         #PLANES DE ACCION
@@ -899,7 +901,7 @@ if (isset($_GET['action'])) {
         $array['incidenciasG'] = array();
         $query = "SELECT id, titulo, tipo_incidencia
         FROM t_mp_np      
-        WHERE responsable = $idUsuario and (status = 'P' or status = 'N' or status = 'PENDIENTE') and activo = 1 $filtroDestinoInicidencias";
+        WHERE responsable = $idUsuario and (status = 'P' or status = 'N' or status = 'PENDIENTE') and activo = 1 $filtroDestinoInicidenciasG";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idIncidencia = $x['id'];
@@ -1050,12 +1052,19 @@ if (isset($_GET['action'])) {
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
+        $palabraUsuario = $_GET["palabraUsuario"];
         $array = array();
 
         if ($idDestino == 10) {
             $filtroDestino = "";
         } else {
-            $filtroDestino = "and t_users.id_destino = $idDestino";
+            $filtroDestino = "and t_users.id_destino IN($idDestino)";
+        }
+
+        if ($palabraUsuario != "") {
+            $filtroUsuario = "and (t_colaboradores.nombre LIKE '%$palabraUsuario%' or t_colaboradores.apellido LIKE '%$palabraUsuario%')";
+        } else {
+            $filtroUsuario = "";
         }
 
         $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido, 
@@ -1063,7 +1072,7 @@ if (isset($_GET['action'])) {
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         LEFT JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.status = 'A' $filtroDestino
+        WHERE t_users.status = 'A' $filtroDestino $filtroUsuario
         ORDER BY t_colaboradores.nombre ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -3051,6 +3060,7 @@ if (isset($_GET['action'])) {
                         t_mp_planificacion_iniciada.departamento_finanzas,
                         t_mp_planificacion_iniciada.departamento_rrhh,
                         t_mp_planificacion_iniciada.status_material,
+                        t_mp_planificacion_iniciada.cod2bend,
                         t_mp_planificacion_iniciada.id_responsables, t_equipos_america.equipo, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido
                         FROM t_mp_planificacion_iniciada
                         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
@@ -3075,7 +3085,13 @@ if (isset($_GET['action'])) {
                                 $destino = $x['destino'];
                                 $status = $x['status'];
                                 $sTrabajando = $x['status_trabajando'];
-                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']) + intval($x['status_material']);
+                                $sCalidad = intval($x['departamento_calidad']);
+                                $sCompras = intval($x['departamento_compras']);
+                                $sDireccion = intval($x['departamento_direccion']);
+                                $sFinanzas = intval($x['departamento_finanzas']);
+                                $sRRHH = intval($x['departamento_rrhh']);
+                                $sMaterial = intval($x['status_material']);
+                                $cod2bend = $x['cod2bend'];
 
                                 #DATOS PARA ABRIR OT
                                 $idEquipo = $x['id_equipo'];
@@ -3121,8 +3137,14 @@ if (isset($_GET['action'])) {
                                     "idPlan" => $idPlan,
                                     "semana" => $semana,
                                     "status" => $status,
-                                    "sDEP" => intval($sDEP),
-                                    "sTrabajando" => intval($sTrabajando)
+                                    "sTrabajando" => intval($sTrabajando),
+                                    "sCalidad" => intval($sCalidad),
+                                    "sCompras" => intval($sCompras),
+                                    "sDireccion" => intval($sDireccion),
+                                    "sFinanzas" => intval($sFinanzas),
+                                    "sRRHH" => intval($sRRHH),
+                                    "sMaterial" => intval($sMaterial),
+                                    "cod2bend" => $cod2bend
                                 );
                             }
                         }
@@ -3212,7 +3234,7 @@ if (isset($_GET['action'])) {
                         $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_mc.status, t_mc.responsable, t_mc.fecha_creacion, t_mc.rango_fecha,
                         t_mc.status_trabajare, t_mc.departamento_calidad, t_mc.status_material,
                         t_mc.departamento_compras, t_mc.departamento_direccion, 
-                        t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino
+                        t_mc.departamento_finanzas, t_mc.departamento_rrhh, t_mc.cod2bend, t_colaboradores.nombre, t_colaboradores.apellido, c_destinos.destino
                         FROM t_mc
                         INNER JOIN t_users ON t_mc.creado_por = t_users.id
                         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
@@ -3235,7 +3257,13 @@ if (isset($_GET['action'])) {
                                 $destino = $x['destino'];
                                 $status = $x['status'];
                                 $sTrabajando = $x['status_trabajare'];
-                                $sDEP = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']) + intval($x['status_material']);
+                                $sCalidad = intval($x['departamento_calidad']);
+                                $sCompras = intval($x['departamento_compras']);
+                                $sDireccion = intval($x['departamento_direccion']);
+                                $sFinanzas = intval($x['departamento_finanzas']);
+                                $sRRHH = intval($x['departamento_rrhh']);
+                                $sMaterial = ($x['status_material']);
+                                $cod2bend = $x['cod2bend'];
 
                                 if ($status == "N" or $status == "P" or $status == "PENDIENTE") {
                                     $status = "PENDIENTE";
@@ -3300,8 +3328,14 @@ if (isset($_GET['action'])) {
                                     "subseccion" => $subseccion,
                                     "destino" => $destino,
                                     "status" => $status,
-                                    "sDEP" => intval($sDEP),
+                                    "sCalidad" => intval($sCalidad),
+                                    "sCompras" => intval($sCompras),
+                                    "sDireccion" => intval($sDireccion),
+                                    "sFinanzas" => intval($sFinanzas),
+                                    "sRRHH" => intval($sRRHH),
                                     "sTrabajando" => intval($sTrabajando),
+                                    "sMaterial" => intval($sMaterial),
+                                    "cod2bend" => $cod2bend,
                                     "tipo" => "F"
                                 );
                             }

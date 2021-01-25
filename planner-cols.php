@@ -1079,11 +1079,11 @@
                     </div>
                 </div>
 
-                <div class="text-blue-700 bg-blue-400 flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
+                <div class="flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
                     <h1 id="estiloSeccion" class="font-medium text-md"></h1>
                 </div>
                 <div class="flex flex-row text-sm bg-white mt-4">
-                    <div id="btnPendientesIncidencias" class="py-1 px-2 rounded-l-md bg-red-200 text-red-500 font-normal cursor-pointer">
+                    <div id="btnPendientesIncidencias" class="py-1 px-2 rounded-l-md bg-gray-200 text-gray-900 font-normal cursor-pointer hover:bg-red-200 hover:text-red-500">
                         <h1>Incidencias</h1>
                     </div>
 

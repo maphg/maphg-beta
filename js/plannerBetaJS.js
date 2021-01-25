@@ -65,6 +65,11 @@ const btnStatusVerEnPlanner = document.getElementById("btnStatusVerEnPlanner");
 const btnResponsablesIncidencias = document.getElementById("btnResponsablesIncidencias");
 const aplicarTituloIncidenca = document.getElementById("aplicarTituloIncidenca");
 const btnEliminarActividadIncidencia = document.getElementById("btnEliminarActividadIncidencia");
+const btnExpandirMenu = document.getElementById("btnExpandirMenu");
+const btnvisualizarpendientesde = document.getElementById("btnvisualizarpendientesde");
+const misPendientesIncidencias = document.getElementById("misPendientesIncidencias");
+const misPendientesPDA = document.getElementById("misPendientesPDA");
+const misPendientesTareas = document.getElementById("misPendientesTareas");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -89,6 +94,7 @@ const comentarioIncidenciaVerEnPlanner =
 const palabraFallaTarea = document.getElementById("palabraFallaTarea");
 const palabraProyecto = document.getElementById("palabraProyecto");
 const inputFileIncidencias = document.getElementById("inputFileIncidencias");
+const palabraUsuario = document.getElementById("palabraUsuario");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -252,7 +258,7 @@ function obtenerDatosUsuario(idDestino) {
    });
 
    // ACTUALIZA LOS PENDIENTES POR USUARIO Y DESTINO
-   obtenerPendientesUsuario();
+   // obtenerPendientesUsuario();
 }
 
 
@@ -858,8 +864,9 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
    misPendientesSinUsuario.setAttribute('onclick', "obtenerPendientesIncidencias('SINASIGNAR')");
    misPendientesSeccion.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
 
-   btnPendientesModal('btnPendientesIncidencias');
-   obtenerPendientesIncidencias('TODOS');
+   btnExpandirMenu.classList.add('hidden');
+   btnvisualizarpendientesde.classList.add('hidden');
+   estiloSeccion.innerHTML = nombreSeccion;
 
    document.getElementById("modalPendientes").classList.add("open");
 
@@ -943,6 +950,10 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
 
    btnPendientesModal('btnPendientesIncidencias');
    estiloSeccion.innerHTML = iconoLoader;
+
+   // MUESTRA LAS OPCIONES
+   btnExpandirMenu.classList.remove('hidden');
+   btnvisualizarpendientesde.classList.remove('hidden');
 
    const action = "obtenerPendientesIncidencias";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&tipoBusqueda=${tipoBusqueda}`;
@@ -1030,9 +1041,48 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                const tipoIncidencia = array.incidencias[x].tipoIncidencia;
                const idSubseccion = array.incidencias[x].idSubseccion;
                const status = array.incidencias[x].status;
-               const sDEP = array.incidencias[x].sDEP;
                const sTrabajando = array.incidencias[x].sTrabajando;
                const tipo = array.incidencias[x].tipo;
+               const sCalidad = array.incidencias[x].sCalidad;
+               const sCompras = array.incidencias[x].sCompras;
+               const sDireccion = array.incidencias[x].sDireccion;
+               const sFinanzas = array.incidencias[x].sFinanzas;
+               const sRRHH = array.incidencias[x].sRRHH;
+               const sMaterial = array.incidencias[x].sMaterial;
+               const cod2bend = array.incidencias[x].cod2bend;
+
+               const iconoMaterial = sMaterial > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" data-title="COD2BEND">
+                     <h1 class="font-medium text-black">${cod2bend}</h1>
+                  </div>
+                  <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Material</h1>
+                  </div>`: '';
+
+               const iconoCalidad = sCalidad > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Calidad</h1>
+                  </div>`: '';
+
+               const iconoCompras = sCompras > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Compras</h1>
+                  </div>` : '';
+
+               const iconoDireccion = sDireccion > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Dirección</h1>
+                  </div>` : '';
+
+               const iconoFinanzas = sFinanzas > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Finanzas</h1>
+                  </div>` : '';
+
+               const iconoRRHH = sRRHH > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">RRHH</h1>
+                  </div>` : '';
 
                const responsableX = responsable.length > 1 ? responsable : creadoPor;
 
@@ -1050,9 +1100,6 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
 
                const iconoS = status == 'SOLUCIONADO' ?
                   '<p class="text-xs font-black bg-green-200 text-green-500 px-1 mx-1 rounded">F</p >' : '';
-
-               const iconoDEP = sDEP > 0 ?
-                  '<p class="text-xs font-black bg-black text-white px-1 mx-1 rounded">DEP</p >' : '';
 
                // OPCIONES PARA EDITAR Y PDF
                const btnOpcion = status ==
@@ -1111,7 +1158,12 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1155,7 +1207,12 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1199,7 +1256,12 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1242,8 +1304,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                               ${iconoComentario}
                               ${iconoAdjunto}
                               ${iconoT}
-                              ${iconoS}
-                              ${iconoDEP}
+                              ${iconoS}                              
                         </div>
                      </div>
 
@@ -1277,7 +1338,7 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
                      tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
                   }
 
-               if (sDEP > 0 && status == "PENDIENTE") {
+               if (status == "PENDIENTE" && (sCalidad > 0 || sCompras > 0 || sDireccion > 0 || sFinanzas > 0 || sRRHH > 0)) {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
                         insertAdjacentHTML('beforeend', codigoDEP);
@@ -1340,10 +1401,15 @@ btnPendientesPreventivos.addEventListener('click', () => {
    let pendientesT = 0;
    let pendientesS = 0;
 
+   // OCULTA LAS OPCIONES
+   btnExpandirMenu.classList.add('hidden');
+   btnvisualizarpendientesde.classList.add('hidden');
    btnPendientesModal('btnPendientesPreventivos');
    estiloSeccion.innerHTML = iconoLoader;
    const action = "obtenerPendientesMP";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
@@ -1429,8 +1495,47 @@ btnPendientesPreventivos.addEventListener('click', () => {
                const idPlan = array.mp[x].idPlan;
                const semana = array.mp[x].semana;
                const status = array.mp[x].status;
-               const sDEP = array.mp[x].sDEP;
                const sTrabajando = array.mp[x].sTrabajando;
+               const sCalidad = array.mp[x].sCalidad;
+               const sCompras = array.mp[x].sCompras;
+               const sDireccion = array.mp[x].sDireccion;
+               const sFinanzas = array.mp[x].sFinanzas;
+               const sRRHH = array.mp[x].sRRHH;
+               const sMaterial = array.mp[x].sMaterial;
+               const cod2bend = array.mp[x].cod2bend;
+
+               const iconoMaterial = sMaterial > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" data-title="COD2BEND">
+                     <h1 class="font-medium text-black">${cod2bend}</h1>
+                  </div>
+                  <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Material</h1>
+                  </div>`: '';
+
+               const iconoCalidad = sCalidad > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Calidad</h1>
+                  </div>`: '';
+
+               const iconoCompras = sCompras > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Compras</h1>
+                  </div>` : '';
+
+               const iconoDireccion = sDireccion > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Dirección</h1>
+                  </div>` : '';
+
+               const iconoFinanzas = sFinanzas > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">Finanzas</h1>
+                  </div>` : '';
+
+               const iconoRRHH = sRRHH > 0 ?
+                  `<div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2">
+                     <h1 class="font-medium">RRHH</h1>
+                  </div>` : '';
 
                const responsableX = responsable.length > 1 ? responsable : creadoPor;
 
@@ -1445,9 +1550,6 @@ btnPendientesPreventivos.addEventListener('click', () => {
 
                const iconoS = status == 'SOLUCIONADO' ?
                   '<p class="text-xs font-black bg-green-200 text-green-500 px-1 mx-2 rounded">F</p >' : '';
-
-               const iconoDEP = sDEP > 0 ?
-                  '<p class="text-xs font-black bg-black text-white px-1 mx-2 rounded">DEP</p >' : '';
 
                const btnOpcion = status == "PROCESO" ?
                   `
@@ -1479,7 +1581,12 @@ btnPendientesPreventivos.addEventListener('click', () => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1517,7 +1624,12 @@ btnPendientesPreventivos.addEventListener('click', () => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1555,7 +1667,12 @@ btnPendientesPreventivos.addEventListener('click', () => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoCalidad}
+                              ${iconoCompras}
+                              ${iconoDireccion}
+                              ${iconoFinanzas}
+                              ${iconoRRHH}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1593,7 +1710,7 @@ btnPendientesPreventivos.addEventListener('click', () => {
                               ${iconoAdjunto}
                               ${iconoT}
                               ${iconoS}
-                              ${iconoDEP}
+                              ${iconoMaterial}
                         </div>
                      </div>
 
@@ -1622,7 +1739,7 @@ btnPendientesPreventivos.addEventListener('click', () => {
                      tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
                   }
 
-               if (sDEP > 0) {
+               if (sCalidad > 0 || sCompras > 0 || sDireccion > 0 || sFinanzas > 0 || sRRHH > 0 || sMaterial > 0) {
                   if (document.getElementById(`row_subseccion_${idSubseccion}_DEP`)) {
                      document.getElementById(`row_subseccion_${idSubseccion}_DEP`).
                         insertAdjacentHTML('beforeend', codigoDEP);
@@ -1707,10 +1824,8 @@ function exportarPorUsuario(
    tipoExportar
 ) {
    document.getElementById("dataExportarSeccionesUsuarios").innerHTML = "";
-   let palabraUsuario = document.getElementById("palabraUsuarioExportar").value;
    // Agrega la función en el Input palabraUsuarioExportar.
-   document
-      .getElementById("palabraUsuarioExportar")
+   document.getElementById("palabraUsuarioExportar")
       .setAttribute(
          "onkeyup",
          "exportarPorUsuario(" +
@@ -1736,7 +1851,7 @@ function exportarPorUsuario(
          idSeccion: idSeccion,
          idSubseccion: idSubseccion,
          tipoExportar: tipoExportar,
-         palabraUsuario: palabraUsuario,
+         palabraUsuario: palabraUsuario.value,
       },
       // dataType: "JSON",
       success: function (data) {
@@ -2300,7 +2415,6 @@ function agregarMC(idMC) {
 function obtenerUsuarios(tipoAsginacion, idItem) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
-   let palabraUsuario = document.getElementById("palabraUsuario").value;
 
    document.getElementById("modalUsuarios").classList.add("open");
    dataUsuarios.innerHTML = iconoLoader;
@@ -2313,7 +2427,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
          action: action,
          idUsuario: idUsuario,
          idDestino: idDestino,
-         palabraUsuario: palabraUsuario,
+         palabraUsuario: palabraUsuario.value,
          tipoAsginacion: tipoAsginacion,
          idItem: idItem,
       },
@@ -2321,8 +2435,9 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
       success: function (data) {
          // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
          dataUsuarios.innerHTML = data.dataUsuarios;
-         document.getElementById("palabraUsuario").setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
-         );
+         palabraUsuario.
+            setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
+            );
       },
    });
 }
@@ -3540,6 +3655,8 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                btnResponsablesIncidencias.
                   setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalUsuarios');`);
 
+               palabraUsuario.setAttribute('onkeyup', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA');`);
+
                inputFileIncidencias.
                   setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIA');`);
 
@@ -3833,7 +3950,9 @@ const obtenerIncidenciaGeneral = (idIncidencia) => {
                   setAttribute('onclick', `obtenerStatusIncidencias(${idIncidencia}, 'INCIDENCIAGENERAL'); toggleModalTailwind('modalStatus');`);
 
                btnResponsablesIncidencias.
-                  setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIAG'); toggleModalTailwind('modalUsuarios');`);
+                  setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIAGENERAL'); toggleModalTailwind('modalUsuarios');`);
+
+               palabraUsuario.setAttribute('onkeyup', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIAGENERAL');`);
 
                inputFileIncidencias.
                   setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIAGENERAL');`);
@@ -4093,10 +4212,16 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
    let idUsuario = localStorage.getItem('usuario');
 
    const action = 'obtenerUsuarios';
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario.value}`;
+
+   console.log(URL);
 
    fetch(URL)
       .then(array => array.json())
+      .then(array => {
+         dataUsuarios.innerHTML = '';
+         return array;
+      })
       .then(array => {
          if (array) {
             for (let x = 0; x < array.length; x++) {
@@ -4107,8 +4232,10 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
 
                if (tipoIncidencia == "INCIDENCIA") {
                   fResponsable = `onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', ${idUsuario});"`
-               } else if (tipoIncidencia == "INCIDENCIAG") {
+               } else if (tipoIncidencia == "INCIDENCIAGENERAL") {
                   fResponsable = `onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'responsable', ${idUsuario});"`
+               }else if(tipoIncidencia == 'PDA'){
+                  fResponsable = `onclick="actualizarInfoPlanaccion(${idIncidencia}, 'responsable', ${idUsuario});"`
                }
                const codigo = `
                <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" ${fResponsable}>
@@ -4123,7 +4250,8 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ``);
+         dataUsuarios.innerHTML = '';
+         fetch(APIERROR + err + ` obtenerResponsablesIncidencias(${idIncidencia}, ${tipoIncidencia})`);
       })
 }
 
@@ -4620,6 +4748,11 @@ function verEnPlannerPlanaccion(idPlanaccion) {
 
             proyectoPlanaccion.setAttribute('onclick', `actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion});  toggleModalTailwind('modalProyectos'); obtenerProyectos(${idSeccion}, 'PENDIENTE');`);
 
+            btnResponsablePlanaccion.setAttribute('onclick', `obtenerResponsablesIncidencias(${idPlanaccion}, 'PDA'); toggleModalTailwind('modalUsuarios');`);
+
+            palabraUsuario.
+               setAttribute('onkeyup', `obtenerResponsablesIncidencias(${idPlanaccion}, 'PDA');`);
+
             palabraProyecto.value = proyecto;
             palabraProyecto.dispatchEvent(new Event('keyup'));
 
@@ -4862,11 +4995,7 @@ btnStatusPlanaccion.addEventListener('click', () => {
 })
 
 
-btnResponsablePlanaccion.addEventListener('click', () => {
-   abrirmodal('modalUsuarios');
-})
-
-
+// ACTUALIZA LA INFORMACIÓN DE PLAN DE ACCIÓN
 function actualizarInfoPlanaccion(idPlanaccion, columna, valor) {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
@@ -4901,6 +5030,9 @@ function actualizarInfoPlanaccion(idPlanaccion, columna, valor) {
             alertaImg('Status Bitacora, Actualizado', '', 'success', 1500);
          } else if (array == "solucionado") {
             alertaImg('Planaccion Solucionado', '', 'success', 1500);
+            obtenerPendientesUsuario();
+            cerrarmodal('modalStatus');
+            cerrarmodal('modalVerEnPlannerPlanaccion');
          } else if (array == "actividad") {
             alertaImg('Planaccion Solucionado', '', 'success', 1500);
          } else if (array == "eliminado") {
@@ -7032,7 +7164,7 @@ const datosFallasTareas = params => {
    }
 
    return `
-        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
+      <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
         ${statusX}">
            
         <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;"
@@ -7091,7 +7223,7 @@ const datosFallasTareas = params => {
 
       </tr>
    `;
-};
+}
 
 
 // FUNCION PARA FALLAS (SOLUCIONADAS Y PENDIENTES)
@@ -8601,6 +8733,8 @@ function obtenerPendientesUsuario() {
    const action = "obtenerPendientesUsuario";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
+   console.log(URL);
+
    fetch(URL)
       .then(array => array.json())
       .then(array => {
@@ -8613,7 +8747,6 @@ function obtenerPendientesUsuario() {
 
             // PEDIENTES PLANES DE ACCIÓN
             if (array.planaccion) {
-               totalPendientesPDA.innerHTML = `PDA Proyectos (${array.planaccion.length})`;
 
                for (let x = 0; x < array.planaccion.length; x++) {
                   const idPlanaccion = array.planaccion[x].idPlanaccion;
@@ -8698,38 +8831,64 @@ function obtenerPendientesUsuario() {
                   dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
                }
             }
-
+         }
+         return array;
+      })
+      .then(array => {
+         if (array) {
             // TOTAL INCIDENCIAS
             let TI = 0;
-            let TIG = 0;
+            let TPDA = 0;
 
             if (array.incidencias) {
-               TI = array.incidencias.length;
+               TI += array.incidencias.length;
             }
 
             if (array.incidenciasG) {
-               TIG = array.incidenciasG.length;
+               TI += array.incidenciasG.length;
             }
 
-            totalPendientesFallas.innerHTML = `Incidencias (${TI + TIG})`;
+            if (array.planaccion.length) {
+               TPDA = array.planaccion.length;
+            }
 
-         } else {
-            alertaImg('Sin Pendientes', '', 'success', 3000);
+            totalPendientesPDA.innerHTML = `PDA Proyectos (${TPDA})`;
+            totalPendientesFallas.innerHTML = `Incidencias (${TI})`;
+
+            if (TI > 0) {
+               opcionMisPendientes('misPendientesIncidencias');
+               misPendientesIncidencias.click();
+            } else if (TPDA > 0) {
+               opcionMisPendientes('misPendientesPDA');
+               misPendientesPDA.click();
+            }
          }
-      })
-      .then(() => {
          loadPendientes.innerHTML = '';
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ': (obtenerPendientesUsuario) ' + idUsuario);
+         fetch(APIERROR + err + ': (obtenerPendientesUsuario) ' + idUsuario + ' | ' + URL);
          loadPendientes.innerHTML = '';
          contenedor.innerHTML = '';
       })
 }
 
 
+// OPCION SELECCIONADA MIS PENDIETES
+const opcionMisPendientes = opcion => {
+   if (opcion == "misPendientesIncidencias") {
+      misPendientesPDA.classList.remove('bg-purple-200', 'text-purple-500');
+      misPendientesIncidencias.classList.add('bg-red-200', 'text-red-500');
+   } else {
+      misPendientesPDA.classList.add('bg-purple-200', 'text-purple-500');
+      misPendientesIncidencias.classList.remove('bg-red-200', 'text-red-500');
+   }
+}
+
+
 // EVENTOS PARA COLUMNA DE MIS PENDIETES
-document.getElementById("misPendientesIncidencias").addEventListener("click", () => {
+misPendientesIncidencias.addEventListener("click", () => {
+   opcionMisPendientes('misPendientesIncidencias');
+
    let array = document.getElementsByClassName("misPendientes_");
    for (let x = 0; x < array.length; x++) {
 
@@ -8745,7 +8904,7 @@ document.getElementById("misPendientesIncidencias").addEventListener("click", ()
 })
 
 
-document.getElementById("misPendientesTareas").addEventListener("click", () => {
+misPendientesTareas.addEventListener("click", () => {
    let array = document.getElementsByClassName("misPendientes_");
    for (let x = 0; x < array.length; x++) {
 
@@ -8761,7 +8920,9 @@ document.getElementById("misPendientesTareas").addEventListener("click", () => {
 })
 
 
-document.getElementById("misPendientesPDA").addEventListener("click", () => {
+misPendientesPDA.addEventListener("click", () => {
+   opcionMisPendientes('misPendientesPDA');
+
    let array = document.getElementsByClassName("misPendientes_");
    for (let x = 0; x < array.length; x++) {
 
@@ -9845,7 +10006,7 @@ window.addEventListener('load', () => {
 
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
 setInterval(function () {
-   alertaImg('Pendientes Actualizados', '', 'success', 500);
+   alertaImg('Pendientes Actualizados', '', 'success', 800);
    obtenerPendientesUsuario();
    // comprobarSession();
 }, 180000);
@@ -10692,7 +10853,6 @@ btnGraficasReportesDiario.addEventListener('click', () => {
    });
    //show the dialog
    alertify.Gift('GODhPuM5cEE').set({ frameless: true });
-
 })
 
 
