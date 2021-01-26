@@ -1052,7 +1052,12 @@ if (isset($_GET['action'])) {
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
-        $palabraUsuario = $_GET["palabraUsuario"];
+        if (isset($_GET["palabraUsuario"])) {
+            $palabraUsuario = $_GET["palabraUsuario"];
+        } else {
+            $palabraUsuario = "";
+        }
+
         $array = array();
 
         if ($idDestino == 10) {
