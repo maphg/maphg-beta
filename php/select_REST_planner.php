@@ -1495,7 +1495,8 @@ if (isset($_GET['action'])) {
                 $resp = "bitacora";
             }
         } elseif ($columna == "status") {
-            $query = "UPDATE t_energeticos SET status = 'SOLUCIONADO' WHERE id = $idEnergetico";
+            $query = "UPDATE t_energeticos SET status = 'SOLUCIONADO', fecha_finalizado = '$fechaActual' 
+            WHERE id = $idEnergetico";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "solucionado";
             }
@@ -2395,7 +2396,7 @@ if (isset($_GET['action'])) {
                 $resp = "rangoFecha";
             }
         } elseif ($columna == "status") {
-            $query = "UPDATE t_proyectos_planaccion SET status = 'SOLUCIONADO' 
+            $query = "UPDATE t_proyectos_planaccion SET status = 'SOLUCIONADO', fecha_realizado = '$fechaActual' 
             WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "solucionado";
@@ -3513,7 +3514,7 @@ if (isset($_GET['action'])) {
                 $resp = "bitacora";
             }
         } elseif ($columna == "status") {
-            $query = "UPDATE t_mc SET status = 'SOLUCIONADO' WHERE id = $idIncidencia";
+            $query = "UPDATE t_mc SET status = 'SOLUCIONADO', fecha_realizado = '$fechaActual' WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "solucionado";
             }
