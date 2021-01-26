@@ -44,8 +44,8 @@ $fecha_final = $fecha_final->format('Y-m-d H:i:s');
     <link rel="stylesheet" href="css/app.css">
     <link rel="icon" href="svg/logo6.png">
     <link rel="stylesheet" href="css/alertify.min.css">
-
 </head>
+
 <style>
     .modal {
         position: fixed;

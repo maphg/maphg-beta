@@ -1282,9 +1282,9 @@ if (isset($_GET['action'])) {
         }
 
         if ($status == "PENDIENTE") {
-            $filtroStatus = "and t_energeticos.status = 'PENDIENTE'";
+            $filtroStatus = "and t_energeticos.status IN('PENDIENTE', 'N', 'P')";
         } else {
-            $filtroStatus = "and t_energeticos.status = 'SOLUCIONADO'";
+            $filtroStatus = "and t_energeticos.status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
         }
 
         $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.responsable,
@@ -1337,8 +1337,8 @@ if (isset($_GET['action'])) {
                 $fechaInicio = "";
                 $fechaFin = "";
                 if ($rangoFecha != "") {
-                    $fechaInicio = substr($rangoFecha, -10);
-                    $fechaFin = substr($rangoFecha, -23, 10);
+                    $fechaInicio = substr($rangoFecha, -23, 10);
+                    $fechaFin = substr($rangoFecha, -10);
                 }
 
                 #RESPONSABLE
@@ -1500,8 +1500,7 @@ if (isset($_GET['action'])) {
                 $resp = "bitacora";
             }
         } elseif ($columna == "status") {
-            $query = "UPDATE t_energeticos SET status = 'SOLUCIONADO', fecha_finalizado = '$fechaActual' 
-            WHERE id = $idEnergetico";
+            $query = "UPDATE t_energeticos SET status = 'SOLUCIONADO', fecha_finalizado = '$fechaActual' WHERE id = $idEnergetico";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = "solucionado";
             }
@@ -1513,7 +1512,12 @@ if (isset($_GET['action'])) {
         } elseif ($columna == "restaurar") {
             $query = "UPDATE t_energeticos SET status = 'PENDIENTE' WHERE id = $idEnergetico";
             if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = "restaurar";
+                $resp = "restuarado";
+            }
+        } else if ($columna == "rangoFecha" && $valor != "") {
+            $query = "UPDATE t_energeticos SET rango_fecha = '$valor' WHERE id = $idEnergetico";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "rangoFecha";
             }
         }
         echo json_encode($resp);

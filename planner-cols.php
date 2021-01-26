@@ -1369,7 +1369,7 @@
                 <div id="estiloSeccionTest" class="">
                     <h1 id="seccionTest" class="font-bold text-black"></h1>
                 </div>
-                <div id="" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
                     <h1 id="equipoTest"> </h1>
                 </div>
             </div>
@@ -1405,7 +1405,7 @@
             </div>
 
             <!-- CONTENIDO TAREAS FALLAS -->
-            <div id="" class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="p-2 flex justify-center items-center flex-col w-full">
 
                 <div class="overflow-x-auto scrollbar">
                     <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
@@ -1470,11 +1470,11 @@
 
             <!-- SECCION Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
-                <div id="" class="">
-                    <h1 id="" class="font-bold text-black"></h1>
+                <div class="">
+                    <h1 class="font-bold text-black"></h1>
                 </div>
-                <div id="" class="ml-4 font-bold bg-yellow-400 text-yellow-700 text-xs py-1 px-2 rounded">
-                    <h1 id="tituloEnergeticos"><i class="fas fa-plug fa-lg"></i> Energéticos</h1>
+                <div class="ml-4 font-bold bg-yellow-400 text-yellow-700 text-xs py-1 px-2 rounded">
+                    <h1 id="tituloEnergeticos"><i class="fas fa-plug fa-lg"></i>Energéticos</h1>
                 </div>
             </div>
 
@@ -1492,28 +1492,38 @@
                     <h1>Nuevo</h1>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
                     <i class="fas fa-list mr-1 font-normal text-xs"></i>
                     <h1>Energeticos</h1>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
                     <i class="fas fa-stream mr-1 font-normal text-xs"></i>
                     <h1>Gantt</h1>
                 </div>
 
-                <div id="" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden" id="exportarProyectos">
-                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
-                    <h1>Exportar</h1>
+                <div id="btnPendientesEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="btnSolucionadosEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
                 </div>
             </div>
 
+            <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden" id="exportarProyectos">
+                <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                <h1>Exportar</h1>
+            </div>
+
             <!-- CONTENIDO TAREAS FALLAS -->
-            <div id="" class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="p-2 flex justify-center items-center flex-col w-full">
 
                 <div class="overflow-x-auto scrollbar">
                     <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
-                        <table id="" class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
                             <thead>
                                 <tr class="cursor-pointer bg-white">
 

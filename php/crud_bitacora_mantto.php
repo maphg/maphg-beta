@@ -1169,7 +1169,6 @@ if (isset($_POST['action'])) {
 
             $graficaMP[] = $total_MP;
 
-
             // Proyectos
             $query_p = "SELECT*
 

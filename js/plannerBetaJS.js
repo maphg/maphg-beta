@@ -70,6 +70,8 @@ const btnvisualizarpendientesde = document.getElementById("btnvisualizarpendient
 const misPendientesIncidencias = document.getElementById("misPendientesIncidencias");
 const misPendientesPDA = document.getElementById("misPendientesPDA");
 const misPendientesTareas = document.getElementById("misPendientesTareas");
+const btnPendientesEnergeticos = document.getElementById("btnPendientesEnergeticos");
+const btnSolucionadosEnergeticos = document.getElementById("btnSolucionadosEnergeticos");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -4230,7 +4232,7 @@ function obtenerResponsablesIncidencias(idIncidencia, tipoIncidencia) {
                   fResponsable = `onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', ${idUsuario});"`
                } else if (tipoIncidencia == "INCIDENCIAGENERAL") {
                   fResponsable = `onclick="actualizarDatosIncidenciaGeneral(${idIncidencia}, 'responsable', ${idUsuario});"`
-               }else if(tipoIncidencia == 'PDA'){
+               } else if (tipoIncidencia == 'PDA') {
                   fResponsable = `onclick="actualizarInfoPlanaccion(${idIncidencia}, 'responsable', ${idUsuario});"`
                }
                const codigo = `
@@ -9383,6 +9385,13 @@ function obtenerEnergeticos(idSeccion, idSubseccion, status) {
    let idUsuario = localStorage.getItem('usuario');
    let contenedor = document.getElementById("dataEnergeticos");
 
+   // obtenerEnergeticos(1001, 1009, 'PENDIENTE');
+   btnPendientesEnergeticos.
+      setAttribute('onclick', `obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE')`);
+
+   btnSolucionadosEnergeticos.
+      setAttribute('onclick', `obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'SOLUCIONADO')`);
+
    const action = 'obtenerEnergeticos';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&status=${status}`;
 
@@ -9424,7 +9433,7 @@ function obtenerEnergeticos(idSeccion, idSubseccion, status) {
                   `onclick="obtenerResponsableEnergetico(${idEnergetico}); abrirmodal('modalUsuarios')"` : '';
 
                const fRangoFecha = status == "PENDIENTE" ?
-                  `onclick="obtenerRangoFecha('${fechaInicio} - ${fechaFin}'); abrirmodal('modalFechaProyectos')"` : '';
+                  `onclick="obtenerRangoFecha(${idEnergetico}, 'rangoFecha', '${fechaInicio} - ${fechaFin}'); abrirmodal('modalRangoFechaX')"` : '';
 
                const fAdjuntos = `onclick="obtenerAdjuntosEnergetico(${idEnergetico}); abrirmodal('modalMedia')"`;
 
@@ -9434,8 +9443,8 @@ function obtenerEnergeticos(idSeccion, idSubseccion, status) {
                   fStatus = `onclick="obtenerStatusEnergetico(${idEnergetico}); abrirmodal('modalStatus')"`;
                   iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
                } else {
-                  fStatus = `onclick="actualizarEnergetico(${idEnergetico}, "restaurar", "F")"`;
-                  iconoStatus = '<i class="fas fa-redo-alt"></i>';
+                  fStatus = `onclick="actualizarEnergetico(${idEnergetico}, 'restaurar', 'F')"`;
+                  iconoStatus = '<i class="fas fa-redo-alt fa-lg text-red-500"></i>';
                }
 
                const codigo = `
@@ -9454,7 +9463,7 @@ function obtenerEnergeticos(idSeccion, idSubseccion, status) {
                         <h1>${responsable}</h1>
                      </td>
 
-                     <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3">
+                     <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fRangoFecha}>
                         <div class="leading-4">${fechaInicio}</div>
                         <div class="leading-3">${fechaFin}</div>
                      </td>
@@ -9495,6 +9504,10 @@ function actualizarEnergetico(idEnergetico, columna, valor) {
    let idSubseccion = localStorage.getItem('idSubseccion');
    let cod2bend = document.getElementById('inputCod2bend');
 
+   if (columna == "rangoFecha") {
+      valor = inputRangoFecha.value;
+   }
+
    const action = 'actualizarEnergetico';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&columna=${columna}&valor=${valor}&titulo=${editarTitulo.value}&cod2bend=${cod2bend.value}`;
 
@@ -9507,6 +9520,7 @@ function actualizarEnergetico(idEnergetico, columna, valor) {
             cerrarmodal('modalUsuarios');
          } else if (array == "titulo") {
             alertaImg('Título Actualizado', '', 'success', 1400);
+            cerrarmodal('modalStatus');
          } else if (array == "trabajare") {
             alertaImg('Status Trabajando, Actualizado', '', 'success', 1400);
          } else if (array == "energetico") {
@@ -9521,10 +9535,14 @@ function actualizarEnergetico(idEnergetico, columna, valor) {
          } else if (array == "eliminado") {
             alertaImg('Energético Eliminado', '', 'success', 1400);
             cerrarmodal('modalStatus');
-         } else if (array == "pendiente") {
+         } else if (array == "restuarado") {
             alertaImg('Energético Restaurado', '', 'success', 1400);
+            cerrarmodal('modalStatus');
          } else if (array == "material") {
             alertaImg('Status Material, Actualizado', '', 'success', 1400);
+         } else if (array == "rangoFecha") {
+            alertaImg('Rango Fecha, Actualizado', '', 'success', 1400);
+            cerrarmodal('modalRangoFechaX');
          } else {
             alertaImg('Intente de Nuevo', '', 'info', 1400);
             cerrarmodal('modalStatus');
@@ -9628,8 +9646,10 @@ function obtenerResponsableEnergetico(idEnergetico) {
 }
 
 
-function obtenerRangoFecha(rangoFecha) {
-   console.log(rangoFecha);
+function obtenerRangoFecha(idEnergetico, columna, valor) {
+   btnAplicarRangoFecha.
+      setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, '${columna}', 0)`);
+   inputRangoFecha.value = valor;
 }
 
 
@@ -10553,7 +10573,7 @@ btnModalAgregarEnergeticos.addEventListener('click', () => {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         fetch(APIERROR + err + ` btnModalAgregarEnergeticos`);
       })
 })
 
