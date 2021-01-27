@@ -472,60 +472,24 @@
                                                 Incidencias
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2">
-                                                Emergencia
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3">
-                                                Urgencia
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4">
-                                                Alarma
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5">
-                                                Alerta
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_">
-                                                Seguimiento
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_7 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_7">
                                                 PREVENTIVOS
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_8 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_8">
                                                 Último MP
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_9 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_9">
                                                 Proximo MP
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_10 hidden">
-                                                Tareas
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11">
                                                 Predictivo
                                             </th>
 
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12 hidden">
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12">
                                                 Último Predictivo
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_13 hidden">
-                                                Cot
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_14">
-                                                Pics
-                                            </th>
-
-                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_15">
-                                                Coments
                                             </th>
 
                                             <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_16">
