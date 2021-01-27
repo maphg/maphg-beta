@@ -8360,11 +8360,13 @@ const obtenerPaginacionEquipos = (idSeccion, idSubseccion, pagina) => {
 
 
 // EVENTO PARA BUSCAR EQUIPOS EN LA DB
-palabraEquipoAmerica.addEventListener('keyup', function () {
+palabraEquipoAmerica.addEventListener('keyup', event => {
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem('idSubseccion');
 
-   if (palabraEquipoAmerica.value.length >= 6 || palabraEquipoAmerica.value.length == 0) {
+   if (
+      (event.key === "Enter" && palabraEquipoAmerica.value.length > 1) ||
+      (event.key === "Backspace" && palabraEquipoAmerica.value.length == 0)) {
       obtenerEquiposAmerica(idSeccion, idSubseccion, 0);
    }
 });

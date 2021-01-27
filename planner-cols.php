@@ -305,8 +305,8 @@
                     <h1 class="text-center mb-2">Equipos & Locales</h1>
                     <h1 id="seccionSubseccionDestinoEquiposAmerica" class="text-xs font-normal text-center"></h1>
                 </div>
-                <div class="relative text-gray-600 w-72">
-                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar equipo o local" autocomplete="off" pattern="[a-zA-Z]">
+                <div class="relative text-gray-600 w-72" data-title="Presione Enter para Buscar">
+                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Equipo o Local (Enter)" autocomplete="off" maxlength="25">
                     <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                         <i class="fad fa-search"></i>
                     </button>
