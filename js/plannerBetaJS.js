@@ -7826,9 +7826,9 @@ const dataEquiposAmerica = params => {
       idEquipoX = '';
    }
 
-   var ultimoMpFecha = params.ultimoMpFecha;
+   var ultimoMpSemana = params.ultimoMpSemana;
 
-   if (ultimoMpFecha == "") {
+   if (ultimoMpSemana <= 0) {
       valorultimoMpFecha = icono;
       valorultimoMpSemana = '';
    } else {
@@ -7836,9 +7836,9 @@ const dataEquiposAmerica = params => {
       valorultimoMpSemana = "Sem " + params.ultimoMpSemana;
    }
 
-   var proximoMpFecha = params.proximoMpFecha;
+   var proximoMpSemana = params.proximoMpSemana;
 
-   if (proximoMpFecha == "") {
+   if (proximoMpSemana <= 0) {
       valorproximoMpFecha = icono;
       valorproximoMpSemana = '';
    } else {
@@ -8165,6 +8165,8 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&pagina=${pagina}`;
 
+   console.log(URL);
+
    const data = new FormData()
    data.append("palabraEquipo", palabraEquipoAmerica.value);
 
@@ -8255,7 +8257,6 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
                   alertaP: alertaP,
                   seguimientoP: seguimientoP
                });
-
                contenedorEquiposAmerica.insertAdjacentHTML('beforeend', codigo);
             }
          } else {
@@ -8281,9 +8282,8 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
          contenedorEquiposAmerica.innerHTML = '';
          obtenerTodosPendientes();
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
-         contenedorEquiposAmerica.innerHTML = '';
          alertaImg('No se Encontraron Equipos/Locales', '', 'info', 1500);
-         fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
+         fetch(APIERROR + err + ` 2 obtenerEquiposAmerica(${iDseccion},${idSubseccion},${pagina}) ${idDestino}`);
       });
 }
 

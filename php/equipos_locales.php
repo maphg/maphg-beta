@@ -204,14 +204,13 @@ if (isset($_GET['action'])) {
                 }
 
                 #MP PRIXIMO POR EQUIPO
-                $proximoMpFecha = "";
-                $proximoMpSemana = 0;
+                $proximoMpSemana = "";
                 $query = "SELECT* FROM t_mp_planeacion_semana WHERE id_equipo = $idEquipo and activo = 1 and año = '$añoActual' ORDER BY id DESC";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $a) {
                         $proximoMpFechaX = (new DateTime($a['ultima_modificacion']))
                             ->format("d/m/Y");
-                        for ($x = 1; $x < 53; $x++) {
+                        for ($x = intval($ultimoMpSemana)  + 1; $x < 53; $x++) {
                             $semana_x = $a['semana_' . $x];
                             if ($semana_x == "PLANIFICADO") {
                                 $proximoMpSemana = $x;
@@ -221,6 +220,9 @@ if (isset($_GET['action'])) {
                         }
                     }
                 }
+                $proximoMpFecha = "";
+
+
 
                 #PREVENTIVOS SOLUCIONADOS POR EQUIPO
                 $testR = 0;
