@@ -149,19 +149,6 @@ const paginacionEquiposAmerica = document.getElementById("paginacionEquiposAmeri
 
 // CONTENEDORES DIV CLASS
 const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia");
-const columna = document.getElementsByClassName("columna_");
-const columna1 = document.getElementsByClassName("columna_1");
-const columna2 = document.getElementsByClassName("columna_2");
-const columna3 = document.getElementsByClassName("columna_3");
-const columna4 = document.getElementsByClassName("columna_4");
-const columna5 = document.getElementsByClassName("columna_5");
-const columna6 = document.getElementsByClassName("columna_6");
-const columna7 = document.getElementsByClassName("columna_7");
-const columna8 = document.getElementsByClassName("columna_8");
-const columna9 = document.getElementsByClassName("columna_9");
-const columna10 = document.getElementsByClassName("columna_10");
-const columna11 = document.getElementsByClassName("columna_11");
-const columna12 = document.getElementsByClassName("columna_12");
 // CONTENEDORES DIV CLASS
 
 // CONTENEDOR DE TABLAS
@@ -862,7 +849,7 @@ function consultaSubsecciones(idDestino, idUsuario) {
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
    localStorage.setItem('idSeccion', idSeccion);
-
+   dataSubseccionesPendientes.innerHTML = '';
    btnPendientesIncidencias.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
    misPendientesUsuario.setAttribute('onclick', "obtenerPendientesIncidencias('MISPENDIENTES')");
    misPendientesCreados.setAttribute('onclick', "obtenerPendientesIncidencias('MISCREADOS')");
@@ -1391,6 +1378,8 @@ const obtenerPendientesIncidencias = (tipoBusqueda) => {
          tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
          tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
          tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
+         estiloSeccion.innerHTML = 'SIN DATOS';
+
       })
 }
 
@@ -1782,13 +1771,14 @@ btnPendientesPreventivos.addEventListener('click', () => {
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err);
+         // fetch(APIERROR + err);
          dataSubseccionesPendientes.innerHTML = '';
          dataOpcionesSubseccionestoggle.innerHTML = '';
          tablaPendientesPendientes.innerText = `PENDIENTES (${pendientesI})`;
          tablaPendientesPendientesDEP.innerText = `PENDIENTES DEP (${pendientesDEP})`;
          tablaPendientesTrabajando.innerText = `TRABAJANDO (${pendientesT})`;
          tablaPendientesSolucionado.innerText = `SOLUCIONADOS (${pendientesS})`;
+         estiloSeccion.innerHTML = 'SIN DATOS';
       })
 })
 
@@ -7989,7 +7979,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_1" ${fFallas}">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300" ${fFallas}">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="${'Incidencias Pendientes: ' + params.fallasP}">
                     <h1>${valorFallasP}</h1>
                 </div>
@@ -7998,7 +7988,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_7">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-bold uppercase text-sm text-red-400" data-title="Preventivo Pendiente: ${params.mpP}">
                     <h1>${valormpP}</h1>
                 </div>
@@ -8007,7 +7997,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_8">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoMpFecha}</h1>
                 </div>
@@ -8016,7 +8006,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_9">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-semibold uppercase">
                     <h1>${valorproximoMpFecha}</h1>
                 </div>
@@ -8025,13 +8015,13 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_11" ${fTest}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300" ${fTest}>
                 <div class="font-semibold uppercase">
                     <h1>${valorTestR}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_12">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoTestFecha}</h1>
                 </div>
@@ -8040,7 +8030,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_16" ${fDespiece}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300" ${fDespiece}>
                 <div class="font-semibold uppercase">
                     <h1>${valorDespiece}</h1>
                 </div>
