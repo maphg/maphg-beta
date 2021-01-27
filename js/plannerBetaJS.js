@@ -8165,8 +8165,6 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
    const action = "obtenerEquiposAmerica";
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&pagina=${pagina}`;
 
-   console.log(URL);
-
    const data = new FormData()
    data.append("palabraEquipo", palabraEquipoAmerica.value);
 
