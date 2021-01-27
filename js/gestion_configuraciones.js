@@ -262,7 +262,7 @@ function obtenerUsuarios(configuracionIdUsuario) {
         .then(array => array.json())
         .then(array => {
             tablaUsuarios.innerHTML = "";
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const y = array[x];
                     const codigo = codigoUsuario({ y });
@@ -292,6 +292,8 @@ function obtenerUsuariosX(configuracionIdUsuario) {
     const URL1 = `php/gestion_configuraciones.php?action=opcionesUsuario&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     const URL2 = `php/gestion_configuraciones.php?action=obtenerUsuariosX&idDestino=${idDestino}&idUsuario=${idUsuario}&configuracionIdUsuario=${configuracionIdUsuario}`;
+
+    console.log(URL2);
 
     // ELEMENTOS
     let datosComplementariosUsuario = document.getElementById("datosComplementariosUsuario");
@@ -344,7 +346,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             // LIMPIA CONTENIDO
 
             // FASES
-            if (array.fases.length > 0) {
+            if (array.fases) {
                 for (let x = 0; x < array.fases.length; x++) {
                     const idFase = array.fases[x].idFase;
                     const fase = array.fases[x].fase;
@@ -359,7 +361,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // SECCIONES
-            if (array.secciones.length > 0) {
+            if (array.secciones) {
                 for (let x = 0; x < array.secciones.length; x++) {
                     const idSeccion = array.secciones[x].idSeccion;
                     const seccion = array.secciones[x].seccion;
@@ -373,7 +375,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // DESTINOS
-            if (array.destinos.length > 0) {
+            if (array.destinos) {
                 for (let x = 0; x < array.destinos.length; x++) {
                     const idDestino = array.destinos[x].idDestino;
                     const destino = array.destinos[x].destino;
@@ -387,7 +389,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // CARGOS
-            if (array.cargos.length > 0) {
+            if (array.cargos) {
                 for (let x = 0; x < array.cargos.length; x++) {
                     const idCargo = array.cargos[x].idCargo;
                     const cargo = array.cargos[x].cargo;
@@ -401,7 +403,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // ROLES
-            if (array.roles.length > 0) {
+            if (array.roles) {
                 for (let x = 0; x < array.roles.length; x++) {
                     const idRol = array.roles[x].idRol;
                     const rol = array.roles[x].rol;
@@ -415,7 +417,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // STATUS
-            if (array.status.length > 0) {
+            if (array.status) {
                 for (let x = 0; x < array.status.length; x++) {
                     const idStatus = array.status[x].idStatus;
                     const status = array.status[x].status;
@@ -429,7 +431,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // OPCIONES SUBALMACENES
-            if (array.opcionSubalmacenes.length > 0) {
+            if (array.opcionSubalmacenes) {
                 for (let x = 0; x < array.opcionSubalmacenes.length; x++) {
                     const idOpcion = array.opcionSubalmacenes[x].idOpcion;
                     const opcion = array.opcionSubalmacenes[x].opcion;
@@ -443,7 +445,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             }
 
             // SUBALMACENES
-            if (array.subalmacenes.length > 0) {
+            if (array.subalmacenes) {
                 for (let x = 0; x < array.subalmacenes.length; x++) {
                     const idSubalmacen = array.subalmacenes[x].idSubalmacen;
                     const nombre = array.subalmacenes[x].nombre;
@@ -462,7 +464,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
             fetch(URL2)
                 .then(array => array.json())
                 .then(array => {
-                    if (array.length > 0) {
+                    if (array) {
                         datosComplementariosUsuario.classList.remove('hidden');
                         for (let x = 0; x < array.length; x++) {
                             const idUsuario = array[x].idUsuario;
@@ -497,7 +499,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
                             contraseñaX.value = contraseña;
 
                             // SECCIONES
-                            if (secciones.length > 0) {
+                            if (secciones) {
                                 for (let x = 0; x < secciones.length; x++) {
                                     const seccion = secciones[x].seccion;
                                     const valor = secciones[x].valor;
@@ -562,7 +564,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
                                     innerHTML = 'Importar' + check;
                             }
 
-                            if (subalmacenes.length > 0) {
+                            if (subalmacenes) {
                                 for (let x = 0; x < subalmacenes.length; x++) {
                                     const idSubalmacen = subalmacenes[x].idSubalmacen;
                                     const subalmacen = subalmacenes[x].subalmacen;
@@ -685,7 +687,7 @@ function obtenerCargos(idCargo) {
         .then(array => array.json())
         .then(array => {
             tablaCargos.innerHTML = '';
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const y = array[x];
                     const codigo = codigoCargo({ y });
@@ -718,7 +720,7 @@ function obtenerCargosX(idCargo) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            if (array.length > 0) {
+            if (array) {
                 cargo.value = array[0].cargo;
                 status.value = array[0].status;
             }
@@ -981,6 +983,6 @@ window.onload = function () {
     obtenerUsuarios(0);
 }
 
-document.getElementById("destinosSelecciona").addEventListener('click', ()=>{
+document.getElementById("destinosSelecciona").addEventListener('click', () => {
     location.href = "gestion_configuraciones.php";
 })
