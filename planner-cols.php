@@ -306,7 +306,7 @@
                     <h1 id="seccionSubseccionDestinoEquiposAmerica" class="text-xs font-normal text-center"></h1>
                 </div>
                 <div class="relative text-gray-600 w-72">
-                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar equipo o local" autocomplete="off">
+                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar equipo o local" autocomplete="off" pattern="[a-zA-Z]">
                     <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                         <i class="fad fa-search"></i>
                     </button>
@@ -338,7 +338,7 @@
                             </div>
                         </div>
 
-                        <div id="btnColumnasInicdencias" class="flex items-center bg-red-300 rounded mb-2 cursor-pointer hover:bg-red-200 shadow-sm mr-6" data-title="Clic, para mostrar Columnas Incidencias">
+                        <div id="btnColumnasInicdencias" class="flex items-center bg-red-300 rounded mb-2 cursor-pointer hover:bg-red-200 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-red-600 uppercase flex py-1">
                                 <h1>INCIDENCIAS</h1>
                             </div>
@@ -350,7 +350,7 @@
                             </div>
                         </div>
 
-                        <div id="btnColumnasPreventivos" class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6" data-title="Clic, para mostrar Columnas Preventivos">
+                        <div id="btnColumnasPreventivos" class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-blue-600 uppercase flex py-1">
                                 <h1>PREVENTIVOS</h1>
                             </div>
@@ -362,7 +362,7 @@
                             </div>
                         </div>
 
-                        <div id="btnColumnasPredictivos" class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6" data-title="Clic, para mostrar Columnas Predictivos">
+                        <div id="btnColumnasPredictivos" class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-indigo-600 uppercase flex py-1">
                                 <h1>PREDICTIVOS</h1>
                             </div>
@@ -373,7 +373,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center bg-black rounded mb-2 cursor-pointer hover:bg-gray-800 shadow-sm mr-6" data-title="Clic, para mostrar Materiales">
+                        <div class="flex items-center bg-black rounded mb-2 cursor-pointer hover:bg-gray-800 shadow-sm mr-6">
                             <div class="text-sm px-3 leading-noene font-semibold text-white uppercase flex py-1">
                                 <h1>Materiales</h1>
                             </div>
@@ -409,73 +409,37 @@
                     </div>
 
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 60vh; max-height: 75vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 62vh; max-height: 72vh;">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                 <thead>
                                     <tr class="cursor-pointer">
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_0">
-                                            Equipo/Local
+                                        <th id="theadEquipoLocal" class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_0">
+                                            Equipo/Local (0)
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_1">
                                             Incidencias
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_2">
-                                            Emergencia
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_3">
-                                            Urgencia
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_4">
-                                            Alarma
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_5">
-                                            Alerta
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_6">
-                                            Seguimiento
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_7 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_7">
                                             PREVENTIVOS
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_8 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_8">
                                             Último MP
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_9 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_9">
                                             Proximo MP
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_10 hidden">
-                                            Tareas
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11">
                                             Predictivo
                                         </th>
 
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12 hidden">
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12">
                                             Último Predictivo
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_13 hidden">
-                                            Cot
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_14">
-                                            Pics
-                                        </th>
-
-                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_15">
-                                            Coments
                                         </th>
 
                                         <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_16">
@@ -577,6 +541,9 @@
 
                         </div>
                     </div>
+
+                    <nav id="paginacionEquiposAmerica" class="relative z-0 flex flex-wrap justify-center -space-x-px my-1" aria-label="Pagination"></nav>
+
                 </div>
             </div>
         </div>
@@ -1719,7 +1686,7 @@
                             <div id="dataComentariosVP" class="flex justify-center items-center flex-col-reverse w-full"></div>
 
                             <div class="flex flex-row justify-center items-center w-full h-10 mt-4">
-                                <input id="comentarioVP" type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                                <input id="comentarioVP" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
                                 <button id="btnComentarioVP" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                                     <i class="fad fa-paper-plane"></i>
                                 </button>
@@ -1873,7 +1840,7 @@
 
                         </div>
                         <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
-                            <input id="inputComentarioPlanaccion" type="text" placeholder="   Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                            <input id="inputComentarioPlanaccion" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
                             <button id="btnAgregarComentarioPlanaccion" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                                 <i class="fad fa-paper-plane"></i>
                             </button>
@@ -2049,7 +2016,7 @@
                         <div id="dataComentariosIncidenciaVerEnPlanner" class="px-4 overflow-y-auto scrollbar flex flex-col w-full pb-10" style="min-height: 499px; min-height: 499px; max-height: 500px;"></div>
 
                         <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
-                            <input id="comentarioIncidenciaVerEnPlanner" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                            <input id="comentarioIncidenciaVerEnPlanner" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
                             <button id="btnAgregarComentarioVerEnPlanner" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                                 <i class="fad fa-paper-plane"></i>
                             </button>
@@ -2836,7 +2803,7 @@
                     <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
                 </div>
                 <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
-                    <input id="inputComentario" type="text" placeholder="    Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                    <input id="inputComentario" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
                     <button id="btnComentario" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
                         <i class="fad fa-paper-plane"></i>
                     </button>

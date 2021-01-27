@@ -97,6 +97,7 @@ const palabraFallaTarea = document.getElementById("palabraFallaTarea");
 const palabraProyecto = document.getElementById("palabraProyecto");
 const inputFileIncidencias = document.getElementById("inputFileIncidencias");
 const palabraUsuario = document.getElementById("palabraUsuario");
+const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -142,6 +143,8 @@ const dataAdjuntosIncidenciaVerEnPlanner =
    document.getElementById("dataAdjuntosIncidenciaVerEnPlanner");
 const estiloSeccion = document.getElementById("estiloSeccion");
 const dataUsuarios = document.getElementById("dataUsuarios");
+const theadEquipoLocal = document.getElementById("theadEquipoLocal");
+const paginacionEquiposAmerica = document.getElementById("paginacionEquiposAmerica");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -7835,34 +7838,21 @@ const dataEquiposAmerica = params => {
 
    var ultimoMpFecha = params.ultimoMpFecha;
 
-   if (ultimoMpFecha == 0) {
+   if (ultimoMpFecha == "") {
       valorultimoMpFecha = icono;
-   } else {
-      valorultimoMpFecha = params.ultimoMpFecha;
-   }
-
-   var ultimoMpSemana = params.ultimoMpSemana;
-
-   if (ultimoMpSemana == 0) {
       valorultimoMpSemana = '';
    } else {
+      valorultimoMpFecha = params.ultimoMpFecha;
       valorultimoMpSemana = "Sem " + params.ultimoMpSemana;
    }
 
-
    var proximoMpFecha = params.proximoMpFecha;
 
-   if (proximoMpFecha == 0) {
+   if (proximoMpFecha == "") {
       valorproximoMpFecha = icono;
-   } else {
-      valorproximoMpFecha = params.proximoMpFecha;
-   }
-
-   var proximoMpSemana = params.proximoMpSemana;
-
-   if (proximoMpSemana == 0) {
       valorproximoMpSemana = '';
    } else {
+      valorproximoMpFecha = params.proximoMpFecha;
       valorproximoMpSemana = "Sem " + params.proximoMpSemana;
    }
 
@@ -7870,42 +7860,12 @@ const dataEquiposAmerica = params => {
 
    if (ultimoTestFecha == 0) {
       valorultimoTestFecha = icono;
-   } else {
-      valorultimoTestFecha = params.ultimoTestFecha;
-   }
-
-
-   var ultimoTestSemana = params.ultimoTestSemana;
-
-   if (ultimoTestSemana == 0) {
       valorultimoTestSemana = '';
    } else {
+      valorultimoTestFecha = params.ultimoTestFecha;
       valorultimoTestSemana = "Sem " + params.ultimoTestSemana;
    }
 
-   var cotizaciones = params.cotizaciones;
-
-   if (cotizaciones == 0) {
-      valorcotizaciones = icono;
-   } else {
-      valorcotizaciones = params.cotizaciones;
-   }
-
-   var imagenes = params.imagenes;
-
-   if (imagenes == 0) {
-      valorimagenes = icono;
-   } else {
-      valorimagenes = params.imagenes;
-   }
-
-   var comentarios = params.comentarios;
-
-   if (comentarios == 0) {
-      valorcomentarios = icono;
-   } else {
-      valorcomentarios = params.comentarios;
-   }
 
    var totalTestR = params.testR;
    if (totalTestR == 0) {
@@ -7926,17 +7886,6 @@ const dataEquiposAmerica = params => {
       valorFallasS = params.fallasS;
    }
 
-   if (params.tareasP == 0) {
-      valorTareasP = '';
-   } else {
-      valorTareasP = params.tareasP;
-   }
-
-   if (params.tareasS == 0) {
-      valorTareasS = '';
-   } else {
-      valorTareasS = params.tareasS;
-   }
 
    if (params.mpP == 0) {
       valormpP = '';
@@ -7954,9 +7903,6 @@ const dataEquiposAmerica = params => {
       valormpS = icono;
    }
 
-   if (valorTareasP == '' && valorTareasS == '') {
-      valorTareasP = icono;
-   }
 
    if (valorFallasP == '' && valorFallasS == '') {
       valorFallasP = icono;
@@ -7971,18 +7917,6 @@ const dataEquiposAmerica = params => {
       fDespiece = `onclick="obtenerDespieceEquipo(${idEquipo})"`;
    }
 
-   // INCIDENCIAS
-   let emergenciaS = params.emergenciaS <= 0 ? icono : params.emergenciaS;
-   let urgenciaS = params.urgenciaS <= 0 ? icono : params.urgenciaS;
-   let alarmaS = params.alarmaS <= 0 ? icono : params.alarmaS;
-   let alertaS = params.alertaS <= 0 ? icono : params.alertaS;
-   let seguimientoS = params.seguimientoS <= 0 ? icono : params.seguimientoS;
-   let emergenciaP = params.emergenciaP <= 0 ? icono : params.emergenciaP;
-   let urgenciaP = params.urgenciaP <= 0 ? icono : params.urgenciaP;
-   let alarmaP = params.alarmaP <= 0 ? icono : params.alarmaP;
-   let alertaP = params.alertaP <= 0 ? icono : params.alertaP;
-   let seguimientoP = params.seguimientoP <= 0 ? icono : params.seguimientoP;
-   // INCIDENCIAS
 
    if (params.emergenciaP <= 0 && params.emergenciaS <= 0) {
       emergenciaS = '';
@@ -8004,38 +7938,36 @@ const dataEquiposAmerica = params => {
       seguimientoS = '';
    }
 
-   let emergenciaPTag = params.emergenciaP <= 0 ? ''
-      : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title="Emergencia">${params.emergenciaP}</h1>
+   const emergenciaPTag = params.emergenciaP <= 0 ? ''
+      : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Emergencia">
+         <h1 class="text-white">${params.emergenciaP}</h1>
       </div>`;
 
-   let urgenciaPTag = params.urgenciaP <= 0 ? ''
-      : `<div class="bg-orange-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title="Urgencia">${params.urgenciaP}</h1>
+   const urgenciaPTag = params.urgenciaP <= 0 ? ''
+      : `<div class="bg-orange-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Urgencia">
+         <h1 class="text-white">${params.urgenciaP}</h1>
       </div>`;
 
-   let alarmaPTag = params.alarmaP <= 0 ? ''
-      : `<div class="bg-yellow-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title="Alarma">${params.alarmaP}</h1>
+   const alarmaPTag = params.alarmaP <= 0 ? ''
+      : `<div class="bg-yellow-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Alarma">
+         <h1 class="text-white">${params.alarmaP}</h1>
       </div>`;
 
-   let alertaPTag = params.alertaP <= 0 ? ''
-      : `<div class="bg-blue-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title="Alerta">${params.alertaP}</h1>
+   const alertaPTag = params.alertaP <= 0 ? ''
+      : `<div class="bg-blue-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Alerta">
+         <h1 class="text-white">${params.alertaP}</h1>
       </div>`;
 
-   let seguimientoPTag = params.seguimientoP <= 0 ? ''
-      : `<div class="bg-teal-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center">
-         <h1 class="text-white" data-title="Seguimiento">${params.seguimientoP}</h1>
+   const seguimientoPTag = params.seguimientoP <= 0 ? ''
+      : `<div class="bg-teal-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Seguimiento">
+         <h1 class="text-white">${params.seguimientoP}</h1>
       </div>`;
 
-   var fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   var fTareas = `onclick="obtenerTareas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   var fComentarios = `onclick="obtenerComentariosEquipos(${idEquipo}); toggleModalTailwind('modalComentarios');"`;
-   var fAdjuntos = `onclick="obtenerMediaEquipo(${idEquipo})"`;
-   var fInfo = `onclick="informacionEquipo(${idEquipo});"`;
-   var fCotizaciones = `onclick="obtenerCotizacionesEquipo(${idEquipo})"`;
-   var fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
+   // FUNCIONALIDADES
+   const fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
+   const fInfo = `onclick="informacionEquipo(${idEquipo});"`;
+
+   const fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
 
    return `
         <tr id="${idEquipo}EquipoAmerica" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-700">
@@ -8058,69 +7990,24 @@ const dataEquiposAmerica = params => {
             </td>
 
             <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_1" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.fallasP}">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Incidencias Pendientes: ' + params.fallasP}">
                     <h1>${valorFallasP}</h1>
                 </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.fallasS}">
+                <div class="font-semibold uppercase text-green-400" data-title="${'Incidencias Solucionadas: ' + params.fallasS}">
                     <h1>${valorFallasS}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_2" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.emergenciaP}">
-                    <h1>${emergenciaP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.emergenciaS}">
-                    <h1>${emergenciaS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_3" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.urgenciaP}">
-                    <h1>${urgenciaP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.urgenciaS}">
-                    <h1>${urgenciaS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_4" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alarmaP}">
-                    <h1>${alarmaP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.alarmaS}">
-                    <h1>${alarmaS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_5" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.alertaP}">
-                    <h1>${alertaP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.alertaS}">
-                    <h1>${alertaS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_6" ${fFallas}">
-                <div class="font-bold uppercase text-sm text-red-400" data-title="${'Fallas Pendientes: ' + params.seguimientoP}">
-                    <h1>${seguimientoP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400" data-title="${'Fallas Solucionadas: ' + params.seguimientoS}">
-                    <h1>${seguimientoS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_7 hidden">
-                <div class="font-bold uppercase text-sm text-red-400">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_7">
+                <div class="font-bold uppercase text-sm text-red-400" data-title="Preventivo Pendiente: ${params.mpP}">
                     <h1>${valormpP}</h1>
                 </div>
-                <div class="font-semibold uppercase text-green-400">
+                <div class="font-semibold uppercase text-green-400" data-title="Preventivo Solucionado: ${params.mpS}">
                     <h1>${valormpS}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_8 hidden">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_8">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoMpFecha}</h1>
                 </div>
@@ -8129,7 +8016,7 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_9 hidden">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_9">
                 <div class="font-semibold uppercase">
                     <h1>${valorproximoMpFecha}</h1>
                 </div>
@@ -8138,45 +8025,18 @@ const dataEquiposAmerica = params => {
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_10 hidden" ${fTareas}>
-                <div class="font-bold uppercase text-sm text-red-400">
-                    <h1>${valorTareasP}</h1>
-                </div>
-                <div class="font-semibold uppercase text-green-400">
-                    <h1>${valorTareasS}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_11 hidden" ${fTest}>
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_11" ${fTest}>
                 <div class="font-semibold uppercase">
                     <h1>${valorTestR}</h1>
                 </div>
             </td>
 
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_12 hidden">
+            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_12">
                 <div class="font-semibold uppercase">
                     <h1>${valorultimoTestFecha}</h1>
                 </div>
                 <div class="uppercase">
                     <h1>${valorultimoTestSemana}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_13 hidden" ${fCotizaciones}>
-                <div class="font-semibold uppercase">
-                    <h1>${valorcotizaciones}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_14" ${fAdjuntos}>
-                <div class="font-semibold uppercase">
-                    <h1>${valorimagenes}</h1>
-                </div>
-            </td>
-
-            <td class="px-4 border-b border-gray-200 py-2 text-center leading-none hover:bg-gray-300 columna_ columna_15" ${fComentarios}>
-                <div class="font-semibold uppercase">
-                    <h1>${valorcomentarios}</h1>
                 </div>
             </td>
 
@@ -8273,7 +8133,6 @@ function obtenerDespieceEquipo(idEquipo) {
                      alertaP: alertaP,
                      seguimientoP: seguimientoP
                   });
-
                   contenedorEquiposAmericaDespice.insertAdjacentHTML('beforeend', codigo);
                }
             } else {
@@ -8303,7 +8162,7 @@ function obtenerDespieceEquipo(idEquipo) {
 
 
 // OBTIENE LOS EQUIPOS AMERICA
-function obtenerEquiposAmerica(idSeccion, idSubseccion) {
+function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
    localStorage.setItem('idSeccion', idSeccion);
    localStorage.setItem("idSubseccion", idSubseccion);
 
@@ -8314,32 +8173,32 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
    document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
 
    const action = "obtenerEquiposAmerica";
-   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&pagina=${pagina}`;
+
+   const data = new FormData()
+   data.append("palabraEquipo", palabraEquipoAmerica.value);
+
    document.getElementById("tareasGeneralesEquipo").
       setAttribute('onclick', "obtenerTareas(0); toggleModalTailwind('modalTareasFallas');");
 
    document.getElementById('reporteEquipos').
       setAttribute('onclick', 'reporteEquipos()');
 
-   // LIMPIA CONTENEDOR
-   contenedorEquiposAmerica.innerHTML = '';
-   // columna1[0].classList.remove('hidden');
-   // columna2[0].classList.remove('hidden');
-   // columna3[0].classList.remove('hidden');
-   // columna4[0].classList.remove('hidden');
-   // columna5[0].classList.remove('hidden');
-   // columna6[0].classList.add('hidden');
-   columna7[0].classList.add('hidden');
-   columna8[0].classList.add('hidden');
-   columna9[0].classList.add('hidden');
-   columna10[0].classList.add('hidden');
-   columna11[0].classList.add('hidden');
-   columna12[0].classList.add('hidden');
 
-   fetch(URL)
+   fetch(URL, {
+      method: 'POST',
+      body: data
+   })
       .then(array => array.json())
       .then(array => {
+         obtenerPaginacionEquipos(idSeccion, idSubseccion, pagina);
+         // LIMPIA CONTENEDOR
+         contenedorEquiposAmerica.innerHTML = '';
+         return array;
+      })
+      .then(array => {
          if (array) {
+            theadEquipoLocal.innerHTML = `EQUIPO/LOCAL (${array.length})`;
             for (let x = 0; x < array.length; x++) {
                const idEquipo = array[x].idEquipo;
                const equipo = array[x].equipo;
@@ -8429,6 +8288,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
          obtenerTodosPendientes();
       })
       .catch(function (err) {
+         contenedorEquiposAmerica.innerHTML = '';
          obtenerTodosPendientes();
          document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = '';
          contenedorEquiposAmerica.innerHTML = '';
@@ -8436,6 +8296,78 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion) {
          fetch(APIERROR + err + ': (obtenerEquiposAmerica 2)');
       });
 }
+
+
+// OBTIENES EL NUMERO DE PAGINAS
+const obtenerPaginacionEquipos = (idSeccion, idSubseccion, pagina) => {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   const action = "obtenerPaginacionEquipos";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}`;
+
+   const data = new FormData()
+   data.append("palabraEquipo", palabraEquipoAmerica.value);
+
+   fetch(URL, {
+      method: "POST",
+      body: data
+   })
+      .then(array => array.json())
+      .then(array => {
+         paginacionEquiposAmerica.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array > 0) {
+            for (let x = 0; x < array + 1; x++) {
+
+               const fx = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}, ${x});"`;
+               const paginaSelected =
+                  x == pagina ? 'bg-blue-200 text-blue-500 animated pulse infinite' : '';
+
+               if (x == 0) {
+                  codigo = `
+                     <a id="pagina_equipo_america_${x}" href="#" class="relative inline-flex items-center px-3 py-1 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-blue-200 hover:text-blue-500 rounded-l-lg ${paginaSelected}" ${fx}>
+                        ${x + 1}
+                     </a>
+                     `;
+               } else if (x == array) {
+                  codigo = `
+                     <a id="pagina_equipo_america_${x}" href="#" class="relative inline-flex items-center px-3 py-1 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-blue-200 hover:text-blue-500 rounded-r-lg ${paginaSelected}" ${fx}>
+                        ${x + 1}
+                     </a>
+                  `;
+
+               } else {
+                  codigo = `
+                     <a id="pagina_equipo_america_${x}" href="#" class="relative inline-flex items-center px-3 py-1 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-blue-200 hover:text-blue-500 ${paginaSelected}" ${fx}>
+                        ${x + 1}
+                    </a>
+                  `;
+               }
+               paginacionEquiposAmerica.insertAdjacentHTML('beforeend', codigo);
+            }
+         } else {
+            paginacionEquiposAmerica.innerHTML = '';
+         }
+      })
+      .catch(function (err) {
+         paginacionEquiposAmerica.innerHTML = '';
+         fetch(APIERROR + err + ` obtenerPaginacionEquipos(${idSeccion}, ${idSubseccion})`);
+      })
+}
+
+
+// EVENTO PARA BUSCAR EQUIPOS EN LA DB
+palabraEquipoAmerica.addEventListener('keyup', function () {
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+
+   if (palabraEquipoAmerica.value.length >= 6 || palabraEquipoAmerica.value.length == 0) {
+      obtenerEquiposAmerica(idSeccion, idSubseccion, 0);
+   }
+});
 
 
 // OBTIENE TODOS LOS PENDIENTES DE  DESTINO->SECCIÓN->SUBSECCIÓN
@@ -8505,11 +8437,6 @@ function obtenerTodosPendientes() {
 // EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
 palabraFallaTarea.addEventListener('keyup', function () {
    buscadorTabla('dataPendientesX', 'palabraFallaTarea', 0);
-});
-
-// EVENTO PARA BUSCAR PROYECTOS EN LA TABLA
-document.getElementById("palabraEquipoAmerica").addEventListener('keyup', function () {
-   buscadorTabla('contenedorEquiposAmerica', 'palabraEquipoAmerica', 0);
 });
 
 
@@ -10687,104 +10614,6 @@ btnSeguimientoEnergetico.addEventListener('click', () => {
 // BUSCADOR PARA TABLA DE ENERGETICOS
 palabraEnergeticos.addEventListener('keyup', () => {
    buscadorTabla('dataEnergeticos', 'palabraEnergeticos', 0);
-})
-
-
-// FUNCION PARA MOSTRAR LAS COLUMNAS DE INCIDENCIAS EN MODALEQUIPOS
-btnColumnasInicdencias.addEventListener('click', () => {
-   alertaImg('Cargando Datos de Incidencias... ', '', 'success', 2500);
-   for (let x = 0; x < columna1.length; x++) {
-      const element1 = columna1[x];
-      const element2 = columna2[x];
-      const element3 = columna3[x];
-      const element4 = columna4[x];
-      const element5 = columna5[x];
-      const element6 = columna6[x];
-      const element7 = columna7[x];
-      const element8 = columna8[x];
-      const element9 = columna9[x];
-      const element10 = columna10[x];
-      const element11 = columna11[x];
-      const element12 = columna12[x];
-      element1.classList.remove('hidden');
-      element2.classList.remove('hidden');
-      element3.classList.remove('hidden');
-      element4.classList.remove('hidden');
-      element5.classList.remove('hidden');
-      element6.classList.remove('hidden');
-      element7.classList.add('hidden');
-      element8.classList.add('hidden');
-      element9.classList.add('hidden');
-      element10.classList.add('hidden');
-      element11.classList.add('hidden');
-      element12.classList.add('hidden');
-   }
-})
-
-
-// FUNCION PARA MOSTRAR LAS COLUMNAS DE PREVENTIVOS EN MODALEQUIPOS
-btnColumnasPreventivos.addEventListener('click', () => {
-   alertaImg('Cargando Datos de Preventivos... ', '', 'success', 2500);
-   for (let x = 0; x < columna1.length; x++) {
-      const element1 = columna1[x];
-      const element2 = columna2[x];
-      const element3 = columna3[x];
-      const element4 = columna4[x];
-      const element5 = columna5[x];
-      const element6 = columna6[x];
-      const element7 = columna7[x];
-      const element8 = columna8[x];
-      const element9 = columna9[x];
-      const element10 = columna10[x];
-      const element11 = columna11[x];
-      const element12 = columna12[x];
-
-      element1.classList.add('hidden');
-      element2.classList.add('hidden');
-      element3.classList.add('hidden');
-      element4.classList.add('hidden');
-      element5.classList.add('hidden');
-      element6.classList.add('hidden');
-      element7.classList.remove('hidden');
-      element8.classList.remove('hidden');
-      element9.classList.remove('hidden');
-      element10.classList.add('hidden');
-      element11.classList.add('hidden');
-      element12.classList.add('hidden');
-   }
-})
-
-
-// FUNCION PARA MOSTRAR LAS COLUMNAS DE PREDICTIVOS EN MODALEQUIPOS
-btnColumnasPredictivos.addEventListener('click', () => {
-   alertaImg('Cargando Datos de Predictivos... ', '', 'success', 2500);
-   for (let x = 0; x < columna1.length; x++) {
-      const element1 = columna1[x];
-      const element2 = columna2[x];
-      const element3 = columna3[x];
-      const element4 = columna4[x];
-      const element5 = columna5[x];
-      const element6 = columna6[x];
-      const element7 = columna7[x];
-      const element8 = columna8[x];
-      const element9 = columna9[x];
-      const element10 = columna10[x];
-      const element11 = columna11[x];
-      const element12 = columna12[x];
-
-      element1.classList.add('hidden');
-      element2.classList.add('hidden');
-      element3.classList.add('hidden');
-      element4.classList.add('hidden');
-      element5.classList.add('hidden');
-      element6.classList.add('hidden');
-      element7.classList.add('hidden');
-      element8.classList.add('hidden');
-      element9.classList.add('hidden');
-      element10.classList.add('hidden');
-      element11.classList.remove('hidden');
-      element12.classList.remove('hidden');
-   }
 })
 
 

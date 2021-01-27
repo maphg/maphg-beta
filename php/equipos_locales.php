@@ -19,8 +19,19 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerEquiposAmerica") {
         $idSeccion = $_GET['idSeccion'];
         $idSubseccion = $_GET['idSubseccion'];
+        $pagina = intval($_GET['pagina']);
         $contador = 0;
         $array = array();
+
+        if (isset($_POST['palabraEquipo'])) {
+            $palabraEquipo = $_POST['palabraEquipo'];
+            $filtroPalabra = "";
+            if ($palabraEquipo != "") {
+                $filtroPalabra = "and t_equipos_america.equipo LIKE '%$palabraEquipo%'";
+            }
+        } else {
+            $filtroPalabra = "";
+        }
 
         if ($idDestino == 10) {
             $filtroDestinoEquipo = "";
@@ -28,11 +39,21 @@ if (isset($_GET['action'])) {
             $filtroDestinoEquipo = "and t_equipos_america.id_destino = $idDestino";
         }
 
+        if ($pagina == 0) {
+            $pagina = intval(0);
+            $filtroPagina = "LIMIT $pagina, 65";
+        } elseif ($pagina > 0) {
+            $pagina = intval(($pagina * 65));
+            $filtroPagina = "LIMIT $pagina, 65";
+        } else {
+            $filtroPagina = "";
+        }
+
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
         t_equipos_america.local_equipo, t_equipos_america.status
         FROM t_equipos_america
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and 
-        t_equipos_america.jerarquia = 'PRINCIPAL' $filtroDestinoEquipo";
+        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and t_equipos_america.jerarquia = 'PRINCIPAL' 
+        $filtroPalabra $filtroDestinoEquipo $filtroPagina";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
@@ -67,25 +88,25 @@ if (isset($_GET['action'])) {
                 $alarmaS = 0;
                 $alertaS = 0;
                 $seguimientoS = 0;
-                $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
-                and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $tipoIncidencia = $a['tipo_incidencia'];
+                // $query = "SELECT tipo_incidencia FROM t_mc WHERE id_equipo = $idEquipo 
+                // and (status = 'F' or status = 'SOLUCIONADO') and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $tipoIncidencia = $a['tipo_incidencia'];
 
-                        if ($tipoIncidencia == "EMERGENCIA") {
-                            $emergenciaS++;
-                        } elseif ($tipoIncidencia == "URGENCIA") {
-                            $urgenciaS++;
-                        } elseif ($tipoIncidencia == "ALARMA") {
-                            $alarmaS++;
-                        } elseif ($tipoIncidencia == "ALERTA") {
-                            $alertaS++;
-                        } else {
-                            $seguimientoS++;
-                        }
-                    }
-                }
+                //         if ($tipoIncidencia == "EMERGENCIA") {
+                //             $emergenciaS++;
+                //         } elseif ($tipoIncidencia == "URGENCIA") {
+                //             $urgenciaS++;
+                //         } elseif ($tipoIncidencia == "ALARMA") {
+                //             $alarmaS++;
+                //         } elseif ($tipoIncidencia == "ALERTA") {
+                //             $alertaS++;
+                //         } else {
+                //             $seguimientoS++;
+                //         }
+                //     }
+                // }
 
                 #INCIDENCIA EMERCENCIA
                 $emergenciaP = 0;
@@ -236,21 +257,21 @@ if (isset($_GET['action'])) {
 
                 #TOTAL ADJUNTOS POR EQUIPO
                 $totalAdjuntos = 0;
-                $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $totalAdjuntos = $a['count(id)'];
-                    }
-                }
+                // $query = "SELECT count(id) FROM t_equipos_america_adjuntos WHERE id_equipo = $idEquipo and activo = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $totalAdjuntos = $a['count(id)'];
+                //     }
+                // }
 
                 #TOTAL COMENTARIOS POR EQUIPO
                 $totalComentarios = 0;
-                $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $a) {
-                        $totalComentarios = $a['count(id)'];
-                    }
-                }
+                // $query = "SELECT count(id) FROM t_equipos_america_comentarios WHERE id_equipo = $idEquipo and status = 1";
+                // if ($result = mysqli_query($conn_2020, $query)) {
+                //     foreach ($result as $a) {
+                //         $totalComentarios = $a['count(id)'];
+                //     }
+                // }
 
                 #DESPIECE 
                 $totalDespiece = 0;
@@ -261,7 +282,7 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $arrayTemp = array(
+                $array[] = array(
                     "filaNumero" => intval($contador),
                     "idEquipo" => intval($idEquipo),
                     "equipo" => $equipo,
@@ -295,7 +316,6 @@ if (isset($_GET['action'])) {
                     "alertaS" => intval($alertaS),
                     "seguimientoS" => intval($seguimientoS)
                 );
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);
@@ -959,6 +979,46 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($array);
+    }
+
+
+    #OBTENER PAGINACIÓN
+    if ($action == "obtenerPaginacionEquipos") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        if (isset($_POST['palabraEquipo'])) {
+            $palabraEquipo = $_POST['palabraEquipo'];
+            $filtroPalabra = "";
+            if ($palabraEquipo != "") {
+                $filtroPalabra = "and t_equipos_america.equipo LIKE '%$palabraEquipo%'";
+            }
+        } else {
+            $filtroPalabra = "";
+        }
+
+        $totalEquipos = 0;
+        $query = "SELECT count(id)
+        FROM t_equipos_america
+        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and activo = 1 and status IN('OPERATIVO', 'TALLER') and jerarquia = 'PRINCIPAL' $filtroPalabra $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalEquipos = $x['count(id)'];
+            }
+
+            if ($totalEquipos > 0) {
+                $totalPaginas = intval($totalEquipos / 65);
+            } else {
+                $totalPaginas = 0;
+            }
+        }
+        echo json_encode($totalPaginas);
     }
 
     // Final
