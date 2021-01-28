@@ -3328,8 +3328,8 @@ function subirImagenGeneral(idTabla, tabla) {
                adjuntosPlanaccion(idTabla);
             } else if (data == 5) {
                alertaImg("Adjunto Agregado", "", "success", 2500);
-               obtenerMediaEquipo(idTabla);
-               obtenerEquiposAmerica(idSeccion, idSubseccion);
+               // obtenerMediaEquipo(idTabla);
+               // obtenerEquiposAmerica(idSeccion, idSubseccion);
                obtenerImagenesEquipo(idTabla);
             } else if (data == 7) {
                obtenerAdjuntosTareas(idTabla);
@@ -7149,8 +7149,8 @@ const datosFallasTareas = params => {
       var statusX = 'S-SOLUCIONADO';
       var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
       var fRangoFecha = '';
-      var fAdjuntos = '';
-      var fComentarios = '';
+      var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
       var fStatus = `onclick="actualizarTareas(${idRegistro},  'status', 'P');"`;
       var fStatus1 = ``;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
@@ -7158,6 +7158,18 @@ const datosFallasTareas = params => {
       var enlaceToltip = `TAREA${idRegistro}`;
       var fVerEnPlanner = ``;
    }
+
+   // DISEÑO TIPO INCIDENCIA
+   const estiloTipoIncidencia =
+      params.tipoIncidencia == 'URGENCIA' ?
+         `<span class="text-red-500 text-xs">${params.tipoIncidencia}</span>`
+         : params.tipoIncidencia == "EMERGENCIA" ?
+            `<span class="text-orange-500 text-xs">${params.tipoIncidencia}</span>`
+            : params.tipoIncidencia == "ALARMA" ?
+               `<span class="text-yellow-500 text-xs">${params.tipoIncidencia}</span>`
+               : params.tipoIncidencia == "ALERTA" ?
+                  `<span class="text-blue-500 text-xs">${params.tipoIncidencia}</span>`
+                  : `<span class="text-teal-500 text-xs">${params.tipoIncidencia}</span>`;
 
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal 
@@ -7173,12 +7185,12 @@ const datosFallasTareas = params => {
             </div>
          </td>
 
-         <td id="${enlaceToltip}" class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
+         <td id="${enlaceToltip}" class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
          ${fActividades}>
             <h1>${params.pda}</h1>
          </td>
          
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
          ${fResponsable}>
             <h1>${params.responsable}</h1>
          </td>
@@ -7189,16 +7201,16 @@ const datosFallasTareas = params => {
             <div class="leading-3">${params.fechaFin}</div>
          </td>
 
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3"
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
          ${fComentarios}>
             <h1>${valorcomentarios}</h1>
          </td>
 
-         <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+         <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
             <h1>${valoradjuntos}</h1>
          </td>
 
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3" ${fStatus1}>
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3" ${fStatus1}>
             <div class="text-sm flex justify-center items-center font-bold">
                ${materialesx}
                ${energeticosx}
@@ -7207,16 +7219,19 @@ const datosFallasTareas = params => {
             </div>
          </td>
          
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3">
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
             <h1>${fOT}</h1>
          </td>
 
-         <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
             <div class="px-2">
                ${iconoStatus}
             </div>
          </td>
 
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <h1>${estiloTipoIncidencia}</h1>
+         </td>
       </tr>
    `;
 }
@@ -7287,6 +7302,9 @@ function obtenerFallas(idEquipo = 0) {
                const departamentos = array[x].departamentos;
                const trabajando = array[x].trabajando;
                const tipo = array[x].tipo;
+               const tipoIncidencia = array[x].tipoIncidencia;
+
+               console.log(tipoIncidencia);
 
                const data = datosFallasTareas({
                   id: id,
@@ -7304,7 +7322,8 @@ function obtenerFallas(idEquipo = 0) {
                   trabajando: trabajando,
                   energeticos: energeticos,
                   departamentos: departamentos,
-                  tipo: tipo
+                  tipo: tipo,
+                  tipoIncidencia: tipoIncidencia
                });
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
             }
@@ -7470,6 +7489,9 @@ function obtenerTareas(idEquipo = 0) {
                const departamentos = array[x].departamentos;
                const trabajando = array[x].trabajando;
                const tipo = array[x].tipo;
+               const tipoIncidencia = array[x].tipoIncidencia;
+
+               console.log(tipoIncidencia);
 
                const data = datosFallasTareas({
                   id: id,
@@ -7487,7 +7509,8 @@ function obtenerTareas(idEquipo = 0) {
                   trabajando: trabajando,
                   energeticos: energeticos,
                   departamentos: departamentos,
-                  tipo: tipo
+                  tipo: tipo,
+                  tipoIncidencia: tipoIncidencia
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
@@ -9953,6 +9976,8 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
                obtenerTestEquipo(idEquipo);
             } else if (tipoAdjunto == "ENERGETICO") {
                obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+            } else if (tipoAdjunto == "EQUIPO") {
+               obtenerImagenesEquipo(idEquipo);
             }
 
          } else {

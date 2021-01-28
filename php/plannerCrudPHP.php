@@ -8295,6 +8295,7 @@ if (isset($_POST['action'])) {
             ORDER BY t_equipos_america_adjuntos.fecha DESC";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $value) {
+                    $idAdjunto = $value['id'];
                     $url = $value['url_adjunto'];
 
                     if (file_exists("../../equipos/files/$url")) {
@@ -8312,29 +8313,44 @@ if (isset($_POST['action'])) {
                     if (strpos($url, "jpg") || strpos($url, "jpeg") || strpos($url, "png") || strpos($url, "JPG") || strpos($url, "JPEG") || strpos($url, "PNG")) {
                         if (strpbrk($adjuntoURL, ' ')) {
                             $imagen .= "
-                            <a href=\"$adjuntoURL\" target=\"_blank\">
-                                <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md\">
-                                    <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                            <div id=\"modalMedia_adjunto_img_$idAdjunto\" class=\"relative\">
+                                <a href=\"$adjuntoURL\" target=\"_blank\">
+                                    <div class=\"m-2 cursor-pointer overflow-hidden w-32 h-32 rounded-md\">
+                                        <img src=\"$adjuntoURL\" class=\"w-full\" alt=\"\">
+                                    </div>
+                                </a>
+                                <div class=\"w-full absolute text-transparent hover:text-red-700 text-center\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'equipo');\">
+                                    <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
                                 </div>
-                            </a>
+                            </div>
                         ";
                         } else {
                             $imagen .= "
+                            <div id=\"modalMedia_adjunto_img_$idAdjunto\" class=\"relative\">
                                 <a href=\"$adjuntoURL\" target=\"_blank\">
                                     <div class=\"bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer\" style=\"background-image: url($adjuntoURL)\">
                                     </div>
                                 </a>
+                                <div class=\"w-full absolute text-transparent hover:text-red-700 text-center\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'equipo');\">
+                                    <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
+                                </div>
+                            </div>
                             ";
                         }
                     } else {
                         $documento .= "
+                        <div id=\"modalMedia_adjunto_img_$idAdjunto\" class=\"relative\">
                             <a href=\"$adjuntoURL\" target=\"_blank\">
                                 <div class=\"w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2\">
                                     <i class=\"fad fa-file-alt fa-3x\"></i>
                                     <p class=\"text-sm font-normal ml-2\">$url
                                     </p>
                                 </div>
-                            </a>                    
+                            </a>
+                            <div class=\"w-full absolute text-transparent hover:text-red-700 text-center\" style=\"bottom: 12px; left: 0px;\" onclick=\"eliminarAdjunto($idAdjunto, 'equipo');\">
+                                <i class=\"fas fa-trash-alt fa-2x\" data-title=\"Clic para Eliminar\"></i>
+                            </div>
+                        </div>                    
                         ";
                     }
                 }

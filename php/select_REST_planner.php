@@ -74,7 +74,7 @@ if (isset($_GET['action'])) {
         }
 
 
-        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.status, t_mp_np.responsable, t_colaboradores.nombre, t_mp_np.fecha, t_mp_np.rango_fecha,
+        $query = "SELECT t_mp_np.id, t_mp_np.titulo, t_mp_np.status, t_mp_np.responsable, t_colaboradores.nombre, t_mp_np.fecha, t_mp_np.rango_fecha, t_mp_np.tipo_incidencia,
         t_colaboradores.apellido,
         t_mp_np.status_urgente,
         t_mp_np.status_material,
@@ -100,6 +100,7 @@ if (isset($_GET['action'])) {
                 $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                 $idResponsable = $x['responsable'];
                 $rangoFecha = $x['rango_fecha'];
+                $tipoIncidencia = $x['tipo_incidencia'];
                 $fechaCreacion = (new DateTime($x['fecha']))->format("d/m/Y");
                 $status = $x['status'];
                 $sUrgente = intval($x['status_urgente']);
@@ -204,6 +205,7 @@ if (isset($_GET['action'])) {
                     "ot" => "T$idTarea",
                     "actividad" => $actividad,
                     "responsable" => $responsable,
+                    "tipoIncidencia" => $tipoIncidencia,
                     "creadoPor" => $creadoPor,
                     "comentarios" => intval($totalComentarios),
                     "adjuntos" => intval($totalAdjuntos),
@@ -230,7 +232,8 @@ if (isset($_GET['action'])) {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
 
-        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, 
+        t_mc.tipo_incidencia, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
         t_mc.status_urgente,
         t_mc.status_material,
         t_mc.status_trabajare,
@@ -253,6 +256,7 @@ if (isset($_GET['action'])) {
                 $actividad = $x['actividad'];
                 $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                 $idResponsable = $x['responsable'];
+                $tipoIncidencia = $x['tipo_incidencia'];
                 $rangoFecha = $x['rango_fecha'];
                 $fechaCreacion = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
                 $status = $x['status'];
@@ -359,6 +363,7 @@ if (isset($_GET['action'])) {
                     "ot" => "F$idFalla",
                     "actividad" => $actividad,
                     "responsable" => $responsable,
+                    "tipoIncidencia" => $tipoIncidencia,
                     "creadoPor" => $creadoPor,
                     "comentarios" => intval($totalComentarios),
                     "adjuntos" => intval($totalAdjuntos),
@@ -1260,6 +1265,11 @@ if (isset($_GET['action'])) {
             }
         } elseif ($tipoAdjunto == "ENERGETICO") {
             $query = "UPDATE t_energeticos_adjuntos SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "equipo") {
+            $query = "UPDATE t_equipos_america_adjuntos SET activo = 0 WHERE id = $idAdjunto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }

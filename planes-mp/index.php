@@ -29,16 +29,61 @@
         <h1>Planes de Mantenimiento</h1>
     </div>
 
-    <div class="flex flex-row container mx-auto text-base mb-6">
+    <div class="flex flex-row container mx-auto text-base pb-4">
         <input id="buscarPlanMP" type="search" name="" id="" placeholder="Buscar Plan" class="w-1/4 px-3 bg-white focus:outline-none py-2 rounded-lg shadow-md">
         <button class="btn btn-indigo shadow-md mx-4" onclick="AgregarPlanMP();">
             <i class="fas fa-plus"></i>
             Crear Plan
         </button>
+
     </div>
+
+    <div class="flex flex-row container mx-auto pb-2 hidden">
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Marcas</h1>
+            <div class="relative ">
+                <select class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="1">RM</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Tipo Local/Equipo</h1>
+            <div class="relative ">
+                <select class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="1">RM</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Tipo Plan</h1>
+            <div class="relative ">
+                <select class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="1">RM</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Grado</h1>
+            <div class="relative ">
+                <select class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="1">RM</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex flex-col pl-4 w-1/6">
+            <h1 class="self-start mb-2">Periodicidad</h1>
+            <div class="relative ">
+                <select class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
+                    <option value="1">RM</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div class="flex flex-col container mx-auto scrollbar">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
-            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 65vh;">
+            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 70vh;">
                 <table id="tablaGestionPlanes" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead>
                         <tr class="cursor-pointer">
