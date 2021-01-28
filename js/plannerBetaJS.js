@@ -145,6 +145,11 @@ const estiloSeccion = document.getElementById("estiloSeccion");
 const dataUsuarios = document.getElementById("dataUsuarios");
 const theadEquipoLocal = document.getElementById("theadEquipoLocal");
 const paginacionEquiposAmerica = document.getElementById("paginacionEquiposAmerica");
+const contenedorEquiposAmericaDespice3 =
+   document.getElementById("contenedorEquiposAmericaDespice3");
+const tooltipDespieceEquipo3 = document.getElementById("tooltipDespieceEquipo3");
+const tituloSegundoNivel = document.getElementById("tituloSegundoNivel");
+const tituloTercerNivel = document.getElementById("tituloTercerNivel");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -7901,12 +7906,16 @@ const dataEquiposAmerica = params => {
    var totalDespiece = params.totalDespiece;
    if (totalDespiece == 0) {
       valorDespiece = icono;
-      fDespiece = `onclick="obtenerDespieceEquipo(0)"`;
+      // fDespiece = `onclick="obtenerDespieceEquipo(0)"`;
    } else {
       valorDespiece = totalDespiece;
-      fDespiece = `onclick="obtenerDespieceEquipo(${idEquipo})"`;
+      // fDespiece = ``;
    }
 
+   const fDespiece =
+      params.jerarquia == "PRINCIPAL" ? `onclick="obtenerDespieceEquipo(${idEquipo})"`
+         : params.jerarquia == "SECUNDARIO" ? `onclick="obtenerDespieceEquipo3(${idEquipo})"`
+            : `onclick="obtenerDespieceEquipo(0)"`;
 
    if (params.emergenciaP <= 0 && params.emergenciaS <= 0) {
       emergenciaS = '';
@@ -7927,6 +7936,7 @@ const dataEquiposAmerica = params => {
    if (params.seguimientoS <= 0 && params.seguimientoP <= 0) {
       seguimientoS = '';
    }
+
 
    const emergenciaPTag = params.emergenciaP <= 0 ? ''
       : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Emergencia">
@@ -8041,6 +8051,116 @@ const dataEquiposAmerica = params => {
 };
 
 
+// DESPIEDE TERCER NIVEL
+const obtenerDespieceEquipo3 = idEquipo => {
+   const button = document.getElementById(idEquipo + "EquipoAmerica");
+   tooltipDespieceEquipo3.classList.toggle('hidden');
+   Popper.createPopper(button, tooltipDespieceEquipo3);
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   const action = "obtenerDespieceEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+
+   contenedorEquiposAmericaDespice3.innerHTML = '';
+
+   if (idEquipo > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+
+            if (array) {
+               for (let x = 0; x < array.length; x++) {
+                  const idEquipo = array[x].idEquipo;
+                  const equipo = array[x].equipo;
+                  const tipoEquipo = array[x].tipoEquipo;
+                  const statusEquipo = array[x].statusEquipo;
+                  const fallasP = array[x].fallasP;
+                  const fallasS = array[x].fallasS;
+                  const mpP = array[x].mpP;
+                  const mpS = array[x].mpS;
+                  const ultimoMpFecha = array[x].ultimoMpFecha;
+                  const ultimoMpSemana = array[x].ultimoMpSemana;
+                  const proximoMpFecha = array[x].proximoMpFecha;
+                  const proximoMpSemana = array[x].proximoMpSemana;
+                  const tareasP = array[x].tareasP;
+                  const tareasS = array[x].tareasS;
+                  const testR = array[x].testR;
+                  const ultimoTestFecha = array[x].ultimoTestFecha;
+                  const ultimoTestSemana = array[x].ultimoTestSemana;
+                  const cotizaciones = array[x].cotizaciones;
+                  const imagenes = array[x].imagenes;
+                  const comentarios = array[x].comentarios;
+                  const totalDespiece = array[x].totalDespiece;
+                  const emergenciaS = array[x].emergenciaS;
+                  const urgenciaS = array[x].urgenciaS;
+                  const alarmaS = array[x].alarmaS;
+                  const alertaS = array[x].alertaS;
+                  const seguimientoS = array[x].seguimientoS;
+                  const emergenciaP = array[x].emergenciaP;
+                  const urgenciaP = array[x].urgenciaP;
+                  const alarmaP = array[x].alarmaP;
+                  const alertaP = array[x].alertaP;
+                  const seguimientoP = array[x].seguimientoP;
+                  const jerarquia = array[x].jerarquia;
+
+                  const codigo = dataEquiposAmerica({
+                     idEquipo: idEquipo,
+                     equipo: equipo,
+                     tipoEquipo: tipoEquipo,
+                     statusEquipo: statusEquipo,
+                     fallasP: fallasP,
+                     fallasS: fallasS,
+                     mpP: mpP,
+                     mpS: mpS,
+                     ultimoMpFecha: ultimoMpFecha,
+                     ultimoMpSemana: ultimoMpSemana,
+                     proximoMpFecha: proximoMpFecha,
+                     proximoMpSemana: proximoMpSemana,
+                     tareasP: tareasP,
+                     tareasS: tareasS,
+                     testR: testR,
+                     ultimoTestFecha: ultimoTestFecha,
+                     ultimoTestSemana: ultimoTestSemana,
+                     cotizaciones: cotizaciones,
+                     imagenes: imagenes,
+                     comentarios: comentarios,
+                     totalDespiece: totalDespiece,
+                     emergenciaS: emergenciaS,
+                     urgenciaS: urgenciaS,
+                     alarmaS: alarmaS,
+                     alertaS: alertaS,
+                     seguimientoS: seguimientoS,
+                     emergenciaP: emergenciaP,
+                     urgenciaP: urgenciaP,
+                     alarmaP: alarmaP,
+                     alertaP: alertaP,
+                     seguimientoP: seguimientoP,
+                     jerarquia: jerarquia
+                  });
+                  contenedorEquiposAmericaDespice3.insertAdjacentHTML('beforeend', codigo);
+               }
+            } else {
+               alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1500);
+            }
+         })
+         .then(() => {
+            fetch(`php/select_REST_planner.php?action=obtenerEquipoPorId&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`)
+               .then(array => array.json())
+               .then(array => {
+                  tituloTercerNivel.innerText = 'DESPICE DE: ' + array.equipo;
+               })
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ': (obtenerDespieceEquipo)');
+            contenedorEquiposAmericaDespice3.innerHTML = '';
+         })
+   } else {
+      alertaImg('Equipo Sin Despiece', '', 'info', 1500);
+   }
+}
+
+
 // OBTIENE EL DESPIECE DE EQUIPOS
 function obtenerDespieceEquipo(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
@@ -8089,6 +8209,7 @@ function obtenerDespieceEquipo(idEquipo) {
                   const alarmaP = array[x].alarmaP;
                   const alertaP = array[x].alertaP;
                   const seguimientoP = array[x].seguimientoP;
+                  const jerarquia = array[x].jerarquia;
 
                   const codigo = dataEquiposAmerica({
                      idEquipo: idEquipo,
@@ -8121,7 +8242,8 @@ function obtenerDespieceEquipo(idEquipo) {
                      urgenciaP: urgenciaP,
                      alarmaP: alarmaP,
                      alertaP: alertaP,
-                     seguimientoP: seguimientoP
+                     seguimientoP: seguimientoP,
+                     jerarquia: jerarquia
                   });
                   contenedorEquiposAmericaDespice.insertAdjacentHTML('beforeend', codigo);
                }
@@ -8129,17 +8251,23 @@ function obtenerDespieceEquipo(idEquipo) {
                alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1500);
             }
          })
-         .then(function () {
+         .then(() => {
+            tooltipDespieceEquipo3.classList.add('hidden');
             const button = document.getElementById(idEquipo + "EquipoAmerica");
             const tooltip = document.getElementById('tooltipDespieceEquipo');
             document.getElementById('tooltipDespieceEquipo').
                classList.toggle('hidden');
-            Popper.createPopper(button, tooltip, {
-               placement: 'bottom'
-            });
+            Popper.createPopper(button, tooltip);
 
             document.getElementById("modalEquiposAmericaBG").
                setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
+         })
+         .then(() => {
+            fetch(`php/select_REST_planner.php?action=obtenerEquipoPorId&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`)
+               .then(array => array.json())
+               .then(array => {
+                  tituloSegundoNivel.innerText = 'DESPICE DE: ' + array.equipo;
+               })
          })
          .catch(function (err) {
             fetch(APIERROR + err + ': (obtenerDespieceEquipo)');
@@ -8184,6 +8312,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
          obtenerPaginacionEquipos(idSeccion, idSubseccion, pagina);
          // LIMPIA CONTENEDOR
          contenedorEquiposAmerica.innerHTML = '';
+         tooltipDespieceEquipo3.classList.add('hidden');
          return array;
       })
       .then(array => {
@@ -8221,6 +8350,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
                const alarmaP = array[x].alarmaP;
                const alertaP = array[x].alertaP;
                const seguimientoP = array[x].seguimientoP;
+               const jerarquia = array[x].jerarquia;
 
                const codigo = dataEquiposAmerica({
                   idEquipo: idEquipo,
@@ -8253,7 +8383,8 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
                   urgenciaP: urgenciaP,
                   alarmaP: alarmaP,
                   alertaP: alertaP,
-                  seguimientoP: seguimientoP
+                  seguimientoP: seguimientoP,
+                  jerarquia: jerarquia
                });
                contenedorEquiposAmerica.insertAdjacentHTML('beforeend', codigo);
             }

@@ -453,11 +453,11 @@
                                 </tbody>
                             </table>
 
-                            <!-- DESPIECE DE EQUIPOS AMERICA -->
-                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full border-solid border-4 border-gray-600 scrollbar overflow-y-auto rounded hidden" style="max-height: 40vh;">
+                            <!-- DESPIECE NIVEL 2 DE EQUIPOS AMERICA -->
+                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full bg-white border-solid border-4 border-bluegray-900 scrollbar overflow-y-auto rounded hidden" style="min-height: 50vh; max-height: 55vh;">
 
                                 <div class="flex items-center justify-center relative bg-white p-2">
-
+                                    <h1 id="tituloSegundoNivel" class="font-semibold text-bluegray-900">SEGUNDO NIVEL</h1>
                                 </div>
 
                                 <table class="min-w-full divide-y divide-gray-200 table-fixed sortable pt-1">
@@ -501,7 +501,57 @@
                                     <tbody id="contenedorEquiposAmericaDespice" class="bg-white divide-y divide-gray-200"></tbody>
                                 </table>
                             </div>
-                            <!-- DESPIECE DE EQUIPOS AMERICA -->
+                            <!-- DESPIECE NIVEL 2 DE EQUIPOS AMERICA -->
+
+                            <!-- DESPIECE NIVEL 3 DE EQUIPOS AMERICA -->
+                            <div id="tooltipDespieceEquipo3" role="tooltip" class="w-full bg-white border-solid border-4 border-gray-700 scrollbar overflow-y-auto rounded hidden" style="height: 30vh;">
+
+                                <div class="flex items-center justify-center relative bg-white p-2">
+                                    <h1 id="tituloTercerNivel" class="font-semibold text-gray-700">TERCER NIVEL</h1>
+                                </div>
+
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed sortable pt-1">
+                                    <thead>
+                                        <tr class="cursor-pointer bg-white">
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Equipo / Local
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Incidencias
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                PREVENTIVOS
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Último MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Proximo MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11">
+                                                Predictivos
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12">
+                                                Último Predictivo
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_16">
+                                                Despiece
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenedorEquiposAmericaDespice3" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <!-- DESPIECE NIVEL 3 DE EQUIPOS AMERICA -->
 
                         </div>
                     </div>
