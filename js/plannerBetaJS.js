@@ -5378,7 +5378,7 @@ function informacionEquipo(idEquipo) {
    consultarOpcionesEquipo();
    toggleInputsEquipo(0);
    obtenerImagenesEquipo(idEquipo);
-   // consultarPlanEquipo(idEquipo);
+   consultarPlanEquipo(idEquipo);
    opcionesJerarquiaEquipo(idEquipo);
 
    setTimeout(() => {
@@ -10852,6 +10852,32 @@ const exportarTareasAIncidencias = (idDestino) => {
       .then(array => array.json())
       .then(array => {
          console.log(array)
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
+
+
+const obtenerSecciones = () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "obtenerSecciones";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         // console.log(array)
+         if (array) {
+
+            // sort by value
+            array.sort((a, b) => {
+               return a.totalIncidencias - b.totalIncidencias;
+            });
+            // console.log(array)
+         }
       })
       .catch(function (err) {
          fetch(APIERROR + err);

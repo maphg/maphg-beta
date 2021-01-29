@@ -1207,6 +1207,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // AGREGA ADJUNTOS EN LOS TEST DE EQUIPOS
     if ($action == "agregarAdjuntoTest") {
         $idTest = $_GET['idTest'];
         $resp = 0;
@@ -1227,7 +1228,7 @@ if (isset($_GET['action'])) {
     }
 
 
-    // ELIMINAR ADJUNTO
+    // ELIMINAR ADJUNTO DE CUALQUIER TABLA
     if ($action == "eliminarAdjunto") {
         $idAdjunto = $_GET['idAdjunto'];
         $tipoAdjunto = $_GET['tipoAdjunto'];
@@ -3714,6 +3715,76 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($resp);
+    }
+
+
+    // OBTENER SECCIONES CON SUBSECCIONES SEGÚN DESTINO Y PERMISOS DE USUARIO
+    if ($action == "obtenerSecciones") {
+        $idSeccion = 0;
+        $array = array();
+
+        if ($idSeccion <= 0 || $idSeccion == "") {
+            $filtroSeccion = "";
+        } else {
+            $filtroSeccion = "and c_rel_destino_seccion.id = $idSeccion";
+        }
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_secciones.id 'idSeccion', c_secciones.seccion, c_subsecciones.id 'idSubseccion', c_subsecciones.grupo
+        FROM c_rel_destino_seccion
+        INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        INNER JOIN c_rel_seccion_subseccion  ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion 
+        INNER JOIN c_subsecciones  ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino $filtroSeccion
+        ORDER BY c_secciones.seccion ASC ";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestino = $x['idDestino'];
+                $destino = $x['destino'];
+                $idSeccion = $x['idSeccion'];
+                $seccion = $x['seccion'];
+                $idSubseccion = $x['idSubseccion'];
+                $subseccion = $x['grupo'];
+
+                #OBTIENE INCIDENCIAS EQUIPO, PENDIENTES
+                $totalIncidencias = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc 
+                WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 and id_equipo > 0 $filtroDestino";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalIncidencias = $x['total'];
+                    }
+                }
+
+                #OBTIENE INCIDENCIAS GENERALES, PENDIENTES
+                $totalIncidenciasGenerales = 0;
+                $query = "SELECT count(id) 'total' FROM t_mp_np
+                WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 and id_equipo = 0 $filtroDestino";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalIncidenciasGenerales = $x['total'];
+                    }
+                }
+
+                $array[] = array(
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion,
+                    "idSubseccion" => intval($idSubseccion),
+                    "subseccion" => $subseccion,
+                    "totalIncidencias" => intval($totalIncidencias),
+                    "totalIncidenciasGenerales" => intval($totalIncidenciasGenerales)
+                );
+            }
+        }
+        echo json_encode($array);
     }
 
     // CIERRE FINAL

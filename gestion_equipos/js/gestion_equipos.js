@@ -1596,7 +1596,7 @@ function informacionEquipo(idEquipo) {
 
     // FUNCIONES INICIALES
     obtenerImagenesEquipo(idEquipo);
-    // consultarPlanEquipo(idEquipo);
+    consultarPlanEquipo(idEquipo);
     toggleDisabledEditarEquipo(0);
 
     const URL = `../php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
