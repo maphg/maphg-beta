@@ -55,48 +55,48 @@ const consultarStock = () => {
                                 ${destino}
                             </td>
 
-                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3 font-semibold w-48" data-title-stock="Descripción: ${descripcionCod2bend}">
-                                <p class="text-bluegray-600 text-left"> cod2bend: ${cod2bendX}</p>
-                                <p class="truncate text-left">${descripcionCod2bend}</p>
+                            <td class="px-2 border-b border-gray-200 text-center py-3 font-semibold w-48" data-title-stock="Descripción: ${descripcionCod2bend}">
+                                <p class="text-bluegray-600 text-left whitespace-no-wrap"> cod2bend: ${cod2bendX}</p>
+                                <p class="truncate text-left whitespace-no-wrap">${descripcionCod2bend}</p>
                             </td>
                             
-                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-4 uppercase font-semibold w-40" data-title-stock="Descripción: ${descripcionSstt}">
-                                <p class="truncate">${descripcionSstt}</p>
+                            <td class="px-2 border-b border-gray-200 text-center py-4 uppercase font-semibold w-40" data-title-stock="Descripción: ${descripcionSstt}">
+                                <p class="truncate whitespace-no-wrap">${descripcionSstt}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
                                 <p class="truncate">${seccion}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${area}">
-                                <p class="truncate">${area}</p>
+                            <td class="px-2 border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${area}">
+                                <p class="truncate whitespace-no-wrap">${area}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
+                            <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold">
                                 <div class="px-2 bg-${estiloCategoria}-300 text-${estiloCategoria}-600 rounded-full uppercase">
                                     <h1>${categoria}</h1>
                                 </div>    
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 font-semibold">
+                            <td class="px-2  border-b border-gray-200 text-center py-3 font-semibold">
                                 <p class="truncate text-bluegray-600">Teorico: ${stockT}</p>
                                 <p class="truncate text-bluegray-800">Real: ${stockR}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                <p class="truncate">${marca}</p>
+                            <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold">
+                                <p class="truncate whitespace-no-wrap">${marca}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${modelo}">
-                                <p class="truncate">${modelo}</p>
+                            <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${modelo}">
+                                <p class="truncate whitespace-no-wrap">${modelo}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${caracteristicas}">
-                                <p class="truncate">${caracteristicas}</p>
+                            <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${caracteristicas}">
+                                <p class="truncate whitespace-no-wrap">${caracteristicas}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${subfamilia}">
-                                <p class="truncate">${subfamilia}</p>
+                            <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${subfamilia}">
+                                <p class="truncate whitespace-no-wrap">${subfamilia}</p>
                             </td>
                             
                             <td class="px-2 border-b border-gray-200 text-center py-3" data-title-stock="${subalmacen}">
