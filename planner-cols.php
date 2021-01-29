@@ -926,7 +926,7 @@
             </div>
 
             <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar" style="max-height:300.5px; min-height:150px;">
-                <div class="p-8 w-full">
+                <div class="w-full">
                     <ul class="list-reset flex border-b">
                         <li class="-mb-px mr-1">
                             <a class="bg-white inline-block border-l-2 border-t-2 border-r-2 rounded-t py-2 px-4 text-bluegray-800 font-semibold border-bluegray-100" href="#">Preventivo</a>
