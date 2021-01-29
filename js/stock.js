@@ -37,12 +37,16 @@ const consultarStock = () => {
                     const destino = array[x].destino;
                     const seccion = array[x].seccion;
 
-                    const estiloCategoria = categoria == 'BAJA' ? `yellow`
-                        : categoria == 'ALTA' ? `red`
-                            : categoria == 'MEIDA' ? `orange`
-                                : categoria == 'BLUE' ? `blue`
-                                    : `gray`;
+                    const cod2bendX = cod2bend == "" || cod2bend == " " ? 'S/C' : cod2bend;
+                    const stockT = stockTeorico <= 0 ? 0 : stockTeorico;
+                    const stockR = stockReal <= 0 ? 0 : stockReal;
 
+                    const estiloCategoria =
+                        categoria == 'BAJA' || categoria == 'Baja' ? `yellow`
+                            : categoria == 'ALTA' || categoria == 'Alta' ? `red`
+                                : categoria == 'MEDIA' || categoria == 'Media' ? `orange`
+                                    : categoria == 'SEGURIDAD' || categoria == 'Seguridad' ? `blue`
+                                        : `gray`;
 
                     const codigo = `
                         <tr id="item_ID_${idItem}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 fila-proyectos-select">
@@ -51,24 +55,21 @@ const consultarStock = () => {
                                 ${destino}
                             </td>
 
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 font-semibold">
-                                ${cod2bend}
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3 font-semibold w-48" data-title-stock="Descripción: ${descripcionCod2bend}">
+                                <p class="text-bluegray-600 text-left"> cod2bend: ${cod2bendX}</p>
+                                <p class="truncate text-left">${descripcionCod2bend}</p>
                             </td>
-
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${descripcionCod2bend}
+                            
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-4 uppercase font-semibold w-40" data-title-stock="Descripción: ${descripcionSstt}">
+                                <p class="truncate">${descripcionSstt}</p>
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${descripcionSstt}
+                                <p class="truncate">${seccion}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${seccion}
-                            </td>
-                            
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${area}
+                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${area}">
+                                <p class="truncate">${area}</p>
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
@@ -77,32 +78,29 @@ const consultarStock = () => {
                                 </div>    
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${stockTeorico}
+                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 font-semibold">
+                                <p class="truncate text-bluegray-600">Teorico: ${stockT}</p>
+                                <p class="truncate text-bluegray-800">Real: ${stockR}</p>
                             </td>
                             
                             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${stockReal}
+                                <p class="truncate">${marca}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${marca}
+                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${modelo}">
+                                <p class="truncate">${modelo}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${modelo}
+                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${caracteristicas}">
+                                <p class="truncate">${caracteristicas}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${caracteristicas}
+                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold" data-title-stock="${subfamilia}">
+                                <p class="truncate">${subfamilia}</p>
                             </td>
                             
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${subfamilia}
-                            </td>
-                            
-                            <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                ${subalmacen}
+                            <td class="px-2 border-b border-gray-200 text-center py-3" data-title-stock="${subalmacen}">
+                                <p class="truncate whitespace-no-wrap">${subalmacen}</p>
                             </td>
                             
                         </tr>    
@@ -118,7 +116,7 @@ const consultarStock = () => {
 }
 
 palabraItems.addEventListener('keyup', () => {
-    buscadorTabla('dataItems', 'palabraItems', 0);
+    buscadorTabla('dataItems', 'palabraItems', 1);
 })
 
 

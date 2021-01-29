@@ -325,7 +325,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     #OBTIENE EL DESPIECE POR EQUIPO
     if ($action == "obtenerDespieceEquipoX") {
         $idEquipo = $_GET['idEquipo'];
@@ -1099,7 +1098,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     #OBTIENE TODOS PENDIENTES POR DESTINO->SUBSECCION
     if ($action == "obtenerTodosPendientes") {
         $idSeccion = $_GET['idSeccion'];
@@ -1266,7 +1264,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     #OBTENER PAGINACIÓN
     if ($action == "obtenerPaginacionEquipos") {

@@ -5378,7 +5378,7 @@ function informacionEquipo(idEquipo) {
    consultarOpcionesEquipo();
    toggleInputsEquipo(0);
    obtenerImagenesEquipo(idEquipo);
-   consultarPlanEquipo(idEquipo);
+   // consultarPlanEquipo(idEquipo);
    opcionesJerarquiaEquipo(idEquipo);
 
    setTimeout(() => {

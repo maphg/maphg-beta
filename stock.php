@@ -59,14 +59,14 @@
     <div class="w-full h-screen bg-white" style="height: calc(100% - 20px);">
 
         <div class="flex justify-center items-center relative py-8">
-            <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
-                <h1>Items
+            <div class="font-semibold text-xl ml-3 leading-none text-bluegray-600 mr-8">
+                <h1>ITEMS
                     <span id="loadProyectos" class="text-center ml-4 text-2xl"></span>
                 </h1>
             </div>
 
             <div class="relative text-gray-600 w-72">
-                <input id="palabraItems" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Item" autocomplete="off">
+                <input id="palabraItems" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar COD2BEND" autocomplete="off">
                 <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
                     <i class="fad fa-search"></i>
                 </button>
@@ -74,7 +74,7 @@
 
             <div id="btnProyectos" class="text-white text-sm cursor-pointer bg-bluegray-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-bluegray-200 px-2 hidden">
                 <i class="fas fa-list mr-1 font-normal text-xs"></i>
-                <h1>Items</h1>
+                <h1>ITEMS</h1>
             </div>
 
             <div id="btnGantt" class="text-white text-sm cursor-pointer bg-bluegray-200 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-bluegray-200 px-2 hidden">
@@ -101,7 +101,7 @@
         <div class="w-full h-auto">
             <div class="flex flex-col container mx-auto scrollbar">
                 <div class="-my-2 py-2 overflow-x-auto relative scrollbar">
-                    <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 50vh;">
+                    <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 72vh;">
 
                         <table id="dataItems" class="w-full divide-y divide-gray-200 table table-fixed sortable">
                             <thead>
@@ -109,19 +109,19 @@
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         DESTINO
                                     </th>
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-48">
                                         COD2BEND
                                     </th>
 
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                                        DESC. 2BEND
-                                    </th>
-                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+
+                                    <th class=" px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-40">
                                         DESC. SSTT
                                     </th>
+
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         SECCIÓN
                                     </th>
+
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
                                         ÁREA
                                     </th>
@@ -131,11 +131,7 @@
                                     </th>
 
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                                        STOCK T
-                                    </th>
-
-                                    <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
-                                        STOCK R
+                                        STOCK
                                     </th>
 
                                     <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">

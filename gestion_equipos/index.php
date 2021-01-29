@@ -430,10 +430,29 @@
 
             <!-- PLANES MP -->
             <div class="text-xs uppercase font-bold w-full px-2 my-2">
-                <h1>Planes Preventivos</h1>
+                <h1>PLANES</h1>
             </div>
 
             <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4" style="height:300px; max-height:305px;">
+                <div class="p-8 w-full">
+                    <ul class="list-reset flex border-b">
+                        <li class="-mb-px mr-1">
+                            <a class="bg-white inline-block border-l-2 border-t-2 border-r-2 rounded-t py-2 px-4 text-bluegray-800 font-semibold border-bluegray-100" href="#">Preventivo</a>
+                        </li>
+                        <li class="mr-1">
+                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-600 font-semibold" href="#">Correctivos</a>
+                        </li>
+                        <li class="mr-1">
+                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-800 font-semibold" href="#">Predictivo/Checklist</a>
+                        </li>
+                        <li class="mr-1">
+                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-800 font-semibold" href="#">Manuales/Planos</a>
+                        </li>
+                    </ul>
+                    <div class="text-center mx-auto my-10 w-full">
+                        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+                    </div>
+                </div>
             </div>
             <!-- PLANES MP -->
         </div>
