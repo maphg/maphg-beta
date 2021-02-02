@@ -3720,21 +3720,25 @@ if (isset($_GET['action'])) {
 
     // OBTENER SECCIONES CON SUBSECCIONES SEGÚN DESTINO Y PERMISOS DE USUARIO
     if ($action == "obtenerSecciones") {
-        $idSeccion = 0;
+        $idSeccion = $_GET['idSeccion'];
         $array = array();
 
         if ($idSeccion <= 0 || $idSeccion == "") {
             $filtroSeccion = "";
         } else {
-            $filtroSeccion = "and c_rel_destino_seccion.id = $idSeccion";
+            $filtroSeccion = "and c_rel_destino_seccion.id_seccion = $idSeccion";
         }
 
         if ($idDestino == 10) {
             $filtroDestino = "";
+            $filtroDestinoInicidencias = "";
         } else {
             $filtroDestino = "and id_destino = $idDestino";
+            $filtroDestinoInicidencias = "and t_mc.id_destino = $idDestino";
         }
 
+        // SUBSECCIONES
+        $array['subsecciones'] = array();
         $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_secciones.id 'idSeccion', c_secciones.seccion, c_subsecciones.id 'idSubseccion', c_subsecciones.grupo
         FROM c_rel_destino_seccion
         INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
@@ -3742,7 +3746,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_rel_seccion_subseccion  ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion 
         INNER JOIN c_subsecciones  ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
         WHERE c_rel_destino_seccion.id_destino = $idDestino $filtroSeccion
-        ORDER BY c_secciones.seccion ASC ";
+        ORDER BY c_subsecciones.id ASC ";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idDestino = $x['idDestino'];
@@ -3752,27 +3756,74 @@ if (isset($_GET['action'])) {
                 $idSubseccion = $x['idSubseccion'];
                 $subseccion = $x['grupo'];
 
+                // TIPOS DE INCIDENCIAS
+                $urgencia = 0;
+                $emergencia = 0;
+                $alarma = 0;
+                $alerta = 0;
+                $seguimiento = 0;
+
                 #OBTIENE INCIDENCIAS EQUIPO, PENDIENTES
                 $totalIncidencias = 0;
-                $query = "SELECT count(id) 'total' FROM t_mc 
-                WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 and id_equipo > 0 $filtroDestino";
+                $query = "SELECT t_mc.tipo_incidencia FROM t_mc 
+                INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+                WHERE t_mc.id_seccion = $idSeccion and t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 $filtroDestinoInicidencias";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
-                        $totalIncidencias = $x['total'];
+                        $tipoIncidencia = $x['tipo_incidencia'];
+
+                        if ($tipoIncidencia === "URGENCIA") {
+                            $urgencia++;
+                        } elseif ($tipoIncidencia === "EMERGENCIA") {
+                            $emergencia++;
+                        } elseif ($tipoIncidencia === "ALARMA") {
+                            $alarma++;
+                        } elseif ($tipoIncidencia === "ALERTA") {
+                            $alerta++;
+                        } elseif ($tipoIncidencia === "SEGUIMIENTO") {
+                            $seguimiento++;
+                        }
                     }
                 }
 
                 #OBTIENE INCIDENCIAS GENERALES, PENDIENTES
                 $totalIncidenciasGenerales = 0;
-                $query = "SELECT count(id) 'total' FROM t_mp_np
-                WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 and id_equipo = 0 $filtroDestino";
+                $query = "SELECT tipo_incidencia FROM t_mp_np
+                WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 and id_equipo <= 0 $filtroDestino";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
-                        $totalIncidenciasGenerales = $x['total'];
+                        $tipoIncidencia = $x['tipo_incidencia'];
+
+                        if ($tipoIncidencia === "URGENCIA") {
+                            $urgencia++;
+                        } elseif ($tipoIncidencia === "EMERGENCIA") {
+                            $emergencia++;
+                        } elseif ($tipoIncidencia === "ALARMA") {
+                            $alarma++;
+                        } elseif ($tipoIncidencia === "ALERTA") {
+                            $alerta++;
+                        } elseif ($tipoIncidencia === "SEGUIMIENTO") {
+                            $seguimiento++;
+                        }
                     }
                 }
 
-                $array[] = array(
+                // OBTIENE EL TOTAL DE PROYECTOS
+                $proyectos = 0;
+                if ($idSubseccion == 200) {
+                    $total = -1;
+                    $query = "SELECT count(id) 'total' FROM t_proyectos 
+                    WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $proyectos = $x['total'];
+                        }
+                    }
+                } else {
+                    $total = $urgencia + $emergencia + $alarma + $alerta + $seguimiento;
+                }
+
+                $array['subsecciones'][] = array(
                     "idDestino" => intval($idDestino),
                     "destino" => $destino,
                     "idSeccion" => intval($idSeccion),
@@ -3780,12 +3831,105 @@ if (isset($_GET['action'])) {
                     "idSubseccion" => intval($idSubseccion),
                     "subseccion" => $subseccion,
                     "totalIncidencias" => intval($totalIncidencias),
-                    "totalIncidenciasGenerales" => intval($totalIncidenciasGenerales)
+                    "totalIncidenciasGenerales" => intval($totalIncidenciasGenerales),
+                    "total" => intval($total),
+                    "urgencia" => intval($urgencia),
+                    "emergencia" => intval($emergencia),
+                    "alarma" => intval($alarma),
+                    "alerta" => intval($alerta),
+                    "seguimiento" => intval($seguimiento),
+                    "proyectos" => intval($proyectos),
+                );
+            }
+        }
+
+        // SECCIONES
+        $array['secciones'] = array();
+        $query = "SELECT id, seccion FROM c_secciones WHERE id = $idSeccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
+
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
                 );
             }
         }
         echo json_encode($array);
     }
+
+    if ($action == "buscarOT") {
+        $numero = intval($_GET['numero']);
+        $tipo = $_GET['tipo'];
+        $array = array();
+
+        if ($tipo == "T") {
+            $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, activo
+            FROM t_mp_np WHERE id = $numero";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idOT = $x["id"];
+                    $status = $x["status"];
+                    $idEquipo = 0;
+                    $idSeccion = $x['id_seccion'];
+                    $idSubseccion = $x['id_subseccion'];
+                    $tipoIncidencia = $x['tipo_incidencia'];
+                    $activo = $x['activo'];
+                }
+            }
+        } elseif ($tipo == "F") {
+            $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, id_equipo, activo
+            FROM t_mc WHERE id = $numero";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idOT = $x["id"];
+                    $status = $x["status"];
+                    $idEquipo = $x["id_equipo"];
+                    $idSeccion = $x['id_seccion'];
+                    $idSubseccion = $x['id_subseccion'];
+                    $tipoIncidencia = $x['tipo_incidencia'];
+                    $activo = $x['activo'];
+                }
+            }
+        } elseif ($tipo == "P") {
+            $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.status, t_proyectos.id_seccion, t_proyectos.id_subseccion, t_proyectos_planaccion.activo
+            FROM t_proyectos_planaccion 
+            INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+            WHERE t_proyectos_planaccion.id = $numero";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idOT = $x["id"];
+                    $status = $x["status"];
+                    $idEquipo = 0;
+                    $idSeccion = $x["id_seccion"];
+                    $idSubseccion = $x["id_subseccion"];
+                    $activo = $x["activo"];
+                    $tipoIncidencia = "PDA";
+                }
+            }
+        }
+
+        if ($status == "PENDIENTE" || $status == "N" || $status == "P") {
+            $status = "PENDIENTE";
+        } else {
+            $status = "SOLUCIONADO";
+        }
+
+        $array[] = array(
+            "idOT" => intval($idOT),
+            "status" => $status,
+            "idEquipo" => intval($idEquipo),
+            "idSeccion" => intval($idSeccion),
+            "idSubseccion" => intval($idSubseccion),
+            "tipo" => $tipo,
+            "tipoIncidencia" => $tipoIncidencia,
+            "activo" => intval($activo)
+        );
+        echo json_encode($array);
+    }
+
 
     // CIERRE FINAL
 }

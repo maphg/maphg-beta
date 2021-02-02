@@ -72,6 +72,7 @@ const misPendientesPDA = document.getElementById("misPendientesPDA");
 const misPendientesTareas = document.getElementById("misPendientesTareas");
 const btnPendientesEnergeticos = document.getElementById("btnPendientesEnergeticos");
 const btnSolucionadosEnergeticos = document.getElementById("btnSolucionadosEnergeticos");
+const btnBuscarOT = document.getElementById("btnBuscarOT");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -98,6 +99,7 @@ const palabraProyecto = document.getElementById("palabraProyecto");
 const inputFileIncidencias = document.getElementById("inputFileIncidencias");
 const palabraUsuario = document.getElementById("palabraUsuario");
 const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
+const inputNumeroOT = document.getElementById("inputNumeroOT");
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -150,6 +152,8 @@ const contenedorEquiposAmericaDespice3 =
 const tooltipDespieceEquipo3 = document.getElementById("tooltipDespieceEquipo3");
 const tituloSegundoNivel = document.getElementById("tituloSegundoNivel");
 const tituloTercerNivel = document.getElementById("tituloTercerNivel");
+const columnas_x = document.getElementById("columnas_x");
+const dataBuscarOT = document.getElementById("dataBuscarOT");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -5481,7 +5485,7 @@ function informacionEquipoxx(idEquipo) {
             obtenerImagenesEquipo(idEquipo);
             consultarPlanEquipo(idEquipo);
             opcionesJerarquiaEquipo(idEquipo);
-
+            despiece(idEquipo);
          }
       });
 
@@ -5815,7 +5819,7 @@ function consultarPlanEquipo(idEquipo) {
                      consultarPlanEquipo(idEquipo);
                   }, 1100)
                } else {
-                  document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+                  document.getElementById("contenedorPlanesEquipo").innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>';
                }
             } else {
                document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
@@ -7962,28 +7966,28 @@ const dataEquiposAmerica = params => {
 
 
    const emergenciaPTag = params.emergenciaP <= 0 ? ''
-      : `<div class="bg-red-600 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Emergencia">
-         <h1 class="text-white">${params.emergenciaP}</h1>
+      : `<div class="flex justify-center items-center w-4 h-4 bg-red-300 text-red-600 rounded-full text-xxs font-bold" data-title-info="Emergencia">
+         <h1 class="">${params.emergenciaP}</h1>
       </div>`;
 
    const urgenciaPTag = params.urgenciaP <= 0 ? ''
-      : `<div class="bg-orange-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Urgencia">
-         <h1 class="text-white">${params.urgenciaP}</h1>
+      : `<div class="flex justify-center items-center w-4 h-4 bg-orange-300 text-orange-600 rounded-full text-xxs font-bold" data-title-info="Urgencia">
+         <h1 class="">${params.urgenciaP}</h1>
       </div>`;
 
    const alarmaPTag = params.alarmaP <= 0 ? ''
-      : `<div class="bg-yellow-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Alarma">
-         <h1 class="text-white">${params.alarmaP}</h1>
+      : `<div class="flex justify-center items-center w-4 h-4 bg-yellow-300 text-yellow-600 rounded-full text-xxs font-bold" data-title-info="Alarma">
+         <h1 class="">${params.alarmaP}</h1>
       </div>`;
 
    const alertaPTag = params.alertaP <= 0 ? ''
-      : `<div class="bg-blue-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Alerta">
-         <h1 class="text-white">${params.alertaP}</h1>
+      : `<div class="flex justify-center items-center w-4 h-4 bg-blue-300 text-blue-600 rounded-full text-xxs font-bold" data-title-info="Alerta">
+         <h1 class="">${params.alertaP}</h1>
       </div>`;
 
    const seguimientoPTag = params.seguimientoP <= 0 ? ''
-      : `<div class="bg-teal-500 px-1 rounded-full font-semibold mr-1 py-1 flex items-center" data-title-info="Seguimiento">
-         <h1 class="text-white">${params.seguimientoP}</h1>
+      : `<div class="flex justify-center items-center w-4 h-4 bg-teal-300 text-teal-600 rounded-full text-xxs font-bold" data-title-info="Seguimiento">
+         <h1 class="">${params.seguimientoP}</h1>
       </div>`;
 
    // FUNCIONALIDADES
@@ -8000,7 +8004,7 @@ const dataEquiposAmerica = params => {
                 <div class="font-semibold uppercase text-sm" data-title="${params.equipo}">
                     <h1 class="truncate">${params.equipo}</h1>
                 </div>
-                <div class="text-gray-500 leading-none flex text-xxs">
+                <div class="text-gray-500 leading-none flex items-center text-xxs">
                     ${valorTipoEquipo}
                     ${valorstatusEquipo}
                     ${idEquipoX}
@@ -8845,23 +8849,22 @@ function obtenerPendientesUsuario() {
 
                   const estiloTipoIncidencia =
                      tipoIncidencia == 'URGENCIA' ?
-                        `<span class="text-red-500 text-xs">${tipoIncidencia}</span>`
+                        `<div class="flex justify-center items-center w-4 h-4 bg-orange-300 text-orange-600 rounded text-xxs font-bold px-2"><h1>U</h1></div>`
                         : tipoIncidencia == "EMERGENCIA" ?
-                           `<span class="text-orange-500 text-xs">${tipoIncidencia}</span>`
+                           ` <div class="flex justify-center items-center w-4 h-4 bg-red-300 text-red-600 rounded text-xxs font-bold px-2"><h1>E</h1></div>`
                            : tipoIncidencia == "ALARMA" ?
-                              `<span class="text-yellow-500 text-xs">${tipoIncidencia}</span>`
+                              ` <div class="flex justify-center items-center w-4 h-4 bg-yellow-300 text-yellow-600 rounded text-xxs font-bold px-2"><h1>A</h1></div>`
                               : tipoIncidencia == "ALERTA" ?
-                                 `<span class="text-blue-500 text-xs">${tipoIncidencia}</span>`
-                                 : `<span class="text-teal-500 text-xs">${tipoIncidencia}</span>`;
+                                 `<div class="flex justify-center items-center w-4 h-4 bg-blue-300 text-blue-600 rounded text-xxs font-bold px-2"><h1>A</h1></div>`
+                                 : ` <div class="flex justify-center items-center w-4 h-4 bg-teal-300 text-teal-600 rounded text-xxs font-bold px-2"><h1>S</h1></div>`;
 
                   const fVerEnPlanner = `onclick="obtenerIncidenciaEquipos(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
 
                   const codigo = `
-                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_INCIDENCIA" data-title-100="${actividad}" ${fVerEnPlanner}>
-                        <h1 class="truncate mr-2">
-                        ${estiloTipoIncidencia + ' <i class="fas fa-arrow-right mx-1"></i> ' + equipo + ' <i class="fas fa-arrow-right mx-1"></i> ' + actividad}
-                        </h1>
-                     </div> 
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-left items-center misPendientes_INCIDENCIA" data-title-100="${actividad}" 
+                     ${fVerEnPlanner}>
+                        ${estiloTipoIncidencia} <h1 class="truncate ml-1"> ${equipo}</h1> <i class="fas fa-arrow-right mx-1"></i> <h1 class="truncate">${actividad}</h1>
+                     </div >
                   `;
                   dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
                }
@@ -8877,22 +8880,20 @@ function obtenerPendientesUsuario() {
 
                   const estiloTipoIncidencia =
                      tipoIncidencia == 'URGENCIA' ?
-                        `<span class="text-red-500 text-xs">${tipoIncidencia}</span>`
+                        `<div class="flex justify-center items-center w-4 h-4 bg-orange-300 text-orange-600 rounded text-xxs font-bold px-2"><h1>U</h1></div>`
                         : tipoIncidencia == "EMERGENCIA" ?
-                           `<span class="text-orange-500 text-xs">${tipoIncidencia}</span>`
+                           ` <div class="flex justify-center items-center w-4 h-4 bg-red-300 text-red-600 rounded text-xxs font-bold px-2"><h1>E</h1></div>`
                            : tipoIncidencia == "ALARMA" ?
-                              `<span class="text-yellow-500 text-xs">${tipoIncidencia}</span>`
+                              ` <div class="flex justify-center items-center w-4 h-4 bg-yellow-300 text-yellow-600 rounded text-xxs font-bold px-2"><h1>A</h1></div>`
                               : tipoIncidencia == "ALERTA" ?
-                                 `<span class="text-blue-500 text-xs">${tipoIncidencia}</span>`
-                                 : `<span class="text-teal-500 text-xs">${tipoIncidencia}</span>`;
+                                 `<div class="flex justify-center items-center w-4 h-4 bg-blue-300 text-blue-600 rounded text-xxs font-bold px-2"><h1>A</h1></div>`
+                                 : ` <div class="flex justify-center items-center w-4 h-4 bg-teal-300 text-teal-600 rounded text-xxs font-bold px-2"><h1>S</h1></div>`;
 
                   const fVerEnPlanner = `onclick="obtenerIncidenciaGeneral(${idIncidencia}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
 
                   const codigo = `
-                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center misPendientes_INCIDENCIA" data-title-info="${actividad}" ${fVerEnPlanner}>
-                        <h1 class="truncate mr-2 uppercase">
-                        ${estiloTipoIncidencia} <i class="fas fa-arrow-right mx-1"></i> Incidencia General <i class="fas fa-arrow-right mx-1"></i> ${actividad}
-                        </h1>
+                     <div class="misPendientes_ hidden p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-left items-center misPendientes_INCIDENCIA" data-title-info="${actividad}" ${fVerEnPlanner}>
+                        ${estiloTipoIncidencia} <h1 class="ml-1"> General</h1> <i class="fas fa-arrow-right mx-1"></i> <h1 class="truncate">${actividad}</h1>
                      </div> 
                   `;
                   dataPendientesUsuario.insertAdjacentHTML('beforeend', codigo);
@@ -10859,27 +10860,170 @@ const exportarTareasAIncidencias = (idDestino) => {
 }
 
 
-const obtenerSecciones = () => {
+const obtenerSecciones = (idSeccion) => {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
    const action = "obtenerSecciones";
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
 
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         // console.log(array)
          if (array) {
+            for (let x = 0; x < array.secciones.length; x++) {
+               const idSeccion = array.secciones[x].idSeccion;
+               const seccion = array.secciones[x].seccion;
+               const estiloLogo = seccion ? seccion.toLowerCase() + '-logo' : '';
+               const codigo = `
+                  <div id="contenedor_seccion_${seccion}" class="flex items-center py-3"> 
+                     <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
+                        <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
+                           <div class="absolute flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
+                              <h1 class="font-medium text-md">${seccion}</h1>
+                           </div>
+                           <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
+                              <i class="fad fa-expand-arrows" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});"></i>
+                           </div>
+                           <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
+                              <div id="elementos_seccion_${idSeccion}" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>            
+               `;
 
-            // sort by value
-            array.sort((a, b) => {
-               return a.totalIncidencias - b.totalIncidencias;
+               // ELIMINA CONTENEDOR
+               if (document.getElementById("contenedor_seccion_" + seccion)) {
+                  console.log('eliminar');
+                  columnas_x.removeChild(document.getElementById("contenedor_seccion_" + seccion));
+               } else {
+                  console.log('crear');
+                  columnas_x.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // ORDENA LAS SUBSECCIONES POR PENDIENTES
+            array.subsecciones.sort(function (a, b) {
+               return b.total - a.total;
             });
-            // console.log(array)
+            return array.subsecciones;
+         }
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const subseccion = array[x].subseccion;
+               const idSubseccion = array[x].idSubseccion;
+               const idSeccion = array[x].idSeccion;
+               const total = array[x].total;
+               const totalX = total > 0 ? total : '';
+               const emergencia = array[x].emergencia;
+               const urgencia = array[x].urgencia;
+               const alarma = array[x].alarma;
+               const alerta = array[x].alerta;
+               const seguimiento = array[x].seguimiento;
+               const proyectos = array[x].proyectos;
+
+               if (idSubseccion == 200) {
+                  fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
+               } else {
+                  fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
+               }
+
+               const emergenciaX = emergencia > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 bg-red-300 text-red-600 rounded-md font-bold flex justify-center items-center ml-1">${emergencia}</h1>` : '';
+
+               const urgenciaX = urgencia > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 bg-orange-300 text-orange-600 rounded-md font-bold flex justify-center items-center ml-1">${urgencia}</h1>` : '';
+
+               const alarmaX = alarma > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 bg-yellow-300 text-yellow-600 rounded-md font-bold flex justify-center items-center ml-1">${alarma}</h1>` : '';
+
+               const alertaX = alerta > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 bg-blue-300 text-blue-600  rounded-md font-bold flex justify-center items-center ml-1">${alerta}</h1>` : '';
+
+               const seguimientoX = seguimiento > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 bg-teal-300 text-teal-600  rounded-md font-bold flex justify-center items-center ml-1">${seguimiento}</h1>` : '';
+
+               const proyectosX = proyectos > 0 ?
+                  `<h1 class="text-xxs h-5 w-5 text-red-700 bg-red-400  rounded-md font-bold flex justify-center items-center ml-1">${proyectos}</h1>` : '';
+
+               const codigo = `
+                  <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
+                     <h1 class="truncate mr-2">${subseccion}</h1>
+                     <div class="flex flex-row justify-center">
+                        ${emergenciaX}
+                        ${urgenciaX}
+                        ${alarmaX}
+                        ${alertaX}
+                        ${seguimientoX}
+                        ${proyectosX}
+                     </div>
+                  </div >
+               `;
+               if (document.getElementById("elementos_seccion_" + idSeccion)) {
+                  document.getElementById("elementos_seccion_" + idSeccion).insertAdjacentHTML('beforeend', codigo);
+               }
+            }
          }
       })
       .catch(function (err) {
          fetch(APIERROR + err);
       })
+}
+
+
+//EVENTO PARA INICIAR BUSCADOR DE OT
+btnBuscarOT.addEventListener('click', () => {
+   abrirmodal('modalBuscarOT');
+   alertaImg('Digíte el Número OT con la Letra Incial y Presione ENTER', '', 'info', 2000);
+   inputNumeroOT.value = '';
+})
+
+
+// EVENTO PARA BUSCAR OT
+inputNumeroOT.addEventListener('keyup', event => {
+   const OT = inputNumeroOT.value;
+
+   if (event.keyCode === 13 && OT.length > 2) {
+      const numero = OT.replace(/#|T|F|P/gi, '');
+      let tipo = OT[0] + '' + OT[1];
+      tipo = tipo.replace(/#|1|2|3|4|5|6|7|8|9|0/gi, '');
+
+      const action = 'buscarOT';
+      const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&numero=${numero}&tipo=${tipo}`;
+
+      console.log(URL);
+
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            console.log(array)
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+
+      alertaImg('Buscando OT #', '', 'info', 1500);
+
+   } else if (OT.length <= 2) {
+      alertaImg('Ingrese más Datos', '', 'info', 1500);
+   }
+})
+
+const xd = () => {
+   obtenerSecciones(1);
+   obtenerSecciones(5);
+   obtenerSecciones(6);
+   obtenerSecciones(7);
+   obtenerSecciones(8);
+   obtenerSecciones(9);
+   obtenerSecciones(10);
+   obtenerSecciones(11);
+   obtenerSecciones(12);
+   obtenerSecciones(19);
+   obtenerSecciones(23);
+   obtenerSecciones(24);
 }

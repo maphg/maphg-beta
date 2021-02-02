@@ -1314,7 +1314,6 @@ function agregarEquipoLocal() {
 }
 
 
-
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
 
 
@@ -1357,7 +1356,6 @@ function despieceEquipos(idEquipo) {
         }).then(despiece => {
             document.getElementById("dataDespieceEquipo").innerHTML = despiece;
         });
-
 }
 
 

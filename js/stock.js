@@ -25,7 +25,7 @@ const consultarStock = () => {
                     const descripcionCod2bend = array[x].descripcionCod2bend;
                     const descripcionSstt = array[x].descripcionSstt;
                     const area = array[x].area;
-                    const categoria = array[x].categoria.toUpperCase();
+                    const categoria = array[x].categoria;
                     const stockTeorico = array[x].stockTeorico;
                     const stockReal = array[x].stockReal;
                     const marca = array[x].marca;
@@ -47,6 +47,11 @@ const consultarStock = () => {
                                 : categoria == 'MEDIA' || categoria == 'Media' ? `orange`
                                     : categoria == 'SEGURIDAD' || categoria == 'Seguridad' ? `blue`
                                         : `gray`;
+                    const categoriaX =
+                        categoria == 'BAJA' || categoria == 'Baja' ? 'Rotación ' + categoria
+                            : categoria == 'ALTA' || categoria == 'Alta' ? 'Rotación ' + categoria
+                                : categoria == 'MEDIA' || categoria == 'Media' ? 'Rotación ' + categoria
+                                    : categoria;
 
                     const codigo = `
                         <tr id="item_ID_${idItem}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 fila-proyectos-select">
@@ -73,8 +78,8 @@ const consultarStock = () => {
                             </td>
                             
                             <td class="px-2  border-b border-gray-200 text-center py-3 uppercase font-semibold">
-                                <div class="px-2 bg-${estiloCategoria}-300 text-${estiloCategoria}-600 rounded-full uppercase">
-                                    <h1>${categoria}</h1>
+                                <div class="px-2 bg-${estiloCategoria}-300 text-${estiloCategoria}-600 rounded-full" data-title-stock="${categoriaX}">
+                                    <h1>${categoriaX}</h1>
                                 </div>    
                             </td>
                             

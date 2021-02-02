@@ -55,6 +55,9 @@ const datosPlanes = params => {
     }
     return `
         <tr class="animate__pulse hover:bg-fondos-4 cursor-pointer" onclick="obtenerDetallesPlanMP(${params.idPlanMP})">
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm text-gray-500 leading-5 uppercase font-semibold">
+                ${params.idPlanMP}
+            </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 uppercase font-semibold">
                 ${params.destino}
             </td>
@@ -580,7 +583,7 @@ window.addEventListener("load", function () {
 
 document.getElementById("buscarPlanMP").
     addEventListener("keyup", function () {
-        buscadorEquipo('tablaGestionPlanes', 'buscarPlanMP', 2);
+        buscadorEquipo('tablaGestionPlanes', 'buscarPlanMP', 3);
     });
 
 

@@ -7,6 +7,7 @@ const datosPlanEquipo = params => {
             <div class="w-full text-center font-semibold text-xs uppercase flex flex-row items-center justify-between leading-none mb-2"> 
 
                 <div class="flex flex-col items-start">
+                    <h1 class="text-lg">ID: ${params.idPlan}</h1>
                     <h1 class="text-lg">${params.periodicidad}</h1>
                     <h1 class="text-xs px-1 inline-flex leading-snug font-bold rounded-sm bg-red-200 text-red-500 uppercase">${params.tipoPlan}</h1>
                 </div>
