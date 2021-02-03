@@ -130,7 +130,7 @@
 </head>
 
 
-<body class="bg-gray-200" style="font-family: 'Roboto', sans-serif;">
+<body class="bg-gray-200 scrollbar" style="font-family: 'Roboto', sans-serif;">
     <!-- MENÚ -->
     <div class="w-full absolute top-0">
         <?php
@@ -245,58 +245,58 @@
 
             <!-- <div id="columnas_x" class="flex flex-row justify-start items-start w-full pt-6"> -->
 
-                <!-- Inicio Columna -->
-                <div id="columnasPendientes" class="flex items-center relative">
-                    <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
-                        <div class="flex items-center">
-                            <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
-                                <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
-                                    <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
-                                        <i class="fad fa-clipboard-list-check"></i>
-                                        <h1 class="text-xs">
-                                            <span id="loadPendientes" class="text-cyan-900"></span>
-                                        </h1>
-                                    </div>
-                                    <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
-                                        <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
-
-                                            <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
-                                                <h1 id="totalPendientesFallas">Incidencias (0)</h1>
-                                            </div>
-
-                                            <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
-                                                <h1 id="totalPendientesTareas">Tareas (0)</h1>
-                                            </div>
-
-                                            <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
-                                                <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
-                                            </div>
-
-                                        </div>
-
-                                        <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
-                                        </div>
-                                    </div>
-
+            <!-- Inicio Columna -->
+            <div id="columnasPendientes" class="flex items-center relative">
+                <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
+                    <div class="flex items-center">
+                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
+                            <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
+                                <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                    <i class="fad fa-clipboard-list-check"></i>
+                                    <h1 class="text-xs">
+                                        <span id="loadPendientes" class="text-cyan-900"></span>
+                                    </h1>
                                 </div>
+                                <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
+                                    <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
+
+                                        <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
+                                            <h1 id="totalPendientesFallas">Incidencias (0)</h1>
+                                        </div>
+
+                                        <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
+                                            <h1 id="totalPendientesTareas">Tareas (0)</h1>
+                                        </div>
+
+                                        <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
+                                            <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
+                                        </div>
+
+                                    </div>
+
+                                    <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesEnergeticos" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesDEC" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZHA" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZHC" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZHH" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZHP" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZIA" class="flex items-center py-3"></div>
-                <div id="columnasSeccionesZIC" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesEnergeticos" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesDEC" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHC" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHH" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZHP" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIA" class="flex items-center py-3"></div>
+            <div id="columnasSeccionesZIC" class="flex items-center py-3"></div>
 
 
             <!-- </div> -->
@@ -1005,6 +1005,37 @@
         </div>
     </div>
     <!-- MODAL EQUIPO PARA LOS MP-->
+
+
+    <!-- MODAL PARA BUSCAR OT -->
+    <div id="modalBuscarOT" class="modal">
+        <div class="modal-window rounded-md" style="width: 350px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalBuscarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-start items-center w-full py-6  bg-lightBlue-100 rounded-md">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <div class="w-full pl-1">
+                        <h1 class="text-left text-xs font-bold text-gray-500">OT FINDER</h1>
+                    </div>
+                    <div class="w-full h-14 mt-4 flex items-center bg-white rounded-md text-gray-300 overflow-hidden">
+                        <i class="fas fa-search ml-2 text-gray-300"></i>
+
+                        <input id="inputNumeroOT" class="py-3 px-4 placeholder-gray-300 appearance-none w-full focus:outline-none text-2xl font-semibold" placeholder="Número de OT" autocomplete="off">
+
+                        <button id="btnBuscarNumeroOT" class="text-xs font-bold cursor-pointer px-4 appearance-none focus:outline-none h-full hover:bg-gray-100 hover:text-gray-500">Buscar</button>
+                    </div>
+                </div>
+
+                <div id="dataBuscarOT" class="rounded-md flex flex-col absolute overflow-y-auto scrollbar py-2 pr-2" style="width: 400px; margin-top: 125px; max-height: 69vh;"></div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- MODAL PARA PENDIENTES POR SECCIONES -->
@@ -2681,156 +2712,6 @@
     </div>
     <!-- MODAL PARA FINALIZAR OT -->
 
-
-    <!-- MODAL PARA BUSCAR OT -->
-    <div id="modalBuscarOT" class="modal">
-        <div class="modal-window rounded-md" style="width: 350px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0 z-30">
-                <button onclick="cerrarmodal('modalBuscarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-start items-center w-full py-6  bg-lightBlue-100 rounded-md">
-                <div class="mb-3 flex flex-col w-full leading-none">
-                    <div class="w-full pl-1">
-                        <h1 class="text-left text-xs font-bold text-gray-500">OT FINDER</h1>
-                    </div>
-                    <div class="w-full h-14 mt-4 flex items-center bg-white rounded-md text-gray-300 overflow-hidden">
-                        <i class="fas fa-search ml-2 text-gray-300"></i>
-                        <input id="inputNumeroOT" class="py-3 px-4 placeholder-gray-300 appearance-none w-full focus:outline-none text-2xl font-semibold" placeholder="Número de OT" autocomplete="off">
-                        <button class="text-xs font-bold cursor-pointer px-4 appearance-none focus:outline-none h-full hover:bg-gray-100 hover:text-gray-500">Buscar</button>
-                    </div>
-                </div>
-                <div id="dataBuscarOT" class="rounded-md flex flex-col absolute" style="width: 400px; margin-top: 125px;">
-
-                    <!-- PREVENTIVA-->
-                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden" style="height: 90px;">
-                        <div class="w-full text-left px-2 flex flex-col">
-                            <div class="font-bold text-3xl text-gray-700">
-                                <h1>#232342</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 uppercase">
-                                <h1>Preventivo</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 flex">
-                                <h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>
-                            </div>
-                        </div>
-                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100">
-                            <i class="fas fa-edit text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
-                        </div>
-                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100">
-                            <i class="fas fa-print text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
-                        </div>
-                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100">
-                            <i class="fas fa-eye text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Equipo</h1>
-                        </div>
-                    </div>
-                    <!-- PREVENTIVA-->
-
-                    <!-- CORRECTIVA-->
-                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden" style="height: 90px;">
-                        <div class="w-full text-left px-2 flex flex-col">
-                            <div class="font-bold text-3xl text-gray-700">
-                                <h1>#43343443</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 uppercase">
-                                <h1>INCIDENCIA</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 flex">
-                                <h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>
-                            </div>
-                        </div>
-                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100">
-                            <i class="fas fa-edit text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
-                        </div>
-                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100">
-                            <i class="fas fa-print text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
-                        </div>
-                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100">
-                            <i class="fas fa-eye text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Equipo</h1>
-                        </div>
-                    </div>
-                    <!-- CORRECTIVA-->
-
-                    <!-- PDA-->
-                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden" style="height: 90px;">
-                        <div class="w-full text-left px-2 flex flex-col">
-                            <div class="font-bold text-3xl text-gray-700">
-                                <h1>#43343443</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 uppercase">
-                                <h1>Accion de PDA proyecto</h1>
-                            </div>
-                            <div class="font-bold text-gray-700 flex">
-                                <h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>
-                            </div>
-                        </div>
-                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100">
-                            <i class="fas fa-edit text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
-                        </div>
-                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100">
-                            <i class="fas fa-print text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
-                        </div>
-                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100">
-                            <i class="fas fa-eye text-2xl"></i>
-                            <h1 class="font-bold text-xxs uppercase">Proye</h1>
-                        </div>
-                    </div>
-                    <!-- PDA-->
-
-                </div>
-            </div>
-        </div>
-        <div class="font-bold text-gray-700 flex">
-            <h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>
-            <h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>
-        </div>
-    </div>
-    <!-- MODAL PARA BUSCAR OT -->
-
-
-    <!-- ****************************** MODALES SECUNDARIOS ****************************** -->
-
-    <!-- MODAL Exportar Secciones Usuarios -->
-    <div id="modalExportarSeccionesUsuarios" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 370px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalExportarSeccionesUsuarios')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <!-- INDICACION -->
-            <div class="absolute top-0 left-0 flex flex-row items-center">
-                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                    <h1>Colaboradores</h1>
-                </div>
-            </div>
-
-            <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
-                <div class="mb-3 w-full">
-                    <input id="palabraUsuarioExportar" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
-                </div>
-                <div id="dataExportarSeccionesUsuarios" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <!-- MODAL Exportar Subsecciones -->
     <div id="modalExportarSubsecciones" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 370px;">
@@ -3885,9 +3766,6 @@
         </div>
     </div>
     <!-- MODAL AGREGAR ENERGETICO   -->
-
-
-    <!-- Modales -->
 
 
     <!-- ***** TOOLTIPS ***** -->

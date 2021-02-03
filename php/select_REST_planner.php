@@ -3863,82 +3863,154 @@ if (isset($_GET['action'])) {
 
     // OPCION PARA BUSCAR OT
     if ($action == "buscarOT") {
-        $numero = intval($_GET['numero']);
-        $tipo = $_GET['tipo'];
+        $idOTX = intval($_GET['idOT']);
         $array = array();
 
-        if ($tipo == "T") {
-            $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, activo
-            FROM t_mp_np WHERE id = $numero";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                foreach ($result as $x) {
-                    $idOT = $x["id"];
-                    $status = $x["status"];
-                    $idEquipo = 0;
-                    $idSeccion = $x['id_seccion'];
-                    $idSubseccion = $x['id_subseccion'];
-                    $tipoIncidencia = $x['tipo_incidencia'];
-                    $activo = $x['activo'];
-                }
-            }
-        } elseif ($tipo == "F") {
-            $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, id_equipo, activo
-            FROM t_mc WHERE id = $numero";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                foreach ($result as $x) {
-                    $idOT = $x["id"];
-                    $status = $x["status"];
-                    $idEquipo = $x["id_equipo"];
-                    $idSeccion = $x['id_seccion'];
-                    $idSubseccion = $x['id_subseccion'];
-                    $tipoIncidencia = $x['tipo_incidencia'];
-                    $activo = $x['activo'];
-                }
-            }
-        } elseif ($tipo == "P") {
-            $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.status, t_proyectos.id_seccion, t_proyectos.id_subseccion, t_proyectos_planaccion.activo
-            FROM t_proyectos_planaccion 
-            INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-            WHERE t_proyectos_planaccion.id = $numero";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                foreach ($result as $x) {
-                    $idOT = $x["id"];
-                    $status = $x["status"];
-                    $idEquipo = 0;
-                    $idSeccion = $x["id_seccion"];
-                    $idSubseccion = $x["id_subseccion"];
-                    $activo = $x["activo"];
-                    $tipoIncidencia = "PDA";
-                }
-            }
-        }
-
-        if ($status == "PENDIENTE" || $status == "N" || $status == "P") {
-            $status = "PENDIENTE";
+        if ($idDestino == 10) {
+            $filtroDestinoInicidenciasG = "";
+            $filtroDestinoInicidencias = "";
+            $filtroDestinoProyectos = "";
+            $filtroDestinoPreventivos = "";
         } else {
-            $status = "SOLUCIONADO";
+            $filtroDestinoInicidenciasG = "and t_mp_np.id_destino = $idDestino";
+            $filtroDestinoInicidencias = "and t_mc.id_destino = $idDestino";
+            $filtroDestinoProyectos = "and t_proyectos.id_destino = $idDestino";
+            $filtroDestinoPreventivos = "and t_equipos_america.id_destino = $idDestino";
         }
 
-        $array[] = array(
-            "idOT" => intval($idOT),
-            "status" => $status,
-            "idEquipo" => intval($idEquipo),
-            "idSeccion" => intval($idSeccion),
-            "idSubseccion" => intval($idSubseccion),
-            "tipo" => $tipo,
-            "tipoIncidencia" => $tipoIncidencia,
-            "activo" => intval($activo)
-        );
+        #OT INCIDENICAS GENERALES
+        $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, activo
+        FROM t_mp_np WHERE id LIKE '%$idOTX%' and activo = 1 $filtroDestinoInicidenciasG";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idOT = $x["id"];
+                $status = $x["status"];
+                $idEquipo = 0;
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $activo = $x['activo'];
+
+                if ($status == "PENDIENTE" || $status == "N" || $status == "P") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                $array['incidenciaGeneral'][] = array(
+                    "idOT" => intval($idOT),
+                    "status" => $status,
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "activo" => intval($activo),
+                    "tipo" => "INCIDENCIA GENERAL",
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion)
+                );
+            }
+        }
+
+        #OT INCIDENICAS EQUIPO
+        $query = "SELECT id, status, tipo_incidencia, id_seccion, id_subseccion, id_equipo, activo
+        FROM t_mc WHERE id LIKE '%$idOTX%' and activo = 1 $filtroDestinoInicidencias and id_equipo > 0";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idOT = $x["id"];
+                $status = $x["status"];
+                $idEquipo = $x["id_equipo"];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $activo = $x['activo'];
+
+                if ($status == "PENDIENTE" || $status == "N" || $status == "P") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                $array['incidencias'][] = array(
+                    "idOT" => intval($idOT),
+                    "status" => $status,
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "activo" => intval($activo),
+                    "tipo" => "INCIDENCIA",
+                    "idEquipo" => intval($idEquipo),
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion)
+                );
+            }
+        }
+
+        #OT PROYECTOS
+        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.status, t_proyectos.id_seccion, t_proyectos.id_subseccion
+        FROM t_proyectos_planaccion 
+        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
+        WHERE t_proyectos_planaccion.id LIKE '$idOTX' and t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1 $filtroDestinoProyectos";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idOT = $x["id"];
+                $status = $x["status"];
+                $idEquipo = 0;
+                $idSeccion = $x["id_seccion"];
+                $idSubseccion = $x["id_subseccion"];
+
+                if ($status == "PENDIENTE" || $status == "N" || $status == "P") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                $array['proyectos'][] = array(
+                    "idOT" => intval($idOT),
+                    "status" => $status,
+                    "tipo" => "PROYECTO",
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion)
+                );
+            }
+        }
+
+        #OT PREVENTIVOS
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.id_equipo, t_mp_planificacion_iniciada.id_plan, t_mp_planificacion_iniciada.semana
+        FROM t_mp_planificacion_iniciada 
+        INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+        WHERE t_mp_planificacion_iniciada.id LIKE '%$idOTX%' and t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.status IN('PROCESO', 'SOLUCIONADO') $filtroDestinoPreventivos";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idOT = $x["id"];
+                $status = $x["status"];
+                $idPlan = $x["id_plan"];
+                $idEquipo = $x["id_equipo"];
+                $semana = $x["semana"];
+
+                if ($status == "PENDIENTE" || $status == "N" || $status == "P" || $status == "PROCESO") {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+                $array['preventivos'][] = array(
+                    "idOT" => intval($idOT),
+                    "status" => $status,
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "activo" => intval($activo),
+                    "tipo" => "PREVENTIVO",
+                    "idPlan" => intval($idPlan),
+                    "idEquipo" => intval($idEquipo),
+                    "semana" => $semana
+                );
+            }
+        }
+
         echo json_encode($array);
     }
 
 
-    // Consulta el despiece de Equipos incluyendo el Equipo Padre
-    // CONSULTA EL DESPIECE DE E¿Q
+    // CONSULTA EL DESPIECE DE EQUIPO INCLUYENDO EL EQUIPO PADRE
     if ($action == "despieceEquipos") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
-        
+
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.jerarquia FROM t_equipos_america WHERE t_equipos_america.activo = 1 and (t_equipos_america.id = $idEquipo or t_equipos_america.id_equipo_principal = $idEquipo)";
 
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -3956,6 +4028,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
 
     // CIERRE FINAL

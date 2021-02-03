@@ -48,6 +48,18 @@ if (isset($_GET['action'])) {
                     $statusOT = "SOLUCIONADO";
                 }
 
+                #RESPONSABLE 
+                $responsable = "Nombre y Firma";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id IN($idResponsables)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . " " . $x['apellido'];
+                    }
+                }
+
                 // ACTIVIDADES NORMALES
                 $query = "SELECT id, tipo_actividad, descripcion_actividad FROM t_mp_planes_actividades_preventivos WHERE id_plan = $idPlan and status = 'ACTIVO' and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
@@ -89,7 +101,17 @@ if (isset($_GET['action'])) {
                 }
 
                 // Array Temporal para cada iteración
-                $arrayTemp = array("OT" => "$idOT", "statusOT" => "$statusOT", "semana" => "Semana $semana", "observacion" => "$idOT", "comentario" => "$comentario", "tipoPlan" => "OT $tipoPlan", "actividades" => $actividades, "actividadesExtra" => $actividadesExtra);
+                $arrayTemp = array(
+                    "OT" => "$idOT",
+                    "statusOT" => "$statusOT",
+                    "semana" => "Semana $semana",
+                    "observacion" => "$idOT",
+                    "comentario" => "$comentario",
+                    "tipoPlan" => "OT $tipoPlan",
+                    "actividades" => $actividades,
+                    "actividadesExtra" => $actividadesExtra,
+                    "responsable" => $responsable
+                );
 
                 // Array para almacenar resultados de las iteraciones
                 $array[] = $arrayTemp;

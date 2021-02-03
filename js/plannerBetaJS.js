@@ -73,6 +73,7 @@ const misPendientesTareas = document.getElementById("misPendientesTareas");
 const btnPendientesEnergeticos = document.getElementById("btnPendientesEnergeticos");
 const btnSolucionadosEnergeticos = document.getElementById("btnSolucionadosEnergeticos");
 const btnBuscarOT = document.getElementById("btnBuscarOT");
+const btnBuscarNumeroOT = document.getElementById("btnBuscarNumeroOT");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -4323,8 +4324,10 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
 function redireccionarOTVerEnPlanner(tipoOT, idOT) {
    if (tipoOT == "INCIDENCIA") {
       window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#F${idOT}`, 'OT');
-   } else {
+   } else if (tipoOT == "INCIDENCIAGENERAL") {
       window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#T${idOT}`, 'OT');
+   } else if (tipoOT == "PDA") {
+      window.open(`https://www.maphg.com/beta/OT_proyectos/#P${idOT}`, 'OT');
    }
 }
 
@@ -7308,8 +7311,6 @@ function obtenerFallas(idEquipo = 0) {
                const tipo = array[x].tipo;
                const tipoIncidencia = array[x].tipoIncidencia;
 
-               console.log(tipoIncidencia);
-
                const data = datosFallasTareas({
                   id: id,
                   ot: ot,
@@ -7494,8 +7495,6 @@ function obtenerTareas(idEquipo = 0) {
                const trabajando = array[x].trabajando;
                const tipo = array[x].tipo;
                const tipoIncidencia = array[x].tipoIncidencia;
-
-               console.log(tipoIncidencia);
 
                const data = datosFallasTareas({
                   id: id,
@@ -9950,43 +9949,47 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    const action = 'eliminarAdjunto';
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
 
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         if (array == 1) {
-            alertaImg('Adjunto Eliminado', '', 'success', 1500);
+   alertify.confirm('MAPHG', '¿Eliminar Adjunto?', function () {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Adjunto Eliminado', '', 'success', 1500);
 
-            // ELIMINA ADJUNTO DEL CONTENEDOR
-            if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
-               document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+               // ELIMINA ADJUNTO DEL CONTENEDOR
+               if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
+                  document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+               } else {
+                  alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+               }
+
+               // ACTUALIZA DATOS
+               if (tipoAdjunto == "FALLA") {
+                  obtenerFallas(idEquipo);
+               } else if (tipoAdjunto == "TAREA") {
+                  obtenerTareas(idEquipo);
+               } else if (tipoAdjunto == "PLANACCION") {
+                  obtenerPlanaccion(idProyecto);
+               } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
+                  obtenerProyectos(idSeccion, 'PENDIENTE');
+               } else if (tipoAdjunto == "TEST") {
+                  obtenerTestEquipo(idEquipo);
+               } else if (tipoAdjunto == "ENERGETICO") {
+                  obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+               } else if (tipoAdjunto == "EQUIPO") {
+                  obtenerImagenesEquipo(idEquipo);
+               }
+
             } else {
-               alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
             }
-
-            // ACTUALIZA DATOS
-            if (tipoAdjunto == "FALLA") {
-               obtenerFallas(idEquipo);
-            } else if (tipoAdjunto == "TAREA") {
-               obtenerTareas(idEquipo);
-            } else if (tipoAdjunto == "PLANACCION") {
-               obtenerPlanaccion(idProyecto);
-            } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
-               obtenerProyectos(idSeccion, 'PENDIENTE');
-            } else if (tipoAdjunto == "TEST") {
-               obtenerTestEquipo(idEquipo);
-            } else if (tipoAdjunto == "ENERGETICO") {
-               obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
-            } else if (tipoAdjunto == "EQUIPO") {
-               obtenerImagenesEquipo(idEquipo);
-            }
-
-         } else {
-            alertaImg('Intente de Nuevo', '', 'info', 1500);
-         }
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
-      })
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
+         })
+      alertify.success('Ok')
+   }
+      , function () { alertify.error('Cancel') });
 }
 
 
@@ -10895,10 +10898,8 @@ const obtenerSecciones = (idSeccion) => {
 
                // ELIMINA CONTENEDOR
                if (document.getElementById("contenedor_seccion_" + seccion)) {
-                  console.log('eliminar');
                   columnas_x.removeChild(document.getElementById("contenedor_seccion_" + seccion));
                } else {
-                  console.log('crear');
                   columnas_x.insertAdjacentHTML('beforeend', codigo);
                }
             }
@@ -10977,37 +10978,242 @@ const obtenerSecciones = (idSeccion) => {
 //EVENTO PARA INICIAR BUSCADOR DE OT
 btnBuscarOT.addEventListener('click', () => {
    abrirmodal('modalBuscarOT');
-   alertaImg('Digíte el Número OT con la Letra Incial y Presione ENTER', '', 'info', 2000);
+   alertaImg('Digíte el Número OT y Presione ENTER', '', 'info', 2000);
    inputNumeroOT.value = '';
+   dataBuscarOT.innerHTML = '';
 })
 
 
 // EVENTO PARA BUSCAR OT
 inputNumeroOT.addEventListener('keyup', event => {
-   const OT = inputNumeroOT.value;
 
-   if (event.keyCode === 13 && OT.length > 2) {
-      const numero = OT.replace(/#|T|F|P/gi, '');
-      let tipo = OT[0] + '' + OT[1];
-      tipo = tipo.replace(/#|1|2|3|4|5|6|7|8|9|0/gi, '');
+   if (event.keyCode === 13 && inputNumeroOT.value.length >= 2) {
+
+      const idOT = inputNumeroOT.value.replace(/[A-Za-z#&]/gi, '');
 
       const action = 'buscarOT';
-      const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&numero=${numero}&tipo=${tipo}`;
+      const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idOT=${idOT}`;
 
-      console.log(URL);
+      btnBuscarNumeroOT.innerHTML = iconoLoader;
 
       fetch(URL)
          .then(array => array.json())
          .then(array => {
-            console.log(array)
+            dataBuscarOT.innerHTML = '';
+            return array;
          })
-         .catch(function (err) {
-            fetch(APIERROR + err);
+         .then(array => {
+
+            // INCIDENCIA DE EQUIPOS
+            if (array.incidencias) {
+               for (let x = 0; x < array.incidencias.length; x++) {
+                  const idOT = array.incidencias[x].idOT;
+                  const tipo = array.incidencias[x].tipo;
+                  const status = array.incidencias[x].status;
+                  const idEquipo = array.incidencias[x].idEquipo;
+                  const idSeccion = array.incidencias[x].idSeccion;
+                  const idSubseccion = array.incidencias[x].idSubseccion;
+
+                  const fVerOT = `onclick="redireccionarOTVerEnPlanner('INCIDENCIA', ${idOT})"`;
+                  const fEdit = `onclick="obtenerIncidenciaEquipos(${idOT}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+                  const fView = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
+
+                  const estiloStatus = status == "PENDIENTE" ?
+                     `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
+                     : `<h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>`;
+
+                  const codigo = `
+                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden flex-none" style="height: 90px;">
+                        <div class="w-full text-left px-2 flex flex-col">
+                            <div class="font-bold text-3xl text-gray-700">
+                                <h1>#${idOT}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 uppercase">
+                                <h1>${tipo}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 flex">
+                                ${estiloStatus}
+                            </div>
+                        </div>
+                        
+                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100" ${fEdit}>
+                            <i class="fas fa-edit text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
+                        </div>
+                      
+                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100" ${fVerOT}>
+                            <i class="fas fa-print text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
+                        </div>
+                       
+                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100" ${fView}>
+                            <i class="fas fa-eye text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">EQUIPO</h1>
+                        </div>
+
+                    </div>
+                  `;
+                  dataBuscarOT.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // INCIDENCIAS GENERALES
+            if (array.incidenciaGeneral) {
+               for (let x = 0; x < array.incidenciaGeneral.length; x++) {
+                  const idOT = array.incidenciaGeneral[x].idOT;
+                  const tipo = array.incidenciaGeneral[x].tipo;
+                  const status = array.incidenciaGeneral[x].status;
+                  const idSeccion = array.incidenciaGeneral[x].idSeccion;
+                  const idSubseccion = array.incidenciaGeneral[x].idSubseccion;
+
+                  const fVerOT = `onclick="redireccionarOTVerEnPlanner('INCIDENCIAGENERAL', ${idOT})"`;
+                  const fEdit = `onclick="obtenerIncidenciaGeneral(${idOT}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+                  const fView = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerTareas(0); toggleModalTailwind('modalTareasFallas');"`;
+
+                  const estiloStatus = status == "PENDIENTE" ?
+                     `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
+                     : `<h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>`;
+
+                  const codigo = `
+                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden flex-none" style="height: 90px;">
+                        <div class="w-full text-left px-2 flex flex-col">
+                            <div class="font-bold text-3xl text-gray-700">
+                                <h1>#${idOT}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 uppercase">
+                                <h1>${tipo}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 flex">
+                                ${estiloStatus}
+                            </div>
+                        </div>
+                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100" ${fEdit}>
+                            <i class="fas fa-edit text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
+                        </div>
+                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100" ${fVerOT}>
+                            <i class="fas fa-print text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
+                        </div>
+                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100" ${fView}>
+                            <i class="fas fa-eye text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">GENERAL</h1>
+                        </div>
+                    </div>
+                  `;
+                  dataBuscarOT.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // PDA DE PROYECTOS
+            if (array.proyectos) {
+               for (let x = 0; x < array.proyectos.length; x++) {
+                  const idOT = array.proyectos[x].idOT;
+                  const tipo = array.proyectos[x].tipo;
+                  const status = array.proyectos[x].status;
+                  const idSeccion = array.proyectos[x].idSeccion;
+                  const idSubseccion = array.proyectos[x].idSubseccion;
+
+                  const fVerOT = `onclick="redireccionarOTVerEnPlanner('PDA', ${idOT})"`;
+                  const fEdit = `onclick="verEnPlannerPlanaccion(${idOT}); toggleModalTailwind('modalVerEnPlannerPlanaccion');"`;
+                  const fView = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion});  toggleModalTailwind('modalProyectos'); obtenerProyectos(${idSeccion}, 'PENDIENTE');"`;
+
+                  const estiloStatus = status == "PENDIENTE" ?
+                     `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
+                     : `<h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>`;
+
+                  const codigo = `
+                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden flex-none" style="height: 90px;">
+                        <div class="w-full text-left px-2 flex flex-col">
+                            <div class="font-bold text-3xl text-gray-700">
+                                <h1>#P${idOT}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 uppercase">
+                                <h1>${tipo}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 flex">
+                                ${estiloStatus}
+                            </div>
+                        </div>
+                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100" ${fEdit}>
+                            <i class="fas fa-edit text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
+                        </div>
+                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100" ${fVerOT}>
+                            <i class="fas fa-print text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
+                        </div>
+                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100" ${fView}>
+                            <i class="fas fa-eye text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">PROYE</h1>
+                        </div>
+                    </div>
+                  `;
+                  dataBuscarOT.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+            // PREVENTIVOS DE EQUIPOS
+            if (array.preventivos) {
+               for (let x = 0; x < array.preventivos.length; x++) {
+                  const idOT = array.preventivos[x].idOT;
+                  const tipo = array.preventivos[x].tipo;
+                  const status = array.preventivos[x].status;
+                  const semana = array.preventivos[x].semana;
+                  const idEquipo = array.preventivos[x].idEquipo;
+                  const idPlan = array.preventivos[x].idPlan;
+
+                  const fVerOT = `onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})"`;
+                  const fEdit = `onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})"`;
+
+                  const estiloStatus = status == "PENDIENTE" ?
+                     `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
+                     : `<h1 class="bg-green-200 text-green-500 px-2 rounded-full">Solucionada</h1>`;
+
+                  const codigo = `
+                    <div class="w-full bg-white rounded mt-2 flex overflow-hidden flex-none" style="height: 90px;">
+                        <div class="w-full text-left px-2 flex flex-col">
+                            <div class="font-bold text-3xl text-gray-700">
+                                <h1>#${idOT}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 uppercase">
+                                <h1>${tipo}</h1>
+                            </div>
+                            <div class="font-bold text-gray-700 flex">
+                                ${estiloStatus}
+                            </div>
+                        </div>
+                        <div class="w-1/6 bg-blue-200 flex flex-col items-center text-center justify-center text-blue-500 cursor-pointer hover:bg-blue-100" ${fEdit}>
+                            <i class="fas fa-edit text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">Edit</h1>
+                        </div>
+                        <div class="w-1/6 bg-green-200 flex flex-col items-center text-center justify-center text-green-500 cursor-pointer hover:bg-green-100" ${fVerOT}>
+                            <i class="fas fa-print text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">PDF</h1>
+                        </div>
+                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100">
+                            <i class="fas fa-eye text-2xl"></i>
+                            <h1 class="font-bold text-xxs uppercase">GENERAL</h1>
+                        </div>
+                    </div>
+                  `;
+                  dataBuscarOT.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+
+         })
+         .then(() => {
+            btnBuscarNumeroOT.innerText = 'Buscar';
+         })
+         .catch(err => {
+            fetch(APIERROR + err + ' BUSCADOR OT');
+            dataBuscarOT.innerHTML = '';
+            btnBuscarNumeroOT.innerText = 'Buscar';
          })
 
-      alertaImg('Buscando OT #', '', 'info', 1500);
+      alertaImg('Buscando OT #' + idOT, '', 'info', 1500);
 
-   } else if (OT.length <= 2) {
+   } else if (inputNumeroOT.value.length < 2) {
       alertaImg('Ingrese más Datos', '', 'info', 1500);
    }
 })
