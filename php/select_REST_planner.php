@@ -3860,6 +3860,8 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+
+    // OPCION PARA BUSCAR OT
     if ($action == "buscarOT") {
         $numero = intval($_GET['numero']);
         $tipo = $_GET['tipo'];
@@ -3927,6 +3929,31 @@ if (isset($_GET['action'])) {
             "tipoIncidencia" => $tipoIncidencia,
             "activo" => intval($activo)
         );
+        echo json_encode($array);
+    }
+
+
+    // Consulta el despiece de Equipos incluyendo el Equipo Padre
+    // CONSULTA EL DESPIECE DE E¿Q
+    if ($action == "despieceEquipos") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+        
+        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.jerarquia FROM t_equipos_america WHERE t_equipos_america.activo = 1 and (t_equipos_america.id = $idEquipo or t_equipos_america.id_equipo_principal = $idEquipo)";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $equipo = $i['equipo'];
+                $jerarquia = $i['jerarquia'];
+
+                $array[] = array(
+                    "id" => "$id",
+                    "equipo" => "$equipo",
+                    "jerarquia" => "$jerarquia"
+                );
+            }
+        }
         echo json_encode($array);
     }
 

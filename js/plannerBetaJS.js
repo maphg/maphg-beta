@@ -7992,8 +7992,7 @@ const dataEquiposAmerica = params => {
 
    // FUNCIONALIDADES
    const fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   const fInfo = `onclick="informacionEquipo(${idEquipo});"`;
-
+   const fInfo = `onclick="informacionEquipo(${idEquipo}); despieceEquipos(${idEquipo});"`;
    const fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
 
    return `
@@ -8075,7 +8074,7 @@ const dataEquiposAmerica = params => {
 
         </tr>
     `;
-};
+}
 
 
 // DESPIEDE TERCER NIVEL

@@ -91,7 +91,7 @@
                     <div class="relative flex flex-col items-center justify-center border-4 mr-2 border-bluegray-900 rounded-md">
                         <img src="svg/qractivefinder.svg" class="w-16 rounded-md" alt="">
                         <div class="absolute text-xs font-bold border rounded-sm px-1 border-bluegray-900 bg-bluegray-900 text-white flex flex-col items-center justify-center" style="margin-top: 6.5rem; z-index: 234234234234;">
-                            <h1 style="z-index: 123123;">234234</h1>
+                            <h1 id="idOT" style="z-index: 123123;"></h1>
                             <div class="w-3 h-3 bg-bluegray-900 rounded-sm transform rotate-45 absolute mx-auto" style="top: -20%; z-index: 123;"></div>
                         </div>
                     </div>
@@ -100,6 +100,7 @@
                             <h1 class=""></h1>
                         </div>
                         <div class="truncate w-252 text-3xl">
+                            <h1 id="equipoPrincipalOT" class=""></h1>
                             <h1 id="equipoOT" class=""></h1>
                         </div>
                         <div class="truncate text-base font-semibold flex">

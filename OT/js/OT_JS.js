@@ -25,6 +25,7 @@ function verOT() {
         dataType: "JSON",
         success: function (data) {
             document.getElementById("idOTQR").innerHTML = data.id;
+            document.getElementById("idOT").innerHTML = data.id;
             document.getElementById("seccionOT").innerHTML = data.seccion;
             document.getElementById("destinoOT").innerHTML = data.destino;
             document.getElementById("comentarioOT").innerHTML = data.comentario;
@@ -35,13 +36,17 @@ function verOT() {
             document.getElementById("periodicidadOT").innerHTML = data.frecuencia;
             document.getElementById("semanaOT").innerHTML = 'Semana ' + data.semana;
             document.getElementById("añoOT").innerHTML = data.año;
-            document.getElementById("equipoOT").innerHTML = data.equipo;
+            document.getElementById("equipoOT").innerText = data.equipo;
             document.getElementById("fechaOT").innerHTML = 'GENERADA EL ' + data.fecha_creacion;
             document.getElementById("logoClassOT").classList.remove();
             document.getElementById("logoClassOT").classList.add(data.seccion.toLowerCase() + '-logo');
             document.getElementById("dataMaterialesOT").innerHTML = data.materiales;
             document.getElementById("indicacionesAdicionalesOT").innerHTML = data.descripcion;
             document.getElementById("responsable").innerHTML = data.responsable;
+
+            if (data.equipoPrincial != "") {
+                document.getElementById("equipoPrincipalOT").innerText = 'Equipo Principal: ' + data.equipoPrincial;
+            }
 
             if (data.status == "PROCESO") {
                 document.getElementById("statusOT").innerHTML = 'EN ' + data.status;
@@ -143,7 +148,7 @@ function consultaActividadesOT(idOT) {
                     if (tipoActividad == "actividad") {
 
                         actividades += `
-                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                        <div class="pb-1 rounded font-semibold text-xs text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer">
                             <label class="mx-2 inline-flex items-center">
                                 <input id="actividad_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="checkbox" class="form-checkbox w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" disabled>
                                 <div class="ml-2 text-justify">
@@ -165,7 +170,7 @@ function consultaActividadesOT(idOT) {
                     if (tipoActividad == "test") {
 
                         actividades += `
-                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer mb-1">
+                        <div class="pb-1 rounded font-semibold text-xs text-bluegray-900 flex items-center justify-start hover:bg-green-100 hover:text-green-500 cursor-pointer">
                             <div class="mr-2 flex flex-col leading-none">
                                 <input id="test_${id}" onchange="actividadRealizadaOT(${idOT}, ${id}, '${tipoActividad}');" type="text" name="" class="border-2 w-20 h-6 border-green-500 px-2 rounded font-bold" placeholder="" disabled>
                                 <h1 class="font-bold text-xxs text-center text-bluegray-600">${medicion}</h1>
@@ -188,7 +193,7 @@ function consultaActividadesOT(idOT) {
 
                     if (tipoActividad == "checkList") {
                         actividades += `
-                        <div class="p-2 rounded font-semibold text-bluegray-900 flex items-center justify-start cursor-pointer mb-1 leading-none  hover:bg-green-100 hover:text-green-500">
+                        <div class="pb-1 rounded font-semibold text-xs text-bluegray-900 flex items-center justify-start cursor-pointer leading-none  hover:bg-green-100 hover:text-green-500">
 
                             <div class="flex items-center justify-start p-1 rounded">
                                 <input id="check_si_${id}" type="radio" class="form-radio w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-bluegray-600" name="${id}" value="SI" disabled>
@@ -211,7 +216,7 @@ function consultaActividadesOT(idOT) {
                                 </div>
                             </div>
 
-                            <div class=" text-justify flex items-center">
+                            <div class=" text-justify text-xs flex items-center">
                                 <h1>${actividad}</h1>
                             </div>
                         </div>                    
@@ -228,7 +233,7 @@ function consultaActividadesOT(idOT) {
                     document.getElementById("actividadesExtraOT").innerHTML = '';
                 } else {
                     actividadesExtra += `
-                        <div class="p-2 rounded font-semibold flex items-center justify-start bg-green-100 text-green-500 cursor-pointer mb-1">
+                        <div class="pb-1 rounded font-semibold text-xs flex items-center justify-start bg-green-100 text-green-500 cursor-pointer">
                             <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 flex-none border-green-600">
                                 <i class="fas fa-check"></i>
                             </div>

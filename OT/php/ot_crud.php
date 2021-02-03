@@ -40,7 +40,8 @@ if (isset($_POST['action'])) {
         t_mp_planificacion_iniciada.actividades_test,
         t_mp_planificacion_iniciada.actividades_check,
         t_mp_planificacion_iniciada.status,
-        t_mp_planificacion_iniciada.id_responsables
+        t_mp_planificacion_iniciada.id_responsables,
+        t_equipos_america.id_equipo_principal
         FROM t_mp_planificacion_iniciada 
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
@@ -54,6 +55,7 @@ if (isset($_POST['action'])) {
             foreach ($result as $i) {
                 $id = $i['id'];
                 $equipo = $i['equipo'];
+                $idEquipoPrincipal = $i['id_equipo_principal'];
                 $seccion = $i['seccion'];
                 $grupo = $i['grupo'];
                 $destino = $i['destino'];
@@ -71,6 +73,7 @@ if (isset($_POST['action'])) {
                 $idCheck = $i['actividades_check'];
                 $idResponsables = $i['id_responsables'];
 
+                #RESPONSABLE
                 $responsable = "Nombre y Firma";
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
                 FROM t_users 
@@ -82,8 +85,18 @@ if (isset($_POST['action'])) {
                     }
                 }
 
+                #EQUIPO PRINCIPAL
+                $equipoPrincial = "";
+                $query = "SELECT equipo FROM t_equipos_america WHERE id = $idEquipoPrincipal";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $equipoPrincial = $x['equipo'];
+                    }
+                }
+
                 $data['id'] = $id;
                 $data['equipo'] = $equipo;
+                $data['equipoPrincial'] = $equipoPrincial;
                 $data['seccion'] = $seccion;
                 $data['grupo'] = $grupo;
                 $data['destino'] = $destino;
@@ -107,7 +120,7 @@ if (isset($_POST['action'])) {
                     $actividad = $i['descripcion_actividad'];
 
                     $actividades .= "
-                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full mb-2 border-b p-1 cursor-pointer text-gray-700\">
+                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full border-b cursor-pointer text-gray-700\">
                             <div class=\"mr-2 flex items-center justify-center font-bold text-base leading-none \">
                                 <h1>$contador</h1>
                             </div>
@@ -140,7 +153,7 @@ if (isset($_POST['action'])) {
                     $actividad = $i['descripcion_actividad'];
 
                     $actividades .= "
-                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full mb-2 border-b p-1 cursor-pointer text-gray-700\">
+                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full border-b cursor-pointer text-gray-700\">
                             <div class=\"mr-2 flex items-center justify-center font-bold text-base leading-none \">
                                 <h1>$contador</h1>
                             </div>
@@ -173,7 +186,7 @@ if (isset($_POST['action'])) {
                     $actividad = $i['descripcion_actividad'];
 
                     $actividades .= "
-                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full mb-2 border-b p-1 cursor-pointer text-gray-700\">
+                        <div id=\"$id\" class=\"flex flex-row justify-start items-center uppercase w-full border-b cursor-pointer text-gray-700\">
                             <div class=\"mr-2 flex items-center justify-center font-bold text-base leading-none \">
                                 <h1>$contador</h1>
                             </div>
