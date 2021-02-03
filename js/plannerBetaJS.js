@@ -11165,6 +11165,7 @@ inputNumeroOT.addEventListener('keyup', event => {
 
                   const fVerOT = `onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})"`;
                   const fEdit = `onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})"`;
+                  const fView = `onclick="informacionEquipo(${idEquipo}); despieceEquipos(${idEquipo});"`;
 
                   const estiloStatus = status == "PENDIENTE" ?
                      `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
@@ -11191,7 +11192,7 @@ inputNumeroOT.addEventListener('keyup', event => {
                             <i class="fas fa-print text-2xl"></i>
                             <h1 class="font-bold text-xxs uppercase">PDF</h1>
                         </div>
-                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100">
+                        <div class="w-1/6 bg-orange-200 flex flex-col items-center text-center justify-center text-orange-500 cursor-pointer hover:bg-orange-100" ${fView}>
                             <i class="fas fa-eye text-2xl"></i>
                             <h1 class="font-bold text-xxs uppercase">GENERAL</h1>
                         </div>

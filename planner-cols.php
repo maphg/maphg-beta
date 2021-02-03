@@ -307,6 +307,36 @@
 
     <!-- ********** MODALES PRINCIPALES ********** -->
 
+    <!-- MODAL PARA BUSCAR OT -->
+    <div id="modalBuscarOT" class="modal">
+        <div class="modal-window rounded-md" style="width: 350px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalBuscarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-start items-center w-full py-6  bg-lightBlue-100 rounded-md">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <div class="w-full pl-1">
+                        <h1 class="text-left text-xs font-bold text-gray-500">OT FINDER</h1>
+                    </div>
+                    <div class="w-full h-14 mt-4 flex items-center bg-white rounded-md text-gray-300 overflow-hidden">
+                        <i class="fas fa-search ml-2 text-gray-300"></i>
+
+                        <input id="inputNumeroOT" class="py-3 px-4 placeholder-gray-300 appearance-none w-full focus:outline-none text-2xl font-semibold" placeholder="Número de OT" autocomplete="off">
+
+                        <button id="btnBuscarNumeroOT" class="text-xs font-bold cursor-pointer px-4 appearance-none focus:outline-none h-full hover:bg-gray-100 hover:text-gray-500">Buscar</button>
+                    </div>
+                </div>
+
+                <div id="dataBuscarOT" class="rounded-md flex flex-col absolute overflow-y-auto scrollbar py-2 pr-2" style="width: 400px; margin-top: 125px; max-height: 69vh;"></div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- MODAL EQUIPOS Y LOCALES -->
     <div id="modalEquiposAmerica" class="modal">
@@ -1005,37 +1035,6 @@
         </div>
     </div>
     <!-- MODAL EQUIPO PARA LOS MP-->
-
-
-    <!-- MODAL PARA BUSCAR OT -->
-    <div id="modalBuscarOT" class="modal">
-        <div class="modal-window rounded-md" style="width: 350px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0 z-30">
-                <button onclick="cerrarmodal('modalBuscarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- CONTENIDO -->
-            <div class="p-2 flex flex-col justify-start items-center w-full py-6  bg-lightBlue-100 rounded-md">
-                <div class="mb-3 flex flex-col w-full leading-none">
-                    <div class="w-full pl-1">
-                        <h1 class="text-left text-xs font-bold text-gray-500">OT FINDER</h1>
-                    </div>
-                    <div class="w-full h-14 mt-4 flex items-center bg-white rounded-md text-gray-300 overflow-hidden">
-                        <i class="fas fa-search ml-2 text-gray-300"></i>
-
-                        <input id="inputNumeroOT" class="py-3 px-4 placeholder-gray-300 appearance-none w-full focus:outline-none text-2xl font-semibold" placeholder="Número de OT" autocomplete="off">
-
-                        <button id="btnBuscarNumeroOT" class="text-xs font-bold cursor-pointer px-4 appearance-none focus:outline-none h-full hover:bg-gray-100 hover:text-gray-500">Buscar</button>
-                    </div>
-                </div>
-
-                <div id="dataBuscarOT" class="rounded-md flex flex-col absolute overflow-y-auto scrollbar py-2 pr-2" style="width: 400px; margin-top: 125px; max-height: 69vh;"></div>
-            </div>
-        </div>
-    </div>
 
 
     <!-- MODAL PARA PENDIENTES POR SECCIONES -->
