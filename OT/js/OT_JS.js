@@ -41,6 +41,7 @@ function verOT() {
             document.getElementById("logoClassOT").classList.add(data.seccion.toLowerCase() + '-logo');
             document.getElementById("dataMaterialesOT").innerHTML = data.materiales;
             document.getElementById("indicacionesAdicionalesOT").innerHTML = data.descripcion;
+            document.getElementById("responsable").innerHTML = data.responsable;
 
             if (data.status == "PROCESO") {
                 document.getElementById("statusOT").innerHTML = 'EN ' + data.status;

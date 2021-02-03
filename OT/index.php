@@ -153,7 +153,7 @@
                         <h1 class="font-semibold text-xs mb-6">ASIGNADA A</h1>
                         <h1 class="font-semibold text-sm truncate cursor-pointer"></h1>
                         <div class="text-xs font-bold border-t-2 border-bluegray-50 w-full text-center">
-                            <h1>NOMBRE Y FIRMA</h1>
+                            <h1 id="responsable">NOMBRE Y FIRMA</h1>
                         </div>
                     </div>
                     <div class="text-bluegray-900 rounded-md w-64 h-32 mt-4 flex flex-col justify-center items-center px-2">

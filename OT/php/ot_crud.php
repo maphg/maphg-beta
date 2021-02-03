@@ -39,7 +39,8 @@ if (isset($_POST['action'])) {
         t_mp_planificacion_iniciada.actividades_preventivo,
         t_mp_planificacion_iniciada.actividades_test,
         t_mp_planificacion_iniciada.actividades_check,
-        t_mp_planificacion_iniciada.status
+        t_mp_planificacion_iniciada.status,
+        t_mp_planificacion_iniciada.id_responsables
         FROM t_mp_planificacion_iniciada 
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
@@ -68,6 +69,18 @@ if (isset($_POST['action'])) {
                 $idActividades = $i['actividades_preventivo'];
                 $idTest = $i['actividades_test'];
                 $idCheck = $i['actividades_check'];
+                $idResponsables = $i['id_responsables'];
+
+                $responsable = "Nombre y Firma";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id IN($idResponsables)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = $x['nombre'] . " " . $x['apellido'];
+                    }
+                }
 
                 $data['id'] = $id;
                 $data['equipo'] = $equipo;
@@ -83,6 +96,7 @@ if (isset($_POST['action'])) {
                 $data['frecuencia'] = $frecuencia;
                 $data['descripcion'] = $descripcion;
                 $data['status'] = $status;
+                $data['responsable'] = $responsable;
             }
 
             $query = "SELECT id, descripcion_actividad FROM t_mp_planes_actividades_preventivos WHERE id IN($idActividades)";
@@ -219,7 +233,4 @@ if (isset($_POST['action'])) {
         }
         echo json_encode($data);
     }
-
-
-
 }
