@@ -146,10 +146,10 @@
 
         <div id="btnFlotanteOpciones" class="flex flex-col-reverse items-end font-medium mb-4 animated hidden">
             <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencia</button>
-            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Proyecto</button>
-            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Checklist</button>
-            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">MP</button>
-            <button class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Predictivo</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Proyecto</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Checklist</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">MP</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Predictivo</button>
             <button id="btnBuscarOT" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2"><i class="fas fa-search"></i> Buscar OT</button>
         </div>
 
