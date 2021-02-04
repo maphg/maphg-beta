@@ -39,7 +39,7 @@ if (isset($_POST['action'])) {
             $AUTO_Permiso = 1;
             $DEC_Permiso = 1;
             $DEP_Permiso = 1;
-            $OMA_Permiso = 1;
+            //$OMA_Permiso = 1;
             $ZHA_Permiso = 1;
             $ZHC_Permiso = 1;
             $ZHP_Permiso = 1;
