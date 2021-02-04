@@ -223,8 +223,6 @@ if (isset($_GET['action'])) {
                 }
                 $proximoMpFecha = "";
 
-
-
                 #PREVENTIVOS SOLUCIONADOS POR EQUIPO
                 $testR = 0;
                 $query = "SELECT count(t_mp_planificacion_iniciada.id) 'id' FROM t_mp_planificacion_iniciada 
@@ -278,7 +276,7 @@ if (isset($_GET['action'])) {
 
                 #DESPIECE 
                 $totalDespiece = 0;
-                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and status = 'OPERATIVO' and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $totalDespiece = $x['count(id)'];
