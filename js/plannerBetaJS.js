@@ -6092,7 +6092,6 @@ const obtenerIncidenciasEquipo = idEquipo => {
             }
          }
       })
-
       .catch(function (err) {
          dataIncidenciasEquipo.innerHTML = '';
          fetch(APIERROR + err + ` obtenerIncidenciasEquipo(${idEquipo})`);

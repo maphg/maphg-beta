@@ -813,25 +813,25 @@
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
-                                <select id="seccionEquipo" class="font-semibold truncate w-32 decoration-none">
+                                <select id="seccionEquipo" class="font-semibold truncate bg-white w-32">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
-                                <select id="subseccionEquipo" class="font-semibold truncate w-32">
+                                <select id="subseccionEquipo" class="font-semibold truncate bg-white w-32">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
-                                <select id="tipoEquipo" class="font-semibold truncate w-32">
+                                <select id="tipoEquipo" class="font-semibold truncate bg-white w-32">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
-                                <select id="jerarquiaEquipo" class="font-semibold truncate w-32">
+                                <select id="jerarquiaEquipo" class="font-semibold truncate bg-white w-32">
                                     <option value="PRINCIPAL">PRINCIPAL</option>
                                     <option value="SECUNDARIO">SECUNDARIO</option>
                                 </select>
@@ -839,7 +839,7 @@
 
                             <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
-                                <select id="dataOpcionesEquipos" class="font-semibold truncate w-32"></select>
+                                <select id="dataOpcionesEquipos" class="font-semibold truncate bg-white w-32"></select>
                             </div>
 
                         </div>
@@ -848,7 +848,7 @@
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
-                                <select id="marcaEquipo" class="font-semibold truncate w-24">
+                                <select id="marcaEquipo" class="font-semibold truncate bg-white w-24">
                                 </select>
 
                             </div>
@@ -1017,57 +1017,57 @@
 
             <!-- INCIDENCIAS EQUIPO -->
             <div id="contenedorIncidenciasEquipo" class="flex flex-wrap w-full justify-start p-1 overflow-x-auto scrollbar hidden" style="height:300px;">
-                    <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
-                        <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
-                            <thead>
-                                <tr class="cursor-pointer bg-white">
+                <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                        <thead>
+                            <tr class="cursor-pointer bg-white">
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
-                                        Incidencia
-                                    </th>
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Acciones
-                                    </th>
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Responsable
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                    Incidencia
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Acciones
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Responsable
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Fechas
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Fechas
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Comentarios
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Comentarios
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Adjuntos
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Adjuntos
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        Status
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Status
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                        OT
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    OT
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
-                                        Tipo
-                                    </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
+                                    Tipo
+                                </th>
 
-                                </tr>
-                            </thead>
+                            </tr>
+                        </thead>
 
-                            <tbody id="dataIncidenciasEquipo" class="bg-white divide-y divide-gray-200">
-                                <!-- More rows... -->
-                            </tbody>
+                        <tbody id="dataIncidenciasEquipo" class="bg-white divide-y divide-gray-200">
+                            <!-- More rows... -->
+                        </tbody>
 
-                        </table>
-                    </div>
+                    </table>
+                </div>
             </div>
 
             <!-- CHECKLIST EQUIPO -->
