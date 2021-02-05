@@ -7902,13 +7902,15 @@ const codigoIncidenciasEquipo = params => {
                   `<span class="text-blue-500 text-xs">${params.tipoIncidencia}</span>`
                   : `<span class="text-teal-500 text-xs">${params.tipoIncidencia}</span>`;
 
+   const textStatus = params.status == "PENDIENTE"? 'text-red-400' : 'text-green-400';
+
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
            
         <td class="px-4 border-b border-gray-200 py-3" style="max-width: 300px;"
         ${fVerEnPlanner}>
             <div class="font-semibold uppercase leading-4" data-title="${params.actividad}">
-               <h1 class="truncate">${params.actividad}</h1>
+               <h1 class="truncate ${textStatus}">${params.actividad}</h1>
             </div>
             <div class="text-gray-500 leading-3 flex">
                <h1>Creado por: ${params.creadoPor}</h1>
