@@ -242,50 +242,7 @@ const datosPlanEquipo = params => {
     `
 }
 
-// Obtiene el despiece de los equipos
-function despieceEquipos(idEquipo) {
-    document.getElementById("dataDespieceEquipo").innerHTML = '';
-    let idUsuario = localStorage.getItem("usuario");
-    let idDestino = localStorage.getItem("idDestino");
-    
-    const action = "despieceEquipos";
-    const URL = `gestion_equipos/php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
 
-    // Fetch ASYC
-    fetch(URL)
-        .then(res => res.json())
-        .then(array => {
-            let despiece = "";
-            for (let index = 0; index < array.length; index++) {
-
-                var id = array[index].id;
-                var equipo = array[index].equipo;
-                var jerarquia = array[index].jerarquia;
-
-                if (jerarquia == "PRINCIPAL") {
-                    despiece += `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b" onclick="informacionEquipo(${id});">
-                            <i class="fad fa-cog mr-1"></i>
-                            <h1>${equipo}</h1>
-                        </div>`
-                        ;
-                } else {
-                    despiece += `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6" onclick="informacionEquipo(${id});">
-                            <i class="fad fa-cogs mr-1"></i>
-                            <h1>${equipo}</h1>
-                        </div>`
-                        ;
-                }
-            }
-            return despiece;
-        }).then(despiece => {
-            document.getElementById("dataDespieceEquipo").innerHTML = despiece;
-        })
-        .catch(err => {
-            console.log(err);
-        })
-}
 
 // Oculta tooltip de las semanas
 function cerrarTooltip(id) {

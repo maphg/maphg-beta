@@ -37,7 +37,6 @@ const e_nombreEquipo = document.getElementById("nombreEquipo");
 const btnEditarEquipo = document.getElementById("btnEditarEquipo");
 const btnGuardarEquipo = document.getElementById("btnGuardarEquipo");
 const btnCancelarEquipo = document.getElementById("btnCancelarEquipo");
-
 // INPUTS POR ID
 
 
@@ -1199,6 +1198,8 @@ function modalAgregarEquipo() {
             fetch(APIERROR + err);
         })
 }
+
+
 document.getElementById("agregarEquipoLocal").
     addEventListener('click', modalAgregarEquipo);
 document.getElementById("seccionXEquipo").
@@ -1502,8 +1503,9 @@ document.getElementById("filtroPalabra").
         buscadorEquipo('tablaGestionEquipos', 'filtroPalabra', 3);
     });
 
-// Función para
-onload = QREquipo();
+
+// BUSCA EQUIPO CON LA URL
+window.onload = QREquipo();
 
 function QREquipo() {
     let URLactual = window.location.search;

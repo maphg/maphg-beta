@@ -5133,73 +5133,82 @@ if (isset($_POST['action'])) {
 
     // Actualzar el status de las Fallas
     if ($action == "actualizarStatusMC") {
-        $idMC = $_POST['idMC'];
-        $status = $_POST['status'];
-        $valorStatus = $_POST['valorStatus'];
+        $idIncidencia = $_POST['idMC'];
+        $columna = $_POST['status'];
+        $valor = $_POST['valorStatus'];
         $tituloMC = $_POST['tituloMC'];
-        $fechaFinalizado = "";
-        $cod2bend = "";
+        $cod2bend = $_POST['cod2bend'];
         $resp = 0;
 
-        if ($status == "status") {
-            if ($valorStatus == "N") {
-                $valorStatus = "F";
-                $fechaFinalizado = ", fecha_realizado = '$fechaActual'";
-            } else {
-                $valorStatus = "N";
-                $fechaFinalizado = ", fecha_realizado = ''";
-            }
-        } elseif ($status == "activo") {
-            if ($valorStatus == "1") {
-                $valorStatus = "0";
-            } else {
-                $valorStatus = "1";
-            }
-        } elseif ($status == "actividad") {
-            $valorStatus = $tituloMC;
-        } elseif ($status == "rango_fecha") {
-            $valorStatus = "$valorStatus";
-        } elseif ($status == 'status_material') {
-            $cod2bend = $_POST['cod2bend'];
-            if ($cod2bend != "") {
-                $query = "SELECT status_material FROM t_mc WHERE id = $idMC";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $valorX = $x['status_material'];
-                    }
-
-                    if ($valorStatus != "") {
-                        $query = "UPDATE t_mc SET cod2bend = '$cod2bend', ultima_modificacion = '$fechaActual' WHERE id = $idMC";
-                        if ($result = mysqli_query($conn_2020, $query)) {
-                            $resp = 1;
-                        }
-                    }
-
-                    if ($valorX == 0) {
-                        $valorStatus = "1";
-                        $cod2bend = ", cod2bend= $valor";
-                    } else {
-                        $valorStatus = "0";
-                    }
+        // BUSCA VALORES EN LOS STATUS PARA CREA EL TOGGLE
+        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "SELECT $columna FROM t_mc WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = intval($x[$columna]);
                 }
-            } else {
-                $status = "";
             }
-        } else {
-            if ($valorStatus == "1") {
-                $valorStatus = "0";
+
+            if ($valor == 0) {
+                $valor = 1;
             } else {
-                $valorStatus = "1";
+                $valor = 0;
             }
         }
 
-        if ($status == "status_trabajare") {
-            $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual', fecha_realizado = '$fechaActual' WHERE id = $idMC";
+        if ($columna == "responsable") {
+            $query = "UPDATE t_mc SET responsable = $valor WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
-        } else {
-            $query = "UPDATE t_mc SET $status = '$valorStatus', ultima_modificacion = '$fechaActual' $fechaFinalizado WHERE id = $idMC";
+        } elseif ($columna == "actividad") {
+            $query = "UPDATE t_mc SET actividad = '$tituloMC' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status_trabajare") {
+            $query = "UPDATE t_mc SET status_trabajare = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status_material" and $cod2bend != "") {
+            $query = "UPDATE t_mc SET status_material = $valor, cod2bend = '$cod2bend' 
+            WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+            $query = "UPDATE t_mc SET $columna = $valor WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status") {
+            $query = "UPDATE t_mc SET status = 'SOLUCIONADO', fecha_realizado = '$fechaActual' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "eliminar") {
+            $query = "UPDATE t_mc SET activo = 0 WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "restaurar") {
+            $query = "UPDATE t_mc SET status = 'PENDIENTE' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "rango_fecha" && $valor != "") {
+            $query = "UPDATE t_mc SET rango_fecha = '$valor' WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }

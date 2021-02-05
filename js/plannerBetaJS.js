@@ -101,6 +101,8 @@ const inputFileIncidencias = document.getElementById("inputFileIncidencias");
 const palabraUsuario = document.getElementById("palabraUsuario");
 const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
 const inputNumeroOT = document.getElementById("inputNumeroOT");
+const inputAdjuntos = document.getElementById("inputAdjuntos");
+
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
@@ -203,6 +205,65 @@ const btnStatusZI = document.getElementById("statusZI");
 const editarTitulo = document.getElementById("editarTitulo");
 // BOTONES PARA EL MODAL STATUS
 
+
+// ELEMENTOS PARA MODAL INFORMACION DE EQUIPO
+const e_estadoEquipo = document.getElementById("estadoEquipo");
+const e_tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
+const e_idFaseEquipo = document.getElementById("idFaseEquipo");
+const e_seccionEquipo = document.getElementById("seccionEquipo");
+const e_subseccionEquipo = document.getElementById("subseccionEquipo");
+const e_tipoEquipo = document.getElementById("tipoEquipo");
+const e_jerarquiaEquipo = document.getElementById("jerarquiaEquipo");
+const e_dataOpcionesEquipos = document.getElementById("dataOpcionesEquipos");
+const e_marcaEquipo = document.getElementById("marcaEquipo");
+const e_modeloEquipo = document.getElementById("modeloEquipo");
+const e_serieEquipo = document.getElementById("serieEquipo");
+const e_codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo");
+const e_codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo");
+const e_largoEquipo = document.getElementById("largoEquipo");
+const e_anchoEquipo = document.getElementById("anchoEquipo");
+const e_altoEquipo = document.getElementById("altoEquipo");
+const e_potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo");
+const e_potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo");
+const e_voltajeEquipo = document.getElementById("voltajeEquipo");
+const e_frecuenciaEquipo = document.getElementById("frecuenciaEquipo");
+const e_caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo");
+const e_caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo");
+const e_cargaMCAEquipo = document.getElementById("cargaMCAEquipo");
+const e_PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo");
+const e_potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo");
+const e_potenciaEnergeticaCalorKCALEquipo =
+   document.getElementById("potenciaEnergeticaCalorKCALEquipo");
+const e_caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo");
+const e_caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo");
+const e_dataDespieceEquipo = document.getElementById("dataDespieceEquipo");
+const e_contenedorDataOpcionesEquipos = document.getElementById("contenedorDataOpcionesEquipos");
+const e_cantidadEquipo = document.getElementById("cantidadEquipo");
+const e_nombreEquipo = document.getElementById("nombreEquipo");
+const btnEditarEquipo = document.getElementById("btnEditarEquipo");
+const btnGuardarEquipo = document.getElementById("btnGuardarEquipo");
+const btnCancelarEquipo = document.getElementById("btnCancelarEquipo");
+const QREquipo = document.getElementById("QREquipo");
+const inputFotografiaEquipo = document.getElementById("inputFotografiaEquipo");
+const btnInformacionEquipo = document.getElementById("btnInformacionEquipo");
+const btnDespieceEquipo = document.getElementById("btnDespieceEquipo");
+const btnDocumentosEquipo = document.getElementById("btnDocumentosEquipo");
+const btnCotizacionesEquipo = document.getElementById("btnCotizacionesEquipo");
+const contenedorCaracteristicasEquipo = document.getElementById("contenedorCaracteristicasEquipo");
+const contenedorDespiedeEquipo = document.getElementById("contenedorDespiedeEquipo");
+const contenedorAdjuntosEquipo = document.getElementById("contenedorAdjuntosEquipo");
+const inputAdjuntosEquipo = document.getElementById("inputAdjuntosEquipo");
+const dataAdjuntosEquipo = document.getElementById("dataAdjuntosEquipo");
+const btnPreventivosEquipo = document.getElementById("btnPreventivosEquipo");
+const btnIncidenciasEquipo = document.getElementById("btnIncidenciasEquipo");
+const btnChecklistEquipo = document.getElementById("btnChecklistEquipo");
+const btnBitacorasEquipo = document.getElementById("btnBitacorasEquipo");
+const contenedorPlanesEquipo = document.getElementById("contenedorPlanesEquipo");
+const contenedorIncidenciasEquipo = document.getElementById("contenedorIncidenciasEquipo");
+const contenedorChecklistEquipo = document.getElementById("contenedorChecklistEquipo");
+const contenedorBitacoraEquipo = document.getElementById("contenedorBitacoraEquipo");
+const dataIncidenciasEquipo = document.getElementById("dataIncidenciasEquipo");
+// ELEMENTOS PARA MODAL INFORMACION DE EQUIPO
 
 // Función principal.
 function comprobarSession() {
@@ -2523,8 +2584,7 @@ function obtenerAdjuntosMC(idMC) {
    document.getElementById("contenedorImagenes").classList.add('hidden');
    document.getElementById("contenedorDocumentos").classList.add('hidden');
 
-   document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idMC + ',"t_mc_adjuntos")');
+   inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idMC + ',"t_mc_adjuntos")');
 
    const action = "obtenerAdjuntosMC";
    $.ajax({
@@ -2732,8 +2792,7 @@ function obtenerAdjuntosTareas(idTarea) {
    document.getElementById("contenedorImagenes").classList.add('hidden');
    document.getElementById("contenedorDocumentos").classList.add('hidden');
 
-   document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idTarea + ',"adjuntos_mp_np")');
+   inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idTarea + ',"adjuntos_mp_np")');
 
    const action = "obtenerAdjuntosTareas";
    $.ajax({
@@ -3075,8 +3134,7 @@ function agregarTarea() {
 // Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
 function obtenerMediaEquipo(idEquipo) {
    document.getElementById("modalMedia").classList.add("open");
-   document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+   inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
    document.getElementById("contenedorImagenes").classList.add('hidden');
    document.getElementById("contenedorDocumentos").classList.add('hidden');
 
@@ -3112,46 +3170,7 @@ function obtenerMediaEquipo(idEquipo) {
 }
 
 
-// Obtiene MEDIA de EQUIPOS (ADJUNTOS: IMAGENES Y DOCUMENTOS)
-function obtenerCotizacionesEquipo(idEquipo) {
-   document.getElementById("modalMedia").classList.add("open");
-   document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_cotizaciones")');
-   document.getElementById("contenedorImagenes").classList.add('hidden');
-   document.getElementById("contenedorDocumentos").classList.add('hidden');
-
-   let idTabla = idEquipo;
-   let tabla = "t_equipos_cotizaciones";
-
-   const action = "obtenerAdjuntos";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idTabla: idTabla,
-         tabla: tabla
-      },
-      dataType: "JSON",
-      success: function (data) {
-
-         if (data.imagen != "") {
-            document.getElementById("dataImagenes").innerHTML = data.imagen;
-            document.getElementById("contenedorImagenes").classList.remove('hidden');
-         }
-
-         if (data.documento != "") {
-            document.getElementById("dataAdjuntos").innerHTML = data.documento;
-            document.getElementById("contenedorDocumentos").classList.remove('hidden');
-         }
-
-      },
-   });
-}
-
-
+// AGREGA COMENTARIO A EQUIPO
 function agregarComentarioEquipo(idEquipo) {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
@@ -3288,7 +3307,7 @@ function expandirProyectos(id, idProyecto) {
 function subirImagenGeneral(idTabla, tabla) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
-   let img = document.getElementById("inputAdjuntos").files;
+   let img = inputAdjuntos.files;
    let idProyecto = localStorage.getItem('idProyecto');
    let idSeccion = localStorage.getItem('idSeccion');
    let idSubseccion = localStorage.getItem("idSubseccion");
@@ -3313,7 +3332,7 @@ function subirImagenGeneral(idTabla, tabla) {
          processData: false,
          success: function (data) {
             document.getElementById("cargandoAdjunto").innerHTML = "";
-            document.getElementById("inputAdjuntos").value = "";
+            inputAdjuntos.value = "";
             if (data == -1) {
                alertaImg("Archivo NO Permitido", "", "warning", 2500);
             } else if (data == 1) {
@@ -5229,14 +5248,65 @@ function agregarComentarioVP(tipoPendiente, idPendiente) {
 }
 
 
-/* ********** PLANES PREVENTIVOS DE EQUIPOS */
+// DISEÑO DE CONTENEDORES PARA modalMPEquipo
+const diseñoOpcionesSuperioresEquipo = (contenedor, btn) => {
+   // OCULTA CONTENEDORES
+   const contenedoresArray = ["contenedorCaracteristicasEquipo", "contenedorDespiedeEquipo", "contenedorAdjuntosEquipo"];
+   contenedoresArray.forEach(x => {
+      const y = document.getElementById(x);
+      if (x != contenedor) {
+         y.classList.add('hidden');
+      } else {
+         y.classList.remove('hidden');
+      }
+   });
 
-// Función para activar o desactivar Inputs de información de los equipos
-function toggleInputsEquipo(estadoInputs) {
+   // APLICA ESTILO A BTN ACTIVO
+   const btnArray = ["btnInformacionEquipo", "btnDespieceEquipo", "btnDocumentosEquipo", "btnCotizacionesEquipo"];
+   btnArray.forEach(x => {
+      const y = document.getElementById(x);
+      if (x == btn) {
+         y.classList.add('bg-purple-200', 'text-purple-500');
+      } else {
+         y.classList.remove('bg-purple-200', 'text-purple-500');
+      }
+   });
+}
+
+
+// DISEÑO DE CONTENEDORES PARA modalMPEquipo
+const diseñoOpcionesInferioresEquipo = (contenedor, btn) => {
+   // OCULTA CONTENEDORES
+   const contenedoresArray = ["contenedorPlanesEquipo", "contenedorIncidenciasEquipo", "contenedorChecklistEquipo", "contenedorBitacoraEquipo"];
+   contenedoresArray.forEach(x => {
+      const y = document.getElementById(x);
+      if (x != contenedor) {
+         y.classList.add('hidden');
+      } else {
+         y.classList.remove('hidden');
+      }
+   });
+
+   // APLICA ESTILO A BTN ACTIVO
+   const btnArray = ["btnPreventivosEquipo", "btnIncidenciasEquipo", "btnChecklistEquipo", "btnBitacorasEquipo"];
+   btnArray.forEach(x => {
+      const y = document.getElementById(x);
+      if (x == btn) {
+         y.classList.add('bg-purple-200', 'text-purple-500');
+      } else {
+         y.classList.remove('bg-purple-200', 'text-purple-500');
+      }
+   });
+}
+
+
+// HABILITA O DESAHABILITA INPUTS Y BOTONES modalMPEquipos
+function toggleDisabledEditarEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
+
    const arrayBtnEquipo =
       [
-         'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'contenedorDataOpcionesEquipos'
+         'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos'
       ]
 
    arrayBtnEquipo.forEach(element => {
@@ -5247,255 +5317,806 @@ function toggleInputsEquipo(estadoInputs) {
       }
    });
 
+   btnEditarEquipo.setAttribute('onclick', 'toggleDisabledEditarEquipo(1)');
+   btnCancelarEquipo.
+      setAttribute('onclick', `toggleDisabledEditarEquipo(2); cancelarInformacionEquipo(${idEquipo})`);
+   btnGuardarEquipo.setAttribute('onclick', `actualizarEquipo(${idEquipo})`);
+
    if (estadoInputs == 1) {
       alertaImg('Editar Equipo, Habilitado', '', 'info', 1500);
-      document.getElementById("btnEditarEquipo").classList.remove('hidden');
-      document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-      document.getElementById("btnGuardarEquipo").classList.remove('hidden');
-      document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-      document.getElementById("btnCancelarEquipo").classList.remove('hidden');
-      document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+      btnEditarEquipo.classList.add('hidden');
+      btnGuardarEquipo.classList.remove('hidden');
+      btnCancelarEquipo.classList.remove('hidden');
    } else if (estadoInputs == 0) {
-      document.getElementById("btnEditarEquipo").classList.remove('hidden');
-      document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-      document.getElementById("btnGuardarEquipo").classList.add('hidden');
-      document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-      document.getElementById("btnCancelarEquipo").classList.add('hidden');
-      document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
-   } else {
-      let idEquipo = localStorage.getItem('idEquipo');
-      informacionEquipo(idEquipo)
-      alertaImg('Editar Equipo, Cancelado', '', 'error', 500);
-      document.getElementById("btnEditarEquipo").classList.remove('hidden');
-      document.getElementById("btnEditarEquipo").setAttribute('onclick', 'toggleInputsEquipo(1)');
-
-      document.getElementById("btnGuardarEquipo").classList.add('hidden');
-      document.getElementById("btnGuardarEquipo").setAttribute('onclick', 'actualizarEquipo(' + idEquipo + ')');
-
-      document.getElementById("btnCancelarEquipo").classList.add('hidden');
-      document.getElementById("btnCancelarEquipo").setAttribute('onclick', 'toggleInputsEquipo(2)');
+      btnEditarEquipo.classList.remove('hidden');
+      btnGuardarEquipo.classList.add('hidden');
+      btnCancelarEquipo.classList.add('hidden');
+   } else if (estadoInputs == 2) {
+      alertaImg('Restaurando Datos...', '', 'info', 1500);
+      btnEditarEquipo.classList.remove('hidden');
+      btnGuardarEquipo.classList.add('hidden');
+      btnCancelarEquipo.classList.add('hidden');
    }
 }
 
 
-// Función para Obtener información de los equipos.
-function informacionEquipoX(idEquipo) {
-   localStorage.setItem('idEquipo', idEquipo);
-   let idUsuario = localStorage.getItem('usuario');
+// OBTIENE LA INFORMACION ACTUAL DE EQUIPO
+function cancelarInformacionEquipo(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
-   document.getElementById("modalMPEquipo").classList.add('open');
-   document.getElementById("tooltipMP").classList.add('hidden');
+   let idUsuario = localStorage.getItem('usuario');
+   const URL = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
 
-   // Funciones principales
-   // consultarOpcionesEquipo();
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         e_nombreEquipo.value = '';
+         e_estadoEquipo.value = '';
+         e_tipoLocalEquipo.value = '';
+         e_idFaseEquipo.value = '';
+         e_seccionEquipo.value = '';
+         e_subseccionEquipo.value = '';
+         e_tipoEquipo.value = '';
+         e_jerarquiaEquipo.value = '';
+         e_dataOpcionesEquipos.value = '';
+         e_marcaEquipo.value = '';
+         e_modeloEquipo.value = '';
+         e_serieEquipo.value = '';
+         e_codigoFabricanteEquipo.value = '';
+         e_codigoInternoComprasEquipo.value = '';
+         e_cantidadEquipo.value = '';
+         e_largoEquipo.value = '';
+         e_anchoEquipo.value = '';
+         e_altoEquipo.value = '';
+         e_potenciaElectricaHPEquipo.value = '';
+         e_potenciaElectricaKWEquipo.value = '';
+         e_voltajeEquipo.value = '';
+         e_frecuenciaEquipo.value = '';
+         e_caudalAguaM3HEquipo.value = '';
+         e_caudalAguaGPHEquipo.value = '';
+         e_cargaMCAEquipo.value = '';
+         e_PotenciaEnergeticaFrioKWEquipo.value = '';
+         e_potenciaEnergeticaFrioTREquipo.value = '';
+         e_potenciaEnergeticaCalorKCALEquipo.value = '';
+         e_caudalAireM3HEquipo.value = '';
+         e_caudalAireCFMEquipo.value = '';
 
-   const action = "informacionEquipo";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-         idEquipo: idEquipo
-      },
-      dataType: "JSON",
-      success: function (data) {
-         document.getElementById("inputAdjuntos").
-            setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            e_nombreEquipo.value = array.equipo;
+            e_estadoEquipo.value = array.status;
+            e_tipoLocalEquipo.value = array.localEquipo;
+            e_idFaseEquipo.value = array.idFases;
 
-         document.getElementById("QREquipo").
-            setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
+            e_seccionEquipo.value = array.idSeccion;
+            e_subseccionEquipo.value = array.idSubseccion;
+            e_tipoEquipo.value = array.idTipo;
+            e_jerarquiaEquipo.value = array.jerarquia;
+            e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
-         document.getElementById("nombreEquipo").value = data.equipo;
-         document.getElementById("idFaseEquipo").value = data.idFases;
-         document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
-         document.getElementById("marcaEquipo").value = data.id_marca;
-         document.getElementById("seccionEquipo").value = data.idSeccion;
-         document.getElementById("subseccionEquipo").value = data.idSubseccion;
-         document.getElementById("jerarquiaEquipo").value = data.jerarquia;
-         document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
-         document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
-         document.getElementById("modeloEquipo").value = data.modelo;
-         document.getElementById("serieEquipo").value = data.numero_serie;
-         document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
-         document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
-         document.getElementById("largoEquipo").value = data.largo_cm;
-         document.getElementById("anchoEquipo").value = data.ancho_cm;
-         document.getElementById("altoEquipo").value = data.alto_cm;
-         document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
-         document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
-         document.getElementById("voltajeEquipo").value = data.voltaje_v;
-         document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
-         document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
-         document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
-         document.getElementById("cargaMCAEquipo").value = data.carga_mca;
-         document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
-         document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
-         document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
-         document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
-         document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
-         document.getElementById("estadoEquipo").value = data.status;
-         document.getElementById("tipoEquipo").value = data.tipo;
-         document.getElementById("idFaseEquipo").value = data.idFases;
-         document.getElementById("contenedorEstadoEquipo").classList.
-            remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
-         document.getElementById("iconEstadoEquipo").classList.
-            remove('text-red-400', 'text-green-400', 'text-orange-400');
-         document.getElementById("estadoEquipo").classList.
-            remove('text-red-400', 'text-green-400', 'text-orange-400');
+            e_marcaEquipo.value = array.idMarca;
+            e_modeloEquipo.value = array.modelo;
+            e_serieEquipo.value = array.serie;
+            e_codigoFabricanteEquipo.value = array.codigoFabricante;
+            e_codigoInternoComprasEquipo.value = array.codigoInternoCompras;
 
-         if (data.status == "TALLER") {
-            document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
-            document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
-            document.getElementById("estadoEquipo").classList.add('text-orange-400');
-         } else if (data.status == "BAJA") {
-            document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
-            document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
-            document.getElementById("estadoEquipo").classList.add('text-red-400');
-         } else {
-            document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
-            document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
-            document.getElementById("estadoEquipo").classList.add('text-green-400');
+            e_cantidadEquipo.value = array.cantidad;
+            e_largoEquipo.value = array.largo_cm;
+            e_anchoEquipo.value = array.ancho_cm;
+            e_altoEquipo.value = array.alto_cm;
+
+            e_potenciaElectricaHPEquipo.value = array.potencia_electrica_hp;
+            e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
+            e_voltajeEquipo.value = array.voltaje_v;
+            e_frecuenciaEquipo.value = array.frecuencia_hz;
+
+            e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
+            e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
+            e_cargaMCAEquipo.value = array.carga_mca;
+
+            e_PotenciaEnergeticaFrioKWEquipo.value = array.potencia_energetica_frio_kw;
+            e_potenciaEnergeticaFrioTREquipo.value = array.potencia_energetica_frio_tr;
+
+            e_potenciaEnergeticaCalorKCALEquipo.value =
+               array.potencia_energetica_calor_kcal;
+
+            e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
+            e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
          }
-
-         // Eventos
-         document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
-
-         document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
-            document.getElementById("modalMedia").classList.add('open');
-            obtenerImagenesEquipo(idEquipo);
-         });
-
-         // Funciones Secundarias
-         // toggleInputsEquipo(0);
-         // obtenerImagenesEquipo(idEquipo);
-         // consultarPlanEquipo(idEquipo);
-         // opcionesJerarquiaEquipo(idEquipo);
-      }
-   });
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+         e_nombreEquipo.value = '';
+         e_estadoEquipo.value = '';
+         e_tipoLocalEquipo.value = '';
+         e_idFaseEquipo.value = '';
+         e_seccionEquipo.value = '';
+         e_subseccionEquipo.value = '';
+         e_tipoEquipo.value = '';
+         e_jerarquiaEquipo.value = '';
+         e_dataOpcionesEquipos.value = '';
+         e_marcaEquipo.value = '';
+         e_modeloEquipo.value = '';
+         e_serieEquipo.value = '';
+         e_codigoFabricanteEquipo.value = '';
+         e_codigoInternoComprasEquipo.value = '';
+         e_cantidadEquipo.value = '';
+         e_largoEquipo.value = '';
+         e_anchoEquipo.value = '';
+         e_altoEquipo.value = '';
+         e_potenciaElectricaHPEquipo.value = '';
+         e_potenciaElectricaKWEquipo.value = '';
+         e_voltajeEquipo.value = '';
+         e_frecuenciaEquipo.value = '';
+         e_caudalAguaM3HEquipo.value = '';
+         e_caudalAguaGPHEquipo.value = '';
+         e_cargaMCAEquipo.value = '';
+         e_PotenciaEnergeticaFrioKWEquipo.value = '';
+         e_potenciaEnergeticaFrioTREquipo.value = '';
+         e_potenciaEnergeticaCalorKCALEquipo.value = '';
+         e_caudalAireM3HEquipo.value = '';
+         e_caudalAireCFMEquipo.value = '';
+      })
 }
 
 
-function informacionEquipo(idEquipo) {
-   consultarOpcionesEquipo();
-   toggleInputsEquipo(0);
-   obtenerImagenesEquipo(idEquipo);
-   consultarPlanEquipo(idEquipo);
-   opcionesJerarquiaEquipo(idEquipo);
-
-   setTimeout(() => {
-      informacionEquipoX(idEquipo);
-   }, 2000);
-}
-
-
-// Función para Obtener información de los equipos.
-function informacionEquipoxx(idEquipo) {
-   localStorage.setItem('idEquipo', idEquipo);
-   let idUsuario = localStorage.getItem('usuario');
+// ACTUALIZA INFORMACIÓN DE LOS EQUIPOS
+function actualizarEquipo(idEquipo) {
    let idDestino = localStorage.getItem('idDestino');
-   document.getElementById("modalMPEquipo").classList.add('open');
-   document.getElementById("tooltipMP").classList.add('hidden');
+   let idUsuario = localStorage.getItem('usuario');
 
-   // Funciones principales
+   const action = "actualizarEquipo";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
-   consultarOpcionesEquipo();
+   const data = new FormData()
+   data.append('idEquipo', idEquipo);
+   data.append('equipo', e_nombreEquipo.value);
+   data.append('status', e_estadoEquipo.value);
+   data.append('localEquipo', e_tipoLocalEquipo.value);
+   data.append('idFases', e_idFaseEquipo.value);
+   data.append('idSeccion', e_seccionEquipo.value);
+   data.append('idSubseccion', e_subseccionEquipo.value);
+   data.append('idTipo', e_tipoEquipo.value);
+   data.append('jerarquia', e_jerarquiaEquipo.value);
+   data.append('idEquipoPrincipal', e_dataOpcionesEquipos.value);
+   data.append('idMarca', e_marcaEquipo.value);
+   data.append('modelo', e_modeloEquipo.value);
+   data.append('serie', e_serieEquipo.value);
+   data.append('codigoFabricante', e_codigoFabricanteEquipo.value);
+   data.append('codigoInternoCompras', e_codigoInternoComprasEquipo.value);
+   data.append('cantidad', e_cantidadEquipo.value);
+   data.append('largo_cm', e_largoEquipo.value);
+   data.append('ancho_cm', e_anchoEquipo.value);
+   data.append('alto_cm', e_altoEquipo.value);
+   data.append('potencia_electrica_hp', e_potenciaElectricaHPEquipo.value);
+   data.append('potencia_electrica_kw', e_potenciaElectricaKWEquipo.value);
+   data.append('voltaje_v', e_voltajeEquipo.value);
+   data.append('frecuencia_hz', e_frecuenciaEquipo.value);
+   data.append('caudal_agua_m3h', e_caudalAguaM3HEquipo.value);
+   data.append('caudal_agua_gph', e_caudalAguaGPHEquipo.value);
+   data.append('carga_mca', e_cargaMCAEquipo.value);
+   data.append('potencia_energetica_frio_kw', e_PotenciaEnergeticaFrioKWEquipo.value);
+   data.append('potencia_energetica_frio_tr', e_potenciaEnergeticaFrioTREquipo.value);
+   data.append('potencia_energetica_calor_kcal', e_potenciaEnergeticaCalorKCALEquipo.value);
+   data.append('caudal_aire_m3h', e_caudalAireM3HEquipo.value);
+   data.append('caudal_aire_cfm', e_caudalAireCFMEquipo.value);
 
-   setTimeout(() => {
-      const action = "informacionEquipo";
-      $.ajax({
-         type: "POST",
-         url: "php/plannerCrudPHP.php",
-         data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idEquipo: idEquipo
-         },
-         dataType: "JSON",
-         success: function (data) {
-            document.getElementById("inputAdjuntos").
-               setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+   if (e_nombreEquipo.value.length > 0 && e_estadoEquipo.value != ""
+      && e_tipoLocalEquipo.value != "" && e_seccionEquipo.value > 0
+      && e_subseccionEquipo.value > 0 && e_tipoEquipo.value > 0 && e_jerarquiaEquipo.value != "") {
 
-            document.getElementById("QREquipo").
-               setAttribute("src", "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?" + idEquipo);
-
-            document.getElementById("nombreEquipo").value = data.equipo;
-            document.getElementById("seccionEquipo").value = data.idSeccion;
-            document.getElementById("subseccionEquipo").value = data.idSubseccion;
-            document.getElementById("jerarquiaEquipo").value = data.jerarquia;
-            document.getElementById("dataOpcionesEquipos").value = data.idEquipoPrincipal;
-            document.getElementById("jerarquiaEquipo2").innerHTML = data.jerarquia;
-            document.getElementById("modeloEquipo").value = data.modelo;
-            document.getElementById("serieEquipo").value = data.numero_serie;
-            document.getElementById("codigoFabricanteEquipo").value = data.codigo_fabricante;
-            document.getElementById("codigoInternoComprasEquipo").value = data.codigo_interno_compras;
-            document.getElementById("largoEquipo").value = data.largo_cm;
-            document.getElementById("anchoEquipo").value = data.ancho_cm;
-            document.getElementById("altoEquipo").value = data.alto_cm;
-            document.getElementById("potenciaElectricaHPEquipo").value = data.potencia_electrica_hp;
-            document.getElementById("potenciaElectricaKWEquipo").value = data.potencia_electrica_kw;
-            document.getElementById("voltajeEquipo").value = data.voltaje_v;
-            document.getElementById("frecuenciaEquipo").value = data.frecuencia_hz;
-            document.getElementById("caudalAguaM3HEquipo").value = data.caudal_agua_m3h;
-            document.getElementById("caudalAguaGPHEquipo").value = data.caudal_agua_gph;
-            document.getElementById("cargaMCAEquipo").value = data.carga_mca;
-            document.getElementById("PotenciaEnergeticaFrioKWEquipo").value = data.potencia_energetica_frio_kw;
-            document.getElementById("potenciaEnergeticaFrioTREquipo").value = data.potencia_energetica_frio_tr;
-            document.getElementById("potenciaEnergeticaCalorKCALEquipo").value = data.potencia_energetica_calor_kcal;
-            document.getElementById("caudalAireM3HEquipo").value = data.caudal_aire_m3h;
-            document.getElementById("caudalAireCFMEquipo").value = data.caudal_aire_cfm;
-            document.getElementById("estadoEquipo").value = data.status;
-            document.getElementById("tipoEquipo").value = data.tipo;
-            document.getElementById("idFaseEquipo").value = data.idFases;
-            document.getElementById("tipoLocalEquipo").value = data.tipoLocalEquipo;
-            document.getElementById("contenedorEstadoEquipo").classList.
-               remove('bg-red-100', 'bg-green-100', 'bg-orange-100');
-            document.getElementById("iconEstadoEquipo").classList.
-               remove('text-red-400', 'text-green-400', 'text-orange-400');
-            document.getElementById("estadoEquipo").classList.
-               remove('text-red-400', 'text-green-400', 'text-orange-400');
-
-            if (data.status == "TALLER") {
-               document.getElementById("contenedorEstadoEquipo").classList.add('bg-orange-100');
-               document.getElementById("iconEstadoEquipo").classList.add('text-orange-400');
-               document.getElementById("estadoEquipo").classList.add('text-orange-400');
-            } else if (data.status == "BAJA") {
-               document.getElementById("contenedorEstadoEquipo").classList.add('bg-red-100');
-               document.getElementById("iconEstadoEquipo").classList.add('text-red-400');
-               document.getElementById("estadoEquipo").classList.add('text-red-400');
+      fetch(URL, {
+         method: "POST",
+         body: data
+      })
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Datos Actualizados', '', 'success', 1200)
+               informacionEquipo(idEquipo)
             } else {
-               document.getElementById("contenedorEstadoEquipo").classList.add('bg-green-100');
-               document.getElementById("iconEstadoEquipo").classList.add('text-green-400');
-               document.getElementById("estadoEquipo").classList.add('text-green-400');
+               alertaImg('No se Guardaron los Cambios', '', 'info', 1400)
+               informacionEquipo(idEquipo)
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+            informacionEquipo(idEquipo)
+         })
+   } else {
+      alertaImg('Datos NO Validos', '', 'info', 1200);
+   }
+}
+
+
+// OBTIENE INFORMACION DE EQUIPO
+function informacionEquipo(idEquipo) {
+   localStorage.setItem("idEquipo", idEquipo);
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   // FUNCIONES INICIALES
+   toggleDisabledEditarEquipo(0);
+   inputFotografiaEquipo.setAttribute('onchange', `subirImagenEquipo(${idEquipo})`);
+
+   // OPCIONES SUPERIORES
+   btnInformacionEquipo.setAttribute('onclick', `informacionEquipo(${idEquipo})`);
+   btnDespieceEquipo.setAttribute('onclick', `despieceEquipos(${idEquipo})`);
+   btnDocumentosEquipo.setAttribute('onclick', `obtenerAdjuntosEquipo(${idEquipo})`);
+   btnCotizacionesEquipo.setAttribute('onclick', `obtenerCotizacionesEquipo(${idEquipo})`);
+
+   // OPCIONES INFERIORES
+   btnPreventivosEquipo.setAttribute('onclick', `consultarPlanEquipo(${idEquipo});`);
+   btnIncidenciasEquipo.setAttribute('onclick', `obtenerIncidenciasEquipo(${idEquipo})`);
+   btnChecklistEquipo.setAttribute('onclick', `obtenerChecklistEquipo(${idEquipo})`);
+   btnBitacorasEquipo.setAttribute('onclick', `obtenerBitacoraEquipo(${idEquipo})`);
+
+   const URL = `php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+   let promesa = new Promise((resolve, reject) => {
+      console.log(1);
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            // LIMPIA CONTENEDORES DE OPCIONES
+            e_seccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_subseccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_tipoEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_dataOpcionesEquipos.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_jerarquiaEquipo.value = 0;
+            diseñoOpcionesSuperioresEquipo('contenedorCaracteristicasEquipo', 'btnInformacionEquipo');
+            consultarPlanEquipo(idEquipo);
+            obtenerImagenesEquipo(idEquipo);
+            abrirmodal('modalMPEquipo');
+
+            return array;
+         })
+         .then(array => {
+            if (array) {
+
+               // OBTIENES SECCIONES
+               for (let x = 0; x < array.secciones.length; x++) {
+                  const idSeccion = array.secciones[x].idSeccion;
+                  const seccion = array.secciones[x].seccion;
+
+                  const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+                  e_seccionEquipo.insertAdjacentHTML('beforeend', codigo);
+
+               }
+
+               // OBTIENES SUBSECCIONES
+               for (let x = 0; x < array.subsecciones.length; x++) {
+                  const idSubseccion = array.subsecciones[x].idSubseccion;
+                  const subseccion = array.subsecciones[x].subseccion;
+
+                  const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                  e_subseccionEquipo.insertAdjacentHTML('beforeend', codigo);
+               }
+
+               // OBTIENE TIPOS
+               for (let x = 0; x < array.tipos.length; x++) {
+                  const idTipo = array.tipos[x].idTipo;
+                  const tipo = array.tipos[x].tipo;
+
+                  const codigo = `<option value="${idTipo}">${tipo}</option>`;
+                  e_tipoEquipo.insertAdjacentHTML('beforeend', codigo);
+               }
+
+               // EQUIPOS PADRE
+               for (let x = 0; x < array.equipos.length; x++) {
+                  const idEquipo = array.equipos[x].idEquipo;
+                  const equipo = array.equipos[x].equipo;
+
+                  const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+                  e_dataOpcionesEquipos.insertAdjacentHTML('beforeend', codigo);
+               }
+
+               // MARCAS
+               for (let x = 0; x < array.marcas.length; x++) {
+                  const idMarca = array.marcas[x].idMarca;
+                  const marca = array.marcas[x].marca;
+
+                  const codigo = `<option value="${idMarca}">${marca}</option>`;
+                  e_marcaEquipo.insertAdjacentHTML('beforeend', codigo);
+               }
+
+            } else {
+               alert('No se Encontraron Datos..', '', 'info', 1200);
             }
 
-            // Eventos
-            document.getElementById("jerarquiaEquipo").addEventListener("change", function () { opcionesJerarquiaEquipo(idEquipo) });
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ' < ' + URL + ' >');
 
-            document.getElementById("btnAdjuntosEquipo").addEventListener("click", function () {
-               document.getElementById("modalMedia").classList.add('open');
-               obtenerImagenesEquipo(idEquipo);
-            });
+            // LIMPIA CONTENEDORES DE OPCIONES
+            e_seccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_subseccionEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_tipoEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_dataOpcionesEquipos.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
+            e_jerarquiaEquipo.value = 0;
+         })
+      resolve(resolve, reject)
+   })
+   promesa.then((resolve, reject) => {
 
-            // Funciones Secundarias
-            toggleInputsEquipo(0);
-            obtenerImagenesEquipo(idEquipo);
-            consultarPlanEquipo(idEquipo);
-            opcionesJerarquiaEquipo(idEquipo);
-            despiece(idEquipo);
-         }
-      });
+      const URL2 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+      console.log(2);
 
-   }, 1200);
+      fetch(URL2)
+         .then(array => array.json())
+         .then(array => {
+            if (array) {
+               e_nombreEquipo.value = array.equipo;
+               e_estadoEquipo.value = array.status;
+               e_tipoLocalEquipo.value = array.localEquipo;
+               e_idFaseEquipo.value = array.idFases;
+
+               e_seccionEquipo.value = array.idSeccion;
+               e_subseccionEquipo.value = array.idSubseccion;
+               e_tipoEquipo.value = array.idTipo;
+               e_jerarquiaEquipo.value = array.jerarquia;
+               e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
+
+               e_marcaEquipo.value = array.idMarca;
+               e_modeloEquipo.value = array.modelo;
+               e_serieEquipo.value = array.serie;
+               e_codigoFabricanteEquipo.value = array.codigoFabricante;
+               e_codigoInternoComprasEquipo.value = array.codigoInternoCompras;
+
+               e_cantidadEquipo.value = array.cantidad;
+               e_largoEquipo.value = array.largo_cm;
+               e_anchoEquipo.value = array.ancho_cm;
+               e_altoEquipo.value = array.alto_cm;
+
+               e_potenciaElectricaHPEquipo.value = array.potencia_electrica_hp;
+               e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
+               e_voltajeEquipo.value = array.voltaje_v;
+               e_frecuenciaEquipo.value = array.frecuencia_hz;
+
+               e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
+               e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
+               e_cargaMCAEquipo.value = array.carga_mca;
+
+               e_PotenciaEnergeticaFrioKWEquipo.value = array.potencia_energetica_frio_kw;
+               e_potenciaEnergeticaFrioTREquipo.value = array.potencia_energetica_frio_tr;
+
+               e_potenciaEnergeticaCalorKCALEquipo.value =
+                  array.potencia_energetica_calor_kcal;
+
+               e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
+               e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
+
+               QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?${array.idEquipo}`);
+            }
+         })
+         .then(() => {
+            console.log(3);
+            cancelarInformacionEquipo(idEquipo);
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+            e_nombreEquipo.value = '';
+            e_estadoEquipo.value = '';
+            e_tipoLocalEquipo.value = '';
+            e_idFaseEquipo.value = '';
+            e_seccionEquipo.value = '';
+            e_subseccionEquipo.value = '';
+            e_tipoEquipo.value = '';
+            e_jerarquiaEquipo.value = '';
+            e_dataOpcionesEquipos.value = '';
+            e_marcaEquipo.value = '';
+            e_modeloEquipo.value = '';
+            e_serieEquipo.value = '';
+            e_codigoFabricanteEquipo.value = '';
+            e_codigoInternoComprasEquipo.value = '';
+            e_cantidadEquipo.value = '';
+            e_largoEquipo.value = '';
+            e_anchoEquipo.value = '';
+            e_altoEquipo.value = '';
+            e_potenciaElectricaHPEquipo.value = '';
+            e_potenciaElectricaKWEquipo.value = '';
+            e_voltajeEquipo.value = '';
+            e_frecuenciaEquipo.value = '';
+            e_caudalAguaM3HEquipo.value = '';
+            e_caudalAguaGPHEquipo.value = '';
+            e_cargaMCAEquipo.value = '';
+            e_PotenciaEnergeticaFrioKWEquipo.value = '';
+            e_potenciaEnergeticaFrioTREquipo.value = '';
+            e_potenciaEnergeticaCalorKCALEquipo.value = '';
+            e_caudalAireM3HEquipo.value = '';
+            e_caudalAireCFMEquipo.value = '';
+         })
+   })
+   promesa.catch((err) => {
+      fetch(APIERROR + err);
+   })
 }
 
 
+// OBTIENE EL DESPIECE DE EQUIPO
+function despieceEquipos(idEquipo) {
+   document.getElementById("dataDespieceEquipo").innerHTML = '';
+   let idUsuario = localStorage.getItem("usuario");
+   let idDestino = localStorage.getItem("idDestino");
+
+   const action = "despieceEquipos";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
+
+   diseñoOpcionesSuperioresEquipo('contenedorDespiedeEquipo', 'btnDespieceEquipo');
+
+   // Fetch ASYC
+   fetch(URL)
+      .then(res => res.json())
+      .then(array => {
+         let despiece = "";
+         for (let index = 0; index < array.length; index++) {
+
+            var id = array[index].id;
+            var equipo = array[index].equipo;
+            var jerarquia = array[index].jerarquia;
+
+            if (jerarquia == "PRINCIPAL") {
+               despiece += `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b" onclick="informacionEquipo(${id});">
+                            <i class="fad fa-cog mr-1"></i>
+                            <h1>${equipo}</h1>
+                        </div>`
+                  ;
+            } else {
+               despiece += `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6" onclick="informacionEquipo(${id});">
+                            <i class="fad fa-cogs mr-1"></i>
+                            <h1>${equipo}</h1>
+                        </div>`
+                  ;
+            }
+         }
+         return despiece;
+      }).then(despiece => {
+         document.getElementById("dataDespieceEquipo").innerHTML = despiece;
+      })
+      .catch(err => {
+         fetch(APIERROR + err + ` despieceEquipos(${idEquipo})`)
+      })
+}
+
+
+// OBTIENE LOS ADJUNTOS DE EQUIPO (MANUALES)
+const obtenerAdjuntosEquipo = idEquipo => {
+   let idUsuario = localStorage.getItem('idUsuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   diseñoOpcionesSuperioresEquipo('contenedorAdjuntosEquipo', 'btnDocumentosEquipo');
+
+   inputAdjuntosEquipo.setAttribute('onchange', `subirAdjuntosEquipo(${idEquipo})`);
+
+   const action = "obtenerAdjuntosEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataAdjuntosEquipo.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idAdjunto = array[x].idAdjunto;
+               const url = array[x].url;
+               const tipo = array[x].tipo;
+
+               if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${url}" class="relative px-1 h-20">
+                        <a href="planner/equipos/${url}" target="_blank">
+                           <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/equipos/${url})">
+                           </div>
+                        </a>
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                        </div>
+                     </div>
+                  `;
+               } else {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                        <a href="planner/equipos/${url}" target="_blank" data-title="${url}">
+                           <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
+                              <i class="fad fa-file-contract fa-3x"></i>
+                              <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
+                           </div>
+                        </a>
+
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${url}, 'ADJUNTOSEQUIPO');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
+                        </div>
+                     </div>              
+                  `;
+               }
+
+               dataAdjuntosEquipo.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         dataAdjuntosEquipo.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+}
+
+
+// SUBE LOS ADJUNTOS DE EQUIPO (MANUALES)
+const subirAdjuntosEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "subirAdjuntosEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   if (inputAdjuntosEquipo.files) {
+      for (let x = 0; x < inputAdjuntosEquipo.files.length; x++) {
+         const formData = new FormData();
+         formData.append('file', inputAdjuntosEquipo.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  obtenerAdjuntosEquipo(idEquipo);
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputAdjuntosEquipo.value = '';
+            })
+            .catch(function (err) {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputAdjuntosEquipo.value = '';
+               fetch(APIERROR + err + ` subirAdjuntosEquipo(${idEquipo})`)
+            })
+      }
+   }
+}
+
+
+// OBTIENE LOS COTIZACIONES DE EQUIPO
+const obtenerCotizacionesEquipo = idEquipo => {
+   let idUsuario = localStorage.getItem('idUsuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   diseñoOpcionesSuperioresEquipo('contenedorAdjuntosEquipo', 'btnCotizacionesEquipo');
+
+   inputAdjuntosEquipo.setAttribute('onchange', `subirCotizacionesEquipo(${idEquipo})`);
+
+   const action = "obtenerCotizacionesEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataAdjuntosEquipo.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idAdjunto = array[x].idAdjunto;
+               const url = array[x].url;
+               const tipo = array[x].tipo;
+
+               if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${url}" class="relative px-1 h-20">
+                        <a href="planner/equipos/${url}" target="_blank">
+                           <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/equipos/${url})">
+                           </div>
+                        </a>
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                        </div>
+                     </div>
+                  `;
+               } else {
+                  codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                        <a href="planner/equipos/${url}" target="_blank" data-title="${url}">
+                           <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
+                              <i class="fad fa-file-contract fa-3x"></i>
+                              <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
+                           </div>
+                        </a>
+
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${url}, 'ADJUNTOSEQUIPO');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
+                        </div>
+                     </div>              
+                  `;
+               }
+
+               dataAdjuntosEquipo.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         dataAdjuntosEquipo.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+}
+
+
+// SUBE LOS ADJUNTOS DE EQUIPO (COTIZACIONES)
+const subirCotizacionesEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "subirCotizacionesEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   if (inputAdjuntosEquipo.files) {
+      for (let x = 0; x < inputAdjuntosEquipo.files.length; x++) {
+         const formData = new FormData();
+         formData.append('file', inputAdjuntosEquipo.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  obtenerCotizacionesEquipo(idEquipo);
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputAdjuntosEquipo.value = '';
+            })
+            .catch(function (err) {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputAdjuntosEquipo.value = '';
+               fetch(APIERROR + err + ` subirAdjuntosEquipo(${idEquipo})`)
+            })
+      }
+   }
+}
+
+
+// FOTOGRAFIAS DE EQUIPOS (PNG, JPEG, JPG)
+const subirImagenEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "subirImagenEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   if (inputFotografiaEquipo.files) {
+      for (let x = 0; x < inputFotografiaEquipo.files.length; x++) {
+         const formData = new FormData();
+         formData.append('file', inputFotografiaEquipo.files[x]);
+         const tipo = inputFotografiaEquipo.files[x].type;
+         if (tipo == "image/jpeg" || tipo == "image/png" || tipo == "image/jpg") {
+            fetch(URL, {
+               method: "POST",
+               body: formData
+            })
+               .then(array => array.json())
+               .then(array => {
+                  if (array == 1) {
+                     obtenerImagenesEquipo(idEquipo);
+                     alertaImg('Imagen Agregada', '', 'success', 1500);
+                  } else {
+                     alertaImg('Intente de Nuevo', '', 'info', 1500);
+                  }
+               })
+               .then(() => {
+                  inputFotografiaEquipo.value = '';
+               })
+               .catch(function (err) {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+                  inputFotografiaEquipo.value = '';
+                  fetch(APIERROR + err + ` subirImagenEquipo(${idEquipo})`)
+               })
+         } else {
+            alertaImg('Adjunto NO Permitido', '', 'info', 1500);
+         }
+      }
+   }
+}
+
+
+const obtenerIncidenciasEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   diseñoOpcionesInferioresEquipo('contenedorIncidenciasEquipo', 'btnIncidenciasEquipo');
+
+   const action = "obtenerFallas";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+   // OBTEIENE DATOS DE LAS FALLAS
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataIncidenciasEquipo.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const id = array[x].id;
+               const ot = array[x].ot;
+               const actividad = array[x].actividad;
+               const creadoPor = array[x].creadoPor;
+               const pda = array[x].pda;
+               const responsable = array[x].responsable;
+               const fechaInicio = array[x].fechaInicio;
+               const fechaFin = array[x].fechaFin;
+               const comentarios = array[x].comentarios;
+               const adjuntos = array[x].adjuntos;
+               const status = array[x].status;
+               const materiales = array[x].materiales;
+               const energeticos = array[x].energeticos;
+               const departamentos = array[x].departamentos;
+               const trabajando = array[x].trabajando;
+               const tipo = array[x].tipo;
+               const tipoIncidencia = array[x].tipoIncidencia;
+
+               const data = codigoIncidenciasEquipo({
+                  id: id,
+                  ot: ot,
+                  actividad: actividad,
+                  creadoPor: creadoPor,
+                  pda: pda,
+                  responsable: responsable,
+                  fechaInicio: fechaInicio,
+                  fechaFin: fechaFin,
+                  comentarios: comentarios,
+                  adjuntos: adjuntos,
+                  status: status,
+                  materiales: materiales,
+                  trabajando: trabajando,
+                  energeticos: energeticos,
+                  departamentos: departamentos,
+                  tipo: tipo,
+                  tipoIncidencia: tipoIncidencia
+               });
+               dataIncidenciasEquipo.insertAdjacentHTML('beforeend', data);
+            }
+         }
+      })
+
+      .catch(function (err) {
+         dataIncidenciasEquipo.innerHTML = '';
+         fetch(APIERROR + err + ` obtenerIncidenciasEquipo(${idEquipo})`);
+      })
+}
+
+
+// OBTIENE EL CHICKLIST DE EQUIPO
+const obtenerChecklistEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   diseñoOpcionesInferioresEquipo('contenedorChecklistEquipo', 'btnChecklistEquipo');
+}
+
+
+// OBTIENE LA BITACORA DE EQUIPO
+const obtenerBitacoraEquipo = idEquipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   diseñoOpcionesInferioresEquipo('contenedorBitacoraEquipo', 'btnBitacorasEquipo');
+}
+
+
+// OBTIENES OPCIONES PARA ASIGNAR EQUIPO PRINCIPAL A EQUIPOS SECUNDARIOS
 function opcionesJerarquiaEquipo(idEquipo) {
 
    let jerarquia = document.getElementById("jerarquiaEquipo").value;
@@ -5537,8 +6158,7 @@ function obtenerImagenesEquipo(idEquipo) {
    let tabla = "t_equipos_america_adjuntos";
    let idTabla = idEquipo;
 
-   document.getElementById("inputAdjuntos").
-      setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+   inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
 
    const action = "obtenerAdjuntos";
    $.ajax({
@@ -5561,7 +6181,12 @@ function obtenerImagenesEquipo(idEquipo) {
          } else {
             document.getElementById("contenedorImagenes").classList.add('hidden');
             document.getElementById("dataImagenes").innerHTML = '';
-            document.getElementById("dataImagenesEquipo").innerHTML = '';
+            document.getElementById("dataImagenesEquipo").innerHTML = `
+               <div id="modalMedia_adjunto_img_603" class="relative">
+                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/equipos/equipo.png)">
+                  </div>
+               </div>
+            `;
          }
 
          if (data.documento != "") {
@@ -5575,107 +6200,14 @@ function obtenerImagenesEquipo(idEquipo) {
 }
 
 
-// Actualiza la información de los Equipos
-function actualizarEquipo(idEquipo) {
-   let idSeccionX = localStorage.getItem('idSeccion');
-   let idSubseccionX = localStorage.getItem('idSubseccion');
-   let idUsuario = localStorage.getItem('usuario');
-   let idDestino = localStorage.getItem('idDestino');
-
-   let nombreEquipo = document.getElementById("nombreEquipo").value;
-   let seccionEquipo = document.getElementById("seccionEquipo").value;
-   let subseccionEquipo = document.getElementById("subseccionEquipo").value;
-   let tipoEquipo = document.getElementById("tipoEquipo").value;
-   let jerarquiaEquipo = document.getElementById("jerarquiaEquipo").value;
-   let equipoPrincipal = document.getElementById("dataOpcionesEquipos").value;
-   let marcaEquipo = document.getElementById("marcaEquipo").value;
-   let modeloEquipo = document.getElementById("modeloEquipo").value;
-   let serieEquipo = document.getElementById("serieEquipo").value;
-   let codigoFabricanteEquipo = document.getElementById("codigoFabricanteEquipo").value;
-   let codigoInternoComprasEquipo = document.getElementById("codigoInternoComprasEquipo").value;
-   let largoEquipo = document.getElementById("largoEquipo").value;
-   let anchoEquipo = document.getElementById("anchoEquipo").value;
-   let altoEquipo = document.getElementById("altoEquipo").value;
-   let potenciaElectricaHPEquipo = document.getElementById("potenciaElectricaHPEquipo").value;
-   let potenciaElectricaKWEquipo = document.getElementById("potenciaElectricaKWEquipo").value;
-   let voltajeEquipo = document.getElementById("voltajeEquipo").value;
-   let frecuenciaEquipo = document.getElementById("frecuenciaEquipo").value;
-   let caudalAguaM3HEquipo = document.getElementById("caudalAguaM3HEquipo").value;
-   let caudalAguaGPHEquipo = document.getElementById("caudalAguaGPHEquipo").value;
-   let cargaMCAEquipo = document.getElementById("cargaMCAEquipo").value;
-   let PotenciaEnergeticaFrioKWEquipo = document.getElementById("PotenciaEnergeticaFrioKWEquipo").value;
-   let potenciaEnergeticaFrioTREquipo = document.getElementById("potenciaEnergeticaFrioTREquipo").value;
-   let potenciaEnergeticaCalorKCALEquipo = document.getElementById("potenciaEnergeticaCalorKCALEquipo").value;
-   let caudalAireM3HEquipo = document.getElementById("caudalAireM3HEquipo").value;
-   let caudalAireCFMEquipo = document.getElementById("caudalAireCFMEquipo").value;
-   let estadoEquipo = document.getElementById("estadoEquipo").value;
-   let idFaseEquipo = document.getElementById("idFaseEquipo").value;
-   let tipoLocalEquipo = document.getElementById("tipoLocalEquipo").value;
-   const action = "actualizarEquipo";
-
-   if (seccionEquipo > 0 && subseccionEquipo > 0) {
-      $.ajax({
-         type: "POST",
-         url: "php/plannerCrudPHP.php",
-         data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idEquipo: idEquipo,
-            nombreEquipo: nombreEquipo,
-            seccionEquipo: seccionEquipo,
-            subseccionEquipo: subseccionEquipo,
-            tipoEquipo: tipoEquipo,
-            jerarquiaEquipo: jerarquiaEquipo,
-            equipoPrincipal: equipoPrincipal,
-            marcaEquipo: marcaEquipo,
-            modeloEquipo: modeloEquipo,
-            serieEquipo: serieEquipo,
-            codigoFabricanteEquipo: codigoFabricanteEquipo,
-            codigoInternoComprasEquipo: codigoInternoComprasEquipo,
-            largoEquipo: largoEquipo,
-            anchoEquipo: anchoEquipo,
-            altoEquipo: altoEquipo,
-            potenciaElectricaHPEquipo: potenciaElectricaHPEquipo,
-            potenciaElectricaKWEquipo: potenciaElectricaKWEquipo,
-            voltajeEquipo: voltajeEquipo,
-            frecuenciaEquipo: frecuenciaEquipo,
-            caudalAguaM3HEquipo: caudalAguaM3HEquipo,
-            caudalAguaGPHEquipo: caudalAguaGPHEquipo,
-            cargaMCAEquipo: cargaMCAEquipo,
-            PotenciaEnergeticaFrioKWEquipo: PotenciaEnergeticaFrioKWEquipo,
-            potenciaEnergeticaFrioTREquipo: potenciaEnergeticaFrioTREquipo,
-            potenciaEnergeticaCalorKCALEquipo: potenciaEnergeticaCalorKCALEquipo,
-            caudalAireM3HEquipo: caudalAireM3HEquipo,
-            caudalAireCFMEquipo: caudalAireCFMEquipo,
-            estadoEquipo: estadoEquipo,
-            idFaseEquipo: idFaseEquipo,
-            tipoLocalEquipo: tipoLocalEquipo
-         },
-         // dataType: "JSON",
-         success: function (data) {
-            if (data = 1) {
-               informacionEquipo(idEquipo);
-               alertaImg('Equipo Actualizado', '', 'success', 2500);
-               obtenerEquiposAmerica(idSeccionX, idSubseccionX);
-            } else {
-               alertaImg('Intente de Nuevo', '', 'info', 3000);
-            }
-         }
-      });
-   } else {
-      alertaImg('Asigne Sección y Subsección', '', 'info', 3000);
-   }
-}
-
-
 // Obtiene el Calendario de MP de los Equipos
 function consultarPlanEquipo(idEquipo) {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
    const action = "consultarPlanEquipo";
 
-   document.getElementById("contenedorPlanesEquipo").innerHTML = '';
+   diseñoOpcionesInferioresEquipo('contenedorPlanesEquipo', 'btnPreventivosEquipo');
+   contenedorPlanesEquipo.innerHTML = '';
 
    $.ajax({
       type: "POST",
@@ -5808,24 +6340,23 @@ function consultarPlanEquipo(idEquipo) {
                      proceso_52: data.planes[index].proceso_52
                   });
 
-                  document.getElementById("contenedorPlanesEquipo")
-                     .insertAdjacentHTML('beforeend', planesX);
+                  contenedorPlanesEquipo.insertAdjacentHTML('beforeend', planesX);
                }
                indicadorSemanaActual(data.planes[0].semanaActual);
             }
          } else {
             if (data.creado) {
-               document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"> Creando Plan MP... </h1>`;
+               contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"> Creando Plan MP... </h1>`;
                if (data.creado == "SI") {
                   alertaImg('Creando Plan MP', '', 'success', 1900);
                   setTimeout(function () {
                      consultarPlanEquipo(idEquipo);
                   }, 1100)
                } else {
-                  document.getElementById("contenedorPlanesEquipo").innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>';
+                  contenedorPlanesEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="svg/SINPREVENTIVOS.svg"></h1>';
                }
             } else {
-               document.getElementById("contenedorPlanesEquipo").innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold">Sin Planes</h1>`;
+               contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="svg/SINPREVENTIVOS.svg"></h1>`;
             }
          }
       }
@@ -6294,7 +6825,7 @@ function consultaAdjuntosOT(idOT) {
          }
 
          // Eventos
-         document.getElementById("inputAdjuntos").setAttribute("onchange", `subirImagenGeneral(${idOT}, "t_mp_planificacion_iniciada_adjuntos")`);
+         inputAdjuntos.setAttribute("onchange", `subirImagenGeneral(${idOT}, "t_mp_planificacion_iniciada_adjuntos")`);
          document.getElementById("btnAdjuntosOT").setAttribute("onclick", `consultaAdjuntosOT(${idOT}); toggleModalTailwind('modalMedia');`);
       });
 }
@@ -7237,6 +7768,198 @@ const datosFallasTareas = params => {
          </td>
 
          <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <h1>${estiloTipoIncidencia}</h1>
+         </td>
+      </tr>
+   `;
+}
+
+
+// OBTENER INCIDENCIAS DE EQUIPO
+// FUNCION PARA DISEÑO DE FILA DE FALLA
+const codigoIncidenciasEquipo = params => {
+
+   var idRegistro = params.id;
+
+   var comentarios = params.comentarios;
+   var valorcomentarios = '';
+
+   var adjuntos = params.adjuntos;
+   var valoradjuntos = '';
+
+   var materiales = params.materiales;
+   var materialesx = '';
+
+   var departamentos = params.departamentos;
+   var departamentosx = '';
+
+   var energeticos = params.energeticos;
+   var energeticosx = '';
+
+   var trabajando = params.trabajando;
+   var trabajandox = '';
+
+   switch (comentarios) {
+      case 0:
+         valorcomentarios = '<i class="fad fa-minus text-xl text-red-400"></i>';
+         break;
+      default:
+         valorcomentarios = params.comentarios;
+   }
+
+   switch (adjuntos) {
+      case 0:
+         valoradjuntos = '<i class="fad fa-minus text-xl text-red-400"></i>';
+         break;
+      default:
+         valoradjuntos = params.adjuntos;
+   }
+
+   if (materiales >= 1) {
+      materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
+   } else {
+      materialesx = '';
+   }
+
+   if (departamentos >= 1) {
+      departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+   } else {
+      departamentosx = '';
+   }
+
+   if (energeticos >= 1) {
+      energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
+   } else {
+      energeticosx = '';
+   }
+
+   if (trabajando >= 1) {
+      trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
+   } else {
+      trabajandox = '';
+   }
+
+   var fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+   if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
+      var statusX = 'S-PENDIENTE';
+      var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
+      var fRangoFecha = `onclick="obtenerFechaMC(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
+      var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
+      var fStatus = `onclick="obtenerstatusMC(${idRegistro});"`;
+      var fStatus1 = `onclick="obtenerstatusMC(${idRegistro});"`;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
+      var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+      var enlaceToltip = `FALLA${idRegistro}`;
+      var fVerEnPlanner = `onclick="obtenerIncidenciaEquipos(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+   } else if (params.status == "SOLUCIONADO" && params.tipo == "FALLA") {
+      var statusX = 'S-SOLUCIONADO';
+      var fResponsable = '';
+      var fRangoFecha = '';
+      var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
+      var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
+      var fStatus1 = ``;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
+      var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+      var enlaceToltip = `FALLA${idRegistro}`;
+      var fVerEnPlanner = ``;
+   } else if (params.status == "PENDIENTE" && params.tipo == "TAREA") {
+      var statusX = 'S-PENDIENTE';
+      var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
+      var fRangoFecha = `onclick="obtenerFechaTareas(${idRegistro}, '${params.fechaInicio + ' - ' + params.fechaFin}');"`;
+      var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
+      var fStatus = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
+      var fStatus1 = `onclick="obtenerInformacionTareas(${idRegistro}, '${params.actividad}')"`;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
+      var iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+      var enlaceToltip = `TAREA${idRegistro}`;
+      var fVerEnPlanner = `onclick="obtenerIncidenciaGeneral(${idRegistro}); toggleModalTailwind('modalVerEnPlannerIncidencia');"`;
+   } else if (params.status == "SOLUCIONADO" && params.tipo == "TAREA") {
+      var statusX = 'S-SOLUCIONADO';
+      var fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${idRegistro});"`;
+      var fRangoFecha = '';
+      var fAdjuntos = `onclick="obtenerAdjuntosTareas(${idRegistro});"`;
+      var fComentarios = `onclick="obtenerComentariosTareas(${idRegistro})"`;
+      var fStatus = `onclick="actualizarTareas(${idRegistro},  'status', 'P');"`;
+      var fStatus1 = ``;
+      var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'TAREA');"`;
+      var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';
+      var enlaceToltip = `TAREA${idRegistro}`;
+      var fVerEnPlanner = ``;
+   }
+
+   // DISEÑO TIPO INCIDENCIA
+   const estiloTipoIncidencia =
+      params.tipoIncidencia == 'URGENCIA' ?
+         `<span class="text-red-500 text-xs">${params.tipoIncidencia}</span>`
+         : params.tipoIncidencia == "EMERGENCIA" ?
+            `<span class="text-orange-500 text-xs">${params.tipoIncidencia}</span>`
+            : params.tipoIncidencia == "ALARMA" ?
+               `<span class="text-yellow-500 text-xs">${params.tipoIncidencia}</span>`
+               : params.tipoIncidencia == "ALERTA" ?
+                  `<span class="text-blue-500 text-xs">${params.tipoIncidencia}</span>`
+                  : `<span class="text-teal-500 text-xs">${params.tipoIncidencia}</span>`;
+
+   return `
+      <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
+           
+        <td class="px-4 border-b border-gray-200 py-3" style="max-width: 300px;"
+        ${fVerEnPlanner}>
+            <div class="font-semibold uppercase leading-4" data-title="${params.actividad}">
+               <h1 class="truncate">${params.actividad}</h1>
+            </div>
+            <div class="text-gray-500 leading-3 flex">
+               <h1>Creado por: ${params.creadoPor}</h1>
+            </div>
+         </td>
+
+         <td id="${enlaceToltip}" class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3"
+         ${fActividades}>
+            <h1>${params.pda}</h1>
+         </td>
+         
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
+         ${fResponsable}>
+            <h1>${params.responsable}</h1>
+         </td>
+
+         <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" 
+         ${fRangoFecha}>
+            <div class="leading-4">${params.fechaInicio}</div>
+            <div class="leading-3">${params.fechaFin}</div>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
+         ${fComentarios}>
+            <h1>${valorcomentarios}</h1>
+         </td>
+
+         <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+            <h1>${valoradjuntos}</h1>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3" ${fStatus1}>
+            <div class="text-sm flex justify-center items-center font-bold">
+               ${materialesx}
+               ${energeticosx}
+               ${departamentosx}
+               ${trabajandox}
+            </div>
+         </td>
+         
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <h1>${fOT}</h1>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
+            <div class="px-2">
+               ${iconoStatus}
+            </div>
+         </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3 hidden">
             <h1>${estiloTipoIncidencia}</h1>
          </td>
       </tr>
@@ -9325,8 +10048,7 @@ function obtenerAdjuntosTest(idTest) {
    dataAdjuntos.innerHTML = '';
    cargandoAdjunto.innerHTML = iconoLoader;
 
-   document.getElementById("inputAdjuntos").
-      setAttribute('onchange', `agregarAdjuntoTest(${idTest})`);
+   inputAdjuntos.setAttribute('onchange', `agregarAdjuntoTest(${idTest})`);
 
    fetch(URL)
       .then(array => array.json())
@@ -9413,7 +10135,7 @@ function agregarAdjuntoTest(idTest) {
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idTest=${idTest}`;
 
    // VARIABLES DEL ADJUNTO
-   const files = document.querySelector("#inputAdjuntos");
+   const files = inputAdjuntos;
    const formData = new FormData()
 
    if (files.files) {
@@ -9818,7 +10540,6 @@ function obtenerAdjuntosEnergetico(idEnergetico) {
    const contenedorAdjuntos = document.getElementById("dataAdjuntos");
    const contenedorImagenes = document.getElementById("contenedorImagenes");
    const contenedorDocumentos = document.getElementById("contenedorDocumentos");
-   const inputAdjuntos = document.getElementById("inputAdjuntos");
 
    inputAdjuntos.setAttribute('onchange', `agregarAdjuntosEnergetico(${idEnergetico})`);
 
@@ -9899,7 +10620,7 @@ function agregarAdjuntosEnergetico(idEnergetico) {
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
 
    // VARIABLES DEL ADJUNTO
-   const files = document.querySelector("#inputAdjuntos");
+   const files = inputAdjuntos;
    const formData = new FormData()
 
    if (files.files) {
@@ -9987,9 +10708,9 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
          .catch(function (err) {
             fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
          })
-      alertify.success('Ok')
+      alertify.success('Eliminando...')
    }
-      , function () { alertify.error('Cancel') });
+      , function () { alertify.error('Proceso Cancelado') });
 }
 
 

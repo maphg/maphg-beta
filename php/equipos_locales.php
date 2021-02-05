@@ -1302,5 +1302,335 @@ if (isset($_GET['action'])) {
         echo json_encode($totalPaginas);
     }
 
+    #OBTIENE ADJUNTOS DE EQUIPOS (MANUALES)
+    if ($action == "obtenerAdjuntosEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT id, documento, fecha_subida 
+        FROM t_equipos_documentos 
+        WHERE id_equipo = $idEquipo and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idAdjunto = $x['id'];
+                $url = $x['documento'];
+                $fecha = $x['fecha_subida'];
+                $tipo = pathinfo($url, PATHINFO_EXTENSION);
+
+                $array[] = array(
+                    "idAdjuntos" => intval($idAdjunto),
+                    "url" => $url,
+                    "fecha" => $fecha,
+                    "tipo" => $tipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #SUBIR ADJUNTOS DE EQUIPOS (MANUALES)
+    if ($action == "subirAdjuntosEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $resp = 0;
+
+        // VARIABLES DEL ADJUNTO
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+        $nombre = 'ADJUNTO_ID_' . $idEquipo . '_' . rand(50, 1500) . '.' . $extension;
+
+        if (move_uploaded_file($rutaTemporal, '../planner/equipos/' . $nombre)) {
+            $query = "INSERT INTO t_equipos_documentos(id_equipo, subido_por, documento, fecha_subida, activo) VALUES($idEquipo, $idUsuario, '$nombre', '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+    #OBTIENE COTIZACIONES DE EQUIPOS
+    if ($action == "obtenerCotizacionesEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT id, url_archivo, fecha 
+        FROM t_equipos_cotizaciones 
+        WHERE id_equipo = $idEquipo and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idAdjunto = $x['id'];
+                $url = $x['url_archivo'];
+                $fecha = $x['fecha'];
+                $tipo = pathinfo($url, PATHINFO_EXTENSION);
+
+                $array[] = array(
+                    "idAdjuntos" => intval($idAdjunto),
+                    "url" => $url,
+                    "fecha" => $fecha,
+                    "tipo" => $tipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #SUBIR COTIZACIONES DE EQUIPOS
+    if ($action == "subirCotizacionesEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $resp = 0;
+
+        // VARIABLES DEL ADJUNTO
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+        $nombre = 'COTIZACIONES_ID_' . $idEquipo . '_' . rand(50, 1500) . '.' . $extension;
+
+        if (move_uploaded_file($rutaTemporal, '../planner/equipos/' . $nombre)) {
+            $query = "INSERT INTO t_equipos_cotizaciones(id_equipo, url_archivo, fecha, subido_por, activo) VALUES($idEquipo, '$nombre', '$fechaActual', $idUsuario, 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+    #SUBIR COTIZACIONES DE EQUIPOS
+    if ($action == "subirImagenEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $resp = 0;
+
+        // VARIABLES DEL ADJUNTO
+        $rutaTemporal = $_FILES["file"]["tmp_name"];
+        $nombreTemporal = $_FILES["file"]["name"];
+        $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+        $nombre = 'EQUIPO_ID_' . $idEquipo . '_' . rand(50, 1500) . '.' . $extension;
+
+        if (move_uploaded_file($rutaTemporal, '../planner/equipos/' . $nombre)) {
+            $query = "INSERT INTO t_equipos_america_adjuntos(id_equipo, url_adjunto, fecha, subido_por, activo) VALUES($idEquipo, '$nombre', '$fechaActual', $idUsuario, 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
+    if ($action == "obtenerFallas") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, 
+        t_mc.tipo_incidencia, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
+        t_mc.status_urgente,
+        t_mc.status_material,
+        t_mc.status_trabajare,
+        t_mc.energetico_electricidad,
+        t_mc.energetico_agua,
+        t_mc.energetico_diesel,
+        t_mc.energetico_gas,
+        t_mc.departamento_calidad,
+        t_mc.departamento_compras,
+        t_mc.departamento_direccion,
+        t_mc.departamento_finanzas,
+        t_mc.departamento_rrhh
+        FROM t_mc 
+        LEFT JOIN t_users ON t_mc.creado_por = t_users.id
+        LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1 ORDER BY t_mc.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idFalla = $x['id'];
+                $actividad = $x['actividad'];
+                $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                $idResponsable = $x['responsable'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $rangoFecha = $x['rango_fecha'];
+                $fechaCreacion = (new DateTime($x['fecha_creacion']))->format("d/m/Y");
+                $status = $x['status'];
+                $sUrgente = intval($x['status_urgente']);
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajare']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+
+                #RESPONSABLE
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users 
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                $responsable = " ";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = strtok($x['nombre'], ' ') . " " .
+                            strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT count(id) FROM t_mc_comentarios 
+                WHERE id_mc = $idFalla and activo = 1";
+                $totalComentarios = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalComentarios = $x['count(id)'];
+                    }
+                }
+
+                #ADJUNTOS
+                $query = "SELECT count(id) FROM t_mc_adjuntos 
+                WHERE id_mc = $idFalla and activo = 1";
+                $totalAdjuntos = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['count(id)'];
+                    }
+                }
+
+                #ACTIVIDADES
+                $query = "SELECT count(id) FROM t_mc_actividades_ot 
+                WHERE id_falla = $idFalla and activo = 1";
+                $totalActividades = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalActividades = $x['count(id)'];
+                    }
+                }
+
+
+                #Rango Fecha
+                if (
+                    $rangoFecha != ""
+                ) {
+                    $rangoFecha = explode(" - ", $rangoFecha);
+                    if (isset($rangoFecha[0])) {
+                        $fechaInicio = $rangoFecha[0];
+                    } else {
+                        $fechaInicio = $fechaCreacion;
+                    }
+
+                    if (isset($rangoFecha[1])) {
+                        $fechaFin = $rangoFecha[1];
+                    } else {
+                        $fechaFin = $fechaCreacion;
+                    }
+                } else {
+                    $fechaInicio = $fechaCreacion;
+                    $fechaFin = $fechaCreacion;
+                }
+
+                #STATUS 
+                if (
+                    $status == "N" or $status == "PENDIENTE" or $status == "" or $status == "P"
+                ) {
+                    $status = "PENDIENTE";
+                } else {
+                    $status = "SOLUCIONADO";
+                }
+
+
+                if (
+                    $sMaterial > 0
+                ) {
+                    $materiales = 1;
+                } else {
+                    $materiales = 0;
+                }
+                if (
+                    $sTrabajando > 0
+                ) {
+                    $trabajando = 1;
+                } else {
+                    $trabajando = 0;
+                }
+                if (
+                    $sEnergetico > 0
+                ) {
+                    $energeticos = 1;
+                } else {
+                    $energeticos = 0;
+                }
+                if (
+                    $sDepartamento > 0
+                ) {
+                    $departamentos = 1;
+                } else {
+                    $departamentos = 0;
+                }
+
+                $arrayTemp = array(
+                    "id" => $idFalla,
+                    "ot" => "F$idFalla",
+                    "actividad" => $actividad,
+                    "responsable" => $responsable,
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "creadoPor" => $creadoPor,
+                    "comentarios" => intval($totalComentarios),
+                    "adjuntos" => intval($totalAdjuntos),
+                    "pda" => intval($totalActividades),
+                    "fechaInicio" => $fechaInicio,
+                    "fechaFin" => $fechaFin,
+                    "status" => $status,
+                    "materiales" => $materiales,
+                    "energeticos" => $energeticos,
+                    "departamentos" => $departamentos,
+                    "trabajando" => $trabajando,
+                    "tipo" => "FALLA"
+                );
+
+                $array[] = $arrayTemp;
+            }
+        }
+        echo json_encode($array);
+    }
+
+    // Consulta el despiece de Equipos incluyendo el Equipo Padre
+    if ($action == "despieceEquipos") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT id, equipo, jerarquia, id_equipo_principal 
+        FROM t_equipos_america
+        WHERE activo = 1 and (id = $idEquipo OR id_equipo_principal = $idEquipo)";
+
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $id = $i['id'];
+                $idPrincipal = $i['id_equipo_principal'];
+                $equipo = $i['equipo'];
+                $jerarquia = $i['jerarquia'];
+
+                $array[] = array(
+                    "id" => "$id",
+                    "equipo" => "$equipo",
+                    "jerarquia" => "$jerarquia"
+                );
+
+                if ($jerarquia == "SECUNDARIO") {
+                    $query = "SELECT id, equipo, jerarquia 
+                    FROM t_equipos_america 
+                    WHERE activo = 1 and id = $idPrincipal LIMIT 1";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $i) {
+                            $id = $i['id'];
+                            $equipo = $i['equipo'];
+                            $jerarquia = $i['jerarquia'];
+
+                            $array[0] = array(
+                                "id" => "$id",
+                                "equipo" => "$equipo",
+                                "jerarquia" => "$jerarquia"
+                            );
+                        }
+                    }
+                }
+            }
+            echo json_encode($array);
+        }
+    }
+
+
+
+
     // Final
 }
