@@ -1318,7 +1318,7 @@ if (isset($_GET['action'])) {
                 $tipo = pathinfo($url, PATHINFO_EXTENSION);
 
                 $array[] = array(
-                    "idAdjuntos" => intval($idAdjunto),
+                    "idAdjunto" => intval($idAdjunto),
                     "url" => $url,
                     "fecha" => $fecha,
                     "tipo" => $tipo
@@ -1364,7 +1364,7 @@ if (isset($_GET['action'])) {
                 $tipo = pathinfo($url, PATHINFO_EXTENSION);
 
                 $array[] = array(
-                    "idAdjuntos" => intval($idAdjunto),
+                    "idAdjunto" => intval($idAdjunto),
                     "url" => $url,
                     "fecha" => $fecha,
                     "tipo" => $tipo

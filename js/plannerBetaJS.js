@@ -5737,7 +5737,7 @@ function informacionEquipo(idEquipo) {
 
 // OBTIENE EL DESPIECE DE EQUIPO
 function despieceEquipos(idEquipo) {
-   document.getElementById("dataDespieceEquipo").innerHTML = '';
+   e_dataDespieceEquipo.innerHTML = '';
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
 
@@ -5758,24 +5758,23 @@ function despieceEquipos(idEquipo) {
             var jerarquia = array[index].jerarquia;
 
             if (jerarquia == "PRINCIPAL") {
-               despiece += `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b" onclick="informacionEquipo(${id});">
-                            <i class="fad fa-cog mr-1"></i>
-                            <h1>${equipo}</h1>
+               codigo = `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center" onclick="informacionEquipo(${id});">
+                            <i class="fas fa-cog mr-1 fa-lg"></i>
+                            <h1>${equipo} (${array.length})</h1>
                         </div>`
                   ;
+               e_dataDespieceEquipo.insertAdjacentHTML('beforeend', codigo);
             } else {
-               despiece += `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center border-b pl-6" onclick="informacionEquipo(${id});">
-                            <i class="fad fa-cogs mr-1"></i>
+               codigo = `
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center pl-6" onclick="informacionEquipo(${id});">
+                            <i class="fad fa-cogs mr-1 fa-lg"></i>
                             <h1>${equipo}</h1>
                         </div>`
                   ;
+               e_dataDespieceEquipo.insertAdjacentHTML('beforeend', codigo);
             }
          }
-         return despiece;
-      }).then(despiece => {
-         document.getElementById("dataDespieceEquipo").innerHTML = despiece;
       })
       .catch(err => {
          fetch(APIERROR + err + ` despieceEquipos(${idEquipo})`)
@@ -5810,7 +5809,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
 
                if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                   codigo = `
-                     <div id="modalMedia_adjunto_img_${url}" class="relative px-1 h-20">
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                         <a href="planner/equipos/${url}" target="_blank">
                            <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/equipos/${url})">
                            </div>
@@ -5830,7 +5829,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
                            </div>
                         </a>
 
-                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${url}, 'ADJUNTOSEQUIPO');">
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
                            <i class="fas fa-trash-alt fa-2x"></i>
                         </div>
                      </div>              
@@ -5914,12 +5913,12 @@ const obtenerCotizacionesEquipo = idEquipo => {
 
                if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                   codigo = `
-                     <div id="modalMedia_adjunto_img_${url}" class="relative px-1 h-20">
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                         <a href="planner/equipos/${url}" target="_blank">
                            <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/equipos/${url})">
                            </div>
                         </a>
-                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'COTIZACIONEQUIPO');">
                            <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
                         </div>
                      </div>
@@ -5934,7 +5933,7 @@ const obtenerCotizacionesEquipo = idEquipo => {
                            </div>
                         </a>
 
-                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${url}, 'ADJUNTOSEQUIPO');">
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'COTIZACIONEQUIPO');">
                            <i class="fas fa-trash-alt fa-2x"></i>
                         </div>
                      </div>              
@@ -6181,7 +6180,7 @@ function obtenerImagenesEquipo(idEquipo) {
             document.getElementById("contenedorImagenes").classList.add('hidden');
             document.getElementById("dataImagenes").innerHTML = '';
             document.getElementById("dataImagenesEquipo").innerHTML = `
-               <div id="modalMedia_adjunto_img_603" class="relative">
+               <div id="modalMedia_adjunto_img_xxx" class="relative">
                   <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/equipos/equipo.png)">
                   </div>
                </div>
@@ -7901,7 +7900,7 @@ const codigoIncidenciasEquipo = params => {
                   `<span class="text-blue-500 text-xs">${params.tipoIncidencia}</span>`
                   : `<span class="text-teal-500 text-xs">${params.tipoIncidencia}</span>`;
 
-   const textStatus = params.status == "PENDIENTE"? 'text-red-400' : 'text-green-400';
+   const textStatus = params.status == "PENDIENTE" ? 'text-red-400' : 'text-green-400';
 
    return `
       <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
@@ -10709,7 +10708,6 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
          .catch(function (err) {
             fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
          })
-      alertify.success('Eliminando...')
    }
       , function () { alertify.error('Proceso Cancelado') });
 }

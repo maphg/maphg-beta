@@ -1274,6 +1274,16 @@ if (isset($_GET['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
+        } elseif ($tipoAdjunto == "ADJUNTOSEQUIPO") {
+            $query = "UPDATE t_equipos_documentos SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "COTIZACIONEQUIPO") {
+            $query = "UPDATE t_equipos_cotizaciones SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
         }
         echo json_encode($resp);
     }

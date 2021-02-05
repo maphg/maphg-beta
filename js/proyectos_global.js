@@ -153,7 +153,7 @@ const datosProyectos = params => {
             </td>
 
             <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
-                <div class="font-semibold uppercase leading-4" data-title-info="${params.proyecto}">
+                <div class="font-semibold uppercase leading-4" data-title-proyecto="${params.proyecto}">
                     <h1 class="truncate">${params.proyecto}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
@@ -166,8 +166,8 @@ const datosProyectos = params => {
                 ${params.pda}
             </td>
 
-            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable}>
-                ${params.responsable}
+            <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable} data-title-proyecto="${params.responsable}">
+                <h1 class="truncate">${params.responsable}</h1>
             </td>
 
             <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3"
@@ -322,7 +322,7 @@ const datosPlanes = params => {
     <tr id="${idPlanaccion}planaccion" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select ${statusPlanaccion}" ${ocultarActividades}>
             <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;" 
             ${fToolTip}>
-                <div class="font-semibold uppercase leading-4" data-title-info="${params.actividad}">
+                <div class="font-semibold uppercase leading-4" data-title-proyecto="${params.actividad}">
                     <h1 id="AP${idPlanaccion}" class="truncate">${params.actividad}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
@@ -1830,41 +1830,45 @@ function eliminarAdjunto(idAdjunto, tipoAdjunto) {
     const action = 'eliminarAdjunto';
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
 
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-            if (array == 1) {
-                alertaImg('Adjunto Eliminado', '', 'success', 1500);
+    alertify.confirm('MAPHG', '¿Eliminar Adjunto?', function () {
 
-                // ELIMINA ADJUNTO DEL CONTENEDOR
-                if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
-                    document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Adjunto Eliminado', '', 'success', 1500);
+
+                    // ELIMINA ADJUNTO DEL CONTENEDOR
+                    if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
+                        document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+                    } else {
+                        alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+                    }
+
+                    // ACTUALIZA DATOS
+                    if (tipoAdjunto == "FALLA") {
+                        obtenerFallas(idEquipo);
+                    } else if (tipoAdjunto == "TAREA") {
+                        obtenerTareas(idEquipo);
+                    } else if (tipoAdjunto == "PLANACCION") {
+                        obtenerPlanaccion(idProyecto);
+                    } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
+                        obtenerProyectosGlobal('PENDIENTE');
+                    } else if (tipoAdjunto == "TEST") {
+                        obtenerTestEquipo(idEquipo);
+                    } else if (tipoAdjunto == "ENERGETICO") {
+                        obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                    }
+
                 } else {
-                    alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
                 }
-
-                // ACTUALIZA DATOS
-                if (tipoAdjunto == "FALLA") {
-                    obtenerFallas(idEquipo);
-                } else if (tipoAdjunto == "TAREA") {
-                    obtenerTareas(idEquipo);
-                } else if (tipoAdjunto == "PLANACCION") {
-                    obtenerPlanaccion(idProyecto);
-                } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
-                    obtenerProyectos(idSeccion, 'PENDIENTE');
-                } else if (tipoAdjunto == "TEST") {
-                    obtenerTestEquipo(idEquipo);
-                } else if (tipoAdjunto == "ENERGETICO") {
-                    obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
-                }
-
-            } else {
-                alertaImg('Intente de Nuevo', '', 'info', 1500);
-            }
-        })
-        .catch(function (err) {
-            fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
-        })
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
+            })
+    }
+        , function () { alertify.error('Proceso Cancelado') });
 }
 
 
