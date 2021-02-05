@@ -735,7 +735,7 @@
                         <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4 bg-green-200">
                             <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg text-green-500"></i>
 
-                            <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500">
+                            <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
                                 <option value="OPERATIVO">OPERATIVO</option>
                                 <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
@@ -813,25 +813,25 @@
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
-                                <select id="seccionEquipo" class="font-semibold truncate bg-white w-32">
+                                <select id="seccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
-                                <select id="subseccionEquipo" class="font-semibold truncate bg-white w-32">
+                                <select id="subseccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
-                                <select id="tipoEquipo" class="font-semibold truncate bg-white w-32">
+                                <select id="tipoEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
                                 </select>
                             </div>
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
-                                <select id="jerarquiaEquipo" class="font-semibold truncate bg-white w-32">
+                                <select id="jerarquiaEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
                                     <option value="PRINCIPAL">PRINCIPAL</option>
                                     <option value="SECUNDARIO">SECUNDARIO</option>
                                 </select>
@@ -839,7 +839,7 @@
 
                             <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
-                                <select id="dataOpcionesEquipos" class="font-semibold truncate bg-white w-32"></select>
+                                <select id="dataOpcionesEquipos" class="font-semibold truncate bg-white w-32 select-sinarrow"></select>
                             </div>
 
                         </div>
@@ -848,7 +848,7 @@
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
-                                <select id="marcaEquipo" class="font-semibold truncate bg-white w-24">
+                                <select id="marcaEquipo" class="font-semibold truncate bg-white w-24 select-sinarrow">
                                 </select>
 
                             </div>
