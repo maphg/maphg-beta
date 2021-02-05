@@ -166,7 +166,7 @@
     <!-- CALENDARIO SEMANAL -->
     <div class="flex flex-col justify-evenly items-center w-full h-screen">
 
-        <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative h-full py-5" style="margin-top: 9vh">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative  py-5" style="margin-top: 9vh">
 
             <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 sticky top-0 left-0 z-20 bg-gray-200 py-8 rounded">
 
@@ -974,10 +974,14 @@
             </div>
 
             <!-- DESPIECE -->
-            <div id="contenedorDespiedeEquipo" class="w-full bg-white hidden">
-                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2">
+            <div id="contenedorDespiedeEquipo" class="flex flex-row w-full bg-white hidden">
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
                     <h1 class="my-2">DESPIECE EQUIPO</h1>
                     <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
+                </div>
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
+                    <h1 class="my-2">DESPIECE MATERIALES</h1>
+                    <div id="dataDespieceMaterialesEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
                 </div>
             </div>
 
