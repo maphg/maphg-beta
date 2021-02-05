@@ -1011,7 +1011,7 @@
                     <button id="btnIncidenciasEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Incidencias</button>
                     <button id="btnChecklistEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Checklist
                         MP</button>
-                    <button id="btnBitacorasEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Bitácoras</button>
+                    <button id="btnBitacorasEquipo" class="bg-gray-200 text-gray-500 px-2 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Inspección/Bitácoras</button>
                 </div>
             </div>
 

@@ -5566,7 +5566,6 @@ function informacionEquipo(idEquipo) {
             e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
             e_jerarquiaEquipo.value = 0;
             diseñoOpcionesSuperioresEquipo('contenedorCaracteristicasEquipo', 'btnInformacionEquipo');
-            consultarPlanEquipo(idEquipo);
             obtenerImagenesEquipo(idEquipo);
             abrirmodal('modalMPEquipo');
 
@@ -5689,6 +5688,20 @@ function informacionEquipo(idEquipo) {
                e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
 
                QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?${array.idEquipo}`);
+
+               if (array.localEquipo == "EQUIPO") {
+                  btnPreventivosEquipo.classList.remove('hidden');
+                  btnIncidenciasEquipo.classList.remove('hidden');
+                  btnChecklistEquipo.classList.add('hidden');
+                  btnBitacorasEquipo.classList.remove('hidden');
+                  consultarPlanEquipo(idEquipo);
+               } else {
+                  btnPreventivosEquipo.classList.add('hidden');
+                  btnIncidenciasEquipo.classList.remove('hidden');
+                  btnChecklistEquipo.classList.remove('hidden');
+                  btnBitacorasEquipo.classList.add('hidden');
+                  obtenerIncidenciasEquipo(idEquipo);
+               }
             }
          })
          .then(() => {
@@ -10656,8 +10669,6 @@ function agregarAdjuntosEnergetico(idEnergetico) {
 }
 
 
-
-
 // ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
 function eliminarAdjunto(idAdjunto, tipoAdjunto) {
    let idDestino = localStorage.getItem('idDestino');
@@ -10770,7 +10781,7 @@ function exportarEquipos(idDestino) {
 }
 
 
-// 
+// ACTUALIZA TAREAS DE EQUIPO
 function actualizarTareasequipos() {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
