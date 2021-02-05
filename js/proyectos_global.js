@@ -137,6 +137,9 @@ const datosProyectos = params => {
         fStatus = `onclick="actualizarProyectos('N', 'status', ${idProyecto});"`;
     }
 
+    const coste = new Intl.NumberFormat('IN').format(params.coste);
+    const presupuesto = new Intl.NumberFormat('IN').format(params.presupuesto);
+    
     return `
         <tr id="${idProyecto + 'proyecto'}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 fila-proyectos-select">
 
@@ -193,13 +196,12 @@ const datosProyectos = params => {
 
             <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fCoste}>
-            
-                $ ${params.coste}
+                $ ${coste}
             </td>
 
             <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fPresupuesto}>
-                $ ${params.presupuesto}
+                $ ${presupuesto}
             </td>
 
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
