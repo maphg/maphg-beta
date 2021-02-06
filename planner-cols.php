@@ -168,7 +168,7 @@
 
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative  py-5" style="margin-top: 9vh">
 
-            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 sticky top-0 left-0 z-20 bg-gray-200 py-8 rounded">
+            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 sticky top-0 -left-0 z-20 bg-gray-200 py-8 rounded">
 
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">--</p>
