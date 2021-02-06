@@ -250,8 +250,8 @@
                     <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
                         <div class="flex items-center">
                             <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
-                                <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
-                                    <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
+                                    <div class="bg-cyan-100 rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
                                         <i class="fad fa-clipboard-list-check"></i>
                                         <h1 class="text-xs">
                                             <span id="loadPendientes" class="text-cyan-900"></span>
