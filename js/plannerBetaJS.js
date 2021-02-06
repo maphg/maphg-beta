@@ -5672,10 +5672,10 @@ function informacionEquipo(idEquipo) {
                }
             }
          })
-         // .then(() => {
-         //    console.log(3);
-         //    cancelarInformacionEquipo(idEquipo);
-         // })
+         .then(() => {
+            console.log(3);
+            cancelarInformacionEquipo(idEquipo);
+         })
          .catch(function (err) {
             fetch(APIERROR + err);
             e_nombreEquipo.value = '';
