@@ -3814,6 +3814,29 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #OBTIENE INCIDENCIAS EQUIPO, PENDIENTES
+                $totalIncidencias = 0;
+                $query = "SELECT t_mc.tipo_incidencia FROM t_mc 
+                INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+                WHERE t_mc.id_seccion = $idSeccion and t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 $filtroDestinoInicidencias";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $tipoIncidencia = $x['tipo_incidencia'];
+
+                        if ($tipoIncidencia === "URGENCIA") {
+                            $urgencia++;
+                        } elseif ($tipoIncidencia === "EMERGENCIA") {
+                            $emergencia++;
+                        } elseif ($tipoIncidencia === "ALARMA") {
+                            $alarma++;
+                        } elseif ($tipoIncidencia === "ALERTA") {
+                            $alerta++;
+                        } elseif ($tipoIncidencia === "SEGUIMIENTO") {
+                            $seguimiento++;
+                        }
+                    }
+                }
+
                 #OBTIENE INCIDENCIAS GENERALES, PENDIENTES
                 $totalIncidenciasGenerales = 0;
                 $query = "SELECT tipo_incidencia FROM t_mp_np
@@ -3832,6 +3855,19 @@ if (isset($_GET['action'])) {
                             $alerta++;
                         } elseif ($tipoIncidencia === "SEGUIMIENTO") {
                             $seguimiento++;
+                        }
+                    }
+                }
+
+                if ($idSeccion == 1001) {
+
+                    #OBTIENE INCIDENCIAS GENERALES, PENDIENTES
+                    $totalIncidenciasGenerales = 0;
+                    $query = "SELECT count(id) 'id' FROM t_energeticos
+                    WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 $filtroDestino";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $seguimiento = $x['id'];
                         }
                     }
                 }
