@@ -337,6 +337,8 @@ const obtenerSecciones = (idSeccion, status) => {
          columnas_x.removeChild(document.getElementById("contenedor_seccion_" + idSeccion))
       }
 
+      console.log(URL);
+
       fetch(URL)
          .then(array => array.json())
          .then(array => {
@@ -531,9 +533,11 @@ function calendarioSecciones() {
    obtenerSecciones(24, 2);
    obtenerSecciones(23, 2);
    obtenerSecciones(7, 2);
+   obtenerSecciones(19, 2);
 
    switch (hoydia) {
       case "lunes":
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(8, 1);
          obtenerSecciones(12, 1);
@@ -541,12 +545,14 @@ function calendarioSecciones() {
          break;
 
       case "martes":
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(9, 1);
          obtenerSecciones(23, 1);
          break;
 
       case "miercoles":
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(1, 1);
          obtenerSecciones(10, 1);
@@ -554,6 +560,7 @@ function calendarioSecciones() {
          break;
 
       case "jueves":
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(6, 1);
          obtenerSecciones(5, 1);
@@ -561,6 +568,7 @@ function calendarioSecciones() {
          break;
 
       case "viernes":
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(11, 1);
          obtenerSecciones(24, 1);
@@ -569,6 +577,7 @@ function calendarioSecciones() {
          break;
 
       default:
+         obtenerSecciones(19, 1)
          obtenerSecciones(1001, 1);
          obtenerSecciones(8, 1);
          obtenerSecciones(12, 1);

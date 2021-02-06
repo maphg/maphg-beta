@@ -3747,6 +3747,24 @@ if (isset($_GET['action'])) {
             $filtroDestinoInicidencias = "and t_mc.id_destino = $idDestino";
         }
 
+        $acceso = 1;
+        if ($idSeccion == 19) {
+            $query = "SELECT OMA FROM t_users WHERE id = $idUsuario";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $acceso = $x['OMA'];
+                }
+            }
+        }
+
+        if ($acceso == 1) {
+            $filtroAccesoSubseccion = "";
+            $filtroAccesoSeccion = "";
+        } else {
+            $filtroAccesoSubseccion = "and c_rel_destino_seccion.id = 0";
+            $filtroAccesoSeccion = "and c_secciones.id = 0";
+        }
+
         // SUBSECCIONES
         $array['subsecciones'] = array();
         $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_secciones.id 'idSeccion', c_secciones.seccion, c_subsecciones.id 'idSubseccion', c_subsecciones.grupo
@@ -3755,7 +3773,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
         INNER JOIN c_rel_seccion_subseccion  ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion 
         INNER JOIN c_subsecciones  ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
-        WHERE c_rel_destino_seccion.id_destino = $idDestino $filtroSeccion
+        WHERE c_rel_destino_seccion.id_destino = $idDestino $filtroSeccion $filtroAccesoSubseccion
         ORDER BY c_subsecciones.id ASC ";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -3855,7 +3873,7 @@ if (isset($_GET['action'])) {
 
         // SECCIONES
         $array['secciones'] = array();
-        $query = "SELECT id, seccion FROM c_secciones WHERE id = $idSeccion";
+        $query = "SELECT id, seccion FROM c_secciones WHERE id = $idSeccion $filtroAccesoSeccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idSeccion = $x['id'];
