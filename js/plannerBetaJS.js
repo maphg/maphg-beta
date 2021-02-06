@@ -349,8 +349,8 @@ const obtenerSecciones = (idSeccion, status) => {
                   const codigo = `
                   <div id="contenedor_seccion_${idSeccion}" class="flex items-center py-3"> 
                      <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
-                        <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
-                           <div class="absolute flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
+                        <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
+                           <div class="absolute flex justify-center items-center top-20 rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
                               <h1 class="font-medium text-md">${logoSeccion}</h1>
                            </div>
                            <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">

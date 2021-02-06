@@ -1,4 +1,11 @@
 css/*
+*.css
+*.map
+*.scss
+*ICON
+css/DataTables/
+css/fontawesome/
+!css/tailwindproduccion.css
 js/i18n/
 php/PHPExcel/
 webfonts/
@@ -24,7 +31,6 @@ tfm/
 themify-icons/
 timedropper/
 imagenes/
-css/
 DataTables/
 files/
 nbproject/
