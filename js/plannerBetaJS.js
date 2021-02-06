@@ -265,6 +265,20 @@ const contenedorBitacoraEquipo = document.getElementById("contenedorBitacoraEqui
 const dataIncidenciasEquipo = document.getElementById("dataIncidenciasEquipo");
 // ELEMENTOS PARA MODAL INFORMACION DE EQUIPO
 
+// BOTONES CALENDARIO SECCIÓN
+const btnSeccion_8 = document.getElementById("btnSeccion_8");
+const btnSeccion_12 = document.getElementById("btnSeccion_12");
+const btnSeccion_9 = document.getElementById("btnSeccion_9");
+const btnSeccion_1 = document.getElementById("btnSeccion_1");
+const btnSeccion_10 = document.getElementById("btnSeccion_10");
+const btnSeccion_6 = document.getElementById("btnSeccion_6");
+const btnSeccion_5 = document.getElementById("btnSeccion_5");
+const btnSeccion_11 = document.getElementById("btnSeccion_11");
+const btnSeccion_24 = document.getElementById("btnSeccion_24");
+const btnSeccion_23 = document.getElementById("btnSeccion_23");
+const btnSeccion_7 = document.getElementById("btnSeccion_7");
+// BOTONES CALENDARIO SECCIÓN
+
 // Función principal.
 function comprobarSession() {
    let idUsuario = localStorage.getItem("usuario");
@@ -272,7 +286,6 @@ function comprobarSession() {
 
    // Comprueba que exista la sessión
    if (idUsuario > 0 || idDestino > 0) {
-      llamarFuncionX("consultaSubsecciones");
       hora();
    } else {
       alertaImg('Sessión No Iniciada', '', 'info', 3000);
@@ -282,8 +295,163 @@ function comprobarSession() {
 
 
 document.getElementById("destinosSelecciona").addEventListener('click', () => {
+   let idDestino = localStorage.getItem("idDestino");
    botonDestino();
+   comprobarSession();
+   obtenerDatosUsuario(idDestino);
+   obtenerPendientesUsuario();
+   calendarioSecciones();
 });
+
+
+// OBTIENE LAS SECCIONES SEGÚN EL DESTINO
+const obtenerSecciones = (idSeccion, status) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "obtenerSecciones";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+
+   // ELIMINA CONTENEDOR
+   if (status == 2) {
+      if (document.getElementById("contenedor_seccion_" + idSeccion)) {
+         columnas_x.removeChild(document.getElementById("contenedor_seccion_" + idSeccion))
+         if (document.getElementById("btnSeccion_" + idSeccion)) {
+            document.getElementById("btnSeccion_" + idSeccion).classList.remove('btn-activo');
+         }
+      }
+   } else if (document.getElementById("contenedor_seccion_" + idSeccion) && status === 0) {
+      if (document.getElementById("btnSeccion_" + idSeccion)) {
+         document.getElementById("btnSeccion_" + idSeccion).classList.remove('btn-activo');
+      }
+      if (document.getElementById("contenedor_seccion_" + idSeccion)) {
+         columnas_x.removeChild(document.getElementById("contenedor_seccion_" + idSeccion))
+      }
+
+   } else {
+      if (document.getElementById("btnSeccion_" + idSeccion)) {
+         document.getElementById("btnSeccion_" + idSeccion).classList.add('btn-activo');
+      }
+      if (document.getElementById("contenedor_seccion_" + idSeccion)) {
+         columnas_x.removeChild(document.getElementById("contenedor_seccion_" + idSeccion))
+      }
+
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array) {
+               for (let x = 0; x < array.secciones.length; x++) {
+                  const idSeccion = array.secciones[x].idSeccion;
+                  const seccion = array.secciones[x].seccion;
+                  const estiloLogo = seccion ? seccion.toLowerCase() + '-logo' : '';
+                  const logoSeccion = idSeccion == 1001 ? `<i class="fas fa-plug fa-lg"></i>` : `${seccion}`;
+                  const codigo = `
+                  <div id="contenedor_seccion_${idSeccion}" class="flex items-center py-3"> 
+                     <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
+                        <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
+                           <div class="absolute flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
+                              <h1 class="font-medium text-md">${logoSeccion}</h1>
+                           </div>
+                           <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
+                              <i class="fad fa-expand-arrows" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});"></i>
+                           </div>
+                           <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
+                              <div id="elementos_seccion_${idSeccion}" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>            
+               `;
+                  columnas_x.insertAdjacentHTML('beforeend', codigo);
+               }
+
+               // ORDENA LAS SUBSECCIONES POR PENDIENTES
+               array.subsecciones.sort(function (a, b) {
+                  return b.total - a.total;
+               });
+               return array.subsecciones;
+            }
+         })
+         .then(array => {
+            if (array) {
+               for (let x = 0; x < array.length; x++) {
+                  const subseccion = array[x].subseccion;
+                  const idSubseccion = array[x].idSubseccion;
+                  const idSeccion = array[x].idSeccion;
+                  const total = array[x].total;
+                  const totalX = total > 0 ? total : '';
+                  const emergencia = array[x].emergencia;
+                  const urgencia = array[x].urgencia;
+                  const alarma = array[x].alarma;
+                  const alerta = array[x].alerta;
+                  const seguimiento = array[x].seguimiento;
+                  const proyectos = array[x].proyectos;
+
+                  if (idSubseccion == 200) {
+                     fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
+                  } else {
+                     fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
+                  }
+
+                  const emergenciaX = emergencia > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 bg-red-300 text-red-600 rounded-md font-bold flex justify-center items-center ml-1">${emergencia}</h1>` : '';
+
+                  const urgenciaX = urgencia > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 bg-orange-300 text-orange-600 rounded-md font-bold flex justify-center items-center ml-1">${urgencia}</h1>` : '';
+
+                  const alarmaX = alarma > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 bg-yellow-300 text-yellow-600 rounded-md font-bold flex justify-center items-center ml-1">${alarma}</h1>` : '';
+
+                  const alertaX = alerta > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 bg-blue-300 text-blue-600  rounded-md font-bold flex justify-center items-center ml-1">${alerta}</h1>` : '';
+
+                  const seguimientoX = seguimiento > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 bg-teal-300 text-teal-600  rounded-md font-bold flex justify-center items-center ml-1">${seguimiento}</h1>` : '';
+
+                  const proyectosX = proyectos > 0 ?
+                     `<h1 class="text-xxs h-5 w-5 text-red-700 bg-red-400  rounded-md font-bold flex justify-center items-center ml-1">${proyectos}</h1>` : '';
+
+                  const codigo = `
+                  <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
+                     <h1 class="truncate mr-2">${subseccion}</h1>
+                     <div class="flex flex-row justify-center">
+                        ${emergenciaX}
+                        ${urgenciaX}
+                        ${alarmaX}
+                        ${alertaX}
+                        ${seguimientoX}
+                        ${proyectosX}
+                     </div>
+                  </div >
+               `;
+                  if (document.getElementById("elementos_seccion_" + idSeccion)) {
+                     document.getElementById("elementos_seccion_" + idSeccion).insertAdjacentHTML('beforeend', codigo);
+                  }
+               }
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ` obtenerSecciones = (${idSeccion})`);
+         })
+   }
+}
+
+
+// EVENTOS PARA LOS BOTONES DE LA SEMANA
+btnSeccion_8.addEventListener("click", () => { obtenerSecciones(8, 0) });
+btnSeccion_12.addEventListener("click", () => { obtenerSecciones(12, 0) });
+btnSeccion_9.addEventListener("click", () => { obtenerSecciones(9, 0) });
+btnSeccion_1.addEventListener("click", () => { obtenerSecciones(1, 0) });
+btnSeccion_10.addEventListener("click", () => { obtenerSecciones(10, 0) });
+btnSeccion_6.addEventListener("click", () => { obtenerSecciones(6, 0) });
+btnSeccion_5.addEventListener("click", () => { obtenerSecciones(5, 0) });
+btnSeccion_11.addEventListener("click", () => { obtenerSecciones(11, 0) });
+btnSeccion_24.addEventListener("click", () => { obtenerSecciones(24, 0) });
+btnSeccion_23.addEventListener("click", () => { obtenerSecciones(23, 0) });
+btnSeccion_7.addEventListener("click", () => { obtenerSecciones(7, 0) });
+
 
 // Obtiene información del usuario, para mostrarlo en el menú 
 function obtenerDatosUsuario(idDestino) {
@@ -312,16 +480,109 @@ function obtenerDatosUsuario(idDestino) {
          document.getElementById("destinosSelecciona").innerHTML =
             data.destinosOpcion;
          // alertaImg("Destino: " + data.destino, "", "success", 2000);
-         comprobarSession();
       },
       error: function (err) {
-         comprobarSession();
-         fetch(APIERROR + ' ' + err);
+         fetch(APIERROR + ' ' + err + ` obtenerDatosUsuario(${idDestino})`);
       }
    });
+}
 
-   // ACTUALIZA LOS PENDIENTES POR USUARIO Y DESTINO
-   // obtenerPendientesUsuario();
+
+window.addEventListener('load', () => {
+   let idDestino = localStorage.getItem("idDestino");
+   comprobarSession();
+   obtenerDatosUsuario(idDestino);
+   obtenerPendientesUsuario();
+   calendarioSecciones();
+});
+
+
+// Función para el calendario de Secciones.
+function calendarioSecciones() {
+   var numSem = new Date().getDay();
+   var diasSem = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+   var hoydia = diasSem[numSem];
+   var horas = new Date().getHours();
+   var minutos = new Date().getMinutes();
+   var mes = new Date().getMonth() + 1;
+   var dia = new Date().getDate();
+
+   if (dia < 10) {
+      dia = "0" + dia;
+   }
+
+   if (mes < 10) {
+      mes = "0" + mes;
+   }
+
+   document.getElementById("hora").innerHTML = horas + ": " + minutos;
+   document.getElementById("mes").innerHTML = mes;
+   document.getElementById("dia").innerHTML = dia;
+
+   obtenerSecciones(1001, 2);
+   obtenerSecciones(8, 2);
+   obtenerSecciones(12, 2);
+   obtenerSecciones(9, 2);
+   obtenerSecciones(1, 2);
+   obtenerSecciones(10, 2);
+   obtenerSecciones(6, 2);
+   obtenerSecciones(5, 2);
+   obtenerSecciones(11, 2);
+   obtenerSecciones(24, 2);
+   obtenerSecciones(23, 2);
+   obtenerSecciones(7, 2);
+
+   switch (hoydia) {
+      case "lunes":
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(8, 1);
+         obtenerSecciones(12, 1);
+         obtenerSecciones(23, 1);
+         break;
+
+      case "martes":
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(9, 1);
+         obtenerSecciones(23, 1);
+         break;
+
+      case "miercoles":
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(1, 1);
+         obtenerSecciones(10, 1);
+         obtenerSecciones(23, 1);
+         break;
+
+      case "jueves":
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(6, 1);
+         obtenerSecciones(5, 1);
+         obtenerSecciones(23, 1);
+         break;
+
+      case "viernes":
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(11, 1);
+         obtenerSecciones(24, 1);
+         obtenerSecciones(7, 1);
+         obtenerSecciones(23, 1);
+         break;
+
+      default:
+         obtenerSecciones(1001, 1);
+         obtenerSecciones(8, 1);
+         obtenerSecciones(12, 1);
+         obtenerSecciones(9, 1);
+         obtenerSecciones(1, 1);
+         obtenerSecciones(10, 1);
+         obtenerSecciones(6, 1);
+         obtenerSecciones(5, 1);
+         obtenerSecciones(11, 1);
+         obtenerSecciones(24, 1);
+         obtenerSecciones(23, 1);
+         obtenerSecciones(7, 1);
+         break;
+   }
 }
 
 
@@ -542,276 +803,7 @@ $(function () {
 });
 
 
-// Funcion para los Botones de los Calendario
-function botones(idd) {
-   let nombreCol = idd.toUpperCase();
-   if (document.getElementById("col" + idd)) {
-      switch (idd) {
-         case "zia":
-            document.getElementById("colzia").classList.toggle("hidden");
-            document.getElementById("btn-zia").classList.toggle("btn-activo");
-            break;
-         case "zie":
-            document.getElementById("colzie").classList.toggle("hidden");
-            document.getElementById("btn-zie").classList.toggle("btn-activo");
-            break;
-         case "zhh":
-            document.getElementById("colzhh").classList.toggle("hidden");
-            document.getElementById("btn-zhh").classList.toggle("btn-activo");
-            break;
-         case "zic":
-            document.getElementById("colzic").classList.toggle("hidden");
-            document.getElementById("btn-zic").classList.toggle("btn-activo");
-            break;
-         case "zhp":
-            document.getElementById("colzhp").classList.toggle("hidden");
-            document.getElementById("btn-zhp").classList.toggle("btn-activo");
-            break;
-         case "dec":
-            document.getElementById("coldec").classList.toggle("hidden");
-            document.getElementById("btn-dec").classList.toggle("btn-activo");
-            break;
-         case "zhc":
-            document.getElementById("colzhc").classList.toggle("hidden");
-            document.getElementById("btn-zhc").classList.toggle("btn-activo");
-            break;
-         case "zha":
-            document.getElementById("colzha").classList.toggle("hidden");
-            document.getElementById("btn-zha").classList.toggle("btn-activo");
-            break;
-         case "zil":
-            document.getElementById("colzil").classList.toggle("hidden");
-            document.getElementById("btn-zil").classList.toggle("btn-activo");
-            break;
-         case "auto":
-            document.getElementById("colauto").classList.toggle("hidden");
-            document.getElementById("btn-auto").classList.toggle("btn-activo");
-            break;
-         case "dep":
-            document.getElementById("coldep").classList.toggle("hidden");
-            document.getElementById("btn-dep").classList.toggle("btn-activo");
-            break;
-      }
-   } else {
-      alertaImg("Acceso Denegado: " + nombreCol, "", "info", 1500);
-   }
-}
-
-
-// Función para el calendario de Secciones.
-function calendarioSecciones() {
-   var numSem = new Date().getDay();
-   var diasSem = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-   var hoydia = diasSem[numSem];
-   var horas = new Date().getHours();
-   var minutos = new Date().getMinutes();
-   var mes = new Date().getMonth() + 1;
-   var dia = new Date().getDate();
-
-   if (dia < 10) {
-      dia = "0" + dia;
-   }
-
-   if (mes < 10) {
-      mes = "0" + mes;
-   }
-
-   document.getElementById("hora").innerHTML = horas + ": " + minutos;
-   document.getElementById("mes").innerHTML = mes;
-   document.getElementById("dia").innerHTML = dia;
-
-   // Restable Clases en los Botones.
-
-
-   if (document.getElementById("colzia")) {
-      document.getElementById("colzia").classList.add("hidden");
-      document.getElementById("btn-zia").classList.remove("btn-activo");
-
-   }
-
-   if (document.getElementById("colzhp")) {
-      document.getElementById("colzhp").classList.add("hidden");
-      document.getElementById("btn-zhp").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("coldep")) {
-      document.getElementById("coldep").classList.add("hidden");
-      document.getElementById("btn-dep").classList.remove("btn-activo");
-      document.getElementById("btn-dep").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colzic")) {
-      document.getElementById("colzic").classList.add("hidden");
-      document.getElementById("btn-zic").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("coldec")) {
-      document.getElementById("coldec").classList.add("hidden");
-      document.getElementById("btn-dec").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colzie")) {
-      document.getElementById("colzie").classList.add("hidden");
-      document.getElementById("btn-zie").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colzhc")) {
-      document.getElementById("colzhc").classList.add("hidden");
-      document.getElementById("btn-zhc").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colzha")) {
-      document.getElementById("colzha").classList.add("hidden");
-      document.getElementById("btn-zha").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colzil")) {
-      document.getElementById("colzil").classList.add("hidden");
-      document.getElementById("btn-zil").classList.remove("btn-activo");
-   }
-
-   if (document.getElementById("colauto")) {
-      document.getElementById("colauto").classList.add("hidden");
-      document.getElementById("btn-auto").classList.remove("btn-activo");
-   }
-
-   switch (hoydia) {
-      case "lunes":
-         document.getElementById("label-lunes").classList.add("text-gray-700");
-
-         if (document.getElementById("colzia")) {
-            document.getElementById("btn-zia").classList.add("btn-activo");
-            document.getElementById("colzia").classList.remove("hidden");
-         }
-         if (document.getElementById("colzhp")) {
-            document.getElementById("btn-zhp").classList.add("btn-activo");
-            document.getElementById("colzhp").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-
-         break;
-
-      case "martes":
-         document.getElementById("label-martes").classList.add("text-gray-700");
-
-         if (document.getElementById("colzic")) {
-            document.getElementById("btn-zic").classList.add("btn-activo");
-            document.getElementById("colzic").classList.remove("hidden");
-         }
-         if (document.getElementById("colzhh")) {
-            document.getElementById("btn-zhh").classList.add("btn-activo");
-            document.getElementById("colzhh").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-         break;
-
-      case "miercoles":
-         document.getElementById("label-miercoles").classList.add("text-gray-700");
-
-         if (document.getElementById("coldec")) {
-            document.getElementById("btn-dec").classList.add("btn-activo");
-            document.getElementById("coldec").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-         if (document.getElementById("colzie")) {
-            document.getElementById("btn-zie").classList.add("btn-activo");
-            document.getElementById("colzie").classList.remove("hidden");
-         }
-         break;
-
-      case "jueves":
-         document.getElementById("label-jueves").classList.add("text-gray-700");
-
-         if (document.getElementById("colzhc")) {
-            document.getElementById("btn-zhc").classList.add("btn-activo");
-            document.getElementById("colzhc").classList.remove("hidden");
-         }
-         if (document.getElementById("colzha")) {
-            document.getElementById("btn-zha").classList.add("btn-activo");
-            document.getElementById("colzha").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-         break;
-
-      case "viernes":
-         document.getElementById("label-viernes").classList.add("text-gray-700");
-
-         if (document.getElementById("colzil")) {
-            document.getElementById("btn-zil").classList.add("btn-activo");
-            document.getElementById("colzil").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-         if (document.getElementById("colauto")) {
-            document.getElementById("btn-auto").classList.add("btn-activo");
-            document.getElementById("colauto").classList.remove("hidden");
-         }
-         break;
-
-      default:
-         if (document.getElementById("colzia")) {
-            document.getElementById("btn-zia").classList.add("btn-activo");
-            document.getElementById("colzia").classList.remove("hidden");
-         }
-         if (document.getElementById("colzhp")) {
-            document.getElementById("btn-zhp").classList.add("btn-activo");
-            document.getElementById("colzhp").classList.remove("hidden");
-         }
-         if (document.getElementById("coldep")) {
-            document.getElementById("btn-dep").classList.add("btn-activo");
-            document.getElementById("coldep").classList.remove("hidden");
-         }
-         if (document.getElementById("colzhh")) {
-            document.getElementById("btn-zhh").classList.add("btn-activo");
-            document.getElementById("colzhh").classList.remove("hidden");
-         }
-         if (document.getElementById("colzic")) {
-            document.getElementById("btn-zic").classList.add("btn-activo");
-            document.getElementById("colzic").classList.remove("hidden");
-         }
-         if (document.getElementById("coldec")) {
-            document.getElementById("btn-dec").classList.add("btn-activo");
-            document.getElementById("coldec").classList.remove("hidden");
-         }
-         if (document.getElementById("colzie")) {
-            document.getElementById("btn-zie").classList.add("btn-activo");
-            document.getElementById("colzie").classList.remove("hidden");
-         }
-         if (document.getElementById("colzhc")) {
-            document.getElementById("btn-zhc").classList.add("btn-activo");
-            document.getElementById("colzhc").classList.remove("hidden");
-         }
-         if (document.getElementById("colzha")) {
-            document.getElementById("btn-zha").classList.add("btn-activo");
-            document.getElementById("colzha").classList.remove("hidden");
-         }
-         if (document.getElementById("colzil")) {
-            document.getElementById("btn-zil").classList.add("btn-activo");
-            document.getElementById("colzil").classList.remove("hidden");
-         }
-         if (document.getElementById("colauto")) {
-            document.getElementById("btn-auto").classList.add("btn-activo");
-            document.getElementById("colauto").classList.remove("hidden");
-         }
-         break;
-   }
-}
-
-
+// FUNCION PARA TOGGLE HIDDEN
 function expandir(id) {
    let idtoggle = id + "toggle";
    let idtitulo = id + "titulo";
@@ -883,40 +875,6 @@ function toggleInivisble(id) {
 }
 
 
-// Obtiene las subsecciones para la pagina principal de Planner, mediante el idDestino.
-function consultaSubsecciones(idDestino, idUsuario) {
-   const action = "consultaSubsecciones";
-
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idDestino: idDestino,
-         idUsuario: idUsuario,
-      },
-      dataType: "JSON",
-      success: function (data) {
-         document.getElementById("columnasSeccionesZIL").innerHTML = data.dataZIL;
-         document.getElementById("columnasSeccionesZIE").innerHTML = data.dataZIE;
-         document.getElementById("columnasSeccionesAUTO").innerHTML = data.dataAUTO;
-         document.getElementById("columnasSeccionesDEC").innerHTML = data.dataDEC;
-         document.getElementById("columnasSeccionesDEP").innerHTML = data.dataDEP;
-         document.getElementById("columnasSeccionesOMA").innerHTML = data.dataOMA;
-         document.getElementById("columnasSeccionesZHA").innerHTML = data.dataZHA;
-         document.getElementById("columnasSeccionesZHC").innerHTML = data.dataZHC;
-         document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
-         document.getElementById("columnasSeccionesZHP").innerHTML = data.dataZHP;
-         document.getElementById("columnasSeccionesZIA").innerHTML = data.dataZIA;
-         document.getElementById("columnasSeccionesZIC").innerHTML = data.dataZIC;
-         document.getElementById("columnasSeccionesZHH").innerHTML = data.dataZHH;
-         document.getElementById("columnasSeccionesEnergeticos").innerHTML = data.dataEnergeticos;
-         calendarioSecciones();
-      },
-   });
-}
-
-
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
    localStorage.setItem('idSeccion', idSeccion);
@@ -926,10 +884,11 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
    misPendientesCreados.setAttribute('onclick', "obtenerPendientesIncidencias('MISCREADOS')");
    misPendientesSinUsuario.setAttribute('onclick', "obtenerPendientesIncidencias('SINASIGNAR')");
    misPendientesSeccion.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
-
    btnExpandirMenu.classList.add('hidden');
    btnvisualizarpendientesde.classList.add('hidden');
    estiloSeccion.innerHTML = nombreSeccion;
+
+   estiloSeccionPendientes("estiloSeccion", nombreSeccion);
 
    document.getElementById("modalPendientes").classList.add("open");
 
@@ -1001,7 +960,7 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
 
 
 // OBTIENE LOS PENDIENTES MARCADOS COMO TRABAJANDO
-const obtenerPendientesIncidencias = (tipoBusqueda) => {
+const obtenerPendientesIncidencias = tipoBusqueda => {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
    let idSeccion = localStorage.getItem('idSeccion');
@@ -5549,7 +5508,7 @@ function informacionEquipo(idEquipo) {
    // OPCIONES INFERIORES
    btnPreventivosEquipo.setAttribute('onclick', `consultarPlanEquipo(${idEquipo});`);
    btnIncidenciasEquipo.setAttribute('onclick', `obtenerIncidenciasEquipo(${idEquipo})`);
-   btnChecklistEquipo.setAttribute('onclick', `obtenerChecklistEquipo(${idEquipo})`);
+   btnChecklistEquipo.setAttribute('onclick', `consultarPlanLocal(${idEquipo})`);
    btnBitacorasEquipo.setAttribute('onclick', `obtenerBitacoraEquipo(${idEquipo})`);
 
    const URL = `php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
@@ -5704,10 +5663,10 @@ function informacionEquipo(idEquipo) {
                }
             }
          })
-         .then(() => {
-            console.log(3);
-            cancelarInformacionEquipo(idEquipo);
-         })
+         // .then(() => {
+         //    console.log(3);
+         //    cancelarInformacionEquipo(idEquipo);
+         // })
          .catch(function (err) {
             fetch(APIERROR + err);
             e_nombreEquipo.value = '';
@@ -6111,14 +6070,6 @@ const obtenerIncidenciasEquipo = idEquipo => {
 }
 
 
-// OBTIENE EL CHICKLIST DE EQUIPO
-const obtenerChecklistEquipo = idEquipo => {
-   let idDestino = localStorage.getItem('idDestino');
-   let idUsuario = localStorage.getItem('usuario');
-   diseñoOpcionesInferioresEquipo('contenedorChecklistEquipo', 'btnChecklistEquipo');
-}
-
-
 // OBTIENE LA BITACORA DE EQUIPO
 const obtenerBitacoraEquipo = idEquipo => {
    let idDestino = localStorage.getItem('idDestino');
@@ -6370,6 +6321,172 @@ function consultarPlanEquipo(idEquipo) {
                contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="svg/SINPREVENTIVOS.svg"></h1>`;
             }
          }
+      }
+   });
+}
+
+
+// Obtiene el Calendario de MP de los Equipos
+function consultarPlanLocal(idEquipo) {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   const action = "consultarPlanLocal";
+   diseñoOpcionesInferioresEquipo('contenedorChecklistEquipo', 'btnChecklistEquipo');
+   contenedorChecklistEquipo.innerHTML = '';
+
+   $.ajax({
+      type: "POST",
+      url: "php/plannerCrudPHP.php",
+      data: {
+         action: action,
+         idUsuario: idUsuario,
+         idDestino: idDestino,
+         idEquipo: idEquipo
+      },
+      dataType: "JSON",
+      success: function (data) {
+         if (data.planes) {
+            if (data.planes.length > 0) {
+               for (let index = 0; index < data.planes.length; index++) {
+
+                  const planesX = datosPlanEquipo({
+                     solucionado: data.planes[index].solucionado,
+                     proceso: data.planes[index].proceso,
+                     planificado: data.planes[index].planificado,
+                     idSemana: data.planes[index].idSemana,
+                     idProceso: data.planes[index].idProceso,
+                     idEquipo: data.planes[index].idEquipo,
+                     idPlan: data.planes[index].idPlan,
+                     periodicidad: data.planes[index].periodicidad,
+                     tipoPlan: data.planes[index].tipoPlan,
+                     semana_1: data.planes[index].semana_1,
+                     semana_2: data.planes[index].semana_2,
+                     semana_3: data.planes[index].semana_3,
+                     semana_4: data.planes[index].semana_4,
+                     semana_5: data.planes[index].semana_5,
+                     semana_6: data.planes[index].semana_6,
+                     semana_7: data.planes[index].semana_7,
+                     semana_8: data.planes[index].semana_8,
+                     semana_9: data.planes[index].semana_9,
+                     semana_10: data.planes[index].semana_10,
+                     semana_11: data.planes[index].semana_11,
+                     semana_12: data.planes[index].semana_12,
+                     semana_13: data.planes[index].semana_13,
+                     semana_14: data.planes[index].semana_14,
+                     semana_15: data.planes[index].semana_15,
+                     semana_16: data.planes[index].semana_16,
+                     semana_17: data.planes[index].semana_17,
+                     semana_18: data.planes[index].semana_18,
+                     semana_19: data.planes[index].semana_19,
+                     semana_20: data.planes[index].semana_20,
+                     semana_21: data.planes[index].semana_21,
+                     semana_22: data.planes[index].semana_22,
+                     semana_23: data.planes[index].semana_23,
+                     semana_24: data.planes[index].semana_24,
+                     semana_25: data.planes[index].semana_25,
+                     semana_26: data.planes[index].semana_26,
+                     semana_27: data.planes[index].semana_27,
+                     semana_28: data.planes[index].semana_28,
+                     semana_29: data.planes[index].semana_29,
+                     semana_30: data.planes[index].semana_30,
+                     semana_31: data.planes[index].semana_31,
+                     semana_32: data.planes[index].semana_32,
+                     semana_33: data.planes[index].semana_33,
+                     semana_34: data.planes[index].semana_34,
+                     semana_35: data.planes[index].semana_35,
+                     semana_36: data.planes[index].semana_36,
+                     semana_37: data.planes[index].semana_37,
+                     semana_38: data.planes[index].semana_38,
+                     semana_39: data.planes[index].semana_39,
+                     semana_40: data.planes[index].semana_40,
+                     semana_41: data.planes[index].semana_41,
+                     semana_42: data.planes[index].semana_42,
+                     semana_43: data.planes[index].semana_43,
+                     semana_44: data.planes[index].semana_44,
+                     semana_45: data.planes[index].semana_45,
+                     semana_46: data.planes[index].semana_46,
+                     semana_47: data.planes[index].semana_47,
+                     semana_48: data.planes[index].semana_48,
+                     semana_49: data.planes[index].semana_49,
+                     semana_50: data.planes[index].semana_50,
+                     semana_51: data.planes[index].semana_51,
+                     semana_52: data.planes[index].semana_52,
+                     proceso_1: data.planes[index].proceso_1,
+                     proceso_2: data.planes[index].proceso_2,
+                     proceso_3: data.planes[index].proceso_3,
+                     proceso_4: data.planes[index].proceso_4,
+                     proceso_5: data.planes[index].proceso_5,
+                     proceso_6: data.planes[index].proceso_6,
+                     proceso_7: data.planes[index].proceso_7,
+                     proceso_8: data.planes[index].proceso_8,
+                     proceso_9: data.planes[index].proceso_9,
+                     proceso_10: data.planes[index].proceso_10,
+                     proceso_11: data.planes[index].proceso_11,
+                     proceso_12: data.planes[index].proceso_12,
+                     proceso_13: data.planes[index].proceso_13,
+                     proceso_14: data.planes[index].proceso_14,
+                     proceso_15: data.planes[index].proceso_15,
+                     proceso_16: data.planes[index].proceso_16,
+                     proceso_17: data.planes[index].proceso_17,
+                     proceso_18: data.planes[index].proceso_18,
+                     proceso_19: data.planes[index].proceso_19,
+                     proceso_20: data.planes[index].proceso_20,
+                     proceso_21: data.planes[index].proceso_21,
+                     proceso_22: data.planes[index].proceso_22,
+                     proceso_23: data.planes[index].proceso_23,
+                     proceso_24: data.planes[index].proceso_24,
+                     proceso_25: data.planes[index].proceso_25,
+                     proceso_26: data.planes[index].proceso_26,
+                     proceso_27: data.planes[index].proceso_27,
+                     proceso_28: data.planes[index].proceso_28,
+                     proceso_29: data.planes[index].proceso_29,
+                     proceso_30: data.planes[index].proceso_30,
+                     proceso_31: data.planes[index].proceso_31,
+                     proceso_32: data.planes[index].proceso_32,
+                     proceso_33: data.planes[index].proceso_33,
+                     proceso_34: data.planes[index].proceso_34,
+                     proceso_35: data.planes[index].proceso_35,
+                     proceso_36: data.planes[index].proceso_36,
+                     proceso_37: data.planes[index].proceso_37,
+                     proceso_38: data.planes[index].proceso_38,
+                     proceso_39: data.planes[index].proceso_39,
+                     proceso_40: data.planes[index].proceso_40,
+                     proceso_41: data.planes[index].proceso_41,
+                     proceso_42: data.planes[index].proceso_42,
+                     proceso_43: data.planes[index].proceso_43,
+                     proceso_44: data.planes[index].proceso_44,
+                     proceso_45: data.planes[index].proceso_45,
+                     proceso_46: data.planes[index].proceso_46,
+                     proceso_47: data.planes[index].proceso_47,
+                     proceso_48: data.planes[index].proceso_48,
+                     proceso_49: data.planes[index].proceso_49,
+                     proceso_50: data.planes[index].proceso_50,
+                     proceso_51: data.planes[index].proceso_51,
+                     proceso_52: data.planes[index].proceso_52
+                  });
+
+                  contenedorChecklistEquipo.insertAdjacentHTML('beforeend', planesX);
+               }
+               indicadorSemanaActual(data.planes[0].semanaActual);
+            }
+         } else {
+            if (data.creado) {
+               contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"> Creando Plan MP... </h1>`;
+               if (data.creado == "SI") {
+                  alertaImg('Creando Plan MP', '', 'success', 1900);
+                  setTimeout(function () {
+                     consultarPlanLocal(idEquipo);
+                  }, 1100)
+               } else {
+                  contenedorChecklistEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="svg/SINPREVENTIVOS.svg"></h1>';
+               }
+            } else {
+               contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="svg/SINPREVENTIVOS.svg"></h1>`;
+            }
+         }
+      },
+      error: function (err) {
+         console.log(err)
       }
    });
 }
@@ -7414,10 +7531,6 @@ function llamarFuncionX(nombreFuncion) {
    let idSubseccion = localStorage.getItem("idSubseccion");
 
    switch (nombreFuncion) {
-      case (nombreFuncion = "consultaSubsecciones"):
-         consultaSubsecciones(idDestino, idUsuario);
-         break;
-
       case (nombreFuncion = "obtenerEquiposAmerica"):
          obtenerEquiposAmerica(idSeccion, idSubseccion);
          break;
@@ -8727,7 +8840,7 @@ const dataEquiposAmerica = params => {
 
    // FUNCIONALIDADES
    const fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   const fInfo = `onclick="informacionEquipo(${idEquipo}); despieceEquipos(${idEquipo});"`;
+   const fInfo = `onclick="informacionEquipo(${idEquipo});"`;
    const fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
 
    return `
@@ -10817,19 +10930,11 @@ function exportarTareasGenerales(idDestino) {
 }
 
 
-window.addEventListener('load', () => {
-   let idDestino = localStorage.getItem("idDestino");
-   comprobarSession();
-   obtenerDatosUsuario(idDestino);
-   obtenerPendientesUsuario();
-});
-
-
 // FUNCIÓN EJECUTADA CADA 60s PARA ACTUALILZAR PENDIENTES DE LOS USUARIOS
 setInterval(function () {
    alertaImg('Pendientes Actualizados', '', 'success', 800);
    obtenerPendientesUsuario();
-   // comprobarSession();
+   comprobarSession();
 }, 180000);
 
 
@@ -11593,119 +11698,6 @@ const exportarTareasAIncidencias = (idDestino) => {
 }
 
 
-const obtenerSecciones = (idSeccion) => {
-   let idDestino = localStorage.getItem('idDestino');
-   let idUsuario = localStorage.getItem('usuario');
-
-   const action = "obtenerSecciones";
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
-
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-         if (array) {
-            for (let x = 0; x < array.secciones.length; x++) {
-               const idSeccion = array.secciones[x].idSeccion;
-               const seccion = array.secciones[x].seccion;
-               const estiloLogo = seccion ? seccion.toLowerCase() + '-logo' : '';
-               const codigo = `
-                  <div id="contenedor_seccion_${seccion}" class="flex items-center py-3"> 
-                     <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
-                        <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
-                           <div class="absolute flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
-                              <h1 class="font-medium text-md">${seccion}</h1>
-                           </div>
-                           <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
-                              <i class="fad fa-expand-arrows" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});"></i>
-                           </div>
-                           <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
-                              <div id="elementos_seccion_${idSeccion}" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>            
-               `;
-
-               // ELIMINA CONTENEDOR
-               if (document.getElementById("contenedor_seccion_" + seccion)) {
-                  columnas_x.removeChild(document.getElementById("contenedor_seccion_" + seccion));
-               } else {
-                  columnas_x.insertAdjacentHTML('beforeend', codigo);
-               }
-            }
-
-            // ORDENA LAS SUBSECCIONES POR PENDIENTES
-            array.subsecciones.sort(function (a, b) {
-               return b.total - a.total;
-            });
-            return array.subsecciones;
-         }
-      })
-      .then(array => {
-         if (array) {
-            for (let x = 0; x < array.length; x++) {
-               const subseccion = array[x].subseccion;
-               const idSubseccion = array[x].idSubseccion;
-               const idSeccion = array[x].idSeccion;
-               const total = array[x].total;
-               const totalX = total > 0 ? total : '';
-               const emergencia = array[x].emergencia;
-               const urgencia = array[x].urgencia;
-               const alarma = array[x].alarma;
-               const alerta = array[x].alerta;
-               const seguimiento = array[x].seguimiento;
-               const proyectos = array[x].proyectos;
-
-               if (idSubseccion == 200) {
-                  fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
-               } else {
-                  fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
-               }
-
-               const emergenciaX = emergencia > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 bg-red-300 text-red-600 rounded-md font-bold flex justify-center items-center ml-1">${emergencia}</h1>` : '';
-
-               const urgenciaX = urgencia > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 bg-orange-300 text-orange-600 rounded-md font-bold flex justify-center items-center ml-1">${urgencia}</h1>` : '';
-
-               const alarmaX = alarma > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 bg-yellow-300 text-yellow-600 rounded-md font-bold flex justify-center items-center ml-1">${alarma}</h1>` : '';
-
-               const alertaX = alerta > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 bg-blue-300 text-blue-600  rounded-md font-bold flex justify-center items-center ml-1">${alerta}</h1>` : '';
-
-               const seguimientoX = seguimiento > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 bg-teal-300 text-teal-600  rounded-md font-bold flex justify-center items-center ml-1">${seguimiento}</h1>` : '';
-
-               const proyectosX = proyectos > 0 ?
-                  `<h1 class="text-xxs h-5 w-5 text-red-700 bg-red-400  rounded-md font-bold flex justify-center items-center ml-1">${proyectos}</h1>` : '';
-
-               const codigo = `
-                  <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
-                     <h1 class="truncate mr-2">${subseccion}</h1>
-                     <div class="flex flex-row justify-center">
-                        ${emergenciaX}
-                        ${urgenciaX}
-                        ${alarmaX}
-                        ${alertaX}
-                        ${seguimientoX}
-                        ${proyectosX}
-                     </div>
-                  </div >
-               `;
-               if (document.getElementById("elementos_seccion_" + idSeccion)) {
-                  document.getElementById("elementos_seccion_" + idSeccion).insertAdjacentHTML('beforeend', codigo);
-               }
-            }
-         }
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err);
-      })
-}
-
-
 //EVENTO PARA INICIAR BUSCADOR DE OT
 btnBuscarOT.addEventListener('click', () => {
    abrirmodal('modalBuscarOT');
@@ -11896,7 +11888,7 @@ inputNumeroOT.addEventListener('keyup', event => {
 
                   const fVerOT = `onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})"`;
                   const fEdit = `onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})"`;
-                  const fView = `onclick="informacionEquipo(${idEquipo}); despieceEquipos(${idEquipo});"`;
+                  const fView = `onclick="informacionEquipo(${idEquipo});"`;
 
                   const estiloStatus = status == "PENDIENTE" ?
                      `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`
@@ -11949,18 +11941,3 @@ inputNumeroOT.addEventListener('keyup', event => {
       alertaImg('Ingrese más Datos', '', 'info', 1500);
    }
 })
-
-const xd = () => {
-   obtenerSecciones(1);
-   obtenerSecciones(5);
-   obtenerSecciones(6);
-   obtenerSecciones(7);
-   obtenerSecciones(8);
-   obtenerSecciones(9);
-   obtenerSecciones(10);
-   obtenerSecciones(11);
-   obtenerSecciones(12);
-   obtenerSecciones(19);
-   obtenerSecciones(23);
-   obtenerSecciones(24);
-}

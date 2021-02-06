@@ -190,52 +190,52 @@
                     <!-- <img src="svg/calendario/lunes.svg" class="w-5/12" alt=""> -->
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-lunes" class="text-sm font-bold mr-4">LUNES</h1>
-                        <h1 onclick="botones('zia');" id="btn-zia" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_8" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIA
                         </h1>
-                        <h1 onclick="botones('zhp');" id="btn-zhp" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_12" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZHP
                         </h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-martes" class="text-sm font-bold mr-4">MARTES</h1>
-                        <h1 onclick="botones('zic');" id="btn-zic" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_9" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIC
                         </h1>
                         <h1 class="w-8 h-8 mr-2"></h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-miercoles" class=" text-sm font-bold mr-4">MIERCOLES</h1>
-                        <h1 onclick="botones('dec');" id="btn-dec" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_1" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             DEC
                         </h1>
-                        <h1 onclick="botones('zie');" id="btn-zie" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_10" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIE
                         </h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-jueves" class=" text-sm font-bold mr-4">JUEVES</h1>
-                        <h1 onclick="botones('zhc');" id="btn-zhc" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_6" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZHC
                         </h1>
-                        <h1 onclick="botones('zha');" id="btn-zha" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_5" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZHA
                         </h1>
                     </div>
                     <div class="flex flex-row items-center justify-end mb-2">
                         <h1 id="label-viernes" class=" text-sm font-bold mr-4">VIERNES</h1>
-                        <h1 onclick="botones('zil');" id="btn-zil" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_11" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZIL
                         </h1>
-                        <h1 onclick="botones('auto');" id="btn-auto" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_24" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             AUT
                         </h1>
                     </div>
                     <div class="flex flex-row items-center justify-center mb-2">
-                        <h1 onclick="botones('dep');" id="btn-dep" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_23" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             DEP
                         </h1>
-                        <h1 onclick="botones('zhh');" id="btn-zhh" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                        <h1 id="btnSeccion_7" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
                             ZHH
                         </h1>
                     </div>
@@ -243,63 +243,48 @@
             </div>
 
 
-            <!-- <div id="columnas_x" class="flex flex-row justify-start items-start w-full pt-6"> -->
+            <div id="columnas_x" class="flex flex-row justify-start items-start w-full pt-6">
 
-            <!-- Inicio Columna -->
-            <div id="columnasPendientes" class="flex items-center relative">
-                <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
-                    <div class="flex items-center">
-                        <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
-                            <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
-                                <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
-                                    <i class="fad fa-clipboard-list-check"></i>
-                                    <h1 class="text-xs">
-                                        <span id="loadPendientes" class="text-cyan-900"></span>
-                                    </h1>
-                                </div>
-                                <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
-                                    <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
+                <!-- Inicio Columna -->
+                <div id="columnasPendientes" class="flex items-center relative">
+                    <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
+                        <div class="flex items-center">
+                            <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
+                                <div class="bg-white shadow-lg rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
+                                    <div class="bg-cyan-100 shadow-md rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                        <i class="fad fa-clipboard-list-check"></i>
+                                        <h1 class="text-xs">
+                                            <span id="loadPendientes" class="text-cyan-900"></span>
+                                        </h1>
+                                    </div>
+                                    <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
+                                        <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
 
-                                        <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
-                                            <h1 id="totalPendientesFallas">Incidencias (0)</h1>
+                                            <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
+                                                <h1 id="totalPendientesFallas">Incidencias (0)</h1>
+                                            </div>
+
+                                            <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
+                                                <h1 id="totalPendientesTareas">Tareas (0)</h1>
+                                            </div>
+
+                                            <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
+                                                <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
+                                            </div>
+
                                         </div>
 
-                                        <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
-                                            <h1 id="totalPendientesTareas">Tareas (0)</h1>
+                                        <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
                                         </div>
-
-                                        <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
-                                            <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
-                                        </div>
-
                                     </div>
 
-                                    <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
-                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-
-            <div id="columnasSeccionesOMA" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesEnergeticos" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesDEP" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZIL" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZIE" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesAUTO" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesDEC" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZHA" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZHC" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZHH" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZHP" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZIA" class="flex items-center py-3"></div>
-            <div id="columnasSeccionesZIC" class="flex items-center py-3"></div>
-
-
-            <!-- </div> -->
         </div>
     </div>
     <!-- CALENDARIO SEMANAL -->

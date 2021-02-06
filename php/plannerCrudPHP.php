@@ -9670,20 +9670,22 @@ if (isset($_POST['action'])) {
         }
     }
 
-
+    // OBTIENE PLANES TIPO EQUIPO Y (PREVENTIVO Y TEST)
     if ($action == "consultarPlanEquipo") {
         $idEquipo = $_POST['idEquipo'];
-        $año = date('Y');
+        $año = date('y');
         $data = array();
         $array = array();
 
         $query = "SELECT t_equipos_america.id 'idEquipo', t_equipos_america.id_destino, t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
         c_frecuencias_mp.frecuencia, t_mp_planes_mantenimiento.grado
         FROM t_equipos_america 
-        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo and 
-        t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino
+        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo
+        and t_mp_planes_mantenimiento.local_equipo = t_equipos_america.local_equipo 
+        and t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino and (t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' or t_mp_planes_mantenimiento.tipo_plan = 'TEST')
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
-        WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and t_mp_planes_mantenimiento.status = 'ACTIVO'";
+        WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and 
+        t_mp_planes_mantenimiento.status = 'ACTIVO'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idEquipo = $i['idEquipo'];
@@ -9700,9 +9702,8 @@ if (isset($_POST['action'])) {
                 t_mp_planeacion_semana.semana_1 'semana_1', t_mp_planeacion_semana.semana_2 'semana_2', t_mp_planeacion_semana.semana_3 'semana_3', t_mp_planeacion_semana.semana_4 'semana_4', t_mp_planeacion_semana.semana_5 'semana_5', t_mp_planeacion_semana.semana_6 'semana_6', t_mp_planeacion_semana.semana_7 'semana_7', t_mp_planeacion_semana.semana_8 'semana_8', t_mp_planeacion_semana.semana_9 'semana_9', t_mp_planeacion_semana.semana_10 'semana_10', t_mp_planeacion_semana.semana_11 'semana_11', t_mp_planeacion_semana.semana_12 'semana_12', t_mp_planeacion_semana.semana_13 'semana_13', t_mp_planeacion_semana.semana_14 'semana_14', t_mp_planeacion_semana.semana_15 'semana_15', t_mp_planeacion_semana.semana_16 'semana_16', t_mp_planeacion_semana.semana_17 'semana_17', t_mp_planeacion_semana.semana_18 'semana_18', t_mp_planeacion_semana.semana_19 'semana_19', t_mp_planeacion_semana.semana_20 'semana_20', t_mp_planeacion_semana.semana_21 'semana_21', t_mp_planeacion_semana.semana_22 'semana_22', t_mp_planeacion_semana.semana_23 'semana_23', t_mp_planeacion_semana.semana_24 'semana_24', t_mp_planeacion_semana.semana_25 'semana_25', t_mp_planeacion_semana.semana_26 'semana_26', t_mp_planeacion_semana.semana_27 'semana_27', t_mp_planeacion_semana.semana_28 'semana_28', t_mp_planeacion_semana.semana_29 'semana_29', t_mp_planeacion_semana.semana_30 'semana_30', t_mp_planeacion_semana.semana_31 'semana_31', t_mp_planeacion_semana.semana_32 'semana_32', t_mp_planeacion_semana.semana_33 'semana_33', t_mp_planeacion_semana.semana_34 'semana_34', t_mp_planeacion_semana.semana_35 'semana_35', t_mp_planeacion_semana.semana_36 'semana_36', t_mp_planeacion_semana.semana_37 'semana_37', t_mp_planeacion_semana.semana_38 'semana_38', t_mp_planeacion_semana.semana_39 'semana_39', t_mp_planeacion_semana.semana_40 'semana_40', t_mp_planeacion_semana.semana_41 'semana_41', t_mp_planeacion_semana.semana_42 'semana_42', t_mp_planeacion_semana.semana_43 'semana_43', t_mp_planeacion_semana.semana_44 'semana_44', t_mp_planeacion_semana.semana_45 'semana_45', t_mp_planeacion_semana.semana_46 'semana_46', t_mp_planeacion_semana.semana_47 'semana_47', t_mp_planeacion_semana.semana_48 'semana_48', t_mp_planeacion_semana.semana_49 'semana_49', t_mp_planeacion_semana.semana_50 'semana_50', t_mp_planeacion_semana.semana_51 'semana_51', t_mp_planeacion_semana.semana_52 'semana_52',
                 t_mp_planeacion_proceso.semana_1 'proceso_1', t_mp_planeacion_proceso.semana_2 'proceso_2', t_mp_planeacion_proceso.semana_3 'proceso_3', t_mp_planeacion_proceso.semana_4 'proceso_4', t_mp_planeacion_proceso.semana_5 'proceso_5', t_mp_planeacion_proceso.semana_6 'proceso_6', t_mp_planeacion_proceso.semana_7 'proceso_7', t_mp_planeacion_proceso.semana_8 'proceso_8', t_mp_planeacion_proceso.semana_9 'proceso_9', t_mp_planeacion_proceso.semana_10 'proceso_10', t_mp_planeacion_proceso.semana_11 'proceso_11',t_mp_planeacion_proceso.semana_12 'proceso_12',t_mp_planeacion_proceso.semana_13 'proceso_13',t_mp_planeacion_proceso.semana_14 'proceso_14',t_mp_planeacion_proceso.semana_15 'proceso_15',t_mp_planeacion_proceso.semana_16 'proceso_16',t_mp_planeacion_proceso.semana_17 'proceso_17',t_mp_planeacion_proceso.semana_18 'proceso_18',t_mp_planeacion_proceso.semana_19 'proceso_19',t_mp_planeacion_proceso.semana_20 'proceso_20',t_mp_planeacion_proceso.semana_21 'proceso_21',t_mp_planeacion_proceso.semana_22 'proceso_22',t_mp_planeacion_proceso.semana_23 'proceso_23',t_mp_planeacion_proceso.semana_24 'proceso_24',t_mp_planeacion_proceso.semana_25 'proceso_25',t_mp_planeacion_proceso.semana_26 'proceso_26',t_mp_planeacion_proceso.semana_27 'proceso_27',t_mp_planeacion_proceso.semana_28 'proceso_28',t_mp_planeacion_proceso.semana_29 'proceso_29',t_mp_planeacion_proceso.semana_30 'proceso_30',t_mp_planeacion_proceso.semana_31 'proceso_31',t_mp_planeacion_proceso.semana_32 'proceso_32',t_mp_planeacion_proceso.semana_33 'proceso_33',t_mp_planeacion_proceso.semana_34 'proceso_34',t_mp_planeacion_proceso.semana_35 'proceso_35',t_mp_planeacion_proceso.semana_36 'proceso_36',t_mp_planeacion_proceso.semana_37 'proceso_37',t_mp_planeacion_proceso.semana_38 'proceso_38',t_mp_planeacion_proceso.semana_39 'proceso_39',t_mp_planeacion_proceso.semana_40 'proceso_40',t_mp_planeacion_proceso.semana_41 'proceso_41',t_mp_planeacion_proceso.semana_42 'proceso_42',t_mp_planeacion_proceso.semana_43 'proceso_43',t_mp_planeacion_proceso.semana_44 'proceso_44',t_mp_planeacion_proceso.semana_45 'proceso_45',t_mp_planeacion_proceso.semana_46 'proceso_46',t_mp_planeacion_proceso.semana_47 'proceso_47',t_mp_planeacion_proceso.semana_48 'proceso_48',t_mp_planeacion_proceso.semana_49 'proceso_49',t_mp_planeacion_proceso.semana_50 'proceso_50',t_mp_planeacion_proceso.semana_51 'proceso_51',t_mp_planeacion_proceso.semana_52 'proceso_52'
                 FROM t_mp_planeacion_semana 
-                INNER JOIN t_mp_planeacion_proceso ON t_mp_planeacion_semana.id_equipo = t_mp_planeacion_proceso.id_equipo AND t_mp_planeacion_semana.id_plan = t_mp_planeacion_proceso.id_plan
-                WHERE t_mp_planeacion_semana.id_plan = $idPlan AND t_mp_planeacion_semana.id_equipo = $idEquipo";
-
+                INNER JOIN t_mp_planeacion_proceso ON t_mp_planeacion_semana.id_equipo = t_mp_planeacion_proceso.id_equipo and t_mp_planeacion_semana.id_plan = t_mp_planeacion_proceso.id_plan
+                WHERE t_mp_planeacion_semana.id_plan = $idPlan and t_mp_planeacion_semana.id_equipo = $idEquipo and t_mp_planeacion_proceso.año = '$año'";
                 if ($resultPlaneacion = mysqli_query($conn_2020, $queryPlaneacion)) {
 
                     if (mysqli_num_rows($resultPlaneacion) > 0) {
@@ -9844,9 +9845,6 @@ if (isset($_POST['action'])) {
                                 }
                             }
 
-
-
-
                             $arrayTemp =
                                 array(
                                     "proceso" => $proceso,
@@ -9971,19 +9969,32 @@ if (isset($_POST['action'])) {
                     } else {
                         $array['creado'] = "NO";
 
-                        $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                        // CREA POR DEFAUL LA PLANEACION ANTERIOR
+                        $query = "";
                         if ($result = mysqli_query($conn_2020, $query)) {
+                            $array['creado'] = "SI";
+                        }
 
-                            // CREA POR DEFAUL LA PLANEACION ANTERIOR
-                            $query = "";
-                            if ($result = mysqli_query($conn_2020, $query)) {
-                                $array['creado'] = "SI";
-                            }
 
-                            // CREA POR DEFAUL LA PLANEACION
-                            $query = "INSERT INTO t_mp_planeacion_proceso(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+
+                        // CREA POR DEFAUL LA PLANEACION
+                        $query = "INSERT INTO t_mp_planeacion_proceso(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array['creado'] = "SI";
+
+                            $query = "SELECT count(id) 'total' FROM t_mp_planeacion_semana WHERE id_destino = $idDestino and id_plan = $idPlan and id_equipo = $idEquipo";
                             if ($result = mysqli_query($conn_2020, $query)) {
-                                $array['creado'] = "SI";
+                                $total = 0;
+                                foreach ($result as $x) {
+                                    $total = $x['total'];
+                                }
+
+                                if ($total == 0) {
+                                    $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        $array['creado'] = "SI";
+                                    }
+                                }
                             }
                         }
                     }
@@ -9994,6 +10005,331 @@ if (isset($_POST['action'])) {
     }
 
 
+    // OBTIENE PLANES TIPO EQUIPO Y (PREVENTIVO Y TEST)
+    if ($action == "consultarPlanLocal") {
+        $idEquipo = $_POST['idEquipo'];
+        $año = date('y');
+        $data = array();
+        $array = array();
+        $contador = 0;
+
+        $query = "SELECT t_equipos_america.id 'idEquipo', t_equipos_america.id_destino, t_mp_planes_mantenimiento.tipo_local_equipo, t_mp_planes_mantenimiento.id 'idPlan', t_mp_planes_mantenimiento.tipo_plan, 
+        c_frecuencias_mp.frecuencia, t_mp_planes_mantenimiento.grado
+        FROM t_equipos_america 
+        INNER JOIN t_mp_planes_mantenimiento ON t_equipos_america.id_tipo = t_mp_planes_mantenimiento.tipo_local_equipo
+        and t_mp_planes_mantenimiento.local_equipo = t_equipos_america.local_equipo 
+        and t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino 
+        and t_mp_planes_mantenimiento.tipo_plan = 'CHECKLIST'
+        INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
+        WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and 
+        t_mp_planes_mantenimiento.status = 'ACTIVO'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $i) {
+                $idEquipo = $i['idEquipo'];
+                $idDestino = $i['id_destino'];
+                $idPlan = $i['idPlan'];
+                $idTipo = $i['tipo_local_equipo'];
+                $tipoPlan = $i['tipo_plan'];
+                $grado = $i['grado'];
+                $periodicidad = $i['frecuencia'];
+
+                $queryPlaneacion = "SELECT 
+                t_mp_planeacion_semana.id_equipo, t_mp_planeacion_semana.id 'semana', 
+                t_mp_planeacion_proceso.id 'proceso',
+                t_mp_planeacion_semana.semana_1 'semana_1', t_mp_planeacion_semana.semana_2 'semana_2', t_mp_planeacion_semana.semana_3 'semana_3', t_mp_planeacion_semana.semana_4 'semana_4', t_mp_planeacion_semana.semana_5 'semana_5', t_mp_planeacion_semana.semana_6 'semana_6', t_mp_planeacion_semana.semana_7 'semana_7', t_mp_planeacion_semana.semana_8 'semana_8', t_mp_planeacion_semana.semana_9 'semana_9', t_mp_planeacion_semana.semana_10 'semana_10', t_mp_planeacion_semana.semana_11 'semana_11', t_mp_planeacion_semana.semana_12 'semana_12', t_mp_planeacion_semana.semana_13 'semana_13', t_mp_planeacion_semana.semana_14 'semana_14', t_mp_planeacion_semana.semana_15 'semana_15', t_mp_planeacion_semana.semana_16 'semana_16', t_mp_planeacion_semana.semana_17 'semana_17', t_mp_planeacion_semana.semana_18 'semana_18', t_mp_planeacion_semana.semana_19 'semana_19', t_mp_planeacion_semana.semana_20 'semana_20', t_mp_planeacion_semana.semana_21 'semana_21', t_mp_planeacion_semana.semana_22 'semana_22', t_mp_planeacion_semana.semana_23 'semana_23', t_mp_planeacion_semana.semana_24 'semana_24', t_mp_planeacion_semana.semana_25 'semana_25', t_mp_planeacion_semana.semana_26 'semana_26', t_mp_planeacion_semana.semana_27 'semana_27', t_mp_planeacion_semana.semana_28 'semana_28', t_mp_planeacion_semana.semana_29 'semana_29', t_mp_planeacion_semana.semana_30 'semana_30', t_mp_planeacion_semana.semana_31 'semana_31', t_mp_planeacion_semana.semana_32 'semana_32', t_mp_planeacion_semana.semana_33 'semana_33', t_mp_planeacion_semana.semana_34 'semana_34', t_mp_planeacion_semana.semana_35 'semana_35', t_mp_planeacion_semana.semana_36 'semana_36', t_mp_planeacion_semana.semana_37 'semana_37', t_mp_planeacion_semana.semana_38 'semana_38', t_mp_planeacion_semana.semana_39 'semana_39', t_mp_planeacion_semana.semana_40 'semana_40', t_mp_planeacion_semana.semana_41 'semana_41', t_mp_planeacion_semana.semana_42 'semana_42', t_mp_planeacion_semana.semana_43 'semana_43', t_mp_planeacion_semana.semana_44 'semana_44', t_mp_planeacion_semana.semana_45 'semana_45', t_mp_planeacion_semana.semana_46 'semana_46', t_mp_planeacion_semana.semana_47 'semana_47', t_mp_planeacion_semana.semana_48 'semana_48', t_mp_planeacion_semana.semana_49 'semana_49', t_mp_planeacion_semana.semana_50 'semana_50', t_mp_planeacion_semana.semana_51 'semana_51', t_mp_planeacion_semana.semana_52 'semana_52',
+                t_mp_planeacion_proceso.semana_1 'proceso_1', t_mp_planeacion_proceso.semana_2 'proceso_2', t_mp_planeacion_proceso.semana_3 'proceso_3', t_mp_planeacion_proceso.semana_4 'proceso_4', t_mp_planeacion_proceso.semana_5 'proceso_5', t_mp_planeacion_proceso.semana_6 'proceso_6', t_mp_planeacion_proceso.semana_7 'proceso_7', t_mp_planeacion_proceso.semana_8 'proceso_8', t_mp_planeacion_proceso.semana_9 'proceso_9', t_mp_planeacion_proceso.semana_10 'proceso_10', t_mp_planeacion_proceso.semana_11 'proceso_11',t_mp_planeacion_proceso.semana_12 'proceso_12',t_mp_planeacion_proceso.semana_13 'proceso_13',t_mp_planeacion_proceso.semana_14 'proceso_14',t_mp_planeacion_proceso.semana_15 'proceso_15',t_mp_planeacion_proceso.semana_16 'proceso_16',t_mp_planeacion_proceso.semana_17 'proceso_17',t_mp_planeacion_proceso.semana_18 'proceso_18',t_mp_planeacion_proceso.semana_19 'proceso_19',t_mp_planeacion_proceso.semana_20 'proceso_20',t_mp_planeacion_proceso.semana_21 'proceso_21',t_mp_planeacion_proceso.semana_22 'proceso_22',t_mp_planeacion_proceso.semana_23 'proceso_23',t_mp_planeacion_proceso.semana_24 'proceso_24',t_mp_planeacion_proceso.semana_25 'proceso_25',t_mp_planeacion_proceso.semana_26 'proceso_26',t_mp_planeacion_proceso.semana_27 'proceso_27',t_mp_planeacion_proceso.semana_28 'proceso_28',t_mp_planeacion_proceso.semana_29 'proceso_29',t_mp_planeacion_proceso.semana_30 'proceso_30',t_mp_planeacion_proceso.semana_31 'proceso_31',t_mp_planeacion_proceso.semana_32 'proceso_32',t_mp_planeacion_proceso.semana_33 'proceso_33',t_mp_planeacion_proceso.semana_34 'proceso_34',t_mp_planeacion_proceso.semana_35 'proceso_35',t_mp_planeacion_proceso.semana_36 'proceso_36',t_mp_planeacion_proceso.semana_37 'proceso_37',t_mp_planeacion_proceso.semana_38 'proceso_38',t_mp_planeacion_proceso.semana_39 'proceso_39',t_mp_planeacion_proceso.semana_40 'proceso_40',t_mp_planeacion_proceso.semana_41 'proceso_41',t_mp_planeacion_proceso.semana_42 'proceso_42',t_mp_planeacion_proceso.semana_43 'proceso_43',t_mp_planeacion_proceso.semana_44 'proceso_44',t_mp_planeacion_proceso.semana_45 'proceso_45',t_mp_planeacion_proceso.semana_46 'proceso_46',t_mp_planeacion_proceso.semana_47 'proceso_47',t_mp_planeacion_proceso.semana_48 'proceso_48',t_mp_planeacion_proceso.semana_49 'proceso_49',t_mp_planeacion_proceso.semana_50 'proceso_50',t_mp_planeacion_proceso.semana_51 'proceso_51',t_mp_planeacion_proceso.semana_52 'proceso_52'
+                FROM t_mp_planeacion_semana
+                INNER JOIN t_mp_planeacion_proceso ON t_mp_planeacion_semana.id_equipo = t_mp_planeacion_proceso.id_equipo and t_mp_planeacion_semana.id_plan = t_mp_planeacion_proceso.id_plan
+                WHERE t_mp_planeacion_semana.id_plan = $idPlan and t_mp_planeacion_semana.id_equipo = $idEquipo and t_mp_planeacion_proceso.año = '$año'";
+                if ($resultPlaneacion = mysqli_query($conn_2020, $queryPlaneacion)) {
+
+                    if (mysqli_num_rows($resultPlaneacion) > 0) {
+                        foreach ($resultPlaneacion as $key => $i) {
+                            $idSemana = $i['semana'];
+                            $idProceso = $i['proceso'];
+                            $idEquipo = $i['id_equipo'];
+                            $semana_planificacion_1 = $i['semana_1'];
+                            $semana_planificacion_2 = $i['semana_2'];
+                            $semana_planificacion_3 = $i['semana_3'];
+                            $semana_planificacion_4 = $i['semana_4'];
+                            $semana_planificacion_5 = $i['semana_5'];
+                            $semana_planificacion_6 = $i['semana_6'];
+                            $semana_planificacion_7 = $i['semana_7'];
+                            $semana_planificacion_8 = $i['semana_8'];
+                            $semana_planificacion_9 = $i['semana_9'];
+                            $semana_planificacion_10 = $i['semana_10'];
+                            $semana_planificacion_11 = $i['semana_11'];
+                            $semana_planificacion_12 = $i['semana_12'];
+                            $semana_planificacion_13 = $i['semana_13'];
+                            $semana_planificacion_14 = $i['semana_14'];
+                            $semana_planificacion_15 = $i['semana_15'];
+                            $semana_planificacion_16 = $i['semana_16'];
+                            $semana_planificacion_17 = $i['semana_17'];
+                            $semana_planificacion_18 = $i['semana_18'];
+                            $semana_planificacion_19 = $i['semana_19'];
+                            $semana_planificacion_20 = $i['semana_20'];
+                            $semana_planificacion_21 = $i['semana_21'];
+                            $semana_planificacion_22 = $i['semana_22'];
+                            $semana_planificacion_23 = $i['semana_23'];
+                            $semana_planificacion_24 = $i['semana_24'];
+                            $semana_planificacion_25 = $i['semana_25'];
+                            $semana_planificacion_26 = $i['semana_26'];
+                            $semana_planificacion_27 = $i['semana_27'];
+                            $semana_planificacion_28 = $i['semana_28'];
+                            $semana_planificacion_29 = $i['semana_29'];
+                            $semana_planificacion_30 = $i['semana_30'];
+                            $semana_planificacion_31 = $i['semana_31'];
+                            $semana_planificacion_32 = $i['semana_32'];
+                            $semana_planificacion_33 = $i['semana_33'];
+                            $semana_planificacion_34 = $i['semana_34'];
+                            $semana_planificacion_35 = $i['semana_35'];
+                            $semana_planificacion_36 = $i['semana_36'];
+                            $semana_planificacion_37 = $i['semana_37'];
+                            $semana_planificacion_38 = $i['semana_38'];
+                            $semana_planificacion_39 = $i['semana_39'];
+                            $semana_planificacion_40 = $i['semana_40'];
+                            $semana_planificacion_41 = $i['semana_41'];
+                            $semana_planificacion_42 = $i['semana_42'];
+                            $semana_planificacion_43 = $i['semana_43'];
+                            $semana_planificacion_44 = $i['semana_44'];
+                            $semana_planificacion_45 = $i['semana_45'];
+                            $semana_planificacion_46 = $i['semana_46'];
+                            $semana_planificacion_47 = $i['semana_47'];
+                            $semana_planificacion_48 = $i['semana_48'];
+                            $semana_planificacion_49 = $i['semana_49'];
+                            $semana_planificacion_50 = $i['semana_50'];
+                            $semana_planificacion_51 = $i['semana_51'];
+                            $semana_planificacion_52 = $i['semana_52'];
+                            $semana_proceso_1 = $i['proceso_1'];
+                            $semana_proceso_2 = $i['proceso_2'];
+                            $semana_proceso_3 = $i['proceso_3'];
+                            $semana_proceso_4 = $i['proceso_4'];
+                            $semana_proceso_5 = $i['proceso_5'];
+                            $semana_proceso_6 = $i['proceso_6'];
+                            $semana_proceso_7 = $i['proceso_7'];
+                            $semana_proceso_8 = $i['proceso_8'];
+                            $semana_proceso_9 = $i['proceso_9'];
+                            $semana_proceso_10 = $i['proceso_10'];
+                            $semana_proceso_11 = $i['proceso_11'];
+                            $semana_proceso_12 = $i['proceso_12'];
+                            $semana_proceso_13 = $i['proceso_13'];
+                            $semana_proceso_14 = $i['proceso_14'];
+                            $semana_proceso_15 = $i['proceso_15'];
+                            $semana_proceso_16 = $i['proceso_16'];
+                            $semana_proceso_17 = $i['proceso_17'];
+                            $semana_proceso_18 = $i['proceso_18'];
+                            $semana_proceso_19 = $i['proceso_19'];
+                            $semana_proceso_20 = $i['proceso_20'];
+                            $semana_proceso_21 = $i['proceso_21'];
+                            $semana_proceso_22 = $i['proceso_22'];
+                            $semana_proceso_23 = $i['proceso_23'];
+                            $semana_proceso_24 = $i['proceso_24'];
+                            $semana_proceso_25 = $i['proceso_25'];
+                            $semana_proceso_26 = $i['proceso_26'];
+                            $semana_proceso_27 = $i['proceso_27'];
+                            $semana_proceso_28 = $i['proceso_28'];
+                            $semana_proceso_29 = $i['proceso_29'];
+                            $semana_proceso_30 = $i['proceso_30'];
+                            $semana_proceso_31 = $i['proceso_31'];
+                            $semana_proceso_32 = $i['proceso_32'];
+                            $semana_proceso_33 = $i['proceso_33'];
+                            $semana_proceso_34 = $i['proceso_34'];
+                            $semana_proceso_35 = $i['proceso_35'];
+                            $semana_proceso_36 = $i['proceso_36'];
+                            $semana_proceso_37 = $i['proceso_37'];
+                            $semana_proceso_38 = $i['proceso_38'];
+                            $semana_proceso_39 = $i['proceso_39'];
+                            $semana_proceso_40 = $i['proceso_40'];
+                            $semana_proceso_41 = $i['proceso_41'];
+                            $semana_proceso_42 = $i['proceso_42'];
+                            $semana_proceso_43 = $i['proceso_43'];
+                            $semana_proceso_44 = $i['proceso_44'];
+                            $semana_proceso_45 = $i['proceso_45'];
+                            $semana_proceso_46 = $i['proceso_46'];
+                            $semana_proceso_47 = $i['proceso_47'];
+                            $semana_proceso_48 = $i['proceso_48'];
+                            $semana_proceso_49 = $i['proceso_49'];
+                            $semana_proceso_50 = $i['proceso_50'];
+                            $semana_proceso_51 = $i['proceso_51'];
+                            $semana_proceso_52 = $i['proceso_52'];
+
+                            // Contador de MP
+                            $proceso = 0;
+                            $solucionado = 0;
+                            $planificado = 0;
+
+                            $z =
+                                $semana_proceso_1 . ";" . $semana_proceso_2 . ";" . $semana_proceso_3 . ";" . $semana_proceso_4 . ";" . $semana_proceso_5 . ";" . $semana_proceso_6 . ";" . $semana_proceso_7 . ";" . $semana_proceso_8 . ";" . $semana_proceso_9 . ";" . $semana_proceso_10 . ";" . $semana_proceso_11 . ";" . $semana_proceso_12 . ";" . $semana_proceso_13 . ";" . $semana_proceso_14 . ";" . $semana_proceso_15 . ";" . $semana_proceso_16 . ";" . $semana_proceso_17 . ";" . $semana_proceso_18 . ";" . $semana_proceso_19 . ";" . $semana_proceso_20 . ";" . $semana_proceso_21 . ";" . $semana_proceso_22 . ";" . $semana_proceso_23 . ";" . $semana_proceso_24 . ";" . $semana_proceso_25 . ";" . $semana_proceso_26 . ";" . $semana_proceso_27 . ";" . $semana_proceso_28 . ";" . $semana_proceso_29 . ";" . $semana_proceso_30 . ";" . $semana_proceso_31 . ";" . $semana_proceso_32 . ";" . $semana_proceso_33 . ";" . $semana_proceso_34 . ";" . $semana_proceso_35 . ";" . $semana_proceso_36 . ";" . $semana_proceso_37 . ";" . $semana_proceso_38 . ";" . $semana_proceso_39 . ";" . $semana_proceso_40 . ";" . $semana_proceso_41 . ";" . $semana_proceso_42 . ";" . $semana_proceso_43 . ";" . $semana_proceso_44 . ";" . $semana_proceso_45 . ";" . $semana_proceso_46 . ";" . $semana_proceso_47 . ";" . $semana_proceso_48 . ";" . $semana_proceso_49 . ";" . $semana_proceso_50 . ";" . $semana_proceso_51 . ";" . $semana_proceso_52;
+                            $z = explode(";", $z);
+
+                            for ($i = 0; $i < count($z); $i++) {
+
+                                if ($z[$i] == "PROCESO") {
+                                    $proceso++;
+                                } elseif ($z[$i] == "SOLUCIONADO") {
+                                    $solucionado++;
+                                }
+                            }
+
+                            $y =
+                                $semana_planificacion_1 . ";" . $semana_planificacion_2 . ";" . $semana_planificacion_3 . ";" . $semana_planificacion_4 . ";" . $semana_planificacion_5 . ";" . $semana_planificacion_6 . ";" . $semana_planificacion_7 . ";" . $semana_planificacion_8 . ";" . $semana_planificacion_9 . ";" . $semana_planificacion_10 . ";" . $semana_planificacion_11 . ";" . $semana_planificacion_12 . ";" . $semana_planificacion_13 . ";" . $semana_planificacion_14 . ";" . $semana_planificacion_15 . ";" . $semana_planificacion_16 . ";" . $semana_planificacion_17 . ";" . $semana_planificacion_18 . ";" . $semana_planificacion_19 . ";" . $semana_planificacion_20 . ";" . $semana_planificacion_21 . ";" . $semana_planificacion_22 . ";" . $semana_planificacion_23 . ";" . $semana_planificacion_24 . ";" . $semana_planificacion_25 . ";" . $semana_planificacion_26 . ";" . $semana_planificacion_27 . ";" . $semana_planificacion_28 . ";" . $semana_planificacion_29 . ";" . $semana_planificacion_30 . ";" . $semana_planificacion_31 . ";" . $semana_planificacion_32 . ";" . $semana_planificacion_33 . ";" . $semana_planificacion_34 . ";" . $semana_planificacion_35 . ";" . $semana_planificacion_36 . ";" . $semana_planificacion_37 . ";" . $semana_planificacion_38 . ";" . $semana_planificacion_39 . ";" . $semana_planificacion_40 . ";" . $semana_planificacion_41 . ";" . $semana_planificacion_42 . ";" . $semana_planificacion_43 . ";" . $semana_planificacion_44 . ";" . $semana_planificacion_45 . ";" . $semana_planificacion_46 . ";" . $semana_planificacion_47 . ";" . $semana_planificacion_48 . ";" . $semana_planificacion_49 . ";" . $semana_planificacion_50 . ";" . $semana_planificacion_51 . ";" . $semana_planificacion_52;
+                            $y = explode(";", $y);
+
+                            for ($i = 0; $i < count($y); $i++) {
+
+                                if ($y[$i] == "PLANIFICADO") {
+                                    $planificado++;
+                                }
+                            }
+                            $contador++;
+                            $array['planes'][] =
+                                array(
+                                    "proceso" => $proceso,
+                                    "solucionado" => $solucionado,
+                                    "planificado" => $planificado,
+                                    "idSemana" => $idSemana,
+                                    "idProceso" => $idProceso,
+                                    "idEquipo" => $idEquipo,
+                                    "idPlan" => $idPlan,
+                                    "periodicidad" => $periodicidad,
+                                    "tipoPlan" => $tipoPlan,
+                                    "semana_1" => $semana_planificacion_1,
+                                    "semana_2" => $semana_planificacion_2,
+                                    "semana_3" => $semana_planificacion_3,
+                                    "semana_4" => $semana_planificacion_4,
+                                    "semana_5" => $semana_planificacion_5,
+                                    "semana_6" => $semana_planificacion_6,
+                                    "semana_7" => $semana_planificacion_7,
+                                    "semana_8" => $semana_planificacion_8,
+                                    "semana_9" => $semana_planificacion_9,
+                                    "semana_10" => $semana_planificacion_10,
+                                    "semana_11" => $semana_planificacion_11,
+                                    "semana_12" => $semana_planificacion_12,
+                                    "semana_13" => $semana_planificacion_13,
+                                    "semana_14" => $semana_planificacion_14,
+                                    "semana_15" => $semana_planificacion_15,
+                                    "semana_16" => $semana_planificacion_16,
+                                    "semana_17" => $semana_planificacion_17,
+                                    "semana_18" => $semana_planificacion_18,
+                                    "semana_19" => $semana_planificacion_19,
+                                    "semana_20" => $semana_planificacion_20,
+                                    "semana_21" => $semana_planificacion_21,
+                                    "semana_22" => $semana_planificacion_22,
+                                    "semana_23" => $semana_planificacion_23,
+                                    "semana_24" => $semana_planificacion_24,
+                                    "semana_25" => $semana_planificacion_25,
+                                    "semana_26" => $semana_planificacion_26,
+                                    "semana_27" => $semana_planificacion_27,
+                                    "semana_28" => $semana_planificacion_28,
+                                    "semana_29" => $semana_planificacion_29,
+                                    "semana_30" => $semana_planificacion_30,
+                                    "semana_31" => $semana_planificacion_31,
+                                    "semana_32" => $semana_planificacion_32,
+                                    "semana_33" => $semana_planificacion_33,
+                                    "semana_34" => $semana_planificacion_34,
+                                    "semana_35" => $semana_planificacion_35,
+                                    "semana_36" => $semana_planificacion_36,
+                                    "semana_37" => $semana_planificacion_37,
+                                    "semana_38" => $semana_planificacion_38,
+                                    "semana_39" => $semana_planificacion_39,
+                                    "semana_40" => $semana_planificacion_40,
+                                    "semana_41" => $semana_planificacion_41,
+                                    "semana_42" => $semana_planificacion_42,
+                                    "semana_43" => $semana_planificacion_43,
+                                    "semana_44" => $semana_planificacion_44,
+                                    "semana_45" => $semana_planificacion_45,
+                                    "semana_46" => $semana_planificacion_46,
+                                    "semana_47" => $semana_planificacion_47,
+                                    "semana_48" => $semana_planificacion_48,
+                                    "semana_49" => $semana_planificacion_49,
+                                    "semana_50" => $semana_planificacion_50,
+                                    "semana_51" => $semana_planificacion_51,
+                                    "semana_52" => $semana_planificacion_52,
+                                    "proceso_1" => $semana_proceso_1,
+                                    "proceso_2" => $semana_proceso_2,
+                                    "proceso_3" => $semana_proceso_3,
+                                    "proceso_4" => $semana_proceso_4,
+                                    "proceso_5" => $semana_proceso_5,
+                                    "proceso_6" => $semana_proceso_6,
+                                    "proceso_7" => $semana_proceso_7,
+                                    "proceso_8" => $semana_proceso_8,
+                                    "proceso_9" => $semana_proceso_9,
+                                    "proceso_10" => $semana_proceso_10,
+                                    "proceso_11" => $semana_proceso_11,
+                                    "proceso_12" => $semana_proceso_12,
+                                    "proceso_13" => $semana_proceso_13,
+                                    "proceso_14" => $semana_proceso_14,
+                                    "proceso_15" => $semana_proceso_15,
+                                    "proceso_16" => $semana_proceso_16,
+                                    "proceso_17" => $semana_proceso_17,
+                                    "proceso_18" => $semana_proceso_18,
+                                    "proceso_19" => $semana_proceso_19,
+                                    "proceso_20" => $semana_proceso_20,
+                                    "proceso_21" => $semana_proceso_21,
+                                    "proceso_22" => $semana_proceso_22,
+                                    "proceso_23" => $semana_proceso_23,
+                                    "proceso_24" => $semana_proceso_24,
+                                    "proceso_25" => $semana_proceso_25,
+                                    "proceso_26" => $semana_proceso_26,
+                                    "proceso_27" => $semana_proceso_27,
+                                    "proceso_28" => $semana_proceso_28,
+                                    "proceso_29" => $semana_proceso_29,
+                                    "proceso_30" => $semana_proceso_30,
+                                    "proceso_31" => $semana_proceso_31,
+                                    "proceso_32" => $semana_proceso_32,
+                                    "proceso_33" => $semana_proceso_33,
+                                    "proceso_34" => $semana_proceso_34,
+                                    "proceso_35" => $semana_proceso_35,
+                                    "proceso_36" => $semana_proceso_36,
+                                    "proceso_37" => $semana_proceso_37,
+                                    "proceso_38" => $semana_proceso_38,
+                                    "proceso_39" => $semana_proceso_39,
+                                    "proceso_40" => $semana_proceso_40,
+                                    "proceso_41" => $semana_proceso_41,
+                                    "proceso_42" => $semana_proceso_42,
+                                    "proceso_43" => $semana_proceso_43,
+                                    "proceso_44" => $semana_proceso_44,
+                                    "proceso_45" => $semana_proceso_45,
+                                    "proceso_46" => $semana_proceso_46,
+                                    "proceso_47" => $semana_proceso_47,
+                                    "proceso_48" => $semana_proceso_48,
+                                    "proceso_49" => $semana_proceso_49,
+                                    "proceso_50" => $semana_proceso_50,
+                                    "proceso_51" => $semana_proceso_51,
+                                    "proceso_52" => $semana_proceso_52,
+                                    "semanaActual" => $semanaActual
+                                );
+                        }
+                    } else {
+                        $array['creado'] = "NO";
+
+                        // CREA POR DEFAUL LA PLANEACION
+                        $query = "INSERT INTO t_mp_planeacion_proceso(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            $array['creado'] = "SI";
+
+                            $query = "SELECT count(id) 'total' FROM t_mp_planeacion_semana WHERE id_destino = $idDestino and id_plan = $idPlan and id_equipo = $idEquipo";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                $total = 0;
+                                foreach ($result as $x) {
+                                    $total = $x['total'];
+                                }
+
+                                if ($total == 0) {
+                                    $query = "INSERT INTO t_mp_planeacion_semana(id_destino, id_plan, id_equipo, fecha_creado, ultima_modificacion, año) VALUES($idDestino, $idPlan, $idEquipo, '$fechaActual', '$fechaActual', '$año')";
+                                    if ($result = mysqli_query($conn_2020, $query)) {
+                                        $array['creado'] = "SI";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            echo json_encode($array);
+        }
+    }
+
     if ($action == "programarMP") {
         $idEquipo = $_POST['idEquipo'];
         $idSemana = $_POST['idSemana'];
@@ -10003,7 +10339,7 @@ if (isset($_POST['action'])) {
         $semana = array();
         $resultado = 0;
         $numeroSemanas = $_POST['numeroSemanas'];
-        $año = date('Y');
+        $año = date('y');
         $idPlan = $_POST['idPlan'];
 
         $query = "SELECT *
@@ -10220,7 +10556,7 @@ if (isset($_POST['action'])) {
                     }
 
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                    AND id_plan = $idPlan AND año = '$año' AND semana_$semanaX IN ('PROCESO', 'SOLUCIONADO') AND activo = 1";
+                    and id_plan = $idPlan and año = '$año' and semana_$semanaX IN ('PROCESO', 'SOLUCIONADO') and activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
@@ -10228,7 +10564,7 @@ if (isset($_POST['action'])) {
                         } else {
                             $query = "INSERT INTO t_mp_planificacion_iniciada(id_usuario, id_plan, id_equipo, semana, año, fecha_creacion, creado_por, actividades_preventivo, actividades_test, actividades_check, status, activo) VALUES($idUsuario, $idPlan, $idEquipo, $semanaX, '$año', '$fechaActual', $idUsuario, '$idActividadesPreventivos', '$idActividadesTest', '$idActividadesCheck', 'PROCESO', 1)";
                             if ($result = mysqli_query($conn_2020, $query)) {
-                                $programarMP = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = 'PROCESO' WHERE id_plan = $idPlan and id_equipo = $idEquipo and semana_$semanaX = '0' and activo = 1";
+                                $programarMP = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = 'PROCESO', ultima_modificacion = '$fechaActual' WHERE id_plan = $idPlan and id_equipo = $idEquipo and semana_$semanaX = '0' and activo = 1 and año = '$año'";
                                 if ($result = mysqli_query($conn_2020, $programarMP)) {
                                     $resultado = 7;
                                 }
@@ -10237,7 +10573,7 @@ if (isset($_POST['action'])) {
                     }
                 } elseif ($accionMP == "SOLUCIONAROT") {
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                         AND id_plan = $idPlan AND semana_$semanaX = 'PROCESO' AND activo = 1";
+                         and id_plan = $idPlan and semana_$semanaX = 'PROCESO' and activo = 1 and año = '$año'";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
@@ -10251,7 +10587,7 @@ if (isset($_POST['action'])) {
                     }
                 } elseif ($accionMP == "CANCELAROT") {
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                         AND id_plan = $idPlan AND semana_$semanaX = 'PROCESO' AND activo = 1";
+                         and id_plan = $idPlan and semana_$semanaX = 'PROCESO' and activo = 1 año = '$año'";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
@@ -10271,7 +10607,7 @@ if (isset($_POST['action'])) {
                     }
                 } elseif ($accionMP == "VEROT") {
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                         AND id_plan = $idPlan AND (semana_$semanaX = 'PROCESO' or semana_$semanaX = 'SOLUCIONADO') AND activo = 1";
+                         and id_plan = $idPlan and (semana_$semanaX = 'PROCESO' or semana_$semanaX = 'SOLUCIONADO') and activo = 1 and año = '$año'";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
