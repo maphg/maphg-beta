@@ -337,8 +337,6 @@ const obtenerSecciones = (idSeccion, status) => {
          columnas_x.removeChild(document.getElementById("contenedor_seccion_" + idSeccion))
       }
 
-      console.log(URL);
-
       fetch(URL)
          .then(array => array.json())
          .then(array => {
@@ -393,6 +391,8 @@ const obtenerSecciones = (idSeccion, status) => {
 
                   if (idSubseccion == 200) {
                      fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
+                  } else if (idSubseccion == 1006 || idSubseccion == 1007 || idSubseccion == 1008 || idSubseccion == 1009 || idSubseccion == 1010 || idSubseccion == 1011 || idSubseccion == 1012 || idSubseccion == 1013) {
+                     fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos')"`;
                   } else {
                      fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
                   }
