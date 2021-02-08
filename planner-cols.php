@@ -251,7 +251,7 @@
                         <div class="flex items-center">
                             <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
                                 <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
-                                    <div class="bg-cyan-100 rounded-full flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                    <div class="bg-cyan-100 rounded-md flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
                                         <i class="fad fa-clipboard-list-check"></i>
                                         <h1 class="text-xs">
                                             <span id="loadPendientes" class="text-cyan-900"></span>
@@ -767,7 +767,7 @@
                 <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
                     <img id="QREquipo">
                 </div>
-                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center"></div>
+                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center overflow-hidden"></div>
             </div>
 
             <!-- OPCIONES SUPERIORES -->
@@ -965,8 +965,40 @@
                     <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
                 </div>
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
-                    <h1 class="my-2">DESPIECE MATERIALES</h1>
-                    <div id="dataDespieceMaterialesEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
+                    <div class="flex items-center justify-center">
+                        <div>
+                            <h1 id="cantidadDespieceMaterialEquipo" class="my-2">DESPIECE MATERIALES</h1>
+                        </div>
+                        <div class="ml-4">
+                            <button id="btnAñadirMaterialEquipo" class="px-2 bg-blue-200 text-blue-500 uppercase font-bold rounded py-1 text-xxs">Añadir material</button>
+                        </div>
+                    </div>
+                    <!-- DATA MATERIALES DE EQUIPO -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                            Cod2Bend
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Cantidad
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Descripción
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataDespieceMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
 
@@ -3843,6 +3875,80 @@
         </div>
     </div>
     <!-- MODAL AGREGAR ENERGETICO   -->
+
+
+    <!-- MODAL SALIDAS Subalmacenes-->
+    <div id="modalOpcionesMaterialesEquipo" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1250px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalOpcionesMaterialesEquipo');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">
+                    <h1>MATERIALES</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor TABLA -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+                    <!-- BUSCADOR -->
+                    <div class="mb-3 w-full flex flex-row items-center justify-center">
+
+                        <input id="inputDespieceMaterialesEquipo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar Material por Descripción" autocomplete="off">
+
+                    </div>
+                    <!-- BUSCADOR -->
+                    <!-- TITULOS -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="min-height: 50vh; max-height: 70vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <td class="px-2 py-1  border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-8">
+                                            <h1>DESTINO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CATEGORÍA</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>COD2BEND</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>GREMIO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>DESCRIPCION</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CARACTERISTICAS</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>MARCA/PROVEEDOR</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>U DE M</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CANTIDAD</h1>
+                                        </td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataOpcionesMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- ***** TOOLTIPS ***** -->

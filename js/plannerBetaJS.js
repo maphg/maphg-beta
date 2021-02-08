@@ -74,6 +74,7 @@ const btnPendientesEnergeticos = document.getElementById("btnPendientesEnergetic
 const btnSolucionadosEnergeticos = document.getElementById("btnSolucionadosEnergeticos");
 const btnBuscarOT = document.getElementById("btnBuscarOT");
 const btnBuscarNumeroOT = document.getElementById("btnBuscarNumeroOT");
+const btnAñadirMaterialEquipo = document.getElementById("btnAñadirMaterialEquipo");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -102,6 +103,7 @@ const palabraUsuario = document.getElementById("palabraUsuario");
 const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
 const inputNumeroOT = document.getElementById("inputNumeroOT");
 const inputAdjuntos = document.getElementById("inputAdjuntos");
+const inputDespieceMaterialesEquipo = document.getElementById("inputDespieceMaterialesEquipo");
 
 // ELEMENTOS <INPUTS> ID
 
@@ -157,6 +159,7 @@ const tituloSegundoNivel = document.getElementById("tituloSegundoNivel");
 const tituloTercerNivel = document.getElementById("tituloTercerNivel");
 const columnas_x = document.getElementById("columnas_x");
 const dataBuscarOT = document.getElementById("dataBuscarOT");
+const cantidadDespieceMaterialEquipo = document.getElementById("cantidadDespieceMaterialEquipo");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -167,6 +170,7 @@ const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia
 const contenedorEquiposAmerica = document.getElementById("contenedorEquiposAmerica");
 const contenedorEquiposAmericaDespice = document.getElementById("contenedorEquiposAmericaDespice");
 const dataSubseccionesPendientes = document.getElementById("dataSubseccionesPendientes");
+const dataOpcionesMaterialesEquipo = document.getElementById("dataOpcionesMaterialesEquipo");
 // CONTENEDOR DE TABLAS
 
 // THEADS DE TABLAS
@@ -175,6 +179,7 @@ const tablaPendientesPendientes = document.getElementById("tablaPendientesPendie
 const tablaPendientesPendientesDEP = document.getElementById("tablaPendientesPendientesDEP");
 const tablaPendientesTrabajando = document.getElementById("tablaPendientesTrabajando");
 const tablaPendientesSolucionado = document.getElementById("tablaPendientesSolucionado");
+const dataDespieceMaterialesEquipo = document.getElementById("dataDespieceMaterialesEquipo");
 // THEADS DE TABLAS
 
 
@@ -2444,7 +2449,7 @@ function agregarMC(idMC) {
 
 
 // Obtener usuario recibe 2 parametros especificos, donde tipoAsignación se refiere a la tabla donde se va a utilizar el usuario y idItem es el identificador del registro que se le va asignar.
-function obtenerUsuarios(tipoAsginacion, idItem) {
+function obtenerUsuarios(tipoAsignacion, idItem) {
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
 
@@ -2460,7 +2465,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
          idUsuario: idUsuario,
          idDestino: idDestino,
          palabraUsuario: palabraUsuario.value,
-         tipoAsginacion: tipoAsginacion,
+         tipoAsignacion: tipoAsignacion,
          idItem: idItem,
       },
       dataType: "JSON",
@@ -2468,7 +2473,7 @@ function obtenerUsuarios(tipoAsginacion, idItem) {
          // alertaImg("Usuarios Obtenidos: " + data.totalUsuarios, "", "info", 2000);
          dataUsuarios.innerHTML = data.dataUsuarios;
          palabraUsuario.
-            setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsginacion + '",' + idItem + ")"
+            setAttribute("onkeydown", 'obtenerUsuarios("' + tipoAsignacion + '",' + idItem + ")"
             );
       },
    });
@@ -5206,7 +5211,6 @@ function agregarComentarioVP(tipoPendiente, idPendiente) {
             } else {
                alertaImg("Intente de Nuevo", "", "question", 2000);
             }
-
          },
       });
 
@@ -5507,10 +5511,11 @@ function informacionEquipo(idEquipo) {
    // FUNCIONES INICIALES
    toggleDisabledEditarEquipo(0);
    inputFotografiaEquipo.setAttribute('onchange', `subirImagenEquipo(${idEquipo})`);
+   btnAñadirMaterialEquipo.setAttribute('onclick', `obtenerOpcionesMaterialesEquipo(${idEquipo}, 'PREVENTIVO'); abrirmodal('modalOpcionesMaterialesEquipo')`);
 
    // OPCIONES SUPERIORES
    btnInformacionEquipo.setAttribute('onclick', `informacionEquipo(${idEquipo})`);
-   btnDespieceEquipo.setAttribute('onclick', `despieceEquipos(${idEquipo})`);
+   btnDespieceEquipo.setAttribute('onclick', `despieceEquipos(${idEquipo}); despieceMaterailesEquipo(${idEquipo}, 'PREVENTIVO')`);
    btnDocumentosEquipo.setAttribute('onclick', `obtenerAdjuntosEquipo(${idEquipo})`);
    btnCotizacionesEquipo.setAttribute('onclick', `obtenerCotizacionesEquipo(${idEquipo})`);
 
@@ -5716,6 +5721,126 @@ function informacionEquipo(idEquipo) {
 }
 
 
+const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+
+   const action = "obtenerOpcionesMaterialesEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&tipoAsignacion=${tipoAsignacion}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataOpcionesMaterialesEquipo.innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idItem = array[x].idItem;
+               const destino = array[x].destino;
+               const categoria = array[x].categoria;
+               const cod2bend = array[x].cod2bend;
+               const gremio = array[x].gremio;
+               const descripcion = array[x].descripcion;
+               const caracteristicas = array[x].caracteristicas;
+               const marca = array[x].marca;
+               const unidad = array[x].unidad;
+               const cantidad = array[x].cantidad;
+
+               const codigo = `
+                  <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-8">
+                           <h1 class="truncate">${destino}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${categoria}">
+                           <h1 class="truncate w-12">${categoria}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${cod2bend}">
+                           <h1 class="truncate w-12">${cod2bend}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16" data-title-material="${gremio}">
+                           <h1 class="truncate w-16">${gremio}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-40" data-title-material="${descripcion}">
+                           <h1 class="truncate w-40">${descripcion}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-24" data-title-material="${caracteristicas}">
+                           <h1 class="truncate w-24">${caracteristicas}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${marca}">
+                           <h1 class="truncate w-12">${marca}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-10" data-title-material="${unidad}">
+                           <h1 class="truncate w-10">${unidad}</h1>
+                     </td>
+
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16">
+                        <div class="w-16">
+                           <input id="item_material_equipo_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 w-16 rounded-md text-sm focus:outline-none" type="text" placeholder="Cantidad" min="1" value="${cantidad}" autocomplete="off" onkeyup="asignarMaterialEquipo(${idItem},${idEquipo}, '${tipoAsignacion}')">
+                        </div>
+                     </td>
+                  </tr>               
+               `;
+               dataOpcionesMaterialesEquipo.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+}
+
+const asignarMaterialEquipo = (idItem, idEquipo, tipoAsignacion) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+   let cantidad = 0;
+
+   if (document.getElementById("item_material_equipo_" + idItem)) {
+      cantidad = parseFloat(document.getElementById("item_material_equipo_" + idItem).value);
+   }
+
+   const action = "asignarMaterialEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}&tipoAsignacion=${tipoAsignacion}&idItem=${idItem}&cantidad=${cantidad}`;
+
+   if (cantidad >= 0 && cantidad != "NaN") {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (tipoAsignacion == "PREVENTIVO") {
+               if (array == "AGREGADO") {
+                  alertaImg('Material Agregado', '', 'success', 1400);
+               } else if (array == "ACTUALIZADO") {
+                  alertaImg('Cantidad Material Actualizado', '', 'success', 1400);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+               despieceMaterailesEquipo(idEquipo, 'PREVENTIVO')
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err + ` asignarMaterialEquipo = (${idItem}, ${idEquipo}, ${tipoAsignacion})`);
+         })
+
+   } else {
+      alertaImg('Cantidad NO Valida', '', 'info', 1500);
+   }
+}
+
+
+// BUSCA MATERIALES PARA EQUIPO
+inputDespieceMaterialesEquipo.addEventListener('keyup', () => {
+   buscadorTabla('dataOpcionesMaterialesEquipo', 'inputDespieceMaterialesEquipo', 4);
+})
+
+
 // OBTIENE EL DESPIECE DE EQUIPO
 function despieceEquipos(idEquipo) {
    e_dataDespieceEquipo.innerHTML = '';
@@ -5759,6 +5884,54 @@ function despieceEquipos(idEquipo) {
       })
       .catch(err => {
          fetch(APIERROR + err + ` despieceEquipos(${idEquipo})`)
+      })
+}
+
+
+//OBTIENE EL DESPIECE DE MATERIALES DE EQUIPO
+const despieceMaterailesEquipo = (idEquipo, tipoAsignacion) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "despieceMaterailesEquipo";
+   const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&tipoAsignacion=${tipoAsignacion}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         dataDespieceMaterialesEquipo.innerHTML = '';
+         cantidadDespieceMaterialEquipo.innerText = 'Despiece Materiales (0)';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            cantidadDespieceMaterialEquipo.innerText = 'Despiece Materiales (' + array.length + ')';
+            for (let x = 0; x < array.length; x++) {
+               const idRegistro = array[x].idRegistro;
+               const cod2bend = array[x].cod2bend;
+               const cantidad = array[x].cantidad;
+               const descripcion = array[x].descripcion;
+               const codigo = `
+                  <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal S-SOLUCIONADO">
+                     <td id="" class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" onclick="obtenerActividadesOT(31620, 'FALLA');">
+                        <h1>${cod2bend}</h1>
+                     </td>
+                     <td id="" class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" onclick="obtenerActividadesOT(31620, 'FALLA');">
+                        <h1>${cantidad}</h1>
+                     </td>
+                     <td class="px-4 border-b border-gray-200 py-3" style="max-width: 300px;">
+                        <h1 class="truncate">${descripcion}</h1>
+                     </td>
+                  </tr>               
+               `;
+               dataDespieceMaterialesEquipo.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         dataDespieceMaterialesEquipo.innerHTML = '';
+         cantidadDespieceMaterialEquipo.innerText = 'Despiece Materiales (0)';
+         fetch(APIERROR + err + ` despieceMaterailesEquipo(${idEquipo}, ${tipoAsignacion})`);
       })
 }
 

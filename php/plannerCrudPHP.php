@@ -4609,7 +4609,7 @@ if (isset($_POST['action'])) {
     if ($action == "obtenerUsuarios") {
         // Variables AJAX.
         $palabraUsuario = $_POST['palabraUsuario'];
-        $tipoAsginacion = $_POST['tipoAsginacion'];
+        $tipoAsignacion = $_POST['tipoAsignacion'];
         $idItem = $_POST['idItem'];
 
         // Variables Locales.
@@ -4638,7 +4638,7 @@ if (isset($_POST['action'])) {
         if ($resultUsuarios = mysqli_query($conn_2020, $queryUsuarios)) {
 
             //Tipo de Asignación sirve para mandar parametros especificos en las funciones. 
-            if ($tipoAsginacion == "asignarMC") {
+            if ($tipoAsignacion == "asignarMC") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4657,7 +4657,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarTarea") {
+            } elseif ($tipoAsignacion == "asignarTarea") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4676,7 +4676,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarTest") {
+            } elseif ($tipoAsignacion == "asignarTest") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4695,7 +4695,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarProyecto") {
+            } elseif ($tipoAsignacion == "asignarProyecto") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4714,7 +4714,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarProyectoDEP") {
+            } elseif ($tipoAsignacion == "asignarProyectoDEP") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4733,7 +4733,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarPlanaccion") {
+            } elseif ($tipoAsignacion == "asignarPlanaccion") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -4752,7 +4752,7 @@ if (isset($_POST['action'])) {
                         </div>
                     ";
                 }
-            } elseif ($tipoAsginacion == "asignarOT") {
+            } elseif ($tipoAsignacion == "asignarOT") {
                 $totalUsuarios = mysqli_num_rows($resultUsuarios);
                 foreach ($resultUsuarios as $value) {
                     $idUsuario = $value['idUsuario'];
@@ -10587,14 +10587,14 @@ if (isset($_POST['action'])) {
                     }
                 } elseif ($accionMP == "CANCELAROT") {
                     $query = "SELECT id FROM t_mp_planeacion_proceso WHERE id_equipo = $idEquipo
-                         and id_plan = $idPlan and semana_$semanaX = 'PROCESO' and activo = 1 año = '$año'";
+                         and id_plan = $idPlan and semana_$semanaX = 'PROCESO' and activo = 1 and año = '$año'";
                     if ($result = mysqli_query($conn_2020, $query)) {
 
                         if (mysqli_num_rows($result) > 0) {
-                            $query = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = '0' WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and semana_$semanaX ='PROCESO'";
+                            $query = "UPDATE t_mp_planeacion_proceso SET semana_$semanaX = '0' WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and semana_$semanaX ='PROCESO' and año = '$año'";
                             if ($query = mysqli_query($conn_2020, $query)) {
-                                $query = "UPDATE t_mp_planificacion_iniciada SET status ='SOLUCIONADO', fecha_finalizado = '$fechaActual'
-                                WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and status ='PROCESO')";
+                                $query = "UPDATE t_mp_planificacion_iniciada SET status ='CANCELADO', fecha_finalizado = '$fechaActual'
+                                WHERE id_plan = $idPlan and id_equipo = $idEquipo and activo = 1 and status ='PROCESO' and año = '$año' and semana = '$semanaX'";
                                 if ($result = mysqli_query($conn_2020, $query)) {
                                     $resultado = 9;
                                 } else {

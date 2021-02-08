@@ -1414,8 +1414,7 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-
-    // OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
+    # OBTIENES LAS FALLAS EN GENERAL (PENDIENTES Y SOLUCIONADOS);
     if ($action == "obtenerFallas") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
@@ -1584,7 +1583,7 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-    // Consulta el despiece de Equipos incluyendo el Equipo Padre
+    # Consulta el despiece de Equipos incluyendo el Equipo Padre
     if ($action == "despieceEquipos") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
@@ -1627,6 +1626,114 @@ if (isset($_GET['action'])) {
             }
             echo json_encode($array);
         }
+    }
+
+    # OBTIENE LOS MATERIAL POSIBLE PARA ASIGNAR AL EQUIPO
+    if ($action == "obtenerOpcionesMaterialesEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $tipoAsignacion = $_GET['tipoAsignacion'];
+        $array = array();
+
+        $query = "SELECT 
+        t_subalmacenes_items_globales.id 'idItem', t_subalmacenes_items_globales.unidad, 
+        t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
+        t_subalmacenes_items_globales.descripcion, t_subalmacenes_items_globales.caracteristicas, t_subalmacenes_items_globales.marca, c_destinos.destino, bitacora_gremio.nombre_gremio
+        FROM t_equipos_america
+        INNER JOIN t_subalmacenes_items_globales ON t_equipos_america.id_destino = t_subalmacenes_items_globales.id_destino
+        INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
+        WHERE t_subalmacenes_items_globales.activo = 1 and t_equipos_america.id = $idEquipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['idItem'];
+                $destino = $x['destino'];
+                $categoria = $x['categoria'];
+                $cod2bend = $x['cod2bend'];
+                $descripcion = $x['descripcion'];
+                $caracteristicas = $x['caracteristicas'];
+                $marca = $x['marca'];
+                $unidad = $x['unidad'];
+                $gremio = $x['nombre_gremio'];
+
+                $cantidad = 0;
+                $query = "SELECT cantidad FROM t_equipos_materiales WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $cantidad = $x['cantidad'];
+                    }
+                }
+                $array[] = array(
+                    "idItem" => intval($idItem),
+                    "destino" => $destino,
+                    "categoria" => $categoria,
+                    "cod2bend" => $cod2bend,
+                    "gremio" => $gremio,
+                    "descripcion" => $descripcion,
+                    "caracteristicas" => $caracteristicas,
+                    "marca" => $marca,
+                    "unidad" => $unidad,
+                    "cantidad" => $cantidad
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    # ASIGNA MATERIAL AL EQUIPO
+    if ($action == "asignarMaterialEquipo") {
+        $idItem = $_GET['idItem'];
+        $idEquipo = $_GET['idEquipo'];
+        $cantidad = $_GET['cantidad'];
+        $tipoAsignacion = $_GET['tipoAsignacion'];
+        $resp = 0;
+
+        $total = 0;
+        $query = "SELECT id FROM t_equipos_materiales WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $total = mysqli_num_rows($result);
+        }
+
+        if ($total >= 1) {
+            $query = "UPDATE t_equipos_materiales SET cantidad = '$cantidad' WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "ACTUALIZADO";
+            }
+        } else {
+            $query = "INSERT INTO t_equipos_materiales(id_usuario, id_equipo, id_item_global, cantidad, tipo_asignacion, fecha, activo) VALUES($idUsuario, $idEquipo, $idItem, '$cantidad', '$tipoAsignacion', '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "AGREGADO";
+            }
+        }
+        echo json_encode($resp);
+    }
+
+    # OBTIENE EL MATERIAL ASIGNADO AL EQUIPO
+    if ($action == "despieceMaterailesEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $tipoAsignacion = $_GET['tipoAsignacion'];
+        $array = array();
+
+        $query = "SELECT t_equipos_materiales.id, t_equipos_materiales.cantidad, 
+        t_subalmacenes_items_globales.cod2bend, t_subalmacenes_items_globales.descripcion
+        FROM t_equipos_materiales 
+        INNER JOIN t_subalmacenes_items_globales ON t_equipos_materiales.id_item_global = t_subalmacenes_items_globales.id
+        WHERE t_equipos_materiales.id_equipo = $idEquipo and t_equipos_materiales.tipo_asignacion = '$tipoAsignacion' and t_equipos_materiales.activo = 1 and t_equipos_materiales.cantidad > 0";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idRegistro = $x['id'];
+                $cantidad = $x['cantidad'];
+                $cod2bend = $x['cod2bend'];
+                $descripcion = $x['descripcion'];
+
+                $array[] = array(
+                    "idRegistro" => intval($idRegistro),
+                    "cantidad" => $cantidad,
+                    "cod2bend" => $cod2bend,
+                    "descripcion" => $descripcion
+                );
+            }
+        }
+        echo json_encode($array);
     }
 
 
