@@ -5596,6 +5596,7 @@ function informacionEquipo(idEquipo) {
             } else {
                alert('No se Encontraron Datos..', '', 'info', 1200);
             }
+            resolve(resolve, reject)
 
          })
          .catch(function (err) {
@@ -5609,7 +5610,7 @@ function informacionEquipo(idEquipo) {
             e_marcaEquipo.innerHTML = '<option value="0">No Seleccionado</option>';
             e_jerarquiaEquipo.value = 0;
          })
-      resolve(resolve, reject)
+
    })
    promesa.then((resolve, reject) => {
 
@@ -5675,11 +5676,8 @@ function informacionEquipo(idEquipo) {
                   btnBitacorasEquipo.classList.add('hidden');
                   obtenerIncidenciasEquipo(idEquipo);
                }
+               console.log(3);
             }
-         })
-         .then(() => {
-            console.log(3);
-            cancelarInformacionEquipo(idEquipo);
          })
          .catch(function (err) {
             fetch(APIERROR + err);

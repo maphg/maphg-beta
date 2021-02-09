@@ -1590,7 +1590,7 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT id, equipo, jerarquia, id_equipo_principal 
         FROM t_equipos_america
-        WHERE activo = 1 and (id = $idEquipo OR id_equipo_principal = $idEquipo)";
+        WHERE activo = 1 and (id = $idEquipo OR id_equipo_principal = $idEquipo) and status IN('OPERATIVO', 'TALLER')";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
@@ -1608,7 +1608,7 @@ if (isset($_GET['action'])) {
                 if ($jerarquia == "SECUNDARIO") {
                     $query = "SELECT id, equipo, jerarquia 
                     FROM t_equipos_america 
-                    WHERE activo = 1 and id = $idPrincipal LIMIT 1";
+                    WHERE activo = 1 and id = $idPrincipal and status IN('OPERATIVO', 'TALLER') LIMIT 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $i) {
                             $id = $i['id'];
