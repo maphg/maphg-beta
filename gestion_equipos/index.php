@@ -179,36 +179,33 @@
 
     <!-- MODAL EQUIPO PARA LOS MP-->
     <div id="modalMPEquipo" class="modal relative">
-        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg " style="width: 1000px;">
+        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg" style="width: 1000px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMPEquipo')" class="cursor-pointer text-md  text-red-500 bg-red-200 px-2 rounded-bl-lg rounded-tr-lg font-normal shadow-md">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <!-- INDICACION -->
-            <div class="absolute top-0 left-0 flex flex-row items-center">
-                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-lg rounded-tl-lg">
-                    <h1>INFORMACIÓN DEL EQUIPO</h1>
-                </div>
-            </div>
 
             <!-- ENCABEZADO -->
             <div class="flex flex-row w-full justify-start px-4 relative">
-                <div class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center">
+                <div class="font-bold text-xl flex flex-col justify-center items-start uppercase truncate w-full text-center">
                     <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="" autocomplete="off">
                     <div class="flex mt-1">
-                        <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4">
-                            <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg"></i>
 
-                            <select id="estadoEquipo" class="text-xs font-bold">
+                        <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4 bg-green-200">
+                            <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg text-green-500"></i>
+
+                            <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
                                 <option value="OPERATIVO">OPERATIVO</option>
                                 <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
+                                <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
                             </select>
 
                         </div>
-                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4">
+
+                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4 hidden">
                             <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
                             <h2 class="mr-2">
                                 <select id="tipoLocalEquipo" class="text-xs font-bold">
@@ -218,17 +215,19 @@
                             </h2>
                             <h2 id="jerarquiaEquipo2"></h2>
                         </div>
-                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
+
+                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4 hidden">
                             <i class="mr-1 text-blue-400">BITÁCORAS:</i>
-                            <select id="idFaseEquipo" class="text-xs font-bold" value="0">
+                            <select id="idFaseEquipo" class="text-xs font-bold">
                                 <option value="1">GP</option>
                                 <option value="2">TRS</option>
                                 <option value="3">ZI</option>
                             </select>
                         </div>
-                        <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer">
+
+                        <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer hidden">
                             <i class="mr-1 text-red-300">R</i>
-                            <h2></h2>
+                            <h2>REEMPLAZADO</h2>
                         </div>
                     </div>
                 </div>
@@ -236,225 +235,389 @@
 
             <!-- FOTOS -->
             <div class="w-full h-32 mt-2 px-4 overflow-x-auto scrollbar flex items-center">
-                <div id="btnAdjuntosEquipo" class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
+
+                <div class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
                     <i class="fas fa-plus ga-lg"></i>
+                    <input id="inputFotografiaEquipo" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px" multiple="">
                 </div>
                 <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
-                    <img id="QREquipo" class="" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/#">
+                    <img id="QREquipo">
                 </div>
-                <div id="dataImagenesEquipo" class="w-full h-32 overflow-x-auto scrollbar flex items-center"></div>
+                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center overflow-hidden"></div>
+            </div>
+
+            <!-- OPCIONES SUPERIORES -->
+            <div class="w-full py-2 border-t my-1">
+                <div class="flex justify-center items-center text-xs">
+                    <button id="btnInformacionEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Información</button>
+                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Despiece</button>
+                    <button id="btnDocumentosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Adjuntos</button>
+                    <button id="btnCotizacionesEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Cotizaciones</button>
+                </div>
             </div>
 
             <!-- CARACTRISTICAS -->
-            <div class="text-xs uppercase font-bold w-full px-2 my-2 flex">
-                <h1>INFORMACIÓN</h1>
+            <div id="contenedorCaracteristicasEquipo" class="w-full bg-white hidden">
+                <div class="text-xs uppercase font-bold w-full px-2 my-2 flex">
 
-                <button id="btnEditarEquipo" class="text-xxs px-2 bg-yellow-300 ml-3 rounded font-semibold hover:shadow">Editar</button>
+                    <button id="btnEditarEquipo" class="text-xxs px-2 bg-yellow-300 text-yellow-700 ml-3 rounded font-semibold hover:shadow">Editar <i class="fas fa-edit ml-1"></i></button>
 
-                <button id="btnGuardarEquipo" class="text-xxs px-2 bg-green-300 ml-3 rounded font-semibold hover:shadow">Guardar</button>
+                    <button id="btnGuardarEquipo" class="text-xxs px-2 bg-green-300 text-green-700 ml-3 rounded font-semibold hover:shadow">Guardar <i class="fad fa-save ml-1"></i></button>
 
-                <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 ml-3 rounded font-semibold hover:shadow">Cancelar</button>
+                    <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 text-red-700 ml-3 rounded font-semibold hover:shadow">Cancelar <i class="fas fa-times-circle ml-1"></i></button>
+                </div>
 
+                <div class="flex flex-row w-full">
+                    <div class="flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 w-full">
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
+                                <select id="seccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
+                                <select id="subseccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
+                                <select id="tipoEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
+                                <select id="jerarquiaEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                    <option value="PRINCIPAL">PRINCIPAL</option>
+                                    <option value="SECUNDARIO">SECUNDARIO</option>
+                                </select>
+                            </div>
+
+                            <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
+                                <select id="dataOpcionesEquipos" class="font-semibold truncate bg-white w-32 select-sinarrow"></select>
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6 bg-white">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
+                                <select id="marcaEquipo" class="font-semibold truncate bg-white w-24 select-sinarrow">
+                                </select>
+
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Modelo</h1>
+                                <input type="text" value="-" id="modeloEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Número de Serie</h1>
+                                <input type="text" value="-" id="serieEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Código Fabricante</h1>
+                                <input type="text" value="-" id="codigoFabricanteEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Código Interno Compras</h1>
+                                <input type="text" value="-" id="codigoInternoComprasEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
+                                <input id="cantidadEquipo" type="text" placeholder="0" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">LARGO</h1>
+                                <input type="text" value="-" id="largoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">ANCHO</h1>
+                                <input type="text" value="-" id="anchoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">ALTO</h1>
+                                <input type="text" value="-" id="altoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
+                                <input type="text" value="-" id="potenciaElectricaHPEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (KW)</h1>
+                                <input type="text" value="-" id="potenciaElectricaKWEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">VOLTAJE (V)</h1>
+                                <input type="text" value="-" id="voltajeEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">FRECUENCIA (HZ)</h1>
+                                <input type="text" value="-" id="frecuenciaEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
+                                <input type="text" value="-" id="caudalAguaM3HEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (GPH)</h1>
+                                <input type="text" value="-" id="caudalAguaGPHEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CARGA (M.C.A)</h1>
+                                <input type="text" value="-" id="cargaMCAEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
+                                <input type="text" value="-" id="PotenciaEnergeticaFrioKWEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(TR)</h1>
+                                <input type="text" value="-" id="potenciaEnergeticaFrioTREquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA CALOR (KCAL)</h1>
+                                <input type="text" value="-" id="potenciaEnergeticaCalorKCALEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(M3/H)</h1>
+                                <input type="text" value="-" id="caudalAireM3HEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(CFM)</h1>
+                                <input type="text" value="-" id="caudalAireCFMEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="flex flex-row w-full bg-fondos-4">
-                <div class="w-9/12 flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 ">
-                    <div class="flex-none w-1/6">
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
-                            <select id="seccionEquipo" class="bg-fondos-4 font-semibold truncate w-24">
-                            </select>
+            <!-- DESPIECE -->
+            <div id="contenedorDespiedeEquipo" class="flex flex-row w-full bg-white hidden">
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
+                    <h1 class="my-2">DESPIECE EQUIPO</h1>
+                    <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
+                </div>
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
+                    <div class="flex items-center justify-center">
+                        <div>
+                            <h1 id="cantidadDespieceMaterialEquipo" class="my-2">DESPIECE MATERIALES</h1>
                         </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
-                            <select id="subseccionEquipo" class="bg-fondos-4 font-semibold truncate w-24">
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
-                            <select id="tipoEquipo" class="bg-fondos-4 font-semibold truncate w-24">
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
-                            <select id="jerarquiaEquipo" class="bg-fondos-4 font-semibold truncate w-24">
-                                <option value="0">No Seleccionado</option>
-                                <option value="PRINCIPAL">PRINCIPAL</option>
-                                <option value="SECUNDARIO">SECUNDARIO</option>
-                            </select>
-                        </div>
-
-                        <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
-                            <select id="dataOpcionesEquipos" class="bg-fondos-4 font-semibold truncate w-24" disabled></select>
-                        </div>
-
-                    </div>
-
-                    <div class="flex-none w-1/6">
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
-                            <select id="marcaEquipo" class="bg-fondos-4 font-semibold truncate w-24">
-                            </select>
-
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Modelo</h1>
-                            <input type="text" placeholder="0.0" id="modeloEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Número de Serie</h1>
-                            <input type="text" placeholder="0.0" id="serieEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Código Fabricante</h1>
-                            <input type="text" placeholder="0.0" id="codigoFabricanteEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Código Interno Compras</h1>
-                            <input type="text" placeholder="0.0" id="codigoInternoComprasEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                    </div>
-                    <div class="flex-none w-1/6">
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
-                            <input id="cantidadEquipo" type="text" placeholder="0" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">LARGO (cm)</h1>
-                            <input type="text" placeholder="0.0" id="largoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">ANCHO (cm)</h1>
-                            <input type="text" placeholder="0.0" id="anchoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">ALTO (cm)</h1>
-                            <input type="text" placeholder="0.0" id="altoEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                        <div class="ml-4">
+                            <button id="btnAñadirMaterialEquipo" class="px-2 bg-blue-200 text-blue-500 uppercase font-bold rounded py-1 text-xxs">Añadir material</button>
                         </div>
                     </div>
+                    <!-- DATA MATERIALES DE EQUIPO -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
 
-                    <div class="flex-none w-1/6">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                            Cod2Bend
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Cantidad
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Descripción
+                                        </th>
+                                    </tr>
+                                </thead>
 
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
-                            <input type="text" placeholder="0.0" id="potenciaElectricaHPEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
+                                <tbody id="dataDespieceMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
                         </div>
 
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (KW)</h1>
-                            <input type="text" placeholder="0.0" id="potenciaElectricaKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">VOLTAJE (V)</h1>
-                            <input type="text" placeholder="0.0" id="voltajeEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">FRECUENCIA (HZ)</h1>
-                            <input type="text" placeholder="0.0" id="frecuenciaEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                    </div>
-                    <div class="flex-none w-1/6">
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
-                            <input type="text" placeholder="0.0" id="caudalAguaM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (GPH)</h1>
-                            <input type="text" placeholder="0.0" id="caudalAguaGPHEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">CARGA (M.C.A)</h1>
-                            <input type="text" placeholder="0.0" id="cargaMCAEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                    </div>
-                    <div class="flex-none w-1/6">
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
-                            <input type="text" placeholder="0.0" id="PotenciaEnergeticaFrioKWEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(TR)</h1>
-                            <input type="text" placeholder="0.0" id="potenciaEnergeticaFrioTREquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA CALOR (KCAL)</h1>
-                            <input type="text" placeholder="0.0" id="potenciaEnergeticaCalorKCALEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(M3/H)</h1>
-                            <input type="text" placeholder="0.0" id="caudalAireM3HEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
-
-                        <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
-                            <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(CFM)</h1>
-                            <input type="text" placeholder="0.0" id="caudalAireCFMEquipo" class="bg-fondos-4 font-semibold" autocomplete="off">
-                        </div>
 
                     </div>
                 </div>
-                <div class="flex-none flex flex-col items-start justify-start border-l w-3/12 text-xs uppercase font-bold px-2">
-
-                    <h1 class="my-2">DESPIECE</h1>
-
-                    <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="max-height: 200px;"></div>
-                </div>
-
-            </div>
-            <!-- CARACTRISTICAS -->
-
-            <!-- PLANES MP -->
-            <div class="text-xs uppercase font-bold w-full px-2 my-2">
-                <h1>PLANES</h1>
             </div>
 
-            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start px-4  overflow-x-auto scrollbar py-4" style="height:300px; max-height:305px;">
-                <div class="w-full">
-                    <ul class="list-reset flex border-b">
-                        <li class="-mb-px mr-1">
-                            <a class="bg-white inline-block border-l-2 border-t-2 border-r-2 rounded-t py-2 px-4 text-bluegray-800 font-semibold border-bluegray-100" href="#">Preventivo</a>
-                        </li>
-                        <li class="mr-1">
-                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-600 font-semibold" href="#">Correctivos</a>
-                        </li>
-                        <li class="mr-1">
-                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-800 font-semibold" href="#">Predictivo/Checklist</a>
-                        </li>
-                        <li class="mr-1">
-                            <a class="bg-white inline-block py-2 px-4 text-bluegray-400 hover:text-bluegray-800 font-semibold" href="#">Manuales/Planos</a>
-                        </li>
-                    </ul>
-                    <div class="text-center mx-auto my-10 w-full">
-                        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+            <!-- ADJUNTOS (COTIZACIONES Y MANUALES)-->
+            <div id="contenedorAdjuntosEquipo" class="w-full bg-white hidden">
+
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 overflow-y-auto scrollbar" style="height: 201px;">
+
+                    <div class="w-full flex flex-row items-center justify-center my-1">
+                        <button class="relative py-2 px-3 bg-teal-200 text-teal-500 font-bold text-xxs rounded-md hover:shadow-md">
+                            <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                            ADJUNTAR
+                            <!-- INPUT -->
+                            <input id="inputAdjuntosEquipo" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px" multiple="">
+                            <!-- INPUT -->
+                        </button>
                     </div>
+
+                    <div id="dataAdjuntosEquipo" class="w-full flex flex-wrap"></div>
                 </div>
             </div>
-            <!-- PLANES MP -->
+
+            <!-- OPCIONES INFERIORES MP -->
+            <div class="w-full my-2 py-2 border-t">
+                <div class="flex justify-center items-center text-xs">
+                    <button id="btnPreventivosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Preventivo</button>
+                    <button id="btnIncidenciasEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Incidencias</button>
+                    <button id="btnChecklistEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Checklist
+                        MP</button>
+                    <button id="btnBitacorasEquipo" class="bg-gray-200 text-gray-500 px-2 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Inspección/Bitácoras</button>
+                </div>
+            </div>
+
+            <!-- PLANES MP EQUIPO -->
+            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- INCIDENCIAS EQUIPO -->
+            <div id="contenedorIncidenciasEquipo" class="flex flex-wrap w-full justify-start p-1 overflow-x-auto scrollbar hidden" style="height:300px;">
+                <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                        <thead>
+                            <tr class="cursor-pointer bg-white">
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                    Incidencia
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Acciones
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Responsable
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Fechas
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Comentarios
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Adjuntos
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Status
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    OT
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
+                                    Tipo
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="dataIncidenciasEquipo" class="bg-white divide-y divide-gray-200">
+                            <!-- More rows... -->
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- CHECKLIST EQUIPO -->
+            <div id="contenedorChecklistEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- BITACORA EQUIPO -->
+            <div id="contenedorBitacoraEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- MENÚ OPCIONES MP -->
+            <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
+                <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646; z-index:90;">
+
+                    <h1 class="mr-1 text-right absolute right-0" style="color: #ffff;" onclick="cerrarTooltip('tooltipMP')">
+                        <i class="fas fa-times fa-lg"></i>
+                    </h1>
+
+                    <h1 class="my-2" style="color: #a9aaaa; background-color: #454A4A;">Programación <span id="semanaProgramacionMP"></span></h1>
+
+                    <h1 id="programarMPIndividual" class="contextmenu-item"><i class="fas fa-long-arrow-down mr-2 text-blue-400"></i>Programar (Individual)</h1>
+
+                    <h1 id="programarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-random mr-2 text-blue-400"></i>Reprogramar desde aquí</h1>
+
+                    <h1 id="opcionMPPersonalizado" class="contextmenu-item" onclick="expandir(this.id)">
+                        <i class="fas fa-random mr-2 text-blue-400"></i>Program. Personalizada
+                    </h1>
+
+                    <div id="opcionMPPersonalizadotoggle" class="flex flex-row items-center justify-center mb-3 hidden">
+                        <input id="numeroSemanasPersonalizadasMP" class="w-1/4 text-center shadow appearance-none border border-red-500 rounded w-full py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="1" max="52" pattern="[0-9]" autocomplete="off">
+                        <button id="programarMPPersonalizado" class="w-3/4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded">Programar</button>
+                    </div>
+
+                    <h1 id="eliminarMPIndividual" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar (individual)</h1>
+
+                    <h1 id="eliminarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar desde aquí</h1>
+
+                    <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
+
+                    <h1 id="VerOTMP" class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
+
+                    <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
+
+                    <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar
+                        OT</h1>
+
+                    <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
+
+                </div>
+                <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
+            </div>
+            <!-- MENÚ OPCIONES MP -->
+
         </div>
     </div>
     <!-- MODAL EQUIPO PARA LOS MP-->
@@ -632,176 +795,6 @@
         </div>
     </div>
     <!-- MODALES -->
-
-
-    <!-- MODAL STATUS   -->
-    <div id="modalStatus" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 300px;">
-            <!-- BOTON CERRARL -->
-            <div class="absolute top-0 right-0">
-                <button onclick="cerrarmodal('modalStatus')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <!-- INDICACION -->
-            <div class="absolute top-0 left-0 flex flex-row items-center">
-                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                    <h1>STATUS</h1>
-                </div>
-            </div>
-            <!-- CONTENIDO -->
-            <div class="px-8 py-2 flex flex-col justify-center items-center flex-col w-full font-bold text-sm">
-
-                <div id="statusUrgente" class="hidden w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
-                    <div class="">
-                        <h1>ES URGENTE</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <i class="fas fa-siren-on animated flash infinite"></i>
-                    </div>
-                </div>
-
-                <div id="statusMaterial" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs">
-                    <div class="">
-                        <h1>NO HAY MATERIAL</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>M</h1>
-                    </div>
-                </div>
-
-                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
-                    <div class="">
-                        <h1>TRABAJANDO</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>T</h1>
-                    </div>
-                </div>
-
-                <div id="statusenergeticos" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
-                    <div class="">
-                        <h1>ENERGÉTICOS</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>E</h1>
-                    </div>
-                </div>
-                <div id="statusenergeticostoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
-                    <div id="statusElectricidad" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
-                        <div class="">
-                            <h1>ELECTRICIDAD</h1>
-                        </div>
-                    </div>
-                    <div id="statusAgua" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
-                        <div class="">
-                            <h1>AGUA</h1>
-                        </div>
-                    </div>
-                    <div id="statusDiesel" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
-                        <div class="">
-                            <h1>DIESEL</h1>
-                        </div>
-                    </div>
-                    <div id="statusGas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
-                        <div class="">
-                            <h1>GAS</h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="statusdep" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                    <div class="">
-                        <h1>DEPARTAMENTO</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>D</h1>
-                    </div>
-                </div>
-                <div id="statusdeptoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
-                    <div id="statusRRHH" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                        <div class="">
-                            <h1>RRHH</h1>
-                        </div>
-                    </div>
-                    <div id="statusCalidad" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                        <div class="">
-                            <h1>CALIDAD</h1>
-                        </div>
-                    </div>
-                    <div id="statusDireccion" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                        <div class="">
-                            <h1>DIRECCION</h1>
-                        </div>
-                    </div>
-                    <div id="statusFinanzas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                        <div class="">
-                            <h1>FINANZAS</h1>
-                        </div>
-                    </div>
-                    <div id="statusCompras" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
-                        <div class="">
-                            <h1>COMPRAS</h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="statusbitacora" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
-                    <div class="">
-                        <h1>BITACORA</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <h1>B</h1>
-                    </div>
-                </div>
-                <div id="statusbitacoratoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2">
-                    <div id="statusGP" class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
-                        <div class="">
-                            <h1>GP</h1>
-                        </div>
-                    </div>
-                    <div id="statusTRS" class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
-                        <div class="">
-                            <h1>TRS</h1>
-                        </div>
-                    </div>
-                    <div id="statusZI" class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
-                        <div class="">
-                            <h1>ZI</h1>
-                        </div>
-                    </div>
-                </div>
-                <div id="statusFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
-                    <div class="">
-                        <h1>SOLUCIONAR</h1>
-                    </div>
-                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                        <i class="fas fa-check"></i>
-                    </div>
-                </div>
-
-                <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
-                        <div class="">
-                            <i class="fas fa-pen fa-lg"></i>
-                        </div>
-                    </div>
-                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
-                        <div class="">
-                            <i class="fas fa-random fa-lg"></i>
-                        </div>
-                    </div>
-                    <div id="statusActivo" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
-                        <div class="">
-                            <i class="fas fa-trash fa-lg"></i>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- MODAL STATUS   -->
 
 
     <!-- MENÚ OPCIONES MP -->
@@ -985,6 +978,269 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL SALIDAS Subalmacenes-->
+    <div id="modalOpcionesMaterialesEquipo" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1250px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalOpcionesMaterialesEquipo');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">
+                    <h1>MATERIALES</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor TABLA -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+                    <!-- BUSCADOR -->
+                    <div class="mb-3 w-full flex flex-row items-center justify-center">
+
+                        <input id="inputDespieceMaterialesEquipo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar Material por Descripción" autocomplete="off">
+
+                    </div>
+                    <!-- BUSCADOR -->
+                    <!-- TITULOS -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="min-height: 50vh; max-height: 70vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <td class="px-2 py-1  border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-8">
+                                            <h1>DESTINO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CATEGORÍA</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>COD2BEND</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>GREMIO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>DESCRIPCION</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CARACTERISTICAS</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>MARCA/PROVEEDOR</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>U DE M</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CANTIDAD</h1>
+                                        </td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataOpcionesMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL STATUS   -->
+    <div id="modalStatus" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalStatus')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center flex-col w-full font-bold text-sm">
+
+                <div id="statusUrgente" class="hidden w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
+                    <div class="">
+                        <h1>ES URGENTE</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-siren-on animated flash infinite"></i>
+                    </div>
+                </div>
+
+                <div id="statusMaterial" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs" onclick="expandir('statusMaterialCod2bend');">
+                    <div class="">
+                        <h1>NO HAY MATERIAL</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>M</h1>
+                    </div>
+                </div>
+
+                <div id="statusMaterialCod2bendtoggle" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs hidden">
+
+                    <input id="inputCod2bend" type="text" placeholder="Ingrese COD2BEND" class="w-full h-full text-center rounded border border-red-400 font-bold text-gray-500" autocomplete="off">
+
+                    <button id="btnStatusMaterial" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnConfirmEditarTitulo" type="button">
+                        <i class="fas fa-check fa-1x"></i>
+                    </button>
+                </div>
+
+                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
+                    <div class="">
+                        <h1>TRABAJANDO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>T</h1>
+                    </div>
+                </div>
+
+                <div id="statusenergeticos" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                    <div class="">
+                        <h1>ENERGÉTICOS</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>E</h1>
+                    </div>
+                </div>
+                <div id="statusenergeticostoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusElectricidad" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>ELECTRICIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusAgua" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>AGUA</h1>
+                        </div>
+                    </div>
+                    <div id="statusDiesel" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>DIESEL</h1>
+                        </div>
+                    </div>
+                    <div id="statusGas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>GAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusdep" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                    <div class="">
+                        <h1>DEPARTAMENTO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>D</h1>
+                    </div>
+                </div>
+                <div id="statusdeptoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusRRHH" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>RRHH</h1>
+                        </div>
+                    </div>
+                    <div id="statusCalidad" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>CALIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusDireccion" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>DIRECCION</h1>
+                        </div>
+                    </div>
+                    <div id="statusFinanzas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>FINANZAS</h1>
+                        </div>
+                    </div>
+                    <div id="statusCompras" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>COMPRAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusbitacora" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div class="">
+                        <h1>BITACORA</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>B</h1>
+                    </div>
+                </div>
+                <div id="statusbitacoratoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2">
+                    <div id="statusGP" class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>GP</h1>
+                        </div>
+                    </div>
+                    <div id="statusTRS" class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>TRS</h1>
+                        </div>
+                    </div>
+                    <div id="statusZI" class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>ZI</h1>
+                        </div>
+                    </div>
+                </div>
+                <div id="statusFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                    <div class="">
+                        <h1>SOLUCIONAR</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                    <div id="btnEditarTituloX" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="expandir('btnEditarTituloX')">
+                        <div class="">
+                            <i class="fas fa-pen fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-random fa-lg"></i>
+                        </div>
+                    </div>
+                    <div id="statusActivo" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-trash fa-lg"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="btnEditarTituloXtoggle" class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs hidden">
+                    <div class=" w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center text-gray-500 px-1">
+                        <input id="editarTitulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" type="text" placeholder="Nuevo Título" maxlength="60">
+
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnEditarTitulo" type="button">
+                            <i class="fas fa-check fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

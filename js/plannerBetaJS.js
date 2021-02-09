@@ -5719,6 +5719,7 @@ function informacionEquipo(idEquipo) {
 }
 
 
+// OBTIENE MATERIALES PARA ASIGNAR A EQUIPO
 const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
    let idUsuario = localStorage.getItem('usuario');
    let idDestino = localStorage.getItem('idDestino');
@@ -5796,6 +5797,8 @@ const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
       })
 }
 
+
+// ASINGA MATERIALES A EQUIPO
 const asignarMaterialEquipo = (idItem, idEquipo, tipoAsignacion) => {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -6185,6 +6188,7 @@ const subirImagenEquipo = idEquipo => {
 }
 
 
+// OBTIENE INCIDENCIAS DE EQUIPO
 const obtenerIncidenciasEquipo = idEquipo => {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
