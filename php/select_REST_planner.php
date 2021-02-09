@@ -3909,7 +3909,10 @@ if (isset($_GET['action'])) {
 
         // SECCIONES
         $array['secciones'] = array();
-        $query = "SELECT id, seccion FROM c_secciones WHERE id = $idSeccion $filtroAccesoSeccion";
+        $query = "SELECT c_secciones.id, c_secciones.seccion 
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_seccion = $idSeccion and c_rel_destino_seccion.id_destino = $idDestino $filtroAccesoSeccion";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idSeccion = $x['id'];

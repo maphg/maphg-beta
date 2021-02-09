@@ -5289,7 +5289,7 @@ function toggleDisabledEditarEquipo(estadoInputs) {
       }
    });
 
-   btnEditarEquipo.setAttribute('onclick', 'toggleDisabledEditarEquipo(1)');
+   btnEditarEquipo.setAttribute('onclick', `toggleDisabledEditarEquipo(1); cancelarInformacionEquipo(${idEquipo})`);
    btnCancelarEquipo.
       setAttribute('onclick', `toggleDisabledEditarEquipo(2); cancelarInformacionEquipo(${idEquipo})`);
    btnGuardarEquipo.setAttribute('onclick', `actualizarEquipo(${idEquipo})`);
@@ -6531,7 +6531,7 @@ function consultarPlanLocal(idEquipo) {
             if (data.planes.length > 0) {
                for (let index = 0; index < data.planes.length; index++) {
 
-                  const planesX = datosPlanEquipo({
+                  const planesX = datosPlanLocal({
                      solucionado: data.planes[index].solucionado,
                      proceso: data.planes[index].proceso,
                      planificado: data.planes[index].planificado,
@@ -7221,6 +7221,49 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
 }
 
 
+// Muestra el Menú de los Planes
+function opcionesMenuMPLocal(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
+
+   document.getElementById("tooltipMP").classList.remove('hidden');
+
+   document.getElementById('semanaProgramacionMP').innerHTML = '(Semana ' + semanaX + ')';
+
+   // Propiedades para el tooltip
+   const button = document.getElementById(id);
+   const tooltip = document.getElementById('tooltipMP');
+
+   Popper.createPopper(button, tooltip, {
+      placement: 'top',
+   });
+
+   document.getElementById("programarMPIndividual").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARINDIVIDUAL")`);
+
+   document.getElementById("programarMPDesdeAqui").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARDESDEAQUI")`);
+
+   document.getElementById("programarMPPersonalizado").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "PROGRAMARPERSONALIZADO")`);
+   document.getElementById("eliminarMPIndividual").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARINDIVIDUAL")`);
+
+   document.getElementById("eliminarMPDesdeAqui").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "ELIMINARDESDEAQUI")`);
+
+   document.getElementById("VerOTMP").
+      setAttribute('onclick', `VerOTMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "VEROT")`);
+
+   document.getElementById("generarOTMP").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "GENERAROT")`);
+
+   document.getElementById("solucionarOTMP").
+      setAttribute('onclick', `obtenerOTDigital(${idEquipo}, ${semanaX}, ${idPlan})`);
+
+   document.getElementById("cancelarOTMP").
+      setAttribute('onclick', `programarMPLocal(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
+}
+
+
 function obtenerOTDigital(idEquipo, semanaX, idPlan) {
    document.getElementById("modalSolucionarOT").classList.add('open');
    document.getElementById("tooltipMP").classList.add('hidden');
@@ -7431,6 +7474,92 @@ function programarMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
          } else if (data == 12) {
             alertaImg(`Semana ${semanaX}, Sin Proceso Iniciado`, '', 'error', 3500);
             consultarPlanEquipo(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else {
+            alertaImg(`Intente de Nuevo`, '', 'info', 3000);
+         }
+         obtenerEquiposAmerica(idSeccion, idSubseccion);
+      }
+   });
+}
+
+
+// Genera la Programación de los MP
+function programarMPLocal(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP) {
+   let idUsuario = localStorage.getItem('usuario');
+   let idDestino = localStorage.getItem('idDestino');
+   let idSeccion = localStorage.getItem('idSeccion');
+   let idSubseccion = localStorage.getItem('idSubseccion');
+   let numeroSemanas = 0;
+
+   if (accionMP == "PROGRAMARPERSONALIZADO") {
+      numeroSemanas = document.getElementById("numeroSemanasPersonalizadasMP").value;
+   }
+
+   const action = "programarMP";
+   $.ajax({
+      type: "POST",
+      url: "php/plannerCrudPHP.php",
+      data: {
+         action: action,
+         idUsuario: idUsuario,
+         idDestino: idDestino,
+         idSemana: idSemana,
+         idProceso: idProceso,
+         idEquipo: idEquipo,
+         semanaX: semanaX,
+         accionMP: accionMP,
+         idPlan: idPlan,
+         numeroSemanas: numeroSemanas
+      },
+      // dataType: "JSON",
+      success: function (data) {
+         if (data == 1) {
+            alertaImg(`Programación Existente, Semana ${semanaX} `, '', 'error', 3000);
+         } else if (data == 2) {
+            alertaImg(`Programado en Semana ${semanaX}`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 3) {
+            alertaImg(`Reprogramado Desde, Semana ${semanaX}`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 4) {
+            alertaImg(`Personalizado Desde, Semana ${semanaX}`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 5) {
+            alertaImg(`Eliminada, Semana ${semanaX}`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 6) {
+            alertaImg(`Eliminada Desde, Semana ${semanaX}`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 7) {
+            alertaImg(`Semana ${semanaX}, en Proceso`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+            VerOTMP(idSemana, idProceso, idEquipo, semanaX, idPlan, accionMP);
+         } else if (data == 8) {
+            alertaImg(`Semana ${semanaX}, Solucionada`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 9) {
+            alertaImg(`Semana ${semanaX}, Cancelada`, '', 'success', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 10) {
+            alertaImg(`Semana ${semanaX}, en Proceso Iniciado`, '', 'error', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 11) {
+            alertaImg(`Semana ${semanaX}, Sin Proceso Iniciado`, '', 'error', 3500);
+            consultarPlanLocal(idEquipo);
+            cerrarTooltip('tooltipMP');
+         } else if (data == 12) {
+            alertaImg(`Semana ${semanaX}, Sin Proceso Iniciado`, '', 'error', 3500);
+            consultarPlanLocal(idEquipo);
             cerrarTooltip('tooltipMP');
          } else {
             alertaImg(`Intente de Nuevo`, '', 'info', 3000);
@@ -8164,7 +8293,7 @@ const codigoIncidenciasEquipo = params => {
       var fRangoFecha = '';
       var fAdjuntos = `onclick="obtenerAdjuntosMC(${idRegistro});"`;
       var fComentarios = `onclick="obtenerComentariosMC(${idRegistro});"`;
-      var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'status', 'F')"`;
+      var fStatus = `onclick="actualizarStatusMC(${idRegistro}, 'restaurar', 'F')"`;
       var fStatus1 = ``;
       var fActividades = `onclick="obtenerActividadesOT(${idRegistro}, 'FALLA');"`;
       var iconoStatus = '<i class="fas fa-undo fa-lg text-red-500"></i>';

@@ -14,6 +14,7 @@
 </head>
 
 <body class="flex flex-col justify-start items-start md:items-center h-auto bg-bluegray-900" style="font-family: 'Roboto', sans-serif;">
+
     <div class="w-full h-auto py-2 bg-white mb-6 flex items-center justify-center" id="boton" style="z-index: 9878;">
 
         <button onclick="screenShot()" class="py-2 px-3 bg-red-200 shadow-sm font-bold uppercase text-red-500 text-xs rounded mr-4">
