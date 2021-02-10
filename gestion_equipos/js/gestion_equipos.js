@@ -1173,7 +1173,7 @@ function modalAgregarEquipo() {
     let valorEquipo = contenedorEquipoLocal.value;
 
     const action = "obtenerOpcionesEquipo";
-    const URL = `../php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${contenedorSeccion.value}`;
+    const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSeccion=${contenedorSeccion.value}`;
 
     fetch(URL)
         .then(array => array.json())
