@@ -5197,7 +5197,7 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
-        } elseif ($columna == "eliminar") {
+        } elseif ($columna == "eliminar" || $columna == "activo") {
             $query = "UPDATE t_mc SET activo = 0 WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
