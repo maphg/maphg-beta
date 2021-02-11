@@ -412,7 +412,8 @@ function consultaStatusOT(idOT) {
             document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
             document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
             document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
-            document.getElementById("btnFinalizarOT").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+            document.getElementById("btnFinalizarOT").setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
+            document.getElementById("btnGuardarOT").setAttribute("onclick", 'guardarCambiosOT()');
         });
 }
 
@@ -776,7 +777,7 @@ document.getElementById("inputActividadesExtra").addEventListener("keyup", funct
 });
 
 // Eventos
-document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
+// document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
 
 
 // Función para Limpiar estilos aplicados en las opciones de modalStatus

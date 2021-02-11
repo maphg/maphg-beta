@@ -435,7 +435,7 @@
                     </div>
 
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 62vh; max-height: 72vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 62vh; max-height: 72vh; height:auto;">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
                                 <thead>
                                     <tr class="cursor-pointer">

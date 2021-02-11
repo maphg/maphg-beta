@@ -17,6 +17,77 @@ if (isset($_GET['action'])) {
     $semanaActual = date('W');
     $array = array();
 
+    #OBTIENE DATOS POR DESTINO
+    if ($action == "datosIniciales") {
+        $array = array();
+
+        #DESTINO
+        $destino = "";
+        $query = "SELECT destino FROM c_destinos WHERE id = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $destino = $x['destino'];
+            }
+        }
+        $array['destino'] = $destino;
+
+        #TIPOS DE ACTIVOS
+        $totalTipos = 0;
+        $query = "SELECT count(id) 'total' FROM c_tipos WHERE status = 'A'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalTipos = $x['total'];
+            }
+        }
+        $array['tipos'] = $totalTipos;
+
+        #USUARIOS
+        $totalUsuarios = 0;
+        $query = "SELECT count(id) 'total' FROM t_users WHERE status = 'A' and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalUsuarios = $x['total'];
+            }
+        }
+        $array['usuarios'] = $totalUsuarios;
+
+        #SUBSECCIONES
+        $totalSubsecciones = 0;
+        $query = "SELECT count(id) 'total' FROM c_subsecciones";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalSubsecciones = $x['total'];
+            }
+        }
+        $array['subsecciones'] = $totalSubsecciones;
+
+        #EQUIPOS
+        $totalEquipos = 0;
+        $query = "SELECT count(id) 'total' FROM t_equipos_america 
+        WHERE status IN('OPERATIVO', 'TALLER') and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalEquipos = $x['total'];
+            }
+        }
+        $array['equipos'] = $totalEquipos;
+
+        #PLANES
+        $totalPlanes = 0;
+        $query = "SELECT count(id) 'total' FROM t_mp_planes_mantenimiento 
+        WHERE status IN('ACTIVO') and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalPlanes = $x['total'];
+            }
+        }
+        $array['planes'] = $totalPlanes;
+        $array['materiales'] = 0;
+        $array['bodegas'] = 0;
+
+        echo json_encode($array);
+    }
+
     if ($action == "obtenerUsuarios") {
         $configuracionIdUsuario = $_GET['configuracionIdUsuario'];
 
@@ -125,7 +196,6 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
 
     if ($action == "obtenerUsuariosX") {
         $configuracionIdUsuario = $_GET['configuracionIdUsuario'];
@@ -307,7 +377,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     if ($action == "opcionesUsuario") {
         $array = array();
 
@@ -414,7 +483,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     if ($action == "actualizarUsuario") {
         $nombre = $_GET['nombre'];
         $apellido = $_GET['apellido'];
@@ -487,7 +555,6 @@ if (isset($_GET['action'])) {
 
         echo json_encode($resp);
     }
-
 
     if ($action == "actualizaUsuarioOpciones") {
         $idUsuarioX = $_GET['idUsuarioX'];
@@ -622,7 +689,6 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-
     if ($action == "obtenerCargos") {
         $idCargo = $_GET['idCargo'];
         $array = array();
@@ -675,7 +741,6 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
-
     if ($action == "actualizarCargo") {
         $idCargo = $_GET['idCargo'];
         $cargo = $_GET['cargo'];
@@ -694,6 +759,144 @@ if (isset($_GET['action'])) {
             }
         } else {
             $resp = 0;
+        }
+        echo json_encode($resp);
+    }
+
+    #OBTIENE LA RELACION DE SECCIONES Y SUBSECCION POR DESTINO INCLUYENDO DESTINO GLOBAL
+    if ($action == "obtenerSeccionesSubsecciones") {
+        $array = array();
+
+        $query = "SELECT c_rel_destino_seccion.id, c_rel_destino_seccion.id_destino, c_rel_destino_seccion.id_seccion, c_destinos.destino, c_secciones.seccion
+        FROM c_rel_destino_seccion 
+        INNER JOIN c_destinos ON c_rel_destino_seccion.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idRelSeccion = $x['id'];
+                $idDestino = $x['id_destino'];
+                $destino = $x['destino'];
+                $idSeccion = $x['id_seccion'];
+                $seccion = $x['seccion'];
+
+
+                $array['secciones'][] = array(
+                    "idRelSeccion" => intval($idRelSeccion),
+                    "idDestino" => intval($idDestino),
+                    "destino" => $destino,
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
+                );
+
+                $query = "SELECT c_rel_seccion_subseccion.id, c_rel_seccion_subseccion.id_subseccion, 
+                c_subsecciones.grupo
+                FROM c_rel_seccion_subseccion
+                INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+                WHERE c_rel_seccion_subseccion.id_rel_seccion = $idRelSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idRelSubseccion = $x['id'];
+                        $idSubseccion = $x['id_subseccion'];
+                        $subseccion = $x['grupo'];
+
+                        $array['subsecciones'][] = array(
+                            "idRelSeccion" => intval($idRelSeccion),
+                            "idDestino" => intval($idDestino),
+                            "destino" => $destino,
+                            "idSeccion" => intval($idSeccion),
+                            "seccion" => $seccion,
+                            "idRelSubseccion" => intval($idRelSubseccion),
+                            "subseccion" => $subseccion,
+                            "idSubseccion" => intval($idSubseccion),
+                        );
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #ELIMINA LA RELACIÓN DE SECCION SUBSECCION
+    if ($action == "eliminarSeccionSubseccion") {
+        $idRelSubseccion = $_GET['idRelSubseccion'];
+        $resp = 0;
+        $query = "DELETE FROM c_rel_seccion_subseccion WHERE id = $idRelSubseccion";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+    #AGREGA RELACIÓN DE SECCION SUBSECCION
+    if ($action == "agregarSeccionSubseccion") {
+        $idRelSeccion = $_GET['idRelSeccion'];
+        $idSeccion = $_GET['idSeccion'];
+        $subseccion = $_GET['subseccion'];
+        $resp = 0;
+
+        $idMax = 0;
+        $query = "SELECT max(id) 'idMax' FROM c_subsecciones";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idMax = intval($x['idMax']) + 1;
+            }
+        }
+
+        if ($idMax > 0) {
+            $query = "INSERT INTO c_subsecciones(id, id_seccion, grupo, id_destino) VALUES($idMax, $idSeccion, '$subseccion', 0)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $query = "INSERT INTO c_rel_seccion_subseccion(id_rel_seccion, id_subseccion) VALUES($idRelSeccion, $idMax)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
+        }
+        echo json_encode($resp);
+    }
+
+    #OBTIENE LOS TIPOS DE ACTIVOS
+    if ($action == "obtenerTiposActivos") {
+        $array = array();
+
+        $query = "SELECT id, tipo, tipo_activo FROM c_tipos WHERE status = 'A'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idTipo = $x['id'];
+                $tipo = $x['tipo'];
+                $tipoActivo = $x['tipo_activo'];
+
+                $array[] = array(
+                    "idTipo" => intval($idTipo),
+                    "tipo" => $tipo,
+                    "tipoActivo" => $tipoActivo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #AGREGAR TIPO DE ACTIVO
+    if ($action == "agregarTipoActivo") {
+        $tipo = $_GET['tipo'];
+        $tipoActivo = $_GET['tipoActivo'];
+        $resp = 0;
+
+        $query = "INSERT INTO c_tipos(tipo, tipo_activo, status) VALUES('$tipo', '$tipoActivo', 'A')";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+    #ELIMINA TIPO DE ACTIVO
+    if ($action == "eliminarTipoActivo") {
+        $idTipo = $_GET['idTipo'];
+        $resp = 0;
+
+        $query = "UPDATE c_tipos SET status = 'B' WHERE id = $idTipo";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
         }
         echo json_encode($resp);
     }

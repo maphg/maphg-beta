@@ -5540,8 +5540,7 @@ function informacionEquipo(idEquipo) {
             e_jerarquiaEquipo.value = 0;
             diseñoOpcionesSuperioresEquipo('contenedorCaracteristicasEquipo', 'btnInformacionEquipo');
             obtenerImagenesEquipo(idEquipo);
-            abrirmodal('modalMPEquipo');
-
+           
             return array;
          })
          .then(array => {
@@ -5866,7 +5865,7 @@ function despieceEquipos(idEquipo) {
 
             if (jerarquia == "PRINCIPAL") {
                codigo = `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center" onclick="informacionEquipo(${id});">
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center" onclick="informacionEquipo(${id});  abrirmodal('modalMPEquipo');">
                             <i class="fas fa-cog mr-1 fa-lg"></i>
                             <h1>${equipo} (${array.length})</h1>
                         </div>`
@@ -5874,7 +5873,7 @@ function despieceEquipos(idEquipo) {
                e_dataDespieceEquipo.insertAdjacentHTML('beforeend', codigo);
             } else {
                codigo = `
-                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center pl-6" onclick="informacionEquipo(${id});">
+                        <div class="flex-none cursor-pointer hover:bg-purple-200 hover:text-purple-700 w-full px-2 py-2 rounded-sm truncate flex items-center pl-6" onclick="informacionEquipo(${id});  abrirmodal('modalMPEquipo');">
                             <i class="fad fa-cogs mr-1 fa-lg"></i>
                             <h1>${equipo}</h1>
                         </div>`
@@ -6685,7 +6684,7 @@ document.getElementById("inputActividadesExtra").addEventListener("keyup", funct
 });
 
 // Avento para guardarCambiosOT
-document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
+// document.getElementById("btnGuardarOT").addEventListener("click", guardarCambiosOT);
 
 
 function actividadRealizadaOT(idOT, idActividad, tipoActividad) {
@@ -7071,7 +7070,8 @@ function consultaStatusOT(idOT) {
          document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
          document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
          document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
-         document.getElementById("btnFinalizarOT").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("btnFinalizarOT").setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("btnGuardarOT").setAttribute("onclick", 'guardarCambiosOT()');
       });
 }
 
@@ -9153,7 +9153,7 @@ const dataEquiposAmerica = params => {
 
    // FUNCIONALIDADES
    const fFallas = `onclick="obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas');"`;
-   const fInfo = `onclick="informacionEquipo(${idEquipo});"`;
+   const fInfo = `onclick="informacionEquipo(${idEquipo});  abrirmodal('modalMPEquipo');"`;
    const fTest = `onclick="toggleModalTailwind('modalTestEquipo'); obtenerTestEquipo(${idEquipo})"`;
 
    return `
@@ -12201,7 +12201,7 @@ inputNumeroOT.addEventListener('keyup', event => {
 
                   const fVerOT = `onclick="VerOTMPSolucionado(${idEquipo}, ${semana}, ${idPlan})"`;
                   const fEdit = `onclick="obtenerOTDigital(${idEquipo}, ${semana}, ${idPlan})"`;
-                  const fView = `onclick="informacionEquipo(${idEquipo});"`;
+                  const fView = `onclick="informacionEquipo(${idEquipo});  abrirmodal('modalMPEquipo');"`;
 
                   const estiloStatus = status == "PENDIENTE" ?
                      `<h1 class="bg-yellow-200 text-yellow-500 px-2 rounded-full">En proceso</h1>`

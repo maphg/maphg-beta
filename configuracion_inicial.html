@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAPHG</title>
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/tailwindproduccion.css">
+    <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/alertify.min.css">
+</head>
+
+<body class="scrollbar">
+
+    <div class="px-4 py-auto mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+            <h2
+                class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+                Configuración MEPHG
+                <span id="nombreDestino" class="font-bold ml-2 text-purple-500"></span>
+            </h2>
+            <p class="text-base text-gray-700 md:text-lg">
+                Configuracion básica requerida para el funcionamiento de planner, generación de incidencias, proyectos y
+                mantenimientos preventivos.
+            </p>
+        </div>
+        <div class="grid gap-8 row-gap-5 md:row-gap-8 lg:grid-cols-3">
+
+            <a id="btnGestionUsuarios" href="#"
+                class="contenedor-usuarios p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        1
+                    </p>
+                    <p class="text-lg font-bold leading-5">Usuarios</p>
+                    <div class="contenedor-usuarios w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed shadow-sm
+                        border-purple-300 flex justify-center items-center font-semibold text-bluegray-700 ml-1">
+                        <h1 id="totalUsuarios">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Al menos un usuario con el rol de responsable por seccion a los cuales asignar incidencias, mp o
+                    proyectos.
+                </p>
+            </a>
+
+            <a href="#" id="btnSeccionSubseccion" class="contenedor-subsecciones p-5 duration-300 transform bg-white border-2 border-dashed rounded
+                shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        2
+                    </p>
+                    <p class="text-lg font-bold leading-5">Áreas o Subsecciones</p>
+                    <div class="contenedor-subsecciones w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed
+                        shadow-sm border-purple-300 flex justify-center items-center font-semibold text-bluegray-700
+                        ml-1">
+                        <h1 id="totalSubsecciones">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Cada seccion puede subdividirse en áreas, mismas que sirven para clasificar equipos.
+                </p>
+                <p class="text-xs font-bold">(Ejemplo: ZIC -> CALDERAS)</p>
+            </a>
+
+            <a href="#" id="btnTiposActivos"
+                class="contenedor-tipos relative p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        3
+                    </p>
+                    <p class="text-lg font-bold leading-5">Tipos de activos</p>
+                    <div class="contenedor-tipos w-6 h-6 text-xs rounded-full bg-white border-2 shadow-sm
+                        border-purple-500 flex justify-center items-center text-purple-700 ml-1 font-bold">
+                        <h1 id="totalTipos">10</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Tipos de equipos y locales existentes, pueden ser tantos como diferentes variantes existan.
+                </p>
+                <p class="text-xs font-bold">(Ejemplo: No debe existir un tipo llamado "bomba" unicamente, debido a que
+                    existen muchos tipos de ellas, en cambio debe haber bomba de vacio, bomba flushing, bomba de carcamo
+                    etc.)</p>
+
+            </a>
+
+            <a
+                class="contenedor-bodegas p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        4
+                    </p>
+                    <p class="text-lg font-bold leading-5">SubAlmacenes y Bodegas</p>
+                    <div class="contenedor-bodegas w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed
+                        shadow-sm border-purple-300 flex justify-center items-center font-semibold text-bluegray-700
+                        ml-1">
+                        <h1 id="totalBodegas">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Listado de subalmacenes y bodegas para el control de entradas y salidas de material.
+                </p>
+            </a>
+
+            <a href="https://www.maphg.com/beta/stock.php"
+                class="contenedor-materiales p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        5
+                    </p>
+                    <p class="text-lg font-bold leading-5">Materiales y Stock</p>
+                    <div
+                        class="contenedor-materiales w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed shadow-sm border-purple-300 flex justify-center items-center font-semibold text-bluegray-700 ml-1">
+                        <h1 id="totalMateriales">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Listado de materiales necesarios para la asociacion a los planes, OT y control de stock.
+                </p>
+            </a>
+
+            <a href="https://www.maphg.com/beta/planes-mp/index.php"
+                class="contenedor-equipos p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        6
+                    </p>
+                    <p class="text-lg font-bold leading-5">Equipos / Locales</p>
+                    <div
+                        class="contenedor-equipos w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed shadow-sm border-purple-300 flex justify-center items-center font-semibold text-bluegray-700 ml-1">
+                        <h1 id="totalEquipos">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Listado de todos los equipos y locales.
+                </p>
+            </a>
+
+            <a href="https://www.maphg.com/beta/planes-mp/index.php"
+                class="contenedor-planes p-5 duration-300 transform bg-white border-2 border-dashed rounded shadow-sm border-purple-100 hover:-translate-y-2 cursor-pointer">
+                <div class="flex items-center mb-2">
+                    <p
+                        class="flex items-center justify-center w-10 h-10 mr-2 text-lg font-bold text-white rounded-full bg-purple-400">
+                        7
+                    </p>
+                    <p class="text-lg font-bold leading-5">Planes de mantenimiento</p>
+                    <div
+                        class="contenedor-planes w-6 h-6 text-xs rounded-full bg-white border-2 border-dashed shadow-sm border-purple-300 flex justify-center items-center font-semibold text-bluegray-700 ml-1">
+                        <h1 id="totalPlanes">0</h1>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-900">
+                    Planes de asociados a los tipos de equipo con unas actividades y periodicidad especifica.
+                </p>
+            </a>
+        </div>
+    </div>
+
+    <!-- MODAL SECCIONES -> SUBSECCIONES -->
+    <div id="modalSeccionesSubsecciones" class="modal scrollbar">
+        <div class="modal-window rounded-md pt-10 bg-gray-200" style="width: 1250px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalSeccionesSubsecciones')"
+                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1> <i class="fa fas fa-tools"></i> Configuración Secciones -> Subsecciones</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="w-full mt-5">
+                <div id="dataSeccionesSubsecciones" class="grid grid-flow-row grid-cols-5 gap-1"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL TIPO ACTIVOS -->
+    <div id="modalTiposActivos" class="modal scrollbar">
+        <div class="modal-window rounded-md pt-10 bg-gray-200" style="width: 650px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTiposActivos')"
+                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1> <i class="fa fas fa-tools"></i> Configuración Tipos de Activos</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="w-full mt-5">
+                <div class="grid grid-flow-row grid-cols-2 gap-1">
+
+                    <div class="mx-auto">
+                        <div
+                            class="bg-white m-3 flex flex-col justify-start items-center rounded-lg w-64 shadow-sm relative">
+                            <div
+                                class="w-full font-bold text-center text-xl bg-black text-white rounded-t-md tracking-widest">
+                                LOCALES
+                            </div>
+                            <div class="divide-y divide-gray-300 w-full text-xxs relative overflow-y-auto scrollbar"
+                                style="max-height:450px; min-height: 150px">
+                                <div
+                                    class="flex flex-row items-center justify-center px-1 py-2 bg-blue-200 sticky top-0">
+                                    <input id="inputTipoActivoLocal" type="text" placeholder="Nuevo Tipo Activo"
+                                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300 rounded-md px-1 py-1"
+                                        autocomplete="off">
+                                    <i id="btnAgregarTipoActivoLocal"
+                                        class="fa fas fa-plus-circle fa-3x text-blue-400 hover:text-blue-700 ml-1 cursor-pointer"></i>
+                                </div>
+                                <div id="dataTiposActivosLocales" class="w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mx-auto">
+                        <div
+                            class="bg-white m-3 flex flex-col justify-start items-center rounded-lg w-64 shadow-sm relative">
+                            <div
+                                class="w-full font-bold text-center text-xl bg-black text-white rounded-t-md tracking-widest">
+                                EQUIPOS
+                            </div>
+                            <div class="divide-y divide-gray-300 w-full text-xxs relative overflow-y-auto scrollbar"
+                                style="max-height:450px; min-height: 150px">
+                                <div
+                                    class="flex flex-row items-center justify-center px-1 py-2 bg-blue-200 sticky top-0">
+                                    <input id="inputTipoActivoEquipo" type="text" placeholder="Nuevo Tipo Activo"
+                                        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full text-xs border-gray-300 rounded-md px-1 py-1"
+                                        autocomplete="off">
+                                    <i id="btnAgregarTipoActivoEquipo"
+                                        class="fa fas fa-plus-circle fa-3x text-blue-400 hover:text-blue-700 ml-1 cursor-pointer"></i>
+                                </div>
+                                <div id="dataTiposActivosEquipos" class="w-full"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL TIPO ACTIVOS -->
+    <div id="modalUsuarios" class="modal scrollbar">
+        <div class="modal-window rounded-md" style="width: 1300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalUsuarios')"
+                    class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1> <i class="fa fas fa-tools"></i> Configuración Usuarios</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <!-- GESTIÓN DE USUARIOS -->
+            <div id="gestionUsuarios" class="rounded-md shadow w-full mx-auto pt-10">
+                <div class="flex justify-star items-center relative container mx-auto  pb-5">
+
+                    <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
+                        <h1>Gestión Usuarios
+                            <span id="load" class="text-center ml-4 text-2xl"></span>
+                        </h1>
+                    </div>
+
+                    <div class="relative text-gray-600 w-72">
+                        <input id="palabraUsuario" type="search" placeholder="Buscar Usuario"
+                            class="bg-white border border-gray-300 rounded mr-4 w-full text-gray-600 text-sm focus:outline-none focus:border-gray-400 px-2 h-10"
+                            autocomplete="off">
+                    </div>
+
+                    <button id="btnNuevoUsuario" class="btn btn-green mx-4 h-10 normal-case">
+                        <i class="fas fa-user-plus fa-lg mx-1"></i> Agregar
+                    </button>
+
+                </div>
+
+                <div class="container mx-auto shadow rounded overflow-auto scrollbar" style="max-height: 70vh;">
+                    <table class="min-w-full divide-y divide-gray-200 sortable mx-auto rounded">
+                        <thead class="bg-gray-200 cursor-pointer ">
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Avatar
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Nombre
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Cargo
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Rol
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 sm:hidden md:block lg:block xl:block 2xl:block">
+                                    Secciónes Asignadas
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Fase
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    Status
+                                </th>
+
+                                <th scope="col"
+                                    class="px-6 py-3 bg-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                    <span class="sr-only">Edit</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataUsuarios" class="bg-white divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL PARA EDITAR USUARIO -->
+    <div id="modalEditarUsuario" class="modal">
+        <div class="modal-window rounded-md" style="width: 750px;">
+
+            <h1 class="text-center text-blue-400 font-semibold uppercase">
+                Gestión de Usuarios</h1>
+
+            <div class="md:mt-0 md:col-span-2">
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-4 py-5 bg-white sm:p-6">
+
+                        <div class="grid grid-cols-8 gap-6">
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="first_name" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                <input autocomplete="off" type="text" id="nombreUsuario"
+                                    class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="last_name" class="block text-sm font-medium text-gray-700">Apellidos</label>
+                                <input autocomplete="off" type="text" id="apellidoUsuario"
+                                    class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="correoUsuario"
+                                    class="block text-sm font-medium text-gray-700">Correo</label>
+                                <input autocomplete="off" type="email" id="correoUsuario" name="correoUsuario"
+                                    class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <div id="labelCorreoUsuario"></div>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="telefono" class="block text-sm font-medium text-gray-700">Telefono</label>
+                                <input autocomplete="off" type="text" id="telefonoUsuario"
+                                    class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <div id="datosComplementariosUsuario" class="w-full grid grid-cols-8 gap-6 mt-4 hidden">
+
+                            <!-- FASES -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700"> Fases</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('fasestoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="fasestoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataFases" class="py-1" role="menu" aria-orientation="vertical"
+                                            aria-labelledby="options-menu">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SECCIONES -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700"> Secciones</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('seccionestoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="seccionestoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataSecciones" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:200px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DESTINOS -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700"> Destinos</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('destinostoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="destinostoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-24 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataDestinos" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:200px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CARGO -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">Cargo</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('cargotoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="cargotoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataCargos" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:200px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ROL -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">Rol</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('roltoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="roltoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-30 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataRoles" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:200px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STATUS -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">Status</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('statustoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="statustoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-30 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataStatus" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:200px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PERMISOS SUBALMACÉN -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700"> Opción Subalmacenes</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('opcionSubalmacenestoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="opcionSubalmacenestoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-30 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer hidden">
+                                        <div id="dataOpcionSubalmacenes" class="py-1 overflow-y-auto scrollbar"
+                                            role="menu" aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:150px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SUBALMACENES -->
+                            <div class="col-span-5 sm:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Subalmacenes</label>
+                                <div class="relative inline-block text-left">
+                                    <div onclick="toggleHidden('subalmacenestoggle');">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                                            aria-haspopup="true" aria-expanded="true">
+                                            Multi Selección
+                                            <!-- Heroicon name: chevron-down -->
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div id="subalmacenestoggle"
+                                        class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 cursor-pointer z-10 hidden">
+                                        <div id="dataSubalmacenes" class="py-1 overflow-y-auto scrollbar" role="menu"
+                                            aria-orientation="vertical" aria-labelledby="options-menu"
+                                            style="max-height:125px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="flex flex-row items-center justify-center w-full">
+                        <div class="col-span-7 sm:col-span-7 lg:col-span-7 mx-5 my-2">
+                            <label for="postal_code" class="block text-sm font-medium text-gray-700">Usuario</label>
+                            <input id="usuarioUsuario" autocomplete="off" type="text" id="postal_code"
+                                class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+
+                        <div class="col-span-7 sm:col-span-7 lg:col-span-7 mx-5 my-2">
+                            <label for="postal_code" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                            <div class="flex flex-row">
+                                <input id="contraseñaUsuario" type="password"
+                                    class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-auto sm:text-sm border-gray-300 rounded-md">
+                                <i id="contraseñaEyes" class="fa far fa-eye-slash p-2 mx-2 mt-1"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-span-7 sm:col-span-7 lg:col-span-7 mx-5 my-2 text-center">
+                            <label class="block text-sm font-medium text-gray-700">Notifiaciones</label>
+                            <i id="checkNotificaciones"
+                                class="fad fa-toggle-on fa-2x px-2 mx-2 text-center text-blue-400"></i>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 flex justify-center items-center">
+                        <button id="btnGuardarUsuario"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mx-2">
+                            Guardar
+                        </button>
+                        <button class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm
+                            font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none
+                            focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mx-2"
+                            onclick=" cerrarmodal('modalEditarUsuario');">
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/alertify.min.js"></script>
+    <script src="js/alertasSweet.js"></script>
+    <script src="js/configuracion_inicial.js"></script>
+    <script src="js/funciones_tablas.js"></script>
+    <script src="js/sorttable.js"></script>
+</body>
+
+</html>

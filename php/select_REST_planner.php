@@ -4012,7 +4012,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.status, t_proyectos.id_seccion, t_proyectos.id_subseccion
         FROM t_proyectos_planaccion 
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-        WHERE t_proyectos_planaccion.id LIKE '$idOTX' and t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1 $filtroDestinoProyectos";
+        WHERE t_proyectos_planaccion.id LIKE '%$idOTX%' and t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1 $filtroDestinoProyectos";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idOT = $x["id"];
