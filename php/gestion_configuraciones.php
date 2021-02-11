@@ -43,7 +43,7 @@ if (isset($_GET['action'])) {
 
         #USUARIOS
         $totalUsuarios = 0;
-        $query = "SELECT count(id) 'total' FROM t_users WHERE status = 'A' and activo = 1";
+        $query = "SELECT count(id) 'total' FROM t_users WHERE status = 'A' and activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalUsuarios = $x['total'];
@@ -64,7 +64,7 @@ if (isset($_GET['action'])) {
         #EQUIPOS
         $totalEquipos = 0;
         $query = "SELECT count(id) 'total' FROM t_equipos_america 
-        WHERE status IN('OPERATIVO', 'TALLER') and activo = 1";
+        WHERE status IN('OPERATIVO', 'TALLER') and activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalEquipos = $x['total'];
@@ -75,7 +75,7 @@ if (isset($_GET['action'])) {
         #PLANES
         $totalPlanes = 0;
         $query = "SELECT count(id) 'total' FROM t_mp_planes_mantenimiento 
-        WHERE status IN('ACTIVO') and activo = 1";
+        WHERE status IN('ACTIVO') and activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalPlanes = $x['total'];
