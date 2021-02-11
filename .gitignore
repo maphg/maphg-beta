@@ -7,6 +7,8 @@ css/DataTables/
 css/fontawesome/
 !css/tailwindproduccion.css
 js/i18n/
+js/bootstrap*
+js/bulma*
 php/PHPExcel/
 webfonts/
 conexion.php
@@ -48,6 +50,3 @@ sa/js/moment.js
 sa/js/bulma*
 sa/js/translation.json
 sa/js/rSlider.min.js
-
-
-
