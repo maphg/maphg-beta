@@ -81,6 +81,7 @@ if (isset($_GET['action'])) {
                 $totalPlanes = $x['total'];
             }
         }
+        
         $array['planes'] = $totalPlanes;
         $array['materiales'] = 0;
         $array['bodegas'] = 0;
