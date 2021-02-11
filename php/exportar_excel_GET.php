@@ -1816,25 +1816,26 @@ if (isset($_GET['action'])) {
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle("Reporte EQUIPOS");
         $objPHPExcel->getActiveSheet()->setCellValue('A1', 'ID EQUIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'DESTINO');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'EQUIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'SECCIÓN');
-        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'SUBSECCIÓN');
-        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'FASE');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'ID TIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'TIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'STATUS');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'MARCA');
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'MODELO');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'EQUIPO / LOCAL');
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'UBICACIÓN');
-        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'PROMIXO MP');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'ID EQUIPO PADRE');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'DESTINO');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'EQUIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'SUBSECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'FASE');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'ID TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'TIPO');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'MARCA');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'MODELO');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'EQUIPO / LOCAL');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', 'UBICACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', 'PROMIXO MP');
         // $objPHPExcel->getActiveSheet()->setCellValue('N1', 'PROCESO');
         // $objPHPExcel->getActiveSheet()->setCellValue('O1', 'SOLUCIONADO');
         // $objPHPExcel->getActiveSheet()->setCellValue('P1', 'PLANIFICADO');
         // $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'SEMANA ACTUAL');
 
-        $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
+        $query = "SELECT t_equipos_america.id, t_equipos_america.id_equipo_principal, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.modelo, t_equipos_america.status, t_equipos_america.id_fases,
         c_secciones.seccion, c_subsecciones.grupo, c_tipos.id 'id_tipo', c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
         c_destinos.destino
         FROM t_equipos_america
@@ -1851,6 +1852,7 @@ if (isset($_GET['action'])) {
             foreach ($result as $i) {
                 $id = $i['id'];
                 $equipo = $i['equipo'];
+                $idEquipoPrincipal = $i['id_equipo_principal'];
                 $local_equipo = $i['local_equipo'];
                 $status = $i['status'];
                 $seccion = $i['seccion'];
@@ -2004,19 +2006,20 @@ if (isset($_GET['action'])) {
                 // );
 
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
-                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
-                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $equipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $seccion);
-                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $subseccion);
-                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $fase);
-                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $idTipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $tipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $status);
-                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $marca);
-                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $modelo);
-                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $local_equipo);
-                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $ubicacion);
-                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $xc);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $idEquipoPrincipal);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $subseccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $fase);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $idTipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $tipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $marca);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $modelo);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $local_equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $ubicacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $xc);
                 // $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $contadorProceso);
                 // $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $contadorSolucionado);
                 // $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $contadorPlanificado);
