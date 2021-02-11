@@ -1165,6 +1165,6 @@ palabraUsuario.addEventListener('keyup', function () {
 })
 
 
-window.onload = () => {
+window.addEventListener('load', () => {
     datosIniciales();
-}
+})
