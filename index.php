@@ -1,8300 +1,4109 @@
-<?php
-session_set_cookie_params(60 * 60 * 24 * 364);
-session_start();
-date_default_timezone_set('America/Cancun');
-setlocale(LC_MONETARY, 'en_US');
-include 'php/conexion.php';
-include_once 'php/layout.php';
-$layout = new Layout();
-$conn = new Conexion();
-$conn->conectar();
-if (!isset($_SESSION['usuario'])) {
-    header('Location: login.php');
-} else {
-    //Variables Generales.
-    $nombreUsuario = "No Identificado.";
-    $avatar = "??";
-    $cargo = " - - ";
-    $conn->conectar();
-    $idUsuario = $_SESSION['usuario'];
-    //Obtener datos del usuario
-    $query = "SELECT * FROM t_users WHERE id = $idUsuario";
-    try {
-        // $zhh = "";
-        $resp = $conn->obtDatos($query);
-        if ($conn->filasConsultadas > 0) {
-            foreach ($resp as $dts) {
-                $idColaborador = $dts['id_colaborador'];
-                $idPermiso = $dts['id_permiso'];
-                $idDestino = $dts['id_destino'];
-                $idFase = $dts['fase'];
-                $auto = 1;
-                $dec = 1;
-                $dep = 1;
-                $zha = 1;
-                $zhc = 1;
-                $zhh = 1;
-                $zhp = 1;
-                $zia = 1;
-                $zic = 1;
-                $zie = 1;
-                $zil = 1;
-                $oma = 0;
-                $seg = 0;
-                $dec = $dts['DECC'];
-                $zhagp = $dts['ZHAGP'];
-                $zhatrs = $dts['ZHATRS'];
-                $zhcgp = $dts['ZHCGP'];
-                $zhctrs = $dts['ZHCTRS'];
-                $zhhgp = $dts['ZHHGP'];
-                $zhhtrs = $dts['ZHHTRS'];
-                $zhpgp = $dts['ZHPGP'];
-                $zhptrs = $dts['ZHPTRS'];
-                $zia = $dts['ZIA'];
-                $zic = $dts['ZIC'];
-                $zie = $dts['ZIE'];
-                $zil = $dts['ZIL'];
-                //                $oma = $dts['OMA'];
-                $dep = $dts['DEP'];
-                $auto = $dts['AUTO'];
-                $zha = $dts['ZHA'];
-                $zhh = $dts['ZHH'];
-                $zhc = $dts['ZHC'];
-                $zhp = $dts['ZHP'];
-                //                $seg = $dts['SEG'];
-
-                $query = "SELECT * FROM c_permisos WHERE id = $idPermiso";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $permiso = $dts['permiso'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                //Obtener datos del colaborador.
-                $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $nombre = $dts['nombre'];
-                            $apellido = $dts['apellido'];
-                            $telefono = $dts['telefono'];
-                            $email = $dts['email'];
-                            $idCargo = $dts['id_cargo'];
-                            $idSeccion = $dts['id_seccion'];
-                            if ($dts['foto'] != "") {
-                                $foto = $dts['foto'];
-                            } else {
-                                $foto = "";
-                            }
-                        }
-                        $nombreUsuario = $nombre . " " . $apellido;
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_cargos WHERE id = $idCargo";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $cargo = $dts['cargo'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_secciones WHERE id = $idSeccion";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $seccion = $dts['seccion'];
-                            $imgSeccion = $dts['url_image'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-
-                $query = "SELECT * FROM c_destinos WHERE id = $idDestino";
-                try {
-                    $resp = $conn->obtDatos($query);
-                    if ($conn->filasConsultadas > 0) {
-                        foreach ($resp as $dts) {
-                            $destino = $dts['destino'];
-                        }
-                    }
-                } catch (Exception $ex) {
-                    echo $ex;
-                }
-            }
-        }
-    } catch (Exception $ex) {
-        echo $ex;
-    }
-}
-
-if ($idDestino == 10) {
-    if (isset($_SESSION['idDestino'])) {
-        $idDestinoT = $_SESSION['idDestino'];
-    } else {
-        $idDestinoT = $idDestino;
-    }
-} else {
-    $idDestinoT = $idDestino;
-}
-
-$query = "SELECT * FROM c_destinos WHERE id = $idDestinoT";
-try {
-    $resp = $conn->obtDatos($query);
-    if ($conn->filasConsultadas > 0) {
-        foreach ($resp as $dts) {
-            $bandera = $dts['bandera'];
-            $destinoT = $dts['destino'];
-            $ubicacion = $dts['ubicacion'];
-            $gp = $dts['gp'];
-            $trs = $dts['trs'];
-        }
-    }
-} catch (Exception $ex) {
-    echo $ex;
-}
-
-//OBTENER AVANCE A NIVEL COMPLEJO
-//Total de tareas 
-$totalPendientesCurrent = 0;
-$totalSolucionadasCurrent = 0;
-$porcentajeCurrent = 0;
-$lstRanking = [];
-
-//Se obtiene los totales del complejo seleccionado
-if ($idDestinoT != 10) {
-    $query = "SELECT * FROM t_mc WHERE id_destino = $idDestinoT";
-    try {
-        $resp = $conn->obtDatos($query);
-        $totalTareasCurrent = $conn->filasConsultadas;
-        if ($conn->filasConsultadas > 0) {
-            foreach ($resp as $dts) {
-                $statusMC = $dts['status'];
-                if ($statusMC == "F") {
-                    $totalSolucionadasCurrent += 1;
-                } else {
-                    $totalPendientesCurrent += 1;
-                }
-            }
-        }
-    } catch (Exception $ex) {
-        echo $ex;
-    }
-    if ($totalTareasCurrent > 0) {
-        $porcentajeCurrent = ($totalSolucionadasCurrent / $totalTareasCurrent) * 100;
-    } else {
-        $porcentajeCurrent = 0;
-    }
-    $ranking = array("idDestino" => $idDestinoT, "porcentaje" => $porcentajeCurrent);
-    $lstRanking[] = $ranking;
-}
-
-
-//Se obtienen los resultados de los destinos diferentes al actual evitando AME
-$query = "SELECT * FROM c_destinos WHERE id != $idDestinoT AND id != 10";
-try {
-    $resp = $conn->obtDatos($query);
-    if ($conn->filasConsultadas > 0) {
-        foreach ($resp as $dts) {
-            $idD = $dts['id'];
-            $nameDest = $dts['destino'];
-            $totalTareas = 0;
-            $totalPendientes = 0;
-            $totalSolucionadas = 0;
-            $query = "SELECT * FROM t_mc WHERE id_destino = $idD";
-            try {
-                $resp = $conn->obtDatos($query);
-                $totalTareas = $conn->filasConsultadas;
-                if ($conn->filasConsultadas > 0) {
-                    foreach ($resp as $dts) {
-                        $statusMC = $dts['status'];
-                        if ($statusMC == "F") {
-                            $totalSolucionadas += 1;
-                        } else {
-                            $totalPendientes += 1;
-                        }
-                    }
-                }
-            } catch (Exception $ex) {
-                echo $ex;
-            }
-
-            if ($totalTareas > 0) {
-                $porcentaje = ($totalSolucionadas / $totalTareas) * 100;
-            } else {
-                $porcentaje = 0;
-            }
-            $ranking = array("idDestino" => $idD, "porcentaje" => $porcentaje);
-            $lstRanking[] = $ranking;
-        }
-    }
-} catch (Exception $ex) {
-    echo $ex;
-}
-
-foreach ($lstRanking as $key => $row) {
-    $aux[$key] = $row['porcentaje'];
-}
-$currenPosition = "NA";
-$tablaRanking = "<div class=\"list is-hoverable has-text-left\">";
-if (count($lstRanking) > 0 && count($aux) > 0) {
-    //Se ordenan de mayor a menor para sacar el ranking
-    array_multisort($aux, SORT_DESC, $lstRanking);
-
-    //Se obtienen los datos y se muestran 
-    for ($i = 0; $i < count($lstRanking); $i++) {
-        if ($idDestinoT == $lstRanking[$i]['idDestino']) {
-            $currenPosition = $i + 1;
-        }
-        $position = $i + 1;
-        $query = "SELECT * FROM c_destinos WHERE id = " . $lstRanking[$i]['idDestino'] . "";
-        try {
-            $resultado = $conn->obtDatos($query);
-            if ($conn->filasConsultadas > 0) {
-                foreach ($resultado as $d) {
-                    $destiny = $d['destino'];
-                }
-            }
-            $tablaRanking .= "<a class=\"list-item\">$position.- $destiny - " . round($lstRanking[$i]['porcentaje']) . "% </a>";
-        } catch (Exception $ex) {
-            echo $ex;
-        }
-    }
-}
-$tablaRanking .= "</div>";
-
-//var_dump($lstRanking);
-?>
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <?php echo $layout->styles(); ?>
-    <link href="css/tailwind.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bulma.css">
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="css/style3.css">
-    <link rel="stylesheet" href="DataTables/datatables.css">
-    <link rel="stylesheet" href="css/clases.css">
-    <link rel="stylesheet" href="css/hover.css">
-    <link rel="stylesheet" href="css/modal-fx.min.css">
-    <link rel="stylesheet" href="css/clasesproyectosypendientes.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+    <title>MAPHG Planner</title>
+    <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/tailwindproduccion.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/fontawesome/css/regular.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/jPages.css">
     <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel="stylesheet" href="css/planner_cols.css">
 
+    <style>
+        .contenedor {
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            .contenedor {
+                max-width: 640px;
+            }
+        }
+
+        @media (min-width: 850px) {
+            .contenedor {
+                max-width: 850px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .contenedor {
+                max-width: 1024px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .contenedor {
+                max-width: 1220px;
+            }
+        }
+
+        @media (min-width: 1366px) {
+            .contenedor {
+                max-width: 1366px;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .contenedor {
+                max-width: 1920px;
+            }
+        }
+
+        @media (min-width: 2176px) {
+            .contenedor {
+                max-width: 2176px;
+            }
+        }
+
+        /* Arrow TOOLTIP */
+
+        #arrowtooltipActividadesGeneral,
+        #arrowtooltipActividadesGeneral::before {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            z-index: -1;
+        }
+
+        #arrowtooltipActividadesGeneral::before {
+            content: '';
+            transform: rotate(45deg);
+            background: #333;
+        }
+
+        #tooltipActividadesGeneral[data-popper-placement^='top']>#arrowtooltipActividadesGeneral {
+            bottom: -4px;
+        }
+
+        #tooltipActividadesGeneral[data-popper-placement^='bottom']>#arrowtooltipActividadesGeneral {
+            top: -4px;
+        }
+
+        #tooltipActividadesGeneral[data-popper-placement^='left']>#arrowtooltipActividadesGeneral {
+            right: -4px;
+        }
+
+        #tooltipActividadesGeneral[data-popper-placement^='right']>#arrowtooltipActividadesGeneral {
+            left: -4px;
+        }
+
+        /* Arrow TOOLTIP */
+        #arrowtooltipActividadesProyecto,
+        #arrowtooltipActividadesProyecto::before {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            z-index: -1;
+        }
+
+        #arrowtooltipActividadesProyecto::before {
+            content: '';
+            transform: rotate(45deg);
+            background: #333;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='top']>#arrowtooltipActividadesProyecto {
+            bottom: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='bottom']>#arrowtooltipActividadesProyecto {
+            top: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='left']>#arrowtooltipActividadesProyecto {
+            right: -4px;
+        }
+
+        #tooltipActividadesPlanaccion[data-popper-placement^='right']>#arrowtooltipActividadesProyecto {
+            left: -4px;
+        }
+    </style>
 </head>
 
-<body>
 
-    <!-- <div id="loader" class="pageloader is-dark"><span class="title">Cargando...</span></div> -->
-    <!--Menu principal latelar izquierdo SIDEBAR-->
+<body class="bg-gray-200 scrollbar" style="font-family: 'Roboto', sans-serif;">
+    <!-- MENÚ -->
+    <div class="w-full absolute top-0">
+        <?php
+        include 'navbartopJS.php';
+        include 'menuJS.php';
+        ?>
+    </div>
+    <!-- MENÚ -->
 
 
-    <!--contetn-->
-    <div id="content" class="">
+    <!-- BOTON FLOTANTE -->
+    <div class="absolute bottom-0 right-0 flex flex-row items-end" style="z-index: 100;">
 
-        <!--MENU-->
-        <?php include 'navbartop.php'; ?>
-        <?php include 'menu-sidebar.php'; ?>
-
-        <!-- Select para Versión Movil -->
-        <div id="opcionMovil" class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 text-center pt-3 hidden">
-            <div class="inline-block relative">
-                <!-- <select id="mostrarSeccionMovil"
-                    class="block appearance-none w-full border border-gray-400 bg-gray-200 hover:border-gray-500 px-4 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline p-2">
-                    <option>Secciones</option>
-                    <option value="11" onclick="mostrarSeccion();">ZIL</option>
-                    <option value="10" onclick="mostrarSeccion();">ZIE</option>
-                    <option value="24" onclick="mostrarSeccion();">AUTO</option>
-                    <option value="1">DEC</option>
-                    <option value="23">DEP</option>
-                    <option value="19">OMA</option>
-                    <option value="5">ZHA</option>
-                    <option value="6">ZHC</option>
-                    <option value="7">ZHH</option>
-                    <option value="12">ZHP</option>
-                    <option value="8">ZIA</option>
-                    <option value="9">ZIC</option>
-                </select> -->
-                <div class="buttons has-addons">
-                    <button onclick="mostrarSeccion('id-11');" class="button btn-id-11">ZIL</button>
-                    <button onclick="mostrarSeccion('id-10');" class="button btn-id-10">ZIE</button>
-                    <button onclick="mostrarSeccion('id-24');" class="button btn-id-24">AUTO</button>
-                    <button onclick="mostrarSeccion('id-1');" class="button btn-id-1">DEC</button>
-                    <button onclick="mostrarSeccion('id-23');" class="button btn-id-23">DEP</button>
-                    <button onclick="mostrarSeccion('id-19');" class="button btn-id-19">OMA</button>
-                    <button onclick="mostrarSeccion('id-5');" class="button btn-id-5">ZHA</button>
-                    <button onclick="mostrarSeccion('id-6');" class="button btn-id-6">ZHC</button>
-                    <button onclick="mostrarSeccion('id-7');" class="button btn-id-7">ZHH</button>
-                    <button onclick="mostrarSeccion('id-12');" class="button btn-id-12">ZHP</button>
-                    <button onclick="mostrarSeccion('id-8');" class="button btn-id-8">ZIA</button>
-                    <button onclick="mostrarSeccion('id-9');" class="button btn-id-9">ZIC</button>
-                </div>
-            </div>
+        <div id="btnFlotanteOpciones" class="flex flex-col-reverse items-end font-medium mb-4 animated hidden">
+            <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencia</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Proyecto</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Checklist</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">MP</button>
+            <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Predictivo</button>
+            <button id="btnBuscarOT" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2"><i class="fas fa-search"></i> Buscar OT</button>
         </div>
-        <!-- Select para Versión Movil -->
 
-        <nav id="nav-menu" class="navbar is-fixed-top modal">
+        <div class="">
+            <button id="btnFlotante" class="text-red-500 text-5xl m-4 hover:text-red-400">
+                <i class="fad fa-plus-circle"></i>
+            </button>
+        </div>
 
-            <div id="navMenuPpal" class="navbar-menu modal">
-                <div class="navbar-end">
-                    <nav class="navbar" role="navigation" aria-label="dropdown navigation">
-                        <div class="navbar-item has-dropdown is-hoverable">
-                            <a class="bd-navbar-icon navbar-item">
-                                <span class="mr-1"><i class="fad fa-grip-lines-vertical has-text-dark"></i></span><?php echo $nombre . " " . $apellido; ?>
-                            </a>
-
-                            <div class="navbar-dropdown">
-                                <a href="perfil.php" class="navbar-item">
-                                    Mi perfil
-                                </a>
-                                <a href="mis-pendientes.php" class="navbar-item">
-                                    Mis pendientes
-                                </a>
-                                <a href="#" class="navbar-item">
-                                    Agenda personal
-                                </a>
-                                <hr class="navbar-divider">
-                                <a href="configuraciones.php" class="navbar-item">
-                                    Configuraciones
-                                </a>
-                                <a class="navbar-item" onClick="showModal('modalLogout');">
-                                    Cerrar Sesion
-                                </a>
-                            </div>
-                        </div>
-                    </nav>
+    </div>
+    <!-- BOTON FLOTANTE -->
 
 
+    <!-- CALENDARIO SEMANAL -->
+    <div class="flex flex-col justify-evenly items-center w-full h-screen">
+
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative  py-5" style="margin-top: 9vh">
+
+            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 sticky top-0 -left-0 z-20 bg-gray-200 py-8 rounded">
+
+                <div class="flex flex-row justify-center items-center w-full">
+                    <p id="dia" class="font-semibold dia">--</p>
+                </div>
+                <div class="flex flex-row justify-center items-center w-full">
+                    <p id="mes" class="font-semibold dia">--</p>
+                </div>
+                <div class="flex flex-row justify-center items-center w-full">
+                    <p id="hora" class="font-semibold text-md"></p>
+                </div>
+                <div class="flex flex-row justify-center items-center w-full">
+                    <p class="font-semibold text-md">
+                        <i class="fas fa-map-marker-alt mt-1"></i>
+                        <span id="nombreDestino"></span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col justify-end mt-6 items-end w-full pr-10">
+                    <!-- <img src="svg/calendario/lunes.svg" class="w-5/12" alt=""> -->
+                    <div class="flex flex-row items-center justify-end mb-2">
+                        <h1 id="label-lunes" class="text-sm font-bold mr-4">LUNES</h1>
+                        <h1 id="btnSeccion_8" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZIA
+                        </h1>
+                        <h1 id="btnSeccion_12" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHP
+                        </h1>
+                    </div>
+                    <div class="flex flex-row items-center justify-end mb-2">
+                        <h1 id="label-martes" class="text-sm font-bold mr-4">MARTES</h1>
+                        <h1 id="btnSeccion_9" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZIC
+                        </h1>
+                        <h1 class="w-8 h-8 mr-2"></h1>
+                    </div>
+                    <div class="flex flex-row items-center justify-end mb-2">
+                        <h1 id="label-miercoles" class=" text-sm font-bold mr-4">MIERCOLES</h1>
+                        <h1 id="btnSeccion_1" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            DEC
+                        </h1>
+                        <h1 id="btnSeccion_10" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZIE
+                        </h1>
+                    </div>
+                    <div class="flex flex-row items-center justify-end mb-2">
+                        <h1 id="label-jueves" class=" text-sm font-bold mr-4">JUEVES</h1>
+                        <h1 id="btnSeccion_6" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHC
+                        </h1>
+                        <h1 id="btnSeccion_5" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHA
+                        </h1>
+                    </div>
+                    <div class="flex flex-row items-center justify-end mb-2">
+                        <h1 id="label-viernes" class=" text-sm font-bold mr-4">VIERNES</h1>
+                        <h1 id="btnSeccion_11" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZIL
+                        </h1>
+                        <h1 id="btnSeccion_24" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            AUT
+                        </h1>
+                    </div>
+                    <div class="flex flex-row items-center justify-center mb-2">
+                        <h1 id="btnSeccion_23" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            DEP
+                        </h1>
+                        <h1 id="btnSeccion_7" class="w-8 h-8 btn-inactivo text-xs rounded-md flex flex-row justify-center items-center font-semibold mr-2 cursor-pointer hover:bg-gray-800 hover:text-gray-100">
+                            ZHH
+                        </h1>
+                    </div>
                 </div>
             </div>
-        </nav>
-
-        <!-- *********************************************************************************** -->
-        <!-- Hidden para Obtener Datos de Tareas Generales -->
-
-        <input type="hidden" id="idUsuarioTG">
-        <input type="hidden" id="idDestinoTG">
-        <input type="hidden" id="idSeccionTG">
-        <input type="hidden" id="idSubseccionTG">
-        <input type="hidden" id="idTareaTG">
-        <input type="hidden" id="statusTG">
-        <input type="hidden" id="tablaTG">
-        <input type="hidden" id="idProyectoPlanAccion">
-        <input type="hidden" id="idPlanAccion">
-        <input type="hidden" id="idDestinoProyectos">
-        <input type="hidden" id="idSeccionProyectos">
-        <input type="hidden" id="idUsuarioProyectos">
-        <input type="hidden" id="idSubseccionProyectos">
-        <input type="hidden" id="tipoMCMCG">
-
-        <!-- Fin de hidden para Tareas Generales -->
 
 
-        <!-- Inputs para Status -->
-        <input type="hidden" id="statusIdDestino">
-        <input type="hidden" id="statusIdSeccion">
-        <input type="hidden" id="statusIdSubseccion">
-        <input type="hidden" id="statusIdTabla">
-        <!--Input donde se guarda el Id de Proyecto, MC, MP o TareaGeneral-->
-        <input type="hidden" id="statusIdPlanAccion">
-        <!--Input donde se guarda el Id de Proyecto, MC, MP o TareaGeneral-->
-        <input type="hidden" id="statusTabla">
-        <!--Input donde se guarda el nombre de la tabla-->
-        <input type="hidden" id="status">
-        <!-- ************************************************************************************** -->
-        <!-- INPUT DE MPNP, GUARDA ID, PARA COMPLEMENTAR EL FORMULARIO  -->
-        <input type="hidden" id="idMPNP">
-        <input type="hidden" id="idEquipoMPNP">
+            <div id="columnas_x" class="flex flex-row justify-start items-start w-full pt-6">
 
-        <!--SECCION DE SLECCION DE HOTEL-->
-        <section id="seccionHoteles" style="display:none;">
-            <div class="columns is-mobile is-centered mt-1">
-                <div class="column is-10 has-text-centered">
-                    <a class="button is-danger is-outlined mb-4">
-                        <span onclick="showHide('')">Regresar</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-undo-alt"></i>
-                        </span>
-                    </a>
-
-                    <div class="is-divider my-0" data-content="HOTELES"></div>
-
-                </div>
-            </div>
-            <div id="listaHoteles" class="columns is-multiline is-mobile is-centered mt-1">
-                <div class="column is-3 hvr-grow">
-                    <a href="settings/destinos.php">
-                        <div class="card rounded-3">
-                            <div class="card-content">
-                                <div class="container">
-                                    <div class="columns is-centered">
-                                        <div class="column has-text-centered">
-                                            <h1 class="title is-size-6">Destinos</h1>
-                                        </div>
+                <!-- Inicio Columna -->
+                <div id="columnasPendientes" class="flex items-center relative">
+                    <div class="flex flex-row justify-start items-start w-full overflow-x-auto px-6 flex scrollbar">
+                        <div class="flex items-center">
+                            <div id="userpendings" class="scrollbar flex flex-col justify-center items-center w-84 py-3">
+                                <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full">
+                                    <div class="bg-cyan-100 rounded-md flex items-center justify-center px-3 absolute py-2 text-cyan-700 text-2xl w-12 h-12" style="top: -20px;">
+                                        <i class="fad fa-clipboard-list-check"></i>
+                                        <h1 class="text-xs">
+                                            <span id="loadPendientes" class="text-cyan-900"></span>
+                                        </h1>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
+                                    <div class="w-full flex flex-col justify-between overflow-y-auto mt-4 scrollbar" style="max-height:55vh;">
+                                        <div class="flex text-xs font-semibold my-3 justify-center items-center w-full sticky top-0">
 
-
-
-        <!--************LISTA DE TAREAS*********************-->
-        <section id="lista-tareas" style="display:none;">
-            <input type="hidden" id="hddIdActividad">
-            <input type="hidden" id="hddIdEquipo">
-            <input type="hidden" id="hddIdDestino">
-            <input type="hidden" id="hddIdCategoria">
-            <input type="hidden" id="hddIdSubseccion">
-            <input type="hidden" id="hddIdSubcategoria">
-            <div class="columns is-centered px-4 has-background-dark my-4 pt-1">
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a class="button is-link is-outlined" onclick="home()">
-                                <span class="icon is-small"><i class="fas fa-home"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button is-danger is-outlined" onclick="showListaTareas('')">
-                                <span>Regresar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-undo-alt"></i>
-                                </span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <button id="btnPendientesPA" class="button is-danger">
-                                <span class="icon is-medium">
-                                    <i class="far fa-times-circle"></i>
-                                </span>
-                                <span>Pendientes</span>
-                            </button>
-                        </p>
-                        <p class="control">
-                            <button id="btnSolucionadosPA" class="button is-primary is-outlined">
-                                <span class="icon is-medium">
-                                    <i class="far fa-check-circle"></i>
-                                </span>
-                                <span>Solucionados</span>
-                            </button>>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="column has-text-centered">
-                    <div class="control has-icons-left has-icons-right">
-                        <input id="txtTarea" class="input is-medium" type="text" placeholder="Añadir un correctivo">
-                        <span class="icon is-left">
-                            <i class="fas fa-fire-extinguisher"></i>
-                        </span>
-                        <span class="icon is-right">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-10">
-                    <div id="divNombreSubseccion" class="is-divider mt-3" data-content="Aljibes"></div>
-                </div>
-            </div>
-
-            <div class="columns mx-3 is-centered">
-                <div id="divListaTareas" class="column is-9">
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
-                                <label for="chkb1"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-info ">Eduardo Meneses</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-info"><i class="fas fa-calendar-check"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
-                                <label for="chkb2"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-danger ">Sin responsable</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-danger"><i class="fas fa-calendar-times"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!--DETALLE DE LA TAREA-->
-        <section id="detalle-tarea" class="mt-3" style="display:none;">
-            <input type="hidden" id="hddIDTarea">
-            <div class="columns is-mobile is-centered">
-                <div class="column is-10 has-text-centered">
-                    <a class="button is-danger is-outlined">
-                        <span onclick="showDetallesTarea('')">Regresar</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-undo-alt"></i>
-                        </span>
-                    </a>
-
-                    <div class="columns">
-                        <div class="column">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-10">
-                    <div class="is-divider mt-3" data-content="Detalles de la tarea"></div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-9">
-                    <h3 id="tituloTarea" class="title is-3 has-text-centered">
-                        "Aqui va el titulo de la tarea Lorem ipsum dolor sit amet, c"
-                    </h3>
-                </div>
-                <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
-                </div>
-            </div>
-
-
-
-            <div class="columns is-centered">
-
-                <div class="column is-one-third has-text-centered">
-                    <div id="myDatePicker" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                    <!--                    <input id="txtDateRange1" type="date">
-                                                   <input id="txtDateRange2" type="date" style="display:none;">-->
-                </div>
-
-                <div class="column is-one-third">
-                    <div class="columns is-centered px-3">
-                        <div class="column is-10">
-                            <div class="control has-icons-right">
-                                <input id="txtComentario" class="input is-medium" type="text" placeholder="Agregar comentario">
-                                <span class="icon is-right">
-                                    <i class="fas fa-comment-dots"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="column is-2">
-
-                            <a class="button is-primary">
-                                <input class="file-input" type="file" name="resume" id="txtArchivo" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar Archivo</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="timeLine" class="timeline">
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Inicio</span>
-                        </header>
-
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading">Creada por: <strong>Eduardo Meneses</strong></p>
-                                <p class="heading">14/11/1989 20:30</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
-                                <img src="svg/secciones/zia.svg" width="40px" alt="">
-                                <img src="svg/secciones/zic.svg" width="40px" alt="">
-                                <img src="svg/secciones/zil.svg" width="40px" alt="">
-                                <img src="svg/secciones/zie.svg" width="40px" alt="">
-                            </div>
-                        </div>
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Fin</span>
-                        </header>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <section id="sectionHeroListaEquipos" style="display:none;" class="hero is-light is-small mt-5">
-            <!-- Hero head: will stick at the top -->
-            <div class="hero-head mx-2">
-                <div class="">
-                    <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-start">
-                            <span class="navbar-item">
-                                <button class="button is-warning" onclick="reloadPlanner('')"><i class="fas fa-arrow-left"></i></button>
-                            </span>
-                            <!-- Cambia el estilo de las categorias en la barra -->
-                            <div id="divNameSeccion" class="navbar-item bannerbit3">
-                                <p class="seccion-logo-desactivado">Seccion</p>
-                            </div>
-                            <span class="navbar-item">
-
-                                <p id="divNameSubseccion" class="subtitle is-3">Subseccion</p>
-
-                            </span>
-                        </div>
-                        <div class="navbar-end">
-
-                            <span class="navbar-item modal">
-                                <div class="field has-addons ">
-                                    <p class="control">
-                                        <button class="button is-light">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-clipboard-check"></i>
-                                            </span>
-                                            <span>Bitácoras</span>
-                                        </button>
-                                    </p>
-                                    <p class="control">
-                                    <div class="dropdown is-active">
-                                        <div class="dropdown-trigger">
-                                            <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
-                                                </span>
-                                                <span>Información</span>
-
-                                            </button>
-                                        </div>
-                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                            <div class="dropdown-content">
-                                                <a id="link-auditorias" href="#" class="dropdown-item">
-                                                    AUDITORIAS - INFORMES
-                                                </a>
-                                                <a id="link-certificaciones" href="#" class="dropdown-item">
-                                                    CERTIFICACIONES - NORMATIVAS
-                                                </a>
-                                                <a id="link-cotizaciones" href="#" class="dropdown-item">
-                                                    COTIZACIONES - FACTURAS
-                                                </a>
-                                                <a id="link-planos" href="#" class="dropdown-item">
-                                                    PLANOS
-                                                </a>
-                                                <a id="link-otros" href="#" class="dropdown-item">
-                                                    OTROS
-                                                </a>
+                                            <div id="misPendientesIncidencias" class="hover:bg-red-200 hover:text-red-500 px-2 bg-gray-300 text-gray-600 rounded-l-md w-1/2 text-center cursor-pointer">
+                                                <h1 id="totalPendientesFallas">Incidencias (0)</h1>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- <a id="link-informes" class="button is-light">
-                                                <<span class="icon is-small">
-                                                <i class="fas fa-info-circle"></i>
-                                                </span>
-                                                <span>Información</span>
-                                                </a>-->
-                                    </p>
-                                    <p class="control">
-                                        <a id="link-stock" class="button is-light">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-box-open"></i>
-                                            </span>
-                                            <span>Stock/Pedidos</span>
-                                        </a>
-                                    </p>
-                                    <p class="control">
-                                        <button class="button is-light">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-file-excel"></i>
-                                            </span>
-                                            <span>Informes</span>
-                                        </button>
-                                    </p>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!--*******SECCION LISTADO DE EQUIPOS*************-->
-        <section id="seccionListaEquipos" style="display: none;">
-            <div class="columns is-centered my-2">
-                <div class="column is-2 has-text-centered">
-                    <div class="field has-addons has-addons-right is-fullwidth">
-                        <div class="control">
-                            <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo" autocomplete="off"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
-                        <div class="control">
-                            <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
-                        </div>
-                    </div>
-                    <!--<div class="control has-icons-left has-icons-right">
-                                    <input class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
-                            </div>-->
-                </div>
-                <div class="column is-1">
-                    <button class="button is-warning"><i class="fas fa-sliders-h"></i></button>
-                </div>
-            </div>
-            <div class="columns">
-                <div id="divListaEquipos" class="column mx-5">
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ******************************** Codigo para la comnas de subsecciones ********************************************************************* -->
-        <!-- <br> -->
-        <section id="seccion-bar" class="hero is-light is-small mt-5">
-            <!-- Hero head: will stick at the top -->
-            <div class="hero-head">
-                <div class="navbar-menu">
-                    <div class="navbar-start has-text-centered">
-                        <div class="bannerbit3">
-                            <p class="">Planner</p>
-                        </div>
-                        <div class="bannerbit">
-                            <p><?php echo $destinoT;  ?></p>
-                        </div>
-                    </div>
-                    <div class="navbar-start has-text-centered">
-                        <div class="navbar-item">
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-1">AUTO</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-2">DEC</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-3">DEP</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-4">OMA</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-5">ZHA</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-6">ZHC</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-7">ZHH</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-8">ZHP</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-9">ZIA</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-10">ZIC</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-11">ZIE</p>
-                            </a>
-                            <a href="#">
-                                <p class="bannersec2 btn-seccion btn-12">ZIL</p>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="navbar-end mr-4">
-                        <?php
-                        $hoy = getdate();
-                        $dia = $hoy['weekday'];
-                        switch ($dia) {
-                            case 'Monday':
-                                echo "<img src=\"svg/calendario/lunes.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Tuesday':
-                                echo "<img src=\"svg/calendario/martes.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Wednesday':
-                                echo "<img src=\"svg/calendario/miercoles.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Thursday':
-                                echo "<img src=\"svg/calendario/jueves.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Friday':
-                                echo "<img src=\"svg/calendario/viernes.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Saturday':
-                                echo "<img src=\"svg/calendario/syd.svg\" class=\"img-fluid\" width=\"280px\">";
-                                break;
-                            case 'Sunday':
-                                echo "<img src=\"svg/calendario/syd.svg\" class=\"img-fluid\" width=\"280px\"><br>";
-                                break;
-                        }
-                        ?>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        <!-- <br> -->
-
-        <!-- ******************* CONSULTAS PARA LA COLUMNA DE SECCIONES********************************** -->
-        <section id="seccionColumnas" class="mt-2 container is-fluid">
-            <div class="columns is-variable is-2  mx-3" style="overflow-X: scroll;">
-                <?php
-                $id_destino = $idDestinoT;
-                if ($id_destino != 10) {
-                ?>
-                    <?php
-                    $id_seccion = 24;
-                    $nombre_seccion = "AUTO";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-24'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id <> 200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-
-                                $query_t_mc = "SELECT id, count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_auto[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_auto);
-
-                        // Recorre el arreglo.
-                        foreach ($array_auto as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto' ); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-
-                    <?php
-                    $id_seccion = 1;
-                    $nombre_seccion = "DEC";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-1'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_dec[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_dec);
-
-                        // Recorre el arreglo.
-                        foreach ($array_dec as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 23;
-                    $nombre_seccion = "DEP";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion AND id_destino=$id_destino";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-23'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_dep_a[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_dep_a);
-
-                        // Recorre el arreglo.
-                        foreach ($array_dep_a as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-                                $nombreSubseccion = $row_subsecciones['grupo'];
-                                $idSubseccion = $row_subsecciones['id'];
-
-
-                                //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4 xxx\">$nombreSubseccion</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino=$id_destino AND id_seccion=" . $id_seccion . " and status='N' and activo=1 and id_subseccion = 200";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-
-                    <?php
-                    $id_seccion = 19;
-                    $nombre_seccion = "OMA";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-19'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_oma[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_oma);
-
-                        // Recorre el arreglo.
-                        foreach ($array_oma as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 5;
-                    $nombre_seccion = "ZHA";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-5'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zha[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zha);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zha as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 6;
-                    $nombre_seccion = "ZHC";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-6'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhc[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhc);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhc as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 7;
-                    $nombre_seccion = "ZHH";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-7'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhh[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhh);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhh as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 12;
-                    $nombre_seccion = "ZHP";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-12'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhp[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhp);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhp as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 8;
-                    $nombre_seccion = "ZIA";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-8'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zia[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zia);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zia as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 9;
-                    $nombre_seccion = "ZIC";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-9'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zic[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zic);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zic as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-                                $idSubseccion = $row_subsecciones['id'];
-                                $nombreGrupo = $row_subsecciones['grupo'];
-
-                                if ($id_destino == 1444 and $idSubseccion == 12) {
-                                    echo
-                                        "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelRM', 'show')\">"
-                                            . "<p class=\"t-normal has-text-left px-4\">"
-                                            . "$nombreGrupo"
-                                            . "</p>"
-                                            . "</div>"
-                                            . "<div class=\"column\">";
-                                } elseif ($id_destino == 74444 and $idSubseccion == 12) {
-                                    echo
-                                        "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelCMU', 'show')\">"
-                                            . "<p class=\"t-normal has-text-left px-4\">"
-                                            . "$nombreGrupo"
-                                            . "</p>"
-                                            . "</div>"
-                                            . "<div class=\"column\">";
-                                } else {
-                                    echo
-                                        "<div class=\"columns btn-subsecciones is-gapless my-1 is-mobile\"  onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                            . "<div class=\"column is-10\">"
-                                            . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo']
-                                            . "</p>"
-                                            . "</div>"
-                                            . "<div class=\"column\">";
-                                }
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 10;
-                    $nombre_seccion = "ZIE";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-10'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zie[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zie);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zie as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 11;
-                    $nombre_seccion = "ZIL";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-11'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and activo=1 and activo=1 and id_destino=$id_destino and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zil[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zil);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zil as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 1001;
-                    $nombre_seccion = "Energéticos";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-11'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status = 'PENDIENTE' and activo = 1 and id_destino = $id_destino and id_seccion = $id_seccion and id_subseccion = " . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_energeticos);
-
-                        // Recorre el arreglo.
-                        foreach ($array_energeticos as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-                                $idSubseccionX = $row_subsecciones['id'];
-                                $subseccionX = $row_subsecciones['grupo'];
-
-                                if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total . " </p></div></div></a>";
-                                } else {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                                }
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                <?php } else {
-
-                    //COLUMNAS PARA EL DESTINO DE AMERICA ID:10 
-                    $id_seccion = 24;
-                    $nombre_seccion = "AUTO";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-24'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id <> 200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-
-                                $query_t_mc = "SELECT id, count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_auto_a[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_auto_a);
-
-                        // Recorre el arreglo.
-                        foreach ($array_auto_a as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                ?>
-
-
-
-                    <?php
-                    $id_seccion = 1;
-                    $nombre_seccion = "DEC";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-1'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_dec_a[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_dec_a);
-
-                        // Recorre el arreglo.
-                        foreach ($array_dec_a as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-
-                    <?php
-                    $id_seccion = 23;
-                    $nombre_seccion = "DEP";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-23'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    // Array para almacenar datos y ordenarlos.
-                                    $array_dep_a[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_dep_a);
-
-                        // Recorre el arreglo.
-                        foreach ($array_dep_a as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-                                $nombreSubseccion = $row_subsecciones['grupo'];
-                                $idSubseccion = $row_subsecciones['id'];
-
-
-                                //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">$nombreSubseccion</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        }
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1 and id_subseccion = 200";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-
-
-
-                    <?php
-                    $id_seccion = 19;
-                    $nombre_seccion = "OMA";
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-19'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_oma[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_oma);
-
-                        // Recorre el arreglo.
-                        foreach ($array_oma as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 5;
-                    $nombre_seccion = "ZHA";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-5'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zha[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zha);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zha as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 6;
-                    $nombre_seccion = "ZHC";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-6'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhc[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhc);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhc as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 7;
-                    $nombre_seccion = "ZHH";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-7'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhh[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhh);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhh as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 12;
-                    $nombre_seccion = "ZHP";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-12'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zhp[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zhp);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zhp as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 8;
-                    $nombre_seccion = "ZIA";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-8'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zia[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zia);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zia as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 9;
-                    $nombre_seccion = "ZIC";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-9'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zic[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zic);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zic as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 10;
-                    $nombre_seccion = "ZIE";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-10'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zie[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zie);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zie as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-                    ?>
-
-                    <?php
-                    $id_seccion = 11;
-                    $nombre_seccion = "ZIL";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-11'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_mc WHERE status='N' and activo=1 and activo=1 and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_zil[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_zil);
-
-                        // Recorre el arreglo.
-                        foreach ($array_zil as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
-                                if ($total > 0) {
-                                    echo "<p class=\"t-pendiente\">$total</p>";
-                                } else {
-
-                                    echo  "<p class=\"t-normal\">0</p>";
-                                }
-                                echo
-                                    "</div>"
-                                        . "</div>"
-                                        . "</a>";
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-
-
-                    // Fin America Total.
-
-                    ?>
-
-
-                <?php
-                    $id_seccion = 1001;
-                    $nombre_seccion = "Energéticos";
-
-                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
-                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
-
-                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
-                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
-                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
-                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-1001'>";
-                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
-                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
-                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
-                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
-
-                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
-                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status='PENDIENTE' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
-                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
-                                $row_cnt = mysqli_num_rows($result_t_mc);
-
-                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
-                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
-                                }
-                            }
-                        }
-
-                        // Imprime las subcategorias Ordenadas.
-
-                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
-                        arsort($array_energeticos);
-
-                        // Recorre el arreglo.
-                        foreach ($array_energeticos as $id => $total) {
-                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
-                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
-                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
-                                $idSubseccionX = $row_subsecciones['id'];
-                                $subseccionX = $row_subsecciones['grupo'];
-
-                                if ($total > 0) {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total . " </p></div></div></a>";
-                                } else {
-                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                                }
-                            }
-                        } //fin Foreach
-
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
-                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
-
-                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
-
-                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
-                            } else {
-
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
-                            }
-                        }
-                        echo "</div>";
-                    }
-
-
-                    // Fin America Total.
-                }
-                ?>
-            </div>
-        </section>
-
-
-        <!--SECCION DE SLECCION DE HOTEL-->
-        <section id="seccionHoteles" style="display:none;">
-            <div class="columns is-mobile is-centered mt-1">
-                <div class="column is-10 has-text-centered">
-                    <a class="button is-danger is-outlined mb-4">
-                        <span onclick="showHide('')">Regresar</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-undo-alt"></i>
-                        </span>
-                    </a>
-
-                    <div class="is-divider my-0" data-content="HOTELES"></div>
-
-                </div>
-            </div>
-            <div id="listaHoteles" class="columns is-multiline is-mobile is-centered mt-1">
-                <div class="column is-3 hvr-grow">
-                    <a href="settings/destinos.php">
-                        <div class="card rounded-3">
-                            <div class="card-content">
-                                <div class="container">
-                                    <div class="columns is-centered">
-                                        <div class="column has-text-centered">
-                                            <h1 class="title is-size-6">Destinos</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!--*******SECCION LISTADO DE EQUIPOS*************-->
-        <section id="seccionListaEquipos" style="display: none;">
-
-            <div class="columns is-centered my-2">
-                <div class="column is-2 has-text-centered">
-                    <div class="field has-addons has-addons-right is-fullwidth">
-                        <div class="control">
-                            <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
-                            </div>
-                        </div>
-                        <div class="control">
-                            <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
-                        </div>
-                    </div>
-                    <!--                    <div class="control has-icons-left has-icons-right">
-                                                    <input class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
-                                                </div>-->
-                </div>
-                <div class="column is-1" id="btn-regresar-subseccion">
-                    <button class="button is-warning"><i class="fas fa-sliders-h"></i></button>
-                </div>
-            </div>
-            <div class="columns">
-                <div id="divListaEquipos" class="column mx-5">
-
-                </div>
-            </div>
-        </section>
-
-        <!--************LISTA DE TAREAS*********************-->
-        <section id="lista-tareas" style="display:none;">
-            <input type="hidden" id="hddIdActividad">
-            <input type="hidden" id="hddIdEquipo">
-            <input type="hidden" id="hddIdDestino">
-            <input type="hidden" id="hddIdCategoria">
-            <input type="hidden" id="hddIdSubseccion">
-            <input type="hidden" id="hddIdSubcategoria">
-            <div class="columns is-centered px-4 has-background-dark my-4 pt-1">
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a class="button is-link is-outlined" onclick="home()">
-                                <span class="icon is-small"><i class="fas fa-home"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button is-danger is-outlined" onclick="showListaTareas('')">
-                                <span>Regresar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-undo-alt"></i>
-                                </span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <button id="btnPendientesPA" class="button is-danger">
-                                <span class="icon is-medium">
-                                    <i class="far fa-times-circle"></i>
-                                </span>
-                                <span>Pendientes</span>
-                            </button>
-                        </p>
-                        <p class="control">
-                            <button id="btnSolucionadosPA" class="button is-primary is-outlined">
-                                <span class="icon is-medium">
-                                    <i class="far fa-check-circle"></i>
-                                </span>
-                                <span>Solucionados</span>
-                            </button>>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="column has-text-centered">
-                    <div class="control has-icons-left has-icons-right">
-                        <input id="txtTarea" class="input is-medium" type="text" placeholder="Añadir un correctivo">
-                        <span class="icon is-left">
-                            <i class="fas fa-fire-extinguisher"></i>
-                        </span>
-                        <span class="icon is-right">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-10">
-                    <div id="divNombreSubseccion" class="is-divider mt-3" data-content="Aljibes"></div>
-                </div>
-            </div>
-
-            <div class="columns mx-3 is-centered">
-                <div id="divListaTareas" class="column is-9">
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
-                                <label for="chkb1"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-info ">Eduardo Meneses</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-info"><i class="fas fa-calendar-check"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
-                                <label for="chkb2"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-danger ">Sin responsable</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-danger"><i class="fas fa-calendar-times"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-
-        <!--DETALLE DE LA TAREA-->
-        <section id="detalle-tarea" class="mt-3" style="display:none;">
-            <input type="hidden" id="hddIDTarea">
-            <div class="columns is-mobile is-centered">
-                <div class="column is-10 has-text-centered">
-                    <a class="button is-danger is-outlined">
-                        <span onclick="showDetallesTarea('')">Regresar</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-undo-alt"></i>
-                        </span>
-                    </a>
-
-                    <div class="columns">
-                        <div class="column">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-10">
-                    <div class="is-divider mt-3" data-content="Detalles de la tarea"></div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-9">
-                    <h3 id="tituloTarea" class="title is-3 has-text-centered">
-                        "Aqui va el titulo de la tarea Lorem ipsum dolor sit amet, c"
-                    </h3>
-                </div>
-                <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
-                </div>
-            </div>
-
-
-
-            <div class="columns is-centered">
-
-                <div class="column is-one-third has-text-centered">
-                    <div id="myDatePicker" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                    <!--                    <input id="txtDateRange1" type="date">
-                                                   <input id="txtDateRange2" type="date" style="display:none;">-->
-                </div>
-
-                <div class="column is-one-third">
-                    <div class="columns is-centered px-3">
-                        <div class="column is-10">
-                            <div class="control has-icons-right">
-                                <input id="txtComentario" class="input is-medium" type="text" placeholder="Agregar comentario">
-                                <span class="icon is-right">
-                                    <i class="fas fa-comment-dots"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="column is-2">
-
-                            <a class="button is-primary">
-                                <input class="file-input" type="file" name="resume" id="txtArchivo" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar Archivo</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="timeLine" class="timeline">
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Inicio</span>
-                        </header>
-
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading">Creada por: <strong>Eduardo Meneses</strong></p>
-                                <p class="heading">14/11/1989 20:30</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
-                                <img src="svg/secciones/zia.svg" width="40px" alt="">
-                                <img src="svg/secciones/zic.svg" width="40px" alt="">
-                                <img src="svg/secciones/zil.svg" width="40px" alt="">
-                                <img src="svg/secciones/zie.svg" width="40px" alt="">
-                            </div>
-                        </div>
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Fin</span>
-                        </header>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!--***********SECCION MP/MC EQUIPOS*****************-->
-        <section id="seccionMPMC" style="display: none;">
-            <div class="columns is-centered px-4 has-background-dark my-4 pt-1">
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a class="button is-link is-outlined" onclick="home();">
-                                <span class="icon is-small"><i class="fas fa-home"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button is-danger is-outlined" onclick="showMPMC();">
-                                <span>Regresar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-undo-alt"></i>
-                                </span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a id="mc" class="button is-warning" onclick="mostrarMCMP('mc');">
-                                <span class="icon is-small">
-                                    <i class="fas fa-fire-extinguisher"></i>
-                                </span>
-                                <span>Fallas</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a id="mp" class="button is-link is-outlined" onclick="mostrarMCMP('mp');">
-                                <span class="icon is-small">
-                                    <i class="fas fa-wrench"></i>
-                                </span>
-                                <span>Preventivos</span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div id="columnaStatusMC" class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a id="btnPendientesMC" class="button is-danger">
-                                <span class="icon is-medium">
-                                    <i class="far fa-times-circle"></i>
-                                </span>
-                                <span>Pendientes</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a id="btnSolucionadosMC" class="button is-primary is-outlined">
-                                <span class="icon is-medium">
-                                    <i class="far fa-check-circle"></i>
-                                </span>
-                                <span>Solucionados</span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div id="columnaAñadirCorrectivo" class="column has-text-centered">
-                    <div class="control has-icons-left has-icons-right">
-                        <input id="txtTareaMC" class="input is-medium" type="text" placeholder="Añadir un correctivo">
-                        <span class="icon is-left">
-                            <i class="fas fa-fire-extinguisher"></i>
-                        </span>
-                        <span class="icon is-right">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!--botones ver planeacion historial y datos-->
-                <div id="columnaControles" class="column has-text-centered" style="display: none;">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a id="btnPlaneacion" class="button is-primary" onclick="showMP('planeacion');">
-                                <span class="icon is-medium">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </span>
-                                <span>Planeación</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a id="btnHistorial" class="button is-warning is-outlined" onclick="showMP('historial');">
-                                <span class="icon is-medium">
-                                    <i class="fas fa-history"></i>
-                                </span>
-                                <span>Historial MP</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a id="btnManuales" class="button is-info is-outlined" onclick="showMP('manuales');">
-                                <span class="icon is-medium">
-                                    <i class="fas fa-history"></i>
-                                </span>
-                                <span>Manuales/Archivos</span>
-                            </a>
-                        </p>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns mx-3 is-centered">
-                <!--Columna informacion equipo-->
-                <div class="column is-3 mb-4">
-                    <h6 class="title is-6 has-text-centered ">
-                        Información del equipo
-                    </h6>
-
-                    <div class="tags has-addons is-centered">
-                        <span id="txtNombreEq" class="tag is-info">Maquina de hielo 33s</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Destino</span>
-                        <span id="txtDestinoEq" class="tag is-primary">CUN</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Tipo</span>
-                        <span id="txtTipoEq" class="tag is-primary">Calderas</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Matricula</span>
-                        <span id="txtMatriculaEq" class="tag is-primary">xxxxxxxx</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Ceco</span>
-                        <span id="txtCECOEq" class="tag is-primary">Mantenimiento ZI CMU</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Seccion</span>
-                        <span id="txtSeccionEq" class="tag is-primary">ZIA</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Sub seccion</span>
-                        <span id="txtSubseccionEq" class="tag is-primary">Calderas</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Marca</span>
-                        <span id="txtMarcaEq" class="tag is-dark">xxxxxxxx</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Modelo</span>
-                        <span id="txtMarcaEq" class="tag is-dark">xxxxxxxx</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Serie</span>
-                        <span id="txtSerieEq" class="tag is-dark">xxxxxxxx</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Estado</span>
-                        <span id="txtStatusEq" class="tag is-dark">xxxxxxxx</span>
-                    </div>
-
-                    <div class="tags has-addons mb-0">
-                        <span class="tag">Jerarquia</span>
-                        <span id="txtJerarquiaEq" class="tag is-dark">xxxxxxxx</span>
-                    </div>
-
-                </div>
-
-                <!--columna donde se ven las tareas correctivas-->
-                <div id="columnaCorrectivos" class="column is-8">
-
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                    HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-info ">Eduardo Meneses</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-info"><i class="fas fa-calendar-check"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns hvr-float">
-                        <div class="column is-9">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
-                                    HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
-                            </div>
-                        </div>
-                        <div class="column is-3">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-danger ">Sin responsable</span>
-                                    <span class="tag is-dark"><i class="fas fa-paperclip"></i></span>
-                                    <span class="tag is-danger"><i class="fas fa-calendar-times"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!--columna donde se ve la informacion del mp-->
-                <div id="columnaPreventivos" class="column is-8" style="display: none">
-                    <div class="columns mx-2 manita is-centered mb-0 pb-0">
-                        <div class="column is-2">
-                        </div>
-                        <div class="column">
-                            <img src="svg/semanas/s-1.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-2.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-3.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-4.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-5.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-6.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-7.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-8.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-9.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-10.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-11.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-12.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-13.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-14.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-15.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-16.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-17.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-18.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-19.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-20.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-21.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-22.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-23.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-24.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-25.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-26.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-27.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-28.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-29.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-30.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-31.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-32.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-33.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-34.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-35.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-36.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-37.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-38.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-39.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-40.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-41.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-42.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-43.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-44.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-45.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-46.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-47.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-48.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-49.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-50.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-51.svg" width="15px" alt="">
-                            <img src="svg/semanas/s-52.svg" width="15px" alt="">
-                        </div>
-                    </div>
-
-                    <div class="columns mx-2 manita is-centered">
-                        <div class="column is-2">
-                            <h6 class="title is-6 has-text-right ">Mantto mayor</h6>
-                        </div>
-                        <div class="column">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                        </div>
-                    </div>
-
-                    <div class="columns mx-2 manita is-centered">
-                        <div class="column is-2">
-                            <h6 class="title is-6 has-text-right ">Mantto menor</h6>
-                        </div>
-                        <div class="column">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/nulo.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                            <img src="svg/planificado.svg" width="15px" alt="">
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <!--columna datos de los mp-->
-                <div id="inicioMP2" class="columns is-centered mt-4 border rounded" style="display: none;">
-                    <div class="column is-half has-text-centered">
-                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.
-                        </h4>
-                        <h6 id="titulomp2" class="title is-6">"Mantenimiento mayor, semana 45"</h6>
-                        <a id="btnGenerarOT2" class="button is-warning">
-                            <span class="icon is-small">
-                                <i class="fas fa-file-alt"></i>
-                            </span>
-                            <span>GENERAR OT</span>
-                        </a>
-                    </div>
-                    <div class="column has-text-centered">
-                        <div class="tags has-addons">
-                            <span class="tag is-dark">Status</span>
-                            <span class="tag is-info">Planificado</span>
-                        </div>
-                        <p class="mb-2">Actividades a realizar</p>
-                        <ul id="ulActividades2" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-
-                        </ul>
-                    </div>
-                </div>
-
-                <div id="divDetalleOT2" class="columns is-centered my-4 border rounded" style="display: none;">
-                    <input type="hidden" id="hddidPlanMP2">
-                    <input type="hidden" id="hddidPlaneacion2">
-                    <div class="column has-text-centered">
-                        <div class="columns is-centered">
-                            <div class="column">
-                                <div class="field is-grouped is-grouped-multiline">
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">Status</span>
-                                            <span id="statusOT2" class="tag is-warning">En proceso</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">OT</span>
-                                            <span id="folioOT2" class="tag is-info">2041</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark"><i class="fas fa-user"></i></span>
-                                            <span id="txtResponsable2" class="tag is-danger">Sin responsable</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark"><i class="fas fa-calendar-times"></i></span>
-                                            <span id="txtFechaRealizado2" class="tag is-danger">Sin fecha</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="column has-text-centered">
-                                <div class="field has-addons centerflex">
-                                    <p class="control">
-                                        <a id="btnImprimirOT2" class="button is-dark is-small">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-file-alt"></i>
-                                            </span>
-                                            <span>Imprimir OT</span>
-                                        </a>
-                                    </p>
-                                    <p class="control">
-                                        <a class="button is-primary is-small">
-                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT2" multiple>
-                                            <span class="icon">
-                                                <i class="fas fa-paperclip"></i>
-                                            </span>
-                                            <span>Adjuntar Archivo</span>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="column">
-                                <div class="control has-icons-left has-icons-right">
-                                    <input id="txtComentarioOT2" class="input is-medium is-primary" type="text" placeholder="Añadir un comentario">
-                                    <span class="icon is-left"><i class="fas fa-comment-dots"></i></span>
-                                    <span class="icon is-right"><i class="fas fa-plus"></i></span>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div class="columns">
-                            <div id="listaActividadesMP2" class="column is-8 is-half">
-
-                                <div class="columns hvr-float">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
-                                                mayor</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns is-centered">
-                                    <div class="column ">
-                                        <p class="control has-text-centered">
-                                            <a class="button is-success">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span>Finalizar OT</span>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="columns is-centered">
-                                    <div class="column ">
-                                        <p class="control has-text-centered">
-                                            <a class="button is-success">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span>Finalizar OT</span>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                            <!--TIMELINE ORDEN TRABAJO-->
-                            <div class="column has-text-left">
-                                <div id="timeLineOT2" class="timeline">
-                                    <header class="timeline-header">
-                                        <span class="tag is-small is-info">Inicio</span>
-                                    </header>
-
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger is-icon">
-                                            <i class="fa fa-plus"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT Creada por: <strong>Eduardo Meneses</strong></p>
-                                            <p class="heading">14/11/1989 20:30</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item is-info">
-                                        <div class="timeline-marker is-info"></div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item is-info">
-                                        <div class="timeline-marker is-info"></div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger is-icon">
-                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span>
-                                            </h4>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
-                                                20:30</p>
-                                            <img src="svg/secciones/zia.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zic.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zil.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zie.svg" width="40px" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item is-success">
-                                        <div class="timeline-marker is-success is-icon">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT Cerrada por: <strong>Eduardo Meneses</strong></p>
-                                            <p class="heading">14/11/1989 20:30</p>
-                                        </div>
-                                    </div>
-                                    <header class="timeline-header">
-                                        <span class="tag is-small is-info">Fin</span>
-                                    </header>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!--columna donde se ve la informacion del historial de mp-->
-                <div id="columnaHistorialMP" class="column is-8" style="display: none;">
-                    <div class="columns is-centered">
-                        <div class="column is-half">
-                            <h6 class="title is-6 has-text-centered">Ultimas Órdenes de trabajo</h6>
-
-                            <div id="timeLineHistorialOT2" class="timeline is-centered">
-                                <div class="timeline-item is-danger">
-                                    <div class="timeline-marker is-danger ">
-                                    </div>
-                                    <div class="timeline-content">
-                                        <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong></p>
-                                        <p class="heading">14/11/1989 20:30</p>
-                                        <div class="field has-addons">
-                                            <p class="control">
-                                                <a class="button is-danger is-outlined is-small">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-file-download"></i>
-                                                    </span>
-                                                    <span>Descargar OT</span>
-                                                </a>
-                                            </p>
-                                            <p class="control">
-                                                <a class="button is-danger is-outlined is-small">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </span>
-                                                    <span>Ver más</span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="timeline-item is-danger">
-                                    <div class="timeline-marker is-danger">
-                                    </div>
-                                    <div class="timeline-content">
-                                        <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong></p>
-                                        <p class="heading">14/11/1989 20:30</p>
-
-                                        <div class="field has-addons">
-                                            <p class="control">
-                                                <a class="button is-danger is-outlined is-small">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-file-download"></i>
-                                                    </span>
-                                                    <span>Descargar OT</span>
-                                                </a>
-                                            </p>
-                                            <p class="control">
-                                                <a class="button is-danger is-outlined is-small">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-info-circle"></i>
-                                                    </span>
-                                                    <span>Ver más</span>
-                                                </a>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="columnaAdjuntosEquipo" class="column is-8" style="display: none;">
-                    <div class="columns">
-                        <div class="column is-2">
-                            <a class="button is-primary">
-                                <input class="file-input" type="file" name="resume" id="txtArchivoEquipo" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar Archivo</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="adjuntosEquipo" class="columns is-multiline is-mobile">
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-                        <div class="column">
-                            <figure class="image is-128x128">
-                                <img src="https://picsum.photos/300/300?random=1">
-                            </figure>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section id="detalle-tarea-mc" class="mt-3" style="display:none;">
-            <input type="hidden" id="hddIDTarea">
-            <div class="columns is-mobile is-centered">
-                <div class="column is-10 has-text-centered">
-                    <a class="button is-danger is-outlined">
-                        <span onclick="showDetallesTareaMC('')">Regresar</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-undo-alt"></i>
-                        </span>
-                    </a>
-
-                    <div class="columns">
-                        <div class="column">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-10">
-                    <div class="is-divider mt-3" data-content="Detalles de la tarea"></div>
-                </div>
-            </div>
-
-            <div class="columns is-centered">
-                <div class="column is-9">
-                    <h3 id="tituloTareaMC" class="title is-3 has-text-centered">
-                        "Aqui va el titulo de la tarea Lorem ipsum dolor sit amet, c"
-                    </h3>
-
-                </div>
-                <div class="column is-1">
-                    <span><a href="#" class="modal-button" data-target="modal-editar-tarea" aria-haspopup="false"><i class="fa fa-edit"></i></a></span>
-                </div>
-            </div>
-
-
-
-            <div class="columns is-centered">
-
-                <!--                        <div class="column is-one-third has-text-centered">
-                                                    <div id="myDatePickerMC" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                                                                           <input id="txtDateRange1" type="date">
-                                                                           <input id="txtDateRange2" type="date" style="display:none;">
-                                                </div>-->
-
-                <div class="column is-one-third">
-                    <div class="columns is-centered px-3">
-                        <div class="column is-10">
-                            <div class="control has-icons-right">
-                                <input id="txtComentarioMC" class="input is-medium" type="text" placeholder="Agregar comentario">
-                                <span class="icon is-right">
-                                    <i class="fas fa-comment-dots"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="column is-2">
-                            <a class="button is-primary">
-                                <input class="file-input" type="file" name="resume" id="txtArchivoMC" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar Archivo</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="timeLineMC" class="timeline">
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Inicio</span>
-                        </header>
-
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading">Creada por: <strong>Eduardo Meneses</strong></p>
-                                <p class="heading">14/11/1989 20:30</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
-                                <img src="svg/secciones/zia.svg" width="40px" alt="">
-                                <img src="svg/secciones/zic.svg" width="40px" alt="">
-                                <img src="svg/secciones/zil.svg" width="40px" alt="">
-                                <img src="svg/secciones/zie.svg" width="40px" alt="">
-                            </div>
-                        </div>
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Fin</span>
-                        </header>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!--***********SECCION DE PROYECTOS*****************-->
-        <section id="seccionDetalleProyectos" class="mt-3" style="display:none;">
-            <input type="hidden" id="hddIdProyecto">
-            <input type="hidden" id="hddIdDestinoProy">
-            <input type="hidden" id="hddIdSeccionProy">
-            <input type="hidden" id="hddIdSubseccionProy">
-            <div class="columns is-centered px-4 has-background-dark my-4 pt-1">
-
-                <div class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a class="button is-link is-outlined" onclick="home();">
-                                <span class="icon is-small"><i class="fas fa-home"></i></span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a class="button is-danger is-outlined" onclick="mostrarInfoProyecto();">
-                                <span>Regresar</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-undo-alt"></i>
-                                </span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div id="columnaStatusMC" class="column has-text-centered">
-                    <div class="field has-addons centerflex">
-                        <p class="control">
-                            <a id="btnPendientesPAProyecto" class="button is-danger">
-                                <span class="icon is-medium">
-                                    <i class="far fa-times-circle"></i>
-                                </span>
-                                <span>Pendientes</span>
-                            </a>
-                        </p>
-                        <p class="control">
-                            <a id="btnSolucionadosPAProyecto" class="button is-primary is-outlined">
-                                <span class="icon is-medium">
-                                    <i class="far fa-check-circle"></i>
-                                </span>
-                                <span>Solucionados</span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-                <div id="columnaAñadirPA" class="column has-text-centered">
-                    <div class="control has-icons-left has-icons-right">
-                        <input id="txtActividadPA" class="input is-medium" type="text" placeholder="Añadir Actividad Plan accion">
-                        <span class="icon is-left">
-                            <i class="fas fa-fire-extinguisher"></i>
-                        </span>
-                        <span class="icon is-right">
-                            <i class="fas fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns mx-3 is-centered">
-                <!--Columna informacion proyecto-->
-                <div class="column mb-4">
-                    <h6 class="title is-6 has-text-centered ">
-                        Información del proyecto
-                    </h6>
-
-                    <div class="columns">
-                        <div class="column is-2">
-                            <div class="tags has-addons mb-0">
-                                <span class="tag">Destino</span>
-                                <span id="txtDestinoProyecto" class="tag is-primary">CUN</span>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <input type="text" class="input is-small" id="txtTituloProyecto" placeholder="Titulo Proyecto">
-                        </div>
-                        <div id="divAñoProy" class="column is-2" style="display: none;">
-                            <input type="text" class="input is-small" id="txtAñoProyecto" placeholder="Año">
-                        </div>
-                        <div id="divCosteProy" class="column is-2" style="display: none;">
-                            <input type="text" class="input is-small" id="txtCosteProyecto" placeholder="Coste $$">
-                        </div>
-                        <div class="column">
-                            <div class="select is-small is-fullwidth">
-                                <select id="cbTipoProyecto" onchange="cambiarTipo();">
-                                    <option value="PROYECTO">PROYECTO</option>
-                                    <option value="CAPEX">CAPEX</option>
-                                    <option value="CAPIN">CAPIN</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="columns">
-                        <div class="column is-2">
-                            <div class="field text-truncate">
-                                <input class="is-checkradio is-success is-circle is-small" id="chkbProyF" type="checkbox" name="chkbProyF" checked="checked">
-                                <label for="chkbProyF"><span></span>PROYECTO TERMINADO</label>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <div class="control">
-                                    <textarea id="txtJustificacion" class="textarea is-small" placeholder="Justificacion" rows="2"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="columns mx-3 is-centered">
-                <!--columna donde se ven las tareas correctivas-->
-                <div id="columnaPAProyectos" class="column is-5">
-
-                    <div class="columns hvr-float">
-                        <div class="column is-7">
-                            <div class="field">
-                                <input class="is-checkradio is-success is-circle is-small" id="exampleCheckboxSuccessCircle2" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle2"></label>
-                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
-                                    </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
-                            </div>
-                        </div>
-                        <div class="column is-5">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-info ">Eduardo Meneses</span>
-                                    <span class="tag is-danger ">Eliminar</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns hvr-float">
-                        <div class="column is-7">
-                            <div class="field">
-                                <input class="is-checkradio is-success is-circle is-small   " id="exampleCheckboxSuccessCircle3" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle3"></label>
-                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
-                                    </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
-                            </div>
-                        </div>
-                        <div class="column is-5">
-                            <div class="control ">
-                                <div class="tags has-addons ">
-                                    <span class="tag is-danger ">Sin responsable</span>
-                                    <span class="tag is-danger ">Eliminar</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div id="columnaComentariosProyecto" class="column">
-
-                    <input id="txtComentarioProyecto" type="text" class="input is-small mb-2" placeholder="Agregar comentario" style="display: none;">
-                    <div id="timeLineComentariosProyecto" class="timeline" style="display: none;">
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Inicio</span>
-                        </header>
-
-                        <div class="timeline-item is-danger">
-                            <div class="timeline-marker is-danger is-icon">
-                                <i class="fa fa-plus"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading">OT Creada por: <strong>Eduardo Meneses</strong></p>
-                                <p class="heading">14/11/1989 20:30</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p class="is-size-7">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                    do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                                    veniam, quis nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-info">
-                            <div class="timeline-marker is-info"></div>
-                            <div class="timeline-content">
-                                <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                    nostrud exercitation ullamco laboris n</p>
-                            </div>
-                        </div>
-
-                        <div class="timeline-item is-success">
-                            <div class="timeline-marker is-success is-icon">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="timeline-content">
-                                <p class="heading">OT Cerrada por: <strong>Eduardo Meneses</strong></p>
-                                <p class="heading">14/11/1989 20:30</p>
-                            </div>
-                        </div>
-                        <header class="timeline-header">
-                            <span class="tag is-small is-info">Fin</span>
-                        </header>
-                    </div>
-                </div>
-
-                <div id="columnaAdjuntosProyecto" class="column">
-                    <div class="columns">
-                        <div class="column">
-                            <a class="button is-primary is-small mb-2">
-                                <input class="file-input" type="file" name="txtCotProyecto" id="txtCotProyecto" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar Cot./Fact.</span>
-                            </a>
-                            <div id="timeLineAdjuntosProyecto" class="timeline">
-                                <header class="timeline-header">
-                                    <span class="tag is-small is-info">Cot. y Fact.</span>
-                                </header>
-
-
-                                <div class="timeline-item is-danger">
-                                    <div class="timeline-marker is-danger is-icon">
-                                        <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
-                                            20:30</p>
-                                        <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="cot-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
-
-                                        <button class="button is-danger is-small is-rounded">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-times"></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <header class="timeline-header">
-                                    <span class="tag is-small is-info">Fin</span>
-                                </header>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <a class="button is-primary is-small mb-2">
-                                <input class="file-input" type="file" name="txtJustificacionProyecto" id="txtJustificacionProyecto" multiple>
-                                <span class="icon">
-                                    <i class="fas fa-paperclip"></i>
-                                </span>
-                                <span>Adjuntar justificacion</span>
-                            </a>
-                            <div id="timeLineJustificacionesProyecto" class="timeline">
-                                <header class="timeline-header">
-                                    <span class="tag is-small is-info">Justificaciones</span>
-                                </header>
-
-
-                                <div class="timeline-item is-danger">
-                                    <div class="timeline-marker is-danger is-icon">
-                                        <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
-                                            20:30</p>
-                                        <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="just-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
-
-                                        <button class="button is-danger is-small is-rounded">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-times"></i>
-                                            </span>
-                                        </button>
-
-                                    </div>
-                                </div>
-
-                                <header class="timeline-header">
-                                    <span class="tag is-small is-info">Fin</span>
-                                </header>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    </div>
-    </div>
-
-
-    <!--AREA DE MODALS-->
-
-    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
-    <div id="modalHotelRM" class="modal">
-        <!-- <div class="modal-background"></div> -->
-        <div class="modal-content columns is-centered">
-            <div class="box column is-8">
-                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelRM','hide');"></a>
-                <article class="media mt-4">
-                    <div class="buttons">
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
-                            PALLADIUM COLONIAL
-                            RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
-                            PALLADIUM KANTENAH
-                            RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'RM', 'ZIC', 'FAN&COILS');">TRS
-                            YUCATÁN
-                            HOTEL</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
-                            PALLADIUM
-                            WHITE SAND RESORT &
-                            SPA</button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
-
-    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
-    <div id="modalHotelCMU" class="modal">
-        <!-- <div class="modal-background"></div> -->
-        <div class="modal-content columns is-centered">
-            <div class="box column is-8">
-                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelCMU','hide');"></a>
-                <article class="media mt-4">
-                    <div class="buttons">
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 22, 6703, 1, 'CMU', 'ZIC', 'FAN&COILS');">GRAND
-                            PALLADIUM COSTA MUJERES RESORT & SPA</button>
-                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 23, 6704, 1, 'CMU', 'ZIC', 'FAN&COILS');">TRS
-                            CORAL HOTEL</button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
-
-
-    <!--MODAL MC-->
-    <div id="modal-mc" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-lg">
-            <section class="modal-card-body">
-
-                <div class="columns">
-                    <div id="colMC" class="column">
-                        <section class="hero is-light is-small">
-                            <!-- Hero head: will stick at the top -->
-                            <div class="hero-head">
-                                <nav class="navbar">
-                                    <div class="navbar-start has-text-centered">
-                                        <div class="navbar-item zia-background">
-                                            <p class="seccion-logo">ZIA</p>
-                                        </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Fallas</a>
-                                    </div>
-                                    <div class="navbar-end has-text-centered">
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-success" name="button">
-                                                <i class="fad fa-check-double mr-2"></i></i> Ver solucionado
-                                            </button>
-                                        </div>
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mc');">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </section>
-                        <section class="mt-4">
-                            <div class="columns is-centered">
-                                ; <div class="column is-3">
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Nueva Falla">
-                                        </div>
-                                        <div class="control">
-                                            <a class="button is-warning">
-                                                <i class="fad fa-plus-circle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </section>
-
-                        <section class="mt-4">
-
-                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
-                                <div class="column is-half">
-                                    <div class="columns is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripción de
-                                                    Falla</strong></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="column is-white">
-                                    <div class="columns is-gapless is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable">
-                                                <strong>Responsable</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
-                                                <strong>Fecha</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
-                                                <strong>Adjuntos</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
-                                                <strong>Comentarios</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos"></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                <div class="column is-half">
-                                    <div class="columns">
-                                        <div class="column">
-                                            <div class="message is-small is-danger">
-                                                <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong></p>
+                                            <div id="misPendientesTareas" class="hover:bg-orange-200 hover:text-orange-500 px-2 bg-gray-300 text-gray-600 w-1/3 text-center cursor-pointer hidden">
+                                                <h1 id="totalPendientesTareas">Tareas (0)</h1>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns is-gapless">
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-user-slash"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-calendar-times"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-file-minus"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-comment-alt-times"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-solucionado">SOLUCIONAR</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                <div class="column is-half">
-                                    <div class="columns">
-                                        <div class="column">
-                                            <div class="message is-small is-danger">
-                                                <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns is-gapless">
-                                        <div class="column">
-                                            <p class="t-normal">Eduardo Meneses</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">14 FEB</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">4</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">14</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-solucionado">SOLUCIONAR</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </section>
-
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!--MODAL ENERGETICOS-->
-    <div id="modal-energeticos" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-lg">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div class="column">
-                        <section class="hero is-light is-small">
-                            <!-- Hero head: will stick at the top -->
-                            <div class="hero-head">
-                                <nav class="navbar">
-                                    <div class="navbar-start has-text-centered">
-                                        <div class="navbar-item has-background-warning">
-                                            <p id="textSeccionEnergeticos" class="navbar-item has-text-weight-bold is-uppercase"></p>
-                                        </div>
-                                        <a id="textSubseccionEnergeticos" class="navbar-item"></a>
-                                    </div>
-                                    <div class="navbar-end has-text-centered">
-
-                                        <div class="navbar-item">
-                                            <button id="btnObtenerEnergeticos" type="button" class="button is-success" name="button">
-                                                <i class="fad fa-check-double mr-2"></i>
-                                                Ver solucionado
-                                            </button>
-                                        </div>
-
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-energeticos');">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-
-                                    </div>
-                                </nav>
-                            </div>
-                        </section>
-                        <section class="mt-4">
-                            <div class="columns is-centered">
-                                <div class="column is-3">
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <input id="inputEnergetico" class="input" type="text" placeholder="Agregar Pendiente" autocomplete="off">
-                                        </div>
-                                        <div id="btnCrearEnergetico" class="control">
-                                            <a class="button is-warning">
-                                                <i class="fad fa-plus-circle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </section>
-
-                        <section class="mt-4">
-
-                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
-                                <div class="column is-half">
-                                    <div class="columns is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable">
-                                                <strong>Descripción</strong>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="column is-white">
-                                    <div class="columns is-gapless is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable">
-                                                <strong>Responsable</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solución">
-                                                <strong>Fecha</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntos">
-                                                <strong>Adjuntos</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Comentarios">
-                                                <strong>Comentarios</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos"><strong>Status</strong></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="dataEnergeticos" class="scrollbar" style="overflow-x: hidden;overflow-y: scroll;max-height: 50vh;"></div>
-
-                        </section>
-
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!--INICIO MODAL MPNP-->
-    <div id="modal-MPNP" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-lg">
-            <section class="modal-card-body">
-
-                <div class="columns">
-                    <div id="colMC" class="column">
-                        <section class="hero is-light is-small">
-                            <!-- Hero head: will stick at the top -->
-                            <div class="hero-head">
-                                <nav class="navbar">
-                                    <div class="navbar-item">
-                                        <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-MPNP');">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                    <div class="navbar-start has-text-centered">
-                                        <div id="divNameSeccionMPNP" class="navbar-item zia-background">
-                                            <p class="seccion-logo">ZIA</p>
-                                        </div>
-                                        <a class="navbar-item"> <span id="subseccionMPNP"> </span> / <span id="equipoMPNP"> </span> /
-                                            Preventivo No Planificado</a>
-                                    </div>
-                                </nav>
-                            </div>
-                        </section>
-                        <section class="mt-4">
-                            <div class="columns is-centered">
-                                <div class="column is-2">
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <button class="button is-success is-rounded" onclick="showModal('modal-agregar-MPNP'); modalInicialMPNP();">
-                                                Agregar MP No Planificado</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="mt-4">
-
-                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
-                                <div class="column is-half">
-                                    <div class="columns is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de
-                                                    los Preventivos NO Planeados</strong></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="column is-white">
-                                    <div class="columns is-gapless is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable">
-                                                <strong>Actividades</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
-                                                <strong>Responsable</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
-                                                <strong>Fecha Creado</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
-                                                <strong>Adjuntos</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
-                                                <strong>Comentario</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="dataMPNP">
-                                <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                    <div class="column is-half">
-                                        <div class="columns">
-                                            <div class="column">
-                                                <div class="message is-small is-danger">
-                                                    <p class="message-body"><strong>Sin MP</strong>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="columns is-gapless">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-    <!-- FIN MODAL MPNP -->
-
-    <!-- INICIO MODAL AGREGAR MPNP -->
-    <div id="modal-agregar-MPNP" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title has-text-centered subtitle is-3 my-0"> MP NO PLANIFICADO</p>
-                <button class="delete" aria-label="close"></button>
-            </header>
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            Título:
-                            <div class="control">
-                                <input id="tituloMPNP" class="input is-primary" type="text" placeholder="título MP (5 Caracteres Mínimo)" onkeyup="if(event.keyCode == 13) tituloMPNP('');">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="formMPNP" class="hidden">
-                    <div class="columns">
-                        <div class="column is-6">
-                            Responsable:
-                            <div class="field">
-                                <p class="control has-icons-left">
-                                    <span class="select">
-                                        <select id="responsableMPNP" onclick="agregarResponsableMPNP('');">
-                                            <option selected value="0"> Seleccione </option>
-                                            <?php
-                                            if ($idDestinoT == 10) {
-                                                $destinoMPNP = "t_users.id_destino IN(1, 7, 2, 6, 5, 11, 3, 4, 10)";
-                                            } else {
-                                                $destinoMPNP = "t_users.id_destino IN($idDestinoT, 10)";
-                                            }
-                                            $queryData = "SELECT
-                                                t_users.id,
-                                                t_colaboradores.nombre,  
-                                                t_colaboradores.apellido  
-                                                FROM t_users 
-                                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                                                WHERE $destinoMPNP";
-
-                                            $resultData = mysqli_query($conn_2020, $queryData);
-                                            while ($rowData = mysqli_fetch_array($resultData)) {
-                                                $id = $rowData['id'];
-                                                $nombre = $rowData['nombre'];
-                                                $apellido = $rowData['apellido'];
-                                                echo "<option value=\"$id\">$nombre $apellido</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </span>
-                                    <span class="icon is-small is-left">
-                                        <i class="fad fa-user-plus"></i>
-                                    </span>
-                                </p>
-                            </div>
-                            <div id="dataResponsablesMPNP" class="column">
-                                <!-- <div class="field is-grouped is-grouped-multiline">
-                                        <div class="control">
-                                            <div class="tags has-addons">
-                                                <p class="tag is-primary">
-                                                    <span class="mr-2"><i class="fa fa-user"></i></span>
-                                                    Eduardo Pool
-                                                </p>
-                                                <p class="tag is-delete"></p>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                            </div>
-                        </div>
-
-                        <div class="column is-5">
-                            Fecha Realizado:
-                            <div class="control">
-                                <input id="dateMPNP" class="input is-primary" type="date" placeholder="" value="<?= date('Y-m-d'); ?>">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns">
-                        <div class="column is-12 has-text-centered">
-                            <div class="field has-addons">
-                                <div class="control is-expanded">
-                                    <input id="actividadMPNP" class="input" type="text" placeholder="titulo de la actividad">
-                                </div>
-                                <div class="control">
-                                    <a class="button is-info" onclick="agregarActividadMPNP('');">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns">
-                        <div id="dataActividadesMPNP" class="column flex inline">
-
-                            <!-- <div class="tags has-addons is-rounded">
-                                    <p class="tag is-medium is-info">
-                                        <i class="fad fa-angle-right"></i>
-                                        <span class="mx-2">
-                                            Eduardo Pool
-                                        </span>
-                                    </p>
-                                    <p class="tag is-medium is-delete"></p>
-                                </div> -->
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <footer class="modal-card bd-notificatio has-text-centered has-background-white">
-                <div class="columns">
-                    <div class="column my-3">
-                        <button id="btnGuardarMPNP" class="button is-success" disabled onclick="btnConfirmarMPNP('');">Guardar MP</button>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
-    <!-- FIN MODAL AGREGAR MPNP -->
-
-    <div id="modal-mc-fecha" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <section class="modal-card-body">
-
-                <div class="columns">
-                    <div class="column has-text-right">
-                        <section class="hero is-light is-small">
-                            <!-- Hero head: will stick at the top -->
-                            <div class="hero-head">
-                                <nav class="navbar">
-                                    <div class="navbar-start has-text-centered">
-
-                                    </div>
-                                    <div class="navbar-end has-text-centered">
-
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mc-fecha');">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </section>
-                        <!--<button class="delete" aria-label="close" onclick="closeModal('modal-mc-fecha');"></button>-->
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colFechaMC" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Rango de Fecha</h4>
-                    </div>
-                </div>
-                <div class="columns is-centered">
-                    <div class="column is-6">
-                        <div id="myDatePickerMC" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                    </div>
-                </div>
-
-
-
-            </section>
-        </div>
-    </div>
-
-    <!--MODAL AGREGAR RESPONSABLE TAREA GENERAL-->
-    <div id="modalAgregarResponsable" class="modal">
-        <br>
-        <br>
-        <br>
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuario(this, <?php echo $idDestinoT; ?>);">
-
-            </header>
-            <!-- Any other Bulma elements you want -->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divListaUsuarios" class="column">
-
-                        <?php
-                        if ($idDestinoT == 10) {
-                            $query = "SELECT * FROM t_users WHERE status = 'A' ORDER BY username";
-                        } else {
-                            $query = "SELECT * FROM t_users WHERE (id_destino = $idDestinoT OR id_destino = 10) AND status = 'A' ORDER BY username";
-                        }
-                        $usuarios = $conn->obtDatos($query);
-                        if ($conn->filasConsultadas > 0) {
-                            foreach ($usuarios as $u) {
-                                $idUsuario = $u['id'];
-                                $idTrabajador = $u['id_colaborador'];
-                                $query = "SELECT * FROM t_colaboradores WHERE id = $idTrabajador";
-                                try {
-                                    $trabajador = $conn->obtDatos($query);
-                                    if ($conn->filasConsultadas > 0) {
-                                        foreach ($trabajador as $t) {
-                                            $nombreT = $t['nombre'];
-                                            $apellidoT = $t['apellido'];
-                                            $fotoT = $t['foto'];
-                                        }
-                                    } else {
-                                        $nombreT = "";
-                                        $apellidoT = "";
-                                        $fotoT = "";
-                                    }
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-
-                                if ($fotoT != "") {
-                                    $urlFoto = "img/users/$fotoT";
-                                } else {
-                                    $urlFoto = "https://ui-avatars.com/api/?uppercase=false&name=$nombreT+$apellidoT&background=d8e6ff&rounded=true&color=4886ff&size=100%";
-                                }
-
-                                echo "<h6 class=\"title is-6 manita border rounded py-1 px-1 my-1 mx-2 text-truncate usuario\" onclick=\"agregarResponsable($idUsuario)\"><span><i class=\"fas fa-user\"></i></span> $nombreT $apellidoT</h6>";
-                            }
-                        }
-                        ?>
-
-                    </div>
-                </div>
-            </section>
-            <footer class="modal-card-foot">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsable');">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-        <!--<button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsable');"></button>-->
-    </div>
-
-
-    <!--MODAL AGREGAR RESPONSABLE TAREA GENERAL-->
-    <div id="modalAgregarResponsableEnergeticos" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <input id="inputResponsableEnergeticos" class="input is-primary" type="text" placeholder="Buscar...">
-            </header>
-            <!-- Any other Bulma elements you want -->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divListaUsuariosEnergeticos" class="column"></div>
-                </div>
-            </section>
-            <footer class="modal-card-foot">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsableEnergeticos');">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-        <button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsableEnergeticos');"></button>
-    </div>
-
-
-    <!--MODAL CONFIRMAR COMPLETAR TAREA GENERAL-->
-    <div id="modalConfirmacionTarea" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Completar esta tarea?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="btnFinalizarTarea" class="button is-success">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarTarea" class="button is-danger" onclick="closeModal('modalConfirmacionTarea');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-
-    <!--MODAL MP/TEST-->
-    <div id="modal-mp" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-lg">
-            <section class="modal-card-body">
-
-                <div class="columns">
-                    <div id="colMP" class="column">
-                        <section class="hero is-light is-small">
-                            <!-- Hero head: will stick at the top -->
-                            <div class="hero-head">
-                                <nav class="navbar">
-                                    <div class="navbar-start has-text-centered">
-                                        <div class="navbar-item zil-background">
-                                            <p class="seccion-logo">ZIA</p>
-                                        </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Falla</a>
-                                    </div>
-                                    <div class="navbar-end has-text-centered">
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-success" name="button">
-                                                <i class="fad fa-check-double mr-2"></i></i> Ver solucionado
-                                            </button>
-                                        </div>
-                                        <div class="navbar-item">
-                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-mp');">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                        </section>
-                        <section class="mt-4">
-                            <div class="columns is-centered">
-                                <div class="column is-3">
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Falla">
-                                        </div>
-                                        <div class="control">
-                                            <a class="button is-warning">
-                                                <i class="fad fa-plus-circle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </section>
-
-                        <section class="mt-4">
-
-                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
-                                <div class="column is-half">
-                                    <div class="columns is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de
-                                                    los correctivos</strong></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="column is-white">
-                                    <div class="columns is-gapless is-mobile">
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable">
-                                                <strong>Responsable</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
-                                                <strong>Fecha</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
-                                                <strong>Adjuntos</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
-                                                <strong>Comentarios</strong>
-                                            </p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-titulos"></p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                <div class="column is-half">
-                                    <div class="columns">
-                                        <div class="column">
-                                            <div class="message is-small is-danger">
-                                                <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns is-gapless">
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-user-slash"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-calendar-times"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-file-minus"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-icono-rojo"><i class="fad fa-comment-alt-times"></i></p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-solucionado">SOLUCIONAR</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
-                                <div class="column is-half">
-                                    <div class="columns">
-                                        <div class="column">
-                                            <div class="message is-small is-danger">
-                                                <p class="message-body"><strong>FUGA DE AGUA CALIENTE</strong></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="columns is-gapless">
-                                        <div class="column">
-                                            <p class="t-normal">Eduardo Meneses</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">14 FEB</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">4</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-normal">14</p>
-                                        </div>
-                                        <div class="column">
-                                            <p class="t-solucionado">SOLUCIONAR</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </section>
-
-                    </div>
-                </div>
-                <div id="inicioMP" class="columns is-centered mt-4 border rounded" style="display: none;">
-                    <div class="column is-half has-text-centered">
-                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.
-                        </h4>
-                        <h6 id="titulomp" class="title is-6">"Mantenimiento mayor, semana 45"</h6>
-                        <a id="btnGenerarOT" class="button is-warning">
-                            <span class="icon is-small">
-                                <i class="fas fa-file-alt"></i>
-                            </span>
-                            <span>GENERAR OT</span>
-                        </a>
-                    </div>
-                    <div class="column has-text-centered">
-                        <div class="tags has-addons">
-                            <span class="tag is-dark">Status</span>
-                            <span class="tag is-info">Planificado</span>
-                        </div>
-                        <p class="mb-2">Actividades a realizar</p>
-                        <ul id="ulActividades" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
-                                fermentum leo eu
-                                lectus mollis, quis dictum mi aliquet.</li>
-
-                        </ul>
-                    </div>
-                </div>
-                <div id="divDetalleOT" class="columns is-centered my-4 border rounded" style="display: none;">
-
-                    <input type="hidden" id="hddidPlanMP">
-                    <input type="hidden" id="hddidPlaneacion">
-                    <div class="column has-text-centered">
-                        <div class="columns is-centered">
-                            <div class="column">
-                                <div class="field is-grouped is-grouped-multiline">
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">Status</span>
-                                            <span id="statusOT" class="tag is-warning">En proceso</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">OT</span>
-                                            <span id="folioOT" class="tag is-info">2041</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark"><i class="fas fa-user"></i></span>
-                                            <span id="txtResponsable" class="tag is-danger">Sin responsable</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark"><i class="fas fa-calendar-times"></i></span>
-                                            <span id="txtFechaRealizado" class="tag is-danger">Sin fecha</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="column has-text-centered">
-                                <div class="field has-addons centerflex">
-                                    <p class="control">
-                                        <a id="btnImprimirOT" class="button is-dark is-small">
-                                            <span class="icon is-small">
-                                                <i class="fas fa-file-alt"></i>
-                                            </span>
-                                            <span>Imprimir OT</span>
-                                        </a>
-                                    </p>
-                                    <p class="control">
-                                        <a class="button is-primary is-small">
-                                            <input class="file-input" type="file" name="resume" id="txtArchivoOT" multiple>
-                                            <span class="icon">
-                                                <i class="fas fa-paperclip"></i>
-                                            </span>
-                                            <span>Adjuntar Archivo</span>
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="column">
-                                <div class="control has-icons-left has-icons-right">
-                                    <input id="txtComentarioOT" class="input is-medium is-primary" type="text" placeholder="Añadir un comentario">
-                                    <span class="icon is-left"><i class="fas fa-comment-dots"></i></span>
-                                    <span class="icon is-right"><i class="fas fa-plus"></i></span>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div class="columns">
-                            <div id="listaActividadesMP" class="column is-8 is-half">
-
-                                <div class="columns hvr-float">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
-                                                mayor</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns hvr-float ml-4">
-                                    <div class="column">
-                                        <div class="field text-truncate has-text-left">
-                                            <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
-                                                eu lectus mollis, quis dictum mi aliquet.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns is-centered">
-                                    <div class="column ">
-                                        <p class="control has-text-centered">
-                                            <a class="button is-success">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span>Finalizar OT</span>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="columns is-centered">
-                                    <div class="column ">
-                                        <p class="control has-text-centered">
-                                            <a class="button is-success">
-                                                <span class="icon is-small">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span>Finalizar OT</span>
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                            <!--TIMELINE ORDEN TRABAJO-->
-                            <div class="column has-text-left">
-                                <div id="timeLineOT" class="timeline">
-                                    <header class="timeline-header">
-                                        <span class="tag is-small is-info">Inicio</span>
-                                    </header>
-
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger is-icon">
-                                            <i class="fa fa-plus"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT Creada por: <strong>Eduardo Meneses</strong></p>
-                                            <p class="heading">14/11/1989 20:30</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item is-info">
-                                        <div class="timeline-marker is-info"></div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="timeline-item is-info">
-                                        <div class="timeline-marker is-info"></div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger is-icon">
-                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span>
-                                            </h4>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
-                                                20:30</p>
-                                            <img src="svg/secciones/zia.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zic.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zil.svg" width="40px" alt="">
-                                            <img src="svg/secciones/zie.svg" width="40px" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item is-success">
-                                        <div class="timeline-marker is-success is-icon">
-                                            <i class="fas fa-check"></i>
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT Cerrada por: <strong>Eduardo Meneses</strong></p>
-                                            <p class="heading">14/11/1989 20:30</p>
-                                        </div>
-                                    </div>
-                                    <header class="timeline-header">
-                                        <span class="tag is-small is-info">Fin</span>
-                                    </header>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div id="divHistorialMP" class="columns" style="display: none;">
-                    <div class="column">
-                        <div class="columns is-centered">
-                            <div class="column is-half">
-                                <h6 class="title is-6 has-text-centered">Ultimas Órdenes de trabajo</h6>
-
-                                <div id="timeLineHistorialOT" class="timeline is-centered">
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger ">
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong>
-                                            </p>
-                                            <p class="heading">14/11/1989 20:30</p>
-                                            <div class="field has-addons">
-                                                <p class="control">
-                                                    <a class="button is-danger is-outlined is-small">
-                                                        <span class="icon is-small">
-                                                            <i class="fas fa-file-download"></i>
-                                                        </span>
-                                                        <span>Descargar OT</span>
-                                                    </a>
-                                                </p>
-                                                <p class="control">
-                                                    <a class="button is-danger is-outlined is-small">
-                                                        <span class="icon is-small">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </span>
-                                                        <span>Ver más</span>
-                                                    </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item is-danger">
-                                        <div class="timeline-marker is-danger">
-                                        </div>
-                                        <div class="timeline-content">
-                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong>
-                                            </p>
-                                            <p class="heading">14/11/1989 20:30</p>
-
-                                            <div class="field has-addons">
-                                                <p class="control">
-                                                    <a class="button is-danger is-outlined is-small">
-                                                        <span class="icon is-small">
-                                                            <i class="fas fa-file-download"></i>
-                                                        </span>
-                                                        <span>Descargar OT</span>
-                                                    </a>
-                                                </p>
-                                                <p class="control">
-                                                    <a class="button is-danger is-outlined is-small">
-                                                        <span class="icon is-small">
-                                                            <i class="fas fa-info-circle"></i>
-                                                        </span>
-                                                        <span>Ver más</span>
-                                                    </a>
-                                                </p>
+                                            <div id="misPendientesPDA" class="hover:bg-purple-200 hover:text-purple-500 px-2 bg-gray-300 text-gray-600 rounded-r-md w-1/2 text-center cursor-pointer">
+                                                <h1 id="totalPendientesPDA">PDA Proyectos (0)</h1>
                                             </div>
 
                                         </div>
+
+                                        <div id="dataPendientesUsuario" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+
+            </div>
+        </div>
+    </div>
+    <!-- CALENDARIO SEMANAL -->
+
+
+    <!-- ********** MODALES PRINCIPALES ********** -->
+
+    <!-- MODAL PARA BUSCAR OT -->
+    <div id="modalBuscarOT" class="modal">
+        <div class="modal-window rounded-md" style="width: 350px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalBuscarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-start items-center w-full py-6  bg-lightBlue-100 rounded-md">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <div class="w-full pl-1">
+                        <h1 class="text-left text-xs font-bold text-gray-500">OT FINDER</h1>
+                    </div>
+                    <div class="w-full h-14 mt-4 flex items-center bg-white rounded-md text-gray-300 overflow-hidden">
+                        <i class="fas fa-search ml-2 text-gray-300"></i>
+
+                        <input id="inputNumeroOT" class="py-3 px-4 placeholder-gray-300 appearance-none w-full focus:outline-none text-2xl font-semibold" placeholder="Número de OT" autocomplete="off">
+
+                        <button id="btnBuscarNumeroOT" class="text-xs font-bold cursor-pointer px-4 appearance-none focus:outline-none h-full hover:bg-gray-100 hover:text-gray-500">Buscar</button>
+                    </div>
+                </div>
+
+                <div id="dataBuscarOT" class="rounded-md flex flex-col absolute overflow-y-auto scrollbar py-2 pr-2" style="width: 400px; margin-top: 125px; max-height: 69vh;"></div>
+            </div>
         </div>
     </div>
 
-    <!--MODAL PARA FINALIZAR OT-->
-    <div id="modalFinalizarOT" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <div class="media">
 
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <div class="select is-fullwidth">
-                                <select id="cbResponsableMP" class="is-uppercase">
-                                    <option value="0">-Responsable-</option>
-                                    <?php
-                                    if ($idDestinoT == 10) {
-                                        $query = "SELECT * FROM t_colaboradores WHERE status = 'A' ORDER BY nombre";
-                                    } else {
-                                        $query = "SELECT * FROM t_colaboradores WHERE id_destino = $idDestinoT AND status = 'A' ORDER BY nombre";
-                                    }
-                                    try {
-                                        $resp = $conn->obtDatos($query);
-                                        if ($conn->filasConsultadas > 0) {
-                                            foreach ($resp as $dts) {
-                                                $idEmpleado = $dts['id'];
-                                                $nombreEmpleado = $dts['nombre'];
-                                                $apellidoEmpleado = $dts['apellido'];
-                                                echo "<option value=\"$idEmpleado\">$nombreEmpleado $apellidoEmpleado</option>";
-                                                //                                                        $idUser = $dts['id'];
-                                                //                                                        $idEmpleado = $dts['id_colaborador'];
-                                                //                                                        $query = "SELECT * FROM t_colaboradores WHERE id = $idEmpleado";
-                                                //                                                        try {
-                                                //                                                            $empleado = $conn->obtDatos($query);
-                                                //                                                            if ($conn->filasConsultadas > 0) {
-                                                //                                                                foreach ($empleado as $e) {
-                                                //                                                                    $nombreEmpleado = $e['nombre'];
-                                                //                                                                    $apellidoEmpleado = $e['apellido'];
-                                                //                                                                }
-                                                //                                                            }
-                                                //                                                        } catch (Exception $ex) {
-                                                //                                                            echo $ex;
-                                                //                                                        }
-                                                //                                                        echo "<option value=\"$idUser\">$nombreEmpleado $apellidoEmpleado</option>";
-                                            }
-                                        }
-                                    } catch (Exception $ex) {
-                                        echo $ex;
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
+    <!-- MODAL EQUIPOS Y LOCALES -->
+    <div id="modalEquiposAmerica" class="modal">
+        <div id="modalEquiposAmericaBG" class="w-full h-screen bg-gray-300">
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+                <div class="font-light text-3xl ml-3 leading-none text-bluegray-700 mr-12">
+                    <h1 class="text-center mb-2">Equipos & Locales</h1>
+                    <h1 id="seccionSubseccionDestinoEquiposAmerica" class="text-xs font-normal text-center"></h1>
+                </div>
+                <div class="relative text-gray-600 w-72" data-title="Presione Enter para Buscar">
+                    <input id="palabraEquipoAmerica" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Equipo o Local (Enter)" autocomplete="off" maxlength="25">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+                <div id="reporteEquipos" class="text-blue-500 text-sm cursor-pointer bg-blue-300 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-blue-200 px-2">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
 
-                        <div class="level">
-                            <div class="media-content">
-                                <input id="txtFechaRealizacion" type='text' class='input has-text-centered datepicker-here' data-language='es' data-auto-close="true" data-date-format="mm/dd/yyyy" placeholder="Fecha de realizacion" />
+            <div id="btnCerrarModalEquiposAmerica" class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-red-200" onclick="cerrarmodal('modalEquiposAmerica');">
+                <i class="fas fa-times"></i>
+                <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
+            </div>
+
+            <div class="w-full h-auto">
+                <div class="flex flex-col container mx-auto scrollbar">
+                    <div class="flex items-center justify-start ">
+
+                        <div id="tareasGeneralesEquipo" class="flex-none flex items-center bg-white rounded mb-2 cursor-pointer hover:bg-gray-200 shadow-sm mr-6" data-title="Clic, para mostrar Tareas Generales">
+                            <div class="text-sm px-3 leading-noene font-semibold text-bluegray-800 uppercase flex py-1">
+                                <h1><i class="fad fa-circle mr-2 text-red-400"></i>Incidencias generales de área</h1>
                             </div>
-                        </div>
-                        <div class="level">
-                            <div class="media-content">
-                                <div class="level-item has-text-centered">
-                                    <button id="btnFinalizarOT" class="button is-success mr-5">ACEPTAR</button>
-                                    <button class="button is-danger ml-5" onclick="closeModal('modalFinalizarOT');">CANCELAR</button>
+                            <div id="totalesTareasGenerales" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
                                 </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
 
+                        <div id="btnColumnasInicdencias" class="flex items-center bg-red-300 rounded mb-2 cursor-pointer hover:bg-red-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-red-600 uppercase flex py-1">
+                                <h1>INCIDENCIAS</h1>
+                            </div>
+                            <div id="totalesFallas" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+
+                        <div id="btnColumnasPreventivos" class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-blue-600 uppercase flex py-1">
+                                <h1>PREVENTIVOS</h1>
+                            </div>
+                            <div id="totalesPreventivos" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
+                            </div>
+                        </div>
+
+                        <div id="btnColumnasPredictivos" class="flex items-center bg-indigo-300 rounded mb-2 cursor-pointer hover:bg-indigo-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-indigo-600 uppercase flex py-1">
+                                <h1>PREDICTIVOS</h1>
+                            </div>
+                            <div id="totalesTest" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class=" text-white text-xs font-semibold py-1">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-black rounded mb-2 cursor-pointer hover:bg-gray-800 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-white uppercase flex py-1">
+                                <h1>Materiales</h1>
+                            </div>
+                            <div class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class=" text-white text-xs font-semibold py-1">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-blue-300 rounded mb-2 cursor-pointer hover:bg-blue-200 shadow-sm mr-6">
+                            <div class="text-sm px-3 leading-noene font-semibold text-blue-600 uppercase flex py-1">
+                                <h1>INFO</h1>
+                            </div>
+                            <div class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class=" text-white text-xs font-semibold py-1">-</h1>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center bg-orange-300 rounded mb-2 cursor-pointer hover:bg-orange-200 shadow-sm hidden">
+                            <div class="text-sm px-3 leading-noene font-semibold text-orange-600 uppercase flex py-1">
+                                <h1>TAREAS</h1>
+                            </div>
+                            <div id="totalesTareas" class="text-sm px-3 leading-noene font-bold text-center text-bluegray-700 uppercase flex flex-col justify-center leading-none py-1 bg-bluegray-800 rounded-r relative">
+                                <div class="absolute bg-bluegray-800 fa-value-absolute w-3 h-3" style="transform: rotate(45deg); left: -12%;">
+                                </div>
+                                <h1 class="text-red-400">-</h1>
+                                <h1 class=" text-green-400 text-xs font-semibold">-</h1>
                             </div>
                         </div>
                     </div>
+
+                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 62vh; max-height: 72vh; height:auto;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                <thead>
+                                    <tr class="cursor-pointer">
+
+                                        <th id="theadEquipoLocal" class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Equipo/Local (0)
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Incidencias
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            PREVENTIVOS
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Último MP
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Proximo MP
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Predictivos
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Último Predictivo
+                                        </th>
+
+                                        <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
+                                            Despiece
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorEquiposAmerica" class="bg-white divide-y divide-gray-200">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
+
+                            <!-- DESPIECE NIVEL 2 DE EQUIPOS AMERICA -->
+                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full bg-white border-solid border-4 border-bluegray-900 scrollbar overflow-y-auto rounded hidden" style="min-height: 50vh; max-height: 55vh;">
+
+                                <div class="flex items-center justify-center relative bg-white p-2">
+                                    <h1 id="tituloSegundoNivel" class="font-semibold text-bluegray-900">SEGUNDO NIVEL</h1>
+                                </div>
+
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed sortable pt-1">
+                                    <thead>
+                                        <tr class="cursor-pointer bg-white">
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Equipo / Local
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Incidencias
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                PREVENTIVOS
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Último MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Proximo MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11">
+                                                Predictivos
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12">
+                                                Último Predictivo
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_16">
+                                                Despiece
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenedorEquiposAmericaDespice" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <!-- DESPIECE NIVEL 2 DE EQUIPOS AMERICA -->
+
+                            <!-- DESPIECE NIVEL 3 DE EQUIPOS AMERICA -->
+                            <div id="tooltipDespieceEquipo3" role="tooltip" class="w-full bg-white border-solid border-4 border-gray-700 scrollbar overflow-y-auto rounded hidden" style="height: 30vh;">
+
+                                <div class="flex items-center justify-center relative bg-white p-2">
+                                    <h1 id="tituloTercerNivel" class="font-semibold text-gray-700">TERCER NIVEL</h1>
+                                </div>
+
+                                <table class="min-w-full divide-y divide-gray-200 table-fixed sortable pt-1">
+                                    <thead>
+                                        <tr class="cursor-pointer bg-white">
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Equipo / Local
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Incidencias
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                PREVENTIVOS
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Último MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                                Proximo MP
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_11">
+                                                Predictivos
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_12">
+                                                Último Predictivo
+                                            </th>
+
+                                            <th class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 columna_ columna_16">
+                                                Despiece
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contenedorEquiposAmericaDespice3" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                            <!-- DESPIECE NIVEL 3 DE EQUIPOS AMERICA -->
+
+                        </div>
+                    </div>
+
+                    <nav id="paginacionEquiposAmerica" class="relative z-0 flex flex-wrap justify-center -space-x-px my-1" aria-label="Pagination"></nav>
+
                 </div>
             </div>
         </div>
-        <button class="modal-close is-large" aria-label="close" onclick="closeModal('modalFinalizarOT');"></button>
     </div>
 
-    <!--MODAL RESPONSABLE TAREA DE PROYECTO-->
-    <div id="modalAgregarResponsableProyecto" class="modal">
-        <br>
-        <br>
-        <br>
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
 
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
-
-            </header>
-            <!-- Any other Bulma elements you want -->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divListaUsuariosProy" class="column">
-
-                        <?php
-                        if ($idDestinoT == 10) {
-                            $query = "SELECT * FROM t_users WHERE status = 'A' ORDER BY username";
-                        } else {
-                            $query = "SELECT * FROM t_users WHERE (id_destino = $idDestinoT OR id_destino = 10) AND status = 'A' ORDER BY username";
-                        }
-                        $usuarios = $conn->obtDatos($query);
-                        if ($conn->filasConsultadas > 0) {
-                            foreach ($usuarios as $u) {
-                                $idUsuario = $u['id'];
-                                $idTrabajador = $u['id_colaborador'];
-                                $query = "SELECT * FROM t_colaboradores WHERE id = $idTrabajador";
-                                try {
-                                    $trabajador = $conn->obtDatos($query);
-                                    if ($conn->filasConsultadas > 0) {
-                                        foreach ($trabajador as $t) {
-                                            $nombreT = $t['nombre'];
-                                            $apellidoT = $t['apellido'];
-                                            $fotoT = $t['foto'];
-                                        }
-                                    } else {
-                                        $nombreT = "";
-                                        $apellidoT = "";
-                                        $fotoT = "";
-                                    }
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-
-                                if ($fotoT != "") {
-                                    $urlFoto = "img/users/$fotoT";
-                                } else {
-                                    $urlFoto = "https://ui-avatars.com/api/?uppercase=false&name=$nombreT+$apellidoT&background=d8e6ff&rounded=true&color=4886ff&size=100%";
-                                }
-
-                                echo "<h6 class=\"title is-6 manita border rounded py-1 px-1 my-1 mx-2 text-truncate usuario\" onclick=\"agregarResponsableProyecto($idUsuario)\"><span><i class=\"fas fa-user\"></i></span> $nombreT $apellidoT</h6>";
-                            }
-                        }
-                        ?>
-
-                    </div>
+    <!-- MODAL PARA EQUIPOS -->
+    <div id="modalEquipos" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1200px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEquipos');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionEquipos" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionEquipos" class="font-medium text-base"><i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i></h1>
                 </div>
-            </section>
-            <footer class="modal-card-foot">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsableProyecto');">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-        <!--<button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsableProyecto');"></button>-->
-    </div>
-
-    <!--MODAL FINALIZAR ACTIVIDAD PROYECTO-->
-    <div id="modalConfirmacionTareaProy" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Completar esta tarea?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="btnFinalizarTareaProy" class="button is-success">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarTareaProy" class="button is-danger" onclick="closeModal('modalConfirmacionTareaProy');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1>SUBSECCION / EQUIPOS Y LOCALES</h1>
                 </div>
             </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
 
-    <!--Modal finalizar PROYECTO-->
-    <div id="modalFinalizarProyecto" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Marcar el proyecto como terminado?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="btnFinalizarProy" class="button is-success">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="btnCancelarFinalizarProy" class="button is-danger" onclick="closeModal('modalFinalizarProyecto');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-    <!--MODAL PARA ELIMINAR UNA TAREA DE PROYECTO-->
-    <div id="modalEliminarTareaProy" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Desea eliminar esta actividad?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="btnEliminarTareaProy" class="button is-success">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="btnCancelarEliminarTareaProy" class="button is-danger" onclick="closeModal('modalEliminarTareaProy');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-    <!--MODAL PARA ELIMINAR UN ADJUNTO DEL PROYECTO-->
-    <div id="modalEliminarAdjuntoProy" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Desea eliminar este archivo?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="btnEliminarArchivoProy" class="button is-success">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="btnCancelarEliminarArchivoProy" class="button is-danger" onclick="closeModal('modalEliminarAdjuntoProy');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-    <!--MODAL CERRAR SESION-->
-    <div id="modalLogout" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content modal-sm">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="content has-text-centered">
-                            <p class="is-size-4">¿Desea cerrar su sesión?</p>
-                        </div>
-                        <div class="level">
-                            <div class="level-item has-text-centered">
-                                <button id="" class="button is-success" onclick="logout();">ACEPTAR</button>
-                            </div>
-                            <div class="level-item has-text-centered">
-                                <button id="" class="button is-danger" onclick="closeModal('modalLogout');">CANCELAR</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-    <!--MODAL PARA AGREGAR PROYECTO-->
-    <div id="modalCrearProyecto" class="modal">
-        <br>
-        <br>
-        <br>
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="container">
-                            <input type="hidden" id="idSeccionHdd">
-                            <input type="hidden" id="idSubseccionHdd">
-                            <input type="hidden" id="idCategoriaHdd">
-                            <div class="columns">
-                                <div class="column">
-                                    <input type="text" id="txtTituloProy" class="input" placeholder="Titulo proyecto">
-                                </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column">
-                                    <textarea type="text" id="txtJustificacionProy" class="input" placeholder="Justificacion"></textarea>
-                                </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="select is-fullwidth">
-                                        <select id="cbTipoProyectoN" onchange="proyectos(this)">
-                                            <option value="PROYECTO">PROYECTO</option>
-                                            <option value="CAPEX">CAPEX</option>
-                                            <option value="CAPIN">CAPIN</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="divDetalleCAP" class="columns" style="display: none;">
-                                <div class="column">
-                                    <div class="columns">
-                                        <div class="column">
-                                            <input type="number" class="input" id="txtCosteN" placeholder="$" />
-                                        </div>
-                                    </div>
-                                    <div class="columns">
-                                        <div class="column">
-                                            <input type="number" maxlength="4" class="input" id="txtAñoN" placeholder="Año" />
-                                        </div>
-                                    </div>
-                                    <div class="columns">
-                                        <div class="column">
-                                            <a class="button is-primary">
-                                                <input class="file-input" type="file" name="resume" id="txtAdjuntoProyectoN" multiple>
-                                                <span class="icon">
-                                                    <i class="fas fa-paperclip"></i>
-                                                </span>
-                                                <span>Adjuntar Archivo</span>
-                                            </a>
-                                            <!--<div class="upload-btn-wrapper hvr-shadow text-center"><button class="btn btn-sm bg-body text-negron manita border-normal">Adjuntar Cotizacion</button><input type="file" id="txtAdjuntoProyecto" name="txtAdjuntoProyecto"/></div>-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <div class="columns has-text-centered">
-                                <div class="column">
-                                    <button id="" class="button is-danger" onclick="closeModal('modalCrearProyecto');">CANCELAR</button>
-                                </div>
-                                <div class="column">
-                                    <button id="" class="button is-success" onclick="agregarProyecto(<?php echo $idDestinoT; ?>, <?php echo $idPermiso; ?>, <?php echo $idUsuario; ?>)">CREAR
-                                        PROYECTO</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--            <button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-
-    <!--MODAL EDITAR DATOS DE UNA TAREA DE EQUIPO-->
-    <div id="modal-editar-tarea" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <div class="container">
-                            <div class="columns">
-                                <div class="column has-text-centered">
-                                    <h1 class="title is-size-4">Editar titulo de tarea</h1>
-                                </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="field">
-                                        <div class="control">
-                                            <input id="txtEditTituloTarea" class="input" type="text" placeholder="Titulo tarea...">
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <input class="is-checkradio is-danger" id="chkbEliminarTarea" type="checkbox" name="chkbEliminarTarea">
-                                        <label for="chkbEliminarTarea">Eliminar tarea</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column has-text-centered">
-                                    <button id="btnActualizarTarea" class="button is-primary is-medium">Guardar</button>
-                                </div>
-                                <div class="column has-text-centered">
-                                    <button class="button is-medium close-modal">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--<button class="modal-close is-large" aria-label="close"></button>-->
-    </div>
-
-
-    <!--MODAL COMENTARIOS EQUIPO-->
-    <div id="modal-equipo-comentarios" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderComentarios" class="column">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-comentarios');"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colComentariosEquipo" class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Comentarios generales</h4>
-
-                            <div class="columns is-centered">
-                                <div class="column is-8">
-                                    <div class="field">
-                                        <p class="control has-icons-right">
-                                            <input class="input" type="text" placeholder="Añadir comentario">
-
-                                            <span class="icon is-small is-right">
-                                                <i class="fas fa-comment-alt-medical"></i>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading ">
-                                        <strong>
-                                            <!-- Here User -->
-                                        </strong>
-                                    </p>
-                                    <p class="heading ">
-                                        <!-- Here Date -->
-                                    </p>
-                                    <p class="has-text-justified">
-                                        <!-- Here Coment -->
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div id="colComentariosEquipoMCMP" class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Comentarios Relacionados (MP/MC)</h4>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">MP</span>
-                                            <span class="tag is-info">OT 86</span>
-                                        </div>
-                                    </div>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-
-    <!--MODAL COMENTARIOS EQUIPO-->
-    <div id="modal-energeticos-comentarios" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderComentarios" class="column">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-energeticos-comentarios');"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
-
-                            <div class="columns is-centered">
-                                <div class="field has-addons has-addons-centered is-fullwidth">
-                                    <div class="control">
-                                        <div class="control has-icons-left has-icons-right">
-                                            <input id="inputComentarioEnergetico" class="input" type="text" placeholder="Añadir comentario" autocomplete="off">
-                                            <span class="icon is-small is-left">
-                                                <i class="fas fa-comment"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="control"><button id="btnAgregarComentarioEnergetico" type="button" class="button is-info">Agregar</button></div>
-                                </div>
-                            </div>
-
-                            <div id="dataComentariosEnergetico"></div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-
-    <!--MODAL FOTOS EQUIPO-->
-    <div id="modal-equipo-pictures" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderFotos" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-pictures');"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colFotosEquipo" class="column is-6">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Fotografias generales</h4>
-
-                            <div class="columns is-centered">
-                                <div class="column is-8 has-text-centered">
-
-                                    <a class="button is-warning">
-                                        <input class="file-input" type="file" name="resume" id="txtFotoEquipo" multiple>
-                                        <span class="icon">
-                                            <i class="fad fa-camera-alt"></i>
-                                        </span>
-                                        <span>Añadir fotografias</span>
-                                    </a>
-                                </div>
-                            </div>
-
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-
-                                </div>
-                            </div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div id="colFotosMPMC" class="column is-6">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Fotografias Relacionados (MP/MC)</h4>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <div class="control mb-2">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-info">MP</span>
-                                            <span class="tag is-dark">OT 86</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <div class="control mb-2">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-warning">MC</span>
-                                            <span class="tag is-dark">NOMBRE DE LA TAREA</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!--                <footer class="modal-card-foot">
-                                    <button class="button is-success">Save changes</button>
-                                    <button class="button">Cancel</button>
-                                </footer>-->
-        </div>
-    </div>
-
-
-    <!--MODAL FOTOS EQUIPO-->
-    <div id="modal-energeticos-pictures" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div class="column is-6">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Fotografias generales</h4>
-                            <div class="columns is-centered">
-                                <div class="column is-8 has-text-centered">
-                                    <a class="button is-warning">
-                                        <input class="file-input" type="file" name="resume" id="inputAdjuntosEnergeticos" multiple>
-                                        <span class="icon">
-                                            <i class="fad fa-camera-alt"></i>
-                                        </span>
-                                        <span>Añadir fotografias</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div id="dataAdjuntosEnergeticos"></div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-
-    <!--MODAL COTIZACIONES EQUIPO-->
-    <div id="modal-equipo-cotizaciones" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-
-            <!--                <header class="modal-card-head">
-                                    <p class="modal-card-title">Modal title</p>
-                                    <button class="delete" aria-label="close"></button>
-                                </header>-->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderCot" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-cotizaciones');"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colCotEquipo" class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Cotizaciones</h4>
-
-                            <div class="columns is-centered">
-                                <div class="column is-8 has-text-centered">
-
-                                    <a class="button is-warning">
-                                        <input class="file-input" type="file" name="resume" id="txtCotEquipo" multiple>
-                                        <span class="icon">
-                                            <i class="fas fa-plus"></i>
-                                        </span>
-                                        <span>Añadir cotizaciones</span>
-                                    </a>
-                                </div>
-                            </div>
-
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-
-                                </div>
-                            </div>
-
-                            <div class="timeline-item ">
-                                <div class="timeline-marker"></div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!--                <footer class="modal-card-foot">
-                                    <button class="button is-success">Save changes</button>
-                                    <button class="button">Cancel</button>
-                                </footer>-->
-        </div>
-    </div>
-
-
-    <!--MODAL INFORMACION DE EQUIPO-->
-    <div id="modal-equipo-info" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderInfo" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-equipo-info');"></button>
-                    </div>
-                </div>
-
-                <div id="rowInfoEquipo" class="columns">
-
-                    <!-- Columna donde se muestran las fotografias Adjuntas. -->
-                    <div id="colInfoEquipoImagenes" class="column">
-                        <div id="colFotosEquipo1" class="column"></div>
-                    </div>
-
-                    <!-- Columna donde se muestra la información del equipo. -->
-                    <div id="colInfoEquipo" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Informacion del equipo</h4>
-
-                        <div class="columns is-centered">
-                            <div class="column is-8 has-text-centered">
-                                <button class="button is-warning">
-                                    <span class="icon is-small">
-                                        <i class="fad fa-edit"></i>
-                                    </span>
-                                    <span>Editar información</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="columns is-mobile is-gapless">
-                            <div class="column has-text-right">
-                                <h4 class="subtitle is-6 mr-2">Nombre: </h4>
-                                <h4 class="subtitle is-6 mr-2">Destino: </h4>
-                                <h4 class="subtitle is-6 mr-2">Tipo: </h4>
-                                <h4 class="subtitle is-6 mr-2">Matricula: </h4>
-                                <h4 class="subtitle is-6 mr-2">Ceco: </h4>
-                                <h4 class="subtitle is-6 mr-2">Seccion: </h4>
-                                <h4 class="subtitle is-6 mr-2">Marca: </h4>
-                                <h4 class="subtitle is-6 mr-2">Modelo: </h4>
-                                <h4 class="subtitle is-6 mr-2">Serie: </h4>
-                                <h4 class="subtitle is-6 mr-2">Estado: </h4>
-                                <h4 class="subtitle is-6 mr-2">Jerarquia: </h4>
-                            </div>
-                            <div class="column has-text-left">
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                                <h4 class="subtitle is-6">xxxxxxxxxxxxxx</h4>
-                            </div>
-                        </div>
-                        <div class="columns">lorem </div>
-                    </div>
-
-                    <!-- Columna donde e muestran archivos Adjuntos. -->
-                    <div id="colInfoEquipoAdjuntos" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Archivos Adjuntos</h4>
-                    </div>
-
-                </div>
-                <div id="rowEditarInfo" class="column" style="display: none;">
-                    <div id="colEditarInfo" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Editar Información</h4>
-
-                        <div class="columns ">
-                            <div class="column has-text-left">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Marca</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="columns ">
-                            <div class="column has-text-left">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Modelo</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <p class="control">
-                                                <input class="input" type="text" placeholder="Modelo">
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="columns ">
-                            <div class="column has-text-left">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Serie</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <p class="control">
-                                                <input class="input" type="text" placeholder="Serie">
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="columns ">
-                            <div class="column has-text-left">
-                                <div class="field is-horizontal">
-                                    <div class="field-label is-normal">
-                                        <label class="label">Estado</label>
-                                    </div>
-                                    <div class="field-body">
-                                        <div class="field">
-                                            <div class="control">
-                                                <div class="select">
-                                                    <select>
-                                                        <option>Operativo</option>
-                                                        <option>Baja</option>
-                                                        <option>Taller</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="columns is-centered">
-                            <div class="column is-8 has-text-centered">
-                                <button class="button is-warning">
-                                    <span class="icon is-small">
-                                        <i class="fad fa-save"></i>
-                                    </span>
-                                    <span>Guardar Cambios</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!-- Modal TAREAS P -->
-    <div id="modal-tareas-p" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content bg-white p-2" style="width:90%; height:auto">
-            <section class="hero is-light is-small">
-                <div class="hero-head">
-                    <nav class=" navbar-menu">
-                        <div class="navbar-start has-text-centered">
-                            <span class="navbar-item">
-                                <button class="button is-warning is-large" onclick="closeModal('modal-tareas-p');"><i class="fas fa-arrow-left"></i></button>
-                            </span>
-                            <div id="estiloSeccionTareas" class="flex items-center">
-                                <p id="textSeccionTareas" class="seccion-logo">--</p>
-                            </div>
-                            <a class="navbar-item">Equipo / <span id="dataEquipoTareasP"> </span></a>
-                        </div>
-                        <div class="navbar-end has-text-centered">
-                            <div class="navbar-item">
-                                <button type="button" class="button is-warning" name="button">
-                                    <i class="fad fa-file-excel mr-2"></i>Exportar
-                                </button>
-                            </div>
-                            <div class="navbar-item">
-                                <button id="btnTareas" type="button" class="button" name="button">
-                                    <i class="fad fa-check-double mr-2"></i><span id="txtTareas"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </section>
-
-            <section class="flex justify-center my-4">
-                <div class="columns is-centered">
-                    <div class="column is-12">
-                        <div class="field has-addons">
-                            <div class="control is-expanded">
-                                <input id="tituloTareaP" class="input" type="text" placeholder="Agregar Tarea" maxlength="60" autocomplete="off">
-                            </div>
-                            <div id="btnAgregarTareaP" class="control">
-                                <a class="button is-warning">
-                                    <i class="fad fa-plus-circle"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            </section>
-
-            <section class="">
-                <div class="columns is-gapless rounded">
-                    <div class="column column is-half">
-                        <div class="columns">
-                            <div class="column">
-                                <p class="t-titulos"><strong>Descripción Tarea</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="columns is-gapless">
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Plan Acción"><strong>Responsable</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Responsable"><strong>Fecha</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Fecha estimada de solucion"><strong>Adjuntos</strong>
-                                </p>
-                            </div>
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Status"><strong>Comentarios</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Status"><strong>Status</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="t-titulos" data-tooltip="Status"><strong>Opción</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-
-
-                <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-            </section>
-
-            <section class="mb-4">
-                <div id="dataTareasP"></div>
-            </section>
-
-        </div>
-    </div>
-    <!-- Modal TAREAS P -->
-
-
-    <!--MODAL COMENTARIOS EQUIPO-->
-    <div id="modal-comentarios-tareas" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="dataHeaderComentarios" class="column"></div>
-
-                    <div class="column is-1">
-                        <button class="button is-warning" onclick="closeModal('modal-comentarios-tareas');">
-                            <span class="icon is-small">
-                                <i class="fas fa-times"></i>
-                            </span>
+            <!-- CONTENIDO -->
+            <div class="p-2 mt-6 flex justify-center items-center flex-col">
+                <div class="flex flex-row items-center w-full">
+                    <div class="ml-10 relative text-gray-600 w-2/6 self-start">
+                        <input id="inputPalabraEquipo" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Equipo/Local" onkeyup="if(event.keyCode == 13) llamarFuncionX('obtenerEquipos')" autocomplete="off">
+                        <button type="submit" class="absolute right-0 top-0 mt-1 mr-4" onclick="llamarFuncionX('obtenerEquipos');">
+                            <i class="fad fa-search"></i>
                         </button>
                     </div>
                 </div>
-                <div class="columns">
-                    <div id="" class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Comentarios Tareas</h4>
 
-                            <div class="columns is-centered">
-                                <div class="column is-3">
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center">
+                    <!-- titulos -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-white sticky top-0">
 
-                                    <div class="field has-addons">
-                                        <div class="control">
-                                            <input id="textComentarioTareas" class="input" type="text" placeholder="Agregar Comentaio" autocomplete="off">
-                                        </div>
-                                        <div id="agregarComentarioTarea" class="control">
-                                            <a class="button is-info">
-                                                Agregar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="columns">
-                                <!-- Data Comentarios -->
-                                <div id="dataComentariosTareas"></div>
-                            </div>
+                        <div class="w-2/6 h-full flex items-center justify-center cursor-pointer">
+                            <h1 id="tipoOrdenamientoNombreEquipo">EQUIPOS / LOCALES</h1>
                         </div>
-                    </div>
-            </section>
-        </div>
-    </div>
 
-    <!--MODAL FOTOS EQUIPO-->
-    <div id="modal-tareas-pictures" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="" class="column has-text-right">
-                        <button class="delete" aria-label="close" onclick="closeModal('modal-tareas-pictures');"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colFotosTareas" class="column is-6">
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-
-    <!-- Status TareasP -->
-    <div id="modalStatusTareasP" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-
-                                <button id="statusUrgenteATP" class="button is-danger is-fullwidth">
-                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>
-                                    Es urgente!
-                                </button>
-
-                                <button id="statusMaterialATP" class="button is-dark is-fullwidth mt-2">
-                                    <span class="mr-4 fa-lg"><strong> M
-                                        </strong></span> No hay material
-                                </button>
-
-                                <div id="codigoSeguimientoTareas" class="columns is-fullwidth is-centered mt-2 is-hidden">
-                                    <input id="inputCodigoSeguimientoTareas" class="column button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
-                                    <button id="statusMaterialTareas" class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
-                                </div>
-
-                                <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
-                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
-                                </button>
-                                <div id="actividadStatusEnergeticos" class="modal has-background-light p-3 m-2">
-
-                                    <button id="statusElectricidadATP" class="button is-warning has-text-centered m-1">Electricidad</button>
-
-                                    <button id="statusAguaATP" class="button is-warning has-text-centered m-1">Agua</button>
-
-                                    <button id="statusDieselATP" class="button is-warning has-text-centered m-1">Diésel</button>
-
-                                    <button id="statusGasATP" class="button is-warning has-text-centered m-1">Gas</button>
-                                </div>
-
-                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleModal('StatusDepartamentos');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
-                                </button>
-                                <div id="actividadStatusDepartamentos" class="modal has-background-light p-3 m-2">
-
-                                    <button id="statusCalidadATP" class="button is-primary has-text-centered m-1">Calidad
-                                    </button>
-
-                                    <button id="statusComprasATP" class="button is-primary has-text-centered m-1">Compras
-                                    </button>
-
-                                    <button id="statusDireccionATP" class="button is-primary has-text-centered m-1">Dirección
-                                    </button>
-
-                                    <button id="statusFinanzasATP" class="button is-primary has-text-centered m-1">Finanzas
-                                    </button>
-
-                                    <button id="statusRRHHATP" class="button is-primary has-text-centered m-1">RRHH
-                                    </button>
-
-                                </div>
-
-                                <button id="statusTrabajandoATP" class="button is-info is-fullwidth mt-2">
-                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
-                                </button>
-
-                                <button id="statusSolucionarATP" class="button is-success is-fullwidth mt-2">
-                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
-                                </button>
-
-                                <button id="statusRestaurarATP" class="button is-danger is-fullwidth mt-2">
-                                    <i class="fad fa-undo mr-4 fa-lg"></i>Restaurar
-                                </button>
-
-                                <div class="column has-text-centered">
-
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloATP');">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-
-                                <div id="actividadNuevoTituloATP" class="column has-text-centered modal">
-                                    <input id="nuevoTituloATP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button id="btnTituloATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="w-16 h-full flex items-center justify-center cursor-pointer">
+                            <h1 id="tipoOrdenamientoMCN">Incidencias P</h1>
                         </div>
+
+                        <div class="w-16 flex h-full items-center justify-center cursor-pointer">
+                            <h1 id="tipoOrdenamientoMCF">Incidencias S</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>TAREAS P</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>TAREAS S</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>MP-P</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>MP-S</h1>
+                        </div>
+
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>U MP</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>TEST</h1>
+                        </div>
+
+                        <div class="w-24 flex h-full items-center justify-center">
+                            <h1>U TEST</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>COT</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>INFO</h1>
+                        </div>
+
+                        <div class="w-16 flex h-full items-center justify-center">
+                            <h1>MEDIA</h1>
+                        </div>
+
                     </div>
+
+                    <!-- Equipos Obtenidos -->
+                    <div id="dataTG" class="w-full"></div>
+                    <div id="dataEquipos" class="w-full"></div>
+                </div>
+            </div>
+            <div class="px-4 py-3 flex items-center justify-center border-t border-gray-200 sm:px-6">
+                <!-- paginación. -->
+                <div>
+                    <!-- Se agrega la paginación de los equipos -->
+                    <!-- <nav id="paginacionEquipos" class="relative inline-flex shadow-sm col">
+                        <div class="holder"></div>
+                    </nav> -->
+                    <nav class="relative inline-flex shadow-sm col">
+                        <div class="holder"></div>
+                    </nav>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Status TareasP -->
+    <!-- MODAL EQUIPOS Y LOCALES -->
 
 
+    <!-- MODAL EQUIPO PARA LOS MP-->
+    <div id="modalMPEquipo" class="modal relative">
+        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg" style="width: 1000px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalMPEquipo')" class="cursor-pointer text-md  text-red-500 bg-red-200 px-2 rounded-bl-lg rounded-tr-lg font-normal shadow-md">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
-    <!-- Status Energeticos -->
-    <div id="modalStatusEnergeticos" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
+            <!-- ENCABEZADO -->
+            <div class="flex flex-row w-full justify-start px-4 relative">
+                <div class="font-bold text-xl flex flex-col justify-center items-start uppercase truncate w-full text-center">
+                    <input id="nombreEquipo" type="text" class="font-bold text-xl flex flex-col justify-center items-center uppercase truncate w-full text-center bg-white" value="" autocomplete="off">
+                    <div class="flex mt-1">
 
-                                <button id="" class="button is-danger is-fullwidth">
-                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i> Es urgente!
-                                </button>
+                        <div id="contenedorEstadoEquipo" class="flex items-center px-1  rounded-full w-auto cursor-pointer mr-4 bg-green-200">
+                            <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg text-green-500"></i>
 
-                                <button class="button is-dark is-fullwidth mt-2" onclick=" toggleHidden('contenedorstatusMaterial');">
-                                    <span class="mr-4 fa-lg">
-                                        <strong> M </strong>
-                                    </span> No hay material
-                                </button>
+                            <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
+                                <option value="OPERATIVO">OPERATIVO</option>
+                                <option value="BAJA">BAJA</option>
+                                <option value="TALLER">TALLER</option>
+                                <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
+                            </select>
 
-                                <div id="contenedorstatusMaterial" class="is-fullwidth is-centered mt-2 hidden">
-                                    <input id="inputCod2bendEnergetico" class="button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
-                                    <button id="btnStatusEnergetico" class="button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="">Aplicar</button>
-                                </div>
+                        </div>
 
-                                <button class="button is-warning is-fullwidth mt-2" onclick="toggleHidden('contenedorEnergeticosToggle');">
-                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
-                                </button>
-                                <div id="contenedorEnergeticosToggle" class="has-background-light p-3 m-2 hidden">
+                        <div class="flex items-center text-xs font-bold text-purple-400 px-1 bg-purple-100 rounded-full w-auto cursor-pointer mr-4 hidden">
+                            <i class="fas fa-cog mr-1 fa-lg text-purple-300"></i>
+                            <h2 class="mr-2">
+                                <select id="tipoLocalEquipo" class="text-xs font-bold">
+                                    <option value="EQUIPO">EQUIPO</option>
+                                    <option value="LOCAL">LOCAL</option>
+                                </select>
+                            </h2>
+                            <h2 id="jerarquiaEquipo2"></h2>
+                        </div>
 
-                                    <button id="btnStatusElectricidadEnergetico" class="button is-warning has-text-centered m-1">Electricidad</button>
+                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4 hidden">
+                            <i class="mr-1 text-blue-400">BITÁCORAS:</i>
+                            <select id="idFaseEquipo" class="text-xs font-bold">
+                                <option value="1">GP</option>
+                                <option value="2">TRS</option>
+                                <option value="3">ZI</option>
+                            </select>
+                        </div>
 
-                                    <button id="btnStatusAguaEnergetico" class="button is-warning has-text-centered m-1">Agua</button>
-
-                                    <button id="btnStatusDieselEnergetico" class="button is-warning has-text-centered m-1">Diésel</button>
-
-                                    <button id="btnStatusGasEnergetico" class="button is-warning has-text-centered m-1">Gas</button>
-                                </div>
-
-                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleHidden('contenedorDepartamentosToggle');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
-                                </button>
-                                <div id="contenedorDepartamentosToggle" class="has-background-light p-3 m-2 hidden">
-
-                                    <button id="btnStatusCalidadEnergetico" class="button is-primary has-text-centered m-1">Calidad
-                                    </button>
-
-                                    <button id="btnStatusComprasEnergetico" class="button is-primary has-text-centered m-1">Compras
-                                    </button>
-
-                                    <button id="btnStatusDireccionEnergetico" class="button is-primary has-text-centered m-1">Dirección
-                                    </button>
-
-                                    <button id="btnStatusFinanzasEnergetico" class="button is-primary has-text-centered m-1">Finanzas
-                                    </button>
-
-                                    <button id="btnStatusRRHHEnergetico" class="button is-primary has-text-centered m-1">RRHH
-                                    </button>
-                                </div>
-
-                                <button id="btnStatusTrabajandoEnergetico" class="button is-info is-fullwidth mt-2">
-                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
-                                </button>
-
-                                <button id="btnStatusSolucionarEnergetico" class="button is-success is-fullwidth mt-2">
-                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
-                                </button>
-
-                                <div class="column has-text-centered">
-
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleHidden('nuevoTituloEnergeticos');">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button id="btnEliminarEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-
-                                <div id="nuevoTituloEnergeticos" class="has-text-centered hidden">
-                                    <input id="inputTituloEnergetico" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button id="btnActualizarTituloEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="flex items-center text-xs text-red-400 px-1 bg-red-100 rounded-full w-auto cursor-pointer hidden">
+                            <i class="mr-1 text-red-300">R</i>
+                            <h2>REEMPLAZADO</h2>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- FOTOS -->
+            <div class="w-full h-32 mt-2 px-4 overflow-x-auto scrollbar flex items-center">
+
+                <div class="flex items-center justify-center w-10 h-10 bg-bluegray-900 hover:bg-indigo-300 hover:text-indigo-500 border-2 border-gray-200 text-bluegray-300 rounded-full absolute left-0 cursor-pointer" data-anijs="if: mouseover, do: tada animated">
+                    <i class="fas fa-plus ga-lg"></i>
+                    <input id="inputFotografiaEquipo" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px" multiple="">
+                </div>
+                <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
+                    <img id="QREquipo">
+                </div>
+                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center overflow-hidden"></div>
+            </div>
+
+            <!-- OPCIONES SUPERIORES -->
+            <div class="w-full py-2 border-t my-1">
+                <div class="flex justify-center items-center text-xs">
+                    <button id="btnInformacionEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Información</button>
+                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Despiece</button>
+                    <button id="btnDocumentosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Adjuntos</button>
+                    <button id="btnCotizacionesEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Cotizaciones</button>
+                </div>
+            </div>
+
+            <!-- CARACTRISTICAS -->
+            <div id="contenedorCaracteristicasEquipo" class="w-full bg-white hidden">
+                <div class="text-xs uppercase font-bold w-full px-2 my-2 flex">
+
+                    <button id="btnEditarEquipo" class="text-xxs px-2 bg-yellow-300 text-yellow-700 ml-3 rounded font-semibold hover:shadow">Editar <i class="fas fa-edit ml-1"></i></button>
+
+                    <button id="btnGuardarEquipo" class="text-xxs px-2 bg-green-300 text-green-700 ml-3 rounded font-semibold hover:shadow">Guardar <i class="fad fa-save ml-1"></i></button>
+
+                    <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 text-red-700 ml-3 rounded font-semibold hover:shadow">Cancelar <i class="fas fa-times-circle ml-1"></i></button>
+                </div>
+
+                <div class="flex flex-row w-full">
+                    <div class="flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 w-full">
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
+                                <select id="seccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">SUBSECCIÓN</h1>
+                                <select id="subseccionEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">TIPO</h1>
+                                <select id="tipoEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                </select>
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">JERARQUIA</h1>
+                                <select id="jerarquiaEquipo" class="font-semibold truncate bg-white w-32 select-sinarrow">
+                                    <option value="PRINCIPAL">PRINCIPAL</option>
+                                    <option value="SECUNDARIO">SECUNDARIO</option>
+                                </select>
+                            </div>
+
+                            <div id="contenedorDataOpcionesEquipos" class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">EQUIPO PRIMARIO</h1>
+                                <select id="dataOpcionesEquipos" class="font-semibold truncate bg-white w-32 select-sinarrow"></select>
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6 bg-white">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
+                                <select id="marcaEquipo" class="font-semibold truncate bg-white w-24 select-sinarrow">
+                                </select>
+
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Modelo</h1>
+                                <input type="text" value="-" id="modeloEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Número de Serie</h1>
+                                <input type="text" value="-" id="serieEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Código Fabricante</h1>
+                                <input type="text" value="-" id="codigoFabricanteEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Código Interno Compras</h1>
+                                <input type="text" value="-" id="codigoInternoComprasEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
+                                <input id="cantidadEquipo" type="text" placeholder="0" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">LARGO</h1>
+                                <input type="text" value="-" id="largoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">ANCHO</h1>
+                                <input type="text" value="-" id="anchoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">ALTO</h1>
+                                <input type="text" value="-" id="altoEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
+                                <input type="text" value="-" id="potenciaElectricaHPEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (KW)</h1>
+                                <input type="text" value="-" id="potenciaElectricaKWEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">VOLTAJE (V)</h1>
+                                <input type="text" value="-" id="voltajeEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">FRECUENCIA (HZ)</h1>
+                                <input type="text" value="-" id="frecuenciaEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
+                                <input type="text" value="-" id="caudalAguaM3HEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (GPH)</h1>
+                                <input type="text" value="-" id="caudalAguaGPHEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CARGA (M.C.A)</h1>
+                                <input type="text" value="-" id="cargaMCAEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="flex-none w-1/6">
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
+                                <input type="text" value="-" id="PotenciaEnergeticaFrioKWEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(TR)</h1>
+                                <input type="text" value="-" id="potenciaEnergeticaFrioTREquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA CALOR (KCAL)</h1>
+                                <input type="text" value="-" id="potenciaEnergeticaCalorKCALEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(M3/H)</h1>
+                                <input type="text" value="-" id="caudalAireM3HEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AIRE(CFM)</h1>
+                                <input type="text" value="-" id="caudalAireCFMEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- DESPIECE -->
+            <div id="contenedorDespiedeEquipo" class="flex flex-row w-full bg-white hidden">
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
+                    <h1 class="my-2">DESPIECE EQUIPO</h1>
+                    <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
+                </div>
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
+                    <div class="flex items-center justify-center">
+                        <div>
+                            <h1 id="cantidadDespieceMaterialEquipo" class="my-2">DESPIECE MATERIALES</h1>
+                        </div>
+                        <div class="ml-4">
+                            <button id="btnAñadirMaterialEquipo" class="px-2 bg-blue-200 text-blue-500 uppercase font-bold rounded py-1 text-xxs">Añadir material</button>
+                        </div>
+                    </div>
+                    <!-- DATA MATERIALES DE EQUIPO -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                            Cod2Bend
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Cantidad
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            Descripción
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataDespieceMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADJUNTOS (COTIZACIONES Y MANUALES)-->
+            <div id="contenedorAdjuntosEquipo" class="w-full bg-white hidden">
+
+                <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 overflow-y-auto scrollbar" style="height: 201px;">
+
+                    <div class="w-full flex flex-row items-center justify-center my-1">
+                        <button class="relative py-2 px-3 bg-teal-200 text-teal-500 font-bold text-xxs rounded-md hover:shadow-md">
+                            <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                            ADJUNTAR
+                            <!-- INPUT -->
+                            <input id="inputAdjuntosEquipo" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px" multiple="">
+                            <!-- INPUT -->
+                        </button>
+                    </div>
+
+                    <div id="dataAdjuntosEquipo" class="w-full flex flex-wrap"></div>
+                </div>
+            </div>
+
+            <!-- OPCIONES INFERIORES MP -->
+            <div class="w-full my-2 py-2 border-t">
+                <div class="flex justify-center items-center text-xs">
+                    <button id="btnPreventivosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Preventivo</button>
+                    <button id="btnIncidenciasEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Incidencias</button>
+                    <button id="btnChecklistEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Checklist
+                        MP</button>
+                    <button id="btnBitacorasEquipo" class="bg-gray-200 text-gray-500 px-2 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Inspección/Bitácoras</button>
+                </div>
+            </div>
+
+            <!-- PLANES MP EQUIPO -->
+            <div id="contenedorPlanesEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- INCIDENCIAS EQUIPO -->
+            <div id="contenedorIncidenciasEquipo" class="flex flex-wrap w-full justify-start p-1 overflow-x-auto scrollbar hidden" style="height:300px;">
+                <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 250px;">
+                    <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                        <thead>
+                            <tr class="cursor-pointer bg-white">
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-24">
+                                    Incidencia
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Acciones
+                                </th>
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Responsable
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Fechas
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Comentarios
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Adjuntos
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    Status
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    OT
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                </th>
+
+                                <th class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 hidden">
+                                    Tipo
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="dataIncidenciasEquipo" class="bg-white divide-y divide-gray-200">
+                            <!-- More rows... -->
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- CHECKLIST EQUIPO -->
+            <div id="contenedorChecklistEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- BITACORA EQUIPO -->
+            <div id="contenedorBitacoraEquipo" class="flex flex-wrap w-full justify-start p-4  overflow-x-auto scrollbar hidden" style="max-height:300.5px; min-height:150px;">
+            </div>
+
+            <!-- MENÚ OPCIONES MP -->
+            <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
+                <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646; z-index:90;">
+
+                    <h1 class="mr-1 text-right absolute right-0" style="color: #ffff;" onclick="cerrarTooltip('tooltipMP')">
+                        <i class="fas fa-times fa-lg"></i>
+                    </h1>
+
+                    <h1 class="my-2" style="color: #a9aaaa; background-color: #454A4A;">Programación <span id="semanaProgramacionMP"></span></h1>
+
+                    <h1 id="programarMPIndividual" class="contextmenu-item"><i class="fas fa-long-arrow-down mr-2 text-blue-400"></i>Programar (Individual)</h1>
+
+                    <h1 id="programarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-random mr-2 text-blue-400"></i>Reprogramar desde aquí</h1>
+
+                    <h1 id="opcionMPPersonalizado" class="contextmenu-item" onclick="expandir(this.id)">
+                        <i class="fas fa-random mr-2 text-blue-400"></i>Program. Personalizada
+                    </h1>
+
+                    <div id="opcionMPPersonalizadotoggle" class="flex flex-row items-center justify-center mb-3 hidden">
+                        <input id="numeroSemanasPersonalizadasMP" class="w-1/4 text-center shadow appearance-none border border-red-500 rounded w-full py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="1" max="52" pattern="[0-9]" autocomplete="off">
+                        <button id="programarMPPersonalizado" class="w-3/4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded">Programar</button>
+                    </div>
+
+                    <h1 id="eliminarMPIndividual" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar (individual)</h1>
+
+                    <h1 id="eliminarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar desde aquí</h1>
+
+                    <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
+
+                    <h1 id="VerOTMP" class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
+
+                    <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
+
+                    <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar
+                        OT</h1>
+
+                    <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
+
+                </div>
+                <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
+            </div>
+            <!-- MENÚ OPCIONES MP -->
+
         </div>
     </div>
-    <!-- Status Energeticos -->
+    <!-- MODAL EQUIPO PARA LOS MP-->
 
 
-    <!-- ************************************************************************ En Proceso ************************************************************************** -->
-    <div id="modal-proyectos" style="display: none;">
-        <br>
-        <br>
-        <br>
-        <section class="hero is-light is-small">
-            <!-- Hero head: will stick at the top -->
-            <div class="hero-head">
-                <nav class="navbar-menu">
-                    <div class="navbar-start has-text-centered">
-                        <span class="navbar-item">
-                            <button class="button is-warning" onclick="showsubsecciones('')"><i class="fas fa-arrow-left"></i></button>
-                        </span>
-                        <div id="estiloSeccionProyectos" class="">
-                            <input id="textSeccionAux" type="hidden">
-                            <p class="seccion-logo" id="textSeccion"></p>
-                        </div>
-                        <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
-                        <a class="navbar-item">Proyectos / Plan de Acción</a>
-                    </div>
-                    <div class="navbar-end has-text-centered">
-                        <div class="navbar-item">
-                            <button type="button" class="button is-warning" name="button">
-                                <i class="fad fa-file-excel mr-2"></i>Exportar
-                            </button>
-                        </div>
-                        <div class="navbar-item">
-                            <button id="btnProyectosFinalizados" type="button" class="button is-success is-hidden" name="button">
-                                <i id="" class="fad fa-check-double mr-2"></i>Ver Finalizados
-                            </button>
-                            <button id="btnProyectosPendientes" type="button" class="button is-danger" name="button">
-                                <i id="" class="fad fa-check-double mr-2"></i>Ver Pendientes
-                            </button>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </section>
+    <!-- MODAL PARA PENDIENTES POR SECCIONES -->
+    <div id="modalPendientes" class="modal">
+        <div class="modal-window py-10 rounded-md" style="width: 1300px;">
+            <div class=" flex flex-col items-center justify-center">
+                <div class="absolute top-0 right-0">
+                    <button onclick="cerrarmodal('modalPendientes')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
 
+                <div class="absolute top-0 left-0 flex flex-row">
+                    <div>
+                        <button id="btnExpandirMenu" onclick="expandir(this.id)" class="py-1 px-2 rounded-br-md bg-indigo-200 text-indigo-500 hover:shadow-sm rounded-tl-md font-normal relative">
+                            <i class="fas fa-arrow-to-bottom mr-1"></i>Exportar Pendientes
+                        </button>
 
-        <section class="mt-4">
-            <div class="columns">
-                <div class="column is-3 has-text-left">
-                    <div class="field has-addons">
-                        <div class="control is-expanded ml-5">
-                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Proyecto" maxlength="60" autocomplete="off">
-                        </div>
-                        <div class="control">
-                            <a class="button is-warning" onclick="nuevoProyecto();">
-                                <i class="fad fa-plus-circle"></i>
+                        <div id="btnExpandirMenutoggle" class="hidden absolute top-0 mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
+
+                            <a id="exportarMisPendientes" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Mis Pendientes (EXCEL)
                             </a>
+
+                            <a id="exportarSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Sección Completa (EXCEL)
+                            </a>
+
+                            <!-- Pendiente por terminar  -->
+                            <a id="exportarExportarSubseccionEXCEL" href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('dataExportarSubseccionesEXCEL', 'dataExportarSubseccionesPDF')">Subsecciones
+                                (EXCEL)</a>
+
+                            <a id="responsableUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Responsable (EXCEL)
+                            </a>
+
+                            <a id="exportarMisCreados" href="#" class="py-1 px-2 w-full hover:bg-gray-700"> Creados Por
+                                Mi (EXCEL)</a>
+
+                            <a id="exportarCreadosPorEXCEL" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Creados Por (EXCEL)
+                            </a>
+
+                            <a id="exportarMisPendientesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Mis Pendientes (PDF)</a>
+
+                            <a id="exportarMisCreadosPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700"> Creados
+                                Por Mi (PDF)</a>
+
+                            <a id="exportarSubseccionesPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700" onclick="toggleSubseccionesTipo('dataExportarSubseccionesPDF', 'dataExportarSubseccionesEXCEL')">Subsecciones
+                                (PDF)</a>
+
+                            <a id="exportarCreadosPorPDF" href="#" class="py-1 px-2 w-full hover:bg-gray-700">
+                                Colaborador (PDF)</a>
+
                         </div>
                     </div>
+                    <div class="ml-3 w-32" (Excel)>
+                        <button id="btnvisualizarpendientesde" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-teal-200 text-teal-500 hover:shadow-sm font-normal relative">
+                            <i class="fas fa-eye mr-1"></i><span id="tipoPendienteNombre">Todos</span>
+                        </button>
+                        <div id="btnvisualizarpendientesdetoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs">
 
+                            <a id="misPendientesUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Mis
+                                Pendientes</a>
+
+                            <a id="misPendientesCreados" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Creados Por
+                                Mi</a>
+
+                            <a id="misPendientesSinUsuario" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Sin
+                                Responsable</a>
+
+                            <a id="misPendientesSeccion" href="#" class="py-1 px-2 w-full hover:bg-gray-700">Todos</a>
+
+                        </div>
+                    </div>
+                    <div class="ml-3 w-48">
+                        <button id="dataOpcionesSubsecciones" onclick="expandir(this.id)" class="py-1 px-2 rounded-b-md bg-orange-200 text-orange-500 hover:shadow-sm font-normal relative">
+                            <i class="fas fa-eye mr-1"></i>Subsecciones
+                        </button>
+                        <div id="dataOpcionesSubseccionestoggle" class="hidden absolute top-0  mt-10 w-auto bg-gray-800 shadow-md p-2 rounded-md divide-y divide-gray-700 text-gray-100 flex flex-col text-xs z-30">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center items-center top-20 shadow-md rounded-lg w-12 h-12">
+                    <h1 id="estiloSeccion" class="font-medium text-md"></h1>
+                </div>
+                <div class="flex flex-row text-sm bg-white mt-4">
+                    <div id="btnPendientesIncidencias" class="py-1 px-2 rounded-l-md bg-gray-200 text-gray-900 font-normal cursor-pointer hover:bg-red-200 hover:text-red-500">
+                        <h1>Incidencias</h1>
+                    </div>
+
+                    <a id="btnGraficasReportesDiario" class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer" href="#">
+                        <div>
+                            <h1>Reporte Incidencias</h1>
+                        </div>
+                    </a>
+
+                    <div id="btnPendientesPreventivos" class="py-1 px-2 bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <h1>Preventivos</h1>
+                    </div>
+                    <div class="py-1 px-2 rounded-r-md bg-gray-200 text-gray-900 hover:bg-red-200 hover:text-red-500 font-normal cursor-pointer">
+                        <h1>Proyectos</h1>
+                    </div>
                 </div>
             </div>
 
-        </section>
+            <div class="px-2 mt-12">
+                <table id="tablaPendientes" class="table-auto text-xs text-center w-full sortable">
+                    <thead>
+                        <tr class="cursor pointer">
+                            <th id="tablaPendientesSubseccion" class="px-4 py-2 cursor-pointer">SUBSECCIONES
+                            </th>
+                            <th id="tablaPendientesPendientes" class="px-4 py-2 cursor-pointer">PENDIENTES
+                            </th>
+                            <th id="tablaPendientesPendientesDEP" class="px-4 py-2 cursor-pointer">PENDIENTES DEP
+                            </th>
+                            <th id="tablaPendientesTrabajando" class="px-4 py-2 cursor-pointer">TRABAJANDO
+                            </th>
+                            <th id="tablaPendientesSolucionado" class="px-4 py-2 cursor-pointer" data-title-info="Ultimos 10 Días">SOLUCIONADOS
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataSubseccionesPendientes" class="divide-y">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA PENDIENTES POR SECCIONES -->
 
 
-        <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-        <section class="mt-4">
-            <div class="columns is-gapless mx-4 rounded mb-3 has-text-white">
-                <div class="column is-one-third">
-                    <div class="columns">
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Responsable">Descripcion de los proyectos</p>
-                        </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalPendientesX-" class="modal">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalPendientesX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionMCN" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionMCN" class="font-medium text-base"></h1>
+                </div>
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1><span id="nombreEquipoMCN"></span> / <span id="tipoPendientesX"></span></h1>
+                </div>
+            </div>
 
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Opciones para MC -->
+                <div class="flex items-center justify-center text-sm font-semibold">
+                    <div id="btnAgregarPendiente" class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500">
+                        <h1>
+                            <i class="fas fa-plus mr-2"></i><span id="agregarPendiente">Agregar</span>
+                        </h1>
+                    </div>
+                    <div id="verGANTT" class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+                        <h1>
+                            <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
+                        </h1>
+                    </div>
+                    <div id="exportarPendientes" class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+                        <h1>
+                            <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
+                        </h1>
                     </div>
                 </div>
-                <div class="column ">
-                    <div class="columns is-gapless">
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Plan Acción">Plan Acción</p>
+
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                    <!-- titulos -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <h1 id="tipoPendiente">--</h1>
                         </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Responsable">Responsable</p>
+                        <div class="w-48 h-full flex items-center justify-center">
+                            <h1>RESPONSABLE</h1>
                         </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Fecha estimada de solucion">Fecha</p>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>FECHA</h1>
                         </div>
-                        <!-- <div class="column">
-                            <p class="barratitulos" data-tooltip="Documentos e imagenes adjuntos">Adjuntos</p>
-                        </div> -->
-                        <!-- <div class="column">
-                            <p class="barratitulos" data-tooltip="Comentarios">Comentarios</p>
-                        </div> -->
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Cotizaciones">Cotizaciones</p>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>MEDIA</h1>
                         </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Tipo">Tipo</p>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>COMENT</h1>
                         </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Justificación">Justificación</p>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>STATUS</h1>
                         </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Coste">Coste</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Status">Status</p>
-                        </div>
+                    </div>
+
+                    <!--Data MCN equipo -->
+                    <div id="dataPendientes" class="w-full"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+
+
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalTareasFallas" class="modal">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTareasFallas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionFallaTarea" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionFallaTarea" class="font-medium text-base"></h1>
+                </div>
+                <div id="estiloEquipoFallaTarea" class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1 id="equipoFallaTarea">. . .</h1>
+                </div>
+            </div>
+
+            <div id="contenidoOpcionesFallaTarea" class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraFallaTarea" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="agregarFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="opcionFallaPendiente" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1 id="tipoFallaTarea"></h1>
+                </div>
+
+                <div id="ganttFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="pendienteFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="solucionadosFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+                <div id="exportarFallaTarea" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2" id="exportarProyectos">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO TAREAS FALLAS -->
+            <div id="pendientesFallasTareas" class="p-2 flex justify-center items-center flex-col w-full">
+
+                <div class="overflow-x-auto scrollbar">
+                    <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                            <thead>
+                                <tr class="cursor-pointer bg-white">
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Incidencia
+                                    </th>
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Acciones
+                                    </th>
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Responsable
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Fechas
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Comentarios
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Status
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        OT
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    </th>
+
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Tipo
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="dataPendientesX" class="bg-white divide-y divide-gray-200">
+                                <!-- More rows... -->
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <!-- CONTENIDO TAREAS FALLAS -->
+
+            <!-- CONTENIDO GANTT TAREAS FALLAS -->
+            <div id="ganttFallasTareas" class="p-2 flex justify-center items-center flex-col w-full hidden">
+                <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200 mx-auto overflow-y-auto scrollbar bg-white" style="max-height: 45vh;">
+                    <div class="min-w-full divide-y divide-gray-200 table-fixed border rounded">
+                        <div class="text-xxs uppercase mt-5 w-full h-full mx-auto" id="dataGanttFallasPendientes"></div>
                     </div>
                 </div>
             </div>
-            <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+            <!-- CONTENIDO GANTT TAREAS FALLAS -->
 
 
-            <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-        </section>
-        <!--FIN FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+        </div>
 
-
-        <!-- RECIBE DATOS DE LOS PROYECTOS ******************************************************************************************* -->
-        <section class="mt-4">
-            <div id="data-proyectos"></div>
-
-            <!-- Tareas Generales convertidos a proyectos! -->
-            <div id="data-proyectos-TG"></div>
-
-        </section>
-        <!-- RECIBE DATOS DE LOS PROYECTOS ******************************************************************************************* -->
+        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
+        <div id="tooltipActividadesGeneral" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden absolute" role="tooltip" style="z-index:200">
+            <div id="arrowtooltipActividadesGeneral" data-popper-arrow></div>
+            <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                    <div class="w-4 h-4  mr-2 flex-none"></div>
+                    <div class=" text-justify w-full h-full">
+                        <input id="agregarActividadGeneral" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                    </div>
+                    <div id="btnAgregarActividadGeneral" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+                <div id="dataActividadesGeneral" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+            </div>
+        </div>
+        <!-- ACTIVIDADES PARA TAREAS Y FALLAS -->
 
     </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
 
 
-    <!-- ****************************************************************** Modal para mostrar el Status de los Departamentos *****************************************************  -->
-    <div id="reporteStatusDEP" class="modal p-4 mt-5">
-        <section class="hero is-light is-small" style="width: 100%;">
-            <!-- Hero head: will stick at the top -->
-            <div class="hero-head">
-                <nav class="navbar-menu">
-                    <div class="navbar-start has-text-centered">
-                        <button class="button is-warning m-2" onclick="show_hide_modal('reporteStatusDEP','hide'); show_hide_modalProyectos('modal-proyectos','show');"><i class=" fas fa-arrow-left"></i></button>
-                        <div class="DEP" style="background: #c8a7fc; width:60px;">
-                            <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
-                            <h3 class="title  is-4 has-text-centered mt-2">DEP</h3>
-                        </div>
-                        <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
-                        <a class="navbar-item"> Departamento &nbsp; <span id="nombreSubseccionDEP"> </span>&nbsp;/
-                            Status</a>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalTestEquipo" class="modal">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background:#DBEAFE; min-height: 60vh;">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTestEquipo')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionTest" class="">
+                    <h1 id="seccionTest" class="font-bold text-black"></h1>
+                </div>
+                <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded">
+                    <h1 id="equipoTest"> </h1>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraTest" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="agregarTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="opcionTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Test</h1>
+                </div>
+
+                <div id="ganttTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="exportarTest" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200" id="exportarProyectos">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO TAREAS FALLAS -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+
+                <div class="overflow-x-auto scrollbar">
+                    <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
+                        <table id="tablaTestEquipo" class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                            <thead>
+                                <tr class="cursor-pointer bg-white">
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Descripción
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Unidad de Medida
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Responsable
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Fechas
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Comentarios
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="dataTestEquipo" class="bg-white divide-y divide-gray-200">
+                                <!-- More rows... -->
+                            </tbody>
+
+                        </table>
                     </div>
-                    <div class="navbar-end has-text-centered">
-                        <div class="navbar-item">
-                            <form method="POST" action="php/GenerarExcel.php">
-                                <!-- Agregar para general XLS -->
-                                <input type="hidden" id="xlsIdGrupo" name="xlsIdGrupo">
-                                <input type="hidden" id="xlsIdDestino" name="xlsIdDestino">
-                                <input type="hidden" id="xlsIdSeccion" name="xlsIdSeccion">
-                                <button type="submit" id="btnEXLS" class="button is-warning" name="button" onclick="">
-                                    <i class="fad fa-file-excel mr-2"></i>Exportar
+                </div>
+
+            </div>
+            <!-- CONTENIDO TAREAS FALLAS -->
+
+        </div>
+
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+
+
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+    <div id="modalEnergeticos" class="modal">
+        <div id="contenedorPrincipalTareasFallas" class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-11/12 overflow-x-auto scrollbar" style="background: rgb(252, 211, 77);min-height: 60vh;">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEnergeticos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="">
+                    <h1 class="font-bold text-black"></h1>
+                </div>
+                <div class="ml-4 font-bold bg-yellow-400 text-yellow-700 text-xs py-1 px-2 rounded">
+                    <h1 id="tituloEnergeticos"><i class="fas fa-plug fa-lg"></i>Energéticos</h1>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraEnergeticos" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="btnModalAgregarEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Energeticos</h1>
+                </div>
+
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 px-2 bg-indigo-600 hover:bg-indigo-200 hidden">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="btnPendientesEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="btnSolucionadosEnergeticos" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+            </div>
+
+            <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 px-2 bg-indigo-600 hover:bg-indigo-200 hidden" id="exportarProyectos">
+                <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                <h1>Exportar</h1>
+            </div>
+
+            <!-- CONTENIDO TAREAS FALLAS -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+
+                <div class="overflow-x-auto scrollbar">
+                    <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200" style="max-height: 45vh;">
+                        <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                            <thead>
+                                <tr class="cursor-pointer bg-white">
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Descripción
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Responsable
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Fechas
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Adjuntos
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        Comentarios
+                                    </th>
+
+                                    <th class="px-6 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="dataEnergeticos" class="bg-white divide-y divide-gray-200">
+                                <!-- More rows... -->
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <!-- CONTENIDO TAREAS FALLAS -->
+
+        </div>
+
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS PENDIENTES -->
+
+
+    <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
+    <div id="modalSolucionadosX" class="modal">
+        <div class="modal-window rounded-md pt-10 w-auto md:w-10/12 lg:w-9/12 h-full">
+
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalSolucionadosX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- BOTON CERRARL -->
+
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div id="estiloSeccionMCF" class="flex justify-center items-center rounded-b-md w-16 h-10 shadow-xs">
+                    <h1 id="seccionMCF" class="font-medium text-base"></h1>
+                </div>
+                <div class="ml-4 font-bold bg-green-200 text-green-500 text-xs py-1 px-2 rounded">
+                    <h1><span id="nombreEquipoMCF"></span> / <span id="tipoSolucionadosX"></span></h1>
+                </div>
+            </div>
+            <!-- SECCION Y UBICACION -->
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+
+                <!-- Opciones para MC -->
+                <div class="invisible flex items-center justify-center text-sm font-semibold">
+                    <div class="py-1 cursor-pointer px-3 rounded-l hover:bg-red-200 bg-red-100 text-red-500">
+                        <h1>
+                            <i class="fas fa-plus mr-2"></i>AGREGAR MC
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 hover:bg-indigo-200 bg-indigo-100 text-indigo-500">
+                        <h1>
+                            <i class="fas fa-tasks-alt mr-2"></i>VER GANTT
+                        </h1>
+                    </div>
+                    <div class="py-1 cursor-pointer px-3 rounded-r hover:bg-teal-200 bg-teal-100 text-teal-500">
+                        <h1>
+                            <i class="fas fa-arrow-to-bottom mr-2"></i>EXPORTAR
+                        </h1>
+                    </div>
+                </div>
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                    <!-- titulos -->
+                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
+                        <div class="w-full h-full flex items-center justify-center">
+                            <h1 id="tipoSolucionado">--</h1>
+                        </div>
+                        <div class="w-48 h-full flex items-center justify-center">
+                            <h1>RESPONSABLE</h1>
+                        </div>
+                        <div class="w-64 flex h-full items-center justify-center">
+                            <h1>FECHA</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>MEDIA</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>COMENT</h1>
+                        </div>
+                        <div class="w-32 flex h-full items-center justify-center">
+                            <h1>REGRESAR</h1>
+                        </div>
+                    </div>
+
+                    <!-- equipo -->
+                    <div id="dataMCF" class="w-full"></div>
+                    <!-- equipo -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- MODAL para FALLAS Y TAREAS SOLUCIONADOS -->
+
+
+    <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
+    <div id="modalVerEnPlanner" class="modal">
+        <div class="modal-window rounded-md" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlanner')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md">
+                    <h1>Detalles</h1>
+                </div>
+            </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-200 text-teal-500 text-xs py-1 px-2 rounded-b-md">
+                    <h1 id="tipoPendienteVP"></h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 id="descripcionPendienteVP" class="px-2 py-1 w-full text-xl font-medium uppercase" style="color: #282B3B;"></h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium" style="color: #ABADB7;">Creado por:
+                        <span id="creadoPorVP" class="uppercase ml-1"></span>
+                    </h1>
+                </div>
+
+                <div class="w-full flex">
+                    <div class="w-1/2 text-sm px-2 flex flex-col">
+                        <h1 class="mb-1"></h1>
+                        <div class="flex flex-wrap w-full justify-start items-center">
+
+                            <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                <span id="fechaVP" class="bg-purple-200"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 text-sm px-2 flex flex-col">
+                        <h1 class="mb-1">Responsables</h1>
+                        <div class="flex flex-wrap w-full justify-start items-center">
+
+                            <div id="responsableVP" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                            </div>
+
+                            <div id="dataResponsablesVP"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full text-sm px-2 flex flex-col mt-3">
+                    <h1 class="mb-1">Status</h1>
+                    <div class="flex flex-wrap w-full justify-start items-center">
+                        <div id="dataStatusVP" class="flex flex-wrap w-full justify-start items-center"></div>
+                    </div>
+                </div>
+
+                <div class="w-full flex text-sm mt-5">
+                    <div class="w-1/2 mt-3">
+                        <h1 class="mb-6">Comentarios</h1>
+                        <div class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="min-height: 499px; max-height: 500px;">
+
+                            <div id="dataComentariosVP" class="flex justify-center items-center flex-col-reverse w-full"></div>
+
+                            <div class="flex flex-row justify-center items-center w-full h-10 mt-4">
+                                <input id="comentarioVP" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none" autocomplete="off">
+                                <button id="btnComentarioVP" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                    <i class="fad fa-paper-plane"></i>
                                 </button>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </nav>
-            </div>
-        </section>
 
-
-
-        <section class="mt-4" style="width: 100%;">
-            <section class="mt-4">
-
-                <div class="columns is-gapless mx-4 rounded mb-3 has-text-white">
-                    <div class="column is-half">
-                        <div class="columns is-mobile">
-                            <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de Falla</strong></p>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="column is-white">
-                        <div class="columns is-gapless is-mobile">
-                            <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Responsable</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos" data-tooltip="Fecha estimada de solucion"><strong class="has-text-white">Fecha</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos" data-tooltip="Documentos e imagenes adjuntoas"><strong class="has-text-white">Adjuntos</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos" data-tooltip="Feedback/Comentarios"><strong class="has-text-white">Comentarios</strong></p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos">Status</p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos">CODSAP</p>
-                            </div>
-                            <div class="column">
-                                <p class="barratitulos">COD2BEND</p>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div id="reporteStatusDEPData"></div>
-        </section>
-    </div>
-    <!-- ***************************************************************************************************************************************************************** -->
-
-
-    <!-- ************************************************************************ En Proceso ************************************************************************** -->
-    <div id="modal-proyectos-finalizados" class="modal">
-        <br><br><br>
-        <section class="hero is-light is-small" style="width: 100%;">
-            <!-- Hero head: will stick at the top -->
-            <div class="hero-head">
-                <nav class="navbar-menu">
-                    <div class="navbar-start has-text-centered">
-                        <span class="navbar-item">
-                            <button class="button is-warning" onclick="regresarProyectos()"><i class="fas fa-arrow-left"></i></button>
-                        </span>
-                        <div class="s-zia">
-                            <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
-                            <p id="textSeccionProyectosFinalizados">--</p>
-                        </div>
-                        <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
-                        <a class="navbar-item"> Proyectos / Finalizados</a>
-                    </div>
-                    <div class="navbar-end has-text-centered">
-                        <div class="navbar-item">
-                            <button type="button" class="button is-warning" name="button">
-                                <i class="fad fa-file-excel mr-2"></i>Exportar
-                            </button>
-                        </div>
-
-                    </div>
-                </nav>
-            </div>
-        </section>
-
-        <section class="mt-4">
-        </section>
-
-        <section class="mt-4" style="width: 100%;">
-            <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-            <div class="columns is-gapless mx-4 rounded mb-3 has-text-white">
-                <div class="column is-one-third">
-                    <div class="columns">
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Responsable">Descripcion de los proyectos</p>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="column ">
-                    <div class="columns is-gapless">
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Responsable Asignado">Responsable</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Fecha estimada de solucion">Fecha</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Documentos e imagenes adjuntoas">Adjuntos</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Comentarios">Comentarios</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Cotizaciones">Cotizaciones</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Tipo">Tipo</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Justificación">Justificación</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Coste">Coste</p>
-                        </div>
-                        <div class="column">
-                            <p class="barratitulos" data-tooltip="Status Actual">Status</p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-
-            <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
-            <div id="data-proyectos-finalizados"></div>
-        </section>
-    </div>
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL JUSTIFICACION xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modal-Justificacion" class="modal">
-        <input type="hidden" id="idProyectoJustificacion">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-
-                        <div class="columns">
-                            <div class="column">
-                                <textarea id="dataJustificacion" class="textarea" placeholder="Escriba la justificacion del proyecto..."></textarea>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarJustificacionProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
-                                <br><button class="button is-info is-fullwidth mt-2" onclick="consultaArchivoJustificacion();"><i class="fad fa-cloud-upload-alt fa-lg"></i>Adjuntos</button>
-
+                    <div class="w-1/2  mt-3">
+                        <div class="flex items-center justify-start">
+                            <h1 class="mr-2">Adjuntos</h1>
+                            <div id="adjuntosVP" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL JUSTIFICACION xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL COSTE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modal-Costo" class="modal">
-        <input type="hidden" id="idProyectoCoste">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-
-                <div class="card-content">
-                    <div class="content">
-
-                        <div class="columns">
-                            <div class="column">
-                                <div class="control">
-                                    <span></span><input id="dataCoste" class="input" type="text" placeholder="Coste en USD">
-                                </div>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarCostoProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL COSTE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  PLAN ACCIÓN xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalStatusPlanAccion" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="aplicarStatus('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
-                                    urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="aplicarStatus('material');"><span class="mr-4 fa-lg"><strong> M
-                                        </strong></span> No hay material</button>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="aplicarStatus('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
-                                <button class="button is-success is-fullwidth mt-2" onclick="aplicarStatus('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
-                                <div class="column has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarPlan();">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarPlanAccion('');">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-                                <div class="column has-text-centered">
-                                    <input id="editarTituloPlan" class="hidden bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button id="btnTituloPlan" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="actualizarPlanAccion('');">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjuntosVP" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 300px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+    <!-- MODAL VER EN PLANNER PARA LOS PENDIENTES  -->
 
 
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modal-Status" class="modal">
-        <input type="hidden" id="idProyectoStatus">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="statusProyecto('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
-                                    urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusProyecto('material');"><span class="mr-4 fa-lg"><strong> M
-                                        </strong></span> No hay material</button>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="statusProyecto('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
-                                <!--<button class="button is-success is-fullwidth mt-2" onclick="statusProyecto('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>-->
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div id="dataOptionDEP" class="column has-text-centered">
-
-                            </div>
-                        </div>
-                        <div class="columns my-0">
-                            <div class="column has-text-centered my-0">
-                                <div class="has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarProyecto();">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarProyecto('');">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-                                <div id="btnInputProyecto" class="has-text-centered hidden">
-                                    <input id="editarTituloProyecto" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarProyecto('');">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
+    <div id="modalVerEnPlannerPlanaccion" class="modal">
+        <div class="modal-window rounded-md" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlannerPlanaccion')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Detalles</h1>
                 </div>
             </div>
-
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalStatusMC" class="modal">
-        <input type="hidden" id="idMC">
-        <input type="hidden" id="idUsuarioMC">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column mb-0">
-                                <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
-                                    urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="consultaCodigoSeguimientoMC()"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
-                                <div id="codigoSeguimientoMC" class="columns is-fullwidth is-centered mt-2 is-hidden">
-                                    <input id="codigoSeguimiento" class="column button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
-                                    <button class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
-                                </div>
-                                <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
-                                <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalDepartamentoMC', 'show'); consultaEDMC('departamento');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
-                                <button class="button is-info is-fullwidth mt-2" onclick="statusMC('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
-                                <button class="button is-success is-fullwidth mt-2" onclick="statusMC('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
-                            </div>
-                        </div>
-                        <div class="columns my-0">
-                            <div class="column has-text-centered my-0">
-                                <div class="has-text-centered">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarMC();">
-                                        <i class="far fa-edit"></i>
-                                        <span> Editar</span>
-                                    </button>
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarMC('');">
-                                        <i class="far fa-trash-alt"></i>
-                                        <span> Eliminar</span>
-                                    </button>
-                                </div>
-                                <div id="btnInputMC" class="has-text-centered hidden">
-                                    <input id="editarTituloMC" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
-                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarMC('');">
-                                        <i class="far fa-save"></i>
-                                        <span> Guardar</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-100 text-teal-500 text-xs py-1 px-2 rounded-b-md">
+                    <h1>ACTIVIDAD DE PLAN DE ACCIÓN</h1>
                 </div>
             </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 id="tiluloPlanaccion" class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;"></h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium text-center" style="color: #ABADB7;">
+                        Fecha de
+                        creacion:
+                        <span id="fechaCreacionPlanaccion" class="uppercase ml-1"></span>
+                    </h1>
+                </div>
+                <div class="w-full  self-start flex flex-wrap border-b-2 border-gray-100">
+                    <div class="w-1/2 border-r-2 border-gray-100">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Creado por:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2">
+                                    <h1 id="creadoPorPlanaccion" class="font-medium"></h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
 
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modal-Tipo" class="modal">
-        <input type="hidden" id="idProyectoTipo">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column"><br>
-                                <div class="control">
-                                    <div class="select is-fullwidth">
-                                        <select id="dataTipo">
-                                            <option value="CAPEX">CAPEX</option>
-                                            <option value="CAPIN">CAPIN</option>
-                                            <option value="PROYECTO">PROYECTO</option>
-                                        </select>
+                                <div id="btnResponsablePlanaccion" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div>
+                                    <div id="dataResponsablesAsignadosPlanaccion" class="flex flex-wrap w-full justify-start items-center">
                                     </div>
+
                                 </div>
-                                <button class="button is-info is-fullwidth mt-2" onclick="actualizarTipoProyecto();"><i class="fad fa-save mr-4 fa-lg"></i>Guardar</button><br>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div id="btnStatusPlanaccion" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+
+                                <div id="dataStatusPlanaccion" class="flex flex-wrap w-full justify-start items-center"> </div>
+
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solucion estimada:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
+                                    <span id="rangoFechaPlanaccion" class="bg-purple-200" onclick="abrirmodal('modalRangoFechaX')">Sin Fecha asignada</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Proviene del proyecto:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 id="proyectoPlanaccion" class="font-medium"></h1>
+                                </div>
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 id="tipoProyectoPlanaccion" class="font-medium"></h1>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <div class="w-1/2">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Acciones:
+                                <div class="flex flex-wrap w-full justify-start items-center">
+                                    <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
+                                        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                                            <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
+                                                <div class="w-4 h-4  mr-2 flex-none"></div>
+                                                <div class=" text-justify w-full h-full ">
+                                                    <input id="inputActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Acción" autocomplete="off">
+                                                </div>
+                                                <div id="btnAgregarActividadPlanaccionX" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div id="btnAbrirOTPlanaccion" class="ml-2 flex items-center justify-center text-white cursor-pointer h-6 rounded px-2 flex-none text-sm bg-blue-500">
+                                                    <h1>Ver OT</h1>
+                                                </div>
+                                            </div>
 
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+                                            <div id="dataActividadesPlanaccion" class="w-auto overflow-y-auto scrollbar" style="max-height: 200px;">
+                                            </div>
 
-
-    <!--MODAL Subir Archivos -->
-    <div id="modalSubirArchivo" class="modal">
-        <input type="hidden" id="idProyecto"></input>
-        <input type="hidden" id="idUsuarioProyecto"></input>
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div class="column is-4 has-text-centered">
-                        <div class="principal">
-                            <h1 class="title is-4 has-text-centered">Subir Archivo</h1>
-                            <form id="form_subir">
-                                <div class="form-1-2">
-                                    <div class="field">
-                                        <div class="file is-info has-name fileName">
-                                            <label class="file-label">
-                                                <input class="file-input" type="file" name="archivo" required>
-                                                <span class="file-cta">
-                                                    <span class="file-icon">
-                                                        <i class="fas fa-upload"></i>
-                                                    </span>
-                                                </span>
-                                                <span class="file-name"> Nombre Archivo </span>
-                                            </label>
-                                            <button class="btn button is-primary" type="submit" onclick="subirArchivo();"><span class="fas fa-save fa-lg">
-                                                </span></button>
-                                            <!-- <span class="fas fa-save"> </span><input class="btn button is-primary" value="Subir" onclick="subirArchivo();"> -->
                                         </div>
                                     </div>
                                 </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <div class="progress is-primary barra">
-                                    <div class="barra_azul" id="barra_estado">
-                                        <span></span>
-                                    </div>
+                <div class="w-full flex text-sm ">
+                    <div class="w-1/2 relative border-r-2 border-gray-100 px-2 mt-2">
+                        <h1 class="mb-2" style="color: #ABADB7;">Comentarios:</h1>
+
+                        <div id="dataComentariosPlanaccion" class="px-4 overflow-y-auto scrollbar flex flex-col w-full pb-10" style="min-height: 499px; min-height: 499px; max-height: 500px;">
+
+
+
+                        </div>
+                        <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
+                            <input id="inputComentarioPlanaccion" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
+                            <button id="btnAgregarComentarioPlanaccion" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                <i class="fad fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 px-2 mt-2">
+                        <div class="flex items-center justify-start relative">
+                            <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
+                            <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm">
+                                    <i class="fas fa-plus"></i>
+                                </h1>
+                                <input type="file" id="inputFilePlanaccion" multiple class="absolute top-0 opacity-0">
+                            </div>
+                        </div>
+
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjutnosPlanaccion" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 450px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLTIP -->
+            <div id="tooltipOpcionesActividadPlanaccion" role="tooltip" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+
+                    <div class="w-full flex flex-row">
+
+                        <button id="btnNuevoTituloPlanaccion" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="expandir('btnNuevoTituloPlanaccion'); expandir('btnAplicarNuevoTituloPlanaccion')">
+                            Editar <i class="fa fa-pencil mx-2"></i>
+                        </button>
+
+                        <button id="btnAplicarNuevoTituloPlanacciontoggle" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="expandir(this.id)">
+                            Aplicar <i class="fa fa-check-circle mx-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="btnNuevoTituloPlanacciontoggle" class="px-1 mb-4 hidden">
+                        <input id="nuevoTituloPlanaccion" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
+                    </div>
+
+                    <button id="btnEliminarActividadPlanaccion" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                        Eliminar <i class="fa fa-trash mx-2"></i>
+                    </button>
+
+                </div>
+            </div>
+            <!-- TOOLTIP -->
+        </div>
+    </div>
+    <!-- MODAL VER EN PLANNER PARA LOS PLANES DE ACCION -->
+
+
+    <!-- MODAL VER EN PLANNER PARA LAS INCIDENCIAS -->
+    <div id="modalVerEnPlannerIncidencia" class="modal">
+        <div class="modal-window rounded-md" style="width: 900px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0 z-30">
+                <button onclick="cerrarmodal('modalVerEnPlannerIncidencia')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 flex flex-row items-center justify-start w-full">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Detalles</h1>
+                </div>
+            </div>
+            <div class="absolute top-0 flex flex-row items-center justify-center w-full">
+                <div class="font-bold bg-teal-100 text-teal-500 text-xs py-1 px-2 rounded-b-md mr-2">
+                    <h1>INCIDENCIA</h1>
+                </div>
+                <div id="tipoIncidenciaVerEnPlanner" class="">
+                    <h1></h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center w-full py-6">
+                <div class="mb-3 flex flex-col w-full leading-none">
+                    <h1 id="tituloVerEnPlanner" class="px-2 pt-4 w-full text-xl font-medium uppercase text-center" style="color: #282B3B;"></h1>
+                    <h1 class="px-2 py-1 w-full text-xs font-medium text-center" style="color: #ABADB7;">
+                        Fecha de Creación:
+                        <span id="fechaVerEnPlanner" class="uppercase ml-1"></span>
+                    </h1>
+                </div>
+                <div class="w-full  self-start flex flex-wrap border-b-2 border-gray-100">
+                    <div class="w-1/2 border-r-2 border-gray-100">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Creado por:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2">
+                                    <h1 id="creadoPorVerEnPlanner" class="font-medium"></h1>
                                 </div>
-
-
-                                <div class="acciones has-text-centered">
-                                    <input type="button" class="cancel " id="cancelar" value="cancelar" hidden>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Responsables asignados:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div id="btnResponsablesIncidencias" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
                                 </div>
-                                <input type="hidden" id="tablaArchivo" name="tablaArchivo">
-                                <input type="hidden" id="idGeneral" name="idGeneral">
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div class="column">
-                        <div id="archivos">
-                            Sin Adjuntos
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-        </div>
-    </div>
-    <!-- Fin Modal Archivos -->
-
-
-    <!--MODAL RESPONSABLE DE PROYECTO-->
-    <div id="modaResponsableProyecto" class="modal">
-        <input type="hidden" id="responsableProyecto">
-        <br>
-        <br>
-        <br>
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
-
-            </header>
-            <!-- Any other Bulma elements you want -->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divListaUsuariosProy" class="column">
-
-                        <?php
-                        if ($idDestinoT == 10) {
-                            $query = "SELECT * FROM t_users WHERE status = 'A' ORDER BY username";
-                        } else {
-                            $query = "SELECT * FROM t_users WHERE (id_destino = $idDestinoT OR id_destino = 10) AND status = 'A' ORDER BY username";
-                        }
-                        $usuarios = $conn->obtDatos($query);
-                        if ($conn->filasConsultadas > 0) {
-                            foreach ($usuarios as $u) {
-                                $idUsuario = $u['id'];
-                                $idTrabajador = $u['id_colaborador'];
-                                $query = "SELECT * FROM t_colaboradores WHERE id = $idTrabajador";
-                                try {
-                                    $trabajador = $conn->obtDatos($query);
-                                    if ($conn->filasConsultadas > 0) {
-                                        foreach ($trabajador as $t) {
-                                            $nombreT = $t['nombre'];
-                                            $apellidoT = $t['apellido'];
-                                            $fotoT = $t['foto'];
-                                        }
-                                    } else {
-                                        $nombreT = "";
-                                        $apellidoT = "";
-                                        $fotoT = "";
-                                    }
-                                } catch (Exception $ex) {
-                                    echo $ex;
-                                }
-
-                                if ($fotoT != "") {
-                                    $urlFoto = "img/users/$fotoT";
-                                } else {
-                                    $urlFoto = "https://ui-avatars.com/api/?uppercase=false&name=$nombreT+$apellidoT&background=d8e6ff&rounded=true&color=4886ff&size=100%";
-                                }
-
-                                echo "<h6 class=\"title is-6 manita border rounded py-1 px-1 my-1 mx-2 text-truncate usuario\" onclick=\"asignarResponsableProyecto($idUsuario)\"><span><i class=\"fas fa-user\"></i></span> $nombreT $apellidoT</h6>";
-                            }
-                        }
-                        ?>
-
-                    </div>
-                </div>
-            </section>
-            <footer class="modal-card-foot">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column has-text-right">
-                            <button class="button is-danger" onclick="cerrarModalResponsableProyecto();">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-        <!--<button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsableProyecto');"></button>-->
-    </div>
-
-
-    <!--MODAL RESPONSABLE DE PROYECTO-->
-    <div id="modaResponsableTareasP" class="modal">
-        <br>
-        <br>
-        <br>
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <!-- <header class="modal-card-head">
-                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
-            </header> -->
-            <!-- Any other Bulma elements you want -->
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="dataResposansableTareaP" class="column">
-                    </div>
-                </div>
-            </section>
-            <footer class="modal-card-foot">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column has-text-right">
-                            <button class="button is-danger" onclick="closeModal();">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
-
-    <!--MODAL COMENTARIOS -->
-    <div id="modalComentario" class="modal">
-        <input type="hidden" id="idProyecto"></input>
-        <input type="hidden" id="idUsuarioProyecto"></input>
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div id="divHeaderComentarios" class="column">
-                        <button class="delete" aria-label="close"></button>
-                    </div>
-                </div>
-                <div class="columns">
-                    <div id="colComentariosEquipo" class="column">
-                        <div class="timeline is-left">
-                            <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
-                            <div class="columns is-centered">
-                                <div class="field has-addons">
-                                    <div class="control">
-                                        <input id="textComentarioProyecto" class="input" type="text" placeholder="Agregar Comentarios...">
-                                    </div>
-                                    <div class="control" onclick="agregarComentarioProyectos()">
-                                        <a class="button is-info">Agregar</a>
+                                <div id="responsablesVerEnPlanner">
+                                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                        <h1 class="font-medium"></h1>
+                                        <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="comentarioProyecto"></div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Status:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div id="btnStatusVerEnPlanner" class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                    <h1 class="font-medium text-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </h1>
+                                </div>
+                                <div id="statusVerEnPlanner" class="flex flex-wrap w-full justify-start items-center"></div>
                             </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Fecha Solución estimada:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2 ">
+                                    <span id="rangoFechaVerEnPlanner" class="bg-purple-200">
+                                        Sin Fecha Asignada</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Asociada a:</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+                                <div class="bg-gray-200 text-gray-700 px-2 rounded flex items-center mr-2 uppercase cursor-pointer">
+                                    <h1 id="asignadoAVerEnPlanner" class="font-medium"></h1>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="w-1/2">
+                        <div class="w-full flex-none text-sm px-2 flex flex-col mb-3">
+                            <h1 class="mb-1" style="color: #ABADB7;">Acciones:
+                                <div class="flex flex-wrap w-full justify-start items-center">
+                                    <div class="w-full h-auto rounded-md flex" role="tooltip" data-popper-placement="bottom" data-popper-reference-hidden="">
+                                        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+                                            <div class="flex items-center justify-between uppercase border-2 py-2 hover:bg-fondos-2 border-gray-100 rounded mb-2">
+                                                <div class="w-4 h-4  mr-2 flex-none"></div>
+                                                <div class=" text-justify w-full h-full ">
+                                                    <input id="actividadVerEnPlanner" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Acción" autocomplete="off">
+                                                </div>
+                                                <div id="btnAgregarActividadVerEnPlanner" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div id="btnVerOTVerEnPlanner" class="ml-2 flex items-center justify-center text-white cursor-pointer h-6 rounded px-2 flex-none text-sm bg-blue-500">
+                                                    <h1>Ver OT</h1>
+                                                </div>
+                                            </div>
+                                            <div id="dataActividadesIncidenciaVerEnPlanner" class="w-auto overflow-y-auto scrollbar" style="max-height: 200px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
+                <div class="w-full flex text-sm ">
+                    <div class="w-1/2 relative border-r-2 border-gray-100 px-2 mt-2">
+                        <h1 class="mb-2" style="color: #ABADB7;">Comentarios:</h1>
+
+                        <div id="dataComentariosIncidenciaVerEnPlanner" class="px-4 overflow-y-auto scrollbar flex flex-col w-full pb-10" style="min-height: 499px; min-height: 499px; max-height: 500px;"></div>
+
+                        <div class="flex flex-row justify-center items-center w-full h-10 absolute bottom-0">
+                            <input id="comentarioIncidenciaVerEnPlanner" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
+                            <button id="btnAgregarComentarioVerEnPlanner" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                                <i class="fad fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="w-1/2 px-2 mt-2">
+                        <div class="flex items-center justify-start relative">
+                            <h1 class="mr-2" style="color: #ABADB7;">Adjuntos</h1>
+                            <div class="bg-gray-500 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
+                                <h1 class="font-medium text-sm">
+                                    <i class="fas fa-plus"></i>
+                                </h1>
+                                <input type="file" id="inputFileIncidencias" multiple class="absolute top-0 opacity-0">
+                            </div>
+                        </div>
+                        <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar">
+                            <div id="dataAdjuntosIncidenciaVerEnPlanner" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 450px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOOLTIP -->
+            <div id="tooltipOpcionesActividadIncidencias" role="tooltip" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+
+                    <div class="w-full flex flex-row">
+
+                        <button class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem" onclick="toggleHidden('aplicarTituloIncidenca'); toggleHidden('nuevoTituloIncidenciaToggle')">
+                            Editar <i class="fa fa-pencil mx-2"></i>
+                        </button>
+
+                        <button id="aplicarTituloIncidenca" class="block w-1/2 text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 hidden" role="menuitem" onclick="toggleHidden('aplicarTituloIncidenca'); toggleHidden('nuevoTituloIncidenciaToggle')">
+                            Aplicar <i class="fa fa-check-circle mx-2"></i>
+                        </button>
+                    </div>
+
+                    <div id="nuevoTituloIncidenciaToggle" class="px-1 mb-4 hidden">
+                        <input id="nuevoTituloIncidencia" type="text" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Nuevo Titulo" autocomplete="off">
+                    </div>
+
+                    <button id="btnEliminarActividadIncidencia" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                        Eliminar <i class="fa fa-trash mx-2"></i>
+                    </button>
+
+                </div>
+            </div>
+            <!-- TOOLTIP -->
+
         </div>
     </div>
+    <!-- MODAL VER EN PLANNER PARA LAS INCIDENCIAS -->
 
 
-    <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
-    <div id="modalPlanAccion" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card modal-md modal-md-91">
-            <section class="modal-card-body">
-                <div class="columns">
-                    <div class="column is-4">
-                        <h4 class="subtitle is-4 has-text-centered">Plan de acción</h4>
-                        <input id="inputPlanAccion" class="input is-rounded" type="text" placeholder="Agregar Plan Acción"><br><br>
+    <!-- MODAL PROYECTOS -->
+    <div id="modalProyectos" class="modal">
+        <div class="w-full h-screen bg-purple-400 relative">
+            <div id="contenidoOpcionesProyectos" class="flex justify-center items-center mb-5 relative pt-4">
+                <div class="font-light text-3xl ml-3 leading-none text-purple-600 absolute left-0 text-center">
+                    <h1>Proyectos</h1><span id="loadProyectos"></span>
+                </div>
 
-                        <div class="timeline is-left">
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraProyecto" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
 
-                            <div id="planAccion"></div>
+                <div id="agregarProyecto" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
 
-                            <div class="timeline-item">
-                                <div class="timeline-marker is-icon">
-                                    <i class="fad fa-genderless"></i>
+                <div id="opcionProyectos" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Proyectos</h1>
+                </div>
+                <div id="opcionGanttProyectos" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="proyectosPendientes" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+                <div id="proyectosSolucionados" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+                <div class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2" id="exportarProyectos">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <div id="btnCerrerModalProyectos" class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-purple-200" onclick="toggleModalTailwind('modalProyectos')">
+                <i class="fas fa-times"></i>
+                <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
+            </div>
+
+            <!-- CONTENIDO PROYECTOS -->
+            <div id="contenidoProyectos" class="flex flex-col mx-auto contenedor">
+                <div class="align-middle inline-block shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar w-auto mx-auto relative bg-white" style="min-height: 79vh; max-height: 80vh;">
+                    <table class="divide-y divide-gray-200  sortable">
+                        <thead>
+                            <tr class="cursor-pointer bg-white">
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Proyecto
+                                </th>
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    PDA
+                                </th>
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Responsable
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Fechas
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Cotizaciones
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Tipo
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Justificación
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Importe
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Presupuesto
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Status
+                                </th>
+
+                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="contenedorDeProyectos" class="bg-white divide-y divide-gray-200">
+                            <!-- More rows... -->
+                        </tbody>
+                    </table>
+
+                    <!-- PLANACCION PROYECTOS -->
+                    <div id="tooltipProyectos" role="tooltip" class="bg-bluegray-900 p-1 rounded-lg contenedor hidden" style="z-index:100">
+                        <div class="flex flex-col">
+                            <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                                <div class="relative text-gray-600">
+                                    <input id="agregarPlanaccion" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Agregar Plan Acción" autocomplete="off">
+                                </div>
+
+                                <div id="btnagregarPlanaccion" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                                    <i class="fas fa-plus mr-1 text-xs"></i>
+                                    <h1>Nuevo</h1>
+                                </div>
+
+                                <div id="planaccionPendientes" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2 bg-purple-200">
+                                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                                    <h1>Pendientes</h1>
+                                </div>
+
+                                <div id="planaccionSolucionados" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2 bg-purple-600">
+                                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                                    <h1>Solucionados</h1>
+                                </div>
+
+                            </div>
+                            <div class="-my-2 py-2 overflow-x-auto scrollbar">
+                                <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 35vh;">
+                                    <table class="min-w-full divide-y divide-gray-200 table-fixed">
+                                        <thead>
+                                            <tr class="cursor-pointer bg-white">
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Planacción
+                                                </th>
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Actividades
+                                                </th>
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Responsable
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Fechas
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Comentarios
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Adjuntos
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    Status
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                    OT
+                                                </th>
+
+                                                <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="contenedorDePlanesdeaccion" class="bg-white divide-y divide-gray-200">
+                                            <!-- More rows... -->
+                                        </tbody>
+
+                                    </table>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+                    <!-- PLANACCION PROYECTOS -->
+                </div>
 
-                    <div class="column is-0"></div>
+            </div>
+            <!-- CONTENIDO PROYECTOS -->
 
-                    <div class="column is-5">
-                        <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
-                        <input id="inputComentarioPlanAccion" class="input is-rounded is-fullwidth is-4" type="text" placeholder="Añadir comentario"><br>
-
-                        <div id="comentarioPlanAccion"></div>
-                    </div>
-
-                    <div class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Adjuntos</h4>
-                        <input id="inputAdjuntoPlanAccion" class="file is-fullwidth" type="file" placeholder="Añadir Adjunto"><br>
-
-                        <img src="svg/formatos/avi.svg" alt="" width="80px">
-
-                    </div>
-            </section>
+            <!-- CONTENIDO GANTT -->
+            <div id="contenidoGantt" class="flex flex-col mx-auto contenedor overflow-x-auto scrollbar hidden">
+                <div class="mt-2 mx-auto flex flex-row justify-center items-start font-semibold text-xs text-bluegray-500 cursor-pointer overflow-y-auto scrollbar bg-white sm:rounded-lg border-b border-gray-200 w-full h-full" style="max-height: 80vh;">
+                    <div class="text-xxs uppercase mt-5 w-full h-full mx-auto" id="chartdiv"></div>
+                </div>
+            </div>
+            <!-- CONTENIDO GANTT -->
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-
-    <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
-
-
-    <!--AREA DE MENSAJES-->
-    <article id="article-mapas" class="message is-primary popup" style="display: none;">
-        <div class="message-header">
-            <p>Mapareregregrgrer</p>
-            <button class="delete" aria-label="delete" onclick="cerrarMapa();"></button>
-        </div>
-        <div id="message-body" class="message-body">
-
-        </div>
-    </article>
+    <!-- MODAL PROYECTOS -->
 
 
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalDepartamento" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <h3 class="title is-3 has-text-centered has-text-primary">Departamentos</h3>
+    <!-- MODAL PROYECTOS DEP -->
+    <div id="modalProyectosDEP" class="modal">
+        <div class="w-full h-screen bg-fondos-7 relative">
+            <div class="flex justify-center items-center mb-5 relative pt-4">
+                <div class="font-light text-xl ml-3 leading-none text-bluegray-600 absolute left-0 text-center">
+                    <h1 id="ProyectosSubseccionDEP"></h1><span class="text-center" id="loadProyectosDEP"></span>
+                </div>
+                <div class="relative text-gray-600 w-72">
+                    <input id="palabraProyectoDEP" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar Proyecto" autocomplete="off">
+                    <button type="submit" class="absolute right-0 top-0 mt-1 mr-4">
+                        <i class="fad fa-search"></i>
+                    </button>
+                </div>
+
+                <div id="agregarProyectoDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-plus mr-1 text-xs"></i>
+                    <h1>Nuevo</h1>
+                </div>
+
+                <div id="opcionProyectosDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-list mr-1 font-normal text-xs"></i>
+                    <h1>Proyectos</h1>
+                </div>
+                <div class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2 hidden">
+                    <i class="fas fa-stream mr-1 font-normal text-xs"></i>
+                    <h1>Gantt</h1>
+                </div>
+
+                <div id="etiquetadoProyectosDEP" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 bg-red-300 text-red-500 px-2 font-semibold border-2 border-red-200">
+                    <i class="fas fa-star mr-1"></i>
+                    <h1>Etiquetado <span id="etiquetadoDEP"></span></h1>
+                </div>
+
+                <div id="proyectosPendientesDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                    <h1>Pendientes</h1>
+                </div>
+
+                <div id="proyectosSolucionadosDEP" class="text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 bg-gray-400 text-bluegray-900 px-2">
+                    <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                    <h1>Solucionados</h1>
+                </div>
+
+                <div id="exportarProyectosDEP" class="text-bluegray-50 text-sm cursor-pointer bg-bluegray-800 rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-gray-400 hover:text-bluegray-900 px-2">
+                    <i class="fas fa-arrow-alt-circle-down mr-1 font-normal text-xs"></i>
+                    <h1>Exportar</h1>
+                </div>
+            </div>
+
+            <div id="btnCerrerModalProyectosDEP" class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer bg-red-300 rounded-full w-auto px-2 h-6 flex justify-center items-center m-2 hover:bg-bluegray-200 hover:text-white" onclick="toggleModalTailwind('modalProyectosDEP');">
+                <i class="fas fa-times"></i>
+                <h1 class="ml-1 uppercase font-semibold text-xs">Cerrar</h1>
+            </div>
+
+            <div id="contenedorDEP" class="w-full mx-auto p-1">
+                <div class="flex flex-col contenedor mx-auto scrollbar">
+                    <div class="-my-2 py-2 overflow-x-auto mx-auto scrollbar">
+                        <div class="align-middle inline-block w-auto shadow-md overflow-auto sm:rounded-lg bg-white border-b border-gray-200 scrollbar mx-auto relative" style="max-height: 80vh; min-height: 70vh;">
+                            <table id="tablaProyectosDEP" class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Proyecto
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            PDA
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Responsable
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Fechas
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Cotizaciones
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Tipo
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Justificación
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Importe
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Presupuesto
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Status
+                                        </th>
+
+                                        <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorDeProyectosDEP" class="bg-white divide-y divide-gray-200">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
+                            <!-- PLANACCION PROYECTOS DEP -->
+                            <div id="tooltipProyectosDEP" role="tooltip" class="bg-bluegray-900 py-4 px-2 rounded contenedor hidden">
+                                <div class="flex flex-col contenedor mx-auto scrollbar">
+                                    <div class="flex justify-center items-center mb-5 relative pt-4">
+
+                                        <div class="relative text-gray-600 w-72">
+                                            <input id="agregarPlanaccionDEP" class="border-2 border-gray-300 bg-white h-8 px-5 pr-16 rounded-md text-sm focus:outline-none w-full" type="input" placeholder="Agregar Plan Acción" autocomplete="off">
+                                        </div>
+
+                                        <div id="btnagregarPlanaccionDEP" class="text-purple-400 text-sm cursor-pointer bg-purple-600 rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2">
+                                            <i class="fas fa-plus mr-1 text-xs"></i>
+                                            <h1>Nuevo</h1>
+                                        </div>
+
+                                        <div id="planaccionPendientesDEP" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-12 hover:bg-purple-200 px-2 bg-purple-200">
+                                            <i class="fas fa-minus mr-1 font-normal text-xs"></i>
+                                            <h1>Pendientes</h1>
+                                        </div>
+
+                                        <div id="planaccionSolucionadosDEP" class="text-purple-400 text-sm cursor-pointer rounded-full w-auto h-6 flex justify-center items-center ml-2 hover:bg-purple-200 px-2 bg-purple-600">
+                                            <i class="fas fa-check mr-1 font-normal text-xs"></i>
+                                            <h1>Solucionados</h1>
+                                        </div>
+
+                                    </div>
+                                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 25vh;">
+                                            <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                                <thead>
+                                                    <tr class="cursor-pointer bg-white">
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Planacción
+                                                        </th>
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Actividades
+                                                        </th>
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Responsable
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Fechas
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Comentarios
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Adjuntos
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            Status
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                            OT
+                                                        </th>
+
+                                                        <th class="px-6 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody id="contenedorDePlanesdeaccionDEP" class="bg-white divide-y divide-gray-200">
+                                                    <!-- More rows... -->
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- PLANACCION PROYECTOS DEP -->
                         </div>
-                        <div class=" columns">
-                            <div class="column buttons">
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatus('departamento_calidad')">Calidad</button>
-
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_compras')">Compras</button>
-
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_direccion')">Dirección</button>
-
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_finanzas')">Finanzas</button>
-
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_rrhh')">RRHH</button>
-                            </div>
-                        </div>
-                        <div class="columns columns is-centered p-2">
-                            Departamentos Selecionados
-                        </div>
-                        <div id="dataStatusDepartamento" class="columns p-2 flex-wrap"></div>
                     </div>
                 </div>
             </div>
 
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+            <!-- ETIQUETADO -->
+            <div id="contendorEtiquetado" class="w-full bg-bluegray-900 py-4 hidden">
+                <div class="flex flex-col container mx-auto scrollbar">
+                    <div class="-my-2 py-2 overflow-x-auto  scrollbar">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto rounded border-b border-gray-200 scrollbar" style="max-height: 80vh;">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Origen
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Sección
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            #OT
+                                        </th>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Responsable
+                                        </th>
 
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Fechas
+                                        </th>
 
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalDepartamentoMC" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <h3 class="title is-3 has-text-centered has-text-primary">Departamentos</h3>
-                            </div>
-                        </div>
-                        <div class="has-text-centered title is-5 mb-2">
-                            Opción
-                        </div>
-                        <div class=" columns">
-                            <div class="column buttons">
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatusMC('departamento_calidad')">Calidad</button>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Comentarios
+                                        </th>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_compras')">Compras</button>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Adjuntos
+                                        </th>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_direccion')">Dirección</button>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Status
+                                        </th>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_finanzas')">Finanzas</button>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            Cod2Bend
+                                        </th>
 
-                                <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('departamento_rrhh')">RRHH</button>
-                            </div>
-                        </div>
-                        <div class="has-text-centered title is-5 mb-2">
-                            Seleccionado
-                        </div>
-                        <div id="consultaDepartamentoMC" class="column"></div>
-                    </div>
-                </div>
-            </div>
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                            CodSap
+                                        </th>
 
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                        </th>
 
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  ENERGETICOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalEnergeticoMC" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <h3 class="title is-3 has-text-centered has-text-warning">Energéticos</h3>
-                            </div>
-                        </div>
-                        <div class="has-text-centered title is-5 mb-2">
-                            Opción
-                        </div>
-                        <div class=" columns">
-                            <div class="column buttons">
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatusMC('energetico_electricidad');">Electricidad</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_agua');">Agua</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_diesel');">Diésel</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatusMC('energetico_gas');">Gas</button>
-                            </div>
-                        </div>
-                        <div class="has-text-centered title is-5 mb-2">
-                            Seleccionado
-                        </div>
-                        <div id="consultaEnergeticoMC" class="column"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  ENERGETICOS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div id="modalEnergetico" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-content is-tiny has-background-white rounded">
-            <!-- Any other Bulma elements you want -->
-            <div class="card">
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns">
-                            <div class="column">
-                                <h3 class="title is-3 has-text-centered has-text-warning">Energéticos</h3>
-                            </div>
-                        </div>
-                        <div class=" columns">
-                            <div class="column buttons">
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered" onclick="aplicarStatus('energetico_electricidad')">Electricidad</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_agua')">Agua</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_diesel')">Diésel</button>
-
-                                <button class="button is-warning is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('energetico_gas')">Gas</button>
-
-                            </div>
+                                    </tr>
+                                </thead>
+                                <tbody id="contenedorDeEtiquetados" class="bg-white divide-y divide-gray-200 min-w-full table-fixed">
+                                    <!-- More rows... -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- ETIQUETADO -->
+
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+    <!-- MODAL PROYECTOS DEP -->
 
 
-    <!-- Modal Justificacion -->
-    <div id="modal-justificacion" style="display:none">
-        <p id="justificacion-proyecto">dfs</p>
-        <button class="modal-close is-large" aria-label="close" onclick="cerrarComentario();"></button>
+    <!-- MODAL PARA FINALIZAR OT -->
+    <div id="modalSolucionarOT" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1000px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalSolucionarOT')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- SECCION Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="flex flex-col leading-none justify-center items-center bg-bluegray-900 rounded-b-md w-16 h-10">
+                    <h1 class="font-bold text-sm text-white">OT</h1>
+                    <h1 id="numeroOT" class="font-bold text-xs text-bluegray-100">234</h1>
+                </div>
+                <div id="tipoOT" class="ml-4 font-bold bg-purple-200 text-purple-500 text-xs py-1 px-2 rounded">
+                    <h1>OT PREVENTIVA</h1>
+                </div>
+                <div id="statusOT" class="ml-4 font-bold text-xs py-1 px-2 rounded">
+                    <h1>EN PROCESO</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor de los equipos y locales(Tabla) -->
+
+                <div class="flex items-center justify-center w-full">
+                    <div class="w-full flex">
+                        <div class="w-1/2 text-sm px-2 flex flex-col">
+                            <h1 class="mb-1">Fecha</h1>
+                            <div class="flex flex-wrap w-full justify-start items-center">
+
+                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                    <h1 id="semanaOT">Semana 8</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-1/2 text-sm px-2 flex flex-col">
+                            <h1 class="mb-1">Responsables</h1>
+                            <div id="responsablesOT" class="flex flex-wrap w-full justify-start items-center"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="w-full text-sm px-2 flex flex-col mt-3">
+                    <h1 class="mb-1">Status</h1>
+                    <div id="dataStatusOT" class="flex flex-wrap w-full justify-start items-center"></div>
+                </div>
+
+                <div class="flex w-full text-sm mt-4">
+                    <div class="w-1/2 flex flex-col items-start justify-start">
+                        <div class="flex flex-col w-full ">
+                            <h1 class="mb-2">Actividades Predefinidas</h1>
+
+                            <div id="actividadesOT" class="flex flex-col w-full border-2 border-gray-300 text-xs rounded p-1 overflow-y-auto scrollbar" style="max-height: 251px; height: 250px;"></div>
+                        </div>
+
+                        <div class="flex flex-col w-full p-2 mt-2 text-xs">
+                            <h1 class="mb-2">Actividades Extra</h1>
+                            <div class="w-full">
+                                <input id="inputActividadesExtra" type="text" placeholder="Añadir Actividad Extra..." class="w-full p-2 border border-gray-200 rounded mb-1" autocomplete="off">
+                            </div>
+
+                            <div id="actividadesExtraOT" class="w-full overflow-y-auto scrollbar" style="max-height: 200px; height: 199px;"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 flex flex-col items-start justify-start px-4">
+                        <div class="flex flex-col w-full mb-2">
+                            <h1 class="">Observaciones / Comentarios</h1>
+                        </div>
+
+                        <div class="w-full">
+                            <textarea id="comentarioOT" cols="30" rows="5" class="w-full  border-2 border-gray-300 rounded leading-none"></textarea>
+                        </div>
+
+                        <div class="flex w-full mb-2">
+                            <h1 class="mr-2">Archivos Adjuntos</h1>
+                            <div id="btnAdjuntosOT" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600" onclick="toggleModalTailwind('modalMedia');">
+                                <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <div class="w-full px-1 font-medium text-sm text-gray-400 overflow-y-auto scrollbar border-2 border-gray-300 rounded">
+                                <div id="imagenesOT" class="flex flex-row flex-wrap justify-evenly items-start overflow-y-auto scrollbar mb-4" style="max-height: 300px;"></div>
+                                <div id="documentosOT" class="flex flex-col overflow-y-auto scrollbar px-1 mb-4 text-xs" style="max-height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full flex justify-center items-center my-4">
+                    <div id="btnGuardarOT" class="btn btn-blue mr-4">
+                        <h1>Guardar Cambios</h1>
+                    </div>
+                    <div id="btnFinalizarOT" class="btn btn-green mr-4">
+                        <h1>Finalizar esta OT</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA FINALIZAR OT -->
+
+    <!-- MODAL Exportar Subsecciones -->
+    <div id="modalExportarSubsecciones" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 370px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalExportarSubsecciones');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Subsecciones</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div id="dataExportarSubseccionesEXCEL" class="hidden divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                </div>
+                <div id="dataExportarSubseccionesPDF" class="hidden divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                </div>
+            </div>
+        </div>
     </div>
 
 
-    <a id="btnAncla" href="#nav-menu" class="button is-primary is-rounded ancla" style="display:none;"><i class="fa fa-arrow-up"></i></a>
+    <!-- MODAL RESPONSABLE -->
+    <div id="modalUsuarios" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 450px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalUsuarios')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RESPONSABLE</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3 w-full">
+                    <input id="palabraUsuario" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                </div>
+
+                <div class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="height: 400px;">
+                    <div id="dataUsuarios"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+    <!-- MODAL MEDIA -->
+    <div id="modalMedia" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 600px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalMedia')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>ARCHIVOS ADJUNTOS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3">
+                    <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
+                        <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                        ADJUNTAR ARCHIVOS
+
+                        <!-- INPUT -->
+                        <input id="inputAdjuntos" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" name="inputAdjuntos[]" multiple>
+                        <!-- INPUT -->
+
+                    </button>
+                </div>
+
+                <!-- Icon upload -->
+                <span id="cargandoAdjunto" class="text-center"></span>
+                <!-- Icon upload -->
+
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+
+                    <div id="contenedorImagenes">
+                        <div class="font-bold divide-y">
+                            <h1>IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <!-- Data para las imagenes -->
+                        <div id="dataImagenes" class="flex flex-row flex-wrap text-center"></div>
+                    </div>
+
+                    <div id="contenedorDocumentos">
+                        <div class="font-bold divide-y mb-4">
+                            <h1>DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntos" class="flex flex-col"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL COMENTARIOS -->
+    <div id="modalComentarios" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 600px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalComentarios')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>COMENTARIOS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6 relative">
+
+                <div id="scrollDataComentarios" class="px-4 overflow-y-auto scrollbar flex flex-col w-full" style="max-height: 50vh;">
+                    <div id="dataComentarios" class="flex justify-center items-center flex-col-reverse w-full"></div>
+                </div>
+                <div class="flex flex-row justify-center items-center w-full h-10 px-16 mt-4">
+                    <input id="inputComentario" type="text" placeholder="Añadir comentario" class="h-full w-full rounded-l-md text-gray-600 font-medium border-2 border-r-0 focus:outline-none px-4" autocomplete="off">
+                    <button id="btnComentario" class="py-2 h-full w-12 rounded-r-md bg-teal-200 text-teal-500 font-bold text-sm hover:shadow-md">
+                        <i class="fad fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL STATUS   -->
+    <div id="modalStatus" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalStatus')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center flex-col w-full font-bold text-sm">
+
+                <div id="statusUrgente" class="hidden w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-red-500 bg-gray-200 hover:bg-red-200 text-xs">
+                    <div class="">
+                        <h1>ES URGENTE</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-siren-on animated flash infinite"></i>
+                    </div>
+                </div>
+
+                <div id="statusMaterial" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs" onclick="toggleHidden('statusMaterialCod2bend');">
+                    <div class="">
+                        <h1>NO HAY MATERIAL</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>M</h1>
+                    </div>
+                </div>
+
+                <div id="statusMaterialCod2bend" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs hidden">
+
+                    <input id="inputCod2bend" type="text" placeholder="Ingrese COD2BEND" class="w-full h-full text-center rounded border border-red-400 font-bold text-gray-500" autocomplete="off">
+
+                    <button id="btnStatusMaterial" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnConfirmEditarTitulo" type="button">
+                        <i class="fas fa-check fa-1x"></i>
+                    </button>
+                </div>
+
+                <div id="statusTrabajare" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
+                    <div class="">
+                        <h1>TRABAJANDO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>T</h1>
+                    </div>
+                </div>
+
+                <div id="statusenergeticos" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                    <div class="">
+                        <h1>ENERGÉTICOS</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>E</h1>
+                    </div>
+                </div>
+                <div id="statusenergeticostoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusElectricidad" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>ELECTRICIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusAgua" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>AGUA</h1>
+                        </div>
+                    </div>
+                    <div id="statusDiesel" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>DIESEL</h1>
+                        </div>
+                    </div>
+                    <div id="statusGas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs">
+                        <div class="">
+                            <h1>GAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusdep" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                    <div class="">
+                        <h1>DEPARTAMENTO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>D</h1>
+                    </div>
+                </div>
+                <div id="statusdeptoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2 flex-wrap">
+                    <div id="statusRRHH" class="w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>RRHH</h1>
+                        </div>
+                    </div>
+                    <div id="statusCalidad" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>CALIDAD</h1>
+                        </div>
+                    </div>
+                    <div id="statusDireccion" class="w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>DIRECCION</h1>
+                        </div>
+                    </div>
+                    <div id="statusFinanzas" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>FINANZAS</h1>
+                        </div>
+                    </div>
+                    <div id="statusCompras" class="w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs">
+                        <div class="">
+                            <h1>COMPRAS</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusbitacora" onclick="expandir(this.id)" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                    <div class="">
+                        <h1>BITACORA</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>B</h1>
+                    </div>
+                </div>
+                <div id="statusbitacoratoggle" class="hidden w-full flex flex-row justify-center items-center text-sm px-2">
+                    <div id="statusGP" class="w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>GP</h1>
+                        </div>
+                    </div>
+                    <div id="statusTRS" class="w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>TRS</h1>
+                        </div>
+                    </div>
+                    <div id="statusZI" class="w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs">
+                        <div class="">
+                            <h1>ZI</h1>
+                        </div>
+                    </div>
+                </div>
+                <div id="statusFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                    <div class="">
+                        <h1>SOLUCIONAR</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                    <div id="btnEditarTituloX" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="expandir(this.id)">
+                        <div class="">
+                            <i class="fas fa-pen fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-random fa-lg"></i>
+                        </div>
+                    </div>
+                    <div id="statusActivo" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-trash fa-lg"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="btnEditarTituloXtoggle" class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs hidden">
+                    <div class=" w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center text-gray-500 px-1">
+                        <input id="editarTitulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" type="text" placeholder="Nuevo Título" maxlength="60">
+
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" id="btnEditarTitulo" type="button">
+                            <i class="fas fa-check fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL STATUS   -->
+    <div id="modalTituloEliminar" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalTituloEliminar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+
+            <div id="finalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                <div class="">
+                    <h1>SOLUCIONAR</h1>
+                </div>
+                <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+                    <div class="">
+                        <i class="fas fa-pen fa-lg"></i>
+                    </div>
+                </div>
+                <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-random fa-lg"></i>
+                    </div>
+                </div>
+                <div id="eliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-trash fa-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR TITULO   -->
+    <div id="modalEditarTitulo" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalEditarTitulo')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1><i class="fas fa-pen fa-lg"></i></h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm">
+
+                <h1>Editar titulo</h1>
+                <input class="mt-4 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="inputEditarTitulo" type="text" placeholder="Escriba titulo" value="" autocomplete="off">
+                <button id="btnEditarTitulo" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i> Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR FECHA EN FALLAS -->
+    <div id="modalFechaMC" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaMC" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaMC" value="" autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR FECHA EN FALLAS   -->
+    <div id="modalFechaTareas" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaTareas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaTareas" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaTareas" value="" autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR TITULO   -->
+    <div id="modalAgregarMC" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarMC')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR Pendiente</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <h1 class="mb-2 self-start">Equipo/Local afectado:</h1>
+                <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
+                    <h1 id="nombreEquipoMC"></h1>
+                </div>
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="inputActividadMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+                <div class="flex w-full items-center justify-center">
+
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="inputRangoFechaMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Comentario:</h1>
+                <input id="comentarioMC" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+
+                <button id="btnAgregarMC" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR INFORMACION -->
+    <div id="modalActualizarProyecto" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5 py-3 text-center" style="width: 550px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalActualizarProyecto')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1 id="tituloActualizarProyecto">-</h1>
+                </div>
+            </div>
+
+            <div id="tipoProyectoDiv" class="hidden flex flex-row items-center pt-10 justify-center">
+                <div class="inline-block relative w-64">
+                    <select id="tipoProyecto" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                        <option>CAPIN</option>
+                        <option>CAPEX</option>
+                        <option>PROYECTO</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="justificacionProyectoDiv" class="hidden flex flex-row items-center pt-10">
+                <textarea id="justificacionProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" cols="30" rows="5"></textarea>
+            </div>
+
+            <div id="costeProyectoDiv" class="hidden flex flex-row items-center pt-10 justify-center">
+                <input id="costeProyecto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="0" placeholder="Cantidad">
+            </div>
+
+            <button id="btnGuardarInformacion" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i>
+                Guardar Cambios
+            </button>
+
+            <!-- CONTENIDO MEDIA -->
+            <div id="mediaProyectos" class="hidden mt-10 p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3">
+                    <button class="relative py-2 px-3 w-full bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md">
+                        <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                        ADJUNTAR ARCHIVOS
+
+                        <!-- INPUT -->
+                        <input id="inputAdjuntosJP" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" name="inputAdjuntosJP[]" multiple>
+                        <!-- INPUT -->
+
+                    </button>
+                </div>
+
+                <!-- Icon upload -->
+                <span id="cargandoAdjuntoJP" class="text-center"></span>
+                <!-- Icon upload -->
+
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+
+                    <div id="contenedorImagenesJP">
+                        <div class="font-bold divide-y">
+                            <h1 class="text-left">IMÁGENES</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataImagenesProyecto" class="flex flex-row flex-wrap text-center overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    </div>
+
+                    <div id="contenedorDocumentosJP">
+
+                        <div class="font-bold divide-y mb-4">
+                            <h1 class="text-left">DOCUMENTOS</h1>
+                            <p> </p>
+                        </div>
+                        <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- MODAL EDITAR INFORMACION -->
+
+
+    <!-- MODAL EDITAR INFORMACION -->
+    <div id="modalPresupuestoProyecto" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5 py-3 text-center" style="width: 550px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalPresupuestoProyecto')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md uppercase">
+                    <h1>Presupuesto de Proyecto</h1>
+                </div>
+            </div>
+
+            <div class="pt-10 ">
+                <input id="presupuestoProyecto" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="0" placeholder="Cantidad">
+
+                <button id="btnPresupuestoProyecto" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded mt-4"><i class="fas fa-save fa-lg"></i>
+                    Guardar Cambios
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <!-- MODAL EDITAR INFORMACION -->
+
+
+    <!-- MODAL EDITAR FECHA EN PROYECTOS -->
+    <div id="modalFechaProyectos" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalFechaProyectos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-10">
+                <input id="fechaProyecto" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="fechaProyecto" value="" autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL AGREGAR PROYECTO -->
+    <div id="modalAgregarProyecto" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarProyecto')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR PROYECTO</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="tituloProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción del Proyecto" autocomplete="off">
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Coste en USD:</h1>
+                        <input id="costeProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" autocomplete="off">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Tipo:</h1>
+                        <div class="relative">
+                            <select id="tipoProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                                <option value="">Seleccione</option>
+                                <option value="CAPEX">CAPEX</option>
+                                <option value="CAPIN">CAPIN</option>
+                                <option value="PROYECTO">PROYECTO</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="fechaProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Justificación:</h1>
+                <input id="justificacionProyectoN" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Escriba aquí la justificación del Proyecto" autocomplete="off">
+
+                <button id="btnCrearProyecto" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR RANGO FECHA -->
+    <div id="modalRangoFechaX" class="modal">
+        <div class="modal-window rounded-md pb-2 px-5" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalRangoFechaX')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>RANGO DE FECHA</h1>
+                </div>
+            </div>
+            <div class="flex flex-row items-center pt-10">
+                <input id="rangoFechaX" class="appearance-none block w-full border rounded p-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-full text-center" type="text" name="rangoFechaX" value="-" autocomplete="off">
+
+                <button id="btnAplicarRangoFecha" class="bg-indigo-300 hover:bg-indigo-400 text-indigo-800 font-bold rounded inline-flex items-center w-10 text-center mx-2 p-2">
+                    <i class="fal fa-sync-alt fa-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL EDITAR RANGO FECHA -->
+
+
+    <!-- MODAL AGREGAR TEST -->
+    <div id="modalAgregarTest" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 500px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarTest')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR TEST</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <h1 class="mb-2 self-start">Equipo afectado:</h1>
+                <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
+                    <h1 id="nombreEquipoTest"></h1>
+                </div>
+                <h1 class="self-start mb-2">Descripción del Test:</h1>
+
+                <input id="descripcionTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+
+                <div class="w-full py-3">
+                    <h1 class="self-start mb-2">Medición:</h1>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <input id="valorTest" type="text" class="bg-gray-200 focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md px-2 py-3" placeholder="Ejemplo: 12.01" autocomplete="off">
+
+                        <div class="absolute inset-y-0 right-0 flex items-center">
+                            <select id="medidaTest" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-800 sm:text-sm rounded-md py-3"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full items-center justify-center">
+
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">
+                            Fecha inicio y Fecha tentativa de finalización:
+                        </h1>
+                        <input id="inputRangoFechaTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="DD/MM/AAAA - DD/MM/AAAA" autocomplete="off">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableTest" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                                <option value="0">Seleccion Responsable</option>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btnAgregarTest" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+    <div id="modalAgregarIncidencias" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarIncidencias')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1></h1>
+                    <h1>
+                        <i class="fas fa-plus mr-2"></i>
+                        INCIDENCIAS
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Sección:</h1>
+                        <div class="relative">
+                            <select id="seccionIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Subseccion:</h1>
+                        <div class="relative">
+                            <select id="subseccionIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="mb-2 self-start">Equipo/Local afectado:</h1>
+                <div class="flex flex-row cursor-pointer justify-start items-start">
+
+                    <button id="btnTGIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Tarea General
+                    </button>
+
+                    <button id="btnEquipoIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Equipo
+                    </button>
+
+                    <button id="btnLocalIncidencias" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Local
+                    </button>
+                </div>
+
+                <div id="contenedorEquipoLocalIncidencias" class="relative w-1/2 hidden">
+                    <select id="equipoLocalIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="descripcionIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+
+                <div class="flex w-full items-left justify-left">
+                    <div class="w-1/2 flex flex-col pr-4 hidden">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="rangoFechaIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" value="" name="datefilter">
+                    </div>
+                    <div class="w-1/2 flex flex-col">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsablesIncidencias" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Clasifique la incidencia:</h1>
+                    <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
+                        <div class="w-full text-center">
+
+                            <button id="btnEmergenciaIncidencia" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación INMEDIATA">
+                                Emergencia
+                            </button>
+
+                            <button id="btnUrgenciaIncidencia" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación RÁPIDA(No Inmediata)">
+                                Urgencia
+                            </button>
+
+                            <button id="btnAlarmaIncidencia" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
+                                Alarma
+                            </button>
+
+                            <button id="btnAlertaIncidencia" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
+                                Alerta
+                            </button>
+
+                            <button id="btnSeguimientoIncidencia" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
+                                Seguimiento
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Comentario:</h1>
+                    <input id="comentarioIncidencia" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+                </div>
+                <button id="btnAgregarIncidencia" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i>
+                    Crear
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+
+
+    <!-- MODAL AGREGAR ENERGETICO   -->
+    <div id="modalAgregarEnergeticos" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarEnergeticos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>
+
+                        <h1><i class="fas fa-plus mr-2"></i>AÑADIR Pendiente</h1>
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+
+                <h1 class="mb-2 self-start">subsección:</h1>
+                <div class="bg-red-200 text-red-500 p-3 rounded self-start mb-4">
+                    <h1 id="nombreSubseccionEnergeticos"></h1>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Clasifique la incidencia:</h1>
+                    <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
+                        <div class="w-full text-center">
+
+                            <button id="btnEmergenciaEnergetico" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación INMEDIATA">
+                                Emergencia
+                            </button>
+
+                            <button id="btnUrgenciaEnergetico" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación RÁPIDA(No Inmediata)">
+                                Urgencia
+                            </button>
+
+                            <button id="btnAlarmaEnergetico" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
+                                Alarma
+                            </button>
+
+                            <button id="btnAlertaEnergetico" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
+                                Alerta
+                            </button>
+
+                            <button id="btnSeguimientoEnergetico" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline btnOpcionIncidencia" data-title-info="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
+                                Seguimiento
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="tituloPendienteEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+
+                <div class="flex w-full items-center justify-center">
+
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Fecha inicio y Fecha tentativa de finalización:</h1>
+                        <input id="rangoFechaEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" name="datefilter" value="---" autocomplete="off">
+                    </div>
+
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Responsable:</h1>
+                        <div class="relative">
+                            <select id="responsableEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" id="grid-state">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Comentario:</h1>
+                <input id="comentarioEnergeticos" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+
+                <button id="btnAgregarEnergeticos" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i> Crear
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <!-- MODAL AGREGAR ENERGETICO   -->
+
+
+    <!-- MODAL SALIDAS Subalmacenes-->
+    <div id="modalOpcionesMaterialesEquipo" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 1250px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="toggleModalTailwind('modalOpcionesMaterialesEquipo');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- MARCA Y UBICACION -->
+            <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
+                <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">
+                    <h1>MATERIALES</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex justify-center items-center flex-col w-full">
+                <!-- Contenedor TABLA -->
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+                    <!-- BUSCADOR -->
+                    <div class="mb-3 w-full flex flex-row items-center justify-center">
+
+                        <input id="inputDespieceMaterialesEquipo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar Material por Descripción" autocomplete="off">
+
+                    </div>
+                    <!-- BUSCADOR -->
+                    <!-- TITULOS -->
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="min-height: 50vh; max-height: 70vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer bg-white">
+                                        <td class="px-2 py-1  border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-8">
+                                            <h1>DESTINO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CATEGORÍA</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>COD2BEND</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>GREMIO</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>DESCRIPCION</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CARACTERISTICAS</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>MARCA/PROVEEDOR</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>U DE M</h1>
+                                        </td>
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                            <h1>CANTIDAD</h1>
+                                        </td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataOpcionesMaterialesEquipo" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ***** TOOLTIPS ***** -->
+
+    <!-- ACTIVIDADES MP -->
+    <div id="tooltipActividadesMP" role="tooltip" class="w-auto bg-white text-bluegray-800 flex flex-col items-start justify-start px-3 py-2 text-justify font-semibold text-xs uppercase rounded-md border overflow-y-auto scrollbar hidden" style="z-index:100; max-width: 350px; max-height: 400px;">
+    </div>
+    <!-- ACTIVIDADES MP -->
+
+
+    <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+    <div id="tooltipActividadesPlanaccion" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        <div id="arrowtooltipActividadesProyecto" data-popper-arrow></div>
+        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+            <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                <div class="w-4 h-4  mr-2 flex-none"></div>
+                <div class=" text-justify w-full h-full">
+                    <input id="agregarActividadPlanaccion" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                </div>
+                <div id="btnAgregarActividadPlanaccion" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+
+            <div id="dataActividades" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+        </div>
+    </div>
+    <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+
+
+    <!-- ACTIVIDADES PLAN DE ACCIÓN DEP -->
+    <div id="tooltipActividadesPlanaccionDEP" class="w-84 h-auto bg-bluegray-900 rounded-md p-1 flex hidden" role="tooltip" style="z-index:200">
+        <div class="bg-white rounded p-2 flex flex-col text-xxs font-semibold w-full">
+            <div class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-fondos-2">
+                <div class="w-4 h-4  mr-2 flex-none"></div>
+                <div class=" text-justify w-full h-full">
+                    <input id="agregarActividadPlanaccionDEP" type="text" class="w-full h-full text-xs focus:outline-none appearance-none py-1 bg-transparent" placeholder="Añadir Actividad" autocomplete="off">
+                </div>
+                <div id="btnAgregarActividadPlanaccionDEP" class="flex items-center justify-center text-blue-300 cursor-pointer w-6 h-6 rounded-full flex-none text-sm">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+
+            <div id="dataActividadesDEP" class="w-auto overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
+
+        </div>
+    </div>
+    <!-- ACTIVIDADES PLAN DE ACCIÓN -->
+
+
+    <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
+    <div id="tooltipEditarEliminarSolucionar" class="hidden bg-white rounded-md" style="z-index: 201;">
+        <div class="pt-10 p-2" style="width: 300px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="hiddenVista('tooltipEditarEliminarSolucionar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>STATUS</h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+
+            <div id="btnFinalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-4 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                <div class="">
+                    <h1>SOLUCIONAR</h1>
+                </div>
+                <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+
+            <div id="segmentoTitulo" class="w-full text-center h-8 rounded-md cursor-pointer mb-4 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 text-xs hidden">
+                <div class="w-full">
+                    <input id="inputTitulo" type="text" class="w-64 p-2 text-justify text-black bg-gray-200 rounded-md text-black" placeholder="Actualizar título" autocomplete="off">
+                </div>
+                <div id="btnTitulo" class="w-8 h-8 flex items-center justify-center font-black px-5 bg-green-200 rounded-md">
+                    <i class="fas fa-sync-alt fa-1x"></i>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+
+                <div id="btnActualizarTitulo" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-pen fa-lg"></i>
+                    </div>
+                </div>
+
+                <div class="bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-random fa-lg"></i>
+                    </div>
+                </div>
+
+                <div id="btnEliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class="">
+                        <i class="fas fa-trash fa-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- OPCIONES PARA ELIMINAR, EDITAR Y SOLUCIONAR -->
+
+
+    <!-- ***** TOOLTIPS ***** -->
+
+    <!-- SCRIPT PARA SORTABLE: SIRVE PARA MOVER ELEMENTOS) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- SCRIPT PARA SORTABLE: SIRVE PARA MOVER ELEMENTOS) -->
+
+    <!-- Librerias JS -->
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="js/modales.js"></script>
+    <script src="js/acordion.js"></script>
+    <!-- <script src="js/sweetalert2@9.js"></script> -->
+    <script src="js/alertasSweet.js"></script>
+    <script src="js/plannerBetaJS.js"></script>
+    <!-- <script src="js/jPages.js"></script> -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/sorttable.js"></script>
+    <!-- Librerias JS -->
+
+    <!-- JS para los planes de los equipos -->
+    <script src="js/planes_equipo.js" type="text/javascript"></script>
+    <!-- JS para los planes de los equipos -->
+
+    <!-- Librerias JS -->
+
+    <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
+    <script src="js/am4core_core.js"></script>
+    <script src="js/am4core_charts.js"></script>
+    <script src="js/am4core_animated.js"></script>
+    <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
+
+    <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
+    <script src="js/proyectos_planacciones.js" type="text/javascript"></script>
+    <script src="js/funciones_tablas.js" type="text/javascript"></script>
+    <script src="js/proyectos_dep.js" type="text/javascript"></script>
+    <!-- LIBRERIAS INDIVIDUALES POR MODULOS -->
+
+    <!-- SEGURIDAD DE SESSION -->
+    <script src="js/seguridad_session.js" type="text/javascript"></script>
+    <!-- SEGURIDAD DE SESSION -->
 </body>
-
-<?php echo $layout->scripts(); ?>
-
-<script src="js/plannerJS.js"></script>
-<script src="js/usuariosJS.js?v4.0.3"></script>
-<script src="js/paginator.min.js"></script>
-<!--DataTables-->
-<script src="DataTables/datatables.js"></script>
-<script type="text/javascript" src="js/modal-fx.min.js"></script>
-<script src="js/sweetalert2@9.js"></script>
-
-<!-- Librerias JS requeridas para la version Beta. -->
-<!-- Libreria para notificaciones prediseñadas sweetAlert -->
-<script src="js/alertasSweet.js"></script>
-<script src="js/plannerBeta.js"></script>
-<script src="js/refreshSession.js"></script>
-<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<script src="js/seguridad_session.js"></script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal-dark"
-        });
-
-        $('#dismiss, .overlay').on('click', function() {
-            $('#sidebar').removeClass('active');
-            $('.overlay').removeClass('active');
-        });
-
-        $('#sidebarCollapse').on('click', function() {
-            $('#sidebar').addClass('active');
-            $('.overlay').addClass('active');
-            $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        var alturaFilas = screen.height - 400;
-        var dFilas = document.getElementById("dFilas");
-        //dFilas.setAttribute("style", "min-height: " + alturaFilas + "px;");
-        var pageloader = document.getElementById("loader");
-        if (pageloader) {
-
-            var pageloaderTimeout = setTimeout(function() {
-                pageloader.classList.toggle('is-active');
-                clearTimeout(pageloaderTimeout);
-            }, 3000);
-        }
-
-        $(window).scroll(function() {
-            var position = $(this).scrollTop();
-            var positionHead = $(this).scrollTop();
-            if (position >= 200) {
-                $('#btnAncla').fadeIn('slow');
-            } else {
-                $('#btnAncla').fadeOut('slow');
-            }
-            if (positionHead >= 300) {
-                $(".tg").addClass("top-head");
-            } else {
-                $(".tg").removeClass("top-head");
-            }
-        });
-
-        $(function() {
-            $("#btnAncla").on('click', function() {
-                $("html, body").animate({
-                    scrollTop: 0
-                }, 1000);
-                return false;
-            });
-        });
-    });
-</script>
-<script>
-    $(function() {
-        $('select[multiple].active.3col').multiselect({
-            columns: 1,
-            placeholder: 'Secciones',
-            search: false,
-            searchOptions: {
-                'default': 'Buscar secciones'
-            },
-        });
-
-        $(".ms-options").mCustomScrollbar({
-            theme: "minimal-dark"
-        });
-    });
-</script>
-<script>
-    $('#myDatePicker').datepicker({
-        // Let's make a function which will add class 'my-class' to every 11 of the month
-        // and make these cells disabled.
-
-        onSelect: function onSelect(fd, date) {
-            var idEquipo = $("#hddIdEquipo").val();
-            var idDestino = $("#hddIdDestino").val();
-            var idSubseccion = $("#hddIdSubseccion").val();
-            var idCategoria = $("#hddIdCategoria").val();
-            var idSubcategoria = $("#hddIdSubcategoria").val();
-            if (date.length == 2) {
-                var idTarea = $("#hddIDTarea").val();
-                actualizarRangoFechas(idTarea, fd);
-                recargarListaTareas(idSubseccion, idDestino, idCategoria, idSubcategoria);
-
-                // alert(date + " " + idTarea);
-            }
-        }
-    });
-
-    $('#myDatePickerMC').datepicker({
-        onSelect: function onSelect(fd, date) {
-            var idEquipo = $("#hddIdEquipo").val();
-            var idDestino = $("#hddIdDestino").val();
-            var idSubseccion = $("#hddIdSubseccion").val();
-            var idCategoria = $("#hddIdCategoria").val();
-            var idSubcategoria = $("#hddIdSubcategoria").val();
-            var idRelSubcategoria = 0;
-            if (date.length == 2) {
-                var idTarea = $("#hddIDTarea").val();
-                actualizarRangoFechas(idTarea, fd);
-                //closeModal('modal-mc-fecha');
-                if (idEquipo != 0) {
-                    obtCorrectivos(idEquipo, 'N');
-                } else {
-                    obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria,
-                        'N');
-                }
-            }
-        }
-    });
-</script>
-
-<script>
-    // Obtener Día
-    var fecha = new Date();
-
-    switch (fecha.getDay()) {
-        case 1:
-            $('.hide-seccion-is-3').hide();
-            $('.id-12, .id-23, .id-8').show();
-            $('.btn-id-12, .btn-id-23, .btn-id-8').addClass('is-success');
-            $(".btn-8, .btn-3, .btn-9").addClass("bannersec")
-            break;
-        case 2:
-            $('.hide-seccion-is-3').hide();
-            $('.id-9, .id-23').show();
-            $('.id-9, .btn-id-23').addClass('is-success');
-            $(".btn-10, .btn-3").addClass("bannersec")
-            break;
-        case 3:
-            $('.hide-seccion-is-3').hide();
-            $('.id-1, .id-23, .id-10').show();
-            $('.btn-id-1, .btn-id-23, .btn-id-10').addClass('is-success');
-            $(".btn-2, .btn-3, .btn-11").addClass("bannersec")
-            break;
-        case 4:
-            $('.hide-seccion-is-3').hide();
-            $('.id-5, .id-23, .id-6').show();
-            $('.btn-id-5, .btn-id-23, .btn-id-6').addClass('is-success');
-            $(".btn-5, .btn-3, .btn-6").addClass("bannersec")
-            break;
-        case 5:
-            $('.hide-seccion-is-3').hide();
-            $('.id-24, .id-23, .id-11').show();
-            $('.btn-id-24, .btn-id-23, .btn-id-11').addClass('is-success');
-            $('.btn-1, .btn-3, .btn-12').addClass("bannersec");
-            break;
-        default:
-            $('.btn-seccion').addClass("bannersec");
-    }
-
-    $(".btn-1").click(function() {
-        $(".id-24").toggle("hide");
-        $(".btn-1").toggleClass("bannersec");
-    });
-
-    $(".btn-2").click(function() {
-        $(".id-1").toggle("hide");
-        $(".btn-2").toggleClass("bannersec");
-    });
-
-    $(".btn-3").click(function() {
-        $(".id-23").toggle("hide");
-        $(".btn-3").toggleClass("bannersec");
-    });
-
-    $(".btn-4").click(function() {
-        $(".id-19").toggle("hide");
-        $(".btn-4").toggleClass("bannersec");
-    });
-
-    $(".btn-5").click(function() {
-        $(".id-5").toggle("hide");
-        $(".btn-5").toggleClass("bannersec");
-    });
-
-    $(".btn-6").click(function() {
-        $(".id-6").toggle("hide");
-        $(".btn-6").toggleClass("bannersec");
-    });
-
-    $(".btn-7").click(function() {
-        $(".id-7").toggle("hide");
-        $(".btn-7").toggleClass("bannersec");
-    });
-
-    $(".btn-8").click(function() {
-        $(".id-12").toggle("hide");
-        $(".btn-8").toggleClass("bannersec");
-    });
-
-    $(".btn-9").click(function() {
-        $(".id-8").toggle("hide");
-        $(".btn-9").toggleClass("bannersec");
-    });
-
-    $(".btn-10").click(function() {
-        $(".id-9").toggle("hide");
-        $(".btn-10").toggleClass("bannersec");
-    });
-
-    $(".btn-11").click(function() {
-        $(".id-10").toggle("hide");
-        $(".btn-11").toggleClass("bannersec");
-    });
-
-    $(".btn-12").click(function() {
-        $(".id-11").toggle("hide");
-        $(".btn-12").toggleClass("bannersec");
-    });
-
-
-    $(".btn-subsecciones").click(function() {
-        $("#seccion-bar").css('display', 'none');
-    });
-
-    // $(".btn-proyectos").click(function() {
-    //     $("#seccion-bar").css('display', 'none');
-    //     $("#seccionColumnas").css('display', 'none');
-    //     $("#modal-proyectos").css('display', 'block');
-    // });
-
-    $(".btn-regresar-subsecciones").click(function() {
-        $("#sectionHeroListaEquipos").css('display', 'none');
-        $("#seccionListaEquipos").css('display', 'none');
-        $("#seccion-bar").css('display', 'block');
-    });
-
-    function modalproyectos() {
-        $("#modal-proyectos").css("display", "none");
-        $("#seccionColumnas").css('display', 'block');
-    }
-
-    function showsubsecciones() {
-        $("#sectionHeroListaEquipos").css('display', 'none');
-        $("#seccionListaEquipos").css('display', 'none');
-        $("#modal-proyectos").css('display', 'none');
-        $("#seccion-bar").css('display', 'block');
-        $("#seccionColumnas").css('display', 'block');
-    }
-
-    function crearProyecto(idDestino) {
-        $("#idDestino-p").val(idDestino);
-        alert(idDestino);
-    }
-
-    function showcomentarioproyecto(comentario) {
-        $("#comentario-proyecto").val(comentario);
-        $("#modal-justificacion").css("display", "block");
-    }
-
-    function cerrarComentario() {
-        $("#modal-justificacion").css("display", "none");
-    }
-</script>
-
-
-<script>
-    const fileInput = document.querySelector('.fileName input[type=file]');
-    fileInput.onchange = () => {
-        if (fileInput.files.length > 0) {
-            const fileName = document.querySelector('.fileName .file-name');
-            fileName.textContent = fileInput.files[0].name;
-        }
-    }
-
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        $("#opcionMovil").removeClass('hidden');
-        $("#seccion-bar").removeClass('mt-5');
-        // $(".hide-seccion-is-3").addClass('hide');
-
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top',
-            showConfirmButton: false,
-            timer: 5000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-
-        Toast.fire({
-            icon: 'success',
-            title: 'Versión Móvil'
-        })
-    } else {
-        $("#opcionMovil").addClass('hidden');
-        $("#seccion-bar").addClass('mt-5');
-    }
-
-    function mostrarSeccion(idSeccion) {
-        // let idSeccion = $("#mostrarSeccionMovil").val();
-        $("." + idSeccion).toggle('hide');
-        $(".btn-" + idSeccion).toggleClass('is-success');
-    }
-
-    // ELIMINAR
-    location.href = "https://www.maphg.com/beta/planner-cols.php";
-</script>
 
 </html>

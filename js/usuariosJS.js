@@ -1,43 +1,89 @@
-$(document).ready(function () {
-    $("#needs-validation").keypress(function (e) {
-        if (e.keyCode == 13) {
-            $("#btnLogin").click();
-        }
-    });
-});
+console.log('%cSTOP!', 'color:red; font-weight: bold; font-size: 4.3rem');
 
-// function cargarTareasDestinoPlanner(pagina, idDestino) {
-//     if (pagina == 1) {
-//         var url = "../php/tareasPHP.php";
-//     } else {
-//         var url = "php/tareasPHP.php";
-//     }
-//     if (idDestino == undefined) {
-//         var destino = document.getElementById("cbDestinos").value;
-//     } else {
-//         var destino = idDestino;
-//     }
+// VARIABLES GLOBALES
+const inputusuario = document.getElementById("inputusuario");
+const inputcontraseña = document.getElementById("inputcontraseña");
+const btnIniciarSession = document.getElementById("btnIniciarSession");
+const icono = document.getElementById("icono");
 
-//     //    for (i = 0; i <= destino.length; i++) {
-//     //        if (destino[i].checked) {
-//     //            var idDestino = destino[i].value;
-//     //            break;
-//     //        }
-//     //    }
-//     $.ajax({
-//         type: 'post',
-//         url: url,
-//         data: 'action=34&idDestino=' + destino,
-//         beforeSend: function () {
-//             $(".loader").show();
-//         },
-//         success: function (data) {
-//             $(".loader").fadeOut('slow');
-//             location.reload();
 
-//         }
-//     });
-// }
+// BORRA DATOS DEL USUARIO
+localStorage.clear();
+
+
+icono.addEventListener("click", () => {
+
+    if (icono.classList.contains("fa-eye-slash")) {
+        icono.className = 'fas fa-eye';
+        inputcontraseña.setAttribute('type', 'text');
+    } else {
+        icono.className = 'fas fa-eye-slash';
+        inputcontraseña.setAttribute('type', 'password');
+    }
+})
+
+
+// COMPRUEBA SI EXISTE EL USUARIO PARA DARLE ACCESO
+const iniciarSession = () => {
+    const action = "iniciarSession";
+    const URL = `php/usuariosPHP.php?`;
+    const data = new FormData();
+
+    data.append('action', action);
+    data.append('usuario', inputusuario.value);
+    data.append('contraseña', inputcontraseña.value);
+
+    // BLOQUEA BTN E INPUTS
+    btnIniciarSession.disabled = true;
+    inputusuario.disabled = true;
+    inputcontraseña.disabled = true;
+
+    fetch(URL, {
+        method: 'POST',
+        body: data
+    })
+        .then(array => array.json())
+        .then(array => {
+            console.log(array);
+            if (array[0].acceso == "ACCESO") {
+                alertaImg('Acceso Concedido', '', 'success', 1400);
+                array.forEach((item) => {
+                    localStorage.setItem('usuario', item.idUsuario);
+                    localStorage.setItem('idDestino', item.idDestino);
+                    localStorage.setItem('superAdmin', item.superAdmin);
+                })
+                location.href = 'index.php';
+            } else if (array[0].acceso == "DENEGADO") {
+                alertaImg('Acceso Denegado', '', 'error', 1400);
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1400);
+            }
+        })
+        .then(() => {
+            btnIniciarSession.disabled = false;
+            inputusuario.disabled = false;
+            inputcontraseña.disabled = false;
+        })
+        .catch(function (err) {
+            console.log(err);
+            btnIniciarSession.disabled = false;
+            inputusuario.disabled = false;
+            inputcontraseña.disabled = false;
+        })
+}
+
+
+// EVENTOS PARA DISPARAR FUNCION DE INICIAR SESSION
+btnIniciarSession.addEventListener('click', () => {
+    iniciarSession();
+})
+
+inputcontraseña.addEventListener('keypress', event => {
+    if (event.key == "Enter") {
+        iniciarSession();
+    }
+})
+
 
 function validarUsuario() {
     var username = document.getElementById("inputusuario").value;

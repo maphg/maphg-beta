@@ -184,6 +184,51 @@ if (isset($_POST['action'])) {
         $resp = $obj->buscarTrabajador($word);
         echo $resp;
     }
+
+    if ($action == "iniciarSession") {
+        $usuario = $_POST['usuario'];
+        $contraseña = $_POST['contraseña'];
+        $array = array();
+
+        $array[0] = array(
+            "idUsuario" => 0,
+            "idDestino" => 0,
+            "nombre" => 0,
+            "apellido" => 0,
+            "destino" => 0,
+            "superAdmin" => 0,
+            "acceso" => "DENEGADO"
+        );
+
+        $query = "SELECT t_users.id 'idUsuario', t_users.super_admin 'superAdmin', c_destinos.destino, c_destinos.id 'idDestino', t_colaboradores.nombre, t_colaboradores.apellido, c_cargos.cargo
+        FROM t_users 
+        INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
+        WHERE t_users.username = '$usuario' and t_users.password = '$contraseña' and t_users.status = 'A' and t_users.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuario = $x['idUsuario'];
+                $nombre = $x['nombre'];
+                $apellido = $x['apellido'];
+                $cargo = $x['cargo'];
+                $idDestino = $x['idDestino'];
+                $destino = $x['destino'];
+                $superAdmin = $x['superAdmin'];
+
+                $array[0] = array(
+                    "idUsuario" => intval($idUsuario),
+                    "idDestino" => intval($idDestino),
+                    "nombre" => $nombre,
+                    "apellido" => $apellido,
+                    "destino" => $destino,
+                    "superAdmin" => $superAdmin,
+                    "acceso" => "ACCESO"
+                );
+            }
+        }
+        echo json_encode($array);
+    }
 }
 
 class Empleado

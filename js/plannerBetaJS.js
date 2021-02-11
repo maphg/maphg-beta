@@ -2611,12 +2611,7 @@ function obtenerComentariosMC(idMC) {
          document
             .getElementById("btnComentario")
             .setAttribute("onclick", "agregarComentarioMC(" + idMC + ")");
-         document
-            .getElementById("inputComentario")
-            .setAttribute(
-               "onkeyup",
-               "if(event.keyCode == 13)agregarComentarioMC(" + idMC + ")"
-            );
+
          if (data.dataComentarios != undefined && data.dataComentarios != '') {
             document.getElementById("dataComentarios").innerHTML =
                data.dataComentarios;
@@ -2819,12 +2814,6 @@ function obtenerComentariosTareas(idTarea) {
          document
             .getElementById("btnComentario")
             .setAttribute("onclick", "agregarComentarioTarea(" + idTarea + ")");
-         document
-            .getElementById("inputComentario")
-            .setAttribute(
-               "onkeyup",
-               "if(event.keyCode == 13)agregarComentarioTarea(" + idTarea + ")"
-            );
          document.getElementById("dataComentarios").innerHTML =
             data.dataComentarios;
       },

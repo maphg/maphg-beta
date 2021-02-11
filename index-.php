@@ -1,4 +1,5 @@
 <?php
+session_set_cookie_params(60 * 60 * 24 * 364);
 session_start();
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'en_US');
@@ -10,12 +11,16 @@ $conn->conectar();
 if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
 } else {
+    //Variables Generales.
+    $nombreUsuario = "No Identificado.";
+    $avatar = "??";
+    $cargo = " - - ";
     $conn->conectar();
     $idUsuario = $_SESSION['usuario'];
     //Obtener datos del usuario
     $query = "SELECT * FROM t_users WHERE id = $idUsuario";
     try {
-        $zhh = "";
+        // $zhh = "";
         $resp = $conn->obtDatos($query);
         if ($conn->filasConsultadas > 0) {
             foreach ($resp as $dts) {
@@ -70,7 +75,7 @@ if (!isset($_SESSION['usuario'])) {
                     echo $ex;
                 }
 
-                //Obtener datos del colaborador
+                //Obtener datos del colaborador.
                 $query = "SELECT * FROM t_colaboradores WHERE id = $idColaborador";
                 try {
                     $resp = $conn->obtDatos($query);
@@ -88,6 +93,7 @@ if (!isset($_SESSION['usuario'])) {
                                 $foto = "";
                             }
                         }
+                        $nombreUsuario = $nombre . " " . $apellido;
                     }
                 } catch (Exception $ex) {
                     echo $ex;
@@ -279,84 +285,74 @@ $tablaRanking .= "</div>";
 <head>
     <meta charset="UTF-8">
     <?php echo $layout->styles(); ?>
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bulma.css">
     <link rel="stylesheet" href="css/all.css">
     <link rel="stylesheet" href="css/style3.css">
     <link rel="stylesheet" href="DataTables/datatables.css">
-    <link rel="stylesheet" href="css/bulma.css">
-    <link rel="stylesheet" href="css/bulma-docs.min.css">
     <link rel="stylesheet" href="css/clases.css">
     <link rel="stylesheet" href="css/hover.css">
     <link rel="stylesheet" href="css/modal-fx.min.css">
     <link rel="stylesheet" href="css/clasesproyectosypendientes.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
 
 </head>
 
 <body>
 
-    <div id="loader" class="pageloader is-dark is-active"><span class="title">Cargando...</span></div>
+    <!-- <div id="loader" class="pageloader is-dark"><span class="title">Cargando...</span></div> -->
     <!--Menu principal latelar izquierdo SIDEBAR-->
-    <nav id="sidebar">
-        <div id="dismiss">
-            <i class="fas fa-arrow-left"></i>
-        </div>
 
-        <!-- <div class="sidebar-header">
-            <img src="svg/logon2.svg" alt="" width="112" height="28">
-        </div> -->
-        <?php echo $layout->menu($destinoT); ?>
-    </nav>
 
     <!--contetn-->
-    <div id="content">
+    <div id="content" class="">
+
         <!--MENU-->
+        <?php include 'navbartop.php'; ?>
+        <?php include 'menu-sidebar.php'; ?>
 
-        <nav class="navbar mt-0 pt-0" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="https://bulma.io">
-                </a>
-
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                    <span aria-hidden="true">--</span>
-                    <span aria-hidden="true">--</span>
-                    <span aria-hidden="true">--</span>
-                </a>
-            </div>
-        </nav>
-
-        <nav id="nav-menu" class="navbar is-fixed-top">
-            <!-- Menu lateral Derecho -->
-            <div class="navbar-brand">
-                <a id="sidebarCollapse" class="navbar-item" href="#">
-                    <img src="svg/logon2.svg" alt="" width="112" height="35">
-                </a>
-                <div class="navbar-burger burger" data-target="navMenuPpal">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+        <!-- Select para Versión Movil -->
+        <div id="opcionMovil" class="bg-white rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 text-center pt-3 hidden">
+            <div class="inline-block relative">
+                <!-- <select id="mostrarSeccionMovil"
+                    class="block appearance-none w-full border border-gray-400 bg-gray-200 hover:border-gray-500 px-4 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline p-2">
+                    <option>Secciones</option>
+                    <option value="11" onclick="mostrarSeccion();">ZIL</option>
+                    <option value="10" onclick="mostrarSeccion();">ZIE</option>
+                    <option value="24" onclick="mostrarSeccion();">AUTO</option>
+                    <option value="1">DEC</option>
+                    <option value="23">DEP</option>
+                    <option value="19">OMA</option>
+                    <option value="5">ZHA</option>
+                    <option value="6">ZHC</option>
+                    <option value="7">ZHH</option>
+                    <option value="12">ZHP</option>
+                    <option value="8">ZIA</option>
+                    <option value="9">ZIC</option>
+                </select> -->
+                <div class="buttons has-addons">
+                    <button onclick="mostrarSeccion('id-11');" class="button btn-id-11">ZIL</button>
+                    <button onclick="mostrarSeccion('id-10');" class="button btn-id-10">ZIE</button>
+                    <button onclick="mostrarSeccion('id-24');" class="button btn-id-24">AUTO</button>
+                    <button onclick="mostrarSeccion('id-1');" class="button btn-id-1">DEC</button>
+                    <button onclick="mostrarSeccion('id-23');" class="button btn-id-23">DEP</button>
+                    <button onclick="mostrarSeccion('id-19');" class="button btn-id-19">OMA</button>
+                    <button onclick="mostrarSeccion('id-5');" class="button btn-id-5">ZHA</button>
+                    <button onclick="mostrarSeccion('id-6');" class="button btn-id-6">ZHC</button>
+                    <button onclick="mostrarSeccion('id-7');" class="button btn-id-7">ZHH</button>
+                    <button onclick="mostrarSeccion('id-12');" class="button btn-id-12">ZHP</button>
+                    <button onclick="mostrarSeccion('id-8');" class="button btn-id-8">ZIA</button>
+                    <button onclick="mostrarSeccion('id-9');" class="button btn-id-9">ZIC</button>
                 </div>
             </div>
+        </div>
+        <!-- Select para Versión Movil -->
 
-            <div id="navMenuPpal" class="navbar-menu">
+        <nav id="nav-menu" class="navbar is-fixed-top modal">
+
+            <div id="navMenuPpal" class="navbar-menu modal">
                 <div class="navbar-end">
-
-                    <!-- Opciones de los Destinos AME, CMU, RM, ETC... -->
-                    <nav class="navbar" role="navigation" aria-label="dropdown navigation">
-                        <div class="navbar-item has-dropdown is-hoverable ">
-                            <a class="bd-navbar-icon navbar-item">
-                                <!-- Muestra el nombre de la ubicación America, Riviera Maya, Costa Mujeres, etc.. -->
-                                <span class="mr-1"><i class="fad fa-globe-americas has-text-info mr-1"></i><?php echo $destinoT . " - " . $ubicacion; ?>
-                            </a>
-                            <?php
-                            if ($idDestino == 10) {
-                                echo $layout->dropDownDestinos();
-                            }
-                            ?>
-                        </div>
-                    </nav>
-
-
                     <nav class="navbar" role="navigation" aria-label="dropdown navigation">
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="bd-navbar-icon navbar-item">
@@ -387,9 +383,6 @@ $tablaRanking .= "</div>";
 
                 </div>
             </div>
-
-            <?php //echo $layout->menu();  
-            ?>
         </nav>
 
         <!-- *********************************************************************************** -->
@@ -408,6 +401,7 @@ $tablaRanking .= "</div>";
         <input type="hidden" id="idSeccionProyectos">
         <input type="hidden" id="idUsuarioProyectos">
         <input type="hidden" id="idSubseccionProyectos">
+        <input type="hidden" id="tipoMCMCG">
 
         <!-- Fin de hidden para Tareas Generales -->
 
@@ -424,6 +418,9 @@ $tablaRanking .= "</div>";
         <!--Input donde se guarda el nombre de la tabla-->
         <input type="hidden" id="status">
         <!-- ************************************************************************************** -->
+        <!-- INPUT DE MPNP, GUARDA ID, PARA COMPLEMENTAR EL FORMULARIO  -->
+        <input type="hidden" id="idMPNP">
+        <input type="hidden" id="idEquipoMPNP">
 
         <!--SECCION DE SLECCION DE HOTEL-->
         <section id="seccionHoteles" style="display:none;">
@@ -536,7 +533,8 @@ $tablaRanking .= "</div>";
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
                                 <label for="chkb1"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
+                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
                             </div>
                         </div>
                         <div class="column is-3">
@@ -555,7 +553,8 @@ $tablaRanking .= "</div>";
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
                                 <label for="chkb2"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
+                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
                             </div>
                         </div>
                         <div class="column is-3">
@@ -660,7 +659,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
 
@@ -668,7 +669,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
                         <div class="timeline-item is-danger">
@@ -703,11 +706,11 @@ $tablaRanking .= "</div>";
                             </span>
                             <!-- Cambia el estilo de las categorias en la barra -->
                             <div id="divNameSeccion" class="navbar-item bannerbit3">
-                                <p class="seccion-logo-desactivado bannerbit">ZIC</p>
+                                <p class="seccion-logo-desactivado">Seccion</p>
                             </div>
                             <span class="navbar-item">
 
-                                <p id="divNameSubseccion" class="subtitle is-3">Aqui va nombre de la subseccion</p>
+                                <p id="divNameSubseccion" class="subtitle is-3">Subseccion</p>
 
                             </span>
                         </div>
@@ -724,37 +727,37 @@ $tablaRanking .= "</div>";
                                         </button>
                                     </p>
                                     <p class="control">
-                                        <div class="dropdown is-active">
-                                            <div class="dropdown-trigger">
-                                                <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
-                                                    <span class="icon is-small">
-                                                        <i class="fas fa-info-circle" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span>Información</span>
+                                    <div class="dropdown is-active">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-light" aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                                </span>
+                                                <span>Información</span>
 
-                                                </button>
-                                            </div>
-                                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                                <div class="dropdown-content">
-                                                    <a id="link-auditorias" href="#" class="dropdown-item">
-                                                        AUDITORIAS - INFORMES
-                                                    </a>
-                                                    <a id="link-certificaciones" href="#" class="dropdown-item">
-                                                        CERTIFICACIONES - NORMATIVAS
-                                                    </a>
-                                                    <a id="link-cotizaciones" href="#" class="dropdown-item">
-                                                        COTIZACIONES - FACTURAS
-                                                    </a>
-                                                    <a id="link-planos" href="#" class="dropdown-item">
-                                                        PLANOS
-                                                    </a>
-                                                    <a id="link-otros" href="#" class="dropdown-item">
-                                                        OTROS
-                                                    </a>
-                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a id="link-auditorias" href="#" class="dropdown-item">
+                                                    AUDITORIAS - INFORMES
+                                                </a>
+                                                <a id="link-certificaciones" href="#" class="dropdown-item">
+                                                    CERTIFICACIONES - NORMATIVAS
+                                                </a>
+                                                <a id="link-cotizaciones" href="#" class="dropdown-item">
+                                                    COTIZACIONES - FACTURAS
+                                                </a>
+                                                <a id="link-planos" href="#" class="dropdown-item">
+                                                    PLANOS
+                                                </a>
+                                                <a id="link-otros" href="#" class="dropdown-item">
+                                                    OTROS
+                                                </a>
                                             </div>
                                         </div>
-                                        <!-- <a id="link-informes" class="button is-light">
+                                    </div>
+                                    <!-- <a id="link-informes" class="button is-light">
                                                 <<span class="icon is-small">
                                                 <i class="fas fa-info-circle"></i>
                                                 </span>
@@ -792,9 +795,8 @@ $tablaRanking .= "</div>";
                     <div class="field has-addons has-addons-right is-fullwidth">
                         <div class="control">
                             <div class="control has-icons-left has-icons-right">
-                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                                <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo" autocomplete="off"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
                             </div>
-                            <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
                         <div class="control">
                             <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
@@ -815,10 +817,9 @@ $tablaRanking .= "</div>";
         </section>
 
 
-
         <!-- ******************************** Codigo para la comnas de subsecciones ********************************************************************* -->
-        <br>
-        <section id="seccion-bar" class="hero is-light is-small">
+        <!-- <br> -->
+        <section id="seccion-bar" class="hero is-light is-small mt-5">
             <!-- Hero head: will stick at the top -->
             <div class="hero-head">
                 <div class="navbar-menu">
@@ -904,7 +905,7 @@ $tablaRanking .= "</div>";
                 </div>
             </div>
         </section>
-        <br>
+        <!-- <br> -->
 
         <!-- ******************* CONSULTAS PARA LA COLUMNA DE SECCIONES********************************** -->
         <section id="seccionColumnas" class="mt-2 container is-fluid">
@@ -923,7 +924,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-24'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id <> 200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -974,28 +975,22 @@ $tablaRanking .= "</div>";
                             }
                         }
 
-
-
-
-
-
-
                         $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
                         $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
 
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
+
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, " . $row_c_rel_seccion['id_subseccion'] . " ); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto' ); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
                     }
                     ?>
-
 
 
                     <?php
@@ -1008,7 +1003,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-1'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1064,10 +1059,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1084,7 +1079,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-23'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1117,7 +1112,7 @@ $tablaRanking .= "</div>";
 
                                 //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
                                 // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectos($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
                                     . "<div class=\"columns is-gapless my-1 is-mobile\">"
                                     . "<div class=\"column is-10\">"
                                     . "<p class=\"t-normal has-text-left px-4 xxx\">$nombreSubseccion</p>"
@@ -1136,16 +1131,16 @@ $tablaRanking .= "</div>";
                             }
                         }
 
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino=$id_destino AND id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino=$id_destino AND id_seccion=" . $id_seccion . " and status='N' and activo=1 and id_subseccion = 200";
                         $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
 
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1163,7 +1158,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-19'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1216,10 +1211,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1237,7 +1232,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-5'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1290,10 +1285,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1311,7 +1306,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-6'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1366,10 +1361,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1387,7 +1382,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-7'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1441,10 +1436,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1462,7 +1457,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-12'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1516,10 +1511,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1537,7 +1532,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-8'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1590,10 +1585,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1611,7 +1606,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-9'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1637,14 +1632,36 @@ $tablaRanking .= "</div>";
                             $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
                             $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
                             if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+                                $idSubseccion = $row_subsecciones['id'];
+                                $nombreGrupo = $row_subsecciones['grupo'];
 
-
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
-                                    . "<div class=\"columns is-gapless my-1 is-mobile\">"
-                                    . "<div class=\"column is-10\">"
-                                    . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo'] . "</p>"
-                                    . "</div>"
-                                    . "<div class=\"column\">";
+                                if ($id_destino == 1444 and $idSubseccion == 12) {
+                                    echo
+                                        "<div class=\"columns is-gapless my-1 is-mobile\">"
+                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelRM', 'show')\">"
+                                            . "<p class=\"t-normal has-text-left px-4\">"
+                                            . "$nombreGrupo"
+                                            . "</p>"
+                                            . "</div>"
+                                            . "<div class=\"column\">";
+                                } elseif ($id_destino == 74444 and $idSubseccion == 12) {
+                                    echo
+                                        "<div class=\"columns is-gapless my-1 is-mobile\">"
+                                            . "<div class=\"column is-10\" onclick=\"show_hide_modal('modalHotelCMU', 'show')\">"
+                                            . "<p class=\"t-normal has-text-left px-4\">"
+                                            . "$nombreGrupo"
+                                            . "</p>"
+                                            . "</div>"
+                                            . "<div class=\"column\">";
+                                } else {
+                                    echo
+                                        "<div class=\"columns btn-subsecciones is-gapless my-1 is-mobile\"  onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
+                                            . "<div class=\"column is-10\">"
+                                            . "<p class=\"t-normal has-text-left px-4\">" . $row_subsecciones['grupo']
+                                            . "</p>"
+                                            . "</div>"
+                                            . "<div class=\"column\">";
+                                }
                                 if ($total > 0) {
                                     echo "<p class=\"t-pendiente\">$total</p>";
                                 } else {
@@ -1653,8 +1670,7 @@ $tablaRanking .= "</div>";
                                 }
                                 echo
                                     "</div>"
-                                        . "</div>"
-                                        . "</a>";
+                                        . "</div>";
                             }
                         } //fin Foreach
 
@@ -1665,10 +1681,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1686,7 +1702,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-10'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
 
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
@@ -1739,10 +1755,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1760,7 +1776,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-11'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1813,15 +1829,80 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
                     }
                     ?>
+
+                    <?php
+                    $id_seccion = 1001;
+                    $nombre_seccion = "Energéticos";
+
+                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_destino= $id_destino and id_seccion=$id_seccion";
+                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
+
+                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
+                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
+                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
+                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-11'>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
+                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
+                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
+
+                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
+                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status = 'PENDIENTE' and activo = 1 and id_destino = $id_destino and id_seccion = $id_seccion and id_subseccion = " . $row_subseccion_nombre['id'] . "";
+                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
+                                $row_cnt = mysqli_num_rows($result_t_mc);
+
+                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
+                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
+                                }
+                            }
+                        }
+
+                        // Imprime las subcategorias Ordenadas.
+
+                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
+                        arsort($array_energeticos);
+
+                        // Recorre el arreglo.
+                        foreach ($array_energeticos as $id => $total) {
+                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
+                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
+                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+                                $idSubseccionX = $row_subsecciones['id'];
+                                $subseccionX = $row_subsecciones['grupo'];
+
+                                if ($total > 0) {
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total . " </p></div></div></a>";
+                                } else {
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                }
+                            }
+                        } //fin Foreach
+
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_destino =" . $id_destino . " and id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
+
+                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
+
+                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                            } else {
+
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                            }
+                        }
+                        echo "</div>";
+                    }
+                    ?>
+
                 <?php } else {
 
                     //COLUMNAS PARA EL DESTINO DE AMERICA ID:10 
@@ -1834,7 +1915,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-24'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id <> 200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1865,7 +1946,6 @@ $tablaRanking .= "</div>";
                             $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
                             if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
 
-
                                 echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
                                     . "<div class=\"columns is-gapless my-1 is-mobile\">"
                                     . "<div class=\"column is-10\">"
@@ -1892,10 +1972,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, " . $row_c_rel_seccion['id_subseccion'] . " ); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\"CapturarStatusGeneral($idUsuario, $idDestinoT, 24, 200, 'reporte_status_proyecto'); listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1914,7 +1994,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-1'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -1970,10 +2050,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -1991,7 +2071,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-23'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2024,7 +2104,7 @@ $tablaRanking .= "</div>";
 
                                 //echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\"showHide('show'); obtenerEquipos($id, $id_destino, 1, 0, 0, 1, '$destinoT', '$nombre_seccion', '" . $row_subsecciones['grupo'] . "');\">"
                                 // Muestra el Modal directo de Tareas Generales
-                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectos($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
+                                echo "<a class=\"btn-subsecciones\" href=\"#\" onclick=\" modalProyectosDEP('show'); listarProyectosDEP($idUsuario, $idDestinoT, 23, $idSubseccion); consultaDEP($idUsuario, $idDestinoT, 23, $idSubseccion);\">"
                                     . "<div class=\"columns is-gapless my-1 is-mobile\">"
                                     . "<div class=\"column is-10\">"
                                     . "<p class=\"t-normal has-text-left px-4\">$nombreSubseccion</p>"
@@ -2043,16 +2123,16 @@ $tablaRanking .= "</div>";
                             }
                         }
 
-                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1 and id_subseccion = 200";
                         $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
 
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2072,7 +2152,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-19'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2125,10 +2205,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2146,7 +2226,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-5'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2199,10 +2279,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2220,7 +2300,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-6'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2275,10 +2355,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2296,7 +2376,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-7'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2350,10 +2430,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2371,7 +2451,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-12'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2425,10 +2505,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2446,7 +2526,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-8'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2499,10 +2579,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2520,7 +2600,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-9'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2574,10 +2654,10 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2595,7 +2675,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-10'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
 
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
@@ -2648,17 +2728,17 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
                     }
                     ?>
 
-                <?php
+                    <?php
                     $id_seccion = 11;
                     $nombre_seccion = "ZIL";
 
@@ -2669,7 +2749,7 @@ $tablaRanking .= "</div>";
                         $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
                         $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
                         echo "<div class='column is-3 hide-seccion-is-3 is-mobile id-11'>";
-                        echo "<p class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
                         while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
                             $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
                             $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
@@ -2722,10 +2802,79 @@ $tablaRanking .= "</div>";
                         if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
 
                             if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
                             } else {
 
-                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion); showmodalproyectos('$nombre_seccion'); \"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
+                            }
+                        }
+                        echo "</div>";
+                    }
+
+
+                    // Fin America Total.
+
+                    ?>
+
+
+                <?php
+                    $id_seccion = 1001;
+                    $nombre_seccion = "Energéticos";
+
+                    $query_c_rel_destino_seccion = "SELECT* FROM c_rel_destino_seccion WHERE id_seccion=$id_seccion";
+                    $result_c_rel_destino_seccion = mysqli_query($conn_2020, $query_c_rel_destino_seccion);
+
+                    if ($row_c_rel_destino_seccion = mysqli_fetch_array($result_c_rel_destino_seccion)) {
+                        $query_c_rel_seccion_subseccion = "SELECT* FROM c_rel_seccion_subseccion WHERE id_rel_seccion=" . $row_c_rel_destino_seccion['id'] . "";
+                        $result_c_rel_seccion_subseccion = mysqli_query($conn_2020,  $query_c_rel_seccion_subseccion);
+                        echo "<div class='column is-3 hide-seccion-is-3- is-mobile id-1001'>";
+                        echo "<p onclick=\"pendientesSubseccion($id_seccion, 'MCS', '$nombre_seccion', $idUsuario, $id_destino);\" class='$nombre_seccion column has-text-centered'> $nombre_seccion </p>";
+                        while ($row_c_rel_seccion = mysqli_fetch_array($result_c_rel_seccion_subseccion)) {
+                            $query_subseccion_nombre = "SELECT* FROM c_subsecciones WHERE id=" . $row_c_rel_seccion['id_subseccion'] . " and id<>200";
+                            $result_subseccion_nombre = mysqli_query($conn_2020, $query_subseccion_nombre);
+
+                            while ($row_subseccion_nombre = mysqli_fetch_array($result_subseccion_nombre)) {
+                                $query_t_mc = "SELECT count(id) FROM t_energeticos WHERE status='PENDIENTE' and activo=1 and id_seccion=$id_seccion and id_subseccion=" . $row_subseccion_nombre['id'] . "";
+                                $result_t_mc = mysqli_query($conn_2020, $query_t_mc);
+                                $row_cnt = mysqli_num_rows($result_t_mc);
+
+                                if ($row_count = mysqli_fetch_array($result_t_mc)) {
+                                    $array_energeticos[$row_subseccion_nombre['id']] = $row_count['count(id)'];
+                                }
+                            }
+                        }
+
+                        // Imprime las subcategorias Ordenadas.
+
+                        // Ordena el arreglo segun las cantidades de pendientes y el index es el id de la Subcategoria.
+                        arsort($array_energeticos);
+
+                        // Recorre el arreglo.
+                        foreach ($array_energeticos as $id => $total) {
+                            $query_subsecciones = "SELECT* FROM c_subsecciones WHERE id=$id";
+                            $result_subsecciones = mysqli_query($conn_2020, $query_subsecciones);
+                            if ($row_subsecciones = mysqli_fetch_array($result_subsecciones)) {
+                                $idSubseccionX = $row_subsecciones['id'];
+                                $subseccionX = $row_subsecciones['grupo'];
+
+                                if ($total > 0) {
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $total . " </p></div></div></a>";
+                                } else {
+                                    echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" obtenerPendientesEnergeticos($id_seccion, $idSubseccionX, 'PENDIENTE');\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\"> $subseccionX</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                                }
+                            }
+                        } //fin Foreach
+
+                        $query_t_proyectos = "SELECT count(id) FROM t_proyectos WHERE id_seccion=" . $id_seccion . " and status='N' and activo=1";
+                        $result_t_proyectos = mysqli_query($conn_2020, $query_t_proyectos);
+
+                        if ($row_t_proyectos = mysqli_fetch_array($result_t_proyectos)) {
+
+                            if ($row_t_proyectos['count(id)'] <= 0 || $row_t_proyectos['count(id)'] == "") {
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-normal\">0</p></div></div></a>";
+                            } else {
+
+                                echo "<a class=\"btn-proyectos\" href=\"#\" onclick=\" listarProyectos($idUsuario, $idDestinoT, $id_seccion, 200);\"><div class=\"columns is-gapless my-1 is-mobile\"><div class=\"column is-10\"><p class=\"t-normal has-text-left px-4\">PROYECTOS</p></div><div class=\"column\"><p class=\"t-pendiente\">" . $row_t_proyectos['count(id)'] . " </p></div></div></a>";
                             }
                         }
                         echo "</div>";
@@ -2783,7 +2932,6 @@ $tablaRanking .= "</div>";
                             <div class="control has-icons-left has-icons-right">
                                 <input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar equipo"><span class="icon is-small is-left"><i class="fas fa-search"></i></span>
                             </div>
-                            <!--<input id="busqueda" name="busqueda" class="input" type="text" placeholder="Buscar...">-->
                         </div>
                         <div class="control">
                             <button id="btnBuscar" type="button" class="button is-info">Buscar</button>
@@ -2879,7 +3027,8 @@ $tablaRanking .= "</div>";
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="chkb1" type="checkbox" name="chkb1" checked="checked">
                                 <label for="chkb1"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
+                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
                             </div>
                         </div>
                         <div class="column is-3">
@@ -2898,7 +3047,8 @@ $tablaRanking .= "</div>";
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="chkb2" type="checkbox" name="chkb2" checked="checked">
                                 <label for="chkb2"></label>
-                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
+                                <span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU)
                             </div>
                         </div>
                         <div class="column is-3">
@@ -3004,7 +3154,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
 
@@ -3012,7 +3164,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
                         <div class="timeline-item is-danger">
@@ -3065,7 +3219,7 @@ $tablaRanking .= "</div>";
                                 <span class="icon is-small">
                                     <i class="fas fa-fire-extinguisher"></i>
                                 </span>
-                                <span>Correctivos</span>
+                                <span>Fallas</span>
                             </a>
                         </p>
                         <p class="control">
@@ -3219,7 +3373,8 @@ $tablaRanking .= "</div>";
                         <div class="column is-9">
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
+                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                    HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
                             </div>
                         </div>
                         <div class="column is-3">
@@ -3237,7 +3392,8 @@ $tablaRanking .= "</div>";
                         <div class="column is-9">
                             <div class="field text-truncate">
                                 <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
+                                <label for="exampleCheckboxSuccessCircle"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS
+                                    HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </label>
                             </div>
                         </div>
                         <div class="column is-3">
@@ -3440,7 +3596,8 @@ $tablaRanking .= "</div>";
                 <!--columna datos de los mp-->
                 <div id="inicioMP2" class="columns is-centered mt-4 border rounded" style="display: none;">
                     <div class="column is-half has-text-centered">
-                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.</h4>
+                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.
+                        </h4>
                         <h6 id="titulomp2" class="title is-6">"Mantenimiento mayor, semana 45"</h6>
                         <a id="btnGenerarOT2" class="button is-warning">
                             <span class="icon is-small">
@@ -3456,13 +3613,27 @@ $tablaRanking .= "</div>";
                         </div>
                         <p class="mb-2">Actividades a realizar</p>
                         <ul id="ulActividades2" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
 
                         </ul>
                     </div>
@@ -3545,7 +3716,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento mayor</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
+                                                mayor</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3554,7 +3726,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3562,7 +3735,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3570,7 +3744,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3578,7 +3753,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3586,7 +3762,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3594,7 +3771,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -3648,7 +3826,9 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-info"></div>
                                         <div class="timeline-content">
                                             <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
                                         </div>
                                     </div>
 
@@ -3656,15 +3836,19 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-info"></div>
                                         <div class="timeline-content">
                                             <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
                                         </div>
                                     </div>
                                     <div class="timeline-item is-danger">
                                         <div class="timeline-marker is-danger is-icon">
-                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
+                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span>
+                                            </h4>
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                                20:30</p>
                                             <img src="svg/secciones/zia.svg" width="40px" alt="">
                                             <img src="svg/secciones/zic.svg" width="40px" alt="">
                                             <img src="svg/secciones/zil.svg" width="40px" alt="">
@@ -3948,7 +4132,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
 
@@ -3956,7 +4142,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
                         <div class="timeline-item is-danger">
@@ -4101,7 +4289,8 @@ $tablaRanking .= "</div>";
                             <div class="field">
                                 <input class="is-checkradio is-success is-circle is-small" id="exampleCheckboxSuccessCircle2" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
                                 <label for="exampleCheckboxSuccessCircle2"></label>
-                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
+                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
+                                    </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
                             </div>
                         </div>
                         <div class="column is-5">
@@ -4119,7 +4308,8 @@ $tablaRanking .= "</div>";
                             <div class="field">
                                 <input class="is-checkradio is-success is-circle is-small   " id="exampleCheckboxSuccessCircle3" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
                                 <label for="exampleCheckboxSuccessCircle3"></label>
-                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i> </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
+                                <span class="is-size-7"><span><i class="fas fa-bookmark has-text-danger"></i>
+                                    </span>(CMU) SONDAS HIDROESTÁTICAS (CMU) SONDAS HIDROESTÁTICAS (CMU) </span>
                             </div>
                         </div>
                         <div class="column is-5">
@@ -4155,7 +4345,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                <p class="is-size-7">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p class="is-size-7">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                    do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                    veniam, quis nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
 
@@ -4163,7 +4355,9 @@ $tablaRanking .= "</div>";
                             <div class="timeline-marker is-info"></div>
                             <div class="timeline-content">
                                 <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                    nostrud exercitation ullamco laboris n</p>
                             </div>
                         </div>
 
@@ -4203,7 +4397,8 @@ $tablaRanking .= "</div>";
                                         <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                                     </div>
                                     <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                            20:30</p>
                                         <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="cot-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
 
                                         <button class="button is-danger is-small is-rounded">
@@ -4238,7 +4433,8 @@ $tablaRanking .= "</div>";
                                         <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
                                     </div>
                                     <div class="timeline-content">
-                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                        <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                            20:30</p>
                                         <a class="example-image-link" href="https://picsum.photos/200/200" data-lightbox="just-gallery" data-title=""><img width="64" height="64" class="example-image img-fluid" src="https://picsum.photos/200/200" alt="" /></a>
 
                                         <button class="button is-danger is-small is-rounded">
@@ -4266,6 +4462,54 @@ $tablaRanking .= "</div>";
 
     <!--AREA DE MODALS-->
 
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+    <div id="modalHotelRM" class="modal">
+        <!-- <div class="modal-background"></div> -->
+        <div class="modal-content columns is-centered">
+            <div class="box column is-8">
+                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelRM','hide');"></a>
+                <article class="media mt-4">
+                    <div class="buttons">
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 18, 6694, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                            PALLADIUM COLONIAL
+                            RESORT & SPA</button>
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 19, 6695, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                            PALLADIUM KANTENAH
+                            RESORT & SPA</button>
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 21, 6696, 1, 'RM', 'ZIC', 'FAN&COILS');">TRS
+                            YUCATÁN
+                            HOTEL</button>
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 1, 1, 20, 6697, 1, 'RM', 'ZIC', 'FAN&COILS');">GRAND
+                            PALLADIUM
+                            WHITE SAND RESORT &
+                            SPA</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+    <div id="modalHotelCMU" class="modal">
+        <!-- <div class="modal-background"></div> -->
+        <div class="modal-content columns is-centered">
+            <div class="box column is-8">
+                <a class="is-pulled-right	 delete is-medium" onclick="show_hide_modal('modalHotelCMU','hide');"></a>
+                <article class="media mt-4">
+                    <div class="buttons">
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 22, 6703, 1, 'CMU', 'ZIC', 'FAN&COILS');">GRAND
+                            PALLADIUM COSTA MUJERES RESORT & SPA</button>
+                        <button class="button is-info btn-subsecciones" onclick="showHide('show'); obtenerEquipos(12, 7, 1, 23, 6704, 1, 'CMU', 'ZIC', 'FAN&COILS');">TRS
+                            CORAL HOTEL</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Para Seleccionar Hotel para los Fans&Cols -->
+
+
     <!--MODAL MC-->
     <div id="modal-mc" class="modal">
         <div class="modal-background"></div>
@@ -4282,7 +4526,7 @@ $tablaRanking .= "</div>";
                                         <div class="navbar-item zia-background">
                                             <p class="seccion-logo">ZIA</p>
                                         </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Correctivos</a>
+                                        <a class="navbar-item">Subseccion / Equipo / Fallas</a>
                                     </div>
                                     <div class="navbar-end has-text-centered">
                                         <div class="navbar-item">
@@ -4301,10 +4545,10 @@ $tablaRanking .= "</div>";
                         </section>
                         <section class="mt-4">
                             <div class="columns is-centered">
-                                <div class="column is-3">
+                                ; <div class="column is-3">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Nuevo correctivo..">
+                                            <input class="input" type="text" placeholder="Agregar Nueva Falla">
                                         </div>
                                         <div class="control">
                                             <a class="button is-warning">
@@ -4324,7 +4568,8 @@ $tablaRanking .= "</div>";
                                 <div class="column is-half">
                                     <div class="columns is-mobile">
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de los correctivos</strong></p>
+                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripción de
+                                                    Falla</strong></p>
                                         </div>
 
                                     </div>
@@ -4332,16 +4577,24 @@ $tablaRanking .= "</div>";
                                 <div class="column is-white">
                                     <div class="columns is-gapless is-mobile">
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Responsable</strong></p>
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Responsable</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion"><strong>Fecha</strong></p>
+                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
+                                                <strong>Fecha</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas"><strong>Adjuntos</strong></p>
+                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
+                                                <strong>Adjuntos</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios"><strong>Comentarios</strong></p>
+                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                <strong>Comentarios</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
                                             <p class="t-titulos"></p>
@@ -4421,6 +4674,344 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+    <!--MODAL ENERGETICOS-->
+    <div id="modal-energeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-lg">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column">
+                        <section class="hero is-light is-small">
+                            <!-- Hero head: will stick at the top -->
+                            <div class="hero-head">
+                                <nav class="navbar">
+                                    <div class="navbar-start has-text-centered">
+                                        <div class="navbar-item has-background-warning">
+                                            <p id="textSeccionEnergeticos" class="navbar-item has-text-weight-bold is-uppercase"></p>
+                                        </div>
+                                        <a id="textSubseccionEnergeticos" class="navbar-item"></a>
+                                    </div>
+                                    <div class="navbar-end has-text-centered">
+
+                                        <div class="navbar-item">
+                                            <button id="btnObtenerEnergeticos" type="button" class="button is-success" name="button">
+                                                <i class="fad fa-check-double mr-2"></i>
+                                                Ver solucionado
+                                            </button>
+                                        </div>
+
+                                        <div class="navbar-item">
+                                            <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-energeticos');">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </nav>
+                            </div>
+                        </section>
+                        <section class="mt-4">
+                            <div class="columns is-centered">
+                                <div class="column is-3">
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <input id="inputEnergetico" class="input" type="text" placeholder="Agregar Pendiente" autocomplete="off">
+                                        </div>
+                                        <div id="btnCrearEnergetico" class="control">
+                                            <a class="button is-warning">
+                                                <i class="fad fa-plus-circle"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <section class="mt-4">
+
+                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
+                                <div class="column is-half">
+                                    <div class="columns is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Descripción</strong>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="column is-white">
+                                    <div class="columns is-gapless is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Responsable</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Fecha estimada de solución">
+                                                <strong>Fecha</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntos">
+                                                <strong>Adjuntos</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Comentarios">
+                                                <strong>Comentarios</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos"><strong>Status</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="dataEnergeticos" class="scrollbar" style="overflow-x: hidden;overflow-y: scroll;max-height: 50vh;"></div>
+
+                        </section>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!--INICIO MODAL MPNP-->
+    <div id="modal-MPNP" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-lg">
+            <section class="modal-card-body">
+
+                <div class="columns">
+                    <div id="colMC" class="column">
+                        <section class="hero is-light is-small">
+                            <!-- Hero head: will stick at the top -->
+                            <div class="hero-head">
+                                <nav class="navbar">
+                                    <div class="navbar-item">
+                                        <button type="button" class="button is-warning" name="button" onclick="closeModal('modal-MPNP');">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <div class="navbar-start has-text-centered">
+                                        <div id="divNameSeccionMPNP" class="navbar-item zia-background">
+                                            <p class="seccion-logo">ZIA</p>
+                                        </div>
+                                        <a class="navbar-item"> <span id="subseccionMPNP"> </span> / <span id="equipoMPNP"> </span> /
+                                            Preventivo No Planificado</a>
+                                    </div>
+                                </nav>
+                            </div>
+                        </section>
+                        <section class="mt-4">
+                            <div class="columns is-centered">
+                                <div class="column is-2">
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <button class="button is-success is-rounded" onclick="showModal('modal-agregar-MPNP'); modalInicialMPNP();">
+                                                Agregar MP No Planificado</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mt-4">
+
+                            <div class="columns is-gapless my-1 is-mobile tg mx-2">
+                                <div class="column is-half">
+                                    <div class="columns is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de
+                                                    los Preventivos NO Planeados</strong></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="column is-white">
+                                    <div class="columns is-gapless is-mobile">
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Actividades</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
+                                                <strong>Responsable</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
+                                                <strong>Fecha Creado</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                <strong>Adjuntos</strong>
+                                            </p>
+                                        </div>
+                                        <div class="column">
+                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                <strong>Comentario</strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dataMPNP">
+                                <div class="columns is-gapless my-1 is-mobile hvr-grow-sm manita mx-2">
+                                    <div class="column is-half">
+                                        <div class="columns">
+                                            <div class="column">
+                                                <div class="message is-small is-danger">
+                                                    <p class="message-body"><strong>Sin MP</strong>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="columns is-gapless">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- FIN MODAL MPNP -->
+
+    <!-- INICIO MODAL AGREGAR MPNP -->
+    <div id="modal-agregar-MPNP" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title has-text-centered subtitle is-3 my-0"> MP NO PLANIFICADO</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            Título:
+                            <div class="control">
+                                <input id="tituloMPNP" class="input is-primary" type="text" placeholder="título MP (5 Caracteres Mínimo)" onkeyup="if(event.keyCode == 13) tituloMPNP('');">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="formMPNP" class="hidden">
+                    <div class="columns">
+                        <div class="column is-6">
+                            Responsable:
+                            <div class="field">
+                                <p class="control has-icons-left">
+                                    <span class="select">
+                                        <select id="responsableMPNP" onclick="agregarResponsableMPNP('');">
+                                            <option selected value="0"> Seleccione </option>
+                                            <?php
+                                            if ($idDestinoT == 10) {
+                                                $destinoMPNP = "t_users.id_destino IN(1, 7, 2, 6, 5, 11, 3, 4, 10)";
+                                            } else {
+                                                $destinoMPNP = "t_users.id_destino IN($idDestinoT, 10)";
+                                            }
+                                            $queryData = "SELECT
+                                                t_users.id,
+                                                t_colaboradores.nombre,  
+                                                t_colaboradores.apellido  
+                                                FROM t_users 
+                                                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                                                WHERE $destinoMPNP";
+
+                                            $resultData = mysqli_query($conn_2020, $queryData);
+                                            while ($rowData = mysqli_fetch_array($resultData)) {
+                                                $id = $rowData['id'];
+                                                $nombre = $rowData['nombre'];
+                                                $apellido = $rowData['apellido'];
+                                                echo "<option value=\"$id\">$nombre $apellido</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </span>
+                                    <span class="icon is-small is-left">
+                                        <i class="fad fa-user-plus"></i>
+                                    </span>
+                                </p>
+                            </div>
+                            <div id="dataResponsablesMPNP" class="column">
+                                <!-- <div class="field is-grouped is-grouped-multiline">
+                                        <div class="control">
+                                            <div class="tags has-addons">
+                                                <p class="tag is-primary">
+                                                    <span class="mr-2"><i class="fa fa-user"></i></span>
+                                                    Eduardo Pool
+                                                </p>
+                                                <p class="tag is-delete"></p>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                            </div>
+                        </div>
+
+                        <div class="column is-5">
+                            Fecha Realizado:
+                            <div class="control">
+                                <input id="dateMPNP" class="input is-primary" type="date" placeholder="" value="<?= date('Y-m-d'); ?>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="columns">
+                        <div class="column is-12 has-text-centered">
+                            <div class="field has-addons">
+                                <div class="control is-expanded">
+                                    <input id="actividadMPNP" class="input" type="text" placeholder="titulo de la actividad">
+                                </div>
+                                <div class="control">
+                                    <a class="button is-info" onclick="agregarActividadMPNP('');">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="columns">
+                        <div id="dataActividadesMPNP" class="column flex inline">
+
+                            <!-- <div class="tags has-addons is-rounded">
+                                    <p class="tag is-medium is-info">
+                                        <i class="fad fa-angle-right"></i>
+                                        <span class="mx-2">
+                                            Eduardo Pool
+                                        </span>
+                                    </p>
+                                    <p class="tag is-medium is-delete"></p>
+                                </div> -->
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card bd-notificatio has-text-centered has-background-white">
+                <div class="columns">
+                    <div class="column my-3">
+                        <button id="btnGuardarMPNP" class="button is-success" disabled onclick="btnConfirmarMPNP('');">Guardar MP</button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- FIN MODAL AGREGAR MPNP -->
+
     <div id="modal-mc-fecha" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -4451,15 +5042,12 @@ $tablaRanking .= "</div>";
                 </div>
                 <div class="columns">
                     <div id="colFechaMC" class="column">
-                        <h4 class="subtitle is-4 has-text-centered">Fecha de la tarea</h4>
-
+                        <h4 class="subtitle is-4 has-text-centered">Rango de Fecha</h4>
                     </div>
                 </div>
                 <div class="columns is-centered">
                     <div class="column is-6">
                         <div id="myDatePickerMC" class="datepicker-here" data-date-format="mm/dd/yyyy"></div>
-                        <!--                    <input id="txtDateRange1" type="date">
-                                                   <input id="txtDateRange2" type="date" style="display:none;">-->
                     </div>
                 </div>
 
@@ -4542,6 +5130,34 @@ $tablaRanking .= "</div>";
         <!--<button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsable');"></button>-->
     </div>
 
+
+    <!--MODAL AGREGAR RESPONSABLE TAREA GENERAL-->
+    <div id="modalAgregarResponsableEnergeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <input id="inputResponsableEnergeticos" class="input is-primary" type="text" placeholder="Buscar...">
+            </header>
+            <!-- Any other Bulma elements you want -->
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="divListaUsuariosEnergeticos" class="column"></div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column has-text-right">
+                            <button class="button is-danger" onclick="closeModal('modalAgregarResponsableEnergeticos');">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <button class="modal-close is-large" aria-label="close" onclick="closeModal('modalAgregarResponsableEnergeticos');"></button>
+    </div>
+
+
     <!--MODAL CONFIRMAR COMPLETAR TAREA GENERAL-->
     <div id="modalConfirmacionTarea" class="modal">
         <div class="modal-background"></div>
@@ -4585,7 +5201,7 @@ $tablaRanking .= "</div>";
                                         <div class="navbar-item zil-background">
                                             <p class="seccion-logo">ZIA</p>
                                         </div>
-                                        <a class="navbar-item">Subseccion / Equipo / Correctivos</a>
+                                        <a class="navbar-item">Subseccion / Equipo / Falla</a>
                                     </div>
                                     <div class="navbar-end has-text-centered">
                                         <div class="navbar-item">
@@ -4607,7 +5223,7 @@ $tablaRanking .= "</div>";
                                 <div class="column is-3">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <input class="input" type="text" placeholder="Agregar Nuevo correctivo">
+                                            <input class="input" type="text" placeholder="Agregar Falla">
                                         </div>
                                         <div class="control">
                                             <a class="button is-warning">
@@ -4627,7 +5243,8 @@ $tablaRanking .= "</div>";
                                 <div class="column is-half">
                                     <div class="columns is-mobile">
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de los correctivos</strong></p>
+                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Descripcion de
+                                                    los correctivos</strong></p>
                                         </div>
 
                                     </div>
@@ -4635,16 +5252,24 @@ $tablaRanking .= "</div>";
                                 <div class="column is-white">
                                     <div class="columns is-gapless is-mobile">
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Responsable"><strong>Responsable</strong></p>
+                                            <p class="t-titulos" data-tooltip="Responsable">
+                                                <strong>Responsable</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion"><strong>Fecha</strong></p>
+                                            <p class="t-titulos" data-tooltip="Fecha estimada de solucion">
+                                                <strong>Fecha</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas"><strong>Adjuntos</strong></p>
+                                            <p class="t-titulos" data-tooltip="Documentos e imagenes adjuntoas">
+                                                <strong>Adjuntos</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
-                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios"><strong>Comentarios</strong></p>
+                                            <p class="t-titulos" data-tooltip="Feedback/Comentarios">
+                                                <strong>Comentarios</strong>
+                                            </p>
                                         </div>
                                         <div class="column">
                                             <p class="t-titulos"></p>
@@ -4722,7 +5347,8 @@ $tablaRanking .= "</div>";
                 </div>
                 <div id="inicioMP" class="columns is-centered mt-4 border rounded" style="display: none;">
                     <div class="column is-half has-text-centered">
-                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.</h4>
+                        <h4 class="title is-4 ">Para poner en proceso este mantenimiento es necesario generar la OT.
+                        </h4>
                         <h6 id="titulomp" class="title is-6">"Mantenimiento mayor, semana 45"</h6>
                         <a id="btnGenerarOT" class="button is-warning">
                             <span class="icon is-small">
@@ -4738,13 +5364,27 @@ $tablaRanking .= "</div>";
                         </div>
                         <p class="mb-2">Actividades a realizar</p>
                         <ul id="ulActividades" class="has-text-left">
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
+                            <li class="hvr-grow manita"><span><i class="fas fa-caret-right has-text-info"></i></span> In
+                                fermentum leo eu
+                                lectus mollis, quis dictum mi aliquet.</li>
 
                         </ul>
                     </div>
@@ -4827,7 +5467,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento mayor</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>Mantenimiento
+                                                mayor</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4836,7 +5477,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4844,7 +5486,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4852,7 +5495,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4860,7 +5504,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4868,7 +5513,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4876,7 +5522,8 @@ $tablaRanking .= "</div>";
                                     <div class="column">
                                         <div class="field text-truncate has-text-left">
                                             <input class="is-checkradio is-success is-circle" id="exampleCheckboxSuccessCircle" type="checkbox" name="exampleCheckboxSuccessCircle" checked="checked">
-                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</label>
+                                            <label for="exampleCheckboxSuccessCircle "><span></span>In fermentum leo
+                                                eu lectus mollis, quis dictum mi aliquet.</label>
                                         </div>
                                     </div>
                                 </div>
@@ -4930,7 +5577,9 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-info"></div>
                                         <div class="timeline-content">
                                             <p class="heading"><strong>Eduardo Meneses</strong> 14/11/1989 20:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
                                         </div>
                                     </div>
 
@@ -4938,15 +5587,19 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-info"></div>
                                         <div class="timeline-content">
                                             <p class="heading"><strong>Manuel Cervera</strong> 14/11/1989 21:30</p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
                                         </div>
                                     </div>
                                     <div class="timeline-item is-danger">
                                         <div class="timeline-marker is-danger is-icon">
-                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span></h4>
+                                            <h4 class="title is-4"><span><i class="fas fa-paperclip"></i></span>
+                                            </h4>
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989 20:30</p>
+                                            <p class="heading"><strong>Eduardo Meneses <span class="has-text-danger">Andjuntó</span></strong> 14/11/1989
+                                                20:30</p>
                                             <img src="svg/secciones/zia.svg" width="40px" alt="">
                                             <img src="svg/secciones/zic.svg" width="40px" alt="">
                                             <img src="svg/secciones/zil.svg" width="40px" alt="">
@@ -4982,7 +5635,8 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-danger ">
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong></p>
+                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong>
+                                            </p>
                                             <p class="heading">14/11/1989 20:30</p>
                                             <div class="field has-addons">
                                                 <p class="control">
@@ -5008,7 +5662,8 @@ $tablaRanking .= "</div>";
                                         <div class="timeline-marker is-danger">
                                         </div>
                                         <div class="timeline-content">
-                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong></p>
+                                            <p class="heading">OT# 342 Creada por: <strong>Eduardo Meneses</strong>
+                                            </p>
                                             <p class="heading">14/11/1989 20:30</p>
 
                                             <div class="field has-addons">
@@ -5384,7 +6039,8 @@ $tablaRanking .= "</div>";
                                     <button id="" class="button is-danger" onclick="closeModal('modalCrearProyecto');">CANCELAR</button>
                                 </div>
                                 <div class="column">
-                                    <button id="" class="button is-success" onclick="agregarProyecto(<?php echo $idDestinoT; ?>, <?php echo $idPermiso; ?>, <?php echo $idUsuario; ?>)">CREAR PROYECTO</button>
+                                    <button id="" class="button is-success" onclick="agregarProyecto(<?php echo $idDestinoT; ?>, <?php echo $idPermiso; ?>, <?php echo $idUsuario; ?>)">CREAR
+                                        PROYECTO</button>
                                 </div>
                             </div>
                         </div>
@@ -5395,6 +6051,7 @@ $tablaRanking .= "</div>";
         </div>
         <!--            <button class="modal-close is-large" aria-label="close"></button>-->
     </div>
+
 
     <!--MODAL EDITAR DATOS DE UNA TAREA DE EQUIPO-->
     <div id="modal-editar-tarea" class="modal">
@@ -5438,15 +6095,11 @@ $tablaRanking .= "</div>";
         <!--<button class="modal-close is-large" aria-label="close"></button>-->
     </div>
 
+
     <!--MODAL COMENTARIOS EQUIPO-->
     <div id="modal-equipo-comentarios" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card modal-md">
-
-            <!--                <header class="modal-card-head">
-                                    <p class="modal-card-title">Modal title</p>
-                                    <button class="delete" aria-label="close"></button>
-                                </header>-->
             <section class="modal-card-body">
                 <div class="columns">
                     <div id="divHeaderComentarios" class="column">
@@ -5475,18 +6128,17 @@ $tablaRanking .= "</div>";
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                    <p class="heading ">
+                                        <strong>
+                                            <!-- Here User -->
+                                        </strong>
+                                    </p>
+                                    <p class="heading ">
+                                        <!-- Here Date -->
+                                    </p>
+                                    <p class="has-text-justified">
+                                        <!-- Here Coment -->
+                                    </p>
                                 </div>
                             </div>
 
@@ -5518,22 +6170,10 @@ $tablaRanking .= "</div>";
                                             <span class="tag is-info">OT 86</span>
                                         </div>
                                     </div>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
-                                </div>
-                            </div>
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-                                    <div class="control">
-                                        <div class="tags has-addons">
-                                            <span class="tag is-dark">MC</span>
-                                            <span class="tag is-info">NOMBRE DE LA TAREA</span>
-                                        </div>
-                                    </div>
-                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n</p>
+                                    <p class="has-text-justified	">Lorem ipsum dolor sit amet, consectetur
+                                        adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n
+                                    </p>
                                 </div>
                             </div>
 
@@ -5551,22 +6191,63 @@ $tablaRanking .= "</div>";
                     </div>
                 </div>
             </section>
-            <!--                <footer class="modal-card-foot">
-                                    <button class="button is-success">Save changes</button>
-                                    <button class="button">Cancel</button>
-                                </footer>-->
         </div>
     </div>
+
+
+    <!--MODAL COMENTARIOS EQUIPO-->
+    <div id="modal-energeticos-comentarios" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="divHeaderComentarios" class="column">
+                        <button class="delete" aria-label="close" onclick="closeModal('modal-energeticos-comentarios');"></button>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Comentarios</h4>
+
+                            <div class="columns is-centered">
+                                <div class="field has-addons has-addons-centered is-fullwidth">
+                                    <div class="control">
+                                        <div class="control has-icons-left has-icons-right">
+                                            <input id="inputComentarioEnergetico" class="input" type="text" placeholder="Añadir comentario" autocomplete="off">
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-comment"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="control"><button id="btnAgregarComentarioEnergetico" type="button" class="button is-info">Agregar</button></div>
+                                </div>
+                            </div>
+
+                            <div id="dataComentariosEnergetico"></div>
+
+                            <div class="timeline-item ">
+                                <div class="timeline-marker"></div>
+                            </div>
+
+                            <div class="timeline-item">
+                                <div class="timeline-marker is-icon">
+                                    <i class="fad fa-genderless"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
 
     <!--MODAL FOTOS EQUIPO-->
     <div id="modal-equipo-pictures" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card modal-md">
-
-            <!--                <header class="modal-card-head">
-                                    <p class="modal-card-title">Modal title</p>
-                                    <button class="delete" aria-label="close"></button>
-                                </header>-->
             <section class="modal-card-body">
                 <div class="columns">
                     <div id="divHeaderFotos" class="column has-text-right">
@@ -5591,15 +6272,6 @@ $tablaRanking .= "</div>";
                                 </div>
                             </div>
 
-
-                            <div class="timeline-item">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <p class="heading "><strong>Eduardo Meneses</strong></p>
-                                    <p class="heading ">14/11/1989 20:30</p>
-
-                                </div>
-                            </div>
 
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
@@ -5678,6 +6350,46 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
+
+    <!--MODAL FOTOS EQUIPO-->
+    <div id="modal-energeticos-pictures" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div class="column is-6">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Fotografias generales</h4>
+                            <div class="columns is-centered">
+                                <div class="column is-8 has-text-centered">
+                                    <a class="button is-warning">
+                                        <input class="file-input" type="file" name="resume" id="inputAdjuntosEnergeticos" multiple>
+                                        <span class="icon">
+                                            <i class="fad fa-camera-alt"></i>
+                                        </span>
+                                        <span>Añadir fotografias</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div id="dataAdjuntosEnergeticos"></div>
+
+                            <div class="timeline-item ">
+                                <div class="timeline-marker"></div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker is-icon">
+                                    <i class="fad fa-genderless"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
     <!--MODAL COTIZACIONES EQUIPO-->
     <div id="modal-equipo-cotizaciones" class="modal">
         <div class="modal-background"></div>
@@ -5751,8 +6463,8 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
-    <!--MODAL INFORMACION DE EQUIPO-->
 
+    <!--MODAL INFORMACION DE EQUIPO-->
     <div id="modal-equipo-info" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card modal-md">
@@ -5914,23 +6626,364 @@ $tablaRanking .= "</div>";
         </div>
     </div>
 
-    <div class="modal">
+    <!-- Modal TAREAS P -->
+    <div id="modal-tareas-p" class="modal">
         <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">Modal title</p>
-                <button class="delete" aria-label="close"></button>
-            </header>
-            <section class="modal-card-body">
-                <!-- Content ... -->
+        <div class="modal-content bg-white p-2" style="width:90%; height:auto">
+            <section class="hero is-light is-small">
+                <div class="hero-head">
+                    <nav class=" navbar-menu">
+                        <div class="navbar-start has-text-centered">
+                            <span class="navbar-item">
+                                <button class="button is-warning is-large" onclick="closeModal('modal-tareas-p');"><i class="fas fa-arrow-left"></i></button>
+                            </span>
+                            <div id="estiloSeccionTareas" class="flex items-center">
+                                <p id="textSeccionTareas" class="seccion-logo">--</p>
+                            </div>
+                            <a class="navbar-item">Equipo / <span id="dataEquipoTareasP"> </span></a>
+                        </div>
+                        <div class="navbar-end has-text-centered">
+                            <div class="navbar-item">
+                                <button type="button" class="button is-warning" name="button">
+                                    <i class="fad fa-file-excel mr-2"></i>Exportar
+                                </button>
+                            </div>
+                            <div class="navbar-item">
+                                <button id="btnTareas" type="button" class="button" name="button">
+                                    <i class="fad fa-check-double mr-2"></i><span id="txtTareas"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
             </section>
-            <footer class="modal-card-foot">
-                <button class="button is-success">Save changes</button>
-                <button class="button">Cancel</button>
-            </footer>
+
+            <section class="flex justify-center my-4">
+                <div class="columns is-centered">
+                    <div class="column is-12">
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input id="tituloTareaP" class="input" type="text" placeholder="Agregar Tarea" maxlength="60" autocomplete="off">
+                            </div>
+                            <div id="btnAgregarTareaP" class="control">
+                                <a class="button is-warning">
+                                    <i class="fad fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+
+            <section class="">
+                <div class="columns is-gapless rounded">
+                    <div class="column column is-half">
+                        <div class="columns">
+                            <div class="column">
+                                <p class="t-titulos"><strong>Descripción Tarea</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="columns is-gapless">
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Plan Acción"><strong>Responsable</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Responsable"><strong>Fecha</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Fecha estimada de solucion"><strong>Adjuntos</strong>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Status"><strong>Comentarios</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Status"><strong>Status</strong></p>
+                            </div>
+                            <div class="column">
+                                <p class="t-titulos" data-tooltip="Status"><strong>Opción</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--FILA DE TITULOS XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+
+                <!-- Aquí se imprimen la información de los ProyectosXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+            </section>
+
+            <section class="mb-4">
+                <div id="dataTareasP"></div>
+            </section>
+
+        </div>
+    </div>
+    <!-- Modal TAREAS P -->
+
+
+    <!--MODAL COMENTARIOS EQUIPO-->
+    <div id="modal-comentarios-tareas" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-md">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="dataHeaderComentarios" class="column"></div>
+
+                    <div class="column is-1">
+                        <button class="button is-warning" onclick="closeModal('modal-comentarios-tareas');">
+                            <span class="icon is-small">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div id="" class="column">
+                        <div class="timeline is-left">
+                            <h4 class="subtitle is-4 has-text-centered">Comentarios Tareas</h4>
+
+                            <div class="columns is-centered">
+                                <div class="column is-3">
+
+                                    <div class="field has-addons">
+                                        <div class="control">
+                                            <input id="textComentarioTareas" class="input" type="text" placeholder="Agregar Comentaio" autocomplete="off">
+                                        </div>
+                                        <div id="agregarComentarioTarea" class="control">
+                                            <a class="button is-info">
+                                                Agregar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="columns">
+                                <!-- Data Comentarios -->
+                                <div id="dataComentariosTareas"></div>
+                            </div>
+                        </div>
+                    </div>
+            </section>
         </div>
     </div>
 
+    <!--MODAL FOTOS EQUIPO-->
+    <div id="modal-tareas-pictures" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card modal-md">
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="" class="column has-text-right">
+                        <button class="delete" aria-label="close" onclick="closeModal('modal-tareas-pictures');"></button>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div id="colFotosTareas" class="column is-6">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <!-- Status TareasP -->
+    <div id="modalStatusTareasP" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny has-background-white rounded">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+
+                                <button id="statusUrgenteATP" class="button is-danger is-fullwidth">
+                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>
+                                    Es urgente!
+                                </button>
+
+                                <button id="statusMaterialATP" class="button is-dark is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong> M
+                                        </strong></span> No hay material
+                                </button>
+
+                                <div id="codigoSeguimientoTareas" class="columns is-fullwidth is-centered mt-2 is-hidden">
+                                    <input id="inputCodigoSeguimientoTareas" class="column button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
+                                    <button id="statusMaterialTareas" class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
+                                </div>
+
+                                <button id="" class="button is-warning is-fullwidth mt-2" onclick="toggleModal('StatusEnergeticos');">
+                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
+                                </button>
+                                <div id="actividadStatusEnergeticos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusElectricidadATP" class="button is-warning has-text-centered m-1">Electricidad</button>
+
+                                    <button id="statusAguaATP" class="button is-warning has-text-centered m-1">Agua</button>
+
+                                    <button id="statusDieselATP" class="button is-warning has-text-centered m-1">Diésel</button>
+
+                                    <button id="statusGasATP" class="button is-warning has-text-centered m-1">Gas</button>
+                                </div>
+
+                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleModal('StatusDepartamentos');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
+                                </button>
+                                <div id="actividadStatusDepartamentos" class="modal has-background-light p-3 m-2">
+
+                                    <button id="statusCalidadATP" class="button is-primary has-text-centered m-1">Calidad
+                                    </button>
+
+                                    <button id="statusComprasATP" class="button is-primary has-text-centered m-1">Compras
+                                    </button>
+
+                                    <button id="statusDireccionATP" class="button is-primary has-text-centered m-1">Dirección
+                                    </button>
+
+                                    <button id="statusFinanzasATP" class="button is-primary has-text-centered m-1">Finanzas
+                                    </button>
+
+                                    <button id="statusRRHHATP" class="button is-primary has-text-centered m-1">RRHH
+                                    </button>
+
+                                </div>
+
+                                <button id="statusTrabajandoATP" class="button is-info is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
+                                </button>
+
+                                <button id="statusSolucionarATP" class="button is-success is-fullwidth mt-2">
+                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
+                                </button>
+
+                                <button id="statusRestaurarATP" class="button is-danger is-fullwidth mt-2">
+                                    <i class="fad fa-undo mr-4 fa-lg"></i>Restaurar
+                                </button>
+
+                                <div class="column has-text-centered">
+
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleModal('NuevoTituloATP');">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEliminarATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+
+                                <div id="actividadNuevoTituloATP" class="column has-text-centered modal">
+                                    <input id="nuevoTituloATP" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnTituloATP" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Status TareasP -->
+
+
+
+    <!-- Status Energeticos -->
+    <div id="modalStatusEnergeticos" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content is-tiny has-background-white rounded">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+
+                                <button id="" class="button is-danger is-fullwidth">
+                                    <i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i> Es urgente!
+                                </button>
+
+                                <button class="button is-dark is-fullwidth mt-2" onclick=" toggleHidden('contenedorstatusMaterial');">
+                                    <span class="mr-4 fa-lg">
+                                        <strong> M </strong>
+                                    </span> No hay material
+                                </button>
+
+                                <div id="contenedorstatusMaterial" class="is-fullwidth is-centered mt-2 hidden">
+                                    <input id="inputCod2bendEnergetico" class="button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
+                                    <button id="btnStatusEnergetico" class="button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="">Aplicar</button>
+                                </div>
+
+                                <button class="button is-warning is-fullwidth mt-2" onclick="toggleHidden('contenedorEnergeticosToggle');">
+                                    <span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos
+                                </button>
+                                <div id="contenedorEnergeticosToggle" class="has-background-light p-3 m-2 hidden">
+
+                                    <button id="btnStatusElectricidadEnergetico" class="button is-warning has-text-centered m-1">Electricidad</button>
+
+                                    <button id="btnStatusAguaEnergetico" class="button is-warning has-text-centered m-1">Agua</button>
+
+                                    <button id="btnStatusDieselEnergetico" class="button is-warning has-text-centered m-1">Diésel</button>
+
+                                    <button id="btnStatusGasEnergetico" class="button is-warning has-text-centered m-1">Gas</button>
+                                </div>
+
+                                <button class="button is-primary is-fullwidth mt-2" onclick="toggleHidden('contenedorDepartamentosToggle');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento
+                                </button>
+                                <div id="contenedorDepartamentosToggle" class="has-background-light p-3 m-2 hidden">
+
+                                    <button id="btnStatusCalidadEnergetico" class="button is-primary has-text-centered m-1">Calidad
+                                    </button>
+
+                                    <button id="btnStatusComprasEnergetico" class="button is-primary has-text-centered m-1">Compras
+                                    </button>
+
+                                    <button id="btnStatusDireccionEnergetico" class="button is-primary has-text-centered m-1">Dirección
+                                    </button>
+
+                                    <button id="btnStatusFinanzasEnergetico" class="button is-primary has-text-centered m-1">Finanzas
+                                    </button>
+
+                                    <button id="btnStatusRRHHEnergetico" class="button is-primary has-text-centered m-1">RRHH
+                                    </button>
+                                </div>
+
+                                <button id="btnStatusTrabajandoEnergetico" class="button is-info is-fullwidth mt-2">
+                                    <span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando
+                                </button>
+
+                                <button id="btnStatusSolucionarEnergetico" class="button is-success is-fullwidth mt-2">
+                                    <i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar
+                                </button>
+
+                                <div class="column has-text-centered">
+
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="toggleHidden('nuevoTituloEnergeticos');">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEliminarEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+
+                                <div id="nuevoTituloEnergeticos" class="has-text-centered hidden">
+                                    <input id="inputTituloEnergetico" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnActualizarTituloEnergetico" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Status Energeticos -->
 
 
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
@@ -5946,10 +6999,9 @@ $tablaRanking .= "</div>";
                         <span class="navbar-item">
                             <button class="button is-warning" onclick="showsubsecciones('')"><i class="fas fa-arrow-left"></i></button>
                         </span>
-                        <div class="s-zia">
-                            <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
+                        <div id="estiloSeccionProyectos" class="">
                             <input id="textSeccionAux" type="hidden">
-                            <p id="textSeccion">ZIA</p>
+                            <p class="seccion-logo" id="textSeccion"></p>
                         </div>
                         <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
                         <a class="navbar-item">Proyectos / Plan de Acción</a>
@@ -5961,8 +7013,11 @@ $tablaRanking .= "</div>";
                             </button>
                         </div>
                         <div class="navbar-item">
-                            <button type="button" class="button is-success" name="button" onclick="proyectosFinalizados();">
-                                <i class="fad fa-check-double mr-2"></i>Ver finalizados
+                            <button id="btnProyectosFinalizados" type="button" class="button is-success is-hidden" name="button">
+                                <i id="" class="fad fa-check-double mr-2"></i>Ver Finalizados
+                            </button>
+                            <button id="btnProyectosPendientes" type="button" class="button is-danger" name="button">
+                                <i id="" class="fad fa-check-double mr-2"></i>Ver Pendientes
                             </button>
                         </div>
                     </div>
@@ -5976,7 +7031,7 @@ $tablaRanking .= "</div>";
                 <div class="column is-3 has-text-left">
                     <div class="field has-addons">
                         <div class="control is-expanded ml-5">
-                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Nuevo Proyecto" maxlength="60">
+                            <input id="tituloProyectoNuevo" class="input" type="text" placeholder="Agregar Proyecto" maxlength="60" autocomplete="off">
                         </div>
                         <div class="control">
                             <a class="button is-warning" onclick="nuevoProyecto();">
@@ -6051,7 +7106,7 @@ $tablaRanking .= "</div>";
 
             <!-- Tareas Generales convertidos a proyectos! -->
             <div id="data-proyectos-TG"></div>
-            
+
         </section>
         <!-- RECIBE DATOS DE LOS PROYECTOS ******************************************************************************************* -->
 
@@ -6060,7 +7115,6 @@ $tablaRanking .= "</div>";
 
     <!-- ****************************************************************** Modal para mostrar el Status de los Departamentos *****************************************************  -->
     <div id="reporteStatusDEP" class="modal p-4 mt-5">
-
         <section class="hero is-light is-small" style="width: 100%;">
             <!-- Hero head: will stick at the top -->
             <div class="hero-head">
@@ -6072,7 +7126,8 @@ $tablaRanking .= "</div>";
                             <h3 class="title  is-4 has-text-centered mt-2">DEP</h3>
                         </div>
                         <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
-                        <a class="navbar-item"> Departamento &nbsp; <span id="nombreSubseccionDEP"> </span>&nbsp;/ Status</a>
+                        <a class="navbar-item"> Departamento &nbsp; <span id="nombreSubseccionDEP"> </span>&nbsp;/
+                            Status</a>
                     </div>
                     <div class="navbar-end has-text-centered">
                         <div class="navbar-item">
@@ -6100,7 +7155,7 @@ $tablaRanking .= "</div>";
                     <div class="column is-half">
                         <div class="columns is-mobile">
                             <div class="column">
-                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de los correctivos</strong></p>
+                                <p class="barratitulos" data-tooltip="Responsable"><strong class="has-text-white">Descripcion de Falla</strong></p>
                             </div>
 
                         </div>
@@ -6122,6 +7177,12 @@ $tablaRanking .= "</div>";
                             <div class="column">
                                 <p class="barratitulos">Status</p>
                             </div>
+                            <div class="column">
+                                <p class="barratitulos">CODSAP</p>
+                            </div>
+                            <div class="column">
+                                <p class="barratitulos">COD2BEND</p>
+                            </div>
 
                         </div>
                     </div>
@@ -6133,22 +7194,20 @@ $tablaRanking .= "</div>";
     <!-- ***************************************************************************************************************************************************************** -->
 
 
-
-
     <!-- ************************************************************************ En Proceso ************************************************************************** -->
     <div id="modal-proyectos-finalizados" class="modal">
-		<br><br><br>
+        <br><br><br>
         <section class="hero is-light is-small" style="width: 100%;">
             <!-- Hero head: will stick at the top -->
             <div class="hero-head">
                 <nav class="navbar-menu">
                     <div class="navbar-start has-text-centered">
-						<span class="navbar-item">
+                        <span class="navbar-item">
                             <button class="button is-warning" onclick="regresarProyectos()"><i class="fas fa-arrow-left"></i></button>
                         </span>
                         <div class="s-zia">
                             <!-- Aqui imprimes el nombre de la seccion y se cambian las clases de colores segun la seccion -->
-                            <p id="textSeccionProyectosFinalizados">ZIA</p>
+                            <p id="textSeccionProyectosFinalizados">--</p>
                         </div>
                         <!-- Aqui imprimes el nombre de la subseccion, el nombre del equipo o si es tareas generales va "tareas generales" y por ultimo tiene que decir correctivos -->
                         <a class="navbar-item"> Proyectos / Finalizados</a>
@@ -6220,7 +7279,6 @@ $tablaRanking .= "</div>";
     </div>
 
 
-
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL JUSTIFICACION xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modal-Justificacion" class="modal">
         <input type="hidden" id="idProyectoJustificacion">
@@ -6280,7 +7338,7 @@ $tablaRanking .= "</div>";
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL COSTE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 
 
-    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  Plan Accion xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+    <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  PLAN ACCIÓN xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalStatusPlanAccion" class="modal">
         <div class="modal-background"></div>
         <div class="modal-content is-tiny has-background-white rounded">
@@ -6290,12 +7348,31 @@ $tablaRanking .= "</div>";
                     <div class="content">
                         <div class="columns">
                             <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="aplicarStatus('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="aplicarStatus('material');"><span class="mr-4 fa-lg"><strong> M </strong></span> No hay material</button>
+                                <button class="button is-danger is-fullwidth" onclick="aplicarStatus('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                    urgente!</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="aplicarStatus('material');"><span class="mr-4 fa-lg"><strong> M
+                                        </strong></span> No hay material</button>
                                 <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
                                 <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
                                 <button class="button is-info is-fullwidth mt-2" onclick="aplicarStatus('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
                                 <button class="button is-success is-fullwidth mt-2" onclick="aplicarStatus('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
+                                <div class="column has-text-centered">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarPlan();">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarPlanAccion('');">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+                                <div class="column has-text-centered">
+                                    <input id="editarTituloPlan" class="hidden bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button id="btnTituloPlan" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="actualizarPlanAccion('');">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6305,16 +7382,6 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
-
-
-
-
-
-
-
-
 
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -6328,12 +7395,40 @@ $tablaRanking .= "</div>";
                     <div class="content">
                         <div class="columns">
                             <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="statusProyecto('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusProyecto('material');"><span class="mr-4 fa-lg"><strong> M </strong></span> No hay material</button>
+                                <button class="button is-danger is-fullwidth" onclick="statusProyecto('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                    urgente!</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="statusProyecto('material');"><span class="mr-4 fa-lg"><strong> M
+                                        </strong></span> No hay material</button>
                                 <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalEnergetico', 'show');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
                                 <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalDepartamento', 'show');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
                                 <button class="button is-info is-fullwidth mt-2" onclick="statusProyecto('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
                                 <!--<button class="button is-success is-fullwidth mt-2" onclick="statusProyecto('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>-->
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div id="dataOptionDEP" class="column has-text-centered">
+
+                            </div>
+                        </div>
+                        <div class="columns my-0">
+                            <div class="column has-text-centered my-0">
+                                <div class="has-text-centered">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarProyecto();">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button id="btnEditarPlan" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarProyecto('');">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+                                <div id="btnInputProyecto" class="has-text-centered hidden">
+                                    <input id="editarTituloProyecto" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarProyecto('');">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6344,7 +7439,6 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
 
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -6358,13 +7452,39 @@ $tablaRanking .= "</div>";
                 <div class="card-content">
                     <div class="content">
                         <div class="columns">
-                            <div class="column">
-                                <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es urgente!</button>
-                                <button class="button is-dark is-fullwidth mt-2" onclick="statusMC('material');"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                            <div class="column mb-0">
+                                <button class="button is-danger is-fullwidth" onclick="statusMC('urgente');"><i class="fad fa-siren-on mr-4 fa-lg animated infinite flash"></i>Es
+                                    urgente!</button>
+                                <button class="button is-dark is-fullwidth mt-2" onclick="consultaCodigoSeguimientoMC()"><span class="mr-4 fa-lg"><strong>M</strong></span>No hay material</button>
+                                <div id="codigoSeguimientoMC" class="columns is-fullwidth is-centered mt-2 is-hidden">
+                                    <input id="codigoSeguimiento" class="column button is-6 mt-2" type="text" placeholder="COD2BEND" autocomplete="off">
+                                    <button class="column button is-2 mt-2 is-dark text-bold p-1 mx-2" onclick="statusMateriales()">Aplicar</button>
+                                </div>
                                 <button class="button is-warning is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalEnergeticoMC', 'show'); consultaEDMC('energetico');"><span class="mr-4 fa-lg"><strong>E</strong></span>Energéticos</button>
                                 <button class="button is-primary is-fullwidth mt-2" onclick="show_hide_modal('modalStatusMC', 'hide');show_hide_modal('modalDepartamentoMC', 'show'); consultaEDMC('departamento');"><span class="mr-4 fa-lg"><strong>D</strong></span>Departamento</button>
                                 <button class="button is-info is-fullwidth mt-2" onclick="statusMC('trabajare');"><span class="mr-4 fa-lg"><strong>T</strong></span>Trabajando</button>
                                 <button class="button is-success is-fullwidth mt-2" onclick="statusMC('solucionado');"><i class="fad fa-check-double mr-4 fa-lg"></i>Solucionar</button>
+                            </div>
+                        </div>
+                        <div class="columns my-0">
+                            <div class="column has-text-centered my-0">
+                                <div class="has-text-centered">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="btnEditarMC();">
+                                        <i class="far fa-edit"></i>
+                                        <span> Editar</span>
+                                    </button>
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold m-4 rounded inline-flex items-center" onclick="eliminarMC('');">
+                                        <i class="far fa-trash-alt"></i>
+                                        <span> Eliminar</span>
+                                    </button>
+                                </div>
+                                <div id="btnInputMC" class="has-text-centered hidden">
+                                    <input id="editarTituloMC" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" placeholder="Nuevo Titulo">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded inline-flex items-center" onclick="editarMC('');">
+                                        <i class="far fa-save"></i>
+                                        <span> Guardar</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6375,8 +7495,6 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-
-
 
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -6412,7 +7530,6 @@ $tablaRanking .= "</div>";
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL TIPO PROYECTO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
 
 
-
     <!--MODAL Subir Archivos -->
     <div id="modalSubirArchivo" class="modal">
         <input type="hidden" id="idProyecto"></input>
@@ -6437,7 +7554,8 @@ $tablaRanking .= "</div>";
                                                 </span>
                                                 <span class="file-name"> Nombre Archivo </span>
                                             </label>
-                                            <button class="btn button is-primary" type="submit" onclick="subirArchivo();"><span class="fas fa-save fa-lg"> </span></button>
+                                            <button class="btn button is-primary" type="submit" onclick="subirArchivo();"><span class="fas fa-save fa-lg">
+                                                </span></button>
                                             <!-- <span class="fas fa-save"> </span><input class="btn button is-primary" value="Subir" onclick="subirArchivo();"> -->
                                         </div>
                                     </div>
@@ -6549,6 +7667,35 @@ $tablaRanking .= "</div>";
     </div>
 
 
+    <!--MODAL RESPONSABLE DE PROYECTO-->
+    <div id="modaResponsableTareasP" class="modal">
+        <br>
+        <br>
+        <br>
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <!-- <header class="modal-card-head">
+                <input class="input is-primary" type="text" placeholder="Buscar..." onkeyup="buscarUsuarioProy(this, <?php echo $idDestinoT; ?>);">
+            </header> -->
+            <!-- Any other Bulma elements you want -->
+            <section class="modal-card-body">
+                <div class="columns">
+                    <div id="dataResposansableTareaP" class="column">
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column has-text-right">
+                            <button class="button is-danger" onclick="closeModal();">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
     <!--MODAL COMENTARIOS -->
     <div id="modalComentario" class="modal">
         <input type="hidden" id="idProyecto"></input>
@@ -6593,6 +7740,7 @@ $tablaRanking .= "</div>";
             </section>
         </div>
     </div>
+
 
     <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
     <div id="modalPlanAccion" class="modal">
@@ -6641,11 +7789,6 @@ $tablaRanking .= "</div>";
     <!-- *********************** PLAN DE ACCIÓN ******************************************************** -->
 
 
-
-
-
-
-
     <!--AREA DE MENSAJES-->
     <article id="article-mapas" class="message is-primary popup" style="display: none;">
         <div class="message-header">
@@ -6656,6 +7799,7 @@ $tablaRanking .= "</div>";
 
         </div>
     </article>
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalDepartamento" class="modal">
@@ -6683,9 +7827,10 @@ $tablaRanking .= "</div>";
                                 <button class="button is-primary is-rounded is-medium is-fullwidth has-text-centered my-2" onclick="aplicarStatus('departamento_rrhh')">RRHH</button>
                             </div>
                         </div>
-                        <div class="columns">
+                        <div class="columns columns is-centered p-2">
                             Departamentos Selecionados
                         </div>
+                        <div id="dataStatusDepartamento" class="columns p-2 flex-wrap"></div>
                     </div>
                 </div>
             </div>
@@ -6694,6 +7839,7 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  DEPARTAMENTOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalDepartamentoMC" class="modal">
@@ -6736,6 +7882,7 @@ $tablaRanking .= "</div>";
         <button class="modal-close is-large" aria-label="close"></button>
     </div>
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
 
     <!--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODAL STATUS  ENERGETICOS MC xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="modalEnergeticoMC" class="modal">
@@ -6834,6 +7981,14 @@ $tablaRanking .= "</div>";
 <script type="text/javascript" src="js/modal-fx.min.js"></script>
 <script src="js/sweetalert2@9.js"></script>
 
+<!-- Librerias JS requeridas para la version Beta. -->
+<!-- Libreria para notificaciones prediseñadas sweetAlert -->
+<script src="js/alertasSweet.js"></script>
+<script src="js/plannerBeta.js"></script>
+<script src="js/refreshSession.js"></script>
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script src="js/seguridad_session.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $("#sidebar").mCustomScrollbar({
@@ -6930,9 +8085,6 @@ $tablaRanking .= "</div>";
     });
 
     $('#myDatePickerMC').datepicker({
-        // Let's make a function which will add class 'my-class' to every 11 of the month
-        // and make these cells disabled.
-
         onSelect: function onSelect(fd, date) {
             var idEquipo = $("#hddIdEquipo").val();
             var idDestino = $("#hddIdDestino").val();
@@ -6947,15 +8099,14 @@ $tablaRanking .= "</div>";
                 if (idEquipo != 0) {
                     obtCorrectivos(idEquipo, 'N');
                 } else {
-                    obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria, 'N');
+                    obtCorrectivosG(idSubseccion, idDestino, idCategoria, idSubcategoria, idRelSubcategoria,
+                        'N');
                 }
-
-                //recargarListaTareasMC(idEquipo);
-                // alert(date + " " + idTarea);
             }
         }
     });
 </script>
+
 <script>
     // Obtener Día
     var fecha = new Date();
@@ -6964,26 +8115,31 @@ $tablaRanking .= "</div>";
         case 1:
             $('.hide-seccion-is-3').hide();
             $('.id-12, .id-23, .id-8').show();
+            $('.btn-id-12, .btn-id-23, .btn-id-8').addClass('is-success');
             $(".btn-8, .btn-3, .btn-9").addClass("bannersec")
             break;
         case 2:
             $('.hide-seccion-is-3').hide();
             $('.id-9, .id-23').show();
+            $('.id-9, .btn-id-23').addClass('is-success');
             $(".btn-10, .btn-3").addClass("bannersec")
             break;
         case 3:
             $('.hide-seccion-is-3').hide();
             $('.id-1, .id-23, .id-10').show();
+            $('.btn-id-1, .btn-id-23, .btn-id-10').addClass('is-success');
             $(".btn-2, .btn-3, .btn-11").addClass("bannersec")
             break;
         case 4:
             $('.hide-seccion-is-3').hide();
             $('.id-5, .id-23, .id-6').show();
+            $('.btn-id-5, .btn-id-23, .btn-id-6').addClass('is-success');
             $(".btn-5, .btn-3, .btn-6").addClass("bannersec")
             break;
         case 5:
             $('.hide-seccion-is-3').hide();
             $('.id-24, .id-23, .id-11').show();
+            $('.btn-id-24, .btn-id-23, .btn-id-11').addClass('is-success');
             $('.btn-1, .btn-3, .btn-12').addClass("bannersec");
             break;
         default:
@@ -7055,11 +8211,11 @@ $tablaRanking .= "</div>";
         $("#seccion-bar").css('display', 'none');
     });
 
-    $(".btn-proyectos").click(function() {
-        $("#seccion-bar").css('display', 'none');
-        $("#seccionColumnas").css('display', 'none');
-        $("#modal-proyectos").css('display', 'block');
-    });
+    // $(".btn-proyectos").click(function() {
+    //     $("#seccion-bar").css('display', 'none');
+    //     $("#seccionColumnas").css('display', 'none');
+    //     $("#modal-proyectos").css('display', 'block');
+    // });
 
     $(".btn-regresar-subsecciones").click(function() {
         $("#sectionHeroListaEquipos").css('display', 'none');
@@ -7104,6 +8260,41 @@ $tablaRanking .= "</div>";
             fileName.textContent = fileInput.files[0].name;
         }
     }
+
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        $("#opcionMovil").removeClass('hidden');
+        $("#seccion-bar").removeClass('mt-5');
+        // $(".hide-seccion-is-3").addClass('hide');
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 5000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Versión Móvil'
+        })
+    } else {
+        $("#opcionMovil").addClass('hidden');
+        $("#seccion-bar").addClass('mt-5');
+    }
+
+    function mostrarSeccion(idSeccion) {
+        // let idSeccion = $("#mostrarSeccionMovil").val();
+        $("." + idSeccion).toggle('hide');
+        $(".btn-" + idSeccion).toggleClass('is-success');
+    }
+
+    // ELIMINAR
+    location.href = "https://www.maphg.com/beta/planner-cols.php";
 </script>
 
 </html>
