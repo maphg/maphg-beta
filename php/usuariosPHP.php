@@ -216,6 +216,11 @@ if (isset($_POST['action'])) {
                 $destino = $x['destino'];
                 $superAdmin = $x['superAdmin'];
 
+                // SESEION PHP
+                $_SESSION['usuario'] = $idUsuario;
+                $_SESSION['idDestino'] = $idDestino;
+                $_SESSION['super_admin'] = $super_admin;
+
                 $array[0] = array(
                     "idUsuario" => intval($idUsuario),
                     "idDestino" => intval($idDestino),
