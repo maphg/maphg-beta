@@ -187,7 +187,7 @@ if (isset($_POST['action'])) {
 
     if ($action == "iniciarSession") {
         $usuario = $_POST['usuario'];
-        $contraseña = $_POST['contraseña'];
+        $contrasena = $_POST['contrasena'];
         $array = array();
 
         $array[0] = array(
@@ -205,7 +205,8 @@ if (isset($_POST['action'])) {
         INNER JOIN c_destinos ON t_users.id_destino = c_destinos.id
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         INNER JOIN c_cargos ON t_colaboradores.id_cargo = c_cargos.id
-        WHERE t_users.username = '$usuario' and t_users.password = '$contraseña' and t_users.status = 'A' and t_users.activo = 1";
+        WHERE t_users.username = '$usuario' and t_users.password = '$contrasena' and t_users.status = 'A' 
+        and t_users.activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idUsuario = $x['idUsuario'];
@@ -219,7 +220,11 @@ if (isset($_POST['action'])) {
                 // SESEION PHP
                 $_SESSION['usuario'] = $idUsuario;
                 $_SESSION['idDestino'] = $idDestino;
-                $_SESSION['super_admin'] = $super_admin;
+                $_SESSION['super_admin'] = $superAdmin;
+
+                // NOTIFICACIÓN
+                $APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+                file_get_contents($APIERROR . "Acceso: $usuario | $nombre | $destino");
 
                 $array[0] = array(
                     "idUsuario" => intval($idUsuario),

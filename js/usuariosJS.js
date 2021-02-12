@@ -26,18 +26,13 @@ icono.addEventListener("click", () => {
 // COMPRUEBA SI EXISTE EL USUARIO PARA DARLE ACCESO
 const iniciarSession = () => {
     const action = "iniciarSession";
-    const URL = `php/usuariosPHP.php?`;
+    const URL = `php/usuariosPHP.php`;
     const data = new FormData();
 
     data.append('action', action);
     data.append('usuario', inputusuario.value);
-    data.append('contraseña', inputcontraseña.value);
-
-    // BLOQUEA BTN E INPUTS
-    btnIniciarSession.disabled = true;
-    inputusuario.disabled = true;
-    inputcontraseña.disabled = true;
-
+    data.append('contrasena', inputcontraseña.value);
+    
     fetch(URL, {
         method: 'POST',
         body: data
@@ -58,16 +53,9 @@ const iniciarSession = () => {
                 alertaImg('Intente de Nuevo', '', 'info', 1400);
             }
         })
-        .then(() => {
-            btnIniciarSession.disabled = false;
-            inputusuario.disabled = false;
-            inputcontraseña.disabled = false;
-        })
         .catch(function (err) {
-            console.log(err);
-            btnIniciarSession.disabled = false;
-            inputusuario.disabled = false;
-            inputcontraseña.disabled = false;
+            inputusuario.value = '';
+            inputcontraseña.value = '';
         })
 }
 
