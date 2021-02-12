@@ -202,6 +202,7 @@ const btnStatusAgua = document.getElementById("statusAgua");
 const btnStatusDiesel = document.getElementById("statusDiesel");
 const btnStatusGas = document.getElementById("statusGas");
 const btnStatusFinalizar = document.getElementById("statusFinalizar");
+const btnStatusEP = document.getElementById("statusEP");
 const btnStatusActivo = document.getElementById("statusActivo");
 const btnEditarTitulo = document.getElementById("btnEditarTitulo");
 const btnStatusGP = document.getElementById("statusGP");
@@ -841,24 +842,27 @@ function expandirpapa(idpapa) {
 
 // Función para actualizar la Hora.
 function hora() {
-   var arrayDestino = {
-      1: "RM",
-      7: "CMU",
-      2: "PVR",
-      6: "MBJ",
-      5: "PUJ",
-      11: "CAP",
-      3: "SDQ",
-      4: "SSA",
-      10: "AME",
-   };
-   let idDestino = localStorage.getItem("idDestino");
+
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario')
    let h = new Date();
    let hora = h.getHours() + ": " + h.getMinutes();
-   let nombreDestinoArray = arrayDestino[idDestino];
 
+   const action = "obtenerDatosCalendario";
+   const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         console.log(array)
+         if (array) {
+            document.getElementById("nombreDestino").innerHTML = array.destino;
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
    document.getElementById("hora").innerHTML = hora;
-   document.getElementById("nombreDestino").innerHTML = nombreDestinoArray;
 }
 
 
@@ -3486,179 +3490,182 @@ function obtenerIncidenciaEquipos(idIncidencia) {
          if (array) {
 
             // DATOS
-            for (let x = 0; x < array.incidencia.length; x++) {
-               const idIncidencia = array.incidencia[x].idIncidencia;
-               const actividad = array.incidencia[x].actividad;
-               const equipo = array.incidencia[x].equipo;
-               const idEquipo = array.incidencia[x].idEquipo;
-               const tipoIncidencia = array.incidencia[x].tipoIncidencia;
-               const fecha = array.incidencia[x].fecha;
-               const creadoPor = array.incidencia[x].creadoPor;
-               const nombreResponsable = array.incidencia[x].nombreResponsable;
-               const rangoFecha = array.incidencia[x].rangoFecha;
+            if (array.incidencia) {
+               for (let x = 0; x < array.incidencia.length; x++) {
+                  const idIncidencia = array.incidencia[x].idIncidencia;
+                  const actividad = array.incidencia[x].actividad;
+                  const equipo = array.incidencia[x].equipo;
+                  const idEquipo = array.incidencia[x].idEquipo;
+                  const tipoIncidencia = array.incidencia[x].tipoIncidencia;
+                  const fecha = array.incidencia[x].fecha;
+                  const creadoPor = array.incidencia[x].creadoPor;
+                  const nombreResponsable = array.incidencia[x].nombreResponsable;
+                  const rangoFecha = array.incidencia[x].rangoFecha;
 
-               const estiloTipoIncidencia =
-                  tipoIncidencia == "URGENCIA" ? 'text-red-500 bg-red-200' :
-                     tipoIncidencia == "EMERGENCIA" ? 'text-orange-500 bg-orange-200' :
-                        tipoIncidencia == "ALARMA" ? 'text-yellow-500 bg-yellow-200' :
-                           tipoIncidencia == "ALERTA" ? 'text-blue-500 bg-blue-200' :
-                              'text-teal-500 bg-teal-200';
+                  const estiloTipoIncidencia =
+                     tipoIncidencia == "URGENCIA" ? 'text-red-500 bg-red-200' :
+                        tipoIncidencia == "EMERGENCIA" ? 'text-orange-500 bg-orange-200' :
+                           tipoIncidencia == "ALARMA" ? 'text-yellow-500 bg-yellow-200' :
+                              tipoIncidencia == "ALERTA" ? 'text-blue-500 bg-blue-200' :
+                                 'text-teal-500 bg-teal-200';
 
-               const status_material = array.incidencia[x].status_material == 0 ? ''
-                  : `
+                  const status_material = array.incidencia[x].status_material == 0 ? ''
+                     : `
                <div class="bg-gray-700 text-gray-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'status_material', 0)">
                      <h1 class="font-medium">Material</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const status_trabajando = array.incidencia[x].status_trabajare == 0 ? ''
-                  : `
+                  const status_trabajando = array.incidencia[x].status_trabajare == 0 ? ''
+                     : `
                <div class="text-blue-500 bg-blue-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'status_trabajare', 0)">
                      <h1 class="font-medium">TRABAJANDO</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const departamento_calidad = array.incidencia[x].departamento_calidad == 0 ? ''
-                  : `
+                  const departamento_calidad = array.incidencia[x].departamento_calidad == 0 ? ''
+                     : `
                <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_calidad', 0)">
                      <h1 class="font-medium">CALIDAD</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const departamento_compras = array.incidencia[x].departamento_compras == 0 ? ''
-                  : `
+                  const departamento_compras = array.incidencia[x].departamento_compras == 0 ? ''
+                     : `
                <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_compras', 0)">
                      <h1 class="font-medium">COMPRAS</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const departamento_direccion = array.incidencia[x].departamento_direccion == 0 ? ''
-                  : `
+                  const departamento_direccion = array.incidencia[x].departamento_direccion == 0 ? ''
+                     : `
                <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_direccion', 0)">
                      <h1 class="font-medium">DIRECCIÓN</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const departamento_finanzas = array.incidencia[x].departamento_finanzas == 0 ? ''
-                  : `
+                  const departamento_finanzas = array.incidencia[x].departamento_finanzas == 0 ? ''
+                     : `
                <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_finanzas', 0)">
                      <h1 class="font-medium">FINANZAS</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const departamento_rrhh = array.incidencia[x].departamento_rrhh == 0 ? ''
-                  : `
+                  const departamento_rrhh = array.incidencia[x].departamento_rrhh == 0 ? ''
+                     : `
                <div class="text-teal-500 bg-teal-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'departamento_rrhh', 0)">
                      <h1 class="font-medium">RRHH</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const energetico_electricidad = array.incidencia[x].energetico_electricidad == 0 ? ''
-                  : `
+                  const energetico_electricidad = array.incidencia[x].energetico_electricidad == 0 ? ''
+                     : `
                <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_electricidad', 0)">
                      <h1 class="font-medium">ELECTRICIDAD</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const energetico_agua = array.incidencia[x].energetico_agua == 0 ? ''
-                  : `
+                  const energetico_agua = array.incidencia[x].energetico_agua == 0 ? ''
+                     : `
                <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_agua', 0)">
                      <h1 class="font-medium">AGUA</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const energetico_diesel = array.incidencia[x].energetico_diesel == 0 ? ''
-                  : `
+                  const energetico_diesel = array.incidencia[x].energetico_diesel == 0 ? ''
+                     : `
                <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_diesel', 0)">
                      <h1 class="font-medium">DIESEL</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               const energetico_gas = array.incidencia[x].energetico_gas == 0 ? ''
-                  : `
+                  const energetico_gas = array.incidencia[x].energetico_gas == 0 ? ''
+                     : `
                <div class="text-yellow-500 bg-yellow-200 px-2 rounded-full flex items-center mr-2" onclick="actualizarStatusIncidencia(${idIncidencia}, 'energetico_gas', 0)">
                      <h1 class="font-medium">GAS</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer"></i>
                </div>
             `;
 
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_material);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', status_trabajando);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_calidad);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_compras);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_direccion);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_finanzas);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_rrhh);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_electricidad);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_agua);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_diesel);
-               statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_gas);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', status_material);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', status_trabajando);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_calidad);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_compras);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_direccion);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_finanzas);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', departamento_rrhh);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_electricidad);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_agua);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_diesel);
+                  statusVerEnPlanner.insertAdjacentHTML('beforeend', energetico_gas);
 
 
-               tipoIncidenciaVerEnPlanner.innerHTML = `<h1>${tipoIncidencia}</h1>`;
-               tipoIncidenciaVerEnPlanner.
-                  className = 'font-bold text-xs py-1 px-2 rounded-b-md ' + estiloTipoIncidencia;
-               tituloVerEnPlanner.innerHTML = actividad;
-               fechaVerEnPlanner.innerText = fecha;
-               creadoPorVerEnPlanner.innerText = creadoPor;
-               rangoFechaVerEnPlanner.innerText = rangoFecha;
-               asignadoAVerEnPlanner.innerText = equipo;
-               asignadoAVerEnPlanner.
-                  setAttribute('onclick', `obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas'); cerrarmodal('modalVerEnPlannerIncidencia');`)
-               palabraFallaTarea.value = actividad;
-               dispatchEvent(new Event('keyup'));
-               responsablesVerEnPlanner.innerHTML = `
+                  tipoIncidenciaVerEnPlanner.innerHTML = `<h1>${tipoIncidencia}</h1>`;
+                  tipoIncidenciaVerEnPlanner.
+                     className = 'font-bold text-xs py-1 px-2 rounded-b-md ' + estiloTipoIncidencia;
+                  tituloVerEnPlanner.innerHTML = actividad;
+                  fechaVerEnPlanner.innerText = fecha;
+                  creadoPorVerEnPlanner.innerText = creadoPor;
+                  rangoFechaVerEnPlanner.innerText = rangoFecha;
+                  asignadoAVerEnPlanner.innerText = equipo;
+                  asignadoAVerEnPlanner.
+                     setAttribute('onclick', `obtenerFallas(${idEquipo}); toggleModalTailwind('modalTareasFallas'); cerrarmodal('modalVerEnPlannerIncidencia');`)
+                  palabraFallaTarea.value = actividad;
+                  dispatchEvent(new Event('keyup'));
+                  responsablesVerEnPlanner.innerHTML = `
                   <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
                      <h1 class="font-medium">${nombreResponsable}</h1>
                      <i class="fas fa-times ml-1 hover:text-red-500 cursor-pointer" onclick="actualizarStatusIncidencia(${idIncidencia}, 'responsable', 0);"></i>
                   </div>
                `;
 
-               btnVerOTVerEnPlanner.
-                  setAttribute('onclick', `redireccionarOTVerEnPlanner('INCIDENCIA', ${idIncidencia})`);
+                  btnVerOTVerEnPlanner.
+                     setAttribute('onclick', `redireccionarOTVerEnPlanner('INCIDENCIA', ${idIncidencia})`);
 
-               btnAgregarActividadVerEnPlanner.
-                  setAttribute('onclick', `agregarActividadesIncidencias(${idIncidencia})`);
+                  btnAgregarActividadVerEnPlanner.
+                     setAttribute('onclick', `agregarActividadesIncidencias(${idIncidencia})`);
 
-               btnAgregarComentarioVerEnPlanner.
-                  setAttribute('onclick', `agregarComentarioIncidencia(${idIncidencia});`);
+                  btnAgregarComentarioVerEnPlanner.
+                     setAttribute('onclick', `agregarComentarioIncidencia(${idIncidencia});`);
 
-               btnStatusVerEnPlanner.
-                  setAttribute('onclick', `obtenerStatusIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalStatus');`);
+                  btnStatusVerEnPlanner.
+                     setAttribute('onclick', `obtenerStatusIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalStatus');`);
 
-               btnResponsablesIncidencias.
-                  setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalUsuarios');`);
+                  btnResponsablesIncidencias.
+                     setAttribute('onclick', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA'); toggleModalTailwind('modalUsuarios');`);
 
-               palabraUsuario.setAttribute('onkeyup', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA');`);
+                  palabraUsuario.setAttribute('onkeyup', `obtenerResponsablesIncidencias(${idIncidencia}, 'INCIDENCIA');`);
 
-               inputFileIncidencias.
-                  setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIA');`);
+                  inputFileIncidencias.
+                     setAttribute('onchange', `agregarAdjuntosIncidenicas(${idIncidencia}, 'INCIDENCIA');`);
 
-               rangoFechaVerEnPlanner.
-                  setAttribute('onclick', `toggleModalTailwind('modalRangoFechaX');`);
+                  rangoFechaVerEnPlanner.
+                     setAttribute('onclick', `toggleModalTailwind('modalRangoFechaX');`);
 
-               btnAplicarRangoFecha.
-                  setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'rango_fecha', 0)`);
+                  btnAplicarRangoFecha.
+                     setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'rango_fecha', 0)`);
+               }
             }
 
             // COMENTARIOS
-            for (let x = 0; x < array.comentarios.length; x++) {
-               const idComentario = array.comentarios[x].idComentario;
-               const comentario = array.comentarios[x].comentario;
-               const nombre = array.comentarios[x].nombre;
-               const apellido = array.comentarios[x].apellido;
-               const fecha = array.comentarios[x].fecha;
-               const codigo = `
+            if (array.comentarios) {
+               for (let x = 0; x < array.comentarios.length; x++) {
+                  const idComentario = array.comentarios[x].idComentario;
+                  const comentario = array.comentarios[x].comentario;
+                  const nombre = array.comentarios[x].nombre;
+                  const apellido = array.comentarios[x].apellido;
+                  const fecha = array.comentarios[x].fecha;
+                  const codigo = `
                   <div class="flex flex-row justify-center items-center mb-3 w-full bg-teal-100 text-teal-600 p-2 rounded-md hover:shadow-md cursor-pointer relative">
                      <div class="flex items-center justify-center" style="width: 30px;">
                         <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="30" height="30" alt="">
@@ -3678,27 +3685,28 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                      </div>
                   </div>
                `;
-               dataComentariosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
-               dataComentariosIncidenciaVerEnPlanner.
-                  scrollTop = dataComentariosIncidenciaVerEnPlanner.scrollHeight;
+                  dataComentariosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+                  dataComentariosIncidenciaVerEnPlanner.
+                     scrollTop = dataComentariosIncidenciaVerEnPlanner.scrollHeight;
 
+               }
             }
 
             // ADJUNTO
+            if (array.adjuntos) {
+               for (let x = 0; x < array.adjuntos.length; x++) {
+                  const idAdjunto = array.adjuntos[x].idAdjunto;
+                  const url = array.adjuntos[x].url;
+                  const extension = array.adjuntos[x].extension;
 
-            for (let x = 0; x < array.adjuntos.length; x++) {
-               const idAdjunto = array.adjuntos[x].idAdjunto;
-               const url = array.adjuntos[x].url;
-               const extension = array.adjuntos[x].extension;
-
-               if (extension == "png" || extension == "jpg" || extension == "jpeg") {
-                  codigo = `
+                  if (extension == "png" || extension == "jpg" || extension == "jpeg") {
+                     codigo = `
                      <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
                         <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/tareas/adjuntos/${url})"></div>
                      </a>
                   `;
-               } else {
-                  codigo = `
+                  } else {
+                     codigo = `
                      <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
@@ -3708,18 +3716,20 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                         </div>
                      </a>
                   `;
+                  }
+                  dataAdjuntosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
                }
-               dataAdjuntosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
             }
 
             // ACTIVIDADES
-            for (let x = 0; x < array.actividades.length; x++) {
-               const idActividad = array.actividades[x].idActividad;
-               const actividad = array.actividades[x].actividad;
-               const status = array.actividades[x].status;
-               const fOpciones = `onclick="mostrarOpcionesActividadIncidencias(${idActividad})"`;
+            if (array.actividades) {
+               for (let x = 0; x < array.actividades.length; x++) {
+                  const idActividad = array.actividades[x].idActividad;
+                  const actividad = array.actividades[x].actividad;
+                  const status = array.actividades[x].status;
+                  const fOpciones = `onclick="mostrarOpcionesActividadIncidencias(${idActividad})"`;
 
-               const codigo = `
+                  const codigo = `
                   <div id="actividad_incidencia_${idActividad}" class="flex items-center justify-between uppercase border-b border-gray-200 py-2 hover:bg-gray-50">
                      <div class="w-2 h-2 border-2 border-gray-300 hove:bg-green-300 hover:border-green-400 cursor-pointer rounded-full mr-2 flex-none"></div>
                      <div class="text-justify w-full">
@@ -3730,7 +3740,8 @@ function obtenerIncidenciaEquipos(idIncidencia) {
                      </div>
                   </div>
                `;
-               dataActividadesIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+                  dataActividadesIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
+               }
             }
          }
       })
@@ -4133,6 +4144,8 @@ function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
          setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'energetico_gas', 0)`);
       btnStatusFinalizar.
          setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status', 0)`);
+      btnStatusEP.
+         setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'status_ep', 0)`);
       btnStatusActivo.
          setAttribute('onclick', `actualizarStatusIncidencia(${idIncidencia}, 'eliminar', 0)`);
       btnStatusGP.
@@ -4174,6 +4187,8 @@ function obtenerStatusIncidencias(idIncidencia, tipoIncidencia) {
          setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'energetico_gas', 0)`);
       btnStatusFinalizar.
          setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status', 0)`);
+      btnStatusEP.
+         setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'status_ep', 0)`);
       btnStatusActivo.
          setAttribute('onclick', `actualizarDatosIncidenciaGeneral(${idIncidencia}, 'eliminar', 0)`);
       btnStatusGP.
@@ -4293,10 +4308,15 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
             alertaImg('Rango Fecha Actualizado', '', 'success', 1500);
             cerrarmodal('modalRangoFechaX');
             inputRangoFecha.value = '';
+         } else if (array == "ep") {
+            alertaImg('Status Entrega Proyecto, Actualizado', '', 'success', 1500);
+            cerrarmodal('modalStatus');
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
          }
       })
       .catch(function (err) {
-         fetch(APIERROR + err + ``);
+         fetch(APIERROR + err + ` actualizarStatusIncidencia(${idIncidencia}, ${columna}, ${valor})`);
       })
 }
 
@@ -4962,6 +4982,9 @@ btnStatusPlanaccion.addEventListener('click', () => {
    btnStatusFinalizar.setAttribute('onclick',
       `actualizarInfoPlanaccion(${idPlanaccion}, 'status', 0);`);
 
+   btnStatusEP.setAttribute('onclick',
+      `actualizarInfoPlanaccion(${idPlanaccion}, 'status_ep', 0);`);
+
    btnStatusActivo.setAttribute('onclick',
       `actualizarInfoPlanaccion(${idPlanaccion}, 'activo', 0);`);
 
@@ -5529,7 +5552,7 @@ function informacionEquipo(idEquipo) {
             e_jerarquiaEquipo.value = 0;
             diseñoOpcionesSuperioresEquipo('contenedorCaracteristicasEquipo', 'btnInformacionEquipo');
             obtenerImagenesEquipo(idEquipo);
-           
+
             return array;
          })
          .then(array => {
@@ -7059,6 +7082,7 @@ function consultaStatusOT(idOT) {
          document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
          document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
          document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("statusEP").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_ep');`);
          document.getElementById("btnFinalizarOT").setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
          document.getElementById("btnGuardarOT").setAttribute("onclick", 'guardarCambiosOT()');
       });
@@ -10817,6 +10841,9 @@ function obtenerStatusEnergetico(idEnergetico) {
 
    // Finalizar TAREA
    btnStatusFinalizar.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status", "F")`);
+
+   // PROYECTO ENTREGADO
+   btnStatusEP.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_ep", "F")`);
 
    // Activo TAREA
    btnStatusActivo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "activo", 0)`);

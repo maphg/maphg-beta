@@ -52,7 +52,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, 
         t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia
         FROM t_equipos_america
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and t_equipos_america.jerarquia = 'PRINCIPAL' 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and t_equipos_america.jerarquia = 'PRINCIPAL' 
         $filtroPalabra $filtroDestinoEquipo $filtroPagina";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
@@ -1122,8 +1122,7 @@ if (isset($_GET['action'])) {
         $queryFallas = "SELECT count(t_mc.id) 
         FROM t_mc
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-        WHERE t_equipos_america.id_seccion = $idSeccion and 
-        t_equipos_america.id_subseccion = $idSubseccion and 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and 
         t_equipos_america.activo = 1 and
         (t_mc.status = 'PENDIENTE' or t_mc.status = 'F' or t_mc.status = 'SOLUCIONADO') 
         and t_mc.activo = 1 $filtroDestinoEquipo";
@@ -1139,8 +1138,7 @@ if (isset($_GET['action'])) {
         $queryFallas = "SELECT count(t_mc.id) 
         FROM t_mc
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-        WHERE t_equipos_america.id_seccion = $idSeccion and 
-        t_equipos_america.id_subseccion = $idSubseccion and 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and 
         t_equipos_america.activo = 1 and
         (t_mc.status = 'N' or t_mc.status = 'P' or t_mc.status = 'PENDIENTE') 
         and t_mc.activo = 1 $filtroDestinoEquipo";
@@ -1156,8 +1154,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT count(id) 'id'
         FROM t_mp_np
         WHERE activo = 1 and 
-        (status = 'F' or status = 'SOLUCIONADO') and 
-        id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 
+        (status = 'F' or status = 'SOLUCIONADO') and id_subseccion = $idSubseccion and id_equipo = 0 
         $filtroDestinoTG";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1171,8 +1168,8 @@ if (isset($_GET['action'])) {
         $query = "SELECT count(id) 'id'
         FROM t_mp_np
         WHERE activo = 1 and 
-        (status = 'N' or status = 'P' or status = 'PENDIENTE' or status = '') and 
-        id_seccion = $idSeccion and id_subseccion = $idSubseccion and id_equipo = 0 
+        (status = 'N' or status = 'P' or status = 'PENDIENTE') 
+        and id_subseccion = $idSubseccion and id_equipo = 0 
         $filtroDestinoTG";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1187,9 +1184,8 @@ if (isset($_GET['action'])) {
         FROM t_mp_np 
         INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
         WHERE t_mp_np.activo = 1 and 
-        (t_mp_np.status = 'F' or t_mp_np.status = 'SOLUCIONADO') and 
-        t_equipos_america.id_seccion = $idSeccion and 
-        t_equipos_america.id_subseccion = $idSubseccion 
+        (t_mp_np.status = 'F' or t_mp_np.status = 'SOLUCIONADO') 
+        and t_equipos_america.id_subseccion = $idSubseccion 
         $filtroDestinoTarea";
         if ($result = mysqli_query($conn_2020, $queryTareas)) {
             foreach ($result as $x) {
@@ -1203,7 +1199,7 @@ if (isset($_GET['action'])) {
         $queryTareas = "SELECT count(t_mp_np.id) 
         FROM t_mp_np
         INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and (t_mp_np.status = 'PENDIENTE' or t_mp_np.status = 'P' or t_mp_np.status = 'N') and t_mp_np.activo = 1 $filtroDestinoEquipo";
         $totalTareas = 0;
         if ($resultTareas = mysqli_query($conn_2020, $queryTareas)) {
             foreach ($resultTareas as $x) {
@@ -1218,7 +1214,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
         t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1234,7 +1230,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'PROCESO' and t_mp_planificacion_iniciada.activo = 1 and 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'PROCESO' and t_mp_planificacion_iniciada.activo = 1 and 
         t_mp_planes_mantenimiento.tipo_plan = 'PREVENTIVO' $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1250,7 +1246,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id 
-        WHERE t_equipos_america.id_seccion = $idSeccion and t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_mp_planificacion_iniciada.status = 'SOLUCIONADO' and t_mp_planificacion_iniciada.activo = 1 and 
         t_mp_planes_mantenimiento.tipo_plan = 'TEST' $filtroDestinoMP";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {

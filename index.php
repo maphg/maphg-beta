@@ -3122,6 +3122,14 @@
                         <i class="fas fa-check"></i>
                     </div>
                 </div>
+                <div id="statusEP" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                    <div class="">
+                        <h1>ENTREGAS PROYECTO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>EP</h1>
+                    </div>
+                </div>
 
                 <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
                     <div id="btnEditarTituloX" class="bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="expandir(this.id)">
