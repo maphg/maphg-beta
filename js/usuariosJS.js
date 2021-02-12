@@ -44,7 +44,6 @@ const iniciarSession = () => {
     })
         .then(array => array.json())
         .then(array => {
-            console.log(array);
             if (array[0].acceso == "ACCESO") {
                 alertaImg('Acceso Concedido', '', 'success', 1400);
                 array.forEach((item) => {
