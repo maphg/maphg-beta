@@ -74,7 +74,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $cod2bendF = $row['cod2bend'];
             $tipoIncidencia = $row['tipo_incidencia'];
 
-            if ($materialF != 0) {
+            if ($materialF != "") {
                 $materialF = "SI";
             } else {
                 $materialF = "";
@@ -162,7 +162,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $cod2bendT = $row['cod2bend'];
             $tipoIncidenciaT = $row['tipo_incidencia'];
 
-            if ($materialT != 0) {
+            if ($materialT != "") {
                 $materialT = "SI";
                 $codsapT = "$codsapT";
                 $cod2bendT = "$cod2bendT";
