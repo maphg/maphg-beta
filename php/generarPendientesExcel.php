@@ -26,6 +26,28 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
         $filtroT = "AND t_mp_np.id IN(0)";
     }
 
+
+
+    // Titulos XLS
+    $objPHPExcel = new PHPExcel();
+    $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte Fallas y Tareas");
+    $objPHPExcel->setActiveSheetIndex(0);
+    $objPHPExcel->getActiveSheet()->setTitle("Reporte Incidencias");
+    $objPHPExcel->getActiveSheet()->setCellValue('A1', 'OT');
+    $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Destino');
+    $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Sección');
+    $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Subsección');
+    $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Equipo - TG');
+    $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Título');
+    $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Responsable');
+    $objPHPExcel->getActiveSheet()->setCellValue('H1', 'Creado Por');
+    $objPHPExcel->getActiveSheet()->setCellValue('I1', 'U. Comentario');
+    $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Comentario de:');
+    $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Tipo Incidencia');
+    $objPHPExcel->getActiveSheet()->setCellValue('L1', 'Material');
+    $objPHPExcel->getActiveSheet()->setCellValue('M1', 'CODSAP');
+    $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COD2BEND');
+
     //FALLAS Generales
     $queryF = " SELECT t_mc.id, t_mc.status_material, t_mc.cod2bend, t_mc.codsap, t_mc.creado_por, c_destinos.destino, c_secciones.seccion, t_mc.tipo_incidencia, c_subsecciones.grupo, t_equipos_america.equipo, t_mc.actividad, t_colaboradores.nombre, t_colaboradores.apellido 
     FROM t_mc 
@@ -38,28 +60,9 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     WHERE t_mc.activo = 1 $filtroF";
     //Fin Tipo de Pendiente es MC ahora -> Fallas.
 
+    $fila = 2;
     if ($resultF = mysqli_query($conn_2020, $queryF)) {
 
-        // Titulos XLS
-        $objPHPExcel = new PHPExcel();
-        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte Fallas y Tareas");
-        $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setTitle("Reporte Incidencias");
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'Destino');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'Sección');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'Subsección');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'Equipo - TG');
-        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'Título');
-        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'Responsable');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'Creado Por');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'U. Comentario');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'Comentario de:');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Tipo Incidencia');
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'Material');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'CODSAP');
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'COD2BEND');
-
-        $fila = 2;
         while ($row = mysqli_fetch_array($resultF)) {
             $idMC = $row['id'];
             $destino = $row['destino'];
@@ -116,19 +119,20 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             }
 
 
-            $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
-            $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $equipo);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $actividad);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsable);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $nombreCreadoF);
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $comentario);
-            $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $realizoComentario);
-            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipoIncidencia);
-            $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialF);
-            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapF);
-            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendF);
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, "F$idMC");
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $equipo);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $actividad);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $responsable);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $nombreCreadoF);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentario);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $realizoComentario);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tipoIncidencia);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $materialF);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $codsapF);
+            $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $cod2bendF);
 
             //Contador de Celdas
             $fila++;
@@ -138,7 +142,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
 
     //TAREAS Generales
     $queryT = "SELECT t_mp_np.id, t_mp_np.status_material, t_mp_np.codsap, t_mp_np.cod2bend, t_mp_np.id_usuario, t_mp_np.tipo_incidencia, c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, 
-    t_mp_np.titulo,  t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
+    t_mp_np.titulo, t_colaboradores.nombre, t_colaboradores.apellido
     FROM t_mp_np
     INNER JOIN c_destinos ON t_mp_np.id_destino = c_destinos.id 
     INNER JOIN c_secciones ON t_mp_np.id_seccion = c_secciones.id
@@ -148,19 +152,19 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
     WHERE t_mp_np.activo = 1 $filtroT";
     //Fin Tipo Tareas.
     if ($resulT = mysqli_query($conn_2020, $queryT)) {
-        while ($rowT = mysqli_fetch_array($resulT)) {
-            $idT = $rowT['id'];
-            $destino = $rowT['destino'];
-            $seccion = $rowT['seccion'];
-            $subseccion = $rowT['grupo'];
+        while ($x = mysqli_fetch_array($resulT)) {
+            $idT = $x['id'];
+            $destino = $x['destino'];
+            $seccion = $x['seccion'];
+            $subseccion = $x['grupo'];
             $equipo = "INCIDENCIA GENERAL";
-            $titulo = $rowT['titulo'];
-            $responsable = $rowT['nombre'] . " " . $rowT['apellido'];
-            $creadoPorT = $rowT['id_usuario'];
-            $materialT = $row['status_material'];
-            $codsapT = $row['codsap'];
-            $cod2bendT = $row['cod2bend'];
-            $tipoIncidenciaT = $row['tipo_incidencia'];
+            $titulo = $x['titulo'];
+            $responsable = $x['nombre'] . " " . $x['apellido'];
+            $creadoPorT = $x['id_usuario'];
+            $materialT = $x['status_material'];
+            $codsapT = $x['codsap'];
+            $cod2bendT = $x['cod2bend'];
+            $tipoIncidenciaT = $x['tipo_incidencia'];
 
             if ($materialT == 1) {
                 $materialT = "SI";
@@ -168,76 +172,70 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
                 $materialT = "";
             }
 
-            $queryComentarioT = "SELECT comentario.comentarios_mp_np, 
+            $comentarioT = "";
+            $comentarioDeT = "";
+            $query = "SELECT comentarios_mp_np.comentario, 
             t_colaboradores.nombre, t_colaboradores.apellido 
             FROM comentarios_mp_np 
-            INNER JOIN t_users ON t_mp_np.id_usuario = t_users.id 
+            INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id 
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE id_mp_np = $idT AND activo = 1";
-            if ($resultComentarioT = mysqli_query($conn_2020, $queryComentarioT)) {
-                if ($rowComentarioT = mysqli_fetch_array($resultComentarioT)) {
-                    $comentarioT = $rowComentarioT['comentario'];
-                    $comentarioDeT = $rowComentarioT['nombre'] . "" . $rowComentarioT['apellido'];
-                } else {
-                    $comentarioT = "";
-                    $comentarioDeT = "";
+            WHERE comentarios_mp_np.id_mp_np = $idT and comentarios_mp_np.activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($x = mysqli_fetch_array($result)) {
+                    $comentarioT = $x['comentario'];
+                    $comentarioDeT = $x['nombre'] . " " . $x['apellido'];
                 }
-            } else {
-                $comentarioT = "";
-                $comentarioDeT = "";
             }
 
-            $queryCreadoT = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+            $nombreCreado = "";
+            $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
             FROM t_users
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_users.id = $creadoPorT";
-            if ($resultCreadoT = mysqli_query($conn_2020, $queryCreadoT)) {
-                if ($rowCreadoT = mysqli_fetch_array($resultCreadoT)) {
-                    $nombreCreado = $rowCreadoT['nombre'] . " " . $rowCreadoT['apellido'];
-                } else {
-                    $nombreCreado = "";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($x = mysqli_fetch_array($result)) {
+                    $nombreCreado = $x['nombre'] . " " . $x['apellido'];
                 }
-            } else {
-                $nombreCreado = "";
             }
 
-            $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
-            $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
-            $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
-            $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $equipo);
-            $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $titulo);
-            $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $responsable);
-            $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $nombreCreado);
-            $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $comentarioT);
-            $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentarioDeT);
-            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $tipoIncidenciaT);
-            $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $materialT);
-            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $codsapT);
-            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $cod2bendT);
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, "T$idT");
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $destino);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $seccion);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $subseccion);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $equipo);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $titulo);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $responsable);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $nombreCreado);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentarioT);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $comentarioDeT);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $tipoIncidenciaT);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $materialT);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $codsapT);
+            $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $cod2bendT);
 
             //Contador de Celdas
             $fila++;
         }
+    }
 
-        // Busca el Nombre Completo de quien Genero el Reporte.
-        $queryGenerado = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+    // Busca el Nombre Completo de quien Genero el Reporte.
+    $queryGenerado = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_users
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_users.id = $generadoPor";
-        if ($resultGenerado = mysqli_query($conn_2020, $queryGenerado)) {
-            if ($rowGenerado = mysqli_fetch_array($resultGenerado)) {
-                $nombreCompletoG = $rowGenerado['nombre'] . " " . $rowGenerado['apellido'];
-            } else {
-                $nombreCompletoG = "";
-            }
+    if ($resultGenerado = mysqli_query($conn_2020, $queryGenerado)) {
+        if ($rowGenerado = mysqli_fetch_array($resultGenerado)) {
+            $nombreCompletoG = $rowGenerado['nombre'] . " " . $rowGenerado['apellido'];
         } else {
             $nombreCompletoG = "";
         }
-        $fecha = date('d-m-Y H:m:s');
-        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header('Content-Disposition: attachment;filename="Reporte_INCIDENCIAS ' . $nombreCompletoG . ' ' . $fecha . '.xlsx"');
-        header('Cache-Control: max-age=0');
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('PHP://output');
+    } else {
+        $nombreCompletoG = "";
     }
+    $fecha = date('d-m-Y H:m:s');
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header('Content-Disposition: attachment;filename="Reporte_INCIDENCIAS ' . $nombreCompletoG . ' ' . $fecha . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+    $objWriter->save('PHP://output');
 }
