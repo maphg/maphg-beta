@@ -58,7 +58,7 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion";
+                $query = "SELECT url_adjunto FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
                 $arrayAdjuntos = array();
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {

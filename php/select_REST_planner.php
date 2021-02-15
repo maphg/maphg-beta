@@ -1309,7 +1309,9 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.responsable,
         t_energeticos.rango_fecha,
+        t_energeticos.tipo_incidencia,
         t_energeticos.status,
+        t_energeticos.status_material,
         t_energeticos.status_trabajare,
         t_energeticos.status_urgente,
         t_energeticos.departamento_calidad,
@@ -1340,6 +1342,7 @@ if (isset($_GET['action'])) {
                 $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                 $rangoFecha = $x['rango_fecha'];
                 $status = $x['status'];
+                $materiales = $x['status_material'];
                 $sTrabajare = $x['status_trabajare'];
                 $sUrgente = $x['status_urgente'];
                 $cod2bend = $x['cod2bend'];
@@ -1347,9 +1350,10 @@ if (isset($_GET['action'])) {
                 $bitacoraGP = $x['bitacora_gp'];
                 $bitacoraTRS = $x['bitacora_trs'];
                 $bitacoraZI = $x['bitacora_zi'];
+                $tipoIncidencia = $x['tipo_incidencia'];
 
-                $sDepartamentos = intval($x['departamento_calidad']) + intval($x['departamento_compras']);
-                +intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sDepartamentos = intval($x['departamento_calidad']) + intval($x['departamento_compras'])
+                    + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
 
                 $sEnergeticos = $x['energetico_electricidad'] + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
 
@@ -1396,16 +1400,18 @@ if (isset($_GET['action'])) {
 
                 $array[] = array(
                     "idEnergetico" => intval($idEnergetico),
+                    "tipoIncidencia" => $tipoIncidencia,
                     "actividad" => $actividad,
                     "creadoPor" => $creadoPor,
                     "responsable" => $responsable,
                     "fechaInicio" => $fechaInicio,
                     "fechaFin" => $fechaFin,
                     "status" => $status,
+                    "materiales" => intval($materiales),
                     "sTrabajare" => intval($sTrabajare),
                     "sUrgente" => intval($sUrgente),
                     "sEnergeticos" => intval($sEnergeticos),
-                    "sDepartamentos" => intval($sDepartamentos),
+                    "sDepartamentos" => $sDepartamentos,
                     "cod2bend" => $cod2bend,
                     "codsap" => $codsap,
                     "bitacoraGP" => $bitacoraGP,
@@ -3879,7 +3885,7 @@ if (isset($_GET['action'])) {
                 if ($idSubseccion == 200) {
                     $total = -1;
                     $query = "SELECT count(id) 'total' FROM t_proyectos 
-                    WHERE id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1";
+                    WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status IN('PENDIENTE', 'N', 'P') and activo = 1 $filtroDestino";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
                             $proyectos = $x['total'];
@@ -4092,6 +4098,43 @@ if (isset($_GET['action'])) {
                     "id" => "$id",
                     "equipo" => "$equipo",
                     "jerarquia" => "$jerarquia"
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENE ENLACES DE ENERGETICOS
+    if ($action == "obtenerEnlaces") {
+        $tipoEnlace = $_GET['tipoEnlace'];
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, id_destino, tipo_enlace, url, descripcion, fecha 
+        FROM t_enlaces 
+        WHERE tipo_enlace = '$tipoEnlace' $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEnlace = $x['id'];
+                $idDestinoX = $x['id_destino'];
+                $tipoEnlace = $x['tipo_enlace'];
+                $url = $x['url'];
+                $descripcion = $x['descripcion'];
+                $fecha = $x['fecha'];
+
+                $array[] = array(
+                    "idEnlace" => intval($idEnlace),
+                    "idDestinoX" => intval($idDestinoX),
+                    "tipoEnlace" => $tipoEnlace,
+                    "url" => $url,
+                    "descripcion" => $descripcion,
+                    "fecha" => $fecha
                 );
             }
         }

@@ -13,18 +13,14 @@ if (isset($_GET['action'])) {
     $idUsuario = $_GET['idUsuario'];
 
     if ($action == "seguridad_session") {
-        $query = "SELECT count(id) FROM t_users 
+        $id = 0;
+        $query = "SELECT count(id) 'total' FROM t_users 
         WHERE id = $idUsuario and status ='A' and activo = 1";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $id = intval($x['count(id)']);
-            }
-
-            if ($id == 0) {
-                echo json_encode(0);
-            } else {
-                echo json_encode(1);
+                $id = intval($x['total']);
             }
         }
+        echo json_encode($id);
     }
 }

@@ -4,13 +4,15 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 
 function validarOT() {
     let URL = window.location.hash;
-    const idOT = URL.replace(/#|T|F|/gi, '');
+    const idOT = URL.replace(/#|T|F|E|/gi, '');
 
     if (idOT > 0) {
         if (URL[1] == "T") {
             generarOT(idOT, 'TAREA');
         } else if (URL[1] == "F") {
             generarOT(idOT, 'FALLA');
+        } else if (URL[1] == "E") {
+            generarOT(idOT, 'ENERGETICO');
         }
         alertaImg('Generando OT #' + idOT, '', 'success', 1500);
     } else {
@@ -30,10 +32,13 @@ function generarOT(idOT, tipo) {
         .then((array) => array.json())
         .then(array => {
             if (array) {
+                let tipo = '';
                 if (array.datos.tipo == "FALLA") {
                     tipo = `INCIDENCIA: ${array.datos.tipoIncidencia}`;
                 } else if (array.datos.tipo == "TAREA") {
                     tipo = `INCIDENCIA GENERAL: ${array.datos.tipoIncidencia}`;
+                } else if (array.datos.tipo == "ENERGETICO") {
+                    tipo = `ENERGETICO: ${array.datos.tipoIncidencia}`;
                 }
 
                 document.getElementById("idOTQR").innerHTML = array.datos.idOT;
@@ -43,7 +48,12 @@ function generarOT(idOT, tipo) {
                 document.getElementById("rangoFecha").
                     innerHTML = ' <i class="fas fa-calendar-alt pl-1"></i> ' + array.datos.rangoFecha;
 
-                document.getElementById("seccionOT").innerHTML = array.datos.seccion;
+                if (array.datos.seccion == "ENERGETICOS") {
+                    document.getElementById("seccionOT").innerHTML = '<i class="fas fa-plug"></i>';
+                } else {
+                    document.getElementById("seccionOT").innerHTML = array.datos.seccion;
+                }
+
                 document.getElementById("logoClassOT").className = '';
                 document.getElementById("logoClassOT").
                     classList.add('relative', array.datos.seccion.toLowerCase() + '-logo');

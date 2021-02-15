@@ -3,9 +3,6 @@ let idUsuario = localStorage.getItem("usuario");
 let idDestino = localStorage.getItem("idDestino");
 // VARIABLES GLOBALES, (VALOR ESTATICO AL CARGAR LA PAGINA)
 
-// ALERTA EN CONSOLE
-console.log('%cSTOP!', 'color:red; font-weight: bold; font-size: 4.3rem');
-
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
@@ -317,7 +314,6 @@ const obtenerSecciones = (idSeccion, status) => {
 
    const action = "obtenerSecciones";
    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
-
 
    // ELIMINA CONTENEDOR
    if (status == 2) {
@@ -854,7 +850,6 @@ function hora() {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
-         console.log(array)
          if (array) {
             document.getElementById("nombreDestino").innerHTML = array.destino;
          }
@@ -8465,48 +8460,54 @@ function obtenerFallas(idEquipo = 0) {
       .then(array => array.json())
       .then(array => {
          document.getElementById("dataPendientesX").innerHTML = '';
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            if (array.length > 0) {
+               for (let x = 0; x < array.length; x++) {
+                  const id = array[x].id;
+                  const ot = array[x].ot;
+                  const actividad = array[x].actividad;
+                  const creadoPor = array[x].creadoPor;
+                  const pda = array[x].pda;
+                  const responsable = array[x].responsable;
+                  const fechaInicio = array[x].fechaInicio;
+                  const fechaFin = array[x].fechaFin;
+                  const comentarios = array[x].comentarios;
+                  const adjuntos = array[x].adjuntos;
+                  const status = array[x].status;
+                  const materiales = array[x].materiales;
+                  const energeticos = array[x].energeticos;
+                  const departamentos = array[x].departamentos;
+                  const trabajando = array[x].trabajando;
+                  const tipo = array[x].tipo;
+                  const tipoIncidencia = array[x].tipoIncidencia;
 
-         if (array.length > 0) {
-            for (let x = 0; x < array.length; x++) {
-               const id = array[x].id;
-               const ot = array[x].ot;
-               const actividad = array[x].actividad;
-               const creadoPor = array[x].creadoPor;
-               const pda = array[x].pda;
-               const responsable = array[x].responsable;
-               const fechaInicio = array[x].fechaInicio;
-               const fechaFin = array[x].fechaFin;
-               const comentarios = array[x].comentarios;
-               const adjuntos = array[x].adjuntos;
-               const status = array[x].status;
-               const materiales = array[x].materiales;
-               const energeticos = array[x].energeticos;
-               const departamentos = array[x].departamentos;
-               const trabajando = array[x].trabajando;
-               const tipo = array[x].tipo;
-               const tipoIncidencia = array[x].tipoIncidencia;
-
-               const data = datosFallasTareas({
-                  id: id,
-                  ot: ot,
-                  actividad: actividad,
-                  creadoPor: creadoPor,
-                  pda: pda,
-                  responsable: responsable,
-                  fechaInicio: fechaInicio,
-                  fechaFin: fechaFin,
-                  comentarios: comentarios,
-                  adjuntos: adjuntos,
-                  status: status,
-                  materiales: materiales,
-                  trabajando: trabajando,
-                  energeticos: energeticos,
-                  departamentos: departamentos,
-                  tipo: tipo,
-                  tipoIncidencia: tipoIncidencia
-               });
-               document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
+                  const data = datosFallasTareas({
+                     id: id,
+                     ot: ot,
+                     actividad: actividad,
+                     creadoPor: creadoPor,
+                     pda: pda,
+                     responsable: responsable,
+                     fechaInicio: fechaInicio,
+                     fechaFin: fechaFin,
+                     comentarios: comentarios,
+                     adjuntos: adjuntos,
+                     status: status,
+                     materiales: materiales,
+                     trabajando: trabajando,
+                     energeticos: energeticos,
+                     departamentos: departamentos,
+                     tipo: tipo,
+                     tipoIncidencia: tipoIncidencia
+                  });
+                  document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
+               }
             }
+         } else {
+            document.getElementById("dataPendientesX").innerHTML = '';
          }
       })
       .then(function () {
@@ -10893,6 +10894,7 @@ function obtenerResponsableEnergetico(idEnergetico) {
 }
 
 
+// OBTIEN RANGO DE FECHA ENERGETICO
 function obtenerRangoFecha(idEnergetico, columna, valor) {
    btnAplicarRangoFecha.
       setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, '${columna}', 0)`);

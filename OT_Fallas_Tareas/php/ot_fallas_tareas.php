@@ -143,6 +143,71 @@ if (isset($_GET['action'])) {
                     }
                 }
             }
+        } elseif ($tipo == "ENERGETICO") {
+
+            $query = "SELECT t_energeticos.id, t_energeticos.actividad, t_energeticos.status, c_secciones.seccion, c_subsecciones.grupo, c_destinos.destino, t_energeticos.rango_fecha, t_energeticos.tipo_incidencia
+            FROM t_energeticos
+            INNER JOIN c_destinos ON t_energeticos.id_destino = c_destinos.id
+            INNER JOIN c_secciones ON t_energeticos.id_seccion = c_secciones.id
+            INNER JOIN c_subsecciones ON t_energeticos.id_subseccion = c_subsecciones.id
+            WHERE t_energeticos.id = $idOT";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idOT = $x['id'];
+                    $actividad = $x['actividad'];
+                    $status = $x['status'];
+                    $equipo = 'Energetico';
+                    $destino = $x['destino'];
+                    $seccion = $x['seccion'];
+                    $subseccion = $x['grupo'];
+                    $rangoFecha = $x['rango_fecha'];
+                    $tipoIncidencia = $x['tipo_incidencia'];
+
+                    if ($status == "N" or $status == "PENDIENTE" or $status == "P") {
+                        $status = "PENDIENTE";
+                    } else {
+                        $status = "SOLUCIONADO";
+                    }
+
+                    if ($equipo == "") {
+                        $equipo = "TAREA GENERAL";
+                    }
+
+                    $array['datos'] = array(
+                        "idOT" => $idOT,
+                        "actividad" => $actividad,
+                        "status" => $status,
+                        "equipo" => $equipo,
+                        "destino" => $destino,
+                        "seccion" => $seccion,
+                        "subseccion" => $subseccion,
+                        "tipo" => $tipo,
+                        "tipoIncidencia" => $tipoIncidencia,
+                        "rangoFecha" => $rangoFecha
+                    );
+
+                    $query = "SELECT id, actividad, status FROM t_mp_np_actividades_ot WHERE id_tarea = 0 and activo = 1 ORDER BY id DESC";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $idActividad = $x['id'];
+                            $actividadX = $x['actividad'];
+                            $statusX = $x['status'];
+
+                            if ($statusX == "N" or $statusX == "PENDIENTE" or $statusX == "P") {
+                                $statusX = "PENDIENTE";
+                            } else {
+                                $statusX = "SOLUCIONADO";
+                            }
+
+                            $array['actividades'][] = array(
+                                "idActividad" => $idActividad,
+                                "actividad" => $actividadX,
+                                "status" => $statusX
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
     echo json_encode($array);

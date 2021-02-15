@@ -1,3 +1,1441 @@
+// CONTENEDORES DATA 
+const dataEnergeticos = document.getElementById("dataEnergeticos");
+const dataPowerbin = document.getElementById("dataPowerbin");
+const destinosSelecciona = document.getElementById("destinosSelecciona");
+const contenedorEnergeticos = document.getElementById("contenedorEnergeticos");
+const dataUsuarios = document.getElementById("dataUsuarios");
+
+// BTN
+const btnPendientesEnergeticos = document.getElementById("btnPendientesEnergeticos");
+const btnModalAgregarEnergeticos = document.getElementById("btnModalAgregarEnergeticos");
+const btnEmergenciaEnergetico = document.getElementById("btnEmergenciaEnergetico");
+const btnUrgenciaEnergetico = document.getElementById("btnUrgenciaEnergetico");
+const btnAlarmaEnergetico = document.getElementById("btnAlarmaEnergetico");
+const btnAlertaEnergetico = document.getElementById("btnAlertaEnergetico");
+const btnSeguimientoEnergetico = document.getElementById("btnSeguimientoEnergetico");
+const rangoFechaEnergeticos = document.getElementById("rangoFechaEnergeticos");
+const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia");
+
+// INPTUS
+const inputRangoFecha = document.getElementById("rangoFechaX");
+const palabraEnergeticos = document.getElementById("palabraEnergeticos");
+
+// API PARA REPORTE DE ERRORES
+const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+
+// ICONOS 
+const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
+const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
+
+// BOTONES PARA EL MODAL STATUS
+const btnStatusUrgente = document.getElementById("statusUrgente");
+const btnStatusMaterial = document.getElementById("btnStatusMaterial");
+const btnStatusTrabajare = document.getElementById("statusTrabajare");
+const btnStatusCalidad = document.getElementById("statusCalidad");
+const btnStatusCompras = document.getElementById("statusCompras");
+const btnStatusDireccion = document.getElementById("statusDireccion");
+const btnStatusFinanzas = document.getElementById("statusFinanzas");
+const btnStatusRRHH = document.getElementById("statusRRHH");
+const btnStatusElectricidad = document.getElementById("statusElectricidad");
+const btnStatusAgua = document.getElementById("statusAgua");
+const btnStatusDiesel = document.getElementById("statusDiesel");
+const btnStatusGas = document.getElementById("statusGas");
+const btnStatusFinalizar = document.getElementById("statusFinalizar");
+const btnStatusEP = document.getElementById("statusEP");
+const btnStatusActivo = document.getElementById("statusActivo");
+const btnEditarTitulo = document.getElementById("btnEditarTitulo");
+const btnStatusGP = document.getElementById("statusGP");
+const btnStatusTRS = document.getElementById("statusTRS");
+const btnStatusZI = document.getElementById("statusZI");
+const editarTitulo = document.getElementById("editarTitulo");
+// BOTONES PARA EL MODAL STATUS
+
+// TOGGLE HIDDEN
+const toggleHidden = idElement => {
+    if (idElement = document.getElementById(idElement)) {
+        idElement.classList.toggle("hidden");
+    }
+}
+
+
+// toggleClass Modal TailWind con la clase OPEN.
+function toggleModalTailwind(idModal) {
+    if (document.getElementById(idModal)) {
+        document.getElementById(idModal).classList.toggle("open");
+    }
+}
+
+
+// Oculta Vista con la clase HIDDEN
+function hiddenVista(idVista) {
+    if (document.getElementById(idVista)) {
+        document.getElementById(idVista).classList.add('hidden')
+    }
+}
+
+
+// INICIA
+window.onload = () => {
+    obtenerEnlaces();
+    obtenerSecciones(1001, 2);
+};
+
+
+destinosSelecciona.addEventListener("click", () => {
+    obtenerEnlaces();
+    obtenerSecciones(1001, 2);
+})
+
+
+// FUNCION PARA RANGO FECHA
+function rangoFechaX(idInput) {
+    let input = document.getElementById(idInput);
+
+    $('#' + idInput).daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: "Cancelar",
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        },
+    });
+
+    $('#' + idInput).on("apply.daterangepicker", function (
+        ev,
+        picker
+    ) {
+        $(this).val(
+            picker.startDate.format("DD/MM/YYYY") +
+            " - " +
+            picker.endDate.format("DD/MM/YYYY")
+        );
+    });
+}
+
+
+// Funciones para Niveles de Vistas(Nivel 0: Elimina z-index, Nivel 1: z-index:101, Nivel 2: z-index:201)
+function nivelVista(nivel, idVista) {
+    if (nivel == 0) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:0;');
+    } else if (nivel == 1) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:101;');
+    } else if (nivel == 2) {
+        document.getElementById(idVista).setAttribute('style', 'z-index:201;');
+    }
+}
+
+// FUNCION PARA ACTUALIZAR RANGO FECHA #rangoFechaX
+$(function () {
+    $('input[name="rangoFechaX"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: "Cancelar",
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        },
+    });
+
+    $('input[name="rangoFechaX"]').on("apply.daterangepicker", function (
+        ev,
+        picker
+    ) {
+        $(this).val(
+            picker.startDate.format("DD/MM/YYYY") +
+            " - " +
+            picker.endDate.format("DD/MM/YYYY")
+        );
+    });
+})
+
+
+// Función para Input Fechas para Agregar MC.
+$(function () {
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        showWeekNumbers: true,
+        locale: {
+            cancelLabel: "Cancelar",
+            applyLabel: "Aplicar",
+            fromLabel: "De",
+            toLabel: "A",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+            monthNames: ["Enero", "Febreo", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        },
+    });
+    $('input[name="datefilter"]').on("apply.daterangepicker", function (
+        ev,
+        picker
+    ) {
+        $(this).val(
+            picker.startDate.format("DD/MM/YYYY") +
+            " - " +
+            picker.endDate.format("DD/MM/YYYY")
+        );
+    });
+    $('input[name="datefilter"]').on("cancel.daterangepicker", function (
+        ev,
+        picker
+    ) {
+        $(this).val("");
+    });
+});
+
+
+// OBTIENE ENLACES SEGÚN DESTINO
+const obtenerEnlaces = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerEnlaces";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=ENERGETICO`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataPowerbin.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                if (array.length > 1) {
+                    dataPowerbin.classList.remove('grid-rows-1', 'grid-cols-1');
+                    dataPowerbin.classList.add('grid-rows-3', 'grid-cols-3');
+                } else {
+                    dataPowerbin.classList.remove('grid-rows-3', 'grid-cols-3');
+                    dataPowerbin.classList.add('grid-rows-1', 'grid-cols-1');
+                }
+
+                for (let x = 0; x < array.length; x++) {
+                    const idDestinoX = array[x].idDestino;
+                    const url = array[x].url;
+
+                    const sizeW = array.length > 1 ? '400px;' : '800px;';
+                    const sizeH = array.length > 1 ? '350px;' : '700px;';
+                    const iconSize = array.length > 1 ?
+                        `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" onclick="url('url_${idDestinoX}');"></i>` : '';
+
+                    const codigo = `
+                    <div class="py-1 mx-auto relative text-transparent hover:text-gray-500">
+                    ${iconSize}
+                    <iframe id="url_${idDestinoX}" class="iframe" width="${sizeW}" height="${sizeH}" src="${url}" frameborder="0" allowFullScreen="true"></iframe>
+                    </div>            
+                    `;
+                    dataPowerbin.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataPowerbin.innerHTML = '';
+            // fetch(APIERROR + err);
+            console.log(err);
+        })
+}
+
+
+// OBTIENE ENLACE PARA RENDERIZAR EN VENTANA MODAL
+function url(idUrl) {
+    alertify.powerbi || alertify.dialog('powerbi', function () {
+        var iframe;
+        return {
+            // dialog constructor function, this will be called when the user calls alertify.powerbi(videoId)
+            main: function (videoId) {
+                //set the videoId setting and return current instance for chaining.
+                return this.set({
+                    'videoId': videoId
+                });
+            },
+            // we only want to override two options (padding and overflow).
+            setup: function () {
+                return {
+                    options: {
+                        //disable both padding and overflow control.
+                        padding: !1,
+                        overflow: !1,
+                    }
+                };
+            },
+            // This will be called once the DOM is ready and will never be invoked again.
+            // Here we create the iframe to embed the video.
+            build: function () {
+                // create the iframe element
+                iframe = document.createElement('iframe');
+                iframe.frameBorder = "no";
+                iframe.width = "100%";
+                iframe.height = "100%";
+                // add it to the dialog
+                this.elements.content.appendChild(iframe);
+
+                //give the dialog initial height (half the screen height).
+                this.elements.body.style.minHeight = screen.height * .5 + 'px';
+            },
+            // dialog custom settings
+            settings: {
+                videoId: undefined
+            },
+            // listen and respond to changes in dialog settings.
+            settingUpdated: function (key, oldValue, newValue) {
+                switch (key) {
+                    case 'videoId':
+                        iframe.src = newValue;
+                        break;
+                }
+            },
+            // listen to internal dialog events.
+            hooks: {
+                // triggered when the dialog is closed, this is seperate from user defined onclose
+                onclose: function () {
+                    iframe.contentWindow.postMessage(
+                        '{"event":"command","func":"pauseVideo","args":""}', '*');
+                },
+                // triggered when a dialog option gets update.
+                // warning! this will not be triggered for settings updates.
+                onupdate: function (option, oldValue, newValue) {
+                    switch (option) {
+                        case 'resizable':
+                            if (newValue) {
+                                this.elements.content.removeAttribute('style');
+                                iframe && iframe.removeAttribute('style');
+                            } else {
+                                this.elements.content.style.minHeight = 'inherit';
+                                iframe && (iframe.style.minHeight = 'inherit');
+                            }
+                            break;
+                    }
+                }
+            }
+        };
+    });
+
+    let x = document.getElementById(idUrl).getAttribute('src');
+    //show the dialog
+    alertify.powerbi(x).set({
+        frameless: false
+    });
+}
+
+
+// OBTIENE LAS SECCIONES SEGÚN EL DESTINO
+const obtenerSecciones = (idSeccion) => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerSecciones";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                // ORDENA LAS SUBSECCIONES POR PENDIENTES
+                array.subsecciones.sort(function (a, b) {
+                    return b.total - a.total;
+                });
+
+                // LIMPIA CONTENEDOR
+                contenedorEnergeticos.innerHTML = '';
+
+                // RETORNA RESULTADOS
+                return array.subsecciones;
+            }
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const subseccion = array[x].subseccion;
+                    const idSubseccion = array[x].idSubseccion;
+                    const idSeccion = array[x].idSeccion;
+                    const total = array[x].total;
+                    const totalX = total > 0 ? total : '';
+                    const emergencia = array[x].emergencia;
+                    const urgencia = array[x].urgencia;
+                    const alarma = array[x].alarma;
+                    const alerta = array[x].alerta;
+                    const seguimiento = array[x].seguimiento;
+                    const proyectos = array[x].proyectos;
+
+                    if (idSubseccion == 200) {
+                        fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
+                    } else if (idSubseccion == 1006 || idSubseccion == 1007 || idSubseccion == 1008 || idSubseccion == 1009 || idSubseccion == 1010 || idSubseccion == 1011 || idSubseccion == 1012 || idSubseccion == 1013) {
+                        fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos')"`;
+                    } else {
+                        fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
+                    }
+
+                    const emergenciaX = emergencia > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 bg-red-300 text-red-600 rounded-md font-bold flex justify-center items-center ml-1">${emergencia}</h1>` : '';
+
+                    const urgenciaX = urgencia > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 bg-orange-300 text-orange-600 rounded-md font-bold flex justify-center items-center ml-1">${urgencia}</h1>` : '';
+
+                    const alarmaX = alarma > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 bg-yellow-300 text-yellow-600 rounded-md font-bold flex justify-center items-center ml-1">${alarma}</h1>` : '';
+
+                    const alertaX = alerta > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 bg-blue-300 text-blue-600  rounded-md font-bold flex justify-center items-center ml-1">${alerta}</h1>` : '';
+
+                    const seguimientoX = seguimiento > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 bg-teal-300 text-teal-600  rounded-md font-bold flex justify-center items-center ml-1">${seguimiento}</h1>` : '';
+
+                    const proyectosX = proyectos > 0 ?
+                        `<h1 class="text-xxs h-5 w-5 text-red-700 bg-red-400  rounded-md font-bold flex justify-center items-center ml-1">${proyectos}</h1>` : '';
+
+                    const codigo = `
+                  <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
+                     <h1 class="truncate mr-2">${subseccion}</h1>
+                     <div class="flex flex-row justify-center">
+                        ${emergenciaX}
+                        ${urgenciaX}
+                        ${alarmaX}
+                        ${alertaX}
+                        ${seguimientoX}
+                        ${proyectosX}
+                     </div>
+                  </div >
+               `;
+                    if (contenedorEnergeticos) {
+                        contenedorEnergeticos.insertAdjacentHTML('beforeend', codigo);
+                    }
+                }
+            }
+        })
+        .catch(function (err) {
+            // fetch(APIERROR + err + ` obtenerSecciones = (${idSeccion})`);
+        })
+}
+
+
+// Funciones para actualizar idSeccion y idSubseccion en localstorage..
+function actualizarSeccionSubseccion(idSeccion, idSubseccion) {
+    localStorage.setItem("idSeccion", idSeccion);
+    localStorage.setItem("idSubseccion", idSubseccion);
+}
+
+
+// RANGO FECHA
+function obtenerRangoFecha(idEnergetico, columna, valor) {
+    btnAplicarRangoFecha.
+        setAttribute('onclick', `actualizarEnergetico(${idEnergetico}, '${columna}', 0)`);
+    inputRangoFecha.value = valor;
+}
+
+
+// FUNCION PARA OBTENER LOS PENDIENTES DE ENERGETICOS
+function obtenerEnergeticos(idSeccion, idSubseccion, status) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    // obtenerEnergeticos(1001, 1009, 'PENDIENTE');
+    btnPendientesEnergeticos.
+        setAttribute('onclick', `obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE')`);
+
+    btnSolucionadosEnergeticos.
+        setAttribute('onclick', `obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'SOLUCIONADO')`);
+
+    const action = 'obtenerEnergeticos';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&status=${status}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataEnergeticos.innerHTML = '';
+            console.log(array);
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idEnergetico = array[x].idEnergetico;
+                    const actividad = array[x].actividad;
+                    const creadoPor = array[x].creadoPor;
+                    const responsable = array[x].responsable;
+                    const fechaInicio = array[x].fechaInicio;
+                    const fechaFin = array[x].fechaFin;
+                    const status = array[x].status;
+                    const sTrabajare = array[x].sTrabajare;
+                    const sUrgente = array[x].sUrgente;
+                    const sDepartamentos = array[x].sDepartamentos;
+                    const sEnergeticos = array[x].sEnergeticos;
+                    const materiales = array[x].materiales;
+                    const adjuntos = array[x].adjuntos
+                    const comentarios = array[x].comentarios;
+
+                    if (materiales >= 1) {
+                        materialesx = '<div class="bg-bluegray-800 w-5 h-5 rounded-full flex justify-center items-center text-white mr-1"><h1>M</h1></div>';
+                    } else {
+                        materialesx = '';
+                    }
+
+                    if (sDepartamentos >= 1) {
+                        departamentosx = '<div class="bg-teal-300 w-5 h-5 rounded-full flex justify-center items-center text-teal-600 mr-1"><h1>D</h1></div>';
+                    } else {
+                        departamentosx = '';
+                    }
+
+                    if (sEnergeticos >= 1) {
+                        energeticosx = '<div class="bg-yellow-300 w-5 h-5 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>E</h1></div>';
+                    } else {
+                        energeticosx = '';
+                    }
+
+                    if (sTrabajare >= 1) {
+                        trabajandox = '<div class="bg-cyan-300 w-5 h-5 rounded-full flex justify-center items-center text-cyan-600 mr-1"><h1>T</h1></div>';
+                    } else {
+                        trabajandox = '';
+                    }
+
+                    if (adjuntos > 0) {
+                        adjuntosX = adjuntos;
+                    } else {
+                        adjuntosX = iconoDefault;
+                    }
+
+                    if (comentarios > 0) {
+                        comentariosX = comentarios;
+                    } else {
+                        comentariosX = iconoDefault;
+                    }
+
+                    // DISEÑO TIPO INCIDENCIA
+                    const tipoIncidencia = array[x].tipoIncidencia;
+                    const estiloTipoIncidencia =
+                        tipoIncidencia == 'URGENCIA' ?
+                            `<span class="text-red-500 text-xs">${tipoIncidencia}</span>`
+                            : tipoIncidencia == "EMERGENCIA" ?
+                                `<span class="text-orange-500 text-xs">${tipoIncidencia}</span>`
+                                : tipoIncidencia == "ALARMA" ?
+                                    `<span class="text-yellow-500 text-xs">${tipoIncidencia}</span>`
+                                    : tipoIncidencia == "ALERTA" ?
+                                        `<span class="text-blue-500 text-xs">${tipoIncidencia}</span>`
+                                        : `<span class="text-teal-500 text-xs">${tipoIncidencia}</span>`;
+
+                    const fResponsable = status == "PENDIENTE" ?
+                        `onclick="obtenerResponsableEnergetico(${idEnergetico}); toggleModalTailwind('modalUsuarios')"` : '';
+
+                    const fRangoFecha = status == "PENDIENTE" ?
+                        `onclick="obtenerRangoFecha(${idEnergetico}, 'rangoFecha', '${fechaInicio} - ${fechaFin}'); toggleModalTailwind('modalRangoFechaX')"` : '';
+
+                    const fAdjuntos = `onclick="obtenerAdjuntosEnergetico(${idEnergetico}); toggleModalTailwind('modalMedia')"`;
+
+                    const fComentarios = `onclick="obtenerComentariosEnergetico(${idEnergetico}); toggleModalTailwind('modalComentarios')"`;
+
+                    if (status == "PENDIENTE") {
+                        fStatus = `onclick="obtenerStatusEnergetico(${idEnergetico}); toggleModalTailwind('modalStatus')"`;
+                        iconoStatus = '<i class="fas fa-ellipsis-h  text-lg"></i>';
+                    } else {
+                        fStatus = `onclick="actualizarEnergetico(${idEnergetico}, 'restaurar', 'F')"`;
+                        iconoStatus = '<i class="fas fa-redo-alt fa-lg text-red-500"></i>';
+                    }
+
+                    const codigo = `
+                        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
+                
+                            <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;">
+                                <div class="font-semibold uppercase leading-4" data-title="${actividad}">
+                                <h1 class="truncate w-48">${actividad} </h1>
+                                </div>
+                                <div class="text-gray-500 leading-3 flex">
+                                <h1>Creado por: ${creadoPor}</h1>
+                                </div>
+                            </td>
+
+                            <td class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3">
+                                <h1>0</h1>
+                            </td>
+
+                            <td class="whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" data-title="${responsable}" ${fResponsable}>
+                                <h1 class="truncate">${responsable}</h1>
+                            </td>
+
+                            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fRangoFecha}>
+                                <div class="leading-4">${fechaInicio}</div>
+                                <div class="leading-3">${fechaFin}</div>
+                            </td>
+
+                            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
+                                <h1>${adjuntosX}</h1>
+                            </td>
+
+                            <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
+                                <h1>${comentariosX}</h1>
+                            </td>
+
+                            <td class="px-2 whitespace-no-wrap text-center py-3 flex flex-row justify-center" ${fStatus}>
+                                ${materialesx}
+                                ${departamentosx}
+                                ${energeticosx}
+                                ${trabajandox}
+                            </td>
+
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+                                <a href="OT_Fallas_Tareas/#E${idEnergetico}" target="_blank" class="text-gray-600 cursor-pointer hover:text-gray-900 font-semibold">E${idEnergetico}</a>
+                            </td>
+
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3" ${fStatus}>
+                                <div class="px-2">
+                                ${iconoStatus}
+                                </div>
+                            </td>
+
+                            <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center text-gray-400 hover:text-purple-500 py-3">
+                                ${estiloTipoIncidencia}
+                            </td>
+
+                        </tr>
+                    `;
+                    dataEnergeticos.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ``);
+            dataEnergeticos.innerHTML = '';
+        })
+}
+
+
+// ACTUALIZAR ENERGETICOS
+function actualizarEnergetico(idEnergetico, columna, valor) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let cod2bend = document.getElementById('inputCod2bend');
+
+    if (columna == "rangoFecha") {
+        valor = inputRangoFecha.value;
+    }
+
+    const action = 'actualizarEnergetico';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&columna=${columna}&valor=${valor}&titulo=${editarTitulo.value}&cod2bend=${cod2bend.value}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+
+            if (array == "responsable") {
+                alertaImg('Responsable Actualizado', '', 'success', 1400);
+                toggleModalTailwind('modalUsuarios');
+            } else if (array == "titulo") {
+                alertaImg('Título Actualizado', '', 'success', 1400);
+                toggleModalTailwind('modalStatus');
+            } else if (array == "trabajare") {
+                alertaImg('Status Trabajando, Actualizado', '', 'success', 1400);
+            } else if (array == "energetico") {
+                alertaImg('Status Energético, Actualizado', '', 'success', 1400);
+            } else if (array == "departamento") {
+                alertaImg('Status Departamento, Actualizado', '', 'success', 1400);
+            } else if (array == "bitacora") {
+                alertaImg('Bitácora Actualizada', '', 'success', 1400);
+            } else if (array == "solucionado") {
+                alertaImg('Energético Solucionado', '', 'success', 1400);
+                toggleModalTailwind('modalStatus');
+            } else if (array == "eliminado") {
+                alertaImg('Energético Eliminado', '', 'success', 1400);
+                toggleModalTailwind('modalStatus');
+            } else if (array == "restuarado") {
+                alertaImg('Energético Restaurado', '', 'success', 1400);
+                toggleModalTailwind('modalStatus');
+            } else if (array == "material") {
+                alertaImg('Status Material, Actualizado', '', 'success', 1400);
+            } else if (array == "rangoFecha") {
+                alertaImg('Rango Fecha, Actualizado', '', 'success', 1400);
+                toggleModalTailwind('modalRangoFechaX');
+            } else {
+                alertaImg('Intente de Nuevo', '', 'info', 1400);
+                toggleModalTailwind('modalStatus');
+            }
+
+            obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+            estiloModalStatus(idEnergetico, 'ENERGETICO');
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + `actualizarEnergetico(${idEnergetico}, ${columna}, ${valor})`);
+        })
+}
+
+
+// OBTENER STATUS ENERGETICOS
+function obtenerStatusEnergetico(idEnergetico) {
+
+    // FUNCIÓN PARA DARL ESTIOLO AL MODALSTATUS
+    estiloModalStatus(idEnergetico, 'ENERGETICO');
+
+    // La función actulizarTarea(?, ?, ?), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
+
+    // Status
+    btnStatusUrgente.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_urgente", 0)`);
+    btnStatusMaterial.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_material", 0)`);
+    btnStatusTrabajare.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_trabajare", 0)`);
+
+    // Status Departamento
+    btnStatusCalidad.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_calidad", 0)`);
+    btnStatusCompras.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_compras", 0)`);
+    btnStatusDireccion.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_direccion", 0)`);
+    btnStatusFinanzas.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_finanzas", 0)`);
+    btnStatusRRHH.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "departamento_rrhh", 0)`);
+
+    // Status Energéticos
+    btnStatusElectricidad.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_electricidad", 0)`);
+    btnStatusAgua.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_agua", 0)`);
+    btnStatusDiesel.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_diesel", 0)`);
+    btnStatusGas.
+        setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "energetico_gas", 0)`);
+
+    // Finalizar TAREA
+    btnStatusFinalizar.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status", "F")`);
+
+    // PROYECTO ENTREGADO
+    btnStatusEP.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "status_ep", "F")`);
+
+    // Activo TAREA
+    btnStatusActivo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "activo", 0)`);
+    // Titulo TAREA
+    btnEditarTitulo.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "titulo", 0)`);
+
+    // Bitacoras
+    btnStatusGP.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_gp", 0)`);
+    btnStatusTRS.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_trs", 0)`);
+    btnStatusZI.setAttribute("onclick", `actualizarEnergetico(${idEnergetico}, "bitacora_zi", 0)`);
+}
+
+
+// OBTIENE RESPONSABLES
+function obtenerResponsableEnergetico(idEnergetico) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    dataUsuarios.innerHTML = '';
+    const action = "obtenerUsuariosEnergeticos";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const puesto = array[x].puesto;
+
+                    const codigo = `
+                  <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarEnergetico(${idEnergetico}, 'responsable', ${idUsuarioX});">
+                     <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre + ' ' + apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${puesto}</h1>
+                  </div>
+               `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+}
+
+
+// OBTENER COMENTARIOS
+function obtenerComentariosEnergetico(idEnergetico) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const contendor = document.getElementById("dataComentarios");
+    contendor.innerHTML = '';
+    let btnComentario = document.getElementById("btnComentario");
+    btnComentario.setAttribute('onclick', `agregarComentariosEnergetico(${idEnergetico})`);
+
+    const action = 'obtenerComentariosEnergetico';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idComentario = array[x].idComentario;
+                    const comentario = array[x].comentario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const fecha = array[x].fecha;
+
+                    codigo = `
+            <div class="flex flex-row justify-center items-center mb-3 w-full bg-gray-100 p-2 rounded-md hover:shadow-md cursor-pointer">
+               <div class="flex items-center justify-center" style="width: 48px;">
+                     <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="48" height="48" alt="">
+               </div>
+               <div class="flex flex-col justify-start items-start p-2 w-full">
+                     <div class="text-xs font-bold flex flex-row justify-between w-full">
+                        <div>
+                           <h1>${nombre + ' ' + apellido}</h1>
+                        </div>
+                        <div>
+                           <p class="font-mono ml-2 text-gray-600">${fecha}</p>
+                        </div>
+                     </div>
+                     <div class="text-xs w-full">
+                        <p>${comentario}</p>
+                     </div>
+               </div>
+            </div>         
+            `;
+                    contendor.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ``);
+        })
+}
+
+
+// AGREGA COMENTARIOS EN ENERGETICOS
+function agregarComentariosEnergetico(idEnergetico) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let comentario = document.getElementById("inputComentario");
+
+    const action = "agregarComentariosEnergetico";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}&comentario=${comentario.value}`;
+
+    if (comentario.value.length > 0) {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Comentario Agregado', '', 'success', 1500);
+                    obtenerComentariosEnergetico(idEnergetico);
+                    obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                    comentario.value = '';
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1400);
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err);
+            })
+    } else {
+        alertaImg('Comentario Vacio', '', 'info', 1400);
+    }
+}
+
+
+// OBTENER ADJUNTOS ENERGETICOS
+function obtenerAdjuntosEnergetico(idEnergetico) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const contenedorImg = document.getElementById("dataImagenes");
+    const contenedorAdjuntos = document.getElementById("dataAdjuntos");
+    const contenedorImagenes = document.getElementById("contenedorImagenes");
+    const contenedorDocumentos = document.getElementById("contenedorDocumentos");
+
+    inputAdjuntos.setAttribute('onchange', `agregarAdjuntosEnergetico(${idEnergetico})`);
+
+    // VALORES Y DESEÑO INICIAL
+    contenedorImg.innerHTML = '';
+    contenedorAdjuntos.innerHTML = '';
+    contenedorImagenes.classList.add('hidden');
+    contenedorDocumentos.classList.add('hidden');
+
+    const action = 'obtenerAdjuntosEnergetico';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idAdjunto = array[x].idAdjunto;
+                    const url = array[x].url;
+                    const tipo = array[x].tipo;
+
+                    if (tipo == "jpg" || tipo == "png" || tipo == "jpeg") {
+                        codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+
+                        <a href="planner/energeticos/${url}" target="_blank" data-title="Clic para Abrir">
+                           <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(planner/energeticos/${url})">
+                           </div>
+                        </a>
+
+                        <div class="w-full absolute text-transparent hover:text-red-700" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ENERGETICO');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                        </div>
+
+                     </div>               
+                  `;
+                        contenedorImg.insertAdjacentHTML('beforeend', codigo);
+                        contenedorImagenes.classList.remove('hidden');
+                    } else {
+                        codigo = `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+                           
+                        <a href="planner/energeticos/${url}" target="_blank">
+                           <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                              <i class="fad fa-file-alt fa-3x"></i>
+                              <p class="text-sm font-normal ml-2">${url}
+                              </p>
+                           </div>
+                        </a>
+                        
+                        <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ENERGETICO');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
+                        </div>
+                     </div>                  
+                  `;
+                        contenedorAdjuntos.insertAdjacentHTML('beforeend', codigo);
+                        contenedorDocumentos.classList.remove('hidden');
+                    }
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ``);
+        })
+}
+
+
+// AGREGAR ADJUNTO A ENERGETICOS
+function agregarAdjuntosEnergetico(idEnergetico) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+    let cargandoAdjunto = document.getElementById("cargandoAdjunto");
+    cargandoAdjunto.innerHTML = iconoLoader;
+
+    const action = "agregarAdjuntosEnergetico";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEnergetico=${idEnergetico}`;
+
+    // VARIABLES DEL ADJUNTO
+    const files = inputAdjuntos;
+    const formData = new FormData()
+
+    if (files.files) {
+        for (let x = 0; x < files.files.length; x++) {
+            formData.append('file', files.files[x]);
+
+            fetch(URL, {
+                method: "POST",
+                body: formData
+            })
+                .then(array => array.json())
+                .then(array => {
+                    if (array == 1) {
+                        obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                        obtenerAdjuntosEnergetico(idEnergetico);
+                        alertaImg('Adjunto Agregado', '', 'success', 1500);
+                    } else {
+                        alertaImg('Intente de Nuevo', '', 'info', 1500);
+                    }
+                })
+                .then(() => {
+                    cargandoAdjunto.innerHTML = '';
+                    files.value = '';
+                })
+                .catch(function (err) {
+                    fetch(APIERROR + err + ` agregarAdjuntoTest(${idEnergetico})`)
+                    cargandoAdjunto.innerHTML = '';
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                    files.value = '';
+                })
+        }
+    }
+}
+
+
+// ELIMINAR ADJUNTOS (TIPO DE ADJUNTO + IDADJUNTO)
+function eliminarAdjunto(idAdjunto, tipoAdjunto) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idEquipo = localStorage.getItem('idEquipo');
+    let idProyecto = localStorage.getItem('idProyecto');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+
+    const action = 'eliminarAdjunto';
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idAdjunto=${idAdjunto}&tipoAdjunto=${tipoAdjunto}`;
+
+    alertify.confirm('MAPHG', '¿Eliminar Adjunto?', function () {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Adjunto Eliminado', '', 'success', 1500);
+
+                    // ELIMINA ADJUNTO DEL CONTENEDOR
+                    if (document.getElementById("modalMedia_adjunto_img_" + idAdjunto)) {
+                        document.getElementById("modalMedia_adjunto_img_" + idAdjunto).innerHTML = '';
+                    } else {
+                        alertaImg('Cierre la Ventana para Aplicar los Cambios', '', 'info', 1500);
+                    }
+
+                    // ACTUALIZA DATOS
+                    if (tipoAdjunto == "FALLA") {
+                        obtenerFallas(idEquipo);
+                    } else if (tipoAdjunto == "TAREA") {
+                        obtenerTareas(idEquipo);
+                    } else if (tipoAdjunto == "PLANACCION") {
+                        obtenerPlanaccion(idProyecto);
+                    } else if (tipoAdjunto == "COTIZACIONPROYECTO") {
+                        obtenerProyectos(idSeccion, 'PENDIENTE');
+                    } else if (tipoAdjunto == "TEST") {
+                        obtenerTestEquipo(idEquipo);
+                    } else if (tipoAdjunto == "ENERGETICO") {
+                        obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                    } else if (tipoAdjunto == "EQUIPO") {
+                        obtenerImagenesEquipo(idEquipo);
+                    }
+
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err + ` eliminarAdjunto(${idAdjunto}, ${tipoAdjunto})`);
+            })
+    }
+        , function () { alertify.error('Proceso Cancelado') });
+}
+
+
+// FUNCIÓN PARA RESALTAR STATUS APLICADOS (TAREAS, FALLAS, PREVENTIVOS, PROYECTOS)
+function estiloModalStatus(idRegistro, tipoRegistro) {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerStatus";
+    const URL = `php/select_REST_planner.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idRegistro=${idRegistro}&tipoRegistro=${tipoRegistro}`;
+    document.getElementById("statusenergeticostoggle").classList.add('hidden');
+    document.getElementById("statusdeptoggle").classList.add('hidden');
+    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
+    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
+    document.getElementById("statusbitacoratoggle").classList.add('hidden');
+    document.getElementById("btnEditarTituloXtoggle").classList.add('hidden');
+
+    let sMaterialX = document.getElementById("statusMaterial");
+    let sTrabajareX = document.getElementById("statusTrabajare");
+    let sCalidadX = document.getElementById("statusCalidad");
+    let sComprasX = document.getElementById("statusCompras");
+    let sDireccionX = document.getElementById("statusDireccion");
+    let sFinanzasX = document.getElementById("statusFinanzas");
+    let sRRHHX = document.getElementById("statusRRHH");
+    let sElectricidadX = document.getElementById("statusElectricidad");
+    let sAguaX = document.getElementById("statusAgua");
+    let sDieselX = document.getElementById("statusDiesel");
+    let sGasX = document.getElementById("statusGas");
+    let sEnergeticosX = document.getElementById("statusenergeticos");
+    let sDepartamentosX = document.getElementById("statusdep");
+    let sGPX = document.getElementById("statusGP");
+    let sTRSX = document.getElementById("statusTRS");
+    let sZIX = document.getElementById("statusZI");
+    let statusbitacoraX = document.getElementById("statusbitacora");
+
+    sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs";
+
+    sTrabajareX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs";
+
+    sCalidadX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sComprasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sDireccionX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sFinanzasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sRRHHX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sElectricidadX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+    sAguaX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+    sDieselX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+    sGasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+    sEnergeticosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-yellow-500 bg-gray-200 hover:bg-yellow-200 text-xs";
+
+    sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-teal-500 bg-gray-200 hover:bg-teal-200 text-xs";
+
+    sGPX.className = "w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+    sTRSX.className = "w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+    sZIX.className = "w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+    statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array[0]) {
+
+                if (array[0].sMaterial == 1) {
+                    sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-orange-500 bg-gray-200 bg-orange-200 text-xs";
+                }
+
+                if (array[0].sTrabajare == 1) {
+                    sTrabajareX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-blue-500 bg-gray-200 bg-blue-200 text-xs";
+                }
+
+                if (array[0].sCalidad == 1) {
+                    sCalidadX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].sCompras == 1) {
+                    sComprasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].sDireccion == 1) {
+                    sDireccionX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].sFinanzas == 1) {
+                    sFinanzasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].sRRHH == 1) {
+                    sRRHHX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].sElectricidad == 1) {
+                    sElectricidadX.className = "w-1/2 text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+                }
+
+                if (array[0].sAgua == 1) {
+                    sAguaX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+                }
+
+                if (array[0].sDiesel == 1) {
+                    sDieselX.className = "w-1/2 text-center h-8 rounded-l-md  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+                }
+
+                if (array[0].sGas == 1) {
+                    sGasX.className = "w-1/2 text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+                }
+
+                if (array[0].sEnergeticos > 0) {
+                    sEnergeticosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-yellow-500 bg-gray-200 bg-yellow-200 text-xs";
+                }
+
+                if (array[0].sDepartamentos > 0) {
+                    sDepartamentosX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-teal-500 bg-gray-200 bg-teal-200 text-xs";
+                }
+
+                if (array[0].bitacoraGP > 0) {
+                    sGPX.className = "w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+                }
+
+                if (array[0].bitacoraTRS > 0) {
+                    sTRSX.className = "w-full text-center h-8  cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+                }
+
+                if (array[0].bitacoraZI > 0) {
+                    sZIX.className = "w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+                }
+
+                if (array[0].bitacoraGP > 0 || array[0].bitacoraTRS > 0 || array[0].bitacoraZI > 0) {
+                    statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
+                }
+
+                if (array[0].titulo) {
+                    editarTitulo.value = array[0].titulo;
+                } else {
+                    editarTitulo.value = '';
+                }
+
+                if (array[0].cod2bend) {
+                    inputCod2bend.value = array[0].cod2bend;
+                } else {
+                    inputCod2bend.value = '';
+                }
+            }
+
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ': (estiloModalStatus)');
+        })
+}
+
+
+// MODAL PARA FORMULARIO DE ENERGETICOS
+btnModalAgregarEnergeticos.addEventListener('click', () => {
+    toggleModalTailwind('modalAgregarEnergeticos');
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+
+    //INICIALIZA VALORES 
+    responsableEnergeticos.innerHTML = '<option value="0">Seleccione Responsable</option>';
+    responsableEnergeticos.value = 0;
+    tituloPendienteEnergeticos.value = '';
+    rangoFechaEnergeticos.value = '';
+    comentarioEnergeticos.value = '';
+
+    fetch(`php/select_REST_planner.php?action=obtenerUsuarios&idDestino=${idDestino}&idUsuario=${idUsuario}`)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const id = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const codigo = `<option value="${id}">${nombre + apellido}</option>`;
+                    responsableEnergeticos.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+
+    fetch(`php/select_REST_planner.php?action=DestinoSeccionSubseccionEquipo&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=0&idEquipo=0&tipoPendiente=0&idSubseccion=${idSubseccion}`)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                nombreSubseccionEnergeticos.innerText = array.subseccion;
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err + ` btnModalAgregarEnergeticos`);
+        })
+})
+
+
+// ESTILO PARA TIPO DE INCIDENCIA
+function estiloDefaultBotonesIncidencias() {
+    btnEmergenciaEnergetico.removeAttribute('style');
+    btnUrgenciaEnergetico.removeAttribute('style');
+    btnAlarmaEnergetico.removeAttribute('style');
+    btnAlertaEnergetico.removeAttribute('style');
+    btnSeguimientoEnergetico.removeAttribute('style');
+}
+
+
+btnEmergenciaEnergetico.addEventListener('click', () => {
+    estiloDefaultBotonesIncidencias();
+    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+        if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+            btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'text-white', 'opcionIncidenciaEnergetico');
+        }
+    }
+    btnEmergenciaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-red-600');
+    btnEmergenciaEnergetico.setAttribute('style', 'color: white');
+})
+
+
+btnUrgenciaEnergetico.addEventListener('click', () => {
+    estiloDefaultBotonesIncidencias();
+    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+        if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+            btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+        }
+    }
+    btnUrgenciaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-orange-600');
+    btnUrgenciaEnergetico.setAttribute('style', 'color: white');
+})
+
+
+btnAlarmaEnergetico.addEventListener('click', () => {
+    estiloDefaultBotonesIncidencias();
+    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+        if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+            btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+        }
+    }
+    btnAlarmaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-yellow-600');
+    btnAlarmaEnergetico.setAttribute('style', 'color: white');
+})
+
+
+btnAlertaEnergetico.addEventListener('click', () => {
+    estiloDefaultBotonesIncidencias();
+    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+        if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+            btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+        }
+    }
+    btnAlertaEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-blue-600');
+    btnAlertaEnergetico.setAttribute('style', 'color: white');
+})
+
+
+btnSeguimientoEnergetico.addEventListener('click', () => {
+    estiloDefaultBotonesIncidencias();
+    for (let x = 0; x < btnOpcionIncidencia.length; x++) {
+        if (btnOpcionIncidencia[x].classList.contains('opcionIncidenciaEnergetico')) {
+            btnOpcionIncidencia[x].classList.remove('bg-red-600', 'bg-orange-600', 'bg-yellow-600', 'bg-blue-600', 'bg-teal-600', 'opcionIncidenciaEnergetico');
+        }
+    }
+    btnSeguimientoEnergetico.classList.add('opcionIncidenciaEnergetico', 'bg-teal-600');
+    btnSeguimientoEnergetico.setAttribute('style', 'color: white');
+})
+
+
+// BTN PARA AGREGAR INCIDENCIA DE ENERGETICO
+btnAgregarEnergeticos.addEventListener('click', () => {
+    let idUsuario = localStorage.getItem('usuario');
+    let idDestino = localStorage.getItem('idDestino');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem('idSubseccion');
+
+    if (document.getElementsByClassName("opcionIncidenciaEnergetico")[0]) {
+        let tipoX = document.getElementsByClassName("opcionIncidenciaEnergetico")[0].id;
+        tipo =
+            tipoX == "btnEmergenciaEnergetico" ? 'EMERGENCIA' :
+                tipoX == "btnUrgenciaEnergetico" ? 'URGENCIA' :
+                    tipoX == "btnAlarmaEnergetico" ? 'ALARMA' :
+                        tipoX == "btnAlertaEnergetico" ? 'ALERTA' :
+                            tipoX == "btnSeguimientoEnergetico" ? 'SEGUIMIENTO' :
+                                'SEGUIMIENTO';
+    } else {
+        alertaImg('Seleccion el tipo de Incidencia', '', 'info', 1600);
+        tipo = '';
+    }
+
+    const action = "agregarEnergetico";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&titulo=${tituloPendienteEnergeticos.value}&rangoFecha=${rangoFechaEnergeticos.value}&responsable=${responsableEnergeticos.value}&comentario=${comentarioEnergeticos.value}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=${tipo}`;
+
+    if (tituloPendienteEnergeticos.value != "" && rangoFechaEnergeticos.value != "" && responsableEnergeticos.value > 0 && tipo != "") {
+
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1 || array == 2) {
+                    alertaImg('Pendiente Agregado', '', 'success', 1500);
+                    toggleModalTailwind('modalAgregarEnergeticos');
+                    obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
+                    obtenerDatosUsuario(idDestino);
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                fetch(APIERROR + err);
+            })
+    } else {
+        alertaImg('Acomplete la Información Requerida', '', 'info', 1500);
+    }
+})
+
+
+// BUSCADOR PARA TABLA DE ENERGETICOS
+palabraEnergeticos.addEventListener('keyup', () => {
+    buscadorTabla('dataEnergeticos', 'palabraEnergeticos', 0);
+})
+
+
+// Sube imagenes con dos parametros, con el formulario #inputAdjuntos
+function subirImagenGeneral(idTabla, tabla) {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+    let img = inputAdjuntos.files;
+    let idProyecto = localStorage.getItem('idProyecto');
+    let idSeccion = localStorage.getItem('idSeccion');
+    let idSubseccion = localStorage.getItem("idSubseccion");
+    let idEquipo = localStorage.getItem('idEquipo');
+    for (let index = 0; index < img.length; index++) {
+        let imgData = new FormData();
+        const action = "subirImagenGeneral";
+        document.getElementById("cargandoAdjunto").innerHTML = iconoLoader;
+
+        imgData.append("adjuntoUrl", img[index]);
+        imgData.append("action", action);
+        imgData.append("idUsuario", idUsuario);
+        imgData.append("idDestino", idDestino);
+        imgData.append("tabla", tabla);
+        imgData.append("idTabla", idTabla);
+
+        $.ajax({
+            data: imgData,
+            type: "POST",
+            url: "php/plannerCrudPHP.php",
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                document.getElementById("cargandoAdjunto").innerHTML = "";
+                inputAdjuntos.value = "";
+                if (data == -1) {
+                    alertaImg("Archivo NO Permitido", "", "warning", 2500);
+                } else if (data == 1) {
+                    alertaImg("Proceso Cancelado", "", "info", 3000);
+                } else if (data == 2) {
+                    alertaImg("Archivo Pesado (MAX:99MB)", "", "info", 3000);
+                    // Sube y Actualiza la Vista para las Cotizaciones de Proyectos.
+                } else if (data == 3) {
+                    alertaImg("Cotización Agregada", "", "success", 2500);
+                    obtenerProyectos(idSeccion, 'PENDIENTE');
+                    cotizacionesProyectos(idTabla);
+                    // Sube y Actualiza la Vista para los Adjuntos de Planaccion.
+                } else if (data == 4) {
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                    obtenerPlanaccion(idProyecto);
+                    adjuntosPlanaccion(idTabla);
+                } else if (data == 5) {
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                    // obtenerMediaEquipo(idTabla);
+                    // obtenerEquiposAmerica(idSeccion, idSubseccion);
+                    obtenerImagenesEquipo(idTabla);
+                } else if (data == 7) {
+                    obtenerAdjuntosTareas(idTabla);
+                    obtenerTareas(idEquipo);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 8) {
+                    obtenerAdjuntosMC(idTabla);
+                    obtenerFallas(idEquipo);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 9) {
+                    obtenerImagenesEquipo(idTabla);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 10) {
+                    consultaAdjuntosOT(idTabla);
+                    alertaImg("Adjunto Agregado", "", "success", 2500);
+                } else if (data == 11) {
+                    alertaImg("Cotización Agregada", "", "success", 2500);
+                    obtenerCotizacionesEquipo(idTabla);
+                    obtenerEquiposAmerica(idSeccion, idSubseccion);
+                } else if (data == 12) {
+                    obtenerProyectosDEP(idSubseccion, 'PENDIENTE');
+                    cotizacionesProyectosDEP(idTabla);
+                } else if (data == 13) {
+                    obtenerPlanaccionDEP(idProyecto);
+                    adjuntosPlanaccionDEP(idTabla)
+                } else {
+                    alertaImg("Intente de Nuevo", "", "info", 3000);
+                }
+            },
+        });
+    }
+}
+
+
+// ********** PROYECTOS **********
 'use strict'
 // const $tablaProyectos = document.getElementById('contenedorDeProyectos');
 const datosProyectos = params => {
@@ -279,7 +1717,7 @@ const datosPlanes = params => {
     var ocultarActividades = `onclick="hiddenVista('tooltipEditarEliminarSolucionar');"`;
     if (params.status == "PENDIENTE") {
         statusPlanaccion = 'planaccion_PENDIENTE';
-        fResponsable = `onclick="hiddenVista('tooltipActividadesPlanaccion'); obtenerResponsablesPlanaccion(${idPlanaccion});"`;
+        fResponsable = `onclick="obtenerResponsablesPlanaccion(${idPlanaccion});"`;
         fComentarios = `onclick="hiddenVista('tooltipActividadesPlanaccion'); comentariosPlanaccion(${idPlanaccion}); nivelVista(1,'modalComentarios');"`;
         fAdjuntos = `onclick="hiddenVista('tooltipActividadesPlanaccion'); adjuntosPlanaccion(${idPlanaccion}); nivelVista(1,'modalMedia');"`;
         fStatus = `onclick="hiddenVista('tooltipActividadesPlanaccion'); statusPlanaccion(${idPlanaccion}); nivelVista(1,'modalStatus');"`;
@@ -302,25 +1740,30 @@ const datosPlanes = params => {
                     <h1>Creado por: ${params.creadoPor}</h1>
                 </div>
             </td>
-            <td id="${idPlanaccion}planaccionX" class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" 
-            ${fToolTip}>
+
+            <td id="${idPlanaccion}planaccionX" class=" whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fToolTip}>
                 <h1>${params.subTareas}</h1>
             </td>
+
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 uppercase text-center py-3" ${fResponsable}>
                 <h1>${params.responsable}</h1>
             </td>
+
             <td class="whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fRangoFecha}>
                 <div class="leading-4">${params.fechaInicio}</div>
                 <div class="leading-3">${params.fechaFin}</div>
             </td>
+
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fComentarios}>
                 <h1>${valorcomentarios}</h1>
             </td>
+
             <td class=" whitespace-no-wrap border-b border-gray-200 text-center py-3" ${fAdjuntos}>
-            <h1>${valoradjuntos}</h1>
+                <h1>${valoradjuntos}</h1>
             </td>
+
             <td class="px-2  whitespace-no-wrap border-b border-gray-200 text-center cursor-pointer py-3">
-                <div class="text-sm flex justify-center items-center font-bold">
+                <div class="text-sm flex justify-center items-center font-bold" ${fStatus}>
                     ${materialesx}
                     ${energeticosx}
                     ${departamentosx}
@@ -398,33 +1841,7 @@ function tooltipProyectos(idproyecto) {
     // Propiedades para el tooltip
     const button = document.getElementById(idproyecto + 'proyecto');
     const tooltip = document.getElementById('tooltipProyectos');
-    Popper.createPopper(button, tooltip, {
-        placement: 'bottom-start'
-    });
-}
-
-
-// TOOLTIP PARA MOSTRAR LOS PLANESACCIÓN DE LOS PROYECTOS
-function tooltipPlanaccion(idPlanaccion) {
-    // Ciclo para quitar bg-gray-200
-    let filas = document.getElementsByClassName("fila-planaccion-select");
-    for (let x = 0; x < filas.length; x++) {
-        filas[x].classList.remove('bg-gray-300');
-    }
-    document.getElementById("tooltipActividadesPlanaccion").classList.toggle('hidden');
-
-    if (document.getElementById("tooltipActividadesPlanaccion").classList.contains('hidden')) {
-        document.getElementById(idPlanaccion + 'planaccion').classList.remove('bg-gray-300');
-    } else {
-        document.getElementById(idPlanaccion + 'planaccion').classList.add('bg-gray-300');
-    }
-
-    // Propiedades para el tooltip
-    const button = document.getElementById(idPlanaccion + 'planaccionX');
-    const tooltip = document.getElementById('tooltipActividadesPlanaccion');
-    Popper.createPopper(button, tooltip, {
-        placement: 'bottom'
-    });
+    Popper.createPopper(button, tooltip);
 }
 
 
@@ -864,31 +2281,47 @@ function agregarProyecto() {
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
-    document.getElementById("palabraUsuario").setAttribute("onkeyup", "obtenerResponsablesProyectos(" + idProyecto + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesProyectos(${idProyecto})`);
+
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idProyecto;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarProyecto";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarProyectos(${idUsuarioX}, 'asignarProyecto', ${idProyecto});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
 }
 
 
@@ -981,7 +2414,7 @@ function statusProyecto(idProyecto) {
     let tituloActual = document.getElementById(idProyecto + 'tituloProyecto').innerHTML;
     document.getElementById("inputEditarTitulo").value = tituloActual;
 
-    document.getElementById("btnEditarTitulo")
+    document.getElementById("btnconfirmEditarTitulo")
         .setAttribute("onclick", 'actualizarProyectos(0, "titulo",' + idProyecto + ")");
 
     document.getElementById("eliminar").
@@ -1115,33 +2548,47 @@ function obtenerPlanaccion(idProyecto) {
 
 // OBTIENE RESPONSABLE PARA PLAN DE ACCIÓN
 function obtenerResponsablesPlanaccion(idPlanaccion) {
-    document.getElementById("palabraUsuario")
-        .setAttribute("onkeyup", "obtenerResponsablesPlanaccion(" + idPlanaccion + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesPlanaccion(${idPlanaccion})`);
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idPlanaccion;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarPlanaccion";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            nivelVista(1, 'modalUsuarios');
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarPlanaccion(${idUsuarioX}, 'asignarPlanaccion', ${idPlanaccion});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
+
 }
 
 
@@ -1173,11 +2620,9 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
         // dataType: "JSON",
         success: function (data) {
 
-            verEnPlanner('PLANACCION', idPlanaccion);
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
                 alertaImg("Responsable Actualizado", "", "success", 2500);
-                nivelVista(0, 'modalUsuarios')
             } else if (data == 2) {
                 document.getElementById("modalEditarTitulo").classList.remove("open");
                 document.getElementById("modalStatus").classList.remove("open");
@@ -1212,10 +2657,8 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             } else {
                 alertaImg("Intente de Nuevo", "", "info", 1200);
             }
-            
-            obtenerPlanaccion(idProyecto);
-            obtenerPlanaccionDEP(idProyecto);
 
+            obtenerPlanaccion(idProyecto);
         },
     });
 }
@@ -1864,3 +3307,4 @@ document.getElementById("opcionProyectos").addEventListener('click', () => {
 });
 
 // ********** FRAGMENTO PARA LOS EVENTOS **********
+// ********** PROYECTOS **********
