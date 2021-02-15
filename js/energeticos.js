@@ -241,7 +241,6 @@ const obtenerEnlaces = () => {
         .catch(function (err) {
             dataPowerbin.innerHTML = '';
             // fetch(APIERROR + err);
-            console.log(err);
         })
 }
 
@@ -452,7 +451,6 @@ function obtenerEnergeticos(idSeccion, idSubseccion, status) {
         .then(array => array.json())
         .then(array => {
             dataEnergeticos.innerHTML = '';
-            console.log(array);
             return array;
         })
         .then(array => {
@@ -643,12 +641,15 @@ function actualizarEnergetico(idEnergetico, columna, valor) {
             } else if (array == "solucionado") {
                 alertaImg('Energético Solucionado', '', 'success', 1400);
                 toggleModalTailwind('modalStatus');
+                obtenerSecciones(1001, idDestino);
             } else if (array == "eliminado") {
                 alertaImg('Energético Eliminado', '', 'success', 1400);
                 toggleModalTailwind('modalStatus');
+                obtenerSecciones(1001, idDestino);
             } else if (array == "restuarado") {
                 alertaImg('Energético Restaurado', '', 'success', 1400);
                 toggleModalTailwind('modalStatus');
+                obtenerSecciones(1001, idDestino);
             } else if (array == "material") {
                 alertaImg('Status Material, Actualizado', '', 'success', 1400);
             } else if (array == "rangoFecha") {
@@ -1331,7 +1332,7 @@ btnAgregarEnergeticos.addEventListener('click', () => {
                     alertaImg('Pendiente Agregado', '', 'success', 1500);
                     toggleModalTailwind('modalAgregarEnergeticos');
                     obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
-                    obtenerDatosUsuario(idDestino);
+                    obtenerSecciones(1001, idDestino);
                 } else {
                     alertaImg('Intente de Nuevo', '', 'info', 1500);
                 }
