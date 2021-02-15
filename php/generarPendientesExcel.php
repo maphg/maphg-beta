@@ -74,7 +74,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $cod2bendF = $row['cod2bend'];
             $tipoIncidencia = $row['tipo_incidencia'];
 
-            if ($materialF != "") {
+            if ($materialF == 1) {
                 $materialF = "SI";
             } else {
                 $materialF = "";
@@ -162,14 +162,10 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             $cod2bendT = $row['cod2bend'];
             $tipoIncidenciaT = $row['tipo_incidencia'];
 
-            if ($materialT != "") {
+            if ($materialT == 1) {
                 $materialT = "SI";
-                $codsapT = "$codsapT";
-                $cod2bendT = "$cod2bendT";
             } else {
                 $materialT = "";
-                $codsapT = "";
-                $cod2bendT = "";
             }
 
             $queryComentarioT = "SELECT comentario.comentarios_mp_np, 
