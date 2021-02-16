@@ -199,13 +199,13 @@ const btnStatusAgua = document.getElementById("statusAgua");
 const btnStatusDiesel = document.getElementById("statusDiesel");
 const btnStatusGas = document.getElementById("statusGas");
 const btnStatusFinalizar = document.getElementById("statusFinalizar");
-const btnStatusEP = document.getElementById("statusEP");
 const btnStatusActivo = document.getElementById("statusActivo");
 const btnEditarTitulo = document.getElementById("btnEditarTitulo");
 const btnStatusGP = document.getElementById("statusGP");
 const btnStatusTRS = document.getElementById("statusTRS");
 const btnStatusZI = document.getElementById("statusZI");
 const editarTitulo = document.getElementById("editarTitulo");
+const btnStatusEP = document.getElementById("statusEP");
 // BOTONES PARA EL MODAL STATUS
 
 
@@ -348,24 +348,25 @@ const obtenerSecciones = (idSeccion, status) => {
                   const seccion = array.secciones[x].seccion;
                   const estiloLogo = seccion ? seccion.toLowerCase() + '-logo' : '';
                   const logoSeccion = idSeccion == 1001 ? `<i class="fas fa-plug fa-lg"></i>` : `${seccion}`;
+
                   const codigo = `
-                  <div id="contenedor_seccion_${idSeccion}" class="flex items-center py-3"> 
-                     <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
-                        <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
-                           <div class="absolute flex justify-center items-center top-20 rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
-                              <h1 class="font-medium text-md">${logoSeccion}</h1>
-                           </div>
-                           <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
-                              <i class="fad fa-expand-arrows" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});"></i>
-                           </div>
-                           <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
-                              <div id="elementos_seccion_${idSeccion}" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                     <div id="contenedor_seccion_${idSeccion}" class="flex items-center py-3"> 
+                        <div id="col${seccion.toLowerCase()}" class="scrollbar flex flex-col justify-center items-center w-22rem mr-4">
+                           <div class="bg-white rounded-lg px-3 py-1 flex flex-col items-center justify-center w-full relative">
+                              <div class="absolute flex justify-center items-center top-20 rounded-lg w-12 h-12 cursor-pointer ${estiloLogo}" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});">
+                                 <h1 class="font-medium text-md">${logoSeccion}</h1>
+                              </div>
+                              <div class="flex justify-center items-center absolute text-gray-500 top-0 right-0 m-1 text-md cursor-pointer hover:text-gray-900">
+                                 <i class="fad fa-expand-arrows" onclick="pendientesSubsecciones(${idSeccion}, 'MCS', '${seccion}', ${idUsuario}, ${idDestino});"></i>
+                              </div>
+                              <div class="w-full flex flex-col justify-between overflow-y-auto mt-3 scrollbar">
+                                 <div id="elementos_seccion_${idSeccion}" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800">
+                                 </div>
                               </div>
                            </div>
                         </div>
-                     </div>
-                  </div>            
-               `;
+                     </div>            
+                  `;
                   columnas_x.insertAdjacentHTML('beforeend', codigo);
                }
 
@@ -395,6 +396,8 @@ const obtenerSecciones = (idSeccion, status) => {
                      fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectos(${idSeccion}, 'PENDIENTE'); toggleModalTailwind('modalProyectos');"`;
                   } else if (idSubseccion == 1006 || idSubseccion == 1007 || idSubseccion == 1008 || idSubseccion == 1009 || idSubseccion == 1010 || idSubseccion == 1011 || idSubseccion == 1012 || idSubseccion == 1013) {
                      fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos')"`;
+                  } else if (idSubseccion == 62 || idSubseccion == 211 || idSubseccion == 212 || idSubseccion == 213 || idSubseccion == 214) {
+                     fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectosDEP(${idSubseccion});"`;
                   } else {
                      fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
                   }
@@ -418,18 +421,18 @@ const obtenerSecciones = (idSeccion, status) => {
                      `<h1 class="text-xxs h-5 w-5 text-red-700 bg-red-400  rounded-md font-bold flex justify-center items-center ml-1">${proyectos}</h1>` : '';
 
                   const codigo = `
-                  <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
-                     <h1 class="truncate mr-2">${subseccion}</h1>
-                     <div class="flex flex-row justify-center">
-                        ${emergenciaX}
-                        ${urgenciaX}
-                        ${alarmaX}
-                        ${alertaX}
-                        ${seguimientoX}
-                        ${proyectosX}
-                     </div>
-                  </div >
-               `;
+                     <div class="ordenarHijosEnergéticos p-2 w-full rounded-sm cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center" data-title-subseccion="${subseccion}" ${fSubseccion}>
+                        <h1 class="truncate mr-2"> ${subseccion}</h1>
+                        <div class="flex flex-row justify-center">
+                           ${emergenciaX}
+                           ${urgenciaX}
+                           ${alarmaX}
+                           ${alertaX}
+                           ${seguimientoX}
+                           ${proyectosX}
+                        </div>
+                     </div >
+                  `;
                   if (document.getElementById("elementos_seccion_" + idSeccion)) {
                      document.getElementById("elementos_seccion_" + idSeccion).insertAdjacentHTML('beforeend', codigo);
                   }
@@ -1006,7 +1009,7 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
       })
       .then(array => {
 
-         if (array) {
+         if (array.subsecciones) {
             for (let x = 0; x < array.subsecciones.length; x++) {
                const idSubseccion = array.subsecciones[x].idSubseccion;
                const subseccion = array.subsecciones[x].subseccion;
@@ -1062,7 +1065,7 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
             }
          }
 
-         if (array) {
+         if (array.incidencias) {
             for (let x = 0; x < array.incidencias.length; x++) {
                const idIncidencia = array.incidencias[x].idIncidencia;
                const actividad = array.incidencias[x].actividad;
@@ -1406,11 +1409,13 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
          return array.secciones;
       })
       .then(array => {
-         for (let x = 0; x < array.length; x++) {
-            const idSeccion = array[x].idSeccion;
-            const seccion = array[x].seccion;
-            estiloSeccionPendientes("estiloSeccion", seccion);
-            estiloSeccion.innerText = seccion;
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const seccion = array[x].seccion;
+               estiloSeccionPendientes("estiloSeccion", seccion);
+               estiloSeccion.innerText = seccion;
+            }
          }
       })
       .catch(function (err) {
@@ -2273,6 +2278,8 @@ function obtenerstatusMC(idMC) {
          document.getElementById("statusZI")
             .setAttribute("onclick", data.dataBitacoraZI);
 
+         document.getElementById("statusEP")
+            .setAttribute("onclick", data.datasEP);
       },
    });
 }
@@ -2860,72 +2867,48 @@ function agregarComentarioTarea(idTarea) {
 function obtenerInformacionTareas(idTarea, tituloTarea) {
 
    estiloModalStatus(idTarea, 'TAREA');
-   document.getElementById("modalStatus").classList.add("open");
+
+   abrirmodal('modalStatus');
+
    localStorage.setItem("idTarea", idTarea);
 
    // La función actulizarTarea(?, ?, ?), recibe 3 parametros idTarea, columna a modificar y el tercer parametro solo funciona para el titulo por ahora
 
    // Status
-   document.getElementById("statusUrgente")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_urgente", 0)'
-      );
-   document.getElementById("btnStatusMaterial")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_material", 0)'
-      );
-   document.getElementById("statusTrabajare")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status_trabajando", 0)'
-      );
+   btnStatusUrgente.setAttribute("onclick", `actualizarTareas(${idTarea} , 'status_urgente', 0)`);
+   btnStatusMaterial.setAttribute("onclick", `actualizarTareas(${idTarea}, 'status_material', 0)`);
+   btnStatusTrabajare.setAttribute("onclick", `actualizarTareas(${idTarea}, 'status_trabajando', 0)`);
 
    // Status Departamento.
-   document.getElementById("statusCalidad")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_calidad", 0)'
-      );
-   document.getElementById("statusCompras")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_compras", 0)'
-      );
-   document.getElementById("statusDireccion")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_direccion", 0)'
-      );
-   document.getElementById("statusFinanzas")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_finanzas", 0)'
-      );
-   document.getElementById("statusRRHH")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "departamento_rrhh", 0)'
-      );
+   btnStatusCalidad.setAttribute("onclick", `actualizarTareas(${idTarea}, 'departamento_calidad', 0)`);
+   btnStatusCompras.setAttribute("onclick", `actualizarTareas(${idTarea}, "'epartamento_compras', 0)`);
+   btnStatusDireccion.setAttribute("onclick", `actualizarTareas(${idTarea}, 'departamento_direccion', 0)`);
+   btnStatusFinanzas.setAttribute("onclick", `actualizarTareas(${idTarea}, 'departamento_finanzas', 0)`);
+   btnStatusRRHH.setAttribute("onclick", `actualizarTareas(${idTarea}, 'departamento_rrhh', 0)`);
 
    // Status Energéticos.
-   document.getElementById("statusElectricidad")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_electricidad", 0)'
-      );
-   document.getElementById("statusAgua")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_agua", 0)'
-      );
-   document.getElementById("statusDiesel")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_diesel", 0)'
-      );
-   document.getElementById("statusGas")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "energetico_gas", 0)'
-      );
+   btnStatusElectricidad.setAttribute("onclick", `actualizarTareas(${idTarea}, 'energetico_electricidad', 0)`);
+   btnStatusAgua.setAttribute("onclick", `actualizarTareas(${idTarea}, 'energetico_agua', 0)`);
+   btnStatusDiesel.setAttribute("onclick", `actualizarTareas(${idTarea}, 'energetico_diesel', 0)`);
+   btnStatusGas.setAttribute("onclick", `actualizarTareas(${idTarea}, 'energetico_gas', 0)`);
 
    // Finalizar TAREA
-   document.getElementById("statusFinalizar")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "status", "F")');
+   btnStatusFinalizar.setAttribute("onclick", `actualizarTareas(${idTarea}, 'status', 'F')`);
+
    // Activo TAREA
-   document.getElementById("statusActivo")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "activo", 0)');
+   btnStatusActivo.setAttribute("onclick", `actualizarTareas(${idTarea}, 'activo', 0)`);
    // Titulo TAREA
-   document.getElementById("btnEditarTitulo")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "titulo", 0)');
+   btnEditarTitulo.setAttribute("onclick", `actualizarTareas(${idTarea}, 'titulo', 0)`);
 
    // Bitacora GP
-   document.getElementById("statusGP")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_gp", 0)');
+   btnStatusGP.setAttribute("onclick", `actualizarTareas(${idTarea}, 'bitacora_gp', 0)`);
    // Bitacora TRS
-   document.getElementById("statusTRS")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_trs", 0)');
+   btnStatusTRS.setAttribute("onclick", `actualizarTareas(${idTarea}, 'bitacora_trs', 0)`);
    // Bitacora ZI
-   document.getElementById("statusZI")
-      .setAttribute("onclick", "actualizarTareas(" + idTarea + ', "bitacora_zi", 0)');
+   btnStatusZI.setAttribute("onclick", `actualizarTareas(${idTarea}, 'bitacora_zi', 0)`);
+
+   // ENTREGA PROYECTO
+   btnStatusEP.setAttribute("onclick", `actualizarTareas(${idTarea}, 'status_ep', 0)`);
 }
 
 
@@ -2956,41 +2939,45 @@ function actualizarTareas(idTarea, columna, valor) {
          if (data == 1) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 2) {
             obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquiposAmerica");
             obtenerTareas(idEquipo);
             alertaImg("Tarea SOLUCIONADA", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 3) {
             obtenerDatosUsuario(idDestino);
             obtenerTareas(idEquipo);
             llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Recuperada como PENDIENTE", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 4) {
             obtenerTareas(idEquipo);
             obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Eliminada", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 5) {
             obtenerTareas(idEquipo);
             alertaImg("Título Actualizado", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 6) {
             obtenerTareas(idEquipo);
             alertaImg("Rango de Fecha, Actualizada", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 7) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
          } else if (data == 8) {
             obtenerTareas(idEquipo);
             alertaImg("Status Actualizado", "", "success", 2000);
-            document.getElementById("modalStatus").classList.remove("open");
+            cerrarmodal("modalStatus");
+         } else if (data == 9) {
+            obtenerTareas(idEquipo);
+            alertaImg("Status EP Actualizado", "", "success", 2000);
+            cerrarmodal("modalStatus");
          } else {
             alertaImg("Intente de Nuevo", "", "question", 2000);
          }
@@ -8091,6 +8078,10 @@ const datosFallasTareas = params => {
       trabajandox = '';
    }
 
+   const sEP = params.sEP >= 1 ?
+      '<div class="bg-yellow-300 w-6 h-6 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>EP</h1></div>'
+      : '';
+
    var fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
@@ -8199,6 +8190,7 @@ const datosFallasTareas = params => {
                ${energeticosx}
                ${departamentosx}
                ${trabajandox}
+               ${sEP}
             </div>
          </td>
          
@@ -8483,6 +8475,7 @@ function obtenerFallas(idEquipo = 0) {
                   const trabajando = array[x].trabajando;
                   const tipo = array[x].tipo;
                   const tipoIncidencia = array[x].tipoIncidencia;
+                  const sEP = array[x].sEP;
 
                   const data = datosFallasTareas({
                      id: id,
@@ -8501,7 +8494,8 @@ function obtenerFallas(idEquipo = 0) {
                      energeticos: energeticos,
                      departamentos: departamentos,
                      tipo: tipo,
-                     tipoIncidencia: tipoIncidencia
+                     tipoIncidencia: tipoIncidencia,
+                     sEP: sEP
                   });
                   document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
                }
@@ -8641,7 +8635,6 @@ function obtenerTareas(idEquipo = 0) {
    document.getElementById("exportarFallaTarea").
       setAttribute('onclick', 'reporteTareas(' + idEquipo + ')');
 
-
    // APLICA ESTILO A LAS OPCIONES
    let activos = ["pendienteFallaTarea", "opcionFallaPendiente"];
    let inactivos = ["ganttFallaTarea", "solucionadosFallaTarea", "agregarFallaTarea", "exportarFallaTarea"];
@@ -8671,6 +8664,7 @@ function obtenerTareas(idEquipo = 0) {
                const trabajando = array[x].trabajando;
                const tipo = array[x].tipo;
                const tipoIncidencia = array[x].tipoIncidencia;
+               const sEP = array[x].sEP;
 
                const data = datosFallasTareas({
                   id: id,
@@ -8689,7 +8683,8 @@ function obtenerTareas(idEquipo = 0) {
                   energeticos: energeticos,
                   departamentos: departamentos,
                   tipo: tipo,
-                  tipoIncidencia: tipoIncidencia
+                  tipoIncidencia: tipoIncidencia,
+                  sEP: sEP
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
@@ -9815,8 +9810,11 @@ document.getElementById("statusMaterial").addEventListener('click', function () 
 function estiloModalStatus(idRegistro, tipoRegistro) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+
    const action = "obtenerStatus";
    const URL = `php/select_REST_planner.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idRegistro=${idRegistro}&tipoRegistro=${tipoRegistro}`;
+
+   // INCIALIZA ESTILO DE MODALSTATUS
    document.getElementById("statusenergeticostoggle").classList.add('hidden');
    document.getElementById("statusdeptoggle").classList.add('hidden');
    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
@@ -9875,6 +9873,8 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    sZIX.className = "w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
 
    statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-lightblue-500 bg-gray-200 hover:bg-lightblue-50 text-xs";
+
+   btnStatusEP.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs";
 
    fetch(URL)
       .then(array => array.json())
@@ -9949,6 +9949,10 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
                statusbitacoraX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center shadow-md shadow-md text-gray-500 text-lightblue-500 bg-gray-200 bg-lightblue-50 text-xs";
             }
 
+            if (array[0].sEP > 0) {
+               btnStatusEP.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-green-500 bg-green-200 text-xs";
+            }
+
             if (array[0].titulo) {
                editarTitulo.value = array[0].titulo;
             } else {
@@ -9961,7 +9965,6 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
                inputCod2bend.value = '';
             }
          }
-
       })
       .catch(function (err) {
          fetch(APIERROR + err + ': (estiloModalStatus)');

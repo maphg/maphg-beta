@@ -148,12 +148,15 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto";
+                $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, status_ep
+                FROM t_proyectos_planaccion 
+                WHERE id_proyecto = $idProyecto";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $sMaterialx = 0;
                     $sEnergeticox = 0;
                     $sDepartamentox = 0;
                     $sTrabajandox = 0;
+                    $sEPx = 0;
 
                     foreach ($result as $x) {
                         $sUrgente = $x['status_urgente'];
@@ -161,6 +164,7 @@ if (isset($_GET['action'])) {
                         $sTrabajando = $x['status_trabajando'];
                         $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                         $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                        $sEP = $x['status_ep'];
 
                         if ($sUrgente > 0) {
                             $sUrgentex = 1;
@@ -177,10 +181,13 @@ if (isset($_GET['action'])) {
                         if ($sDepartamento >= 1) {
                             $sDepartamentox = 1;
                         }
+                        if ($sEP >= 1) {
+                            $sEPx = 1;
+                        }
                     }
                 }
 
-                $arrayTemp = array(
+                $array[] = array(
                     "id" => $idProyecto,
                     "destino" => $destino,
                     "proyecto" => $titulo,
@@ -198,9 +205,9 @@ if (isset($_GET['action'])) {
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),
                     "departamento" => intval($sDepartamentox),
-                    "trabajando" => intval($sTrabajandox)
+                    "trabajando" => intval($sTrabajandox),
+                    "sEP" => intval($sEPx),
                 );
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);
@@ -228,7 +235,8 @@ if (isset($_GET['action'])) {
         t_proyectos_planaccion.departamento_compras,
         t_proyectos_planaccion.departamento_direccion,
         t_proyectos_planaccion.departamento_finanzas,
-        t_proyectos_planaccion.departamento_rrhh
+        t_proyectos_planaccion.departamento_rrhh,
+        t_proyectos_planaccion.status_ep
         FROM t_proyectos_planaccion 
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id 
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id 
@@ -260,6 +268,7 @@ if (isset($_GET['action'])) {
                 $sTrabajando = $x['status_trabajando'];
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -374,7 +383,8 @@ if (isset($_GET['action'])) {
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),
                     "departamentos" => intval($sDepartamentox),
-                    "trabajando" => intval($sTrabajandox)
+                    "trabajando" => intval($sTrabajandox),
+                    "sEP" => intval($sEP)
                 );
                 $array[] = $arrayTemp;
             }

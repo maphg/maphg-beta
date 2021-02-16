@@ -89,6 +89,10 @@ const datosProyectos = params => {
             trabajandox = '';
     }
 
+    const sEP = params.sEP >= 1 ?
+        '<div class="bg-yellow-300 w-6 h-6 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>EP</h1></div>'
+        : '';
+
     // Valor Inicial
     var fResponsable = '';
     var fJustificacionAdjunto = '';
@@ -181,6 +185,7 @@ const datosProyectos = params => {
                     ${energeticosx}
                     ${departamentox}
                     ${trabajandox}                                                
+                    ${sEP}                                                
                 </div>
             </td>
 
@@ -196,7 +201,7 @@ const datosProyectos = params => {
 
 
 // const $tablaPlanes = document.getElementById('contenedorDePlanesdeaccion');
-const datosPlanes = params => {
+const datosPlanaccion = params => {
     var idPlanaccion = params.id;
 
     var comentarios = params.comentarios;
@@ -265,6 +270,10 @@ const datosPlanes = params => {
             trabajandox = '';
     }
 
+    const sEP = params.sEP >= 1 ?
+        '<div class="bg-yellow-300 w-6 h-6 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>EP</h1></div>'
+        : '';
+
     var fResponsable = '';
     var fComentarios = '';
     var fAdjuntos = '';
@@ -325,6 +334,7 @@ const datosPlanes = params => {
                     ${energeticosx}
                     ${departamentosx}
                     ${trabajandox}
+                    ${sEP}
                 </div>
             </td>
             
@@ -521,6 +531,9 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                     const energeticos = array[x].energeticos;
                     const departamento = array[x].departamento;
                     const trabajando = array[x].trabajando;
+                    const sEP = array[x].sEP;
+
+
                     const dataProyectos = datosProyectos({
                         id: id,
                         destino: destino,
@@ -539,7 +552,8 @@ function obtenerProyectos(idSeccion, status = 'PENDIENTE') {
                         materiales: materiales,
                         energeticos: energeticos,
                         departamento: departamento,
-                        trabajando: trabajando
+                        trabajando: trabajando,
+                        sEP: sEP,
                     });
 
                     document.getElementById("contenedorDeProyectos").insertAdjacentHTML('beforeend', dataProyectos);
@@ -864,31 +878,47 @@ function agregarProyecto() {
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
-    document.getElementById("palabraUsuario").setAttribute("onkeyup", "obtenerResponsablesProyectos(" + idProyecto + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesProyectos(${idProyecto})`);
+
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idProyecto;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarProyecto";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarProyectos(${idUsuarioX}, 'asignarProyecto', ${idProyecto});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
 }
 
 
@@ -981,7 +1011,7 @@ function statusProyecto(idProyecto) {
     let tituloActual = document.getElementById(idProyecto + 'tituloProyecto').innerHTML;
     document.getElementById("inputEditarTitulo").value = tituloActual;
 
-    document.getElementById("btnEditarTitulo")
+    document.getElementById("btnconfirmEditarTituloX")
         .setAttribute("onclick", 'actualizarProyectos(0, "titulo",' + idProyecto + ")");
 
     document.getElementById("eliminar").
@@ -1072,8 +1102,9 @@ function obtenerPlanaccion(idProyecto) {
                         const energeticos = array[x].energeticos;
                         const departamentos = array[x].departamentos;
                         const trabajando = array[x].trabajando;
+                        const sEP = array[x].sEP;
 
-                        const dataPlanaccion = datosPlanes({
+                        const dataPlanaccion = datosPlanaccion({
                             id: id,
                             destino: destino,
                             actividad: actividad,
@@ -1090,7 +1121,8 @@ function obtenerPlanaccion(idProyecto) {
                             materiales: materiales,
                             energeticos: energeticos,
                             departamentos: departamentos,
-                            trabajando: trabajando
+                            trabajando: trabajando,
+                            sEP: sEP
                         });
 
                         document.getElementById("contenedorDePlanesdeaccion")
@@ -1115,33 +1147,47 @@ function obtenerPlanaccion(idProyecto) {
 
 // OBTIENE RESPONSABLE PARA PLAN DE ACCIÓN
 function obtenerResponsablesPlanaccion(idPlanaccion) {
-    document.getElementById("palabraUsuario")
-        .setAttribute("onkeyup", "obtenerResponsablesPlanaccion(" + idPlanaccion + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesPlanaccion(${idPlanaccion})`);
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idPlanaccion;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarPlanaccion";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            nivelVista(1, 'modalUsuarios');
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarPlanaccion(${idUsuarioX}, 'asignarPlanaccion', ${idPlanaccion});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
+
 }
 
 
@@ -1177,7 +1223,6 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
             if (data == 1) {
                 document.getElementById("modalUsuarios").classList.remove("open");
                 alertaImg("Responsable Actualizado", "", "success", 2500);
-                nivelVista(0, 'modalUsuarios')
             } else if (data == 2) {
                 document.getElementById("modalEditarTitulo").classList.remove("open");
                 document.getElementById("modalStatus").classList.remove("open");
@@ -1209,13 +1254,16 @@ function actualizarPlanaccion(valor, columna, idPlanaccion) {
                 document.getElementById("modalStatus").classList.remove("open");
                 alertaImg("Bitácora Actualizada", "", "success", 2500);
                 obtenerProyectos(idSeccion, 'PENDIENTE');
+            } else if (data == 10) {
+                document.getElementById("modalStatus").classList.remove("open");
+                alertaImg("Status EP Actualizado", "", "success", 2500);
+                obtenerProyectos(idSeccion, 'PENDIENTE');
             } else {
                 alertaImg("Intente de Nuevo", "", "info", 1200);
             }
-            
+
             obtenerPlanaccion(idProyecto);
             obtenerPlanaccionDEP(idProyecto);
-
         },
     });
 }
@@ -1260,6 +1308,8 @@ function statusPlanaccion(idPlanaccion) {
     document.getElementById("statusTRS").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_trs",' + idPlanaccion + ")");
 
     document.getElementById("statusZI").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_zi",' + idPlanaccion + ")");
+
+    document.getElementById("statusEP").setAttribute("onclick", 'actualizarPlanaccion(1, "status_ep",' + idPlanaccion + ")");
 
     nivelVista(2, 'modalEditarTitulo');
     estiloModalStatus(idPlanaccion, 'PLANACCION');

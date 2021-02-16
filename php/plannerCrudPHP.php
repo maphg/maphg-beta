@@ -4974,7 +4974,7 @@ if (isset($_POST['action'])) {
         status, activo, actividad,
         status_material, status_trabajare, status_urgente,
         energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas,
-        departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, bitacora_gp, bitacora_trs, bitacora_zi
+        departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, bitacora_gp, bitacora_trs, bitacora_zi, status_ep
         FROM t_mc 
         WHERE id = $idMC";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -5000,6 +5000,7 @@ if (isset($_POST['action'])) {
                 $bitacoraGP = $value['bitacora_gp'];
                 $bitacoraTRS = $value['bitacora_trs'];
                 $bitacoraZI = $value['bitacora_zi'];
+                $sEP = $value['status_ep'];
 
                 // Status.
                 if ($statusMaterial == "" or $statusMaterial == "0") {
@@ -5106,6 +5107,13 @@ if (isset($_POST['action'])) {
                 } else {
                     $dataBitacoraZI = "actualizarStatusMC($idMC, 'bitacora_zi', '1');";
                 }
+
+                // STATUS EP
+                if ($sEP == 0) {
+                    $datasEP = "actualizarStatusMC($idMC, 'status_ep', '0');";
+                } else {
+                    $datasEP = "actualizarStatusMC($idMC, 'status_ep', '1');";
+                }
             }
             $data['dataStatusMaterial'] = $dataStatusMaterial;
             $data['dataStatusUrgente'] = $dataStatusUrgente;
@@ -5126,6 +5134,7 @@ if (isset($_POST['action'])) {
             $data['dataBitacoraGP'] = $dataBitacoraGP;
             $data['dataBitacoraTRS'] = $dataBitacoraTRS;
             $data['dataBitacoraZI'] = $dataBitacoraZI;
+            $data['datasEP'] = $datasEP;
         }
         echo json_encode($data);
     }
@@ -5141,7 +5150,7 @@ if (isset($_POST['action'])) {
         $resp = 0;
 
         // BUSCA VALORES EN LOS STATUS PARA CREA EL TOGGLE
-        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
+        if ($columna == "status_material" || $columna == "status_trabajare" || $columna == "status_urgente" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas" || $columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi" || $columna == "status_ep") {
             $query = "SELECT $columna FROM t_mc WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
@@ -5209,6 +5218,11 @@ if (isset($_POST['action'])) {
             }
         } elseif ($columna == "rango_fecha" && $valor != "") {
             $query = "UPDATE t_mc SET rango_fecha = '$valor' WHERE id = $idIncidencia";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($columna == "status_ep") {
+            $query = "UPDATE t_mc SET status_ep = '$valor' WHERE id = $idIncidencia";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
@@ -5877,6 +5891,7 @@ if (isset($_POST['action'])) {
         $idTarea = $_POST['idTarea'];
         $valor = $_POST['valor'];
         $tituloNuevo = $_POST['tituloNuevo'];
+        $resp = 0;
 
         if ($columna == "status_urgente" || $columna == "status_trabajando" || $columna == "departamento_calidad" || $columna == "departamento_compras" || $columna == "departamento_direccion" || $columna == "departamento_finanzas" || $columna == "departamento_rrhh" || $columna == "energetico_electricidad" || $columna == "energetico_agua" || $columna == "energetico_diesel" || $columna == "energetico_gas") {
             $query = "SELECT $columna FROM t_mp_np WHERE id =  $idTarea";
@@ -5887,17 +5902,13 @@ if (isset($_POST['action'])) {
                     $valorNuevo = 1;
                     $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
                     if ($result = mysqli_query($conn_2020, $update)) {
-                        echo 1;
-                    } else {
-                        echo 0;
+                        $resp = 1;
                     }
                 } else {
                     $valorNuevo = 0;
                     $update = "UPDATE t_mp_np SET $columna = '$valorNuevo' WHERE id = $idTarea";
                     if ($result = mysqli_query($conn_2020, $update)) {
-                        echo 1;
-                    } else {
-                        echo 0;
+                        $resp = 1;
                     }
                 }
             }
@@ -5905,37 +5916,27 @@ if (isset($_POST['action'])) {
             $update = "UPDATE t_mp_np SET status = 'F', fecha_finalizado = '$fechaActual'  
             WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 2;
-            } else {
-                echo 0;
+                $resp = 2;
             }
         } elseif ($columna == "status" and $valor == "P") {
             $update = "UPDATE t_mp_np SET status = 'P' WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 3;
-            } else {
-                echo 0;
+                $resp = 3;
             }
         } elseif ($columna == "activo" and $valor == "0") {
             $update = "UPDATE t_mp_np SET $columna = '0' WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 4;
-            } else {
-                echo 0;
+                $resp = 4;
             }
         } elseif ($columna == "titulo" and $tituloNuevo != "") {
             $update = "UPDATE t_mp_np SET titulo = '$tituloNuevo' WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 5;
-            } else {
-                echo 0;
+                $resp = 5;
             }
         } elseif ($columna == "rango_fecha" and $valor != "") {
             $update = "UPDATE t_mp_np SET rango_fecha = '$valor' WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 6;
-            } else {
-                echo 0;
+                $resp = 6;
             }
         } elseif ($columna == "status_material") {
             $cod2bend = $_POST['cod2bend'];
@@ -5949,12 +5950,10 @@ if (isset($_POST['action'])) {
                 }
                 if ($valorX == 0) {
                     $valor = 1;
-                } else {
-                    $valor = 0;
                 }
                 $update = "UPDATE t_mp_np SET status_material = '$valor' WHERE id = $idTarea";
                 if ($result = mysqli_query($conn_2020, $update)) {
-                    echo 7;
+                    $resp = 7;
                 }
             }
         } elseif ($columna == "bitacora_gp" || $columna == "bitacora_trs" || $columna == "bitacora_zi") {
@@ -5972,11 +5971,30 @@ if (isset($_POST['action'])) {
             }
             $update = "UPDATE t_mp_np SET $columna = '$valor' WHERE id = $idTarea";
             if ($result = mysqli_query($conn_2020, $update)) {
-                echo 8;
+                $resp = 8;
             }
-        } else {
-            echo 0;
+        } elseif ($columna == "status_ep") {
+            $valor = 0;
+            $query = "SELECT status_ep FROM t_mp_np WHERE id =  $idTarea";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = $x['status_ep'];
+                }
+                if ($valor == 0) {
+                    $valor = 1;
+                } else {
+                    $valor = 0;
+                }
+            }
+
+            $update = "UPDATE t_mp_np SET status_ep = $valor WHERE id = $idTarea";
+            if ($result = mysqli_query($conn_2020, $update)) {
+                $resp = 9;
+            }
         }
+
+        // Respuesta Final
+        echo $resp;
     }
 
 
@@ -7619,6 +7637,7 @@ if (isset($_POST['action'])) {
     }
 
 
+    // ACTUALIZA LOS STATUS DE PLAN DE ACCION
     if ($action == "actualizarPlanaccion") {
         $columna = $_POST['columna'];
         $valor = $_POST['valor'];
@@ -7648,7 +7667,8 @@ if (isset($_POST['action'])) {
                 echo 0;
             }
         } elseif ($columna == "status" and $valor == "F") {
-            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' ,fecha_realizado = '$fechaActual'  WHERE id = $idPlanaccion";
+            $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' ,fecha_realizado = '$fechaActual'  
+            WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
 
                 $query = "SELECT id_proyecto FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
@@ -7740,9 +7760,27 @@ if (isset($_POST['action'])) {
                     $valor = 0;
                 }
 
-                $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor'";
+                $query = "UPDATE t_proyectos_planaccion SET $columna = '$valor' WHERE id = $idPlanaccion";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     echo 9;
+                }
+            }
+        } elseif ($columna == "status_ep") {
+            $query = "SELECT status_ep FROM t_proyectos_planaccion WHERE id = $idPlanaccion";
+            $valorX = 1;
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valorX = $x['status_ep'];
+                }
+                if ($valorX == 0) {
+                    $valor = 1;
+                } else {
+                    $valor = 0;
+                }
+
+                $query = "UPDATE t_proyectos_planaccion SET status_ep = '$valor' WHERE id = $idPlanaccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    echo 10;
                 }
             }
         } else {
@@ -7870,13 +7908,13 @@ if (isset($_POST['action'])) {
         $tabla = $_POST['tabla'];
         $idTabla = $_POST['idTabla'];
         $img = $_FILES['adjuntoUrl'];
-        $extension = pathinfo($img['name'], PATHINFO_EXTENSION);
+        $extension = "." . pathinfo($img['name'], PATHINFO_EXTENSION);
         $nombreTratado = preg_replace('([^A-Za-z0-9.])', '', $img['name']);
         $aleatorio = rand(1, 1500);
 
         // Cambia Tabla, Ruta y Nombre de Archivos, donde se enviara.
         if ($tabla == "t_proyectos_adjuntos") {
-            $imgNombre = "COT_PROYECTO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "COT_PROYECTO_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/proyectos/";
 
             if ($img['name'] != "") {
@@ -7898,7 +7936,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_proyectos_planaccion_adjuntos") {
-            $imgNombre = "PLANACCION_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "PLANACCION_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/proyectos/planaccion/";
 
             if ($img['name'] != "") {
@@ -7920,7 +7958,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_equipos_america_adjuntos") {
-            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/equipos/";
 
             if ($img['name'] != "") {
@@ -7942,7 +7980,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_proyectos_justificaciones") {
-            $imgNombre = "JUSTIFICACION_PROYECTO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "JUSTIFICACION_PROYECTO_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/proyectos/";
 
             if ($img['name'] != "") {
@@ -7964,7 +8002,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "adjuntos_mp_np") {
-            $imgNombre = "TAREAS_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "TAREAS_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../img/equipos/mpnp/";
 
             if ($img['name'] != "") {
@@ -7986,7 +8024,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_mc_adjuntos") {
-            $imgNombre = "FALLAS_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "FALLAS_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/tareas/adjuntos/";
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
@@ -8007,7 +8045,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_equipos_adjuntos_america") {
-            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "EQUIPO_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/equipos/";
             if ($extension == "png" || $extension == "jpg" || $extension == "jpeg" || $extension == "gif" || $extension == "PNG" || $extension == "JPG" || $extension == "JPEG" || $extension == "GIF") {
                 if ($img['name'] != "") {
@@ -8032,7 +8070,7 @@ if (isset($_POST['action'])) {
                 echo -1;
             }
         } elseif ($tabla == "t_mp_planificacion_iniciada_adjuntos") {
-            $imgNombre = "OT_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "OT_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/mp_ot/";
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
@@ -8054,7 +8092,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_equipos_cotizaciones") {
-            $imgNombre = "EQUIPO_ID_COT_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "EQUIPO_ID_COT_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../img/equipos/cotizaciones/";
 
             if ($img['name'] != "") {
@@ -8076,7 +8114,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_proyectos_adjuntos_DEP") {
-            $imgNombre = "COT_PROYECTO_DEP_ID_" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "COT_PROYECTO_DEP_ID_" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/proyectos/";
             if ($img['name'] != "") {
                 if (($img['size'] / 1000) < 100000) {
@@ -8097,7 +8135,7 @@ if (isset($_POST['action'])) {
                 echo 1;
             }
         } elseif ($tabla == "t_proyectos_planaccion_adjuntos_DEP") {
-            $imgNombre = "PLANACCION_ID_DEP" . $idTabla . "_$aleatorio" . $nombreTratado;
+            $imgNombre = "PLANACCION_ID_DEP" . $idTabla . "_$aleatorio" . $extension;
             $ruta = "../planner/proyectos/planaccion/";
 
             if ($img['name'] != "") {

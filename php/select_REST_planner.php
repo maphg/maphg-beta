@@ -86,7 +86,8 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_compras,
         t_mp_np.departamento_direccion,
         t_mp_np.departamento_finanzas,
-        t_mp_np.departamento_rrhh
+        t_mp_np.departamento_rrhh,
+        t_mp_np.status_ep
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -107,6 +108,7 @@ if (isset($_GET['action'])) {
                 $sTrabajando = intval($x['status_trabajando']);
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -199,7 +201,7 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
-                $arrayTemp = array(
+                $array[] = array(
                     "id" => $idTarea,
                     "ot" => "T$idTarea",
                     "actividad" => $actividad,
@@ -216,10 +218,9 @@ if (isset($_GET['action'])) {
                     "energeticos" => $energeticos,
                     "departamentos" => $departamentos,
                     "trabajando" => $trabajando,
-                    "tipo" => "TAREA"
+                    "tipo" => "TAREA",
+                    "sEP" => intval($sEP)
                 );
-
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);
@@ -244,7 +245,8 @@ if (isset($_GET['action'])) {
         t_mc.departamento_compras,
         t_mc.departamento_direccion,
         t_mc.departamento_finanzas,
-        t_mc.departamento_rrhh
+        t_mc.departamento_rrhh,
+        t_mc.status_ep
         FROM t_mc 
         LEFT JOIN t_users ON t_mc.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -264,6 +266,7 @@ if (isset($_GET['action'])) {
                 $sTrabajando = intval($x['status_trabajare']);
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -374,7 +377,8 @@ if (isset($_GET['action'])) {
                     "energeticos" => $energeticos,
                     "departamentos" => $departamentos,
                     "trabajando" => $trabajando,
-                    "tipo" => "FALLA"
+                    "tipo" => "FALLA",
+                    "sEP" => intval($sEP)
                 );
 
                 $array[] = $arrayTemp;
@@ -578,13 +582,14 @@ if (isset($_GET['action'])) {
         $sGas = 0;
         $titulo = "";
         $cod2bend = "";
-        $bitacoraGP = "";
-        $bitacoraTRS = "";
-        $bitacoraZI = "";
+        $bitacoraGP = 0;
+        $bitacoraTRS = 0;
+        $bitacoraZI = 0;
+        $sEP = 0;
 
         if ($tipoRegistro == "FALLA") {
             $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend,
-            bitacora_gp, bitacora_trs, bitacora_zi
+            bitacora_gp, bitacora_trs, bitacora_zi, status_ep
              FROM t_mc WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
@@ -604,10 +609,11 @@ if (isset($_GET['action'])) {
                     $bitacoraGP = $x['bitacora_gp'];
                     $bitacoraTRS = $x['bitacora_trs'];
                     $bitacoraZI = $x['bitacora_zi'];
+                    $sEP = $x['status_ep'];
                 }
             }
         } elseif ($tipoRegistro == "TAREA") {
-            $query = "SELECT titulo, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            $query = "SELECT titulo, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi, status_ep 
             FROM t_mp_np WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
@@ -627,6 +633,7 @@ if (isset($_GET['action'])) {
                     $bitacoraGP = $x['bitacora_gp'];
                     $bitacoraTRS = $x['bitacora_trs'];
                     $bitacoraZI = $x['bitacora_zi'];
+                    $sEP = $x['status_ep'];
                 }
             }
         } elseif ($tipoRegistro == "PROYECTO") {
@@ -651,7 +658,7 @@ if (isset($_GET['action'])) {
                 }
             }
         } elseif ($tipoRegistro == "PLANACCION") {
-            $query = "SELECT actividad, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            $query = "SELECT actividad, status_material, status_trabajando, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi, status_ep
             FROM t_proyectos_planaccion WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
@@ -671,10 +678,11 @@ if (isset($_GET['action'])) {
                     $bitacoraGP = $x['bitacora_gp'];
                     $bitacoraTRS = $x['bitacora_trs'];
                     $bitacoraZI = $x['bitacora_zi'];
+                    $sEP = $x['status_ep'];
                 }
             }
         } elseif ($tipoRegistro == "ENERGETICO") {
-            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi 
+            $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend, bitacora_gp, bitacora_trs, bitacora_zi , status_ep
             FROM t_energeticos WHERE id = $idRegistro";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
@@ -694,6 +702,7 @@ if (isset($_GET['action'])) {
                     $bitacoraGP = $x['bitacora_gp'];
                     $bitacoraTRS = $x['bitacora_trs'];
                     $bitacoraZI = $x['bitacora_zi'];
+                    $sEP = $x['status_ep'];
                 }
             }
         } elseif ($tipoRegistro == "ACTIVIDADPLANACCION") {
@@ -761,6 +770,11 @@ if (isset($_GET['action'])) {
         } else {
             $sGas = 0;
         }
+        if ($sEP != "" and $sEP != 0) {
+            $sEP = 1;
+        } else {
+            $sEP = 0;
+        }
 
         $array[] = array(
             "sMaterial" => intval($sMaterial),
@@ -780,7 +794,8 @@ if (isset($_GET['action'])) {
             "cod2bend" => $cod2bend,
             "bitacoraGP" => $bitacoraGP,
             "bitacoraTRS" => $bitacoraTRS,
-            "bitacoraZI" => $bitacoraZI
+            "bitacoraZI" => $bitacoraZI,
+            "sEP" => intval($sEP)
         );
 
         echo json_encode($array);
