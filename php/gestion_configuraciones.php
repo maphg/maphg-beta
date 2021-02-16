@@ -81,7 +81,7 @@ if (isset($_GET['action'])) {
                 $totalPlanes = $x['total'];
             }
         }
-        
+
         $array['planes'] = $totalPlanes;
         $array['materiales'] = 0;
         $array['bodegas'] = 0;
@@ -901,6 +901,74 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
+
+    #OBTIENE LOS SUBALMACENES Y BODEGAS
+    if ($action == "obtenerSubalmacenes") {
+        $array = array();
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, nombre, fase, tipo 
+        FROM t_subalmacenes 
+        WHERE activo = 1 $filtroDestino ORDER BY tipo ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idSubalmacen = $x['id'];
+                $nombre = $x['nombre'];
+                $fase = $x['fase'];
+                $tipo = $x['tipo'];
+
+                $array[] = array(
+                    "idSubalmacen" => intval($idSubalmacen),
+                    "nombre" => $nombre,
+                    "fase" => $fase,
+                    "tipo" => $tipo,
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    #ELIMINA TIPO DE ACTIVO
+    if ($action == "eliminarSubalmacen") {
+        $idSubalmacen = $_GET['idSubalmacen'];
+        $resp = 0;
+
+        $query = "UPDATE t_subalmacenes SET activo = 0 WHERE id = $idSubalmacen";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+    #AGREGA SUBALMACENES
+    if ($action == "agregarSubalmacen") {
+        $fase = $_GET['fase'];
+        $subalmacen = $_GET['subalmacen'];
+        $tipo = $_GET['tipo'];
+        $resp = 0;
+
+        if ($fase == "GP") {
+            $idFase = 1;
+        } elseif ($fase == "TRS") {
+            $idFase = 2;
+        } elseif ($fase == "ZI") {
+            $idFase = 3;
+        }
+
+        $query = "INSERT INTO t_subalmacenes(id_destino, id_fase, nombre, fase, tipo, activo) VALUES ($idDestino, $idFase, '$subalmacen', '$fase', '$tipo', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
 
     // Final
 }

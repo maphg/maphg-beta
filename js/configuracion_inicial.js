@@ -5,6 +5,12 @@ const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const inputTipoActivoLocal = document.getElementById("inputTipoActivoLocal");
 const inputTipoActivoEquipo = document.getElementById("inputTipoActivoEquipo");
 const palabraUsuario = document.getElementById("palabraUsuario");
+const inputSubalmacenGP = document.getElementById("inputSubalmacenGP");
+const inputSubalmacenTRS = document.getElementById("inputSubalmacenTRS");
+const inputSubalmacenZI = document.getElementById("inputSubalmacenZI");
+const inputTipoSubalmacenGP = document.getElementById("inputTipoSubalmacenGP");
+const inputTipoSubalmacenTRS = document.getElementById("inputTipoSubalmacenTRS");
+const inputTipoSubalmacenZI = document.getElementById("inputTipoSubalmacenZI");
 // INPUTS
 
 // BTNS
@@ -15,6 +21,10 @@ const btnAgregarTipoActivoEquipo = document.getElementById("btnAgregarTipoActivo
 const btnGestionUsuarios = document.getElementById("btnGestionUsuarios");
 const btnNuevoUsuario = document.getElementById("btnNuevoUsuario");
 const contraseñaEyes = document.getElementById("contraseñaEyes");
+const btnSubalmacenes = document.getElementById("btnSubalmacenes");
+const btnAgregarSubalmacenGP = document.getElementById("btnAgregarSubalmacenGP");
+const btnAgregarSubalmacenTRS = document.getElementById("btnAgregarSubalmacenTRS");
+const btnAgregarSubalmacenZI = document.getElementById("btnAgregarSubalmacenZI");
 // BTNS
 
 // DIVs
@@ -30,6 +40,9 @@ const totalPlanes = document.getElementById("totalPlanes");
 
 // CONTENEDORES
 const contenedorUsuarios = document.getElementById("contenedorUsuarios");
+const dataSubalmacenesGP = document.getElementById("dataSubalmacenesGP");
+const dataSubalmacenesTRS = document.getElementById("dataSubalmacenesTRS");
+const dataSubalmacenesZI = document.getElementById("dataSubalmacenesZI");
 // CONTENEDORES
 
 // DATA CONTENEDORES
@@ -84,8 +97,6 @@ const datosIniciales = () => {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array);
-
             const classRemove = ['border-dashed', 'border-purple-100', 'border-purple-300'];
             const classadd = ['border-purple-700'];
             const contenedores = ['contenedor-usuarios', 'contenedor-subsecciones', 'contenedor-tipos', 'contenedor-subalmacenes', 'contenedor-materiales', 'contenedor-equipos', 'contenedor-planes'];
@@ -210,7 +221,6 @@ const datosIniciales = () => {
             }
         })
         .catch(function (err) {
-            console.log(err);
             nombreDestino.innerHTML = '';
             totalSubsecciones.innerText = 0;
             totalTipos.innerText = 0;
@@ -326,7 +336,6 @@ const eliminarSeccionSubseccion = idRelSubseccion => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
             })
     }, function () {
         alertaImg('Proceso Cancelado', '', 'info', 1400)
@@ -350,7 +359,6 @@ const agregarSeccionSubseccion = (idRelSeccion, idSeccion) => {
             fetch(URL)
                 .then(array => array.json())
                 .then(array => {
-                    console.log(array)
                     obtenerSeccionesSubsecciones();
                     if (array == 1) {
                         alertaImg('Subseccion Agregada', '', 'success', 1400)
@@ -361,7 +369,6 @@ const agregarSeccionSubseccion = (idRelSeccion, idSeccion) => {
                     }
                 })
                 .catch(function (err) {
-                    console.log(err);
                 })
         }
     }, function () {
@@ -488,7 +495,6 @@ const eliminarTipoActivo = idTipo => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
             })
     }, function () {
         alertaImg('Proceso Cancelado', '', 'info', 1400)
@@ -729,7 +735,6 @@ const obtenerUsuarios = configuracionIdUsuario => {
         })
         .catch(function (err) {
             // fetch(APIERROR + err + ' obtenerUsuarios(0)');
-            console.log(err);
             load.innerHTML = '';
             palabraUsuario.value = '';
         })
@@ -1163,6 +1168,148 @@ contraseñaEyes.addEventListener('click', () => {
 palabraUsuario.addEventListener('keyup', function () {
     buscadorTabla('dataUsuarios', 'palabraUsuario', 1);
 })
+
+
+// OBTIENES LOS SUBALMACENES Y BODEGAS
+btnSubalmacenes.addEventListener('click', () => {
+    abrirmodal('modalSubalmacenes');
+
+    btnAgregarSubalmacenGP.setAttribute('onclick', `agregarSubalmacen('GP')`);
+    btnAgregarSubalmacenTRS.setAttribute('onclick', `agregarSubalmacen('TRS')`);
+    btnAgregarSubalmacenZI.setAttribute('onclick', `agregarSubalmacen('ZI')`);
+
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerSubalmacenes";
+    const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataSubalmacenesGP.innerHTML = '';
+            dataSubalmacenesTRS.innerHTML = '';
+            dataSubalmacenesZI.innerHTML = '';
+
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idSubalmacen = array[x].idSubalmacen;
+                    const nombre = array[x].nombre;
+                    const tipo = array[x].tipo;
+                    const fase = array[x].fase;
+
+                    const estiloTipo = tipo == "BODEGA" ? 'text-blue-500 text-xs hover:text-black'
+                        : tipo == 'SUBALMACEN' ? 'text-gray-500 text-xs hover:text-black'
+                            : 'text-red-500 text-xs hover:text-black';
+
+                    const codigo = `
+                        <div class="p-2 w-full cursor-pointer hover:bg-gray-100 flex flex-row justify-between items-center">
+                            <h1 class="truncate mr-2 font-semibold ${estiloTipo}">${nombre}</h1>
+                            <div class="flex flex-row justify-center" onclick="eliminarSubalmacen(${idSubalmacen});">
+                                <i class="fa fas fa-trash-alt fa-2x text-red-300 hover:text-red-500"></i>
+                            </div>
+                        </div>
+                    `;
+
+                    fase === "GP" ?
+                        dataSubalmacenesGP.insertAdjacentHTML('beforeend', codigo)
+                        : fase === "TRS" ?
+                            dataSubalmacenesTRS.insertAdjacentHTML('beforeend', codigo)
+                            : fase === "ZI" ?
+                                dataSubalmacenesZI.insertAdjacentHTML('beforeend', codigo)
+                                : '';
+                }
+            }
+        })
+        .catch(function (err) {
+            // fetch(APIERROR + err);
+            dataSubalmacenesGP.innerHTML = '';
+            dataSubalmacenesTRS.innerHTML = '';
+            dataSubalmacenesZI.innerHTML = '';
+        })
+})
+
+
+// ELIMINA LAS SUBALMACENES Y BODEGAS
+const eliminarSubalmacen = idSubalmacen => {
+
+    alertify.confirm('MAPHG', '¿Desea Eliminar Subalmacen?', function () {
+        let idDestino = localStorage.getItem('idDestino');
+        let idUsuario = localStorage.getItem('usuario');
+
+        const action = "eliminarSubalmacen";
+        const URL =
+            `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSubalmacen=${idSubalmacen}`;
+
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                obtenerTiposActivos();
+                if (array == 1) {
+                    alertaImg('Subalmacen Eliminado', '', 'success', 1400)
+                    btnSubalmacenes.click();
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1400)
+                }
+            })
+            .catch(function (err) {
+            })
+    }, function () {
+        alertaImg('Proceso Cancelado', '', 'info', 1400)
+    });
+}
+
+// AGREGAR SUBALMACENES
+const agregarSubalmacen = fase => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const subalmacen =
+        fase === 'GP' ? inputSubalmacenGP.value
+            : fase === 'TRS' ? inputSubalmacenTRS.value
+                : fase === 'ZI' ? inputSubalmacenZI.value
+                    : '';
+    const tipo =
+        fase === 'GP' ? inputTipoSubalmacenGP.value
+            : fase === 'TRS' ? inputTipoSubalmacenTRS.value
+                : fase === 'ZI' ? inputTipoSubalmacenZI.value
+                    : '';
+
+    const action = "agregarSubalmacen";
+    const URL = `php/gestion_configuraciones.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&fase=${fase}&subalmacen=${subalmacen}&tipo=${tipo}`;
+
+    if (tipo.length > 1 && subalmacen.length > 1 && fase.length > 1) {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg(`${tipo}, Agregado`, '', 'success', 1400);
+                    btnSubalmacenes.click();
+                    inputSubalmacenGP.value = '';
+                    inputSubalmacenTRS.value = '';
+                    inputSubalmacenZI.value = '';
+                    inputTipoSubalmacenGP.value = '';
+                    inputTipoSubalmacenTRS.value = '';
+                    inputTipoSubalmacenZI.value = '';
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1400);
+                }
+            })
+            .catch(function (err) {
+                inputSubalmacenGP.value = '';
+                inputSubalmacenTRS.value = '';
+                inputSubalmacenZI.value = '';
+                inputTipoSubalmacenGP.value = '';
+                inputTipoSubalmacenTRS.value = '';
+                inputTipoSubalmacenZI.value = '';
+            })
+    } else {
+        alertaImg('Acomplete la Información Requerida', '', 'info', 1400);
+    }
+}
 
 
 window.addEventListener('load', () => {
