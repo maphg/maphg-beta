@@ -397,7 +397,7 @@ const obtenerSecciones = (idSeccion, status) => {
                   } else if (idSubseccion == 1006 || idSubseccion == 1007 || idSubseccion == 1008 || idSubseccion == 1009 || idSubseccion == 1010 || idSubseccion == 1011 || idSubseccion == 1012 || idSubseccion == 1013) {
                      fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerEnergeticos(${idSeccion}, ${idSubseccion}, 'PENDIENTE'); toggleModalTailwind('modalEnergeticos')"`;
                   } else if (idSubseccion == 62 || idSubseccion == 211 || idSubseccion == 212 || idSubseccion == 213 || idSubseccion == 214) {
-                     fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectosDEP(${idSubseccion});"`;
+                     fSubseccion = `onclick="actualizarSeccionSubseccion(${idSeccion}, ${idSubseccion}); obtenerProyectosDEP(${idSubseccion}, 'PENDIENTE');"`;
                   } else {
                      fSubseccion = `onclick="obtenerEquiposAmerica(${idSeccion}, ${idSubseccion}); toggleModalTailwind('modalEquiposAmerica');"`;
                   }

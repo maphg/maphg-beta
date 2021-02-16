@@ -162,7 +162,7 @@ const datosIniciales = () => {
                 if (array.bodegas >= 0) {
                     totalBodegas.innerHTML = array.bodegas;
                     for (let x = 0; x < document.getElementsByClassName(contenedores[3]).length; x++) {
-                        const element = document.getElementsByClassName('contenedor-bodegas')[x];
+                        const element = document.getElementsByClassName('contenedor-subalmacenes')[x];
                         if (array.bodegas > 0) {
                             element.classList.remove(classRemove[0], classRemove[1], classRemove[2]);
                             element.classList.add(classadd[0]);

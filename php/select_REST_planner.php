@@ -3818,7 +3818,7 @@ if (isset($_GET['action'])) {
                 $totalIncidencias = 0;
                 $query = "SELECT t_mc.tipo_incidencia FROM t_mc 
                 INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-                WHERE t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 $filtroDestinoInicidencias";
+                WHERE t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') $filtroDestinoInicidencias";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $tipoIncidencia = $x['tipo_incidencia'];
@@ -3837,11 +3837,10 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                #OBTIENE INCIDENCIAS EQUIPO, PENDIENTES
-                $totalIncidencias = 0;
-                $query = "SELECT t_mc.tipo_incidencia FROM t_mc 
-                INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-                WHERE t_mc.id_subseccion = $idSubseccion and t_mc.status IN('PENDIENTE', 'N', 'P') and t_mc.activo = 1 $filtroDestinoInicidencias";
+                #OBTIENE INCIDENCIAS GENERALES, PENDIENTES
+
+                $query = "SELECT tipo_incidencia FROM t_mp_np 
+                WHERE id_subseccion = $idSubseccion and id_equipo == 0 and status IN('PENDIENTE', 'N', 'P') and activo = 1 $filtroDestino";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $tipoIncidencia = $x['tipo_incidencia'];
@@ -3891,6 +3890,17 @@ if (isset($_GET['action'])) {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $x) {
                             $seguimiento = $x['id'];
+                        }
+                    }
+                }
+
+                if ($idSubseccion == 62 || $idSubseccion == 211 || $idSubseccion == 212 ||  $idSubseccion == 213 || $idSubseccion == 214) {
+                    $query = "SELECT count(id) 'total' FROM t_proyectos 
+                    WHERE id_subseccion = $idSubseccion and activo = 1 and status IN('PENDIENTE', 'N', 'P') $filtroDestino";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        foreach ($result as $x) {
+                            $totalIncidencias = $x['total'];
+                            $seguimiento = $x['total'];
                         }
                     }
                 }

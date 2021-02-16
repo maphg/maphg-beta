@@ -81,10 +81,28 @@ if (isset($_GET['action'])) {
                 $totalPlanes = $x['total'];
             }
         }
-
         $array['planes'] = $totalPlanes;
-        $array['materiales'] = 0;
-        $array['bodegas'] = 0;
+
+        #SUBALMACENES
+        $totalBodegas = 0;
+        $query = "SELECT count(id) 'total' FROM t_subalmacenes WHERE activo = 1 and id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalBodegas = $x['total'];
+            }
+        }
+        $array['bodegas'] = $totalBodegas;
+
+        #ITEMS
+        $totalMateriales = 0;
+        $query = "SELECT count(id) 'total' FROM t_subalmacenes_items_globales 
+        WHERE activo = 1 and id_destino = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $totalMateriales = $x['total'];
+            }
+        }
+        $array['materiales'] = $totalMateriales;
 
         echo json_encode($array);
     }
