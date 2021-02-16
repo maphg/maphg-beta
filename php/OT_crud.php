@@ -25,8 +25,7 @@ if (isset($_GET['action'])) {
         $actividades = array();
         $adjuntos = array();
 
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.id_responsables, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.semana, 
-        t_mp_planificacion_iniciada.comentario, t_mp_planes_mantenimiento.id 'id_plan', t_mp_planes_mantenimiento.tipo_plan, t_mp_planificacion_iniciada.actividades_extra
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.id_responsables, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.semana, t_mp_planificacion_iniciada.comentario, t_mp_planes_mantenimiento.id 'id_plan', t_mp_planes_mantenimiento.tipo_plan, t_mp_planificacion_iniciada.actividades_extra
         FROM t_mp_planificacion_iniciada 
         INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
         WHERE t_mp_planificacion_iniciada.id_plan = $idPlan and t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.semana = $semanaX and t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.año = $añoActual and t_mp_planificacion_iniciada.status IN('SOLUCIONADO', 'PROCESO')";
