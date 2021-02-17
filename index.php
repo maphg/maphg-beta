@@ -3160,7 +3160,7 @@
                     </div>
                 </div>
 
-                <div id="contenedorMover" class="flex flex-col justify-center items-center rounded-md w-full bg-gray-300 px-2 py-1 text-gray-700 uppercase">
+                <div id="contenedorMover" class="flex flex-col justify-center items-center rounded-md w-full bg-gray-300 px-2 py-1 text-gray-700 uppercase hidden">
 
                     <div class="p-1 w-full">
                         <label class="text-xs font-medium text-gray-700">Mover a:</label>
