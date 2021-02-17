@@ -72,6 +72,7 @@ const btnSolucionadosEnergeticos = document.getElementById("btnSolucionadosEnerg
 const btnBuscarOT = document.getElementById("btnBuscarOT");
 const btnBuscarNumeroOT = document.getElementById("btnBuscarNumeroOT");
 const btnAñadirMaterialEquipo = document.getElementById("btnAñadirMaterialEquipo");
+const btnMover = document.getElementById("btnMover");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
@@ -101,6 +102,11 @@ const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
 const inputNumeroOT = document.getElementById("inputNumeroOT");
 const inputAdjuntos = document.getElementById("inputAdjuntos");
 const inputDespieceMaterialesEquipo = document.getElementById("inputDespieceMaterialesEquipo");
+const selectMoverOpcion = document.getElementById("selectMoverOpcion");
+const selectMoverSeccion = document.getElementById("selectMoverSeccion");
+const selectMoverSubseccion = document.getElementById("selectMoverSubseccion");
+const selectMoverEquipo = document.getElementById("selectMoverEquipo");
+const selectMoverProyecto = document.getElementById("selectMoverProyecto");
 
 // ELEMENTOS <INPUTS> ID
 
@@ -157,10 +163,12 @@ const tituloTercerNivel = document.getElementById("tituloTercerNivel");
 const columnas_x = document.getElementById("columnas_x");
 const dataBuscarOT = document.getElementById("dataBuscarOT");
 const cantidadDespieceMaterialEquipo = document.getElementById("cantidadDespieceMaterialEquipo");
+const contenedorMover = document.getElementById("contenedorMover");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
 const btnOpcionIncidencia = document.getElementsByClassName("btnOpcionIncidencia");
+const opcionSelectsMover = document.getElementsByClassName("opcionSelectsMover");
 // CONTENEDORES DIV CLASS
 
 // CONTENEDOR DE TABLAS
@@ -2280,6 +2288,8 @@ function obtenerstatusMC(idMC) {
 
          document.getElementById("statusEP")
             .setAttribute("onclick", data.datasEP);
+
+         btnMover.setAttribute("onclick", `moverA(${idMC}, 'EQUIPO')`);
       },
    });
 }
@@ -2909,6 +2919,8 @@ function obtenerInformacionTareas(idTarea, tituloTarea) {
 
    // ENTREGA PROYECTO
    btnStatusEP.setAttribute("onclick", `actualizarTareas(${idTarea}, 'status_ep', 0)`);
+
+   btnMover.setAttribute('onclick', `moverA(${idTarea}, 'GENERAL')`);
 }
 
 
@@ -5521,7 +5533,6 @@ function informacionEquipo(idEquipo) {
 
    const URL = `php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
    let promesa = new Promise((resolve, reject) => {
-      console.log(1);
       fetch(URL)
          .then(array => array.json())
          .then(array => {
@@ -5608,7 +5619,6 @@ function informacionEquipo(idEquipo) {
    promesa.then((resolve, reject) => {
 
       const URL2 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
-      console.log(2);
 
       fetch(URL2)
          .then(array => array.json())
@@ -5669,7 +5679,6 @@ function informacionEquipo(idEquipo) {
                   btnBitacorasEquipo.classList.add('hidden');
                   obtenerIncidenciasEquipo(idEquipo);
                }
-               console.log(3);
             }
          })
          .catch(function (err) {
@@ -6663,7 +6672,6 @@ function consultarPlanLocal(idEquipo) {
          }
       },
       error: function (err) {
-         console.log(err)
       }
    });
 }
@@ -6917,8 +6925,10 @@ function consultarActividadRealizadaOT(idOT) {
 function consultaStatusOT(idOT) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+
    const action = "consultarStatusOT";
    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+
    fetch(URL)
       .then(res => res.json())
       .then(array => {
@@ -9821,6 +9831,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    document.getElementById("statusMaterialCod2bend").classList.add('hidden');
    document.getElementById("statusbitacoratoggle").classList.add('hidden');
    document.getElementById("btnEditarTituloXtoggle").classList.add('hidden');
+   contenedorMover.classList.add('hidden');
 
    let sMaterialX = document.getElementById("statusMaterial");
    let sTrabajareX = document.getElementById("statusTrabajare");

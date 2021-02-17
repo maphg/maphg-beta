@@ -327,46 +327,46 @@ if (isset($_GET['action'])) {
                 }
 
                 #Obtiene el Responsable Asignado
+                $nombreResponsable = "";
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                 FROM t_users 
                 LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id IN ($idResponsable)
                 ";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $nombreResponsable = "";
                     foreach ($result as $x) {
                         $nombreResponsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
                 }
 
                 #Comentarios de Planaccion
+                $totalComentarios = 0;
                 $query = "SELECT count(id) FROM t_proyectos_planaccion_comentarios WHERE id_actividad = $idPlanaccion and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
                 }
 
                 #Adjuntos de Planaccion
+                $totalAdjuntos = 0;
                 $query = "SELECT count(id) FROM t_proyectos_planaccion_adjuntos WHERE id_actividad = $idPlanaccion and status = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
                         $totalAdjuntos = $x['count(id)'];
                     }
                 }
 
                 #Planaccion Actividades
+                $subTareas = 0;
                 $query = "SELECT count(id) FROM t_proyectos_planaccion_actividades WHERE id_planaccion = $idPlanaccion and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $subTareas = 0;
                     foreach ($result as $x) {
                         $subTareas = $x['count(id)'];
                     }
                 }
 
-                $arrayTemp = array(
+                $array[] = array(
                     "id" => $idPlanaccion,
                     "destino" => $destino,
                     "actividad" => $actividad,
@@ -386,7 +386,6 @@ if (isset($_GET['action'])) {
                     "trabajando" => intval($sTrabajandox),
                     "sEP" => intval($sEP)
                 );
-                $array[] = $arrayTemp;
             }
         }
         echo json_encode($array);

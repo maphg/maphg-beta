@@ -16,6 +16,11 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $semanaActual = date('W');
 
+    $ruta_t_mc_adjuntos = "../planner/tareas/adjuntos/";
+    $adjuntos_ruta_t_mp_np = "../img/equipos/mpnp/";
+    $ruta_t_proyectos_cotizaciones = "";
+    $ruta_t_proyectos_planaccion_adjuntos = "../planner/proyectos/planaccion/";
+
 
     #OBTIENE LOS PROYECTOS SEGÚN LA SECCIÓN Y DESTINO
     if ($action == "obtenerActividadesOT") {
@@ -969,7 +974,7 @@ if (isset($_GET['action'])) {
     }
 
 
-    // OBTIENE LOS TESTE DE EQUIPOS
+    // OBTIENE LOS TEST DE EQUIPOS
     if ($action == "obtenerTestEquipo") {
         $idEquipo = $_GET['idEquipo'];
         $array = array();
@@ -1116,8 +1121,35 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+    // OBTIENE PROYECTOS POR SECCION, SUBSECCION Y DESTINO
+    if ($action == "obtenerProyectosPorSeccionSubseccion") {
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $array = array();
 
-    // OBTIENES TODAS LOS TIPOS DE MEDIDAS DE LA TABLA t_unidades_medidas
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, titulo FROM t_proyectos WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and activo = 1 and status IN('PENDIENTE', 'N', 'P') $filtroDestino ORDER BY id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idProyecto = $x['id'];
+                $proyecto = $x['titulo'];
+
+                $array[] = array(
+                    "idProyecto" => intval($idProyecto),
+                    "proyecto" => $proyecto
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // OBTIENES TODOS LOS TIPOS DE MEDIDAS DE LA TABLA t_unidades_medidas
     if ($action == "obtenerUnidadesMedidas") {
         $array = array();
         $query = "SELECT id, medida FROM  t_unidades_medidas WHERE activo = 1";
@@ -4167,6 +4199,471 @@ if (isset($_GET['action'])) {
     }
 
 
+    // MUEVE REGISTRO
+    if ($action == "moverA") {
+        $id = $_GET['id'];
+        $tipo = $_GET['tipo'];
+
+        $opcion = $_GET['opcion'];
+        $idSeccion = $_GET['idSeccion'];
+        $idSubseccion = $_GET['idSubseccion'];
+        $idEquipo = $_GET['idEquipo'];
+        $idProyecto = $_GET['idProyecto'];
+        $resp = 0;
+
+        if ($tipo == "EQUIPO" and $tipo == $opcion) {
+            $query = "UPDATE t_mc SET id_seccion = $idSeccion, id_subseccion = $idSubseccion, id_equipo = $idEquipo WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query) and $idEquipo > 0) {
+                $resp = 1;
+            }
+        } elseif ($tipo == "GENERAL" and $tipo == $opcion) {
+            $query = "UPDATE t_mp_np SET id_seccion = $idSeccion, id_subseccion = $idSubseccion, id_equipo = 0 
+            WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipo == "PROYECTO" and $tipo == $opcion) {
+            $idProyecto = 0;
+            $query = "SELECT id_proyecto FROM t_proyectos_planaccion WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idProyecto = $x['id'];
+                }
+            }
+
+            if ($idProyecto > 0) {
+                $query = "UPDATE t_proyectos_planaccion SET id_proyecto = $idProyecto WHERE id = $id";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
+        } else {
+            $idAnterior = 0;
+            $idNuevo = 0;
+            $idEquipoX = 0;
+            $titulo = "";
+            $tipoIncidencia = "";
+            $status = "";
+            $creadoPor = 0;
+            $responsable = 0;
+            $fechaRealizado = "";
+            $finalizadoPor = "";
+            $fechaCreacion = "";
+            $ultimaModificacion = date("Y-m-d");
+            $idDestino = 0;
+            $idSeccion = 0;
+            $idSubseccion = 0;
+            $rangoFecha = "";
+            $sMaterial = 0;
+            $sTrabajare = 0;
+            $dCalidad = 0;
+            $dCompras = 0;
+            $dDireccion = 0;
+            $dFinanzas = 0;
+            $dRRHH = 0;
+            $eElectricidad = 0;
+            $eAgua = 0;
+            $eDiesel = 0;
+            $eGas = 0;
+            $zona = "NA";
+            $cod2bend = "";
+            $codsap = "";
+            $bGP = 0;
+            $bTRS = 0;
+            $bZI = 0;
+            $sEP = 0;
+
+            $idMax = 0;
+            if ($opcion == "EQUIPO") {
+                $query = "SELECT max(id) 'idMax' FROM t_mc";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idMax = intval($x['idMax']) + 1;
+                    }
+                }
+            } elseif ($opcion == "GENERAL") {
+                $query = "SELECT max(id) 'idMax' FROM t_mp_np";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idMax = intval($x['idMax']) + 1;
+                    }
+                }
+            } elseif ($opcion == "PROYECTO") {
+                $query = "SELECT max(id) 'idMax' FROM t_proyectos_planaccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idMax = intval($x['idMax']) + 1;
+                    }
+                }
+            }
+
+            // DATOS T_MC
+            if ($tipo == "EQUIPO") {
+                $query = "SELECT* FROM t_mc WHERE id = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idAnterior = $x['id'];
+                        $idEquipoX = $x['id_equipo'];
+                        $titulo = $x['actividad'];
+                        $tipoIncidencia = $x['tipo_incidencia'];
+                        $status = $x['status'];
+                        $creadoPor = $x['creado_por'];
+                        $responsable = $x['responsable'];
+                        $fechaRealizado = $x['fecha_realizado'];
+                        $finalizadoPor = $x['realizado_por'];
+                        $fechaCreacion = $x['fecha_creacion'];
+                        $idDestino = $x['id_destino'];
+                        $idSeccion = $x['id_seccion'];
+                        $idSubseccion = $x['id_subseccion'];
+                        $rangoFecha = $x['rango_fecha'];
+                        $sMaterial = $x['status_material'];
+                        $sTrabajare = $x['status_trabajare'];
+                        $dCalidad = $x['departamento_calidad'];
+                        $dCompras = $x['departamento_compras'];
+                        $dDireccion = $x['departamento_direccion'];
+                        $dFinanzas = $x['departamento_finanzas'];
+                        $dRRHH = $x['departamento_rrhh'];
+                        $eElectricidad = $x['energetico_electricidad'];
+                        $eAgua = $x['energetico_agua'];
+                        $eDiesel = $x['energetico_diesel'];
+                        $eGas = $x['energetico_gas'];
+                        $zona = $x['zona'];
+                        $cod2bend = $x['cod2bend'];
+                        $codsap = $x['codsap'];
+                        $bGP = $x['bitacora_gp'];
+                        $bTRS = $x['bitacora_trs'];
+                        $bZI = $x['bitacora_zi'];
+                        $sEP = $x['status_ep'];
+                    }
+                }
+            } elseif ($tipo == "GENERAL") {
+                $query = "SELECT* FROM t_mp_np WHERE id = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idAnterior = $x['id'];
+                        $idEquipoX = $x['id_equipo'];
+                        $titulo = $x['titulo'];
+                        $tipoIncidencia = $x['tipo_incidencia'];
+                        $status = $x['status'];
+                        $creadoPor = $x['id_usuario'];
+                        $responsable = $x['responsable'];
+                        $fechaRealizado = $x['fecha_finalizado'];
+                        // $finalizadoPor = 0;
+                        $fechaCreacion = $x['fecha'];
+                        $idDestino = $x['id_destino'];
+                        $idSeccion = $x['id_seccion'];
+                        $idSubseccion = $x['id_subseccion'];
+                        $rangoFecha = $x['rango_fecha'];
+                        $sMaterial = $x['status_material'];
+                        $sTrabajare = $x['status_trabajando'];
+                        $dCalidad = $x['departamento_calidad'];
+                        $dCompras = $x['departamento_compras'];
+                        $dDireccion = $x['departamento_direccion'];
+                        $dFinanzas = $x['departamento_finanzas'];
+                        $dRRHH = $x['departamento_rrhh'];
+                        $eElectricidad = $x['energetico_electricidad'];
+                        $eAgua = $x['energetico_agua'];
+                        $eDiesel = $x['energetico_diesel'];
+                        $eGas = $x['energetico_gas'];
+                        // $zona = $x['zona'];
+                        $cod2bend = $x['cod2bend'];
+                        $codsap = $x['codsap'];
+                        $bGP = $x['bitacora_gp'];
+                        $bTRS = $x['bitacora_trs'];
+                        $bZI = $x['bitacora_zi'];
+                        $sEP = $x['status_ep'];
+                    }
+                }
+            } elseif ($tipo == "PROYECTO") {
+                $query = "SELECT t_proyectos_planaccion.*, t_proyectos.id_destino, t_proyectos.id_seccion, t_proyectos.id_subseccion FROM t_proyectos_planaccion INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id WHERE t_proyectos_planaccion.id = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $idAnterior = $x['id'];
+                        // $idEquipoX = $x['id_equipo'];
+                        $titulo = $x['actividad'];
+                        $tipoIncidencia = "SEGUIMIENTO";
+                        $status = $x['status'];
+                        $creadoPor = $x['creado_por'];
+                        $responsable = $x['responsable'];
+                        $fechaRealizado = $x['fecha_realizado'];
+                        // $finalizadoPor = 0;
+                        $fechaCreacion = $x['fecha_creacion'];
+                        $idDestino = $x['id_destino'];
+                        $idSeccion = $x['id_seccion'];
+                        $idSubseccion = $x['id_subseccion'];
+                        $rangoFecha = $x['rango_fecha'];
+                        $sMaterial = $x['status_material'];
+                        $sTrabajare = $x['status_trabajando'];
+                        $dCalidad = $x['departamento_calidad'];
+                        $dCompras = $x['departamento_compras'];
+                        $dDireccion = $x['departamento_direccion'];
+                        $dFinanzas = $x['departamento_finanzas'];
+                        $dRRHH = $x['departamento_rrhh'];
+                        $eElectricidad = $x['energetico_electricidad'];
+                        $eAgua = $x['energetico_agua'];
+                        $eDiesel = $x['energetico_diesel'];
+                        $eGas = $x['energetico_gas'];
+                        // $zona = $x['zona'];
+                        $cod2bend = $x['cod2bend'];
+                        $codsap = $x['codsap'];
+                        $bGP = $x['bitacora_gp'];
+                        $bTRS = $x['bitacora_trs'];
+                        $bZI = $x['bitacora_zi'];
+                        $sEP = $x['status_ep'];
+                    }
+                }
+            }
+
+            if ($opcion == "EQUIPO" and $idMax > 0) {
+                $query = "INSERT INTO t_mc(id, id_equipo, actividad, tipo_incidencia, status, creado_por, responsable, fecha_realizado, realizado_por, fecha_creacion, ultima_modificacion, id_destino, id_seccion, id_subseccion, rango_fecha, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, zona, cod2bend, codsap, bitacora_gp, bitacora_trs, bitacora_zi, status_ep, activo) VALUES($idMax, $idEquipo, '$titulo', '$tipoIncidencia', '$status', '$creadoPor', '$responsable', '$fechaRealizado', '$finalizadoPor', '$fechaCreacion', '$fechaActual', '$idDestino', '$idSeccion', '$idSubseccion', '$rangoFecha', '$sMaterial', '$sTrabajare', '$dCalidad', '$dCompras', '$dDireccion', '$dFinanzas', '$dRRHH', '$eElectricidad', '$eAgua', '$eDiesel', '$eGas', '$zona', '$cod2bend', '$codsap', '$bGP', '$bTRS', '$bZI', '$sEP', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            } elseif ($opcion == "GENERAL" and $idMax > 0) {
+                $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, tipo_incidencia, titulo, responsable, fecha, fecha_finalizado, rango_fecha, status, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, cod2bend, codsap, bitacora_gp, bitacora_trs, bitacora_zi, status_ep, activo) VALUES($idMax, 0, '$creadoPor', '$idDestino', '$idSeccion', '$idSubseccion', '$tipoIncidencia', '$titulo', '$responsable', '$fechaCreacion', '$fechaRealizado', '$rangoFecha', '$status', '$sMaterial', '$sTrabajare', '$eElectricidad', '$eAgua', '$eDiesel', '$eGas', '$dCalidad', '$dCompras', '$dDireccion', '$dFinanzas', '$dRRHH', '$cod2bend', '$codsap', '$bGP', '$bTRS', '$bZI', '$sEP', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            } elseif ($opcion == "PROYECTO" and $idMax > 0) {
+                $query = "INSERT INTO t_proyectos_planaccion(id, id_proyecto, actividad, status, fecha_creacion, fecha_realizado, rango_fecha, creado_por, responsable, realizado_por, justificacion, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, codsap, cod2bend, cantidad, coste, bitacora_gp, bitacora_trs, bitacora_zi, status_ep, activo) VALUES($idMax, $idProyecto, '$titulo', '$status', '$fechaCreacion', '$fechaRealizado' '$rangoFecha', '$creadoPor', '$responsable', '$finalizadoPor', '', '$sMaterial', '$sTrabajare', '$eElectricidad', '$eAgua', '$eDiesel', '$eGas', '$dCalidad', '$dCompras', '$dDireccion', '$dFinanzas', '$dRRHH', '$cod2bend', '$codsap', 0, 0, '$bGP', '$bTRS', '$bZI', '$sEP', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
+
+
+            // PROCESO PARA TRANSFERIR ADJUNTOS Y COMENTARIOS
+            $array['comentarios'] = array();
+            $array['adjuntos'] = array();
+
+            if ($tipo == "EQUIPO") {
+
+                #ADJUNTOS
+                $query = "SELECT id_mc, url_adjuntos, fecha, subido_por 
+                FROM t_mc_adjuntos 
+                WHERE id_mc = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['adjuntos'][] = array(
+                            "id" => intval($x['id_mc']),
+                            "url" => $x['url_adjunto'],
+                            "fecha" => $x['fecha'],
+                            "subidoPor" => intval($x['subido_por'])
+                        );
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT id_mc, comentario, id_usuario, fecha 
+                FROM t_mc_comentarios
+                WHERE id_mc = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['comentarios'][] = array(
+                            "id" => intval($x['id_mc']),
+                            "comentario" => $x['comentario'],
+                            "CreadoPor" => intval($x['id_usuario']),
+                            "fecha" => $x['fecha']
+                        );
+                    }
+                }
+            } elseif ($tipo == "GENERAL") {
+
+                #ADJUNTOS
+                $query = "SELECT id_mp_np, url, fecha, id_usuario 
+                FROM adjuntos_mp_np 
+                WHERE id_mp_np = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['adjuntos'][] = array(
+                            "id" => intval($x['id_mp_np']),
+                            "url" => $x['url'],
+                            "fecha" => $x['fecha'],
+                            "subidoPor" => intval($x['id_usuario'])
+                        );
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT id_mp_np, comentario, id_usuario, fecha 
+                FROM comentarios_mp_np
+                WHERE id_mp_np = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['comentarios'][] = array(
+                            "id" => intval($x['id_mp_np']),
+                            "comentario" => $x['comentario'],
+                            "CreadoPor" => intval($x['id_usuario']),
+                            "fecha" => $x['fecha']
+                        );
+                    }
+                }
+            } elseif ($tipo == "PROYECTO") {
+
+                #ADJUNTOS
+                $query = "SELECT id_actividad, url_adjunto, fecha_creado, subido_por 
+                FROM t_proyectos_planaccion_adjuntos 
+                WHERE id_actividad = $id and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['adjuntos'][] = array(
+                            "id" => intval($x['id_actividad']),
+                            "url" => $x['url_adjunto'],
+                            "fecha" => $x['fecha_creado'],
+                            "subidoPor" => intval($x['subido_por'])
+                        );
+                    }
+                }
+
+                #COMENTARIOS
+                $query = "SELECT id_actividad, comentario, usuario, fecha 
+                FROM comentarios_mp_np
+                WHERE id_actividad = $id and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $array['comentarios'][] = array(
+                            "id" => intval($x['id_actividad']),
+                            "comentario" => $x['comentario'],
+                            "CreadoPor" => intval($x['usuario']),
+                            "fecha" => $x['fecha']
+                        );
+                    }
+                }
+            }
+
+            // RUTA ANTERIOR
+            if ($tipo == "EQUIPO") {
+                $rutaAnterior = $ruta_t_mc_adjuntos;
+            } elseif ($tipo == "GENERAL") {
+                $rutaAnterior = $adjuntos_ruta_t_mp_np;
+            } elseif ($tipo = "PROYECTO") {
+                $rutaAnterior = $ruta_t_proyectos_planaccion_adjuntos;
+            }
+
+            if ($opcion == "EQUIPO") {
+                foreach ($array['comentarios'] as $x) {
+                    $idX = $x['id'];
+                    $comentario = $x['comentario'];
+                    $creadoPor = $x['CreadoPor'];
+                    $fecha = $x['fecha'];
+
+                    $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) 
+                    VALUES($idMax, '$comentario', $creadoPor, '$fecha', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $resp = 1;
+                    }
+                }
+
+                foreach ($array['adjuntos'] as $x) {
+                    $idX = $x['id'];
+                    $url = $x['url'];
+                    $fecha = $x['fecha'];
+                    $subidoPor = $x['subidoPor'];
+                    $extension = pathinfo($url, PATHINFO_EXTENSION);
+                    $nuevoUrl = "INCIDENCIA_ID_"  . $idMax . "_" . rand(1, 60000) . ".$extension";
+
+                    $query = "INSERT INTO t_mc_adjuntos(id_mc, url_adjunto, fecha, subido_por, activo) 
+                    VALUES($idMax, '$nuevoUrl', '$fecha', $subidoPor, 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        if (copy($rutaAnterior . "/$url", $ruta_t_mc_adjuntos . "/$url")) {
+                            if (rename($ruta_t_mc_adjuntos . "/$url", $ruta_t_mc_adjuntos . "/$nuevoUrl")) {
+                                $resp = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($opcion == "GENERAL") {
+                foreach ($array['comentarios'] as $x) {
+                    $idX = $x['id'];
+                    $comentario = $x['comentario'];
+                    $creadoPor = $x['CreadoPor'];
+                    $fecha = $x['fecha'];
+
+                    $query = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha, activo) 
+                    VALUES($idMax, $creadoPor, '$comentario', '$fecha', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $resp = 1;
+                    }
+                }
+
+                foreach ($array['adjuntos'] as $x) {
+                    $idX = $x['id'];
+                    $url = $x['url'];
+                    $fecha = $x['fecha'];
+                    $subidoPor = $x['subidoPor'];
+                    $extension = pathinfo($url, PATHINFO_EXTENSION);
+                    $nuevoUrl = "INCIDENCIA_GENERAL_ID_"  . $idMax . "_" . rand(1, 60000) . ".$extension";
+
+                    $query = "INSERT INTO adjuntos_mp_np(id_usuario, id_mp_np, url, fecha, activo) 
+                    VALUES($subidoPor, $idMax, '$nuevoUrl', '$fecha', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        if (copy($rutaAnterior . "/$url", $adjuntos_ruta_t_mp_np . "/$url")) {
+                            if (rename($adjuntos_ruta_t_mp_np . "/$url", $adjuntos_ruta_t_mp_np . "/$nuevoUrl")) {
+                                $resp = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($opcion == "PROYECTO") {
+                foreach ($array['comentarios'] as $x) {
+                    $idX = $x['id'];
+                    $comentario = $x['comentario'];
+                    $creadoPor = $x['CreadoPor'];
+                    $fecha = $x['fecha'];
+
+                    $query = "INSERT INTO t_proyectos_planaccion_comentarios(id_actividad, comentario, id_usuario, fecha, activo) 
+                    VALUES($idMax, '$comentario', $creadoPor, '$fecha', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        $resp = 1;
+                    }
+                }
+
+                foreach ($array['adjuntos'] as $x) {
+                    $idX = $x['id'];
+                    $url = $x['url'];
+                    $fecha = $x['fecha'];
+                    $subidoPor = $x['subidoPor'];
+                    $extension = pathinfo($url, PATHINFO_EXTENSION);
+                    $nuevoUrl = "IPLANACCION_ID_"  . $idMax . "_" . rand(1, 60000) . ".$extension";
+
+                    $query = "INSERT INTO t_proyectos_planaccion_adjuntos(id_actividad, url_adjunto, id_usuario, fecha_creado, status) 
+                    VALUES($idMax, '$nuevoUrl', $subidoPor, '$fecha', 1)";
+                    if ($result = mysqli_query($conn_2020, $query)) {
+                        if (copy($rutaAnterior . "/$url", $ruta_t_proyectos_planaccion_adjuntos . "/$url")) {
+                            if (rename($ruta_t_proyectos_planaccion_adjuntos . "/$url", $ruta_t_proyectos_planaccion_adjuntos . "/$nuevoUrl")) {
+                                $resp = 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // else
+        }
+
+        if ($tipo == "EQUIPO" and $resp == 1) {
+            $query = "UPDATE t_mc SET activo = 3 WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        } elseif ($tipo == "GENERAL" and $resp == 1) {
+            $query = "UPDATE t_mp_np SET activo = 3 WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        } else if ($tipo == "PROYECTO" and $resp == 1) {
+            $query = "UPDATE t_proyectos_planaccion SET activo = 3 WHERE id = $id";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 2;
+            }
+        }
+
+        echo json_encode($resp);
+    }
 
     // CIERRE FINAL
 }

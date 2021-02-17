@@ -1072,11 +1072,13 @@ function obtenerPlanaccion(idProyecto) {
     localStorage.setItem('idProyecto', idProyecto);
     let idUsuario = localStorage.getItem('usuario');
     let idDestino = localStorage.getItem('idDestino');
+
     const action = 'obtenerPlanaccion';
-    const ruta = 'php/proyectos_planacciones.php?';
-    const URL = `${ruta}action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
+    const URL = `php/proyectos_planacciones.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idProyecto=${idProyecto}`;
+
     document.getElementById("loadProyectos").innerHTML =
         '<i class="fa fa-spinner fa-pulse fa-sm"></i>';
+
     fetch(URL)
         .then(array => array.json())
         .then(array => {
@@ -1310,6 +1312,8 @@ function statusPlanaccion(idPlanaccion) {
     document.getElementById("statusZI").setAttribute("onclick", 'actualizarPlanaccion(1, "bitacora_zi",' + idPlanaccion + ")");
 
     document.getElementById("statusEP").setAttribute("onclick", 'actualizarPlanaccion(1, "status_ep",' + idPlanaccion + ")");
+
+    document.getElementById("btnMover").setAttribute("onclick", `moverA(${idPlanaccion}, 'PROYECTO')`);
 
     nivelVista(2, 'modalEditarTitulo');
     estiloModalStatus(idPlanaccion, 'PLANACCION');

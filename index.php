@@ -2969,8 +2969,8 @@
 
 
     <!-- MODAL STATUS   -->
-    <div id="modalStatus" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+    <div id="modalStatus" class="modal scrollbar">
+        <div class="modal-window rounded-md pt-8" style="width: 300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalStatus')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -3137,7 +3137,7 @@
                             <i class="fas fa-pen fa-lg"></i>
                         </div>
                     </div>
-                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleHidden('contenedorMover');">
                         <div class="">
                             <i class="fas fa-random fa-lg"></i>
                         </div>
@@ -3160,13 +3160,72 @@
                     </div>
                 </div>
 
+                <div id="contenedorMover" class="flex flex-col justify-center items-center rounded-md w-full bg-gray-300 px-2 py-1 text-gray-700 uppercase">
+
+                    <div class="p-1 w-full">
+                        <label class="text-xs font-medium text-gray-700">Mover a:</label>
+                        <select id="selectMoverOpcion" class="mt-1 w-full px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-200">
+                            <option>Selecciones Opción</option>
+                            <option value="EQUIPO">EQUIPO</option>
+                            <option value="GENERAL">INCIDENCIA GENERAL</option>
+                            <option value="PROYECTO">PROYECTO</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-1 px-2  w-full">
+                        <div class="p-1">
+
+                            <div class="opcionSelectsMover hidden">
+                                <label class="text-xs font-medium text-gray-700">Sección: </label>
+                                <select id="selectMoverSeccion" class="mb-2 w-full px-3 border border-gray-300 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="">Seleccione Sección</option>
+                                </select>
+                            </div>
+
+                            <div class="opcionSelectsMover hidden">
+                                <label class="text-xs font-medium text-gray-700">Subsección: </label>
+                                <select id="selectMoverSubseccion" class="mb-2 w-full px-3 border border-gray-300 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="">Seleccione Subsección</option>
+                                </select>
+                            </div>
+
+                            <div class="opcionSelectsMover hidden">
+                                <label class="text-xs font-medium text-gray-700">Equipo: </label>
+                                <select id="selectMoverEquipo" class="mb-2 w-full px-3 border border-gray-300 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="">Seleccione Equipo</option>
+                                    <option value="EQUIPO">EQUIPO</option>
+                                    <option value="GENERAL">INCIDENCIA GENERAL</option>
+                                    <option value="PROYECTO">PROYECTO</option>
+                                </select>
+                            </div>
+
+                            <div class="opcionSelectsMover hidden">
+                                <label class="text-xs font-medium text-gray-700">Proyecto: </label>
+                                <select id="selectMoverProyecto" class="mb-2 w-full px-3 border border-gray-300 bg-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <option value="">Seleccione Proyecto</option>
+                                </select>
+                            </div>
+
+                            <div class="w-full flex flex-row justify-center opcionSelectsMover hidden">
+                                <button id="btnMover" type="button" class="font-semibold bg-blue-400 text-blue-800 hover:bg-blue-600 rounded-lg focus:outline-none w-1/3 mx-2">
+                                    Mover
+                                </button>
+
+                                <button type="button" class="font-semibold bg-red-400 text-red-800 hover:bg-red-600 rounded-lg focus:outline-none w-1/3 mx-2" onclick="toggleHidden('contenedorMover')">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 
 
     <!-- MODAL STATUS   -->
-    <div id="modalTituloEliminar" class="modal">
+    <div id=" modalTituloEliminar" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -4112,6 +4171,10 @@
     <!-- SEGURIDAD DE SESSION -->
     <script src="js/seguridad_session.js" type="text/javascript"></script>
     <!-- SEGURIDAD DE SESSION -->
+
+    <!-- SCRIPTS COMPLMENTOS -->
+    <script src="js/planner.js" type="text/javascript"></script>
+    <!-- SCRIPTS COMPLMENTOS -->
 </body>
 
 </html>
