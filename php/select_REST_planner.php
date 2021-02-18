@@ -1076,6 +1076,7 @@ if (isset($_GET['action'])) {
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
+        
         if (isset($_GET["palabraUsuario"])) {
             $palabraUsuario = $_GET["palabraUsuario"];
         } else {
@@ -4214,13 +4215,13 @@ if (isset($_GET['action'])) {
         if ($tipo == "EQUIPO" and $tipo == $opcion) {
             $query = "UPDATE t_mc SET id_seccion = $idSeccion, id_subseccion = $idSubseccion, id_equipo = $idEquipo WHERE id = $id";
             if ($result = mysqli_query($conn_2020, $query) and $idEquipo > 0) {
-                $resp = 1;
+                $resp = 2;
             }
         } elseif ($tipo == "GENERAL" and $tipo == $opcion) {
             $query = "UPDATE t_mp_np SET id_seccion = $idSeccion, id_subseccion = $idSubseccion, id_equipo = 0 
             WHERE id = $id";
             if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 1;
+                $resp = 2;
             }
         } elseif ($tipo == "PROYECTO" and $tipo == $opcion) {
             $idProyecto = 0;
@@ -4234,7 +4235,7 @@ if (isset($_GET['action'])) {
             if ($idProyecto > 0) {
                 $query = "UPDATE t_proyectos_planaccion SET id_proyecto = $idProyecto WHERE id = $id";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $resp = 1;
+                    $resp = 2;
                 }
             }
         } else {
@@ -4642,24 +4643,24 @@ if (isset($_GET['action'])) {
                 }
             }
 
-            // else
-        }
+            if ($tipo == "EQUIPO" and $resp == 1) {
+                $query = "UPDATE t_mc SET activo = 3 WHERE id = $id";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 2;
+                }
+            } elseif ($tipo == "GENERAL" and $resp == 1) {
+                $query = "UPDATE t_mp_np SET activo = 3 WHERE id = $id";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 2;
+                }
+            } else if ($tipo == "PROYECTO" and $resp == 1) {
+                $query = "UPDATE t_proyectos_planaccion SET activo = 3 WHERE id = $id";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 2;
+                }
+            }
 
-        if ($tipo == "EQUIPO" and $resp == 1) {
-            $query = "UPDATE t_mc SET activo = 3 WHERE id = $id";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 2;
-            }
-        } elseif ($tipo == "GENERAL" and $resp == 1) {
-            $query = "UPDATE t_mp_np SET activo = 3 WHERE id = $id";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 2;
-            }
-        } else if ($tipo == "PROYECTO" and $resp == 1) {
-            $query = "UPDATE t_proyectos_planaccion SET activo = 3 WHERE id = $id";
-            if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 2;
-            }
+            // else
         }
 
         echo json_encode($resp);
