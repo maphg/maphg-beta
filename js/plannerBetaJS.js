@@ -1136,7 +1136,7 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
                   '<i class="fas fa-comment-dots"></i>' : '';
 
                const iconoNombreComentario = comentario.length >= 1 ?
-                  '<img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombreComentario}" width="20" height="20">' : '';
+                  `<img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombreComentario}" width="20" height="20">` : '';
 
                const iconoAdjunto = adjuntos >= 1 ?
                   '<i class="fas fa-paperclip mx-1"></i>' : '';

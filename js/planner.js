@@ -98,7 +98,6 @@ selectMoverSeccion.addEventListener('change', () => {
             selectMoverProyecto.innerHTML = '<option value="">Seleccione Proyecto</option>';
             fetch(APIERROR + err);
         })
-
 })
 
 
