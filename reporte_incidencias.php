@@ -167,26 +167,34 @@
 
             </div>
 
-            <div id="contenedorPendientesSolucionados" class="w-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start">
-                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 overflow-y-auto scrollbar md:mr-8 sm:mb-8 md:mb-0" style="max-height: 900px;">
-                    <div class="flex">
-                        <h1 class="font-bold text-gray-500 uppercase text-sm">En proceso</h1>
+            <div id="contenedorPendientesSolucionados" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start">
+                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
+                    <div class="flex text-xxs rounded-full bg-red-100 pr-2 items-center w-40">
+                        <div class="w-6 h-6 rounded-full bg-red-300 text-red-500 font-bold flex items-center justify-center mr-2">
+                            <h1>22</h1>
+                        </div>
+                        <h1 class="font-bold text-gray-500 uppercase text-sm text-red-500">Pendientes</h1>
                     </div>
-                    <div id="dataPendientes"> </div>
-                </div>
-
-                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 overflow-y-auto scrollbar" style="max-height: 900px;">
-                    <div class="flex">
-                        <h1 class="font-bold text-gray-500 uppercase text-sm">Solucionadas</h1>
+                    <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
+                        <div id="dataPendientes"> </div>
                     </div>
-                    <div id="dataSolucionados"></div>
                 </div>
-
+                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
+                    <div class="flex text-xxs rounded-full bg-green-100 pr-2 items-center w-40">
+                        <div class="w-6 h-6 rounded-full bg-green-300 text-green-500 font-bold flex items-center justify-center mr-2">
+                            <h1>10909</h1>
+                        </div>
+                        <h1 class="font-bold uppercase text-sm text-green-500">Solucionados</h1>
+                    </div>
+                    <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
+                        <div id="dataSolucionados"> </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="contenedorSeccion" class="w-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start"></div>
+            <div id="contenedorSeccion" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start overflow-x-auto scrollbar" style="max-height: 80vh"></div>
 
-            <div id="contenedorSubsecciones" class="w-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start"></div>
+            <div id="contenedorSubsecciones" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start" style="max-height: 80vh"></div>
 
         </div>
     </div>

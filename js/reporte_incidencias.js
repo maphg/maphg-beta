@@ -35,11 +35,6 @@ const contenedorSubsecciones = document.getElementById("contenedorSubsecciones")
 const chartdiv2 = document.getElementById("chartdiv2");
 // GRAFICA
 
-// EXPANDIR
-const expandir = idElemento => {
-    if (document.getElementById(idElemento).classList.toggle('hidden')) {
-    }
-}
 
 // TOGGLE PARA CUALQUIER CLASE
 const toggleClassX = (idElemento, claseX) => {
@@ -47,8 +42,8 @@ const toggleClassX = (idElemento, claseX) => {
     }
 }
 
-// GENERA REPORTE CON LOS FILTROS
-const obtenerReporte = () => {
+// GENERA REPORTE CON LOS FILTROS (COLUMNA: PRECESO - SOLUCIONADO)
+const obtenerReporte = (columna) => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
@@ -79,8 +74,6 @@ const obtenerReporte = () => {
             // LIMPIA CONTENEDORES
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
-            contenedorSeccion.innerHTML = '';
-            contenedorSubsecciones.innerHTML = '';
 
             console.log(array);
             console.log(array.length);
@@ -109,12 +102,23 @@ const obtenerReporte = () => {
                     const comentario = array[x].comentario;
                     const comentarioFecha = array[x].comentarioFecha;
                     const ComentarioDe = array[x].ComentarioDe;
+                    const totalAdjuntos = array[x].totalAdjuntos;
+                    const idSeccion = array[x].idSeccion;
+                    const idSubseccion = array[x].idSubseccion;
 
                     // ICONO PARA COMENTARIOS
                     const iconoComentario = comentario.length > 0 ?
                         `
                             <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full ml-2">
                                 <i class="fas fa-comment-alt-dots"></i>
+                            </div>
+                        ` : '';
+
+                    // ICONO PARA ADJUNTOS
+                    const iconoAdjunto = totalAdjuntos > 0 ?
+                        `
+                            <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full">
+                                <i class="fas fa-paperclip"></i>
                             </div>
                         ` : '';
 
@@ -152,63 +156,13 @@ const obtenerReporte = () => {
                     }
 
                     // ESTILO PARA EL BORDE(RING)
-                    const estiloIncidencia = tipoIncidencia == "EMERGENCIA" ? `ring ring-red-200 bg-red-100`
-                        : tipoIncidencia == "URGENCIA" ? `ring ring-orange-200 bg-orange-100`
-                            : tipoIncidencia == "ALARMA" ? `ring ring-yellow-200 bg-yellow-100`
-                                : tipoIncidencia == "ALERTA" ? `ring ring-blue-200 bg-blue-100`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `ring ring-green-200 bg-green-100`
-                                        : tipoIncidencia == "PREVENTIVO" ? `ring ring-gray-200 bg-gray-100`
-                                            : tipoIncidencia == "PROYECTO" ? `ring ring-purple-200 bg-purple-100`
-                                                : ''
-
-                    // ESTILO BACKGROUND 200
-                    const bg200 = tipoIncidencia == "EMERGENCIA" ? `bg-red-200`
-                        : tipoIncidencia == "URGENCIA" ? `bg-orange-200`
-                            : tipoIncidencia == "ALARMA" ? `bg-yellow-200`
-                                : tipoIncidencia == "ALERTA" ? `bg-blue-200`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `bg-green-200`
-                                        : tipoIncidencia == "PREVENTIVO" ? `bg-gray-200`
-                                            : tipoIncidencia == "PROYECTO" ? `bg-purple-200`
-                                                : ''
-
-                    // ESTILO BACKGROUND 400
-                    const bg400 = tipoIncidencia == "EMERGENCIA" ? `bg-red-400`
-                        : tipoIncidencia == "URGENCIA" ? `bg-orange-400`
-                            : tipoIncidencia == "ALARMA" ? `bg-yellow-400`
-                                : tipoIncidencia == "ALERTA" ? `bg-blue-400`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `bg-gray-400`
-                                        : tipoIncidencia == "PREVENTIVO" ? `bg-green-400`
-                                            : tipoIncidencia == "PROYECTO" ? `bg-purple-400`
-                                                : ''
-
-                    // ESTILO BACKGROUND 300
-                    const bg300 = tipoIncidencia == "EMERGENCIA" ? `bg-red-300`
-                        : tipoIncidencia == "URGENCIA" ? `bg-orange-300`
-                            : tipoIncidencia == "ALARMA" ? `bg-yellow-300`
-                                : tipoIncidencia == "ALERTA" ? `bg-blue-300`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `bg-green-300`
-                                        : tipoIncidencia == "PREVENTIVO" ? `bg-gray-300`
-                                            : tipoIncidencia == "PROYECTO" ? `bg-purple-300`
-                                                : ''
-
-                    // ESTILO TEXT 200
-                    const text200 = tipoIncidencia == "EMERGENCIA" ? `text-red-200`
-                        : tipoIncidencia == "URGENCIA" ? `text-orange-200`
-                            : tipoIncidencia == "ALARMA" ? `text-yellow-200`
-                                : tipoIncidencia == "ALERTA" ? `text-blue-200`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `text-green-200`
-                                        : tipoIncidencia == "PREVENTIVO" ? `text-gray-200`
-                                            : tipoIncidencia == "PROYECTO" ? `text-purple-200`
-                                                : ''
-
-                    // ESTILO TEXT 500
-                    const text500 = tipoIncidencia == "EMERGENCIA" ? `text-red-500`
-                        : tipoIncidencia == "URGENCIA" ? `text-orange-500`
-                            : tipoIncidencia == "ALARMA" ? `text-yellow-500`
-                                : tipoIncidencia == "ALERTA" ? `text-blue-500`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `text-green-500`
-                                        : tipoIncidencia == "PREVENTIVO" ? `text-gray-500`
-                                            : tipoIncidencia == "PROYECTO" ? `text-purple-500`
+                    const color = tipoIncidencia == "EMERGENCIA" ? `red`
+                        : tipoIncidencia == "URGENCIA" ? `orange`
+                            : tipoIncidencia == "ALARMA" ? `yellow`
+                                : tipoIncidencia == "ALERTA" ? `blue`
+                                    : tipoIncidencia == "SEGUIMIENTO" ? `green`
+                                        : tipoIncidencia == "PREVENTIVO" ? `gray`
+                                            : tipoIncidencia == "PROYECTO" ? `purple`
                                                 : ''
 
                     const sMaterialX = sMaterial >= 1 ? `
@@ -237,23 +191,21 @@ const obtenerReporte = () => {
                         </div>                    
                     ` : ``;
 
-                    const fExpandir = `onclick="expandir('mostrar_mas_${x}'); toggleClassX('titulo_incidencia_${x}', 'truncate');"`;
-
+                    const fExpandir = `onclick="toggleClassX('mostrar_mas_${x}', 'hidden'); 
+                    toggleClassX('titulo_incidencia_${x}', 'truncate'); toggleClassX('titulo_incidencia_${x}', 'mb-1'); toggleClassX('titulo_incidencia_${x}', 'text-justify');"`;
 
                     const codigo = `
-                        <div class="w-full flex flex-col h-auto my-3 rounded cursor-pointer ${estiloIncidencia}" 
+                        <div class="w-full flex flex-col h-auto my-3 rounded cursor-pointer ring ring-${color}-200 bg-${color}-100" 
                         ${fExpandir}>
                             <!-- PARTE VISIBLE -->
                             <div class="w-full p-1 flex flex-none flex-col">
-                                <h1 id="titulo_incidencia_${x}" class="truncate font-semibold">${titulo}</h1>
+                                <h1 id="titulo_incidencia_${x}" class="truncate font-semibold lowercase">${titulo}</h1>
                                 <div class="flex justify-between">
                                     <div class="flex bg-white shadow py-1 px-2 rounded-full items-center text-bluegray-700">
                                         <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="">
                                         <p class="text-xs font-bold mx-1">${creadoPor}</p>
                                        ${iconoComentario}
-                                        <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full hidden">
-                                            <i class="fas fa-paperclip"></i>
-                                        </div>
+                                        ${iconoAdjunto}
                                     </div>
                                     
                                     <div class="flex justify-around items-center">
@@ -269,12 +221,12 @@ const obtenerReporte = () => {
 
                             <!-- PARTE TOOGLEABLE -->
                             <div id="mostrar_mas_${x}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
-                                <div class="rounded w-full p-2 ${bg200}">
+                                <div class="rounded w-full p-2 bg-${color}-200">
                                     ${dataComentario}
                                 </div>
                                 <div class="flex px-2 mt-2 w-full">
-                                    <button class="py-2 px-2 rounded-l w-1/2 ${bg300} ${text500} hover:${bg400} hover:${text200}">Editar</button>
-                                    <button class="py-2 px-2 rounded-r w-1/2 ${bg300} ${text500} hover:${bg400} hover:${text200}">PDF</button>
+                                    <button class="py-2 px-2 rounded-l w-1/2  bg-${color}-300 text-${color}-500 hover:bg-${color}-400 hover:text-${color}-200">Editar</button>
+                                    <button class="py-2 px-2 rounded-r w-1/2 bg-${color}-300 text-${color}-500 hover:bg-${color}-400 hover:text-${color}-200">PDF</button>
                                 </div>
                             </div>
                             <!-- PARTE TOOGLEABLE -->
@@ -282,10 +234,22 @@ const obtenerReporte = () => {
                         </div>
                     `;
 
-                    if (status === "PENDIENTE") {
-                        dataPendientes.insertAdjacentHTML('beforeend', codigo);
-                    } else {
-                        dataSolucionados.insertAdjacentHTML('beforeend', codigo);
+                    if (columna == "COLUMNA") {
+                        if (status === "PENDIENTE") {
+                            dataPendientes.insertAdjacentHTML('beforeend', codigo);
+                        } else {
+                            dataSolucionados.insertAdjacentHTML('beforeend', codigo);
+                        }
+                    } else if (columna == "SECCION") {
+                        if (document.getElementById("dataPendientesSeccion_" + idSeccion)) {
+                            document.getElementById("dataPendientesSeccion_" + idSeccion).
+                                insertAdjacentHTML('beforeend', codigo)
+                        }
+                    } else if (columna == "SUBSECCION") {
+                        if (document.getElementById("dataPendientesSeccion_" + idSubseccion)) {
+                            document.getElementById("dataPendientesSeccion_" + idSubseccion).
+                                insertAdjacentHTML('beforeend', codigo)
+                        }
                     }
                 }
             }
@@ -300,6 +264,7 @@ const obtenerReporte = () => {
             contenedorSubsecciones.innerHTML = '';
         })
 }
+
 
 
 // GRAFICA DE INCIDENCIAS
@@ -472,7 +437,7 @@ filtroSeccion.addEventListener('change', () => {
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${filtroSeccion.value}`;
 
     // ACTUALIZA RESULTADOS
-    obtenerReporte();
+    obtenerReporte('COLUMNA');
 
     if (filtroSeccion.value > 0) {
         fetch(URL)
@@ -494,7 +459,7 @@ filtroSeccion.addEventListener('change', () => {
             })
             .catch(function (err) {
                 filtroSubseccion.innerHTML = '<option value="0">TODOS</option>';
-                obtenerReporte();
+                obtenerReporte('COLUMNA');
             })
     } else {
         filtroSubseccion.innerHTML = '<option value="0">TODOS</option>';
@@ -510,17 +475,27 @@ btnColumnaPendientesSolucionados.addEventListener('click', () => {
     btnColumnaPendientesSolucionados.classList.remove('bg-gray-100', 'text-gray-300');
     btnColumnaSecciones.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSubsecciones.classList.add('bg-gray-100', 'text-gray-300');
-    obtenerReporte();
+    contenedorPendientesSolucionados.classList.remove('hidden');
+    contenedorSeccion.classList.add('hidden');
+    contenedorSubsecciones.classList.add('hidden');
+    obtenerReporte('COLUMNA');
 })
-btnColumnaSecciones.addEventListener('click', () => {
+
+btnColumnaSecciones.addEventListener('click', async () => {
     btnColumnaPendientesSolucionados.classList.remove('bg-white', 'shadow');
     btnColumnaSecciones.classList.add('bg-white', 'shadow');
     btnColumnaSubsecciones.classList.remove('bg-white', 'shadow');
     btnColumnaPendientesSolucionados.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSecciones.classList.remove('bg-gray-100', 'text-gray-300');
     btnColumnaSubsecciones.classList.add('bg-gray-100', 'text-gray-300');
-    obtenerReporte();
+    contenedorPendientesSolucionados.classList.add('hidden');
+    contenedorSeccion.classList.remove('hidden');
+    contenedorSubsecciones.classList.add('hidden');
+    // obtenerReporte('COLUMNA');
+    await crearContenedoresSecciones()
+    await obtenerReporte('SECCION')
 })
+
 btnColumnaSubsecciones.addEventListener('click', () => {
     btnColumnaPendientesSolucionados.classList.remove('bg-white', 'shadow');
     btnColumnaSecciones.classList.remove('bg-white', 'shadow');
@@ -528,7 +503,10 @@ btnColumnaSubsecciones.addEventListener('click', () => {
     btnColumnaPendientesSolucionados.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSecciones.classList.add('bg-gray-100', 'text-gray-300');
     btnColumnaSubsecciones.classList.remove('bg-gray-100', 'text-gray-300');
-    obtenerReporte();
+    contenedorPendientesSolucionados.classList.add('hidden');
+    contenedorSeccion.classList.add('hidden');
+    contenedorSubsecciones.classList.remove('hidden');
+    obtenerReporte('COLUMNA');
 })
 
 
@@ -543,9 +521,47 @@ const crearContenedoresSecciones = () => {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            contenedorSeccion.innerHTML = '';
+            return array;
+        })
+        .then(array => {
             console.log(array)
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idSeccion = array[x].idSeccion;
+                    const seccion = array[x].seccion;
+
+                    const estilo = idSeccion == 9 ? 'red'
+                        : idSeccion == 8 ? 'blue'
+                            : idSeccion == 10 ? 'yellow'
+                                : idSeccion == 11 ? 'green'
+                                    : idSeccion == 24 ? 'cyan'
+                                        : idSeccion == 1 ? 'purple'
+                                            : idSeccion == 6 ? 'orange'
+                                                : idSeccion == 12 ? 'blue'
+                                                    : idSeccion == 5 ? 'indigo'
+                                                        : idSeccion == 7 ? 'red'
+                                                            : 'gray';
+
+                    const codigo = `  
+                        <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
+                            <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
+                                <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
+                                    <h1 id="cantidad_seccion_${idSeccion}"></h1>
+                                </div>
+                                <h1 class="font-bold text-gray-500 uppercase text-sm text-${estilo}-500">${seccion}</h1>
+                            </div>
+                            <div class="overflow-y-auto scrollbar px-1" style="max-height: 900px;">
+                                <div id="dataPendientesSeccion_${idSeccion}"></div>
+                             </div>
+                        </div>
+                    `;
+                    contenedorSeccion.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
         })
         .catch(function (err) {
+            contenedorSeccion.innerHTML = '';
             console.log(err)
             // fetch(APIERROR + err);
         })
@@ -573,14 +589,26 @@ const crearContenedoresSubsecciones = () => {
 
 
 // EVENTOS PARA ACTUALIZAR RESULTADOS
-btnFiltroPalabra.addEventListener('click', obtenerReporte)
-filtroResponsable.addEventListener('change', obtenerReporte)
-filtroSubseccion.addEventListener('change', obtenerReporte)
-filtroTipo.addEventListener('change', obtenerReporte)
-filtroTipoIncidencia.addEventListener('change', obtenerReporte)
-filtroStatus.addEventListener('change', obtenerReporte)
+btnFiltroPalabra.addEventListener('click', () => {
+    obtenerReporte('COLUMNA')
+})
+filtroResponsable.addEventListener('change', () => {
+    obtenerReporte('COLUMNA')
+})
+filtroSubseccion.addEventListener('change', () => {
+    obtenerReporte('COLUMNA')
+})
+filtroTipo.addEventListener('change', () => {
+    obtenerReporte('COLUMNA')
+})
+filtroTipoIncidencia.addEventListener('change', () => {
+    obtenerReporte('COLUMNA')
+})
+filtroStatus.addEventListener('change', () => {
+    obtenerReporte('COLUMNA')
+})
 filtroFecha.addEventListener('change', () => {
-    obtenerReporte();
+    obtenerReporte('COLUMNA');
     if (filtroFecha.value == "RANGO") {
         contenedorRangoFecha.classList.remove('hidden');
     } else {
@@ -591,7 +619,7 @@ filtroFecha.addEventListener('change', () => {
 
 
 filtroFechaFin.addEventListener('change', () => {
-    obtenerReporte()
+    obtenerReporte('COLUMNA')
     console.log(filtroFechaFin.value);
     console.log(filtroFechaInicio.value);
 })
@@ -601,6 +629,4 @@ filtroFechaFin.addEventListener('change', () => {
 window.addEventListener('load', () => {
     obtenerUsuarios()
     obtenerSeccionesPorDestino()
-    crearContenedoresSecciones()
-    crearContenedoresSubsecciones()
 })

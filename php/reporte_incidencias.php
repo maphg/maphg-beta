@@ -362,6 +362,16 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc_adjuntos 
+                WHERE id_mc = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
+
                 if ($guardar == "SI") {
                     $array[] = array(
                         "idItem" => intval($idItem),
@@ -379,7 +389,8 @@ if (isset($_GET['action'])) {
                         "comentarioFecha" => $fecha,
                         "ComentarioDe" => $ComentarioDe,
                         "idSeccion" => intval($idSeccion),
-                        "idSubseccion" => intval($idSubseccion)
+                        "idSubseccion" => intval($idSubseccion),
+                        "totalAdjuntos" => intval($totalAdjuntos)
                     );
                 }
             }
@@ -482,6 +493,16 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM adjuntos_mp_np 
+                WHERE id_mp_np = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
+
                 if ($guardar == "SI") {
                     $array[] = array(
                         "idItem" => intval($idItem),
@@ -499,7 +520,8 @@ if (isset($_GET['action'])) {
                         "comentarioFecha" => $fecha,
                         "ComentarioDe" => $ComentarioDe,
                         "idSeccion" => intval($idSeccion),
-                        "idSubseccion" => intval($idSubseccion)
+                        "idSubseccion" => intval($idSubseccion),
+                        "totalAdjuntos" => intval($totalAdjuntos)
                     );
                 }
             }
@@ -507,7 +529,19 @@ if (isset($_GET['action'])) {
 
 
         #PREVENTIVOS
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, t_equipos_america.id_seccion, t_equipos_america.id_subseccion
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, t_equipos_america.id_seccion, t_equipos_america.id_subseccion,
+        t_mp_planificacion_iniciada.status_material,
+        t_mp_planificacion_iniciada.status_trabajando,
+        t_mp_planificacion_iniciada.energetico_electricidad,
+        t_mp_planificacion_iniciada.energetico_agua,
+        t_mp_planificacion_iniciada.energetico_diesel,
+        t_mp_planificacion_iniciada.energetico_gas,
+        t_mp_planificacion_iniciada.departamento_calidad,
+        t_mp_planificacion_iniciada.departamento_compras,
+        t_mp_planificacion_iniciada.departamento_direccion,
+        t_mp_planificacion_iniciada.departamento_finanzas,
+        t_mp_planificacion_iniciada.departamento_rrhh,
+        t_mp_planificacion_iniciada.status_ep
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
@@ -518,6 +552,11 @@ if (isset($_GET['action'])) {
                 $idCreadoPor = $x['creado_por'];
                 $titulo = "PREVENTIVO OT: # $idItem";
                 $status = $x['status'];
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajando']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
                 $rangoFecha = $x['rango_fecha'];
                 $comentario = $x['comentario'];
                 $idSeccion = $x['id_seccion'];
@@ -543,6 +582,16 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM t_proyectos_planaccion_adjuntos 
+                WHERE id_planificacion_iniciada = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
@@ -550,23 +599,36 @@ if (isset($_GET['action'])) {
                     "status" => $status,
                     "tipo" => "PREVENTIVO",
                     "tipoIncidencia" => "PREVENTIVO",
-                    "sMaterial" => 0,
-                    "sTrabajando" => 0,
-                    "sEnergetico" => 0,
-                    "sDepartamento" => 0,
-                    "sEP" => 0,
+                    "sMaterial" => $sMaterial,
+                    "sTrabajando" => $sTrabajando,
+                    "sEnergetico" => $sEnergetico,
+                    "sDepartamento" => $sDepartamento,
+                    "sEP" => $sEP,
                     "comentario" => $comentario,
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => "",
                     "idSeccion" => intval($idSeccion),
-                    "idSubseccion" => intval($idSubseccion)
+                    "idSubseccion" => intval($idSubseccion),
+                    "totalAdjuntos" => intval($totalAdjuntos)
                 );
             }
         }
 
         #PROYECTOS PLANACCIONES
         $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.creado_por, t_proyectos.id_seccion, 
-        t_proyectos.id_subseccion
+        t_proyectos.id_subseccion,
+        t_proyectos_planaccion.status_material,
+        t_proyectos_planaccion.status_trabajando,
+        t_proyectos_planaccion.energetico_electricidad,
+        t_proyectos_planaccion.energetico_agua,
+        t_proyectos_planaccion.energetico_diesel,
+        t_proyectos_planaccion.energetico_gas,
+        t_proyectos_planaccion.departamento_calidad,
+        t_proyectos_planaccion.departamento_compras,
+        t_proyectos_planaccion.departamento_direccion,
+        t_proyectos_planaccion.departamento_finanzas,
+        t_proyectos_planaccion.departamento_rrhh,
+        t_proyectos_planaccion.status_ep
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
@@ -580,6 +642,11 @@ if (isset($_GET['action'])) {
                 $idCreadoPor = $x['creado_por'];
                 $idSeccion = $x['id_seccion'];
                 $idSubseccion = $x['id_subseccion'];
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajando']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -619,6 +686,16 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM t_proyectos_planaccion_adjuntos 
+                WHERE id_actividad = $idItem and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
+
                 $array[] = array(
                     "idItem" => intval($idItem),
                     "titulo" => $titulo,
@@ -626,16 +703,17 @@ if (isset($_GET['action'])) {
                     "status" => $status,
                     "tipo" => "PROYECTO",
                     "tipoIncidencia" => "PROYECTO",
-                    "sMaterial" => 0,
-                    "sTrabajando" => 0,
-                    "sEnergetico" => 0,
-                    "sDepartamento" => 0,
-                    "sEP" => 0,
+                    "sMaterial" => $sMaterial,
+                    "sTrabajando" => $sTrabajando,
+                    "sEnergetico" => $sEnergetico,
+                    "sDepartamento" => $sDepartamento,
+                    "sEP" => $sEP,
                     "comentario" => $comentario,
                     "comentarioFecha" => $fecha,
                     "ComentarioDe" => $ComentarioDe,
                     "idSeccion" => intval($idSeccion),
-                    "idSubseccion" => intval($idSubseccion)
+                    "idSubseccion" => intval($idSubseccion),
+                    "totalAdjuntos" => intval($totalAdjuntos)
                 );
             }
         }
