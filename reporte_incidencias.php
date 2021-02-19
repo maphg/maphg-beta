@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion_2021.css">
     <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.css">
 </head>
 
 <body style="background-color: #EEF0FC;" class="scrollbar">

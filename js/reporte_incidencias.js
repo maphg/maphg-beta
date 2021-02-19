@@ -97,16 +97,24 @@ const obtenerReporte = () => {
                     const comentarioFecha = array[x].comentarioFecha;
                     const ComentarioDe = array[x].ComentarioDe;
 
+                    // ICONO PARA COMENTARIOS
+                    const iconoComentario = comentario.length > 0 ?
+                        `
+                            <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full ml-2">
+                                <i class="fas fa-comment-alt-dots"></i>
+                            </div>
+                        ` : '';
 
+                    // HTML PARA COMENTARIO (COMENTARIO, CREADO POR, FECHA)
                     const dataComentario = comentario.length > 0 ?
                         `
-                        <h1 class="text-center mb-2 font-semibold">Ultimo Mensaje</h1>
-                        <p class="text-justify">${comentario}</p>
-                        <div class="flex py-1 px-2 rounded-full items-center text-bluegray-700 justify-center text-xxs">
-                        <h1 class="mr-1">Por: </h1>
-                        <h1 class="font-bold mr-2">${ComentarioDe}</h1>
-                        <h1 class="">${comentarioFecha}</h1>
-                        </div>
+                            <h1 class="text-center mb-2 font-semibold">Ultimo Mensaje</h1>
+                            <p class="text-justify">${comentario}</p>
+                            <div class="flex py-1 px-2 rounded-full items-center text-bluegray-700 justify-center text-xxs">
+                            <h1 class="mr-1">Por: </h1>
+                            <h1 class="font-bold mr-2">${ComentarioDe}</h1>
+                            <h1 class="">${comentarioFecha}</h1>
+                            </div>
                         `
                         : '<h1 class="text-center mb-2 font-semibold">Sin Mensaje</h1>'
 
@@ -118,6 +126,7 @@ const obtenerReporte = () => {
                                     : tipoIncidencia == "SEGUIMIENTO" ? contadorSeguimiento++
                                         : ''
 
+                    // DATOS PARA GENERAR GRAFICA
                     if ((x + 1) == array.length) {
                         const totalIncidencias = 100 / (contadorEmergencia + contadorUrgencia + contadorAlarma + contadorAlerta + contadorSeguimiento);
 
@@ -227,10 +236,8 @@ const obtenerReporte = () => {
                                     <div class="flex bg-orange-300 py-1 px-2 rounded-full items-center text-bluegray-700">
                                         <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="">
                                         <p class="text-xs font-bold mx-1">${creadoPor}</p>
-                                        <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full ml-2">
-                                            <i class="fas fa-comment-alt-dots"></i>
-                                        </div>
-                                        <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full">
+                                       ${iconoComentario}
+                                        <div class="w-5 h-5 flex items-center justify-center flex-none rounded-full hidden">
                                             <i class="fas fa-paperclip"></i>
                                         </div>
                                     </div>
