@@ -10,7 +10,7 @@ if (isset($_GET['action'])) {
 
     $APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
-    //Variables Globales 
+    //Variables Globales
     $action = $_GET['action'];
     $idUsuario = $_GET['idUsuario'];
     $idDestino = $_GET['idDestino'];
@@ -279,9 +279,12 @@ if (isset($_GET['action'])) {
         t_mc.departamento_direccion,
         t_mc.departamento_finanzas,
         t_mc.departamento_rrhh,
-        t_mc.status_ep
-        FROM t_mc 
-        WHERE activo = 1 and id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias";
+        t_mc.status_ep,
+        t_mc.id_seccion,
+        t_mc.id_subseccion
+        FROM t_mc
+        WHERE activo = 1 and id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias
+        ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -295,6 +298,8 @@ if (isset($_GET['action'])) {
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -329,7 +334,7 @@ if (isset($_GET['action'])) {
                     foreach ($result as $x) {
                         $comentario = $x['comentario'];
                         $fecha = $x['fecha'];
-                        $ComentarioDe = strtok($x['apellido'], ' ') . " " . strtok($x['apellido'], ' ');
+                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
                 }
 
@@ -372,7 +377,9 @@ if (isset($_GET['action'])) {
                         "sEP" => $sEP,
                         "comentario" => $comentario,
                         "comentarioFecha" => $fecha,
-                        "ComentarioDe" => $ComentarioDe
+                        "ComentarioDe" => $ComentarioDe,
+                        "idSeccion" => intval($idSeccion),
+                        "idSubseccion" => intval($idSubseccion)
                     );
                 }
             }
@@ -392,10 +399,12 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_direccion,
         t_mp_np.departamento_finanzas,
         t_mp_np.departamento_rrhh,
-        t_mp_np.status_ep
-        FROM t_mp_np 
+        t_mp_np.status_ep,
+        t_mp_np.id_seccion,
+        t_mp_np.id_subseccion
+        FROM t_mp_np
         WHERE activo = 1 and id_equipo = 0
-        $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General";
+        $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General ORDER BY t_mp_np.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -409,6 +418,8 @@ if (isset($_GET['action'])) {
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -443,7 +454,7 @@ if (isset($_GET['action'])) {
                     foreach ($result as $x) {
                         $comentario = $x['comentario'];
                         $fecha = $x['fecha'];
-                        $ComentarioDe = strtok($x['apellido'], ' ') . " " . strtok($x['apellido'], ' ');
+                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
                 }
 
@@ -486,19 +497,21 @@ if (isset($_GET['action'])) {
                         "sEP" => $sEP,
                         "comentario" => $comentario,
                         "comentarioFecha" => $fecha,
-                        "ComentarioDe" => $ComentarioDe
+                        "ComentarioDe" => $ComentarioDe,
+                        "idSeccion" => intval($idSeccion),
+                        "idSubseccion" => intval($idSubseccion)
                     );
                 }
             }
         }
 
+
         #PREVENTIVOS
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status,
-        t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, t_equipos_america.id_seccion, t_equipos_america.id_subseccion
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
-        $filtroDestino_Preventivo $filtroPalabra_Preventivo $filtroResponsable_Preventivo $filtroSeccion_Preventivo $filtroSubseccion_Preventivo $filtroTipoIncidencia_Preventivo $filtroTipo_Preventivo $filtroStatus_Preventivo $filtroFecha_Preventivo";
+        $filtroDestino_Preventivo $filtroPalabra_Preventivo $filtroResponsable_Preventivo $filtroSeccion_Preventivo $filtroSubseccion_Preventivo $filtroTipoIncidencia_Preventivo $filtroTipo_Preventivo $filtroStatus_Preventivo $filtroFecha_Preventivo ORDER BY t_mp_planificacion_iniciada.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -507,6 +520,9 @@ if (isset($_GET['action'])) {
                 $status = $x['status'];
                 $rangoFecha = $x['rango_fecha'];
                 $comentario = $x['comentario'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+                $fecha = $x['fecha_finalizado'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -540,18 +556,21 @@ if (isset($_GET['action'])) {
                     "sDepartamento" => 0,
                     "sEP" => 0,
                     "comentario" => $comentario,
-                    "comentarioFecha" => "",
-                    "ComentarioDe" => ""
+                    "comentarioFecha" => $fecha,
+                    "ComentarioDe" => "",
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion)
                 );
             }
         }
 
         #PROYECTOS PLANACCIONES
-        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.creado_por
+        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.creado_por, t_proyectos.id_seccion, 
+        t_proyectos.id_subseccion
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
-        $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto";
+        $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -559,6 +578,8 @@ if (isset($_GET['action'])) {
                 $status = $x['status'];
                 $rangoFecha = $x['rango_fecha'];
                 $idCreadoPor = $x['creado_por'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -594,7 +615,7 @@ if (isset($_GET['action'])) {
                     foreach ($result as $x) {
                         $comentario = $x['comentario'];
                         $fecha = $x['fecha'];
-                        $ComentarioDe = strtok($x['apellido'], ' ') . " " . strtok($x['apellido'], ' ');
+                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
                 }
 
@@ -612,7 +633,9 @@ if (isset($_GET['action'])) {
                     "sEP" => 0,
                     "comentario" => $comentario,
                     "comentarioFecha" => $fecha,
-                    "ComentarioDe" => $ComentarioDe
+                    "ComentarioDe" => $ComentarioDe,
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion)
                 );
             }
         }

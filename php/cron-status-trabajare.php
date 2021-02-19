@@ -2,8 +2,9 @@
 
 include 'conexion.php';
 $APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=STATUS T: ';
+
 $resp = "FALLO INCIDENCIAS";
-$query = "UPDATE t_mc SET status_trabajare = 0 WHERE status_trabajare != ''";
+$query = "UPDATE t_mc SET status_trabajare = 0 WHERE status_trabajare = 1";
 if ($result = mysqli_query($conn_2020, $query)) {
 	$resp = "Restaurado en Incidencias EQUIPOS";
 }

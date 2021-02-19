@@ -8,6 +8,7 @@
     <title>MAPHG Reporte Incidencias</title>
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion_2021.css">
+    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
 </head>
@@ -141,7 +142,7 @@
             </div>
 
             <div>
-                <div class="" id="chartdiv2" style="height: 280px; width: 100%;"></div>
+                <div id="chartdiv2" class="hidden" style="height: 280px; width: 100%;"></div>
             </div>
 
             <div class="flex justify-center items-center text-xs w-full">

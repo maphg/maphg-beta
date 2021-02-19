@@ -31,10 +31,19 @@ const contenedorSeccion = document.getElementById("contenedorSeccion");
 const contenedorSubsecciones = document.getElementById("contenedorSubsecciones");
 // CONTENEDORES DATA
 
+// GRAFICA
+const chartdiv2 = document.getElementById("chartdiv2");
+// GRAFICA
 
 // EXPANDIR
 const expandir = idElemento => {
     if (document.getElementById(idElemento).classList.toggle('hidden')) {
+    }
+}
+
+// TOGGLE PARA CUALQUIER CLASE
+const toggleClassX = (idElemento, claseX) => {
+    if (document.getElementById(idElemento).classList.toggle(claseX)) {
     }
 }
 
@@ -73,6 +82,7 @@ const obtenerReporte = () => {
             contenedorSeccion.innerHTML = '';
             contenedorSubsecciones.innerHTML = '';
 
+            console.log(array);
             console.log(array.length);
             return array;
         })
@@ -119,8 +129,7 @@ const obtenerReporte = () => {
                             <h1 class="">${comentarioFecha}</h1>
                             </div>
                         `
-                        : '<h1 class="text-center mb-2 font-semibold">Sin Mensaje</h1>'
-
+                        : '<h1 class="text-xxs text-center font-semibold">Sin Comentarios</h1>'
 
                     tipoIncidencia == "EMERGENCIA" ? contadorEmergencia++
                         : tipoIncidencia == "URGENCIA" ? contadorUrgencia++
@@ -143,13 +152,13 @@ const obtenerReporte = () => {
                     }
 
                     // ESTILO PARA EL BORDE(RING)
-                    const estiloIncidencia = tipoIncidencia == "EMERGENCIA" ? `ring ring-red-400 bg-red-100`
-                        : tipoIncidencia == "URGENCIA" ? `ring ring-orange-400 bg-orange-100`
-                            : tipoIncidencia == "ALARMA" ? `ring ring-yellow-400 bg-yellow-100`
-                                : tipoIncidencia == "ALERTA" ? `ring ring-blue-400 bg-blue-100`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `ring ring-green-400 bg-green-100`
-                                        : tipoIncidencia == "PREVENTIVO" ? `ring ring-gray-400 bg-gray-100`
-                                            : tipoIncidencia == "PROYECTO" ? `ring ring-purple-400 bg-purple-100`
+                    const estiloIncidencia = tipoIncidencia == "EMERGENCIA" ? `ring ring-red-200 bg-red-100`
+                        : tipoIncidencia == "URGENCIA" ? `ring ring-orange-200 bg-orange-100`
+                            : tipoIncidencia == "ALARMA" ? `ring ring-yellow-200 bg-yellow-100`
+                                : tipoIncidencia == "ALERTA" ? `ring ring-blue-200 bg-blue-100`
+                                    : tipoIncidencia == "SEGUIMIENTO" ? `ring ring-green-200 bg-green-100`
+                                        : tipoIncidencia == "PREVENTIVO" ? `ring ring-gray-200 bg-gray-100`
+                                            : tipoIncidencia == "PROYECTO" ? `ring ring-purple-200 bg-purple-100`
                                                 : ''
 
                     // ESTILO BACKGROUND 200
@@ -167,8 +176,8 @@ const obtenerReporte = () => {
                         : tipoIncidencia == "URGENCIA" ? `bg-orange-400`
                             : tipoIncidencia == "ALARMA" ? `bg-yellow-400`
                                 : tipoIncidencia == "ALERTA" ? `bg-blue-400`
-                                    : tipoIncidencia == "SEGUIMIENTO" ? `bg-green-400`
-                                        : tipoIncidencia == "PREVENTIVO" ? `bg-gray-400`
+                                    : tipoIncidencia == "SEGUIMIENTO" ? `bg-gray-400`
+                                        : tipoIncidencia == "PREVENTIVO" ? `bg-green-400`
                                             : tipoIncidencia == "PROYECTO" ? `bg-purple-400`
                                                 : ''
 
@@ -228,15 +237,17 @@ const obtenerReporte = () => {
                         </div>                    
                     ` : ``;
 
-                    const fExpandir = `onclick="expandir('mostrar_mas_${idItem}')"`;
+                    const fExpandir = `onclick="expandir('mostrar_mas_${x}'); toggleClassX('titulo_incidencia_${x}', 'truncate');"`;
+
 
                     const codigo = `
-                        <div class="w-full flex flex-col h-auto my-2 rounded cursor-pointer ${estiloIncidencia}" ${fExpandir}>
+                        <div class="w-full flex flex-col h-auto my-3 rounded cursor-pointer ${estiloIncidencia}" 
+                        ${fExpandir}>
                             <!-- PARTE VISIBLE -->
                             <div class="w-full p-1 flex flex-none flex-col">
-                                <h1 class="truncate font-semibold">${titulo}</h1>
+                                <h1 id="titulo_incidencia_${x}" class="truncate font-semibold">${titulo}</h1>
                                 <div class="flex justify-between">
-                                    <div class="flex bg-orange-300 py-1 px-2 rounded-full items-center text-bluegray-700">
+                                    <div class="flex bg-white shadow py-1 px-2 rounded-full items-center text-bluegray-700">
                                         <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="">
                                         <p class="text-xs font-bold mx-1">${creadoPor}</p>
                                        ${iconoComentario}
@@ -257,7 +268,7 @@ const obtenerReporte = () => {
                             <!-- PARTE VISIBLE -->
 
                             <!-- PARTE TOOGLEABLE -->
-                            <div id="mostrar_mas_${idItem}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
+                            <div id="mostrar_mas_${x}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
                                 <div class="rounded w-full p-2 ${bg200}">
                                     ${dataComentario}
                                 </div>
@@ -293,6 +304,7 @@ const obtenerReporte = () => {
 
 // GRAFICA DE INCIDENCIAS
 const graficaIncidencias = array => {
+    chartdiv2.classList.remove('hidden');
     // Themes begin
     am4core.useTheme(am4themes_animated);
 
@@ -379,8 +391,8 @@ const graficaIncidencias = array => {
         am4core.color("#F76D82"),
         am4core.color("#FC8370"),
         am4core.color("#FCD277"),
-        am4core.color("#62DDBD"),
         am4core.color("#66D4F1"),
+        am4core.color("#62DDBD"),
         am4core.color("#F9F871")
     ];
 }
@@ -520,6 +532,46 @@ btnColumnaSubsecciones.addEventListener('click', () => {
 })
 
 
+// CREA CONTENEDORES SECCIONES
+const crearContenedoresSecciones = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerSeccionesPorDestino";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            console.log(array)
+        })
+        .catch(function (err) {
+            console.log(err)
+            // fetch(APIERROR + err);
+        })
+}
+
+
+// CREA CONTENEDORES SUBSECCIONES
+const crearContenedoresSubsecciones = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerSubseccionPorSeccion";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            console.log(array)
+        })
+        .catch(function (err) {
+            console.log(err)
+            // fetch(APIERROR + err);
+        })
+}
+
+
 // EVENTOS PARA ACTUALIZAR RESULTADOS
 btnFiltroPalabra.addEventListener('click', obtenerReporte)
 filtroResponsable.addEventListener('change', obtenerReporte)
@@ -549,4 +601,6 @@ filtroFechaFin.addEventListener('change', () => {
 window.addEventListener('load', () => {
     obtenerUsuarios()
     obtenerSeccionesPorDestino()
+    crearContenedoresSecciones()
+    crearContenedoresSubsecciones()
 })
