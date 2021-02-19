@@ -58,6 +58,9 @@ const obtenerReporte = () => {
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
+    dataPendientes.innerHTML = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
+    dataSolucionados.innerHTML = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
+
     fetch(URL, {
         method: 'POST',
         body: data
