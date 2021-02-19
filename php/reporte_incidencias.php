@@ -493,7 +493,8 @@ if (isset($_GET['action'])) {
         }
 
         #PREVENTIVOS
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status,
+        t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
@@ -505,6 +506,7 @@ if (isset($_GET['action'])) {
                 $titulo = "PREVENTIVO OT: # $idItem";
                 $status = $x['status'];
                 $rangoFecha = $x['rango_fecha'];
+                $comentario = $x['comentario'];
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -537,7 +539,7 @@ if (isset($_GET['action'])) {
                     "sEnergetico" => 0,
                     "sDepartamento" => 0,
                     "sEP" => 0,
-                    "comentario" => "",
+                    "comentario" => $comentario,
                     "comentarioFecha" => "",
                     "ComentarioDe" => ""
                 );
