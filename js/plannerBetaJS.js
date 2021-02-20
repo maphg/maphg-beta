@@ -10,6 +10,7 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
 const loaderMAPHG75 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="75px" height="75px"></div>';
+const loaderMAPHG45 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="45px" height="45px"></div>';
 
 // ELEMENTOS BUTTOM ID
 const btnModalAgregarIncidencias = document.getElementById("btnModalAgregarIncidencias");
@@ -188,6 +189,9 @@ const tablaPendientesSolucionado = document.getElementById("tablaPendientesSoluc
 const dataDespieceMaterialesEquipo = document.getElementById("dataDespieceMaterialesEquipo");
 // THEADS DE TABLAS
 
+// SCROLLS
+const scrollContenedorEquiposPrincipales = document.getElementById("scrollContenedorEquiposPrincipales");
+// SCROLLS
 
 // MODALES
 const modalVerEnPlannerIncidencia = document.getElementById("modalVerEnPlannerIncidencia");
@@ -3984,7 +3988,7 @@ const obtenerIncidenciaGeneral = (idIncidencia) => {
                dataComentariosIncidenciaVerEnPlanner.insertAdjacentHTML('beforeend', codigo);
                dataComentariosIncidenciaVerEnPlanner.
                   scrollTop = dataComentariosIncidenciaVerEnPlanner.scrollHeight;
-
+               dataComentariosIncidenciaVerEnPlanner.sc
             }
 
             // ADJUNTO
@@ -9379,6 +9383,7 @@ function obtenerDespieceEquipo(idEquipo) {
    contenedorEquiposAmericaDespice.innerHTML = loaderMAPHG75;
 
    // FUNCIONES TOOLTIP
+   scrollContenedorEquiposPrincipales.scrollTop = 0;
    tooltipDespieceEquipo3.classList.add('hidden');
    const button = document.getElementById("contenedorEquiposPrincipales");
    const tooltip = document.getElementById('tooltipDespieceEquipo');
