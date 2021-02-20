@@ -9392,8 +9392,8 @@ function obtenerDespieceEquipo(idEquipo) {
    if (idEquipo > 0) {
       fetch(URL)
          .then(array => array.json())
-         .then(array =>{
-   contenedorEquiposAmericaDespice.innerHTML = '';
+         .then(array => {
+            contenedorEquiposAmericaDespice.innerHTML = '';
             return array;
          })
          .then(array => {
@@ -9512,6 +9512,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
    document.getElementById('reporteEquipos').
       setAttribute('onclick', 'reporteEquipos()');
 
+   contenedorEquiposAmerica.innerHTML = loaderMAPHG75;
 
    fetch(URL, {
       method: 'POST',
