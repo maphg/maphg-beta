@@ -10,7 +10,7 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
 const loaderMAPHG75 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="75px" height="75px"></div>';
-const loaderMAPHG45 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="45px" height="45px"></div>';
+const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
 
 // ELEMENTOS BUTTOM ID
 const btnModalAgregarIncidencias = document.getElementById("btnModalAgregarIncidencias");
@@ -9502,7 +9502,7 @@ function obtenerEquiposAmerica(idSeccion, idSubseccion, pagina = 0) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
 
-   document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = iconoLoader;
+   document.getElementById("seccionSubseccionDestinoEquiposAmerica").innerHTML = loaderMAPHG40;
    document.getElementById("tooltipDespieceEquipo").classList.add('hidden');
 
    const action = "obtenerEquiposAmerica";
