@@ -435,9 +435,9 @@
                     </div>
 
                     <div class="-my-2 py-2 overflow-x-auto  scrollbar">
-                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="min-height: 62vh; max-height: 72vh; height:auto;">
+                        <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar relative bg-white" style="height: 72vh;">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed sortable">
-                                <thead>
+                                <thead id="contenedorEquiposPrincipales">
                                     <tr class="cursor-pointer">
 
                                         <th id="theadEquipoLocal" class="py-3 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10">
@@ -480,8 +480,11 @@
                             </table>
 
                             <!-- DESPIECE NIVEL 2 DE EQUIPOS AMERICA -->
-                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full bg-white border-solid border-4 border-bluegray-900 scrollbar overflow-y-auto rounded hidden" style="min-height: 50vh; max-height: 55vh;">
+                            <div id="tooltipDespieceEquipo" role="tooltip" class="w-full bg-white border-solid border-4 border-bluegray-900 scrollbar overflow-y-auto rounded relative hidden" style="height: 65vh;">
 
+                                <div class="absolute right-0 top-0 text-red-500 text-lg cursor-pointer w-auto px-2 h-6 flex justify-center items-center m-2 z-10" onclick="toggleHidden('tooltipDespieceEquipo');">
+                                    <i class="fas fa-window-close hover:text-red-300 fa-lg"></i>
+                                </div>
                                 <div class="flex items-center justify-center relative bg-white p-2">
                                     <h1 id="tituloSegundoNivel" class="font-semibold text-bluegray-900">SEGUNDO NIVEL</h1>
                                 </div>

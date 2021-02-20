@@ -9,6 +9,7 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 // ICONOS 
 const iconoLoader = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>';
 const iconoDefault = '<i class="fad fa-minus text-xl text-red-400"></i>';
+const loaderMAPHG75 = '<div class="w-full p-12 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="75px" height="75px"></div>';
 
 // ELEMENTOS BUTTOM ID
 const btnModalAgregarIncidencias = document.getElementById("btnModalAgregarIncidencias");
@@ -9375,13 +9376,27 @@ function obtenerDespieceEquipo(idEquipo) {
    const URL = `php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
 
    document.getElementById("modalEquiposAmericaBG").removeAttribute('onclick');
-   contenedorEquiposAmericaDespice.innerHTML = '';
+   contenedorEquiposAmericaDespice.innerHTML = loaderMAPHG75;
+
+   // FUNCIONES TOOLTIP
+   tooltipDespieceEquipo3.classList.add('hidden');
+   const button = document.getElementById("contenedorEquiposPrincipales");
+   const tooltip = document.getElementById('tooltipDespieceEquipo');
+   document.getElementById('tooltipDespieceEquipo').
+      classList.toggle('hidden');
+   Popper.createPopper(button, tooltip);
+
+   document.getElementById("modalEquiposAmericaBG").
+      setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
 
    if (idEquipo > 0) {
       fetch(URL)
          .then(array => array.json())
+         .then(array =>{
+   contenedorEquiposAmericaDespice.innerHTML = '';
+            return array;
+         })
          .then(array => {
-
             if (array) {
                for (let x = 0; x < array.length; x++) {
                   const idEquipo = array[x].idEquipo;
@@ -9456,17 +9471,6 @@ function obtenerDespieceEquipo(idEquipo) {
             } else {
                alertaImg('Sin Equipos/Locales DESPIECE', '', 'info', 1500);
             }
-         })
-         .then(() => {
-            tooltipDespieceEquipo3.classList.add('hidden');
-            const button = document.getElementById(idEquipo + "EquipoAmerica");
-            const tooltip = document.getElementById('tooltipDespieceEquipo');
-            document.getElementById('tooltipDespieceEquipo').
-               classList.toggle('hidden');
-            Popper.createPopper(button, tooltip);
-
-            document.getElementById("modalEquiposAmericaBG").
-               setAttribute('onclick', "expandir('tooltipDespieceEquipo')");
          })
          .then(() => {
             fetch(`php/select_REST_planner.php?action=obtenerEquipoPorId&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`)

@@ -42,6 +42,8 @@ const toggleClassX = (idElemento, claseX) => {
     }
 }
 
+iconoLoader = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
+
 // GENERA REPORTE CON LOS FILTROS (COLUMNA: PRECESO - SOLUCIONADO)
 const obtenerReporte = (columna) => {
     let idDestino = localStorage.getItem('idDestino');
@@ -62,8 +64,8 @@ const obtenerReporte = (columna) => {
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
-    dataPendientes.innerHTML = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
-    dataSolucionados.innerHTML = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
+    dataPendientes.innerHTML = iconoLoader;
+    dataSolucionados.innerHTML = iconoLoader;
 
     fetch(URL, {
         method: 'POST',
