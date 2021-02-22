@@ -156,7 +156,7 @@
         </div>
 
         <div class="flex-none">
-            <div class="overflow-x-auto scrollbar mx-auto" style="width: 800px">
+            <div class="overflow-x-auto scrollbar mx-auto" style="width: 100%">
                 <div class="w-full flex justify-start items-center p-4">
                     <h1 class="font-bold text-xs text-gray-400 uppercase mr-4">Columnas</h1>
 
@@ -166,13 +166,14 @@
 
                     <button id="btnColumnaSubsecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Subsecciones</button>
 
+                    <div id="loader" class=""></div>
                 </div>
 
                 <div id="contenedorPendientesSolucionados" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start">
                     <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
                         <div class="flex text-xxs rounded-full bg-red-100 pr-2 items-center w-40">
                             <div class="w-6 h-6 rounded-full bg-red-300 text-red-500 font-bold flex items-center justify-center mr-2">
-                                <h1>22</h1>
+                                <h1 id="totalPendientes">0</h1>
                             </div>
                             <h1 class="font-bold text-gray-500 uppercase text-sm text-red-500">Pendientes</h1>
                         </div>
@@ -183,7 +184,7 @@
                     <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
                         <div class="flex text-xxs rounded-full bg-green-100 pr-2 items-center w-40">
                             <div class="w-6 h-6 rounded-full bg-green-300 text-green-500 font-bold flex items-center justify-center mr-2">
-                                <h1>10909</h1>
+                                <h1 id="totalSolucionados">0</h1>
                             </div>
                             <h1 class="font-bold uppercase text-sm text-green-500">Solucionados</h1>
                         </div>

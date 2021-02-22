@@ -2378,46 +2378,32 @@ if (isset($_POST['action'])) {
             $filtroUsuarioT = "";
         }
 
-
-        if ($idDestino == 10) {
-            $filtroDestinoMC = "";
-            $filtroDestinoTareas = "";
-        } else {
-            $filtroDestinoMC = "AND t_mc.id_destino = $idDestino";
-            $filtroDestinoTareas = "AND t_mp_np.id_destino = $idDestino";
-        }
-
         // Query para obtener todas las subsecciones, según la sección.
-        if ($idDestino == 10) {
-            $query = "SELECT c_subsecciones.id 'id_subseccion', c_subsecciones.grupo, 
-            c_secciones.seccion  
-            FROM c_subsecciones 
-            INNER JOIN c_secciones ON c_subsecciones.id_seccion = c_secciones.id
-            WHERE c_subsecciones.id_seccion = $idSeccion";
-        } else {
-            $query = "CALL obtenerSubseccionesDestinoSeccion($idDestino, $idSeccion)";
-        }
-
+        $query = "SELECT c_secciones.id 'id_seccion', c_secciones.seccion, c_subsecciones.id 'id_subseccion', c_subsecciones.grupo
+        FROM c_rel_destino_seccion
+        INNER JOIN c_secciones  ON c_rel_destino_seccion.id_seccion = c_secciones.id
+        INNER JOIN c_rel_seccion_subseccion  ON c_rel_destino_seccion.id = c_rel_seccion_subseccion.id_rel_seccion
+        INNER JOIN c_subsecciones ON c_rel_seccion_subseccion.id_subseccion = c_subsecciones.id
+        WHERE c_rel_destino_seccion.id_destino = $idDestino and c_rel_destino_seccion.id_seccion = $idSeccion
+        ORDER BY c_secciones.seccion ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
-            $conn_2020->next_result();
             foreach ($result as $row) {
-                $data = "";
-                $subseccion = $row['grupo'];
+                $idSeccion = $row['id_seccion'];
+                $seccion = $row['seccion'];
                 $idSubseccion = $row['id_subseccion'];
-                $nombreSeccion = $row['seccion'];
-                $nombreSubseccion = $row['grupo'];
+                $subseccion = $row['grupo'];
 
                 // Se almacenan las subsecciones para mostrarlas en el select (dataOpcionesSubsecciones).
-                $misPendientesUsuario = "$idSeccion, 'MCU', '$nombreSeccion', $idUsuario, $idDestino";
-                $misPendientesCreados = "$idSeccion, 'MCC', '$nombreSeccion', $idUsuario, $idDestino";
-                $misPendientesSinUsuario = "$idSeccion, 'MCU0', '$nombreSeccion', $idUsuario, $idDestino";
-                $misPendientesSeccion = "$idSeccion, 'MCS', '$nombreSeccion', $idUsuario, $idDestino";
+                $misPendientesUsuario = "$idSeccion, 'MCU', '$seccion', $idUsuario, $idDestino";
+                $misPendientesCreados = "$idSeccion, 'MCC', '$seccion', $idUsuario, $idDestino";
+                $misPendientesSinUsuario = "$idSeccion, 'MCU0', '$seccion', $idUsuario, $idDestino";
+                $misPendientesSeccion = "$idSeccion, 'MCS', '$seccion', $idUsuario, $idDestino";
 
                 // Exportar Pendientes.
                 $exportarSeccion = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSeccion'";
                 $exportarMisPendientes = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientes'";
                 $exportarCreadosDe = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosDe'";
-                $exportarPorResponsable = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarPorResponsable'";
+                $exportarPorResponsable = "$idUsuario, $idDestino, $idSeccion, $idSubseccion, 'exportarPorResponsable'";
                 $exportarMisCreados = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisCreados'";
                 $exportarMisPendientesPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarMisPendientesPDF'";
                 $exportarCreadosPorPDF = "$idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarCreadosPorPDF'";
@@ -2426,14 +2412,14 @@ if (isset($_POST['action'])) {
                 $exportarSubseccion .= "
                     <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
                     onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccion');\">
-                        <h1 class=\"ml-2\">$nombreSubseccion</h1>
+                        <h1 class=\"ml-2\">$subseccion</h1>
                     </div>                
                 ";
 
                 $exportarSubseccionPDF .= "
                     <div class=\"w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate\"
                     onclick=\"exportarPendientes($idUsuario, $idDestino,$idSeccion, $idSubseccion, 'exportarSubseccionPDF');\">
-                        <h1 class=\"ml-2\">$nombreSubseccion</h1>
+                        <h1 class=\"ml-2\">$subseccion</h1>
                     </div>                
                 ";
             }
@@ -3382,8 +3368,8 @@ if (isset($_POST['action'])) {
                     </div>                
                 ";
             }
-            echo $data;
         }
+        echo $data;
     }
 
 

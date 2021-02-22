@@ -4021,6 +4021,34 @@
     </div>
 
 
+    <!-- MODAL Exportar Secciones Usuarios -->
+    <div id="modalExportarSeccionesUsuarios" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 370px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalExportarSeccionesUsuarios');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>Colaboradores</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+                <div class="mb-3 w-full">
+                    <input id="palabraUsuarioExportar" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-full" type="search" name="search" placeholder="Buscar..." autocomplete="off">
+                </div>
+                <div id="dataExportarSeccionesUsuarios" class="divide-y divide-gray-200 w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar" style="max-height: 80vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- ***** TOOLTIPS ***** -->
 
     <!-- ACTIVIDADES MP -->

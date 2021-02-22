@@ -356,6 +356,7 @@ const obtenerSecciones = (idSeccion, status) => {
          .then(array => array.json())
          .then(array => {
             if (array) {
+               // s(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino)
                for (let x = 0; x < array.secciones.length; x++) {
                   const idSeccion = array.secciones[x].idSeccion;
                   const seccion = array.secciones[x].seccion;
@@ -906,6 +907,10 @@ function toggleInivisble(id) {
 
 // Obtiene los pendientes de las secciones mediante la seccion seleccionada y el destinol.
 function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuario, idDestino) {
+
+   document.getElementById("btnExpandirMenutoggle").classList.add('hidden');
+   document.getElementById("btnvisualizarpendientesdetoggle").classList.add('hidden');
+
    localStorage.setItem('idSeccion', idSeccion);
    dataSubseccionesPendientes.innerHTML = '';
    btnPendientesIncidencias.setAttribute('onclick', "obtenerPendientesIncidencias('TODOS')");
@@ -934,7 +939,6 @@ function pendientesSubsecciones(idSeccion, tipoPendiente, nombreSeccion, idUsuar
       },
       dataType: "JSON",
       success: function (data) {
-
          // Tipo de Vista Seleccionado
          document.getElementById("tipoPendienteNombre").innerHTML =
             data.tipoPendienteNombre;
@@ -998,6 +1002,10 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
    let pendientesDEP = 0;
    let pendientesT = 0;
    let pendientesS = 0;
+
+   // 
+   document.getElementById("btnExpandirMenutoggle").classList.add('hidden');
+   document.getElementById("btnvisualizarpendientesdetoggle").classList.add('hidden');
 
    btnPendientesModal('btnPendientesIncidencias');
    estiloSeccion.innerHTML = iconoLoader;
@@ -1456,6 +1464,10 @@ btnPendientesPreventivos.addEventListener('click', () => {
    let pendientesT = 0;
    let pendientesS = 0;
 
+   // 
+   document.getElementById("btnExpandirMenutoggle").classList.add('hidden');
+   document.getElementById("btnvisualizarpendientesdetoggle").classList.add('hidden');
+
    // OCULTA LAS OPCIONES
    btnExpandirMenu.classList.add('hidden');
    btnvisualizarpendientesde.classList.add('hidden');
@@ -1870,13 +1882,7 @@ function toggleSubseccionesTipo(mostrar, ocultar) {
 
 
 // Muestra Usuario para Exportar sus pendientes o Creados.
-function exportarPorUsuario(
-   idUsuario,
-   idDestino,
-   idSeccion,
-   idSubseccion,
-   tipoExportar
-) {
+function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
    document.getElementById("dataExportarSeccionesUsuarios").innerHTML = "";
    // Agrega la función en el Input palabraUsuarioExportar.
    document.getElementById("palabraUsuarioExportar")
@@ -1909,9 +1915,7 @@ function exportarPorUsuario(
       },
       // dataType: "JSON",
       success: function (data) {
-         document
-            .getElementById("modalExportarSeccionesUsuarios")
-            .classList.add("open");
+         document.getElementById("modalExportarSeccionesUsuarios").classList.add("open");
          document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
       },
    });
@@ -7069,18 +7073,29 @@ function consultaStatusOT(idOT) {
          document.getElementById("statusOT2").setAttribute("onclick", `consultaStatusOT(${idOT}); toggleModalTailwind('modalStatus');`);
          document.getElementById("statusMaterial").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
          document.getElementById("statusTrabajare").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_trabajando');`);
+
+         // ENERGETICOS
          document.getElementById("statusElectricidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_electricidad');`);
          document.getElementById("statusAgua").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_agua');`);
          document.getElementById("statusDiesel").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_diesel');`);
          document.getElementById("statusGas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_gas');`);
          document.getElementById("statusRRHH").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_rrhh');`);
+
+         // DEPARTAMENTOS
          document.getElementById("statusDireccion").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_direccion');`);
          document.getElementById("statusFinanzas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_finanzas');`);
          document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
          document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
+
          document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
          document.getElementById("statusEP").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_ep');`);
          document.getElementById("btnFinalizarOT").setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
+
+         // BITACORA
+         document.getElementById("statusGP").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'bitacora_gp');`);
+         document.getElementById("statusTRS").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'bitacora_trs');`);
+         document.getElementById("statusZI").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'bitacora_zi');`);
+
          document.getElementById("btnGuardarOT").setAttribute("onclick", 'guardarCambiosOT()');
       });
 }
