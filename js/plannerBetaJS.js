@@ -100,6 +100,7 @@ const palabraFallaTarea = document.getElementById("palabraFallaTarea");
 const palabraProyecto = document.getElementById("palabraProyecto");
 const inputFileIncidencias = document.getElementById("inputFileIncidencias");
 const palabraUsuario = document.getElementById("palabraUsuario");
+const palabraUsuarioExportar = document.getElementById("palabraUsuarioExportar");
 const palabraEquipoAmerica = document.getElementById("palabraEquipoAmerica");
 const inputNumeroOT = document.getElementById("inputNumeroOT");
 const inputAdjuntos = document.getElementById("inputAdjuntos");
@@ -1883,23 +1884,9 @@ function toggleSubseccionesTipo(mostrar, ocultar) {
 
 // Muestra Usuario para Exportar sus pendientes o Creados.
 function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoExportar) {
-   document.getElementById("dataExportarSeccionesUsuarios").innerHTML = "";
    // Agrega la función en el Input palabraUsuarioExportar.
-   document.getElementById("palabraUsuarioExportar")
-      .setAttribute(
-         "onkeyup",
-         "exportarPorUsuario(" +
-         idUsuario +
-         ", " +
-         idDestino +
-         ", " +
-         idSeccion +
-         ", " +
-         idSubseccion +
-         ', "' +
-         tipoExportar +
-         '")'
-      );
+   palabraUsuarioExportar.setAttribute("onkeyup", `exportarPorUsuario(${idUsuario}, ${idDestino}, ${idSeccion}, ${idSubseccion}, '${tipoExportar}')`);
+
    const action = "exportarPorUsuario";
    $.ajax({
       type: "POST",
@@ -1911,13 +1898,17 @@ function exportarPorUsuario(idUsuario, idDestino, idSeccion, idSubseccion, tipoE
          idSeccion: idSeccion,
          idSubseccion: idSubseccion,
          tipoExportar: tipoExportar,
-         palabraUsuario: palabraUsuario.value,
+         palabraUsuario: palabraUsuarioExportar.value
       },
       // dataType: "JSON",
       success: function (data) {
+         document.getElementById("dataExportarSeccionesUsuarios").innerHTML = "";
          document.getElementById("modalExportarSeccionesUsuarios").classList.add("open");
          document.getElementById("dataExportarSeccionesUsuarios").innerHTML = data;
       },
+      error: function (err) {
+         document.getElementById("dataExportarSeccionesUsuarios").innerHTML = "";
+      }
    });
 }
 

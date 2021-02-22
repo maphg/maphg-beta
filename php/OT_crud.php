@@ -260,7 +260,7 @@ if (isset($_GET['action'])) {
         if (
             $status == "status_material" || $status == "status_trabajando" || $status == "energetico_electricidad" || $status == "energetico_agua" ||
             $status == "energetico_diesel" || $status == "energetico_gas" || $status == "departamento_rrhh" || $status == "departamento_direccion" ||
-            $status == "departamento_finanzas" || $status == "departamento_calidad" || $status == "departamento_compras"
+            $status == "departamento_finanzas" || $status == "departamento_calidad" || $status == "departamento_compras" || $status == "bitacora_gp" || $status == "bitacora_trs" || $status == "bitacora_zi"
         ) {
             $query = "SELECT $status FROM t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {

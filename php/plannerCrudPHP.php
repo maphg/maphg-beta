@@ -3347,15 +3347,15 @@ if (isset($_POST['action'])) {
         if ($palabraUsuario == "") {
             $filtroPalabraEquipo = "";
         } else {
-            $filtroPalabraEquipo = "AND(t_colaboradores.nombre LIKE '%$palabraUsuario%' OR t_colaboradores.apellido  LIKE '%$palabraUsuario%')";
+            $filtroPalabraEquipo = "and (t_colaboradores.nombre LIKE '%$palabraUsuario%' OR t_colaboradores.apellido  LIKE '%$palabraUsuario%')";
         }
 
-        $queryUsuario = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
+        $query = "SELECT t_users.id, t_colaboradores.nombre, t_colaboradores.apellido 
         FROM t_users 
         INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
         WHERE t_users.status = 'A' $filtroDestino $filtroPalabraEquipo ORDER BY t_colaboradores.nombre ASC";
 
-        if ($resultUsuario = mysqli_query($conn_2020, $queryUsuario)) {
+        if ($resultUsuario = mysqli_query($conn_2020, $query)) {
             foreach ($resultUsuario as $row) {
                 $idUsuarioExport = $row['id'];
                 $nombre = $row['nombre'];
