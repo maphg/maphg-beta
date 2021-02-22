@@ -668,7 +668,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 alertaImg("Proyecto Finalizado", "", "success", 2000);
             } else if (data == 9) {
                 obtenerProyectosGlobal("PENDIENTE");
-                toggleModalTailwind('modalTituloEliminar');
+                cerrarmodal('modalTituloEliminar');
                 alertaImg("Proyecto Restaurado", "", "success", 2000);
             } else if (data == 10) {
                 alertaImg("Solucione todas las actividades", "", "warning", 4000);

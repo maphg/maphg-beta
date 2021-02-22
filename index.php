@@ -3228,7 +3228,7 @@
 
 
     <!-- MODAL STATUS   -->
-    <div id=" modalTituloEliminar" class="modal">
+    <div id="modalTituloEliminar" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -3259,7 +3259,7 @@
                         <i class="fas fa-pen fa-lg"></i>
                     </div>
                 </div>
-                <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                <div class="hidden bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
                     <div class="">
                         <i class="fas fa-random fa-lg"></i>
                     </div>

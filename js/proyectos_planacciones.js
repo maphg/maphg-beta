@@ -1007,7 +1007,7 @@ function justificacionAdjuntosProyectos(idProyecto) {
 
 // OBTENER STATUS PLANACCIÓN
 function statusProyecto(idProyecto) {
-    document.getElementById("modalTituloEliminar").classList.add("open");
+    abrirmodal('modalTituloEliminar');
     let tituloActual = document.getElementById(idProyecto + 'tituloProyecto').innerHTML;
     document.getElementById("inputEditarTitulo").value = tituloActual;
 
