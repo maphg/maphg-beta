@@ -8,15 +8,15 @@
     <title>MAPHG Reporte Incidencias</title>
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/tailwindproduccion_2021.css">
-    <!-- <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
 </head>
 
 <body style="background-color: #EEF0FC;" class="scrollbar">
 
     <div class="w-full h-screen flex sm:flex-col md:flex-row md:items-start md:justify-start p-8 sm:justify-start sm:items-center">
-        <div class="bg-white md:w-80 sm:w-full h-auto rounded-xl shadow-lg flex flex-col justify-start items-center p-8 z-40 mb-4">
+        <div class="flex-none bg-white md:w-80 sm:w-full h-auto rounded-xl shadow-lg flex flex-col justify-start items-center p-8 z-40 mb-4">
             <div class="flex">
                 <input id="filtroPalabra" type="text" placeholder="Buscar incidencias" class="focus:outline-none focus:ring p-2 w-3/4 rounded-l-md mb-2 ring-bluegray-300" style="background-color: #F4F5F7;">
                 <button id="btnFiltroPalabra" class="focus:outline-none focus:ring bg-gray-600 text-gray-50 p-2 rounded-r-md mb-2 cursor-pointer ring-lime-300">Buscar</button>
@@ -155,48 +155,51 @@
             </div>
         </div>
 
-        <div class="w-full flex flex-col px-4">
-            <div class="w-full flex justify-start items-center p-4">
-                <h1 class="font-bold text-xs text-gray-400 uppercase mr-4">Columnas</h1>
+        <div class="flex-none">
+            <div class="overflow-x-auto scrollbar mx-auto" style="width: 800px">
+                <div class="w-full flex justify-start items-center p-4">
+                    <h1 class="font-bold text-xs text-gray-400 uppercase mr-4">Columnas</h1>
 
-                <button id="btnColumnaPendientesSolucionados" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Pendientes/Solucionados</button>
+                    <button id="btnColumnaPendientesSolucionados" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Pendientes/Solucionados</button>
 
-                <button id="btnColumnaSecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Secciones</button>
+                    <button id="btnColumnaSecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Secciones</button>
 
-                <button id="btnColumnaSubsecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Subsecciones</button>
+                    <button id="btnColumnaSubsecciones" class="bg-gray-100 text-gray-300 text-xs hover:bg-white hover:text-gray-700 hover:shadow uppercase font-bold rounded py-2 px-3 mr-4">Subsecciones</button>
 
-            </div>
+                </div>
 
-            <div id="contenedorPendientesSolucionados" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start">
-                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
-                    <div class="flex text-xxs rounded-full bg-red-100 pr-2 items-center w-40">
-                        <div class="w-6 h-6 rounded-full bg-red-300 text-red-500 font-bold flex items-center justify-center mr-2">
-                            <h1>22</h1>
+                <div id="contenedorPendientesSolucionados" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start">
+                    <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
+                        <div class="flex text-xxs rounded-full bg-red-100 pr-2 items-center w-40">
+                            <div class="w-6 h-6 rounded-full bg-red-300 text-red-500 font-bold flex items-center justify-center mr-2">
+                                <h1>22</h1>
+                            </div>
+                            <h1 class="font-bold text-gray-500 uppercase text-sm text-red-500">Pendientes</h1>
                         </div>
-                        <h1 class="font-bold text-gray-500 uppercase text-sm text-red-500">Pendientes</h1>
+                        <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
+                            <div id="dataPendientes"> </div>
+                        </div>
                     </div>
-                    <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
-                        <div id="dataPendientes"> </div>
+                    <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
+                        <div class="flex text-xxs rounded-full bg-green-100 pr-2 items-center w-40">
+                            <div class="w-6 h-6 rounded-full bg-green-300 text-green-500 font-bold flex items-center justify-center mr-2">
+                                <h1>10909</h1>
+                            </div>
+                            <h1 class="font-bold uppercase text-sm text-green-500">Solucionados</h1>
+                        </div>
+                        <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
+                            <div id="dataSolucionados"> </div>
+                        </div>
                     </div>
                 </div>
-                <div class="md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0">
-                    <div class="flex text-xxs rounded-full bg-green-100 pr-2 items-center w-40">
-                        <div class="w-6 h-6 rounded-full bg-green-300 text-green-500 font-bold flex items-center justify-center mr-2">
-                            <h1>10909</h1>
-                        </div>
-                        <h1 class="font-bold uppercase text-sm text-green-500">Solucionados</h1>
-                    </div>
-                    <div class="overflow-y-auto scrollbar px-1" style="max-height: 80vh">
-                        <div id="dataSolucionados"> </div>
-                    </div>
-                </div>
+
+                <div id="contenedorSeccion" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start overflow-y-auto scrollbar" style="max-height: 80vh"></div>
+
+                <div id="contenedorSubsecciones" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start" style="max-height: 80vh"></div>
+
             </div>
-
-            <div id="contenedorSeccion" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start overflow-x-auto scrollbar" style="max-height: 80vh"></div>
-
-            <div id="contenedorSubsecciones" class="hidden w-full h-full flex sm:flex-col md:flex-row md:justify-start sm:justify-start" style="max-height: 80vh"></div>
-
         </div>
+
     </div>
 
     <!-- AM4CORE -->
@@ -205,10 +208,18 @@
     <script src="js/am4core_animated.js"></script>
     <!-- AM4CORE -->
 
+    <!-- SCRIPTS ALERTIFY -->
+    <script src="js/alertify.min.js"></script>
+    <script src="js/alertasSweet.js"></script>
+    <!-- SCRIPTS ALERTIFY -->
+
     <!-- JS -->
     <script src="js/reporte_incidencias.js" type="text/javascript"></script>
     <!-- JS -->
 
+    <!-- SCRIPT SEGURIDAD -->
+    <script src="js/seguridad_session.js"></script>
+    <!-- SCRIPT SEGURIDAD -->
 
 </body>
 

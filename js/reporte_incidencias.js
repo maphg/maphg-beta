@@ -61,6 +61,10 @@ const obtenerReporte = (columna) => {
     data.append('filtroFechaInicio', filtroFechaInicio.value);
     data.append('filtroFechaFin', filtroFechaFin.value);
 
+    if (columna == "SUBSECCION") {
+        crearContenedoresSubsecciones(filtroSeccion.value)
+    }
+
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
@@ -77,7 +81,6 @@ const obtenerReporte = (columna) => {
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
 
-            console.log(array);
             console.log(array.length);
             return array;
         })
@@ -248,8 +251,8 @@ const obtenerReporte = (columna) => {
                                 insertAdjacentHTML('beforeend', codigo)
                         }
                     } else if (columna == "SUBSECCION") {
-                        if (document.getElementById("dataPendientesSeccion_" + idSubseccion)) {
-                            document.getElementById("dataPendientesSeccion_" + idSubseccion).
+                        if (document.getElementById("dataPendientesSubseccion_" + idSubseccion)) {
+                            document.getElementById("dataPendientesSubseccion_" + idSubseccion).
                                 insertAdjacentHTML('beforeend', codigo)
                         }
                     }
@@ -258,7 +261,6 @@ const obtenerReporte = (columna) => {
         })
         .catch(function (err) {
             // fetch(APIERROR + err);
-            console.log(err);
             // LIMPIA CONTENEDORES
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
@@ -438,9 +440,6 @@ filtroSeccion.addEventListener('change', () => {
     const action = "obtenerSubseccionPorSeccion";
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${filtroSeccion.value}`;
 
-    // ACTUALIZA RESULTADOS
-    obtenerReporte('COLUMNA');
-
     if (filtroSeccion.value > 0) {
         fetch(URL)
             .then(array => array.json())
@@ -461,7 +460,6 @@ filtroSeccion.addEventListener('change', () => {
             })
             .catch(function (err) {
                 filtroSubseccion.innerHTML = '<option value="0">TODOS</option>';
-                obtenerReporte('COLUMNA');
             })
     } else {
         filtroSubseccion.innerHTML = '<option value="0">TODOS</option>';
@@ -480,6 +478,7 @@ btnColumnaPendientesSolucionados.addEventListener('click', () => {
     contenedorPendientesSolucionados.classList.remove('hidden');
     contenedorSeccion.classList.add('hidden');
     contenedorSubsecciones.classList.add('hidden');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('COLUMNA')`);
     obtenerReporte('COLUMNA');
 })
 
@@ -493,12 +492,14 @@ btnColumnaSecciones.addEventListener('click', async () => {
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.remove('hidden');
     contenedorSubsecciones.classList.add('hidden');
-    // obtenerReporte('COLUMNA');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION')`);
+
+    // obtenerReporte('SECCION');
     await crearContenedoresSecciones()
     await obtenerReporte('SECCION')
 })
 
-btnColumnaSubsecciones.addEventListener('click', () => {
+btnColumnaSubsecciones.addEventListener('click', async () => {
     btnColumnaPendientesSolucionados.classList.remove('bg-white', 'shadow');
     btnColumnaSecciones.classList.remove('bg-white', 'shadow');
     btnColumnaSubsecciones.classList.add('bg-white', 'shadow');
@@ -508,9 +509,20 @@ btnColumnaSubsecciones.addEventListener('click', () => {
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.add('hidden');
     contenedorSubsecciones.classList.remove('hidden');
-    obtenerReporte('COLUMNA');
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte(SUBSECCION)`);
+
+    // obtenerReporte('SUBSECCION');
+    await obtenerReporte('SUBSECCION')
+    await crearContenedoresSubsecciones(filtroSeccion.value)
 })
 
+
+const limpiarDataContenedores = () => {
+    dataPendientes.innerHTML = '';
+    dataSolucionados.innerHTML = '';
+    contenedorSeccion.innerHTML = '';
+    contenedorSubsecciones.innerHTML = '';
+}
 
 // CREA CONTENEDORES SECCIONES
 const crearContenedoresSecciones = () => {
@@ -527,7 +539,6 @@ const crearContenedoresSecciones = () => {
             return array;
         })
         .then(array => {
-            console.log(array)
             if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idSeccion = array[x].idSeccion;
@@ -564,67 +575,77 @@ const crearContenedoresSecciones = () => {
         })
         .catch(function (err) {
             contenedorSeccion.innerHTML = '';
-            console.log(err)
             // fetch(APIERROR + err);
         })
 }
 
 
 // CREA CONTENEDORES SUBSECCIONES
-const crearContenedoresSubsecciones = () => {
+const crearContenedoresSubsecciones = idSeccion => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "obtenerSubseccionPorSeccion";
-    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
 
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-            console.log(array)
-        })
-        .catch(function (err) {
-            console.log(err)
-            // fetch(APIERROR + err);
-        })
+    contenedorSubsecciones.innerHTML = '';
+
+    if (idSeccion > 0) {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array) {
+                    for (let x = 0; x < array.length; x++) {
+                        const idSubseccion = array[x].idSubseccion;
+                        const subseccion = array[x].subseccion;
+
+                        const estilo = idSeccion == 9 ? 'red'
+                            : idSeccion == 8 ? 'blue'
+                                : idSeccion == 10 ? 'yellow'
+                                    : idSeccion == 11 ? 'green'
+                                        : idSeccion == 24 ? 'cyan'
+                                            : idSeccion == 1 ? 'purple'
+                                                : idSeccion == 6 ? 'orange'
+                                                    : idSeccion == 12 ? 'blue'
+                                                        : idSeccion == 5 ? 'indigo'
+                                                            : idSeccion == 7 ? 'red'
+                                                                : 'gray';
+
+                        const codigo = `  
+                        <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
+                            <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
+                                <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
+                                    <h1 id="cantidad_subseccion_${idSubseccion}"></h1>
+                                </div>
+                                <h1 class="font-bold text-gray-500 uppercase text-xxs text-${estilo}-500">${subseccion}</h1>
+                            </div>
+                            <div class="overflow-y-auto scrollbar px-1" style="max-height: 900px;">
+                                <div id="dataPendientesSubseccion_${idSubseccion}"></div>
+                             </div>
+                        </div>
+                    `;
+                        contenedorSubsecciones.insertAdjacentHTML('beforeend', codigo);
+                    }
+                }
+            })
+            .catch(function (err) {
+                contenedorSubsecciones.innerHTML = '';
+                // fetch(APIERROR + err);
+            })
+    } else {
+        alertaImg('Agregue un Sección en el Filtro', '', 'info', 1400);
+    }
 }
 
 
-// EVENTOS PARA ACTUALIZAR RESULTADOS
-btnFiltroPalabra.addEventListener('click', () => {
-    obtenerReporte('COLUMNA')
-})
-filtroResponsable.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-})
-filtroSubseccion.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-})
-filtroTipo.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-})
-filtroTipoIncidencia.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-})
-filtroStatus.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-})
 filtroFecha.addEventListener('change', () => {
-    obtenerReporte('COLUMNA');
     if (filtroFecha.value == "RANGO") {
         contenedorRangoFecha.classList.remove('hidden');
     } else {
-        // contenedorRangoFecha.classList.add('hidden');
+        contenedorRangoFecha.classList.add('hidden');
     }
 })
-// filtroFechaFin.addEventListener('change', obtenerReporte)
 
-
-filtroFechaFin.addEventListener('change', () => {
-    obtenerReporte('COLUMNA')
-    console.log(filtroFechaFin.value);
-    console.log(filtroFechaInicio.value);
-})
 
 
 // INICIA FILTROS DEPUES DE CARGAR
