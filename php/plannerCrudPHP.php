@@ -5951,7 +5951,7 @@ if (isset($_POST['action'])) {
                 if ($valorX == 0) {
                     $valor = 1;
                 }
-                $update = "UPDATE t_mp_np SET status_material = '$valor' WHERE id = $idTarea";
+                $update = "UPDATE t_mp_np SET status_material = '$valor', cod2bend = '$co2bend' WHERE id = $idTarea";
                 if ($result = mysqli_query($conn_2020, $update)) {
                     $resp = 7;
                 }

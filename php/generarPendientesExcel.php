@@ -181,7 +181,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE comentarios_mp_np.id_mp_np = $idT and comentarios_mp_np.activo = 1";
             if ($result = mysqli_query($conn_2020, $query)) {
-                if ($x = mysqli_fetch_array($result)) {
+                foreach ($result as $x) {
                     $comentarioT = $x['comentario'];
                     $comentarioDeT = $x['nombre'] . " " . $x['apellido'];
                 }
@@ -193,7 +193,7 @@ if (isset($_GET['listaIdF']) and isset($_GET['listaIdT']) and isset($_GET['gener
             INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
             WHERE t_users.id = $creadoPorT";
             if ($result = mysqli_query($conn_2020, $query)) {
-                if ($x = mysqli_fetch_array($result)) {
+                foreach ($result as $x) {
                     $nombreCreado = $x['nombre'] . " " . $x['apellido'];
                 }
             }
