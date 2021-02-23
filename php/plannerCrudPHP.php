@@ -7564,10 +7564,58 @@ if (isset($_POST['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 11;
             }
-        } else {
-            $resp = 0;
-        }
+        } elseif ($columna == 'status_i') {
+            $valor = 0;
+            $query = "SELECT status_i FROM t_proyectos WHERE id = $idProyecto and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = $x['status_i'];
+                }
+            }
+            if ($valor == 0) {
+                $valor = 1;
+            } else {
+                $valor = 0;
+            }
 
+            $query = "UPDATE t_proyectos SET status_i = '$valor' 
+            WHERE id = $idProyecto and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 12;
+            }
+        } elseif ($columna == 'status_ap') {
+            $valor = 0;
+            $query = "SELECT status_ap FROM t_proyectos WHERE id = $idProyecto and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $valor = $x['status_ap'];
+                }
+            }
+            if ($valor == 0) {
+                $valor = 1;
+            } else {
+                $valor = 0;
+            }
+
+            $total = 0;
+            $query = "SELECT  count(id) 'total' FROM t_proyectos_adjuntos 
+            WHERE id_proyecto = $idProyecto and status = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $total = $x['total'];
+                }
+            }
+
+            if ($total > 0) {
+                $query = "UPDATE t_proyectos SET status_ap = '$valor' 
+                WHERE id = $idProyecto and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 12;
+                }
+            } else {
+                $resp = 13;
+            }
+        }
         echo $resp;
     }
 

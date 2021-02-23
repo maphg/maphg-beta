@@ -1501,8 +1501,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
-        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, 
-        t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.status_i, t_proyectos.status_ap, t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, 
         t_proyectos.tipo, c_secciones.seccion
         FROM t_proyectos 
         INNER JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
@@ -1525,6 +1524,8 @@ if (isset($_GET['action'])) {
                 $coste = $x['coste'];
                 $presupuesto = $x['presupuesto'];
                 $tipo = $x['tipo'];
+                $sI = $x['status_i'];
+                $sAP = $x['status_ap'];
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -1566,11 +1567,11 @@ if (isset($_GET['action'])) {
                 }
 
                 #Obtiene PDA de Proyectos
+                $totalActividadesCreadas = 0;
+                $totalActividadesSolucionadas = 0;
+                $pda = "";
                 $query = "SELECT id, status FROM t_proyectos_planaccion WHERE id_proyecto = $idProyecto and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalActividadesCreadas = 0;
-                    $totalActividadesSolucionadas = 0;
-                    $pda = "";
                     foreach ($result as $x) {
                         $idActividad = $x['id'];
                         $statusActividad = $x['status'];
@@ -1583,33 +1584,40 @@ if (isset($_GET['action'])) {
                 }
 
                 #Obtiene el Responsable Asignado
+                $nombreResponsable = "";
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
                 FROM t_users 
                 LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
                 WHERE t_users.id = $idResponsable
                 ";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $nombreResponsable = "";
                     foreach ($result as $x) {
                         $nombreResponsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
                     }
                 }
 
                 #Comentarios de Proyecto
+                $totalComentarios = 0;
                 $query = "SELECT count(id) FROM t_proyectos_comentarios WHERE id_proyecto = $idProyecto and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalComentarios = 0;
                     foreach ($result as $x) {
                         $totalComentarios = $x['count(id)'];
                     }
                 }
 
                 #Adjuntos de Proyecto
+                $totalAdjuntos = 0;
                 $query = "SELECT count(id) FROM t_proyectos_adjuntos WHERE id_proyecto = $idProyecto and status = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
-                    $totalAdjuntos = 0;
                     foreach ($result as $x) {
-                        $totalAdjuntos = $x['count(id)'];
+                        $totalAdjuntos = intval($x['count(id)']);
+                    }
+                }
+                $query = "SELECT count(id) FROM t_proyectos_catalogo_conceptos 
+                WHERE id_proyecto = $idProyecto and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $totalAdjuntos + intval($x['count(id)']);
                     }
                 }
 
@@ -1665,7 +1673,9 @@ if (isset($_GET['action'])) {
                     "materiales" => intval($sMaterialx),
                     "energeticos" => intval($sEnergeticox),
                     "departamento" => intval($sDepartamentox),
-                    "trabajando" => intval($sTrabajandox)
+                    "trabajando" => intval($sTrabajandox),
+                    "sI" => intval($sI),
+                    "sAP" => intval($sAP),
                 );
                 $array[] = $arrayTemp;
             }
@@ -1709,7 +1719,5 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
-
-
     // CIERRE FINAL
 }

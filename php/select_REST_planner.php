@@ -591,6 +591,8 @@ if (isset($_GET['action'])) {
         $bitacoraTRS = 0;
         $bitacoraZI = 0;
         $sEP = 0;
+        $sI = 0;
+        $sAP = 0;
 
         if ($tipoRegistro == "FALLA") {
             $query = "SELECT actividad, status_material, status_trabajare, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, cod2bend,
@@ -642,7 +644,7 @@ if (isset($_GET['action'])) {
                 }
             }
         } elseif ($tipoRegistro == "PROYECTO") {
-            $query = "SELECT titulo, status_material, status_trabajare
+            $query = "SELECT titulo, status_material, status_trabajare, status_i, status_ap
             -- departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, energetico_electricidad, energetico_agua, 
             -- energetico_diesel, energetico_gas 
             FROM t_proyectos WHERE id = $idRegistro";
@@ -660,6 +662,8 @@ if (isset($_GET['action'])) {
                     // $sDiesel = $x['energetico_diesel'];
                     // $sGas = $x['energetico_gas'];
                     $titulo = $x['titulo'];
+                    $sI = $x['status_i'];
+                    $sAP = $x['status_ap'];
                 }
             }
         } elseif ($tipoRegistro == "PLANACCION") {
@@ -800,7 +804,9 @@ if (isset($_GET['action'])) {
             "bitacoraGP" => $bitacoraGP,
             "bitacoraTRS" => $bitacoraTRS,
             "bitacoraZI" => $bitacoraZI,
-            "sEP" => intval($sEP)
+            "sEP" => intval($sEP),
+            "sI" => intval($sI),
+            "sAP" => intval($sAP)
         );
 
         echo json_encode($array);
@@ -1076,7 +1082,7 @@ if (isset($_GET['action'])) {
 
     // OBTIENE USUARIOS SEGÚN DESTINO
     if ($action == "obtenerUsuarios") {
-        
+
         if (isset($_GET["palabraUsuario"])) {
             $palabraUsuario = $_GET["palabraUsuario"];
         } else {
@@ -1303,6 +1309,11 @@ if (isset($_GET['action'])) {
             }
         } elseif ($tipoAdjunto == "COTIZACIONPROYECTO") {
             $query = "UPDATE t_proyectos_adjuntos SET status = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } elseif ($tipoAdjunto == "CATALOGOPROYECTO") {
+            $query = "UPDATE t_proyectos_catalogo_conceptos SET status = 0 WHERE id = $idAdjunto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }

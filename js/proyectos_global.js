@@ -1,10 +1,30 @@
 'use strict'
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
+// ICONO LOADER MAPHG
+const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
+
 // INPUTS
 const btnPresupuestoProyecto = document.getElementById("btnPresupuestoProyecto");
 const presupuestoProyecto = document.getElementById("presupuestoProyecto");
+const inputCotizacionesProyecto = document.getElementById("inputCotizacionesProyecto");
+const inputCatalogoConcepto = document.getElementById("inputCatalogoConcepto");
 
+// BTNS
+const btnStatusI = document.getElementById("btnStatusI");
+const btnStatusAP = document.getElementById("btnStatusAP");
+const btnStatusFinalizar = document.getElementById("btnStatusFinalizar");
+const btnStatusEliminar = document.getElementById("btnStatusEliminar");
+const inputEditarTituloX = document.getElementById("inputEditarTituloX");
+const btnEditarTituloX = document.getElementById("btnEditarTituloX");
+// BTNS
+
+// CONTENEDORES DIVS
+const loaderCotizacionesProyecto = document.getElementById("loaderCotizacionesProyecto");
+const dataCotizacionesImagenes = document.getElementById("dataCotizacionesImagenes");
+const dataCotizacionesDocumentos = document.getElementById("dataCotizacionesDocumentos");
+const dataCatalogoConcepto = document.getElementById("dataCatalogoConcepto");
+// CONTENEDORES DIVS
 
 const datosProyectos = params => {
 
@@ -45,7 +65,7 @@ const datosProyectos = params => {
             break;
 
         case 'CAPEX':
-            valorTipo = '<div class="px-2 bg-yellow-300 text-yellow-600 rounded-full uppercase"><h1>capex</h1></div>';
+            valorTipo = '<div class="px-2 bg-yellow-300 text-yellow-600 rounded-full uppercase"><h1>FF&E</h1></div>';
             break;
 
         case 'PROYECTO':
@@ -118,7 +138,7 @@ const datosProyectos = params => {
 
         fRangoFecha = `onclick="obtenerDatoProyectos(${idProyecto},'rango_fecha');"`;
 
-        fCotizaciones = `onclick="cotizacionesProyectos(${idProyecto});"`;
+        fCotizaciones = `onclick="obtenerCotizaciones(${idProyecto}); obtenerCatalogoConceptos(${idProyecto}); abrirmodal('modalMediaProyectos');"`;
 
         fTipo = `onclick="obtenerDatoProyectos(${idProyecto}, 'tipo');"`;
 
@@ -139,7 +159,11 @@ const datosProyectos = params => {
 
     const coste = new Intl.NumberFormat('IN').format(params.coste);
     const presupuesto = new Intl.NumberFormat('IN').format(params.presupuesto);
-    
+    const statusI = params.sI == 1 ?
+        `<p class="text-xs font-semibold text-green-500 bg-green-300 rounded-full p-1 mx-1 w-6">I</p>` : '';
+    const statusAP = params.sAP == 1 ?
+        `<p class="text-xs font-semibold text-blue-500 bg-blue-300 rounded-full p-1 mx-1 w-6">AP</p>` : '';
+
     return `
         <tr id="${idProyecto + 'proyecto'}" class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800 fila-proyectos-select">
 
@@ -194,6 +218,14 @@ const datosProyectos = params => {
                 ${valorjustificacion}
             </td>
 
+            <td class="whitespace-no-wrap border-b border-gray-200 text-center text-lg py-3"
+            ${fStatus}>
+                <div class="flex flex-row items-center justify-center">
+                    ${statusI}
+                    ${statusAP}
+                </div>
+            </td>
+
             <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3"
             ${fCoste}>
                 $ ${coste}
@@ -221,7 +253,7 @@ const datosProyectos = params => {
             
         </tr>
     `;
-};
+}
 
 
 const datosPlanes = params => {
@@ -369,7 +401,7 @@ const datosPlanes = params => {
             </td>                        
         </tr>
         `;
-};
+}
 
 
 function obtenerProyectosGlobal(statusProyectos) {
@@ -428,6 +460,9 @@ function obtenerProyectosGlobal(statusProyectos) {
                     const energeticos = array[x].energeticos;
                     const departamento = array[x].departamento;
                     const trabajando = array[x].trabajando;
+                    const sI = array[x].sI;
+                    const sAP = array[x].sAP;
+
                     const dataProyectos = datosProyectos({
                         id: id,
                         destino: destino,
@@ -448,7 +483,9 @@ function obtenerProyectosGlobal(statusProyectos) {
                         materiales: materiales,
                         energeticos: energeticos,
                         departamento: departamento,
-                        trabajando: trabajando
+                        trabajando: trabajando,
+                        sI: sI,
+                        sAP: sAP
                     });
 
                     document.getElementById("contenedorDeProyectos").insertAdjacentHTML('beforeend', dataProyectos);
@@ -572,7 +609,6 @@ document.getElementById("destinosSelecciona").addEventListener('click', () => {
 });
 
 
-// FUNCIONES
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
     document.getElementById("palabraUsuario").setAttribute("onkeyup", "obtenerResponsablesProyectos(" + idProyecto + ")");
@@ -610,9 +646,10 @@ function actualizarProyectos(valor, columna, idProyecto) {
     let tipo = document.getElementById("tipoProyecto").value;
     let justificacion = document.getElementById("justificacionProyecto").value;
     let coste = document.getElementById("costeProyecto").value;
-    let titulo = document.getElementById("inputEditarTituloX").value;
     let presupuesto = presupuestoProyecto.value;
+
     const action = "actualizarProyectos";
+
     $.ajax({
         type: "POST",
         url: "php/plannerCrudPHP.php",
@@ -626,7 +663,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
             justificacion: justificacion,
             tipo: tipo,
             coste: coste,
-            titulo: titulo,
+            titulo: inputEditarTituloX.value,
             presupuesto: presupuesto
         },
         // dataType: "JSON",
@@ -676,8 +713,15 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 obtenerProyectosGlobal("PENDIENTE");
                 toggleModalTailwind('modalPresupuestoProyecto');
                 alertaImg("Presupuesto Actualizado", "", "success", 2000);
+            } else if (data == 12) {
+                obtenerProyectosGlobal("PENDIENTE");
+                cerrarmodal('modalTituloEliminar');
+                alertaImg("Status Actualizado", "", "success", 2000);
+            } else if (data == 13) {
+                alertaImg("Adjunte Cotización, para Aplicar el Status", "", "error", 2000);
             } else {
                 alertaImg("Intente de Nuevo", "", "info", 3000);
+                obtenerProyectosGlobal("PENDIENTE");
             }
         },
     });
@@ -805,45 +849,239 @@ $(function () {
 })
 
 
-
 // Obtienes las Cotizaciones de PROYECTOS
-function cotizacionesProyectos(idProyecto) {
+const obtenerCotizaciones = idProyecto => {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let idTabla = idProyecto;
-    let tabla = "t_proyectos_adjuntos";
 
-    document.getElementById("contenedorImagenes").classList.add('hidden');
-    document.getElementById("contenedorDocumentos").classList.add('hidden');
+    inputCotizacionesProyecto.setAttribute('onchange', `agregarCotizacion(${idProyecto})`);
+    loaderCotizacionesProyecto.innerHTML = loaderMAPHG40;
 
-    document.getElementById("modalMedia").classList.add("open");
-    document.getElementById("inputAdjuntos")
-        .setAttribute("onchange", "subirImagenGeneral(" + idProyecto + ', "t_proyectos_adjuntos")');
+    const action = "obtenerCotizaciones";
+    const URL = `php/adjuntos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
 
-    const action = "obtenerAdjuntos";
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idTabla: idTabla,
-            tabla: tabla,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            if (data.imagen != "") {
-                document.getElementById("dataImagenes").innerHTML = data.imagen;
-                document.getElementById("contenedorImagenes").classList.remove('hidden');
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataCotizacionesImagenes.innerHTML = '';
+            dataCotizacionesDocumentos.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idAdjunto = array[x].idAdjunto;
+                    const url = array[x].url;
+                    const fecha = array[x].fecha;
+                    const extension = array[x].extension;
+
+                    const codigo = extension == 'png' || extension == 'jpeg' || extension == 'jpg' || extension == 'svg' ?
+                        `
+                        <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+                            <a href="planner/proyectos/${url}" target="_blank" data-title="Clic para Abrir">
+                                <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url('planner/proyectos/${url}')">
+                                </div>
+                            </a>
+                            <div class="w-full absolute text-transparent hover:text-red-700" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'COTIZACIONPROYECTO');">
+                                <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                            </div>
+                        </div>
+                        `
+                        : `
+                        <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative w-full px-2">
+                            <a href="planner/proyectos/${url}" target="_blank">
+                                <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                                    <i class="fad fa-file-alt fa-3x"></i>
+                                    <p class="text-sm font-normal ml-2">${url}</p>
+                                </div>
+                            </a>     
+                            <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'COTIZACIONPROYECTO');">
+                                <i class="fas fa-trash-alt fa-2x"></i>
+                            </div>
+                        </div>  
+                    `;
+
+                    extension == 'png' || extension == 'jpeg' || extension == 'jpg' || extension == 'svg' ?
+                        dataCotizacionesImagenes.insertAdjacentHTML('beforeend', codigo)
+                        :
+                        dataCotizacionesDocumentos.insertAdjacentHTML('beforeend', codigo);
+                }
             }
+        })
+        .then(() => {
+            loaderCotizacionesProyecto.innerHTML = '';
+        })
+        .catch(function (err) {
+            loaderCotizacionesProyecto.innerHTML = '';
+            dataCotizacionesImagenes.innerHTML = '';
+            dataCotizacionesDocumentos.innerHTML = '';
+            fetch(APIERROR + err);
+        })
+}
 
-            if (data.documento != "") {
-                document.getElementById("dataAdjuntos").innerHTML = data.documento;
-                document.getElementById("contenedorDocumentos").classList.remove('hidden');
+
+// AGREGAR COTIZACIONES DE PROYECTOS
+const agregarCotizacion = idProyecto => {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+
+    const action = "agregarCotizacion";
+    const URL = `php/adjuntos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
+
+    const formData = new FormData();
+
+    if (inputCotizacionesProyecto.files) {
+        loaderCotizacionesProyecto.innerHTML = loaderMAPHG40;
+        for (let x = 0; x < inputCotizacionesProyecto.files.length; x++) {
+            formData.append('file', inputCotizacionesProyecto.files[x]);
+
+            fetch(URL, {
+                method: "POST",
+                body: formData
+            })
+                .then(array => array.json())
+                .then(array => {
+                    if (array == 1) {
+                        alertaImg('Adjunto Agregado', '', 'success', 1400);
+                        obtenerCotizaciones(idProyecto);
+                    } else {
+                        alertaImg('Intente de Nueva', '', 'info', 1400);
+                    }
+                })
+                .then(() => {
+                    inputCotizacionesProyecto.value = '';
+                    loaderCotizacionesProyecto.innerHTML = '';
+                })
+                .catch(function (err) {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                    loaderCotizacionesProyecto.innerHTML = '';
+                    inputCotizacionesProyecto.value = '';
+                    fetch(APIERROR + err + ` agregarCotizacion(${idProyecto})`)
+                })
+        }
+    }
+}
+
+
+// OBTIENE CATALOGO DE CONCEP DE PROYECTOS
+const obtenerCatalogoConceptos = idProyecto => {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+
+    inputCatalogoConcepto.setAttribute('onchange', `agregarCatalogoConceptos(${idProyecto})`);
+    loaderCotizacionesProyecto.innerHTML = loaderMAPHG40;
+
+    const action = "obtenerCatalogoConceptos";
+    const URL = `php/adjuntos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataCatalogoConcepto.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idAdjunto = array[x].idAdjunto;
+                    const url = array[x].url;
+                    const fecha = array[x].fecha;
+                    const extension = array[x].extension;
+
+                    const codigo = extension == 'png' || extension == 'jpeg' || extension == 'jpg' || extension == 'svg' ?
+                        `
+                        <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative">
+                            <a href="planner/proyectos/${url}" target="_blank" data-title="Clic para Abrir">
+                                <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url('planner/proyectos/${url}')">
+                                </div>
+                            </a>
+                            <div class="w-full absolute text-transparent hover:text-red-700" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'CATALOGOPROYECTO');">
+                                <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                            </div>
+                        </div>
+                        `
+                        : extension == 'xls' || extension == 'xlsx' ?
+                            `
+                                <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative w-full px-2">
+                                    <a href="planner/proyectos/${url}" target="_blank">
+                                        <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                                            <i class="fad fa-file-excel fa-2x text-green-600 hover:text-green-400"></i>
+                                            <p class="text-sm font-normal ml-2">${url}</p>
+                                        </div>
+                                    </a>     
+                                    <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'CATALOGOPROYECTO');">
+                                        <i class="fas fa-trash-alt fa-2x"></i>
+                                    </div>
+                                </div>
+                            `
+                            : `
+                                <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative w-full px-2">
+                                    <a href="planner/proyectos/${url}" target="_blank">
+                                        <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                                            <i class="fad fa-file-alt fa-3x"></i>
+                                            <p class="text-sm font-normal ml-2">${url}</p>
+                                        </div>
+                                    </a>     
+                                    <div class="absolute text-red-700" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'CATALOGOPROYECTO');">
+                                        <i class="fas fa-trash-alt fa-2x"></i>
+                                    </div>
+                                </div>  
+                            `;
+                    dataCatalogoConcepto.insertAdjacentHTML('beforeend', codigo);
+                }
             }
-        },
-    });
+        })
+        .then(() => {
+            loaderCotizacionesProyecto.innerHTML = '';
+        })
+        .catch(function (err) {
+            dataCatalogoConcepto.innerHTML = '';
+            dataCotizacionesDocumentos.innerHTML = '';
+            fetch(APIERROR + err);
+        })
+}
+
+
+// AGREGAR CATALOGO DE CONCEPTOS DE PROYECTOS
+const agregarCatalogoConceptos = idProyecto => {
+    let idUsuario = localStorage.getItem("usuario");
+    let idDestino = localStorage.getItem("idDestino");
+
+    const action = "agregarCatalogoConceptos";
+    const URL = `php/adjuntos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idProyecto=${idProyecto}`;
+
+    const formData = new FormData();
+
+    if (inputCatalogoConcepto.files) {
+        loaderCotizacionesProyecto.innerHTML = loaderMAPHG40;
+        for (let x = 0; x < inputCatalogoConcepto.files.length; x++) {
+            formData.append('file', inputCatalogoConcepto.files[x]);
+
+            fetch(URL, {
+                method: "POST",
+                body: formData
+            })
+                .then(array => array.json())
+                .then(array => {
+                    if (array == 1) {
+                        alertaImg('Adjunto Agregado', '', 'success', 1400);
+                        obtenerCatalogoConceptos(idProyecto);
+                    } else {
+                        alertaImg('Intente de Nueva', '', 'info', 1400);
+                    }
+                })
+                .then(() => {
+                    inputCatalogoConcepto.value = '';
+                    loaderCotizacionesProyecto.innerHTML = '';
+                })
+                .catch(function (err) {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                    loaderCotizacionesProyecto.innerHTML = '';
+                    inputCatalogoConcepto.value = '';
+                    fetch(APIERROR + err + ` agregarCatalogoConceptos(${idProyecto})`)
+                })
+        }
+    }
 }
 
 
@@ -886,7 +1124,7 @@ function subirImagenGeneral(idTabla, tabla) {
                     // Sube y Actualiza la Vista para las Cotizaciones de Proyectos
                     alertaImg("Cotización Agregada", "", "success", 2500);
                     obtenerProyectosGlobal('PENDIENTE');
-                    cotizacionesProyectos(idTabla);
+                    obtenerCotizaciones(idTabla);
                 } else if (data == 4) {
                     // Sube y Actualiza la Vista para los Adjuntos de Planaccion
                     alertaImg("Adjunto Agregado", "", "success", 2500);
@@ -997,18 +1235,16 @@ function statusProyecto(idProyecto) {
         .then(array => array.json())
         .then(array => {
             if (array[0]) {
-                document.getElementById("inputEditarTituloX").value = array[0].titulo;
+                inputEditarTituloX.value = array[0].titulo;
             }
         })
         .then(function () {
-            document.getElementById("btnEditarTituloX")
-                .setAttribute("onclick", 'actualizarProyectos(0, "titulo",' + idProyecto + ")");
+            btnEditarTituloX.setAttribute("onclick", `actualizarProyectos(0, 'titulo', ${idProyecto})`);
+            btnStatusEliminar.setAttribute("onclick", `actualizarProyectos(0, 'eliminar', ${idProyecto})`);
 
-            document.getElementById("eliminar").
-                setAttribute("onclick", 'actualizarProyectos(0, "eliminar",' + idProyecto + ")");
-
-            document.getElementById("finalizar").
-                setAttribute("onclick", 'actualizarProyectos("F", "status",' + idProyecto + ")");
+            btnStatusI.setAttribute("onclick", `actualizarProyectos(0, 'status_i', ${idProyecto})`);
+            btnStatusAP.setAttribute("onclick", `actualizarProyectos(0, 'status_ap', ${idProyecto})`);
+            btnStatusFinalizar.setAttribute("onclick", `actualizarProyectos('F', 'status', ${idProyecto})`);
         })
         .catch(function (err) {
             fetch(APIERROR + err + ': (statusProyecto)');
@@ -1690,9 +1926,7 @@ function agregarPlanaccion() {
                 } else {
                     alertaImg("Intente de Nuevo", "", "info", 3000);
                 }
-            }, error: function (err) {
-                console.log(err);
-            }
+            },
         });
     } else {
         alertaImg("Intente de Nuevo", "", "info", 3000);
