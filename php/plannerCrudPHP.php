@@ -10092,7 +10092,7 @@ if (isset($_POST['action'])) {
         and t_mp_planes_mantenimiento.local_equipo = t_equipos_america.local_equipo 
         and t_equipos_america.id_destino = t_mp_planes_mantenimiento.id_destino 
         and t_mp_planes_mantenimiento.tipo_plan = 'CHECKLIST' 
-        -- and t_mp_planes_mantenimiento.id_fase = t_equipos_america.id_fases
+        and t_mp_planes_mantenimiento.id_fase = t_equipos_america.id_fases
         INNER JOIN c_frecuencias_mp ON t_mp_planes_mantenimiento.id_periodicidad = c_frecuencias_mp.id
         WHERE t_equipos_america.id = $idEquipo and t_equipos_america.activo = 1 and 
         t_mp_planes_mantenimiento.status = 'ACTIVO'";
