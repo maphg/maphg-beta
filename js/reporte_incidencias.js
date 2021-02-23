@@ -22,6 +22,9 @@ const btnColumnaSubsecciones = document.getElementById("btnColumnaSubsecciones")
 
 // CONTENEDORES DIV
 const contenedorRangoFecha = document.getElementById("contenedorRangoFecha");
+const loader = document.getElementById("loader");
+const totalPendientes = document.getElementById("totalPendientes");
+const totalSolucionados = document.getElementById("totalSolucionados");
 // CONTENEDORES DIV
 
 // CONTENEDORES DATA
@@ -42,10 +45,10 @@ const toggleClassX = (idElemento, claseX) => {
     }
 }
 
-iconoLoader = '<img src="svg/lineal_animated_loop.svg" width="120px" height="120px">';
+iconoLoader = '<img src="svg/lineal_animated_loop.svg" width="35px" height="35px">';
 
 // GENERA REPORTE CON LOS FILTROS (COLUMNA: PRECESO - SOLUCIONADO)
-const obtenerReporte = (columna) => {
+const obtenerReporte = columna => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
@@ -68,8 +71,7 @@ const obtenerReporte = (columna) => {
     const action = "obtenerReporte";
     const URL = `php/reporte_incidencias.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
-    dataPendientes.innerHTML = iconoLoader;
-    dataSolucionados.innerHTML = iconoLoader;
+    loader.innerHTML = iconoLoader;
 
     fetch(URL, {
         method: 'POST',
@@ -86,12 +88,18 @@ const obtenerReporte = (columna) => {
         })
         .then(array => {
             if (array) {
+                // CONTADORES
                 let contadorEmergencia = 0;
                 let contadorUrgencia = 0;
                 let contadorAlarma = 0;
                 let contadorAlerta = 0;
                 let contadorSeguimiento = 0;
                 let arrayGrafica = [];
+                let pendientes = 0;
+                let solucionados = 0;
+                let arraySecciones = [];
+                let arraySubsecciones = [];
+
                 for (let x = 0; x < array.length; x++) {
                     const idItem = array[x].idItem;
                     const titulo = array[x].titulo;
@@ -196,6 +204,29 @@ const obtenerReporte = (columna) => {
                         </div>                    
                     ` : ``;
 
+                    // CONTADOR DE PENDIENTES
+                    if (columna == "COLUMNA") {
+                        if (status == "SOLUCIONADO") {
+                            pendientes++;
+                        } else {
+                            solucionados++;
+                        }
+                        if ((x + 1) == array.length) {
+                            totalSolucionados.innerHTML = pendientes++;
+                            totalPendientes.innerHTML = solucionados++;
+                        }
+                    } else if (columna == "SECCION") {
+                        arraySecciones.push(idSeccion);
+                        if ((x + 1) == array.length) {
+                            contadorArray(arraySecciones);
+                        }
+                    } else if (columna == "SUBSECCION") {
+                        arraySubsecciones.push(idSubseccion);
+                        if ((x + 1) == array.length) {
+                            contadorArray(arraySubsecciones);
+                        }
+                    }
+
                     const fExpandir = `onclick="toggleClassX('mostrar_mas_${x}', 'hidden'); 
                     toggleClassX('titulo_incidencia_${x}', 'truncate'); toggleClassX('titulo_incidencia_${x}', 'mb-1'); toggleClassX('titulo_incidencia_${x}', 'text-justify');"`;
 
@@ -235,7 +266,6 @@ const obtenerReporte = (columna) => {
                                 </div>
                             </div>
                             <!-- PARTE TOOGLEABLE -->
-
                         </div>
                     `;
 
@@ -259,6 +289,9 @@ const obtenerReporte = (columna) => {
                 }
             }
         })
+        .then(() => {
+            loader.innerHTML = '';
+        })
         .catch(function (err) {
             // fetch(APIERROR + err);
             // LIMPIA CONTENEDORES
@@ -269,6 +302,18 @@ const obtenerReporte = (columna) => {
         })
 }
 
+
+// CONTADOR DE RESULTADOS
+const contadorArray = array => {
+    console.log(array);
+    for (let x = 0; x < array.length; x++) {
+        const idSeccion = array[x];
+        if (valor = document.getElementById("cantidad_seccion_" + idSeccion)) {
+            valor.innerText = valor.innerText.parseInt() + 1;
+            console.log(valor);
+        }
+    }
+}
 
 
 // GRAFICA DE INCIDENCIAS
@@ -509,7 +554,7 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     contenedorPendientesSolucionados.classList.add('hidden');
     contenedorSeccion.classList.add('hidden');
     contenedorSubsecciones.classList.remove('hidden');
-    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte(SUBSECCION)`);
+    btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
 
     // obtenerReporte('SUBSECCION');
     await obtenerReporte('SUBSECCION')
@@ -560,7 +605,7 @@ const crearContenedoresSecciones = () => {
                         <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
                             <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
                                 <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
-                                    <h1 id="cantidad_seccion_${idSeccion}"></h1>
+                                    <h1 id="cantidad_seccion_${idSeccion}">0</h1>
                                 </div>
                                 <h1 class="font-bold text-gray-500 uppercase text-sm text-${estilo}-500">${seccion}</h1>
                             </div>
@@ -620,7 +665,7 @@ const crearContenedoresSubsecciones = idSeccion => {
                                 <h1 class="font-bold text-gray-500 uppercase text-xxs text-${estilo}-500">${subseccion}</h1>
                             </div>
                             <div class="overflow-y-auto scrollbar px-1" style="max-height: 900px;">
-                                <div id="dataPendientesSubseccion_${idSubseccion}"></div>
+                                <div id="dataPendientesSubseccion_${idSubseccion}">0</div>
                              </div>
                         </div>
                     `;
@@ -652,4 +697,7 @@ filtroFecha.addEventListener('change', () => {
 window.addEventListener('load', () => {
     obtenerUsuarios()
     obtenerSeccionesPorDestino()
+    btnFiltroPalabra.setAttribute('onclick', () => { })
 })
+
+
