@@ -1846,7 +1846,7 @@ if (isset($_GET['action'])) {
         LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
         LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
         LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER');
+        WHERE t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER')
         $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
 
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -1993,7 +1993,6 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $id);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $idEquipoPrincipal);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $destino);
@@ -2010,10 +2009,6 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $local_equipo);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $ubicacion);
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $xc);
-                // $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $contadorProceso);
-                // $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $contadorSolucionado);
-                // $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $contadorPlanificado);
-                // $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $semanaActual);
             }
         }
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
