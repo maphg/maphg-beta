@@ -101,7 +101,7 @@ function validarUsuario() {
                             fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
 
                             if (data.idDestino) {
-                                location.href = "https://www.maphg.com/beta/planner-cols.php";
+                                location.href = "https://www.maphg.com/beta/index.php";
                             } else {
                                 location.href = "https://www.maphg.com/beta/msg.html";
                                 // location.href = "index.php";

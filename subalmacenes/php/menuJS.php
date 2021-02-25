@@ -31,7 +31,7 @@
         </dav>
         <dav id="hijo1" class="menu-hijo-1 ocultalo">
             <dav class="menu-hijo-2">
-                <a href="https://www.maphg.com/beta/planner-cols.php" target="_blanck" class="menu-hijo-3 CA">TR Mantto</a>
+                <a href="https://www.maphg.com/beta/index.php" target="_blanck" class="menu-hijo-3 CA">TR Mantto</a>
             </dav>
             <dav class="menu-hijo-2">
                 <a href="bitacora_mantto.php" target="_blanck" class="menu-hijo-3 CA">Bitácora diaria</a>
