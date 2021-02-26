@@ -156,7 +156,7 @@
                 <o href="#" class="menu-hijo-3 CA">Planos</o>
             </dav>
             <dav class="menu-hijo-2">
-                <o href="#" class="menu-hijo-3 CA">Normativas</o>
+                <o href="#" class="menu-hijo-3 CA">Mantenimiento Legal</o>
             </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Auditorias</o>
