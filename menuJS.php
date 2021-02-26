@@ -132,6 +132,9 @@
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Activos</o>
             </dav>
+            <dav class="menu-hijo-2" onclick="enlaceInventariosSubalmacenes();">
+                <a href="#" class="menu-hijo-3 CA">Inventarios</a>
+            </dav>
         </dav>
         <dav class="menu-contenedor-padre-1">
             <dav class="menu-contenedor-padre-2">
@@ -299,4 +302,21 @@
             }
         }
     });
+
+    const enlaceInventariosSubalmacenes = () => {
+        let idDestino = localStorage.getItem('idDestino');
+        let idUsuario = localStorage.getItem('usuario');
+
+        const URL = `php/select_REST_planner.php?action=enlaceInventariosSubalmacenes&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array) {
+                    window.open(array.url, "Inventarios", "witdh=900, height=800")
+                }
+            })
+            .catch(function(err) {
+                fetch(APIERROR + err);
+            })
+    }
 </script>

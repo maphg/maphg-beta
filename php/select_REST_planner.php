@@ -4677,5 +4677,22 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+    #OBTIENE ENLACES DE LAS CARPETAS DE LOS INVENTARIOS DE SUBALMACENES
+    if ($action == "enlaceInventariosSubalmacenes") {
+        $array = array();
+
+        $query = "SELECT url FROM t_enlaces WHERE id_destino = $idDestino and tipo_enlace = 'MENUGESTIONINVENTARIO'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $url = $x['url'];
+
+                $array = array(
+                    "url" => $url
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
     // CIERRE FINAL
 }
