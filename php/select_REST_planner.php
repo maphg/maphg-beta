@@ -4678,10 +4678,12 @@ if (isset($_GET['action'])) {
     }
 
     #OBTIENE ENLACES DE LAS CARPETAS DE LOS INVENTARIOS DE SUBALMACENES
-    if ($action == "enlaceInventariosSubalmacenes") {
+    if ($action == "abrirEnlace") {
+        $tipoEnlace = $_GET['tipoEnlace'];
+
         $array = array();
 
-        $query = "SELECT url FROM t_enlaces WHERE id_destino = $idDestino and tipo_enlace = 'MENUGESTIONINVENTARIO'";
+        $query = "SELECT url FROM t_enlaces WHERE id_destino = $idDestino and tipo_enlace = '$tipoEnlace'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $url = $x['url'];

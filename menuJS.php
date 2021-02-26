@@ -123,6 +123,9 @@
             <dav class="menu-hijo-2">
                 <a href="https://www.maphg.com/beta/gastos.php" target="_blanck" class="menu-hijo-3 CA">Gastos</a>
             </dav>
+            <dav class="menu-hijo-2" onclick="abrirEnlace('MENUPRESUPUESTOS');">
+                <a href="" target="_blanck" class="menu-hijo-3 CA">Presupuestos</a>
+            </dav>
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Empresas y proveedores</o>
             </dav>
@@ -132,7 +135,7 @@
             <dav class="menu-hijo-2">
                 <o href="#" class="menu-hijo-3 CA">Activos</o>
             </dav>
-            <dav class="menu-hijo-2" onclick="enlaceInventariosSubalmacenes();">
+            <dav class="menu-hijo-2" onclick="abrirEnlace('MENUGESTIONINVENTARIO');">
                 <a href="#" class="menu-hijo-3 CA">Inventarios</a>
             </dav>
         </dav>
@@ -303,11 +306,11 @@
         }
     });
 
-    const enlaceInventariosSubalmacenes = () => {
+    const abrirEnlace = tipoEnlace => {
         let idDestino = localStorage.getItem('idDestino');
         let idUsuario = localStorage.getItem('usuario');
 
-        const URL = `php/select_REST_planner.php?action=enlaceInventariosSubalmacenes&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+        const URL = `php/select_REST_planner.php?action=abrirEnlace&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=${tipoEnlace}`;
         fetch(URL)
             .then(array => array.json())
             .then(array => {
