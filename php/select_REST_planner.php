@@ -21,6 +21,32 @@ if (isset($_GET['action'])) {
     $ruta_t_proyectos_cotizaciones = "";
     $ruta_t_proyectos_planaccion_adjuntos = "../planner/proyectos/planaccion/";
 
+    // FUNCION PARA NOTIFICACIONES TELEGRAM
+    function notificacionTelegram($De, $Para, $message, $tipoIncidencia)
+    {
+        $chatId = "";
+        $query = "SELECT telegram_chat_id FROM t_users WHERE id = $Para";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $chatId = $x['telegram_chat_id'];
+            }
+        }
+
+        $asignadoPor = "MAPHG";
+        $query = "SELECT t_colaboradores.nombre 
+        FROM t_users
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.id = $De";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $asignadoPor = $x['nombre'];
+            }
+        }
+
+        $APIERROR = "https://api.telegram.org/bot1540300257:AAHqqChOEk_FJh4YdK4uKOJWD1vEG5PqlPg/sendMessage?chat_id=$chatId" . "&text=$asignadoPor, Te ha asignado un Pendiente de: $message, Tipo: $tipoIncidencia";
+        file_get_contents($APIERROR);
+    }
+
 
     #OBTIENE LOS PROYECTOS SEGÚN LA SECCIÓN Y DESTINO
     if ($action == "obtenerActividadesOT") {
@@ -2161,6 +2187,8 @@ if (isset($_GET['action'])) {
             $query = "INSERT INTO t_energeticos(id, id_destino, id_seccion, id_subseccion, actividad, creado_por, responsable, fecha_creacion, rango_fecha, tipo_incidencia, status, activo) VALUES($idMax, $idDestino, $idSeccion, $idSubseccion, '$titulo', $idUsuario, $responsable, '$fechaActual', '$rangoFecha', '$tipo', 'PENDIENTE', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
+                notificacionTelegram($idUsuario, $responsable, 'Energetico', $tipo);
+
                 if ($comentario != "") {
                     $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) VALUES($idMax, $idUsuario, '$fechaActual', '$comentario', 1)";
                     if ($result = mysqli_query($conn_2020, $query)) {
