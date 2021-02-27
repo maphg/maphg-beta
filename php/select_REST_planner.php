@@ -22,11 +22,11 @@ if (isset($_GET['action'])) {
     $ruta_t_proyectos_planaccion_adjuntos = "../planner/proyectos/planaccion/";
 
     // FUNCION PARA NOTIFICACIONES TELEGRAM
-    function notificacionTelegram($De, $Para, $message, $tipoIncidencia, $conexion)
+    function notificacionTelegram($De, $Para, $message, $tipoIncidencia)
     {
         $chatId = "";
         $query = "SELECT telegram_chat_id FROM t_users WHERE id = $Para";
-        if ($result = mysqli_query($conexion, $query)) {
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
             foreach ($result as $x) {
                 $chatId = $x['telegram_chat_id'];
             }
@@ -2187,7 +2187,7 @@ if (isset($_GET['action'])) {
             $query = "INSERT INTO t_energeticos(id, id_destino, id_seccion, id_subseccion, actividad, creado_por, responsable, fecha_creacion, rango_fecha, tipo_incidencia, status, activo) VALUES($idMax, $idDestino, $idSeccion, $idSubseccion, '$titulo', $idUsuario, $responsable, '$fechaActual', '$rangoFecha', '$tipo', 'PENDIENTE', 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
-                notificacionTelegram($idUsuario, $responsable, 'Energetico', $tipo, $conn_2020);
+                notificacionTelegram($idUsuario, $responsable, 'Energetico', $tipo);
 
                 if ($comentario != "") {
                     $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) VALUES($idMax, $idUsuario, '$fechaActual', '$comentario', 1)";
