@@ -19,7 +19,7 @@
         <h1 id="dataNombreSeccion" class="">--</h1>
       </div>
       <div class="ml-10 font-bold text-2xl uppercase">
-        <h1>Reporte de Fallas y Tareas</h1>
+        <h1>Reporte de Incidencias</h1>
       </div>
     </div>
 
@@ -61,14 +61,14 @@
     </div>
 
     <div class="ml-10 font-bold text-2xl uppercase self-start">
-      <h1>Fallas y Tareas por Subsección</h1>
+      <h1>Incidencias por Subsección</h1>
     </div>
     <div class="w-full mb-10">
       <div id="subsecciones" class=" w-full h-108  bg-white"></div>
     </div>
 
     <div class="ml-10 font-bold text-2xl uppercase self-start">
-      <h1>Fallas y Tareas por Responsables asignados</h1>
+      <h1>Incidencias por Responsables asignados</h1>
     </div>
     <div class="w-full mb-10">
       <div id="responsables" class=" w-full h-108  bg-white"></div>
