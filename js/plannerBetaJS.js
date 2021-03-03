@@ -11427,7 +11427,6 @@ function iniciarFormularioInicidencias() {
                .then(array => array.json())
                .then(array => {
                   if (array) {
-                     console.log(array);
                      if (array.localEquipo == "EQUIPO") {
                         btnEquipoIncidencias.click();
                      } else if (array.localEquipo == "LOCAL") {

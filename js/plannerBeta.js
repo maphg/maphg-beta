@@ -1113,7 +1113,6 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array);
             contenedor.innerHTML = '';
             document.getElementById("textSeccionEnergeticos").
                 innerHTML = array.subseccion[0] + ' / PENDIENTES';
@@ -1243,7 +1242,6 @@ function obtenerPendientesEnergeticos(idSeccion, idSubseccion, status) {
             }
         },
         error: function (e) {
-            console.log(e);
             contenedor.innerHTML = '';
             document.getElementById("textSeccionEnergeticos").innerHTML = '';
             document.getElementById("textSubseccionEnergeticos").innerHTML = '';
@@ -1632,7 +1630,6 @@ function obtenerStatusEnergetico(idEnergetico) {
 
 // ACTUALIZAR INFORMACIÓN DE ENERGETICO
 function actualizarEnergetico(idEnergetico, columna) {
-    console.log(idEnergetico, columna);
     let idSeccion = localStorage.getItem('idSeccion');
     let idSubseccion = localStorage.getItem('idSubseccion');
     let cod2bend = document.getElementById("inputCod2bendEnergetico").value;
@@ -1650,7 +1647,6 @@ function actualizarEnergetico(idEnergetico, columna) {
         },
         dataType: "JSON",
         success: function (array) {
-            console.log(array);
             document.getElementById("modalStatusEnergeticos").classList.remove('is-active');
             obtenerPendientesEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
             titulo.value = '';
@@ -1671,7 +1667,6 @@ function actualizarEnergetico(idEnergetico, columna) {
             }
         },
         error: function (e) {
-            console.log(e);
         }
     })
 }

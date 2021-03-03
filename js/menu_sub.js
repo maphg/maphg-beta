@@ -311,7 +311,6 @@ btnCodigoTelegram.addEventListener('click', () => {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
-                console.log(array);
                 if (array == 1) {
                     alertaImg('Código Actualizado', '', 'success', 1500);
                     codigoTelegram.value = '';

@@ -83,7 +83,6 @@ const obtenerReporte = columna => {
             dataPendientes.innerHTML = '';
             dataSolucionados.innerHTML = '';
 
-            console.log(array.length);
             return array;
         })
         .then(array => {
