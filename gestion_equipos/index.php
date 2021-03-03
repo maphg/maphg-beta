@@ -26,15 +26,15 @@
     </style>
 </head>
 
-<body class=" bg-fondos-7 text-bluegray-800 scrollbar pt-16">
+<body class=" bg-fondos-7 text-bluegray-800 scrollbar h-screen">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include '../navbartopJS.php';
-        include '../menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 sticky top-0 shadow-sm"></menu-sidebar>
+
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
     <!-- MENÚ -->
 
     <div class="flex flex-col container mx-auto font-light text-3xl">
@@ -128,7 +128,7 @@
 
     <div class="flex flex-col items-star lg:items-center mx-auto container mx-auto">
         <div class="-my-2 py-2 overflow-x-auto scrollbar">
-            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 65vh;">
+            <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 60vh;">
                 <table id="tablaGestionEquipos" class="min-w-full divide-y divide-gray-200 sortable">
                     <thead>
                         <tr class="cursor-pointer">
@@ -171,8 +171,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <!-- ***** MODALES PRINCIPALES ***** -->
@@ -1257,7 +1255,10 @@
     <script src="../js/OT_JS.js"></script>
     <script src="../js/sorttable.js"></script>
     <script src="../js/funciones_tablas.js"></script>
-    <script src="../js/complemento_menuJS_externo.js"></script>
+
+    <!-- MENU JS -->
+    <script src="../js/menu_sub.js" type="text/javascript"></script>
+    <!-- MENU JS -->
 </body>
 
 </html>

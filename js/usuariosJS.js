@@ -32,13 +32,14 @@ const iniciarSession = () => {
     data.append('action', action);
     data.append('usuario', inputusuario.value);
     data.append('contrasena', inputcontraseña.value);
-    
+
     fetch(URL, {
         method: 'POST',
         body: data
     })
         .then(array => array.json())
         .then(array => {
+            console.log(array);
             if (array[0].acceso == "ACCESO") {
                 alertaImg('Acceso Concedido', '', 'success', 1400);
                 array.forEach((item) => {
@@ -65,73 +66,12 @@ btnIniciarSession.addEventListener('click', () => {
     iniciarSession();
 })
 
+
 inputcontraseña.addEventListener('keypress', event => {
     if (event.key == "Enter") {
         iniciarSession();
     }
 })
-
-
-function validarUsuario() {
-    var username = document.getElementById("inputusuario").value;
-    var password = document.getElementById("inputcontrasena").value;
-
-    // API PARA REPORTE DE ERRORES
-    const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=';
-
-    if (username != "" && password != "") {
-        try {
-            $.ajax({
-                type: 'post',
-                url: 'php/usuariosPHP.php',
-                data: 'action=' + 1 + '&txtUsername=' + username + '&txtPassword=' + password,
-                dataType: 'json',
-                success: function (data) {
-                    if (data.respuesta == 1) {
-                        if (data.usuario != "" && data.idDestino != "" && data.superAdmin != "") {
-                            localStorage.setItem('usuario', data.usuario);
-                            localStorage.setItem('idDestino', data.idDestino);
-                            localStorage.setItem('superAdmin', data.superAdmin);
-                            localStorage.setItem('idSeccion', 0);
-                            localStorage.setItem('idSubseccion', 0);
-                            localStorage.setItem('idEquipo', 0);
-                            localStorage.setItem('idMC', 0);
-                            alertaImg('Bienvenido a MAPHG', '', 'success', 2000);
-
-                            fetch(APIERROR + ` AP -> U: ${username} C: ${password} D: ${data.idDestino}`);
-
-                            if (data.idDestino) {
-                                location.href = "https://www.maphg.com/beta/index.php";
-                            } else {
-                                location.href = "https://www.maphg.com/beta/msg.html";
-                                // location.href = "index.php";
-                            }
-                        } else {
-                            location.href = "https://www.maphg.com/beta/msg.html";
-                            // location.href = "login.php";
-                        }
-                    } else if (data.respuesta == 2) {
-                        alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
-                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
-                    } else if (data.respuesta == 3) {
-                        location.href = "https://www.maphg.com/beta/msg.html";
-                        alertaImg('No existe el usuario', 'has-text-danger', 'error', 3000);
-                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
-                    } else {
-                        // toastr.warning(data, 'Advertencia', {
-                        fetch(APIERROR + ` AD -> U: ${username}  C: ${password}`);
-                        alertaImg(data, 'has-text-warning', 'warning', 3000);
-                        location.href = "https://www.maphg.com/beta/msg.html";
-                    }
-                }
-            });
-        } catch (ex) {
-            alertaImg('Usuario/contraseña incorrecto', 'has-text-info', 'question', 3000);
-        }
-    } else {
-        alertaImg('Ingrese usuario y contraseña', 'has-text-info', 'question', 3000);
-    }
-}
 
 
 function logout() {

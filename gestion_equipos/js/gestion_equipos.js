@@ -1593,18 +1593,17 @@ window.addEventListener("load", function () {
     let idDestino = localStorage.getItem("idDestino");
     document.getElementById("filtroDestino").value = idDestino;
     consultaEquiposLocales();
+
+    document.getElementById("destinosSelecciona").addEventListener("click", () => {
+        let idDestino = localStorage.getItem("idDestino");
+        document.getElementById("filtroDestino").value = idDestino;
+        location.reload();
+    })
 })
 
 
 // EVENTO PARA EXPORTA EQUIPOS
 document.getElementById("exportarPendientes").addEventListener('click', exportarEquipos);
-
-
-document.getElementById("destinosSelecciona").addEventListener("click", () => {
-    let idDestino = localStorage.getItem("idDestino");
-    document.getElementById("filtroDestino").value = idDestino;
-    location.reload();
-})
 
 
 function informacionEquipoxx(idEquipo) {

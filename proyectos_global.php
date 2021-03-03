@@ -79,18 +79,19 @@
 
 </head>
 
-<body style="font-family: 'Source Sans Pro', sans-serif;">
+<body style="font-family: 'Source Sans Pro', sans-serif;" class="scrollbar bg-white h-screen">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="shadow"></menu-sidebar>
     <!-- MENÚ -->
 
-    <div class="w-full h-screen bg-white pt-20">
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+
+
+    <div class="w-full">
 
         <div class="flex justify-center items-center mb-5 relative pt-4">
             <div class="font-light text-xl ml-3 leading-none text-bluegray-600 mr-8">
@@ -135,7 +136,7 @@
         <div class="w-full h-auto">
             <div class="flex flex-col container mx-auto scrollbar">
                 <div class="-my-2 py-2 overflow-x-auto relative scrollbar">
-                    <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 70vh;">
+                    <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="max-height: 75vh;">
 
                         <table id="dataProyectos" class="w-full divide-y divide-gray-200 table table-fixed sortable hidden">
                             <thead>
@@ -1016,10 +1017,6 @@
 <script src="js/sorttable.js"> </script>
 <!-- JS PARA ORDENAMIENTO DE TABLAS -->
 
-<!-- COMPLEMENTO PARA MOSTRAR DATOS DE MENU -->
-<script src="js/complemento_menuJS.js"></script>
-<!-- COMPLEMENTO PARA MOSTRAR DATOS DE MENU -->
-
 <!-- JS PARA NOTIFICACIONES -->
 <script src="js/alertify.min.js"></script>
 <script src="js/alertasSweet.js"></script>
@@ -1046,5 +1043,9 @@
 <!-- JS POPPER -->
 <script src="js/popper.min.js"></script>
 <!-- JS POPPER -->
+
+<!-- MENU -->
+<script src="js/menu.js" type="text/javascript"></script>
+<!-- MENU -->
 
 </html>

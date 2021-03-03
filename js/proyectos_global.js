@@ -604,9 +604,11 @@ function ganttProyectosGlobal(statusProyectos) {
 
 
 // EVENTOS
-document.getElementById("destinosSelecciona").addEventListener('click', () => {
-    obtenerProyectosGlobal('PENDIENTE');
-});
+window.addEventListener('load', () => {
+    document.getElementById("destinosSelecciona").addEventListener('click', () => {
+        obtenerProyectosGlobal('PENDIENTE');
+    })
+})
 
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.

@@ -22,29 +22,40 @@ if (isset($_GET['action'])) {
     $ruta_t_proyectos_planaccion_adjuntos = "../planner/proyectos/planaccion/";
 
     // FUNCION PARA NOTIFICACIONES TELEGRAM
-    function notificacionTelegram($De, $Para, $message, $tipoIncidencia)
+    function notificacionTelegram($De, $Para, $tipo, $tipoIncidencia)
     {
         $chatId = "";
-        $query = "SELECT telegram_chat_id FROM t_users WHERE id = $Para";
+        $asignadoA = "";
+        $query = "SELECT t_users.telegram_chat_id, t_colaboradores.nombre
+        FROM t_users 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.id = $Para";
         if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
             foreach ($result as $x) {
                 $chatId = $x['telegram_chat_id'];
+                $asignadoA = $x['nombre'];
             }
         }
 
-        $asignadoPor = "MAPHG";
-        $query = "SELECT t_colaboradores.nombre 
-        FROM t_users
-        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-        WHERE t_users.id = $De";
+        $token = "";
+        $query = "SELECT url FROM t_enlaces WHERE tipo_enlace = 'BOTMAPHG' and activo = 1";
         if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
             foreach ($result as $x) {
-                $asignadoPor = $x['nombre'];
+                $token = $x['url'];
             }
         }
 
-        $APIERROR = "https://api.telegram.org/bot1540300257:AAHqqChOEk_FJh4YdK4uKOJWD1vEG5PqlPg/sendMessage?chat_id=$chatId" . "&text=$asignadoPor, Te ha asignado un Pendiente de: $message, Tipo: $tipoIncidencia";
-        file_get_contents($APIERROR);
+        $msg = "";
+        if ($tipo == "INCIDENCIA") {
+            $msg = "Hola $asignadoA, te han asignado una INCIDENCIA tipo: $tipoIncidencia";
+        } else if ($tipo == "ENERGETICO") {
+            $msg = "Hola $asignadoA, te han asignado una INCIDENCIA de Energetico tipo: $tipoIncidencia";
+        }
+
+        $APITelegram = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chatId" . "&text=$msg";
+        if ($token != "" and $chatId != "" and $msg != "") {
+            file_get_contents($APITelegram);
+        }
     }
 
 
@@ -1892,8 +1903,14 @@ if (isset($_GET['action'])) {
             $filtroTipo = "";
         }
 
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
         $query = "SELECT id, equipo FROM t_equipos_america 
-        WHERE id_destino = $idDestino and id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1 $filtroTipo
+        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and status = 'OPERATIVO' and activo = 1 $filtroTipo $filtroDestino
         ORDER BY equipo ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -2129,11 +2146,13 @@ if (isset($_GET['action'])) {
                         $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idMax, '$comentario', $idUsuario, '$fechaActual', 1)";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $resp = 1;
+                            notificacionTelegram($idUsuario, $responsable, 'INCIDENCIA', $tipo);
                         }
                     }
                 } else {
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $resp = 1;
+                        notificacionTelegram($idUsuario, $responsable, 'INCIDENCIA', $tipo);
                     }
                 }
             }
@@ -2153,8 +2172,10 @@ if (isset($_GET['action'])) {
                         $query = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha, activo) VALUES($idMax, $idUsuario, '$comentario', '$fechaActual', 1)";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $resp = 2;
+                            notificacionTelegram($idUsuario, $responsable, 'INCIDENCIA', $tipo);
                         }
                     } else {
+                        notificacionTelegram($idUsuario, $responsable, 'INCIDENCIA', $tipo);
                         $resp = 2;
                     }
                 }
@@ -2193,6 +2214,7 @@ if (isset($_GET['action'])) {
                     $query = "INSERT INTO t_energeticos_comentarios(id_energetico, creado_por, fecha_creado, comentario, activo) VALUES($idMax, $idUsuario, '$fechaActual', '$comentario', 1)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $resp = 2;
+                        notificacionTelegram($idUsuario, $responsable, 'Energetico', $tipo);
                     }
                 }
             }
@@ -4703,25 +4725,6 @@ if (isset($_GET['action'])) {
         }
 
         echo json_encode($resp);
-    }
-
-    #OBTIENE ENLACES DE LAS CARPETAS DE LOS INVENTARIOS DE SUBALMACENES
-    if ($action == "abrirEnlace") {
-        $tipoEnlace = $_GET['tipoEnlace'];
-
-        $array = array();
-
-        $query = "SELECT url FROM t_enlaces WHERE id_destino = $idDestino and tipo_enlace = '$tipoEnlace'";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $url = $x['url'];
-
-                $array = array(
-                    "url" => $url
-                );
-            }
-        }
-        echo json_encode($array);
     }
 
     // CIERRE FINAL

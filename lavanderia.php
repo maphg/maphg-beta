@@ -16,17 +16,20 @@
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="css/modales.css">
 
 </head>
 
-<body class="h-screen">
+<body class="h-screen scrollbar">
 
-    <!-- MENU -->
-    <?php
-    include 'navbartopJS.php';
-    include 'menuJS.php';
-    ?>
-    <!-- MENU -->
+    <!-- MENÚ -->
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-10 sticky top-0 shadow-sm"></menu-sidebar>
+
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
+    <!-- MENÚ -->
 
     <!-- Page Content  -->
     <ul class="flex border-b p-2">
@@ -83,21 +86,16 @@
         <div class="flex justify-left"><img src="https://i.gifer.com/757D.gif" width="45%" alt=""></div>
     </div>
 
-    <div id="pendientes" class="grid grid-flow-col grid-cols-1 grid-rows-1 h-screen">
-        <iframe id="iframPendientes" class="h-screen" width="100%" frameborder="0" allowFullScreen="true"></iframe>
+    <div id="pendientes" class="grid grid-flow-col grid-cols-1 grid-rows-1 h-full">
+        <iframe id="iframPendientes" class="h-full" width="100%" frameborder="0" allowFullScreen="true"></iframe>
     </div>
 
 
     <script src="js/jquery-3.3.1.js"></script>
-    <script src="js/complemento_menuJS.js"></script>
     <script src="js/alertify.min.js"></script>
     <script src="js/alertasSweet.js"></script>
 
     <script>
-        document.getElementById("destinosSelecciona").setAttribute('onclick', 'graficos();');
-        document.getElementById("camaras").setAttribute('onclick', 'graficos();');
-        document.getElementById("pendientes").setAttribute('onclick', 'graficos();');
-
         // Función para mostrar la VISTA de GRAFICOS
         function graficos() {
             let destino = localStorage.getItem('idDestino');
@@ -200,10 +198,17 @@
             document.getElementById("iframPendientes").src = 'https://www.maphg.com/beta/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
         }
 
-
+        window.addEventListener('load', () => {
+            document.getElementById("destinosSelecciona").setAttribute('onclick', 'graficos();');
+            document.getElementById("camaras").setAttribute('onclick', 'graficos();');
+            document.getElementById("pendientes").setAttribute('onclick', 'graficos();');
+        })
         graficos();
     </script>
 
+    <!-- MENU JS -->
+    <script src="js/menu.js" type="text/javascript"></script>
+    <!-- MENU JS -->
 
 </body>
 

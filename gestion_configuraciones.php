@@ -17,12 +17,12 @@
 <body class="relative">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 sticky top-0 shadow-sm"></menu-sidebar>
+
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
     <!-- MENÚ -->
 
     <div id="btnConfiguraciones" class="absolute bg-blue-400 cursor-pointer rounded-full shadow-md text-center w-2/12 hidden">
@@ -31,7 +31,7 @@
         </ul>
     </div>
 
-    <div class="flex flex-row pt-12">
+    <div class="flex flex-row">
 
         <div id="menuConfiguraciones" class="mr-2 w-2/12 py-1 px-3 rounded-md shadow mt-8 border border-gray-400 relative h-auto">
 
@@ -532,13 +532,16 @@
     </div>
     <!-- MODAL PARA EDITAR CARGOS -->
 
+    <script src="js/alertify.min.js"></script>
+    <script src="js/alertasSweet.js"></script>
+    <script src="js/modales.js"></script>
+    <script src="js/sorttable.js"></script>
+    <script src="js/gestion_configuraciones.js"></script>
+    <script src="js/funciones_tablas.js"></script>
+
+    <!-- MENU JS -->
+    <script src="js/menu.js" type="text/javascript"></script>
+    <!-- MENU JS -->
 </body>
-<script src="js/alertify.min.js"></script>
-<script src="js/alertasSweet.js"></script>
-<script src="js/modales.js"></script>
-<script src="js/sorttable.js"></script>
-<script src="js/gestion_configuraciones.js"></script>
-<script src="js/funciones_tablas.js"></script>
-<script src="js/complemento_menuJS.js"></script>
 
 </html>

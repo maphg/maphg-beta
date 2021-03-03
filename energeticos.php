@@ -81,15 +81,15 @@
     }
 </style>
 
-<body class="bg-gray-200 scrollbar">
+<body class="bg-gray-200 scrollbar h-screen">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-10 sticky top-0 shadow-sm mb-1"></menu-sidebar>
+
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
     <!-- MENÚ -->
 
     <div class="absolute left-0 z-10" style="margin: 15px 0 0 15px;">
@@ -101,7 +101,7 @@
         <div id="contenedorEnergeticos" class="flex flex-col justify-center items-center font-medium text-xxs divide-y divide-gray-300 text-gray-800 bg-white w-48 rounded-md pt-5 px-2" style="margin-top: 10px"></div>
     </div>
 
-    <div id="contenedor" class="container-fluid mx-auto mt-16">
+    <div id="contenedor" class="container-fluid mx-auto">
         <div id="dataPowerbin" class="grid grid-flow-row p-1 mx-auto"></div>
     </div>
 
@@ -1255,12 +1255,15 @@
 
     <script src=" js/alertify.min.js"></script>
     <script src="js/alertasSweet.js"></script>
-    <script src="js/complemento_menuJS.js"></script>
     <script src="js/energeticos.js"></script>
     <script src="js/seguridad_session.js"></script>
     <script src="js/funciones_tablas.js"></script>
     <script src="js/modales.js"></script>
     <!-- LIBRERIAS -->
+
+    <!-- MENU JS -->
+    <script src="js/menu.js" type="text/javascript"></script>
+    <!-- MENU JS -->
 </body>
 
 </html>

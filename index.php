@@ -130,16 +130,15 @@
 </head>
 
 
-<body class="bg-gray-200 scrollbar" style="font-family: 'Roboto', sans-serif;">
+<body class="bg-gray-200 scrollbar h-screen" style="font-family: 'Roboto', sans-serif;">
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
-    <!-- MENÚ -->
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-10"></menu-sidebar>
 
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
+    <!-- MENÚ -->
 
     <!-- BOTON FLOTANTE -->
     <div class="absolute bottom-0 right-0 flex flex-row items-end" style="z-index: 100;">
@@ -164,11 +163,11 @@
 
 
     <!-- CALENDARIO SEMANAL -->
-    <div class="flex flex-col justify-evenly items-center w-full h-screen">
+    <div class="flex flex-col justify-evenly items-center mb-0 w-full">
 
-        <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative  py-5" style="margin-top: 9vh">
+        <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative">
 
-            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 sticky top-0 -left-0 z-20 bg-gray-200 py-8 rounded">
+            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 -left-0 z-20 bg-gray-200 py-8 rounded">
 
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">--</p>
@@ -4206,6 +4205,10 @@
     <!-- SCRIPTS COMPLMENTOS -->
     <script src="js/planner.js" type="text/javascript"></script>
     <!-- SCRIPTS COMPLMENTOS -->
+
+    <!-- COMPONENTE MENU -->
+    <script src="js/menu.js"></script>
+    <!-- COMPONENTE MENU -->
 </body>
 
 </html>

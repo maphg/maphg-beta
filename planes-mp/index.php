@@ -13,19 +13,19 @@
     <link rel="stylesheet" href="../css/alertify.min.css">
 </head>
 
-<body class="bg-fondos-7 text-bluegray-800 scrollbar">
+<body class="bg-fondos-7 text-bluegray-800 scrollbar h-screen">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include '../navbartopJS.php';
-        include '../menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-10 sticky top-0 shadow-sm"></menu-sidebar>
+
+    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <configuracion-telegram></configuracion-telegram>
+
     <!-- MENÚ -->
 
     <!-- Principal -->
-    <div class="flex flex-col container mx-auto pt-16 pb-5 font-light text-3xl">
+    <div class="flex flex-col container mx-auto pb-5 font-light text-3xl">
         <h1>Planes de Mantenimiento</h1>
     </div>
 
@@ -541,7 +541,7 @@
     <script src="js/planesDeMantenimiento.js"></script>
     <script src="../js/sorttable.js"></script>
     <script src="../js/funciones_tablas.js"></script>
-    <script src="../js/complemento_menuJS_externo.js"></script>
+    <script src="../js/menu_sub.js"></script>
 </body>
 
 </html>

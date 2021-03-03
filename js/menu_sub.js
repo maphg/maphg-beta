@@ -20,9 +20,9 @@ class menuSidebar extends HTMLElement {
                     <div class="w-full max-w-md sm:-ml-2 flex">
                         <button id="btnAbrirMenu"
                             class="w-10 h-10 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:bg-gray-100 focus:text-gray-600 rounded-full flex justify-center items-center">
-                            <img src="svg/menu.svg" class="w-5" alt="">
+                            <img src="../svg/menu.svg" class="w-5" alt="">
                         </button>
-                        <img src="svg/log.svg" class="w-20 ml-6" alt="">
+                        <img src="../svg/log.svg" class="w-20 ml-6" alt="">
                     </div>
                     <div class="flex flex-shrink-0 items-center ml-auto">
                         <div id="btnConfiguracionesUsuario">
@@ -33,7 +33,7 @@ class menuSidebar extends HTMLElement {
                                     <span id="cargoUsuario" class="text-sm text-gray-600"></span>
                                 </div>
                                 <span class="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden relative">
-                                    <img id="avatarUsuario" src="planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo"
+                                    <img id="avatarUsuario" src="../planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo"
                                         class="h-full w-full object-cover">
                                         <input id="subirAvatarUsuario" type="file" class="opacity-0 h-12 w-full absolute top-0" style="left:-10px;">
                                 </span>
@@ -65,7 +65,7 @@ class menuSidebar extends HTMLElement {
                             <div class="py-2">
                                 <a href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
-                                    <div class="h-8 w-8  flex flex-none justify-center items-center "><img src="svg/campana.svg"
+                                    <div class="h-8 w-8  flex flex-none justify-center items-center "><img src="../svg/campana.svg"
                                             class="w-full" alt=""></div>
                                     <p class="text-gray-600 dark:text-white text-sm mx-2">
                                         <span class="font-bold" href="#">Incidencias Asignadas</span> Usted tiene
@@ -76,7 +76,7 @@ class menuSidebar extends HTMLElement {
                                 <a href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
-                                            src="svg/calendario.svg" class="w-full" alt=""></div>
+                                            src="../svg/calendario.svg" class="w-full" alt=""></div>
                                     <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold">
                                         Agenda Personal
                                     </p>
@@ -84,7 +84,7 @@ class menuSidebar extends HTMLElement {
                                 <a href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
-                                            src="svg/favoritos2.svg" class="w-full" alt=""></div>
+                                            src="../svg/favoritos2.svg" class="w-full" alt=""></div>
                                     <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold">
                                         Favoritos
                                     </p>
@@ -92,14 +92,14 @@ class menuSidebar extends HTMLElement {
                                 <a href="#" onclick="modalOpenClose('modalConfigurarTelegram')"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
-                                            src="svg/logo_telegram.svg" class="w-full" alt=""></div>
+                                            src="../svg/logo_telegram.svg" class="w-full" alt=""></div>
                                     <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold">
                                         Configurar Notificaciones
                                     </p>
                                 </a>
                                 <a href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
-                                    <div class="h-8 w-8 flex flex-none justify-center items-center "><img src="svg/ajustes.svg"
+                                    <div class="h-8 w-8 flex flex-none justify-center items-center "><img src="../svg/ajustes.svg"
                                             class="w-full" alt=""></div>
                                     <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold">
                                         Mi cuenta
@@ -135,7 +135,7 @@ class menu extends HTMLElement {
 
                     <div class="flex items-center justify-start relative p-2">
                         <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
-                            <img id="avatarMenuUsuario" src="planner/avatars/AVATAR_ID_0_0.svg" _mstvisible="4">
+                            <img id="avatarMenuUsuario" src="../planner/avatars/AVATAR_ID_0_0.svg" _mstvisible="4">
                         </div>
                         <div class="flex flex-col leading-none ml-2">
                             <h1 class="text-gray-400 text-xs">Bienvenido,</h1>
@@ -216,7 +216,7 @@ class telegram extends HTMLElement {
                     <div class="flex flex-col justify-center items-center flex-col w-full pb-3">
                         <h1 class="py-2 text-blue-300 text-sm">Escanea el QR e Ingresa el Código de Acceso</h1>
                         <div class="flex justify-center items-center w-full px-1 text-center">
-                            <img src="svg/QR_BotMaphg.png" width="250px" alt="">
+                            <img src="../svg/QR_BotMaphg.png" width="250px" alt="">
                         </div>
 
                         <div class="mt-5 w-full px-2 flex justify-center items-center">
@@ -305,7 +305,7 @@ btnCodigoTelegram.addEventListener('click', () => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "comprobarCodigoTelegram";
-    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&chatID=${codigoTelegram.value}`;
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&chatID=${codigoTelegram.value}`;
 
     if (codigoTelegram.value.length == 9) {
         fetch(URL)
@@ -343,7 +343,7 @@ subirAvatarUsuario.addEventListener('change', () => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "subirAvatarUsuario";
-    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     if (subirAvatarUsuario.files) {
         for (let x = 0; x < subirAvatarUsuario.files.length; x++) {
@@ -384,7 +384,7 @@ const obtenerMenu = () => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "obtenerMenu";
-    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     fetch(URL)
         .then(array => array.json())
@@ -467,7 +467,7 @@ const obtenerDestinosUsuario = () => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "obtenerDestinosUsuario";
-    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     fetch(URL)
         .then(array => array.json())
@@ -507,7 +507,7 @@ const obtenerInformacionUsuario = () => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "obtenerInformacionUsuario";
-    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
 
     fetch(URL)
         .then(array => array.json())
@@ -517,8 +517,8 @@ const obtenerInformacionUsuario = () => {
                 nombreUsuario.innerText = array.nombre + ' ' + array.apellido;
                 nombreUsuarioMenu.innerText = array.nombre;
                 cargoUsuario.innerText = array.cargo;
-                avatarUsuario.setAttribute('src', `planner/avatars/${array.avatar}`);
-                avatarMenuUsuario.setAttribute('src', `planner/avatars/${array.avatar}`);
+                avatarUsuario.setAttribute('src', `../planner/avatars/${array.avatar}`);
+                avatarMenuUsuario.setAttribute('src', `../planner/avatars/${array.avatar}`);
                 incidenciasAsignadasUsuario.innerText = array.incidencias;
             }
         })
@@ -531,7 +531,7 @@ const obtenerInformacionUsuario = () => {
 // CERRAR SESSIÓN
 const cerrarSesion = () => {
     localStorage.clear();
-    location.href = 'login.php';
+    location.href = '../login.php';
 }
 
 const toggleMenu = menu => {
@@ -561,7 +561,7 @@ const abrirEnlace = tipoEnlace => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
-    const URL = `php/select_REST_planner.php?action=abrirEnlace&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=${tipoEnlace}`;
+    const URL = `../php/menu.php?action=abrirEnlace&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=${tipoEnlace}`;
     fetch(URL)
         .then(array => array.json())
         .then(array => {

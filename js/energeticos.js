@@ -1,7 +1,6 @@
 // CONTENEDORES DATA 
 const dataEnergeticos = document.getElementById("dataEnergeticos");
 const dataPowerbin = document.getElementById("dataPowerbin");
-const destinosSelecciona = document.getElementById("destinosSelecciona");
 const contenedorEnergeticos = document.getElementById("contenedorEnergeticos");
 const dataUsuarios = document.getElementById("dataUsuarios");
 
@@ -73,18 +72,6 @@ function hiddenVista(idVista) {
     }
 }
 
-
-// INICIA
-window.onload = () => {
-    obtenerEnlaces();
-    obtenerSecciones(1001, 2);
-};
-
-
-destinosSelecciona.addEventListener("click", () => {
-    obtenerEnlaces();
-    obtenerSecciones(1001, 2);
-})
 
 
 // FUNCION PARA RANGO FECHA
@@ -3305,7 +3292,19 @@ document.getElementById("opcionProyectos").addEventListener('click', () => {
 
     document.getElementById("proyectosSolucionados").setAttribute('onclick', `obtenerProyectos(${idSeccion}, "SOLUCIONADO");`);
 
-});
+})
 
+
+// INICIA
+
+window.addEventListener('load', () => {
+    obtenerSecciones(1001, 2);
+    obtenerEnlaces();
+
+    document.getElementById("destinosSelecciona").addEventListener('click', () => {
+        obtenerEnlaces();
+        obtenerSecciones(1001, 2);
+    })
+})
 // ********** FRAGMENTO PARA LOS EVENTOS **********
 // ********** PROYECTOS **********

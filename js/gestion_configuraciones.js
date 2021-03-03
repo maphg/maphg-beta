@@ -976,10 +976,10 @@ document.getElementById("btnNuevoCargo").addEventListener("click", function () {
 
 
 // MUESTRA DATOS DESPUES DE CARGA COMPLETA DE LA PAGINA
-window.onload = function () {
+window.addEventListener('load', () => {
     obtenerUsuarios(0);
-}
 
-document.getElementById("destinosSelecciona").addEventListener('click', () => {
-    location.href = "gestion_configuraciones.php";
+    document.getElementById("destinosSelecciona").addEventListener('click', () => {
+        location.href = "gestion_configuraciones.php";
+    })
 })

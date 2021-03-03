@@ -310,15 +310,18 @@ function comprobarSession() {
    }
 }
 
-
-document.getElementById("destinosSelecciona").addEventListener('click', () => {
-   let idDestino = localStorage.getItem("idDestino");
-   botonDestino();
-   comprobarSession();
-   obtenerDatosUsuario(idDestino);
+window.addEventListener('load', () => {
    obtenerPendientesUsuario();
    calendarioSecciones();
-});
+   comprobarSession();
+
+   document.getElementById("destinosSelecciona").addEventListener('click', () => {
+      comprobarSession();
+      obtenerPendientesUsuario();
+      calendarioSecciones();
+   })
+})
+
 
 
 // OBTIENE LAS SECCIONES SEGÚN EL DESTINO
@@ -473,50 +476,6 @@ btnSeccion_11.addEventListener("click", () => { obtenerSecciones(11, 0) });
 btnSeccion_24.addEventListener("click", () => { obtenerSecciones(24, 0) });
 btnSeccion_23.addEventListener("click", () => { obtenerSecciones(23, 0) });
 btnSeccion_7.addEventListener("click", () => { obtenerSecciones(7, 0) });
-
-
-// Obtiene información del usuario, para mostrarlo en el menú 
-function obtenerDatosUsuario(idDestino) {
-   localStorage.setItem("idDestino", idDestino);
-   let idUsuario = localStorage.getItem("usuario");
-   const action = "obtenerDatosUsuario";
-   $.ajax({
-      type: "POST",
-      url: "php/plannerCrudPHP.php",
-      data: {
-         action: action,
-         idUsuario: idUsuario,
-         idDestino: idDestino,
-      },
-      dataType: "JSON",
-      success: function (data) {
-         document.getElementById("avatarUsuario").innerHTML =
-            '<img src="https://ui-avatars.com/api/?format=svg&rounded=true&size=300&background=2d3748&color=edf2f7&name=' + data.nombre + " % " + data.apellido + '"' +
-            'alt="avatar" class="menu-contenedor-6">';
-         document.getElementById("nombreUsuarioNavBarTop").innerHTML =
-            data.nombre + " " + data.apellido;
-         document.getElementById("nombreUsuarioMenu").innerHTML =
-            data.nombre + " " + data.apellido;
-         document.getElementById("cargoUsuarioMeu").innerHTML = data.cargo;
-         document.getElementById("destinoNavBarTop").innerHTML = data.destino;
-         document.getElementById("destinosSelecciona").innerHTML =
-            data.destinosOpcion;
-         // alertaImg("Destino: " + data.destino, "", "success", 2000);
-      },
-      error: function (err) {
-         fetch(APIERROR + ' ' + err + ` obtenerDatosUsuario(${idDestino})`);
-      }
-   });
-}
-
-
-window.addEventListener('load', () => {
-   let idDestino = localStorage.getItem("idDestino");
-   comprobarSession();
-   obtenerDatosUsuario(idDestino);
-   obtenerPendientesUsuario();
-   calendarioSecciones();
-});
 
 
 // Función para el calendario de Secciones.
@@ -2324,7 +2283,6 @@ function actualizarStatusMC(idMC, status, valorStatus) {
             alertaImg("Información Actualizada", "", "success", 2000);
             if (status == "activo" || status == "status") {
                llamarFuncionX("obtenerEquiposAmerica");
-               obtenerDatosUsuario(idDestino);
             }
             if (valorStatus == "F") {
                obtenerFallas(idEquipo);
@@ -2440,7 +2398,6 @@ function agregarMC(idMC) {
             if (data >= 1) {
                agregarComentarioMC(idMC);
                alertaImg("FALLA AGREGADA", "", "success", 1500);
-               obtenerDatosUsuario(idDestino);
                obtenerFallas(idEquipo);
                llamarFuncionX("obtenerEquiposAmerica");
                datosModalAgregarMC();
@@ -2953,20 +2910,17 @@ function actualizarTareas(idTarea, columna, valor) {
             alertaImg("Status Actualizado", "", "success", 2000);
             cerrarmodal("modalStatus");
          } else if (data == 2) {
-            obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquiposAmerica");
             obtenerTareas(idEquipo);
             alertaImg("Tarea SOLUCIONADA", "", "success", 2000);
             cerrarmodal("modalStatus");
          } else if (data == 3) {
-            obtenerDatosUsuario(idDestino);
             obtenerTareas(idEquipo);
             llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Recuperada como PENDIENTE", "", "success", 2000);
             cerrarmodal("modalStatus");
          } else if (data == 4) {
             obtenerTareas(idEquipo);
-            obtenerDatosUsuario(idDestino);
             llamarFuncionX("obtenerEquiposAmerica");
             alertaImg("Tarea Eliminada", "", "success", 2000);
             cerrarmodal("modalStatus");
@@ -3065,14 +3019,12 @@ function agregarTarea() {
          // dataType: "JSON",
          success: function (data) {
             if (data == 1) {
-               obtenerDatosUsuario(idDestino);
                llamarFuncionX("obtenerEquiposAmerica");
                obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
                document.getElementById("modalAgregarMC").classList.remove("open");
                alertaImg("Tarea Agregada", "", "success", 1500);
             } else if (data == 2) {
-               obtenerDatosUsuario(idDestino);
                llamarFuncionX("obtenerEquiposAmerica");
                obtenerTareas(idEquipo);
                document.getElementById("inputActividadMC").value = "";
@@ -11425,98 +11377,105 @@ function iniciarFormularioInicidencias() {
    // ASIGNA VALORES POR DEFAULT
 
    // OBTIENES SECCIONES INICIALES
-   const action = "obtenerSeccionesPorDestino";
-   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   fetch(URL)
-      .then(array => array.json())
-      .then(array => {
 
-         if (array) {
-            for (let x = 0; x < array.length; x++) {
-               const idSeccion = array[x].idSeccion;
-               const seccion = array[x].seccion;
-               const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+   const promesa = new Promise((resolve, reject) => {
+      const action = "obtenerSeccionesPorDestino";
+      const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
 
-               seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            if (array) {
+               for (let x = 0; x < array.length; x++) {
+                  const idSeccion = array[x].idSeccion;
+                  const seccion = array[x].seccion;
+                  const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+
+                  seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+               }
             }
-         }
-      })
-      .then(() => {
-         seccionIncidencias.value = idSeccion;
-      })
-      .then(() => {
-         const action2 = "obtenerSubseccionPorSeccion";
-         const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+         })
+         .then(() => {
+            seccionIncidencias.value = idSeccion;
+         })
+         .then(() => {
+            const action2 = "obtenerSubseccionPorSeccion";
+            const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
 
-         fetch(URL2)
-            .then(array => array.json())
-            .then(array => {
-               if (array) {
-                  for (let x = 0; x < array.length; x++) {
-                     const idSubseccion = array[x].idSubseccion;
-                     const subseccion = array[x].subseccion;
-                     const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
-                     subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            fetch(URL2)
+               .then(array => array.json())
+               .then(array => {
+                  if (array) {
+                     for (let x = 0; x < array.length; x++) {
+                        const idSubseccion = array[x].idSubseccion;
+                        const subseccion = array[x].subseccion;
+                        const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                        subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+                     }
                   }
-               }
-            })
-            .then(() => {
-               subseccionIncidencias.value = idSubseccion;
-            })
-            .catch(function (err) {
-               fetch(APIERROR + err);
-            })
-      })
-      .then(() => {
-         const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
-         fetch(URL4)
-            .then(array => array.json())
-            .then(array => {
-               if (array) {
-                  if (array.local_equipo == "EQUIPO") {
-                     btnEquipoIncidencias.click();
-                  } else if (array.local_equipo == "LOCAL") {
-                     btnLocalIncidencias.click();
+               })
+               .then(() => {
+                  subseccionIncidencias.value = idSubseccion;
+               })
+               .catch(function (err) {
+                  fetch(APIERROR + err);
+               })
+         })
+         .then(() => {
+            const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
+            fetch(URL4)
+               .then(array => array.json())
+               .then(array => {
+                  if (array) {
+                     console.log(array);
+                     if (array.localEquipo == "EQUIPO") {
+                        btnEquipoIncidencias.click();
+                     } else if (array.localEquipo == "LOCAL") {
+                        btnLocalIncidencias.click();
+                     } else {
+                        btnTGIncidencias.click();
+                     }
                   } else {
-                     btnTGIncidencias.click();
+                     btnLocalIncidencias.click();
                   }
-               } else {
-               }
-            })
-      })
-      .then(() => {
-         const action3 = "obtenerEquipoLocal";
-         const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=LOCALEQUIPO`;
+               })
+         })
+         .then(() => {
+            const action3 = "obtenerEquipoLocal";
+            const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=LOCALEQUIPO`;
 
-         fetch(URL3)
-            .then(array => array.json())
-            .then(array => {
-               if (array) {
-                  for (let x = 0; x < array.length; x++) {
-                     const idEquipo = array[x].idEquipo;
-                     const equipo = array[x].equipo;
-                     const codigo = `<option value="${idEquipo}">${equipo}</option>`;
-                     equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+            fetch(URL3)
+               .then(array => array.json())
+               .then(array => {
+                  if (array) {
+                     for (let x = 0; x < array.length; x++) {
+                        const idEquipo = array[x].idEquipo;
+                        const equipo = array[x].equipo;
+                        const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+                        equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+                     }
                   }
-               }
-            })
-            .then(() => {
-               equipoLocalIncidencias.value = idEquipo;
-               contenedorEquipoLocalIncidencias.classList.remove('hidden');
-               seccionIncidencias.setAttribute('disabled', true);
-               subseccionIncidencias.setAttribute('disabled', true);
-               btnTGIncidencias.setAttribute('disabled', true);
-               btnEquipoIncidencias.setAttribute('disabled', true);
-               btnLocalIncidencias.setAttribute('disabled', true);
-               equipoLocalIncidencias.setAttribute('disabled', true);
-            })
-            .catch(function (err) {
-               fetch(APIERROR + err);
-            })
-      })
-      .catch(function (err) {
-         fetch(APIERROR + err);
-      })
+               })
+               .then(() => {
+                  equipoLocalIncidencias.value = idEquipo;
+                  contenedorEquipoLocalIncidencias.classList.remove('hidden');
+                  seccionIncidencias.setAttribute('disabled', true);
+                  subseccionIncidencias.setAttribute('disabled', true);
+                  btnTGIncidencias.setAttribute('disabled', true);
+                  btnEquipoIncidencias.setAttribute('disabled', true);
+                  btnLocalIncidencias.setAttribute('disabled', true);
+                  equipoLocalIncidencias.setAttribute('disabled', true);
+               })
+               .catch(function (err) {
+                  fetch(APIERROR + err);
+               })
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   })
+
+
 
    // OBTIENES USUARIOS INICIALES
    responsablesIncidencias.innerHTML = '<option value="0">Seleccion Responsable</option>';
@@ -11587,8 +11546,6 @@ btnEquipoIncidencias.addEventListener('click', () => {
    btnTGIncidencias.classList.remove("bg-blue-600");
    btnEquipoIncidencias.classList.add("bg-blue-600");
    btnLocalIncidencias.classList.remove("bg-blue-600");
-   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Equipo</option>';
-   equipoLocalIncidencias.value = 0;
    contenedorEquipoLocalIncidencias.classList.remove('hidden');
 
    const idSeccion = seccionIncidencias.value;
@@ -11600,6 +11557,11 @@ btnEquipoIncidencias.addEventListener('click', () => {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
+         equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Equipo</option>';
+         equipoLocalIncidencias.value = 0;
+         return array;
+      })
+      .then(array => {
          if (array) {
             for (let x = 0; x < array.length; x++) {
                const idEquipo = array[x].idEquipo;
@@ -11610,6 +11572,8 @@ btnEquipoIncidencias.addEventListener('click', () => {
          }
       })
       .catch(function (err) {
+         equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione Equipo</option>';
+         equipoLocalIncidencias.value = 0;
          fetch(APIERROR + err);
       })
 })
@@ -11829,7 +11793,7 @@ btnModalAgregarEnergeticos.addEventListener('click', () => {
                const id = array[x].idUsuario;
                const nombre = array[x].nombre;
                const apellido = array[x].apellido;
-               const codigo = `<option value="${id}">${nombre + apellido}</option>`;
+               const codigo = `<option value="${id}">${nombre + ' ' + apellido}</option>`;
                responsableEnergeticos.insertAdjacentHTML('beforeend', codigo);
             }
          }
@@ -11883,7 +11847,6 @@ btnAgregarEnergeticos.addEventListener('click', () => {
                alertaImg('Pendiente Agregado', '', 'success', 1500);
                cerrarmodal('modalAgregarEnergeticos');
                obtenerEnergeticos(idSeccion, idSubseccion, 'PENDIENTE');
-               obtenerDatosUsuario(idDestino);
             } else {
                alertaImg('Intente de Nuevo', '', 'info', 1500);
             }

@@ -15,6 +15,44 @@ if (isset($_POST['action'])) {
     $semanaActual = date('W');
 
 
+    // FUNCION PARA NOTIFICACIONES TELEGRAM
+    function notificacionTelegram($De, $Para, $tipo, $tipoIncidencia)
+    {
+        $chatId = "";
+        $asignadoA = "";
+        $query = "SELECT t_users.telegram_chat_id, t_colaboradores.nombre
+        FROM t_users 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        WHERE t_users.id = $Para";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $chatId = $x['telegram_chat_id'];
+                $asignadoA = $x['nombre'];
+            }
+        }
+
+        $token = "";
+        $query = "SELECT url FROM t_enlaces WHERE tipo_enlace = 'BOTMAPHG' and activo = 1";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $token = $x['url'];
+            }
+        }
+
+        $msg = "";
+        if ($tipo == "PROYECTO") {
+            $msg = "Hola $asignadoA, te han asignado un PROYECTO";
+        } else if ($tipo == "PLANACCION") {
+            $msg = "Hola $asignadoA, te han asignado un PDA";
+        }
+
+        $APITelegram = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chatId" . "&text=$msg";
+        if ($token != "" and $chatId != "" and $msg != "") {
+            file_get_contents($APITelegram);
+        }
+    }
+
+
     // Array para Secciones.
     $arraySeccion = array(11 => "ZIL", 10 => "ZIE", 24 => "AUTO", 1 => "DEC", 23 => "DEP", 19 => "OMA", 5 => "ZHA", 6 => "ZHC", 7 => "ZHH", 12 => "ZHP", 8 => "ZIA", 9 => "ZIC", 0 => "", 1001 => "Energeticos");
 
@@ -7447,6 +7485,7 @@ if (isset($_POST['action'])) {
         VALUES($idDestino, $idSeccion, $idSubseccion, '$titulo', '$justificacion', '$fechaActual', '$rangoFecha', $idUsuario, $responsable, 'N', '$tipo', '$coste', '$año', 1)";
         if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
+            notificacionTelegram($idUsuario, $responsable, 'PROYECTO', '');
         } else {
             echo 0;
         }
@@ -7497,6 +7536,7 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos SET responsable = '$valor' WHERE id = $idProyecto";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
+                notificacionTelegram($idUsuario, $valor, 'PROYECTO', '');
             }
         } elseif ($columna == "justificacion" and $justificacion != "") {
             $query = "UPDATE t_proyectos SET justificacion = '$justificacion' WHERE id = $idProyecto";
@@ -7665,6 +7705,7 @@ if (isset($_POST['action'])) {
             $query = "INSERT INTO t_proyectos_planaccion(id_proyecto, actividad, status, creado_por, fecha_creacion, rango_fecha, responsable, activo) VALUES($idProyecto, '$actividad', 'N', $idUsuario, '$fechaActual', '$rangoFecha', $responsable, 1)";
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
+                notificacionTelegram($idUsuario, $responsable, 'PLANACCION', '');
             }
         }
         echo json_encode($resp);
@@ -7683,6 +7724,7 @@ if (isset($_POST['action'])) {
             $query = "UPDATE t_proyectos_planaccion SET responsable = $valor WHERE id = $idPlanaccion";
             if ($result = mysqli_query($conn_2020, $query)) {
                 echo 1;
+                notificacionTelegram($idUsuario, $valor, 'PLANACCION', '');
             } else {
                 echo 0;
             }
