@@ -158,8 +158,10 @@ if (isset($_GET['action'])) {
 
         if ($idDestino == 10) {
             $filtroDestino = "";
+            $filtroDestinoProyecto = "";
         } else {
             $filtroDestino = "and id_destino = $idDestino";
+            $filtroDestinoProyecto = "and t_proyectos.id_destino = $idDestino";
         }
 
         $incidencias = 0;
@@ -175,6 +177,16 @@ if (isset($_GET['action'])) {
         $query = "SELECT count(id) 'total'
         FROM t_mp_np
         WHERE activo = 1 and status IN('PENDIENTE', 'N', 'P') and responsable IN($idUsuario) $filtroDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $incidencias += $x['total'];
+            }
+        }
+
+        $query = "SELECT count(t_proyectos_planaccion.id) 'total' 
+        FROM t_proyectos 
+        INNER JOIN t_proyectos_planaccion ON t_proyectos.id = t_proyectos_planaccion.id_proyecto
+        WHERE t_proyectos.activo = 1 and t_proyectos.status IN('PENDIENTE', 'N', 'P') and t_proyectos_planaccion.status IN('PENDIENTE', 'N', 'P') and t_proyectos_planaccion.responsable IN($idUsuario) $filtroDestinoProyecto";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $incidencias += $x['total'];
@@ -265,7 +277,7 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-    
+
     #OBTIENE ENLACES DE LAS CARPETAS DE LOS INVENTARIOS DE SUBALMACENES
     if ($action == "abrirEnlace") {
         $tipoEnlace = $_GET['tipoEnlace'];
