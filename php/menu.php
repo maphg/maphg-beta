@@ -130,7 +130,7 @@ if (isset($_GET['action'])) {
         if ($idDestinoX == 10) {
             $filtroDestino = "";
         } else {
-            $filtroDestino = "and id_destino = $idDestinoX";
+            $filtroDestino = "and id = $idDestinoX";
         }
 
         $query = "SELECT id, destino, ubicacion FROM c_destinos WHERE status = 'A' $filtroDestino 
