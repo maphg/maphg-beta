@@ -224,7 +224,7 @@ class telegram extends HTMLElement {
                             <input id="codigoTelegram" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none" type="text" placeholder="Ingrese Código Acceso" autocomplete="off" max-length="0">
 
                             <button id="btnCodigoTelegram" class="cursor-pointer text-md  text-blue-500  bg-blue-200 h-10 ml-1 px-2 rounded-md rounded-tr-md font-normal">
-                                <i class="fas fa-check"></i> Varificar
+                                <i class="fas fa-check"></i> Verificar
                             </button>
                         </div>
                     </div>

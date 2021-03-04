@@ -133,7 +133,7 @@
 <body class="bg-gray-200 scrollbar h-screen" style="font-family: 'Roboto', sans-serif;">
     <!-- MENÚ -->
     <menu-menu></menu-menu>
-    <menu-sidebar clases="z-20"></menu-sidebar>
+    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
 
     <!-- MODAL CONFIGURACIÓN TELEGRAM -->
     <configuracion-telegram></configuracion-telegram>

@@ -481,7 +481,7 @@ const datosEtiquetados = params => {
         fComentarios = `onclick="obtenerComentariosMC(${id});"`;
         fAdjuntos = `onclick="obtenerAdjuntosMC(${id});"`;
         fStatus = `onclick="obtenerstatusMC(${id});"`;
-        fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${id}" class="text-black" target="_blank">F${id}</a>`;
+        fOT = `<a href="OT_Fallas_Tareas/#F${id}" class="text-black" target="_blank">F${id}</a>`;
     } else if (origen == "TAREA") {
         fActividades = ``;
         fResponsable = `onclick="obtenerUsuarios('asignarTarea', ${id});"`;
@@ -489,7 +489,7 @@ const datosEtiquetados = params => {
         fComentarios = `onclick="obtenerComentariosTareas(${id});"`;
         fAdjuntos = `onclick="obtenerAdjuntosTareas(${id});"`;
         fStatus = `onclick="obtenerInformacionTareas(${id}, '${params.descripcion}')"`;
-        fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#T${id}" class="text-black" target="_blank">T${id}</a>`;
+        fOT = `<a href="OT_Fallas_Tareas/#T${id}" class="text-black" target="_blank">T${id}</a>`;
     } else if (origen == "PROYECTO") {
         fActividades = ``;
         fResponsable = `onclick="obtenerResponsablesPlanaccion(${id})"`;
