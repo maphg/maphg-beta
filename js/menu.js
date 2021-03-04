@@ -131,7 +131,7 @@ class menu extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
             <div id="contenedorMenu" class="hidden w-full h-screen bg-white z-50 bg-gray-900 bg-opacity-50 absolute animated">
-                <div class="w-64 h-full h-screen bg-white flex flex-col absolute opacity-100 z-50 shadow-md justify-start">
+                <div class="w-64 h-full h-screen bg-white flex flex-col absolute opacity-100 z-50 shadow-md justify-start animated">
 
                     <div class="flex items-center justify-start relative p-2">
                         <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
@@ -183,7 +183,7 @@ class menu extends HTMLElement {
                     </div>
 
                 </div>
-                <div id="menuBG" class="h-full h-screen"></div>
+                <div id="menuBG" class="h-full h-screen animated"></div>
             </div>        
         `;
     }
@@ -260,11 +260,14 @@ const codigoTelegram = document.querySelector('#codigoTelegram');
 const menuBG = document.querySelector('#menuBG');
 
 btnCerrarMenu.addEventListener('click', () => {
-    contenedorMenu.classList.remove('fadeInLeft');
-    contenedorMenu.classList.add('fadeOutLeft');
+    contenedorMenu.classList.remove('fadeIn');
+    contenedorMenu.children[0].classList.remove('fadeInLeft');
+    contenedorMenu.classList.add('fadeOut');
+    contenedorMenu.children[0].classList.add('fadeOutLeft');
+
     setTimeout(() => {
         contenedorMenu.classList.add('hidden');
-    }, 2000);
+    }, 1200);
 })
 
 menuBG.addEventListener('click', () => {
@@ -274,9 +277,11 @@ menuBG.addEventListener('click', () => {
 
 // ABRIR MENU
 btnAbrirMenu.addEventListener('click', () => {
-    contenedorMenu.classList.remove('fadeOutLeft');
-    contenedorMenu.classList.add('fadeInLeft');
     contenedorMenu.classList.remove('hidden');
+    contenedorMenu.classList.remove('fadeOut');
+    contenedorMenu.children[0].classList.remove('fadeOutLeft');
+    contenedorMenu.classList.add('fadeIn');
+    contenedorMenu.children[0].classList.add('fadeInLeft');
 })
 
 
