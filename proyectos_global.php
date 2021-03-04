@@ -86,9 +86,13 @@
     <menu-sidebar clases="shadow"></menu-sidebar>
     <!-- MENÚ -->
 
-    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
-    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
+    <!-- MENÚ -->
 
 
     <div class="w-full">

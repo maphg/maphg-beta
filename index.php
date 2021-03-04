@@ -135,8 +135,6 @@
     <menu-menu></menu-menu>
     <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
 
-
-    
     <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
     <menu-notificaciones clases="h-screen"></menu-notificaciones>

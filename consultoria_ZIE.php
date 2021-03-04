@@ -17,9 +17,12 @@
     <menu-menu></menu-menu>
     <menu-sidebar clases="z-10 sticky top-0 shadow-sm"></menu-sidebar>
 
-    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
+    <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
-
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
     <div class="flex flex-col md:flex-row">
@@ -37,7 +40,7 @@
     <script src="js/jquery-3.3.1.js"></script>
 
     <script src="js/alertify.min.js"></script>
-    <script src="js/alertasSweet.js"></script>    
+    <script src="js/alertasSweet.js"></script>
     <script src="js/menu.js" type="text/javascript"></script>
 </body>
 
