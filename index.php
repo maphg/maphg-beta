@@ -135,9 +135,14 @@
     <menu-menu></menu-menu>
     <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
 
-    <!-- MODAL CONFIGURACIÓN TELEGRAM -->
-    <configuracion-telegram></configuracion-telegram>
 
+    
+    <!-- CONFIGURACIONES SIDEBAR -->
+    <configuracion-telegram></configuracion-telegram>
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
     <!-- BOTON FLOTANTE -->

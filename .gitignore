@@ -28,7 +28,7 @@ repositorio/
 sass/
 segoe/
 settings/
-svg/
+ot/svg/
 tfm/
 themify-icons/
 timedropper/
@@ -36,7 +36,9 @@ imagenes/
 DataTables/
 files/
 nbproject/
-svg/
+OT_Fallas_Tareas/svg/
+OT_proyectos/svg
+sa/svg
 sa/libs/conexion.php
 sa/libs/*.css
 sa/js/*.map

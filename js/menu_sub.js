@@ -234,6 +234,52 @@ class telegram extends HTMLElement {
     }
 }
 
+
+class telegram extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        this.innerHTML = `
+            <!-- MODAL RESPONSABLE -->
+            <div id="modalConfigurarTelegram" class="modal">
+                <div class="modal-window rounded-md pt-10" style="width: 300px;">
+                    <!-- BOTON CERRARL -->
+                    <div class="absolute top-0 right-0">
+                        <button onclick="modalOpenClose('modalConfigurarTelegram')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- INDICACION -->
+                    <div class="absolute top-0 left-0 flex flex-row items-center">
+                        <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                            <h1>CONFIGURAR TELEGRAM</h1>
+                        </div>
+                    </div>
+
+                    <!-- CONTENIDO -->
+                    <div class="flex flex-col justify-center items-center flex-col w-full pb-3">
+                        <h1 class="py-2 text-blue-300 text-sm">Escanea el QR e Ingresa el Código de Acceso</h1>
+                        <div class="flex justify-center items-center w-full px-1 text-center">
+                            <img src="../svg/QR_BotMaphg.png" width="250px" alt="">
+                        </div>
+
+                        <div class="mt-5 w-full px-2 flex justify-center items-center">
+
+                            <input id="codigoTelegram" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none" type="text" placeholder="Ingrese Código Acceso" autocomplete="off" max-length="0">
+
+                            <button id="btnCodigoTelegram" class="cursor-pointer text-md  text-blue-500  bg-blue-200 h-10 ml-1 px-2 rounded-md rounded-tr-md font-normal">
+                                <i class="fas fa-check"></i> Verificar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+        `;
+    }
+}
+
 window.customElements.define("menu-sidebar", menuSidebar);
 window.customElements.define("menu-menu", menu);
 window.customElements.define("configuracion-telegram", telegram);
