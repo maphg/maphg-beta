@@ -133,7 +133,7 @@
 <body class="bg-gray-200 scrollbar h-screen" style="font-family: 'Roboto', sans-serif;">
     <!-- MENÚ -->
     <menu-menu></menu-menu>
-    <menu-sidebar clases="z-10"></menu-sidebar>
+    <menu-sidebar clases="z-20"></menu-sidebar>
 
     <!-- MODAL CONFIGURACIÓN TELEGRAM -->
     <configuracion-telegram></configuracion-telegram>
@@ -167,7 +167,7 @@
 
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative">
 
-            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 -left-0 bg-gray-200 py-8 rounded">
+            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 bg-gray-200 py-8 rounded">
 
                 <div class="flex flex-row justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">--</p>

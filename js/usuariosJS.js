@@ -94,26 +94,6 @@ function logout() {
     });
 }
 
-// function logout2() {
-//     $.ajax({
-//         type: 'post',
-//         url: '../php/usuariosPHP.php',
-//         data: 'action=2',
-//         beforeSend: function () {
-//             $(".loader").show();
-//         },
-//         success: function (data) {
-//             $(".loader").fadeOut('slow');
-//             if (data == 1) {
-//                 location.href = "../login.php";
-//             } else {
-//                 $("#msg").html("");
-//                 $("#msg").html(data);
-//             }
-
-//         }
-//     });
-// }
 
 function obtDatosEmpleado(idEmpleado) {
     $.ajax({
