@@ -35,7 +35,7 @@ if (isset($_GET['action'])) {
                 $array2 = array();
                 $query = "SELECT id, id_padre, nivel, titulo, link, icono FROM t_menu 
                 WHERE activo = 1 and id_permiso = 0 and id_padre = $idPadreX and jerarquia = 'DOS' 
-                ORDER BY id ASC";
+                ORDER BY nivel ASC";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $idOpcion2 = $x['id'];
