@@ -656,7 +656,7 @@ btnCodigoTelegram.addEventListener('click', () => {
     const action = "comprobarCodigoTelegram";
     const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&chatID=${codigoTelegram.value}`;
 
-    if (codigoTelegram.value.length == 9) {
+    if (codigoTelegram.value.length >= 8) {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
