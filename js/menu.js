@@ -663,7 +663,7 @@ btnCodigoTelegram.addEventListener('click', () => {
                 if (array == 1) {
                     alertaImg('Código Actualizado', '', 'success', 1500);
                     codigoTelegram.value = '';
-                    modalOpenClose('modalConfigurarTelegram');
+                    btnCerrarTelegram.click();
                 } else {
                     alertaImg('Escannea de Nuevo', '', 'info', 1500);
                 }
