@@ -64,9 +64,9 @@ if ($result = mysqli_query($conn_2020, $query)) {
                 if (file_exists("../../planner/proyectos/$url")) {
                     $url2 = "http://www.maphg.com/planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/$url")) {
-                    $url2 = "http://www.maphg.com/beta/planner/proyectos/$url";
+                    $url2 = "http://www.maphg.com/america/planner/proyectos/$url";
                 } elseif (file_exists("../planner/proyectos/planaccion/$url")) {
-                    $url2 = "http://www.maphg.com/beta/planner/proyectos/planaccion/$url";
+                    $url2 = "http://www.maphg.com/america/planner/proyectos/planaccion/$url";
                 } else {
                     $url2 = "";
                 }

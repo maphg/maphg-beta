@@ -3647,13 +3647,13 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
                   if (extension == "png" || extension == "jpg" || extension == "jpeg") {
                      codigo = `
-                     <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/tareas/adjuntos/${url})"></div>
+                     <a href="https://www.maphg.com/america/planner/tareas/adjuntos/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/tareas/adjuntos/${url})"></div>
                      </a>
                   `;
                   } else {
                      codigo = `
-                     <a href="https://www.maphg.com/beta/planner/tareas/adjuntos/${url}" target="_blank">
+                     <a href="https://www.maphg.com/america/planner/tareas/adjuntos/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -4714,13 +4714,13 @@ function verEnPlannerPlanaccion(idPlanaccion) {
 
                if (tipo == "jpg" || tipo == "png" || tipo == "jpeg") {
                   codigo = `
-                     <a href="${'https://www.maphg.com/beta/planner/proyectos/planaccion/' + url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${'https://www.maphg.com/beta/planner/proyectos/planaccion/' + url})"></div>
+                     <a href="${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url})"></div>
                      </a>
                   `;
                } else {
                   codigo = `
-                     <a href="${'https://www.maphg.com/beta/planner/proyectos/planaccion/' + url}" target="_blank">
+                     <a href="${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -6283,7 +6283,7 @@ function obtenerImagenesEquipo(idEquipo) {
             document.getElementById("dataImagenes").innerHTML = '';
             document.getElementById("dataImagenesEquipo").innerHTML = `
                <div id="modalMedia_adjunto_img_xxx" class="relative">
-                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/planner/equipos/equipo.png)">
+                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/equipos/equipo.png)">
                   </div>
                </div>
             `;
