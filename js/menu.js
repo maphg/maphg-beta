@@ -901,7 +901,7 @@ const abrirEnlace = tipoEnlace => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
-    const URL = `php/select_REST_planner.php?action=abrirEnlace&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=${tipoEnlace}`;
+    const URL = `php/menu.php?action=abrirEnlace&idDestino=${idDestino}&idUsuario=${idUsuario}&tipoEnlace=${tipoEnlace}`;
     fetch(URL)
         .then(array => array.json())
         .then(array => {
