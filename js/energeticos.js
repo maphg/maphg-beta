@@ -2245,7 +2245,6 @@ function agregarProyecto() {
             success: function (data) {
                 if (data == 1) {
                     obtenerProyectos(idSeccion, "PENDIENTE");
-                    obtenerDatosUsuario(idDestino);
                     alertaImg("Proyecto Agregado", "", "success", 2500);
                     document.getElementById("tituloProyectoN").value = "";
                     document.getElementById("tipoProyectoN").value = "";

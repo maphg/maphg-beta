@@ -920,7 +920,6 @@ function agregarProyectoDEP() {
             success: function (data) {
                 if (data == 1) {
                     obtenerProyectosDEP(idSubseccion, "PENDIENTE");
-                    obtenerDatosUsuario(idDestino);
                     alertaImg("Proyecto Agregado", "", "success", 2500);
                     document.getElementById("tituloProyectoN").value = "";
                     document.getElementById("tipoProyectoN").value = "";
