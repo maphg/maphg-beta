@@ -613,31 +613,47 @@ window.addEventListener('load', () => {
 
 //Optienes Usuarios posible para asignar responsable en Proyectos.
 function obtenerResponsablesProyectos(idProyecto) {
-    document.getElementById("palabraUsuario").setAttribute("onkeyup", "obtenerResponsablesProyectos(" + idProyecto + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesProyectos(${idProyecto})`);
+
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idProyecto;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarProyecto";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarProyectos(${idUsuarioX}, 'asignarProyecto', ${idProyecto});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
 }
 
 
@@ -1674,32 +1690,46 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
 
 // OBTIENE RESPONSABLE PARA PLAN DE ACCIÓN
 function obtenerResponsablesPlanaccion(idPlanaccion) {
-    document.getElementById("palabraUsuario")
-        .setAttribute("onkeyup", "obtenerResponsablesPlanaccion(" + idPlanaccion + ")");
+    document.getElementById("palabraUsuario").setAttribute("onkeyup", `obtenerResponsablesPlanaccion(${idPlanaccion})`);
     document.getElementById("modalUsuarios").classList.add("open");
-    let idItem = idPlanaccion;
+
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tipoAsginacion = "asignarPlanaccion";
     let palabraUsuario = document.getElementById("palabraUsuario").value;
-    const action = "obtenerUsuarios";
 
-    $.ajax({
-        type: "POST",
-        url: "php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            idItem: idItem,
-            tipoAsginacion: tipoAsginacion,
-            palabraUsuario: palabraUsuario,
-        },
-        dataType: "JSON",
-        success: function (data) {
-            document.getElementById("dataUsuarios").innerHTML = data.dataUsuarios;
-        },
-    });
+    const action = "obtenerUsuarios";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraUsuario=${palabraUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataUsuarios.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idUsuarioX = array[x].idUsuario;
+                    const nombre = array[x].nombre;
+                    const apellido = array[x].apellido;
+                    const cargo = array[x].cargo;
+
+                    const codigo = `
+                        <div class="w-full p-2 rounded-md mb-1 hover:text-gray-900 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm cursor-pointer flex flex-row items-center truncate" onclick="actualizarPlanaccion(${idUsuarioX}, 'asignarPlanaccion', ${idPlanaccion});">
+                        <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${nombre}%${apellido}" width="20" height="20" alt="">
+                        <h1 class="ml-2">${nombre} ${apellido}</h1>
+                        <p class="font-bold mx-1"> / </p>
+                        <h1 class="font-normal text-xs">${cargo}</h1>
+                        </div>
+                        `;
+                    dataUsuarios.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            dataUsuarios.innerHTML = '';
+            fetch(APIERROR + err);
+        })
 }
 
 
