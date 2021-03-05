@@ -16,6 +16,59 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $semanaActual = date('W');
 
+
+    function notifiacionMP($idOT)
+    {
+        $equipo = "";
+        $asignadoPor = "";
+        $asignadoA = "";
+        $idResponsable = 0;
+        $token = "";
+        $chatId = "";
+
+        $query = "SELECT t_mp_planificacion_iniciada.id, t_colaboradores.nombre, t_equipos_america.equipo, t_mp_planificacion_iniciada.id_responsables
+        FROM t_mp_planificacion_iniciada
+        INNER JOIN t_users ON t_mp_planificacion_iniciada.id_usuario = t_users.id
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+        INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+        WHERE t_mp_planificacion_iniciada.id = $idOT";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $asignadoPor = $x['nombre'];
+                $equipo = $x['equipo'];
+                $idOT = $x['id'];
+                $idResponsable = $x['id_responsables'];
+            }
+        }
+
+        $query = "SELECT t_colaboradores.nombre, t_users.telegram_chat_id
+        FROM t_users 
+        INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id 
+        WHERE t_users.id = $idResponsable";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $asignadoA = $x['nombre'];
+                $chatId = $x['telegram_chat_id'];
+            }
+        }
+
+        $query = "SELECT url FROM t_enlaces WHERE tipo_enlace = 'BOTMAPHG' and activo = 1";
+        if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            foreach ($result as $x) {
+                $token = $x['url'];
+            }
+        }
+
+        $equipo = preg_replace('([^A-Za-z0-9 ])', '', $equipo);
+        $msg = "Hola <strong>$asignadoA</strong>, te han asignado una OT de Preventivos por <strong>$asignadoPor</strong>, <strong>\"OT $idOT\"</strong> del equipo <strong>🚩$equipo</strong> 📅 " . $GLOBALS['fechaActual'];
+
+        $APITelegram = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chatId" .
+            "&text=$msg&parse_mode=html";
+        if ($token != "" and $chatId != "" and $msg != "") {
+            file_get_contents($APITelegram);
+        }
+    }
+
     if ($action == "obtenerOTDigital") {
         $idEquipo = $_GET['idEquipo'];
         $idPlan = $_GET['idPlan'];
@@ -501,22 +554,28 @@ if (isset($_GET['action'])) {
                     if ($contador > 0) {
                         unset($responsables[$key]);
                         $responsables = implode(",", $responsables);
-                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' WHERE id = $idOT and activo = 1";
+                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' 
+                        WHERE id = $idOT and activo = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $array[] = "Eliminado";
+                            notifiacionMP($idOT);
                         }
                     } else {
                         $responsables[] = "$idResponsable";
                         $responsables = implode(",", $responsables);
-                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' WHERE id = $idOT and activo = 1";
+                        $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$responsables' 
+                        WHERE id = $idOT and activo = 1";
                         if ($result = mysqli_query($conn_2020, $query)) {
                             $array[] = "Agregado";
+                            notifiacionMP($idOT);
                         }
                     }
                 } else {
-                    $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$idResponsable' WHERE id = $idOT and activo = 1";
+                    $query = "UPDATE t_mp_planificacion_iniciada SET id_responsables = '$idResponsable' 
+                    WHERE id = $idOT and activo = 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $array[] = "Agregado";
+                        notifiacionMP($idOT);
                     }
                 }
             }
