@@ -294,8 +294,8 @@ class telegram extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
             <div id="contenedorTelegram" class="hidden w-full absolute top-0 z-50 bg-gray-900 bg-opacity-50 animated ${this.clases}">
-                <div class="w-72 flex flex-col bg-white shadow-md animated absolute top-0 right-0 h-screen">
-                    <div class=" w-72 p-2 flex flex-col bg-white shadow-md">
+                <div class="w-72 flex flex-col bg-white animated absolute top-0 right-0 h-screen">
+                    <div class=" w-72 p-2 flex flex-col bg-white">
                         <div class="p-2 mb-2 text-xs text-justify flex flex-col h-12 flex items-center justify-center relative overflow-hidden">
                             <img src="svg/telegram.gif" class="absolute" alt="">
                             <div id="btnCerrarTelegram" class="absolute top-0 right-0 text-gray-400 hover:text-cyan-200">
