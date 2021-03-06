@@ -775,11 +775,11 @@ const obtenerDestinosUsuario = () => {
                     const ubicacion = array[x].ubicacion;
                     const codigo = `
                         <a href="#" class="flex items-start px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2 flex-col" onclick="actualizarDestino('${destino}', ${idDestinoX})">
-                            <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold leading-none font-bold">
-                                ${ubicacion}
+                            <p class="text-gray-600 dark:text-white text-sm mx-2 leading-none font-bold">
+                                ${destino}
                             </p>
                             <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold leading-none text-xs">
-                                ${destino}
+                                ${ubicacion}
                             </p>
                         </a>            
                     `;
