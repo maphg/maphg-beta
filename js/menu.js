@@ -33,9 +33,8 @@ class menuSidebar extends HTMLElement {
                                     <span id="cargoUsuario" class="text-sm text-gray-600"></span>
                                 </div>
                                 <span class="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden relative">
-                                    <img id="avatarUsuario" src="planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo"
-                                        class="h-full w-full object-cover">
-                                        <input id="subirAvatarUsuario" type="file" class="opacity-0 h-12 w-full absolute top-0" style="left:-10px;">
+                                    <img id="avatarUsuario" src="planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo" class="h-full w-full object-cover">
+                                        <input id="subirAvatarUsuario" type="file" class="hidden md:flex md:flex-col md:items-end md:leading-tight opacity-0 h-12 w-full absolute top-0" style="left:-10px;">
                                 </span>
                                 <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"
                                     class="hidden sm:block h-6 w-6 text-gray-300">
@@ -214,61 +213,8 @@ class nofiticaciones extends HTMLElement {
                                 <button><i class="fal fa-times p-2 fa-lg"></i></button>
                             </div>
                         </div>
-
-                        <div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-red-500">
-                            <div class="flex w-full items-center">
-                                <div class="w-6 h-6 bg-red-200 flex-none rounded-full mr-2 flex items-center justify-center">
-                                    <h1 class="font-bold text-red-500">I</h1>
-                                </div>
-                                <p><span class="font-bold">Pedro rego</span> te asigno una <span class="font-bold">incidencia</span> tipo <span class="text-red-500 font-bold uppercase text-xxs">URGENCIA</span> "Lorem ipsum dolor sit "</p>
-                            </div>
-                            <div class="w-full flex mt-1 justify-evenly">
-                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-blue-500">
-                            <div class="flex w-full items-center">
-                                <div class="w-6 h-6 bg-blue-200 flex-none rounded-full mr-2 flex items-center justify-center">
-                                    <h1 class="font-bold text-blue-500">MP</h1>
-                                </div>
-                                <p><span class="font-bold">Pedro rego</span> te asigno una <span class="font-bold">OT MP</span> numero <span class="text-red-500 font-bold uppercase text-xxs">12312</span> "Lorem ipsum dolor sit "</p>
-                            </div>
-                            <div class="w-full flex mt-1 justify-evenly">
-                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
-                            <div class="flex w-full items-center">
-                                <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
-                                    <h1 class="font-bold text-purple-500">P</h1>
-                                </div>
-                                <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">PROYECTO</span> "Lorem ipsum dolor sit" en <span class="font-bold">ZIA</span></p>
-                            </div>
-                            <div class="w-full flex mt-1 justify-evenly">
-                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
-                            <div class="flex w-full items-center">
-                                <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
-                                    <h1 class="font-bold text-purple-500 text-xxs">PDA</h1>
-                                </div>
-                                <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">Plan de accion</span>"Lorem ipsum dolor sit" en el proyecto <span class="font-bold">NOMBRE DEL PORYECTO</span></p>
-                            </div>
-                            <div class="w-full flex mt-1 justify-evenly">
-                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
-                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
-                            </div>
+                        <div class="flex flex-col overflow-y-auto scrollbar" style="max-height: 100%">
+                            <div id="dataNotifiaciones"></div>
                         </div>
                     </div>
                 </div>
@@ -497,6 +443,7 @@ const telegramBG = document.querySelector('#telegramBG');
 const btnCerrarTelegram = document.querySelector('#btnCerrarTelegram');
 const contenedorTelegram = document.querySelector('#contenedorTelegram');
 const btnAbrirTelegram = document.querySelector('#btnAbrirTelegram');
+const dataNotifiaciones = document.querySelector('#dataNotifiaciones');
 
 
 // MENU
@@ -544,6 +491,7 @@ btnAbrirNotificaciones.addEventListener('click', () => {
     contenedorNotifiaciones.children[0].classList.remove('fadeOutRight');
     contenedorNotifiaciones.classList.add('fadeIn');
     contenedorNotifiaciones.children[0].classList.add('fadeInRight');
+    obtenerNotificaciones();
 })
 
 notificacionesBG.addEventListener('click', () => {
@@ -632,7 +580,7 @@ agendaBG.addEventListener('click', () => {
 // OBTIENE LAS OPCIONES DE CONFIGURACIONES DEL USUARIO
 btnConfiguracionesUsuario.addEventListener('click', () => {
     destinosUsuario.classList.add('hidden');
-
+    obtenerInformacionUsuario();
     configuracionesUsuario.classList.contains('hidden') ?
         configuracionesUsuario.classList.remove('hidden') :
         configuracionesUsuario.classList.add('hidden');
@@ -649,6 +597,7 @@ btnDestinosUsuario.addEventListener('click', () => {
 })
 
 
+// VALIDA CODIGO TELEGRAM
 btnCodigoTelegram.addEventListener('click', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -678,6 +627,7 @@ btnCodigoTelegram.addEventListener('click', () => {
 })
 
 
+// SUBE AVATAR DEL USUARIO
 subirAvatarUsuario.addEventListener('change', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -719,6 +669,7 @@ subirAvatarUsuario.addEventListener('change', () => {
 })
 
 
+// OBTIENE Y CREA CONTENIDO DEL MENU
 const obtenerMenu = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -802,6 +753,7 @@ const obtenerMenu = () => {
 }
 
 
+// OBTIENE LOS DESTINOS ASIGNADOS AL USUARIO
 const obtenerDestinosUsuario = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -842,6 +794,7 @@ const obtenerDestinosUsuario = () => {
 }
 
 
+// OBTIENE DATOS DEL USUARIO
 const obtenerInformacionUsuario = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -874,6 +827,8 @@ const cerrarSesion = () => {
     location.href = 'login.php';
 }
 
+
+// ESTILO PARA MENU LATERAL
 const toggleMenu = menu => {
     if (array = document.getElementsByClassName(menu)) {
         for (let x = 0; x < array.length; x++) {
@@ -890,11 +845,14 @@ const toggleMenu = menu => {
     }
 }
 
+
+// ACTUALIZA DESTINO
 const actualizarDestino = (destino, idDestino) => {
     localStorage.setItem('idDestino', idDestino);
     destinoUsuario.innerText = destino;
     destinosUsuario.classList.add('hidden');
 }
+
 
 // FUNCION EXTRA PARA LIMITAR ENLACES
 const abrirEnlace = tipoEnlace => {
@@ -907,6 +865,90 @@ const abrirEnlace = tipoEnlace => {
         .then(array => {
             if (array) {
                 window.open(array.url, "Inventarios", "witdh=900, height=800")
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+}
+
+
+// OBTIENE LAS NOTIFICACIONES DEL USUARIO
+const obtenerNotificaciones = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerNotificaciones";
+    const URL = `php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            console.log(array)
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idNotificacion = array[x].idNotificacion;
+                    const notificacion = array[x].notificacion;
+                    const tipo = array[x].tipo;
+
+                    const codigo = tipo == 'INCIDENCIA' ?
+                        `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-red-500">
+                            <div class="flex w-full items-center">
+                                <div class="w-6 h-6 bg-red-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                    <h1 class="font-bold text-red-500">I</h1>
+                                </div>
+                                <p>${notificacion}</p>
+                            </div>
+                            <div class="w-full flex mt-1 justify-evenly">
+                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>`
+                        : tipo == 'PDA' ?
+                            `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
+                                <div class="flex w-full items-center">
+                                    <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                        <h1 class="font-bold text-purple-500 text-xxs">PDA</h1>
+                                    </div>
+                                    <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">Plan de accion</span>"Lorem ipsum dolor sit" en el proyecto <span class="font-bold">NOMBRE DEL PORYECTO</span></p>
+                                </div>
+                                <div class="w-full flex mt-1 justify-evenly">
+                                    <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                    <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                    <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                            </div>`
+                            : tipo == 'PROYECTO' ?
+                                `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
+                                    <div class="flex w-full items-center">
+                                        <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                            <h1 class="font-bold text-purple-500">P</h1>
+                                        </div>
+                                        <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">PROYECTO</span> "Lorem ipsum dolor sit" en <span class="font-bold">ZIA</span></p>
+                                    </div>
+                                    <div class="w-full flex mt-1 justify-evenly">
+                                        <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                        <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                        <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </div>`
+                                : tipo == 'MP' ?
+                                    `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-blue-500">
+                                        <div class="flex w-full items-center">
+                                            <div class="w-6 h-6 bg-blue-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                                <h1 class="font-bold text-blue-500">MP</h1>
+                                            </div>
+                                            <p><span class="font-bold">Pedro rego</span> te asigno una <span class="font-bold">OT MP</span> numero <span class="text-red-500 font-bold uppercase text-xxs">12312</span> "Lorem ipsum dolor sit "</p>
+                                        </div>
+                                        <div class="w-full flex mt-1 justify-evenly">
+                                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                            <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>`
+                                    : '';
+                    dataNotifiaciones.insertAdjacentHTML('beforeend', codigo);
+                }
             }
         })
         .catch(function (err) {

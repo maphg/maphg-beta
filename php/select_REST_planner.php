@@ -60,6 +60,10 @@ if (isset($_GET['action'])) {
 
         if ($tipo == "INCIDENCIA") {
             $msg = "Hola <strong>$asignadoA</strong>, te han asignado una Incidencia por <strong>$asignadoPor</strong>, <strong>\"$titulo\"</strong> del tipo <strong>🚩$tipoIncidencia</strong> 📅 " . $GLOBALS['fechaActual'];
+
+            $query = "INSERT INTO t_notificaciones_telegram(id_destino, id_usuario, status, notificacion_telegram, notificacion_maphg, tipo_notifiCacion, activo) VALUES(0, $Para, 'PENDIENTE', '$msg', '', 'INCIDENCIA', 1)";
+            if ($result = mysqli_query($GLOBALS['conn_2020'], $query)) {
+            }
         } else if ($tipo == "ENERGETICO") {
             $msg = "Hola <strong>$asignadoA</strong>, te han asignado una Incidencia Energetico por <strong>$asignadoPor</strong>, <strong>\"$titulo\"</strong> del tipo <strong>🚩$tipoIncidencia</strong> 📅" . $GLOBALS['fechaActual'];
         }

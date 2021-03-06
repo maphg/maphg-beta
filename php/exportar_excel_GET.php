@@ -2097,4 +2097,459 @@ if (isset($_GET['action'])) {
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('PHP://output');
     }
+
+
+    if ($action == "reporteIncidencia") {
+        $filtroPalabra = $_GET["filtroPalabra"];
+        $filtroResponsable = $_GET["filtroResponsable"];
+        $filtroSeccion = $_GET["filtroSeccion"];
+        $filtroSubseccion = $_GET["filtroSubseccion"];
+        $filtroTipo = $_GET["filtroTipo"];
+        $filtroTipoIncidencia = $_GET["filtroTipoIncidencia"];
+        $filtroStatus = $_GET["filtroStatus"];
+        $filtroFecha = $_GET["filtroFecha"];
+        $filtroFechaInicio = $_GET["filtroFechaInicio"];
+        $filtroFechaFin = $_GET["filtroFechaFin"];
+
+        $fila = 1;
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setTitle("Reporte Incidencias");
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', 'DESTINO');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', 'SECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', 'SUBSECCIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', 'CREADO POR');
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', 'RESPONSABLE');
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', 'ACTIVIDAD');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', 'EQUIPO / LOCAL');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', 'STATUS');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', 'ULTIMO COMENTARIO');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', '');
+
+        #FILTRO DESTINO
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+            $filtroDestino_General = "";
+            $filtroDestino_Preventivo = "";
+            $filtroDestino_Proyecto = "";
+        } else {
+            $filtroDestino = "and t_mc.id_destino = $idDestino";
+            $filtroDestino_General = "and id_destino = $idDestino";
+            $filtroDestino_Preventivo = "and t_equipos_america.id_destino = $idDestino";
+            $filtroDestino_Proyecto = "and t_proyectos.id_destino = $idDestino";
+        }
+
+        #FILTRO PALABRA
+        if ($filtroPalabra == "" || $filtroPalabra == " ") {
+            $filtroPalabraIncidencias = "";
+            $filtroPalabra_General = "";
+            $filtroPalabra_Preventivo = "";
+            $filtroPalabra_Proyecto = "";
+        } else {
+            $filtroPalabraIncidencias = "and t_mc.actividad LIKE '%$filtroPalabra%'";
+            $filtroPalabra_General = "and titulo LIKE '%$filtroPalabra%'";
+            $filtroPalabra_Preventivo = "and t_mp_planificacion_iniciada.comentario LIKE '%$filtroPalabra%'";
+            $filtroPalabra_Proyecto = "and t_proyectos_planaccion.actividad LIKE '%$filtroPalabra%'";
+        }
+
+        #FILTRO RESPONSABLE
+        if ($filtroResponsable <= 0) {
+            $filtroResponsableIncidencias = "";
+            $filtroResponsable_General = "";
+            $filtroResponsable_Preventivo = "";
+            $filtroResponsable_Proyecto = "";
+        } else {
+            $filtroResponsableIncidencias = "and t_mc.responsable IN($filtroResponsable)";
+            $filtroResponsable_General = "and responsable IN($filtroResponsable)";
+            $filtroResponsable_Preventivo = "and t_mp_planificacion_iniciada.id_responsables IN($filtroResponsable)";
+            $filtroResponsable_Proyecto = "and t_proyectos_planaccion.responsable IN($filtroResponsable)";
+        }
+
+        #FILTRO SECCION
+        if ($filtroSeccion <= 0) {
+            $filtroSeccionIncidencias = "";
+            $filtroSeccion_General = "";
+            $filtroSeccion_Preventivo = "";
+            $filtroSeccion_Proyecto = "";
+        } else {
+            $filtroSeccionIncidencias = "and t_mc.id_seccion = $filtroSeccion";
+            $filtroSeccion_General = "and id_seccion = $filtroSeccion";
+            $filtroSeccion_Preventivo = "and t_equipos_america.id_seccion = $filtroSeccion";
+            $filtroSeccion_Proyecto = "and t_proyectos.id_seccion = $filtroSeccion";
+        }
+
+        #FILTRO SUBSECCION
+        if ($filtroSubseccion == 0) {
+            $filtroSubseccionIncidencias = "";
+            $filtroSubseccion_General = "";
+            $filtroSubseccion_Preventivo = "";
+            $filtroSubseccion_Proyecto = "";
+        } else {
+            $filtroSubseccionIncidencias = "and t_mc.id_subseccion = $filtroSubseccion";
+            $filtroSubseccion_General = "and id_subseccion = $filtroSubseccion";
+            $filtroSubseccion_Preventivo = "and t_equipos_america.id_subseccion = $filtroSubseccion";
+            $filtroSubseccion_Proyecto = "and t_proyectos.id_subseccion = $filtroSubseccion";
+        }
+
+        #FILTRO TIPO INCIDENCIA (EMERGENCIA, URGENCIA, ALARMA, ALERTA, SEGUIMIENTO)
+        if ($filtroTipoIncidencia == "TODOS") {
+            $filtroTipoIncidenciaIncidencias = "";
+            $filtroTipoIncidencia_General = "";
+            $filtroTipoIncidencia_Preventivo = "";
+            $filtroTipoIncidencia_Proyecto = "";
+        } elseif ($filtroTipoIncidencia == "EMERGENCIA") {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'EMERGENCIA'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'EMERGENCIA'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipoIncidencia == "URGENCIA") {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'URGENCIA'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'URGENCIA'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipoIncidencia == "ALARMA") {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'ALARMA'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'ALARMA'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipoIncidencia == "ALERTA") {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'ALERTA'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'ALERTA'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipoIncidencia == "SEGUIMIENTO") {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'SEGUIMIENTO'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'SEGUIMIENTO'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } else {
+            $filtroTipoIncidenciaIncidencias = "and t_mc.tipo_incidencia = 'ND'";
+            $filtroTipoIncidencia_General = "and tipo_incidencia = 'ND'";
+            $filtroTipoIncidencia_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipoIncidencia_Proyecto = "and t_proyectos_planaccion.id = 0";
+        }
+
+        #FILTRO TIPO (INCIDENCIAS, INCIDENCIA GENERALES, PREVENTIVOS, PROYECTOS->PLANACCION)
+        if ($filtroTipo == "TODOS") {
+            $filtroTipoIncidencias = "";
+            $filtroTipo_General = "";
+            $filtroTipo_Preventivo = "";
+            $filtroTipo_Proyecto = "";
+        } elseif ($filtroTipo == "INCIDENCIAS") {
+            $filtroTipoIncidencias = "";
+            $filtroTipo_General = "";
+            $filtroTipo_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipo_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipo == "PREVENTIVOS") {
+            $filtroTipoIncidencias = "and t_mc.id = 0";
+            $filtroTipo_General = "and id = 0";
+            $filtroTipo_Preventivo = "";
+            $filtroTipo_Proyecto = "and t_proyectos_planaccion.id = 0";
+        } elseif ($filtroTipo == "PROYECTOS") {
+            $filtroTipoIncidencias = "and t_mc.id = 0";
+            $filtroTipo_General = "and id = 0";
+            $filtroTipo_Preventivo = "and t_mp_planificacion_iniciada.id = 0";
+            $filtroTipo_Proyecto = "";
+        } else {
+            $filtroTipoIncidencias = "and t_mc.id_destino = 0";
+            $filtroTipo_General = "and id_destino = 0";
+            $filtroTipo_Preventivo = "and id_destino = 0";
+            $filtroTipo_Proyecto = "and id_destino = 0";
+        }
+
+        #FILTRO STATUS
+        if ($filtroStatus == "TODOS") {
+            $filtroStatusIncidencias = "";
+            $filtroStatus_General = "";
+            $filtroStatus_Preventivo = "";
+            $filtroStatus_Proyecto = "";
+        } else {
+            if ($filtroStatus == "MATERIAL") {
+                $filtroStatusIncidencias = "and t_mc.status_material = 1";
+                $filtroStatus_General = "and status_material = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.status_material = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.status_material = 1";
+            } elseif ($filtroStatus == "TRABAJANDO") {
+                $filtroStatusIncidencias = "and t_mc.status_trabajare = 1";
+                $filtroStatus_General = "and status_trabajando = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.status_trabajando = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.status_trabajando = 1";
+            } elseif ($filtroStatus == "ELECTRICIDAD") {
+                $filtroStatusIncidencias = "and t_mc.energetico_electricidad = 1";
+                $filtroStatus_General = "and energetico_electricidad = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.energetico_electricidad = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.energetico_electricidad = 1";
+            } elseif ($filtroStatus == "AGUA") {
+                $filtroStatusIncidencias = "and t_mc.energetico_agua = 1";
+                $filtroStatus_General = "and energetico_agua = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.energetico_agua = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.energetico_agua = 1";
+            } elseif ($filtroStatus == "DIESEL") {
+                $filtroStatusIncidencias = "and t_mc.energetico_diesel = 1";
+                $filtroStatus_General = "and energetico_diesel = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.energetico_diesel = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.energetico_diesel = 1";
+            } elseif ($filtroStatus == "GAS") {
+                $filtroStatusIncidencias = "and t_mc.energetico_gas = 1";
+                $filtroStatus_General = "and energetico_gas = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.energetico_gas = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.energetico_gas = 1";
+            } elseif ($filtroStatus == "CALIDAD") {
+                $filtroStatusIncidencias = "and t_mc.departamento_calidad = 1";
+                $filtroStatus_General = "and departamento_calidad = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.departamento_calidad = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.departamento_calidad = 1";
+            } elseif ($filtroStatus == "COMPRAS") {
+                $filtroStatusIncidencias = "and t_mc.departamento_compras = 1";
+                $filtroStatus_General = "and departamento_compras = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.departamento_compras = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.departamento_compras = 1";
+            } elseif ($filtroStatus == "DIRECCION") {
+                $filtroStatusIncidencias = "and t_mc.departamento_direccion = 1";
+                $filtroStatus_General = "and departamento_direccion = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.departamento_direccion = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.departamento_direccion = 1";
+            } elseif ($filtroStatus == "FINANZAS") {
+                $filtroStatusIncidencias = "and t_mc.departamento_finanzas = 1";
+                $filtroStatus_General = "and departamento_finanzas = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.departamento_finanzas = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.departamento_finanzas = 1";
+            } elseif ($filtroStatus == "RRHH") {
+                $filtroStatusIncidencias = "and t_mc.departamento_rrhh = 1";
+                $filtroStatus_General = "and departamento_rrhh = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.departamento_rrhh = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.departamento_rrhh = 1";
+            } elseif ($filtroStatus == "EP") {
+                $filtroStatusIncidencias = "and t_mc.status_ep = 1";
+                $filtroStatus_General = "and status_ep = 1";
+                $filtroStatus_Preventivo = "and t_mp_planificacion_iniciada.status_ep = 1";
+                $filtroStatus_Proyecto = "and t_proyectos_planaccion.status_ep = 1";
+            } else {
+                $filtroStatusIncidencias = "";
+                $filtroStatus_General = "";
+                $filtroStatus_Preventivo = "";
+                $filtroStatus_Proyecto = "";
+            }
+        }
+
+        #FILTRO FECHA
+        if ($filtroFecha == "TODOS") {
+            $filtroFechaIncidencias = "";
+            $filtroFecha_General = "";
+            $filtroFecha_Preventivo = "";
+            $filtroFecha_Proyecto = "";
+        } elseif ($filtroFecha == "SINPLANIFICAR") {
+            $filtroFechaIncidencias = "and t_mc.rango_fecha = ''";
+            $filtroFecha_General = "and rango_fecha = ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha = ''";
+            $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha = ''";
+        } elseif ($filtroFecha == "PLANIFICADO") {
+            $filtroFechaIncidencias = "and t_mc.rango_fecha != ''";
+            $filtroFecha_General = "and rango_fecha != ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
+            $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
+        } elseif ($filtroFecha == "RANGO") {
+            $filtroFechaIncidencias = "and t_mc.rango_fecha != ''";
+            $filtroFecha_General = "and rango_fecha != ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
+            $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
+        } else {
+            $filtroFechaIncidencias = "and t_mc.rango_fecha != ''";
+            $filtroFecha_General = "and rango_fecha != ''";
+            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
+            $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
+        }
+
+        #INCIDENCIAS
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.rango_fecha, t_mc.tipo_incidencia,
+        t_mc.creado_por, t_mc.responsable,
+        t_mc.status_material,
+        t_mc.status_trabajare,
+        t_mc.energetico_electricidad,
+        t_mc.energetico_agua,
+        t_mc.energetico_diesel,
+        t_mc.energetico_gas,
+        t_mc.departamento_calidad,
+        t_mc.departamento_compras,
+        t_mc.departamento_direccion,
+        t_mc.departamento_finanzas,
+        t_mc.departamento_rrhh,
+        t_mc.status_ep,
+        t_mc.id_seccion,
+        t_mc.id_subseccion,
+        c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos_america.equipo, 
+        t_mc.fecha_creacion, t_mc.fecha_realizado
+        FROM t_mc
+        INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
+        INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+        WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias
+        ORDER BY t_mc.id DESC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x['id'];
+                $idCreadoPor = $x['creado_por'];
+                $idResponsable = $x['responsable'];
+                $titulo = $x['actividad'];
+                $status = $x['status'];
+                $rangoFecha = $x['rango_fecha'];
+                $tipoIncidencia = $x['tipo_incidencia'];
+                $sMaterial = intval($x['status_material']);
+                $sTrabajando = intval($x['status_trabajare']);
+                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
+                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
+                $idSeccion = $x['id_seccion'];
+                $idSubseccion = $x['id_subseccion'];
+                $destino = $x['destino'];
+                $seccion = $x['seccion'];
+                $subseccion = $x['grupo'];
+                $equipo = $x['equipo'];
+                $fechaCreacion = $x['fecha_creacion'];
+                $fechaFinalizado = $x['fecha_realizado'];
+                $fila++;
+
+                #STATUS
+                if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
+                    $status = "SOLUCIONADO";
+                } else {
+                    $status = "PENDIENTE";
+                }
+
+                #CREADO POR
+                $creadoPor = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idCreadoPor";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #RESPONSABLE
+                $responsable = "";
+                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
+                FROM t_users
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_users.id = $idResponsable";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $responsable = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                #ULTIMO COMENTARIO
+                $comentario = "";
+                $fecha = "";
+                $ComentarioDe = "";
+                $query = "SELECT t_mc_comentarios.comentario, t_mc_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
+                FROM t_mc_comentarios 
+                INNER JOIN t_users ON t_mc_comentarios.id_usuario = t_users.id
+                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
+                WHERE t_mc_comentarios.id_mc = $idItem and t_mc_comentarios.activo = 1
+                ORDER BY t_mc_comentarios.id DESC";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $comentario = $x['comentario'];
+                        $fecha = $x['fecha'];
+                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
+                    }
+                }
+
+                $guardar = "SI";
+                if ($filtroFecha == "RANGO") {
+                    $guardar = "NO";
+                    if (strlen($rangoFecha) == 23 and $filtroFechaInicio != "" and $filtroFechaFin != "") {
+
+                        // TRATA LA FECHA SELECCIONADA POR EL USUARIO
+                        // $filtroFechaInicio = (new DateTime($filtroFechaInicio))->format('Y-m-d');
+                        // $filtroFechaFin = (new DateTime($filtroFechaFin))->format('Y-m-d');
+
+                        // TRATA LA FECHA DEL REGISTRO
+                        $rangoFecha = str_replace("/", "-", $rangoFecha);
+                        $rangoFecha = explode(" - ", $rangoFecha);
+                        $fechaInicio = (new DateTime($rangoFecha[0]))->format('Y-m-d');
+                        $fechaFin = (new DateTime($rangoFecha[1]))->format('Y-m-d');
+
+                        if ($fechaInicio >= date('Y-01-04') &&  $fechaInicio <= date('Y-01-05')) {
+                            $guardar = "SI";
+                        }
+                        // if ($fechaFin >= date('Y-01-05') && $fechaFin <= date('Y-01-05')) {
+                        //     $guardar = "SI";
+                        // }
+                    }
+                }
+
+                #DOCUMENTOS
+                $totalAdjuntos = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc_adjuntos 
+                WHERE id_mc = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $x['total'];
+                    }
+                }
+
+                if ($guardar == "SI") {
+                    $array[] = array(
+                        "idItem" => intval($idItem),
+                        "titulo" => $titulo,
+                        "creadoPor" => $creadoPor,
+                        "status" => $status,
+                        "tipo" => "INCIDENCIA",
+                        "tipoIncidencia" => $tipoIncidencia,
+                        "sMaterial" => $sMaterial,
+                        "sTrabajando" => $sTrabajando,
+                        "sEnergetico" => $sEnergetico,
+                        "sDepartamento" => $sDepartamento,
+                        "sEP" => $sEP,
+                        "comentario" => $comentario,
+                        "comentarioFecha" => $fecha,
+                        "ComentarioDe" => $ComentarioDe,
+                        "idSeccion" => intval($idSeccion),
+                        "idSubseccion" => intval($idSubseccion),
+                        "totalAdjuntos" => intval($totalAdjuntos)
+                    );
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $destino);
+                $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $seccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $subseccion);
+                $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $creadoPor);
+                $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $responsable);
+                $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $titulo);
+                $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $equipo);
+                $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $status);
+                $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentario);
+                $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $fechaCreacion);
+                $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $fechaFinalizado);
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('R' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('S' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('T' . $fila, '');
+            }
+        }
+
+        // GENERA EL EXCEL
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header('Content-Disposition: attachment;filename="Reporte_Incidencias_' . $fechaActual . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('PHP://output');
+    }
 }

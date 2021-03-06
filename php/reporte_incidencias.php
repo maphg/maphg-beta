@@ -27,8 +27,6 @@ if (isset($_GET['action'])) {
         $filtroTipoIncidencia = $_POST['filtroTipoIncidencia'];
         $filtroStatus = $_POST['filtroStatus'];
         $filtroFecha = $_POST['filtroFecha'];
-        $filtroFechaInicio = $_POST['filtroFechaInicio'];
-        $filtroFechaFin = $_POST['filtroFechaFin'];
         $array = array();
 
         #FILTRO DESTINO
@@ -254,10 +252,44 @@ if (isset($_GET['action'])) {
             $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
             $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
         } elseif ($filtroFecha == "RANGO") {
-            $filtroFechaIncidencias = "and rango_fecha != ''";
-            $filtroFecha_General = "and rango_fecha != ''";
-            $filtroFecha_Preventivo = "and t_mp_planificacion_iniciada.rango_fecha != ''";
-            $filtroFecha_Proyecto = "and t_proyectos_planaccion.rango_fecha != ''";
+            $fechaInicio = strtotime($_POST['filtroFechaInicio']);
+            $fechaFin = strtotime($_POST['filtroFechaFin']);
+
+            $rangoFechasIncidencias = "";
+            $rangoFechasIncidenciasGenerales = "";
+            $rangoFechasPreventivos = "";
+            $rangoFechasPDA = "";
+
+            for ($i = $fechaInicio; $i <= $fechaFin; $i += 86400) {
+                if ($i == $fechaFin) {
+                    $rangoFechasIncidencias .= "t_mc.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%'";
+                    $rangoFechasIncidenciasGenerales .= "t_mp_np.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%'";
+                    $rangoFechasPDA .= "t_proyectos_planaccion.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%'";
+                    $rangoFechasPreventivos .= "t_mp_planificacion_iniciada.fecha_creacion LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('Y-m-d') . "%'";
+                } else {
+                    $rangoFechasIncidencias .= "t_mc.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%' or ";
+                    $rangoFechasIncidenciasGenerales .= "t_mp_np.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%' or ";
+                    $rangoFechasPDA .= "t_proyectos_planaccion.rango_fecha LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('d/m/Y') . "%' or ";
+                    $rangoFechasPreventivos .= "t_mp_planificacion_iniciada.fecha_creacion LIKE '%" .
+                        (new DateTime(date("d-m-Y", $i)))->format('Y-m-d') . "%' or ";
+                }
+            }
+
+            // $array[] = array("Fecha" => $rangoFechasIncidencias);
+            // $array[] = array("Fecha" => $rangoFechasIncidenciasGenerales);
+            // $array[] = array("Fecha" => $rangoFechasPDA);
+
+            $filtroFechaIncidencias = "and $rangoFechasIncidencias";
+            $filtroFecha_General = "and $rangoFechasIncidenciasGenerales";
+            $filtroFecha_Preventivo = "and ($rangoFechasPreventivos)";
+            $filtroFecha_Proyecto = "and ($rangoFechasPDA)";
         } else {
             $filtroFechaIncidencias = "and rango_fecha != ''";
             $filtroFecha_General = "and rango_fecha != ''";
@@ -338,30 +370,6 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $guardar = "SI";
-                if ($filtroFecha == "RANGO") {
-                    $guardar = "NO";
-                    if (strlen($rangoFecha) == 23 and $filtroFechaInicio != "" and $filtroFechaFin != "") {
-
-                        // TRATA LA FECHA SELECCIONADA POR EL USUARIO
-                        // $filtroFechaInicio = (new DateTime($filtroFechaInicio))->format('Y-m-d');
-                        // $filtroFechaFin = (new DateTime($filtroFechaFin))->format('Y-m-d');
-
-                        // TRATA LA FECHA DEL REGISTRO
-                        $rangoFecha = str_replace("/", "-", $rangoFecha);
-                        $rangoFecha = explode(" - ", $rangoFecha);
-                        $fechaInicio = (new DateTime($rangoFecha[0]))->format('Y-m-d');
-                        $fechaFin = (new DateTime($rangoFecha[1]))->format('Y-m-d');
-
-                        if ($fechaInicio >= date('Y-01-04') &&  $fechaInicio <= date('Y-01-05')) {
-                            $guardar = "SI";
-                        }
-                        // if ($fechaFin >= date('Y-01-05') && $fechaFin <= date('Y-01-05')) {
-                        //     $guardar = "SI";
-                        // }
-                    }
-                }
-
                 #DOCUMENTOS
                 $totalAdjuntos = 0;
                 $query = "SELECT count(id) 'total' FROM t_mc_adjuntos 
@@ -372,27 +380,25 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                if ($guardar == "SI") {
-                    $array[] = array(
-                        "idItem" => intval($idItem),
-                        "titulo" => $titulo,
-                        "creadoPor" => $creadoPor,
-                        "status" => $status,
-                        "tipo" => "INCIDENCIA",
-                        "tipoIncidencia" => $tipoIncidencia,
-                        "sMaterial" => $sMaterial,
-                        "sTrabajando" => $sTrabajando,
-                        "sEnergetico" => $sEnergetico,
-                        "sDepartamento" => $sDepartamento,
-                        "sEP" => $sEP,
-                        "comentario" => $comentario,
-                        "comentarioFecha" => $fecha,
-                        "ComentarioDe" => $ComentarioDe,
-                        "idSeccion" => intval($idSeccion),
-                        "idSubseccion" => intval($idSubseccion),
-                        "totalAdjuntos" => intval($totalAdjuntos)
-                    );
-                }
+                $array[] = array(
+                    "idItem" => intval($idItem),
+                    "titulo" => $titulo,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "tipo" => "INCIDENCIA",
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "sMaterial" => $sMaterial,
+                    "sTrabajando" => $sTrabajando,
+                    "sEnergetico" => $sEnergetico,
+                    "sDepartamento" => $sDepartamento,
+                    "sEP" => $sEP,
+                    "comentario" => $comentario,
+                    "comentarioFecha" => $fecha,
+                    "ComentarioDe" => $ComentarioDe,
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion),
+                    "totalAdjuntos" => intval($totalAdjuntos)
+                );
             }
         }
 
@@ -469,30 +475,6 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                $guardar = "SI";
-                if ($filtroFecha == "RANGO") {
-                    $guardar = "NO";
-                    if (strlen($rangoFecha) == 23 and $filtroFechaInicio != "" and $filtroFechaFin != "") {
-
-                        // TRATA LA FECHA SELECCIONADA POR EL USUARIO
-                        // $filtroFechaInicio = (new DateTime($filtroFechaInicio))->format('Y-m-d');
-                        // $filtroFechaFin = (new DateTime($filtroFechaFin))->format('Y-m-d');
-
-                        // TRATA LA FECHA DEL REGISTRO
-                        $rangoFecha = str_replace("/", "-", $rangoFecha);
-                        $rangoFecha = explode(" - ", $rangoFecha);
-                        $fechaInicio = (new DateTime($rangoFecha[0]))->format('Y-m-d');
-                        $fechaFin = (new DateTime($rangoFecha[1]))->format('Y-m-d');
-
-                        if ($fechaInicio >= date('Y-01-04') &&  $fechaInicio <= date('Y-01-05')) {
-                            $guardar = "SI";
-                        }
-                        // if ($fechaFin >= date('Y-01-05') && $fechaFin <= date('Y-01-05')) {
-                        //     $guardar = "SI";
-                        // }
-                    }
-                }
-
                 #DOCUMENTOS
                 $totalAdjuntos = 0;
                 $query = "SELECT count(id) 'total' FROM adjuntos_mp_np 
@@ -503,27 +485,25 @@ if (isset($_GET['action'])) {
                     }
                 }
 
-                if ($guardar == "SI") {
-                    $array[] = array(
-                        "idItem" => intval($idItem),
-                        "titulo" => $titulo,
-                        "creadoPor" => $creadoPor,
-                        "status" => $status,
-                        "tipo" => "GENERAL",
-                        "tipoIncidencia" => $tipoIncidencia,
-                        "sMaterial" => $sMaterial,
-                        "sTrabajando" => $sTrabajando,
-                        "sEnergetico" => $sEnergetico,
-                        "sDepartamento" => $sDepartamento,
-                        "sEP" => $sEP,
-                        "comentario" => $comentario,
-                        "comentarioFecha" => $fecha,
-                        "ComentarioDe" => $ComentarioDe,
-                        "idSeccion" => intval($idSeccion),
-                        "idSubseccion" => intval($idSubseccion),
-                        "totalAdjuntos" => intval($totalAdjuntos)
-                    );
-                }
+                $array[] = array(
+                    "idItem" => intval($idItem),
+                    "titulo" => $titulo,
+                    "creadoPor" => $creadoPor,
+                    "status" => $status,
+                    "tipo" => "GENERAL",
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "sMaterial" => $sMaterial,
+                    "sTrabajando" => $sTrabajando,
+                    "sEnergetico" => $sEnergetico,
+                    "sDepartamento" => $sDepartamento,
+                    "sEP" => $sEP,
+                    "comentario" => $comentario,
+                    "comentarioFecha" => $fecha,
+                    "ComentarioDe" => $ComentarioDe,
+                    "idSeccion" => intval($idSeccion),
+                    "idSubseccion" => intval($idSubseccion),
+                    "totalAdjuntos" => intval($totalAdjuntos)
+                );
             }
         }
 

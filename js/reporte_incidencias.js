@@ -286,6 +286,8 @@ const obtenerReporte = columna => {
                         }
                     }
                 }
+            } else {
+                alertaImg('No nay Datos', '', 'info', 1500);
             }
         })
         .then(() => {
@@ -305,15 +307,19 @@ const obtenerReporte = columna => {
 
 // CONTADOR DE RESULTADOS
 const contadorArray = array => {
-    var repetidos = {};
-    array.forEach(function (numero) {
-        repetidos[numero] = (repetidos[numero] || 0) + 1;
-    })
+    if (array) {
+        var repetidos = {};
+        array.forEach(function (numero) {
+            repetidos[numero] = (repetidos[numero] || 0) + 1;
+        })
 
-    for (const index in repetidos) {
-        if (element = document.querySelector('#cantidad_incidencias_' + index)) {
-            element.innerHTML = repetidos[index];
+        for (const index in repetidos) {
+            if (element = document.querySelector('#cantidad_incidencias_' + index)) {
+                element.innerHTML = repetidos[index];
+            }
         }
+    } else {
+        alertaImg('No nay Datos', '', 'info', 1500);
     }
 }
 

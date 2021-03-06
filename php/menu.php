@@ -296,4 +296,26 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
+
+    #OBTENER NOOTIFICACIONES
+    if ($action == "obtenerNotificaciones") {
+        $array = array();
+        $query = "SELECT id, tipo_notificacion, notificacion_telegram FROM t_notificaciones_telegram 
+        WHERE id_usuario = $idUsuario and status = 'PENDIENTE' and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idNotificacion = $x['id'];
+                $notifiacion = $x['notificacion_telegram'];
+                $tipo = $x['tipo_notificacion'];
+
+                $array[] = array(
+                    "idNotificacion" => intval($idNotificacion),
+                    "notificacion" => $notifiacion,
+                    "tipo" => $tipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
 }
