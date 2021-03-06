@@ -146,7 +146,7 @@
             </div>
 
             <div class="flex justify-center items-center text-xs w-full">
-                <button class="focus:outline-none focus:ring p-2 w-1/2 rounded-l-md  ring-lime-200 bg-lime-200 text-lime-900">
+                <button id="btnExportarExcel" class="focus:outline-none focus:ring p-2 w-1/2 rounded-l-md  ring-lime-200 bg-lime-200 text-lime-900">
                     Exportar excel
                 </button>
                 <button class="focus:outline-none focus:ring p-2 w-1/2 rounded-r-md  ring-lime-200 bg-purple-200 text-purple-900">

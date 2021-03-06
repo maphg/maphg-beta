@@ -298,18 +298,21 @@ const obtenerReporte = columna => {
             dataSolucionados.innerHTML = '';
             contenedorSeccion.innerHTML = '';
             contenedorSubsecciones.innerHTML = '';
+            loader.innerHTML = '';
         })
 }
 
 
 // CONTADOR DE RESULTADOS
 const contadorArray = array => {
-    console.log(array);
-    for (let x = 0; x < array.length; x++) {
-        const idSeccion = array[x];
-        if (valor = document.getElementById("cantidad_seccion_" + idSeccion)) {
-            valor.innerText = valor.innerText.parseInt() + 1;
-            console.log(valor);
+    var repetidos = {};
+    array.forEach(function (numero) {
+        repetidos[numero] = (repetidos[numero] || 0) + 1;
+    })
+
+    for (const index in repetidos) {
+        if (element = document.querySelector('#cantidad_incidencias_' + index)) {
+            element.innerHTML = repetidos[index];
         }
     }
 }
@@ -538,7 +541,6 @@ btnColumnaSecciones.addEventListener('click', async () => {
     contenedorSubsecciones.classList.add('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SECCION')`);
 
-    // obtenerReporte('SECCION');
     await crearContenedoresSecciones()
     await obtenerReporte('SECCION')
 })
@@ -555,7 +557,6 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     contenedorSubsecciones.classList.remove('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
 
-    // obtenerReporte('SUBSECCION');
     await obtenerReporte('SUBSECCION')
     await crearContenedoresSubsecciones(filtroSeccion.value)
 })
@@ -604,7 +605,7 @@ const crearContenedoresSecciones = () => {
                         <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
                             <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
                                 <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
-                                    <h1 id="cantidad_seccion_${idSeccion}">0</h1>
+                                    <h1 id="cantidad_incidencias_${idSeccion}">0</h1>
                                 </div>
                                 <h1 class="font-bold text-gray-500 uppercase text-sm text-${estilo}-500">${seccion}</h1>
                             </div>
@@ -659,12 +660,12 @@ const crearContenedoresSubsecciones = idSeccion => {
                         <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
                             <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
                                 <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
-                                    <h1 id="cantidad_subseccion_${idSubseccion}"></h1>
+                                    <h1 id="cantidad_incidencias_${idSubseccion}">0</h1>
                                 </div>
                                 <h1 class="font-bold text-gray-500 uppercase text-xxs text-${estilo}-500">${subseccion}</h1>
                             </div>
                             <div class="overflow-y-auto scrollbar px-1" style="max-height: 900px;">
-                                <div id="dataPendientesSubseccion_${idSubseccion}">0</div>
+                                <div id="dataPendientesSubseccion_${idSubseccion}"></div>
                              </div>
                         </div>
                     `;
@@ -690,6 +691,17 @@ filtroFecha.addEventListener('change', () => {
     }
 })
 
+
+btnExportarExcel.addEventListener('click', () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const filtroPalabraX = filtroPalabra.value.replace(/|=| |-|^|`|'|"|&/gi, '');
+
+    const URL = `php/exportar_excel_GET.php?action=reporteIncidencia&idDestino=${idDestino}&idUsuario=${idUsuario}&filtroPalabra=${filtroPalabraX}&filtroResponsable=${filtroResponsable.value}&filtroSeccion=${filtroSeccion.value}&filtroSubseccion=${filtroSubseccion.value}&filtroTipo=${filtroTipo.value}&filtroTipoIncidencia=${filtroTipoIncidencia.value}&filtroStatus=${filtroStatus.value}&filtroFecha=${filtroFecha.value}&filtroFechaInicio=${filtroFechaInicio.value}&filtroFechaFin=${filtroFechaFin.value}`;
+    // location.href = URL;
+    window.open(URL);
+})
 
 
 // INICIA FILTROS DEPUES DE CARGAR

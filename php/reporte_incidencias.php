@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
         }
 
         #FILTRO PALABRA
-        if ($filtroPalabra == "" and $filtroPalabra == " ") {
+        if ($filtroPalabra == "" || $filtroPalabra == " ") {
             $filtroPalabraIncidencias = "";
             $filtroPalabra_General = "";
             $filtroPalabra_Preventivo = "";
