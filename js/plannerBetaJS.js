@@ -1128,7 +1128,7 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
                   <i class="fas fa-edit mr-1 text-sm"></i>Editar</button>
                   
                   <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
-                  <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                  <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                   </button>
                   `
                   : status == "PENDIENTE" && tipo == "T" ?
@@ -1137,11 +1137,11 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
                      </button>
 
                      <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
-                        <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                        <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                      </button>`
                      :
                      `<button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold">
-                        <a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                        <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                      </button>                  
                   `;
 
@@ -3946,13 +3946,13 @@ const obtenerIncidenciaGeneral = (idIncidencia) => {
 
                if (extension == "png" || extension == "jpg" || extension == "jpeg") {
                   codigo = `
-                     <a href="https://www.maphg.com/beta/img/equipos/mpnp/${url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/beta/img/equipos/mpnp/${url})"></div>
+                     <a href="https://www.maphg.com/america/img/equipos/mpnp/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/img/equipos/mpnp/${url})"></div>
                      </a>
                   `;
                } else {
                   codigo = `
-                     <a href="https://www.maphg.com/beta/img/equipos/mpnp/${url}" target="_blank">
+                     <a href="https://www.maphg.com/america/img/equipos/mpnp/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -4270,11 +4270,11 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
 // ABRE OT DE INCIDENCIAS E INCICDENCIAS GENERALES
 function redireccionarOTVerEnPlanner(tipoOT, idOT) {
    if (tipoOT == "INCIDENCIA") {
-      window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#F${idOT}`, 'OT');
+      window.open(`https://www.maphg.com/america/OT_Fallas_Tareas/#F${idOT}`, 'OT');
    } else if (tipoOT == "INCIDENCIAGENERAL") {
-      window.open(`https://www.maphg.com/beta/OT_Fallas_Tareas/#T${idOT}`, 'OT');
+      window.open(`https://www.maphg.com/america/OT_Fallas_Tareas/#T${idOT}`, 'OT');
    } else if (tipoOT == "PDA") {
-      window.open(`https://www.maphg.com/beta/OT_proyectos/#P${idOT}`, 'OT');
+      window.open(`https://www.maphg.com/america/OT_proyectos/#P${idOT}`, 'OT');
    }
 }
 
@@ -4879,7 +4879,7 @@ btnAgregarActividadPlanaccionX.addEventListener('click', () => {
 btnAbrirOTPlanaccion.addEventListener('click', () => {
    let idPlanaccion = localStorage.getItem('idPlanaccion');
    if (idPlanaccion > 0) {
-      window.open(`https://www.maphg.com/beta/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
+      window.open(`https://www.maphg.com/america/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
    } else {
       alert(`OT #${idPlanaccion} No Encontrada`, 'info', 1500);
    }
@@ -5616,7 +5616,7 @@ function informacionEquipo(idEquipo) {
                e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
                e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
 
-               QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?${array.idEquipo}`);
+               QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/america/gestion_equipos/index.php?${array.idEquipo}`);
 
                if (array.localEquipo == "EQUIPO") {
                   btnPreventivosEquipo.classList.remove('hidden');
@@ -8055,7 +8055,7 @@ const datosFallasTareas = params => {
       '<div class="bg-yellow-300 w-6 h-6 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>EP</h1></div>'
       : '';
 
-   var fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+   var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
@@ -8249,7 +8249,7 @@ const codigoIncidenciasEquipo = params => {
       trabajandox = '';
    }
 
-   var fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+   var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
@@ -11343,9 +11343,9 @@ btnModalAgregarIncidencias.addEventListener('click', () => {
 });
 
 
-function iniciarFormularioInicidencias() {
-   abrirmodal("modalAgregarIncidencias");
-   rangoFechaX('rangoFechaIncidencia');
+async function iniciarFormularioInicidencias() {
+   await abrirmodal("modalAgregarIncidencias");
+   await rangoFechaX('rangoFechaIncidencia');
 
    //DESBLOQUE BOTONES PARA LANZAR EVENTO CLIC() 
    btnTGIncidencias.removeAttribute('disabled',);
@@ -11353,15 +11353,8 @@ function iniciarFormularioInicidencias() {
    btnLocalIncidencias.removeAttribute('disabled',);
 
    //LIMPIAR CONTENIDO 
-   seccionIncidencias.innerHTML = '<option value="0">Seleccione Sección</option>';
-   subseccionIncidencias.innerHTML = '<option value="0">Seleccione Subsección</option>';
-   equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione</option>';
    descripcionIncidencia.value = '';
    comentarioIncidencia.value = '';
-   responsablesIncidencias.value = 0;
-   seccionIncidencias.value = 0;
-   subseccionIncidencias.value = 0;
-   equipoLocalIncidencias.value = 0;
 
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
@@ -11374,115 +11367,98 @@ function iniciarFormularioInicidencias() {
    btnEquipoIncidencias.classList.remove('hidden');
    btnLocalIncidencias.classList.remove('hidden');
 
-   // ASIGNA VALORES POR DEFAULT
 
-   // OBTIENES SECCIONES INICIALES
+   // APLICA ESTILO PARA BTN
+   const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
 
-   const promesa = new Promise((resolve, reject) => {
-      const action = "obtenerSeccionesPorDestino";
-      const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-      fetch(URL)
+   if (idEquipo == 0) {
+      btnTGIncidencias.click();
+   } else {
+      await fetch(URL4)
          .then(array => array.json())
          .then(array => {
-
             if (array) {
-               for (let x = 0; x < array.length; x++) {
-                  const idSeccion = array[x].idSeccion;
-                  const seccion = array[x].seccion;
-                  const codigo = `<option value="${idSeccion}">${seccion}</option>`;
-
-                  seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+               if (array.localEquipo == "EQUIPO") {
+                  btnEquipoIncidencias.click();
+               } else if (array.localEquipo == "LOCAL") {
+                  btnLocalIncidencias.click();
                }
             }
          })
-         .then(() => {
-            seccionIncidencias.value = idSeccion;
-         })
-         .then(() => {
-            const action2 = "obtenerSubseccionPorSeccion";
-            const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+   }
 
-            fetch(URL2)
-               .then(array => array.json())
-               .then(array => {
-                  if (array) {
-                     for (let x = 0; x < array.length; x++) {
-                        const idSubseccion = array[x].idSubseccion;
-                        const subseccion = array[x].subseccion;
-                        const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
-                        subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
-                     }
-                  }
-               })
-               .then(() => {
-                  subseccionIncidencias.value = idSubseccion;
-               })
-               .catch(function (err) {
-                  fetch(APIERROR + err);
-               })
-         })
-         .then(() => {
-            const URL4 = `php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`
-            fetch(URL4)
-               .then(array => array.json())
-               .then(array => {
-                  if (array) {
-                     if (array.localEquipo == "EQUIPO") {
-                        btnEquipoIncidencias.click();
-                     } else if (array.localEquipo == "LOCAL") {
-                        btnLocalIncidencias.click();
-                     } else {
-                        btnTGIncidencias.click();
-                     }
-                  } else {
-                     btnLocalIncidencias.click();
-                  }
-               })
-         })
-         .then(() => {
-            const action3 = "obtenerEquipoLocal";
-            const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}&idSubseccion=${idSubseccion}&tipo=LOCALEQUIPO`;
 
-            fetch(URL3)
-               .then(array => array.json())
-               .then(array => {
-                  if (array) {
-                     for (let x = 0; x < array.length; x++) {
-                        const idEquipo = array[x].idEquipo;
-                        const equipo = array[x].equipo;
-                        const codigo = `<option value="${idEquipo}">${equipo}</option>`;
-                        equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
-                     }
-                  }
-               })
-               .then(() => {
-                  equipoLocalIncidencias.value = idEquipo;
-                  contenedorEquipoLocalIncidencias.classList.remove('hidden');
-                  seccionIncidencias.setAttribute('disabled', true);
-                  subseccionIncidencias.setAttribute('disabled', true);
-                  btnTGIncidencias.setAttribute('disabled', true);
-                  btnEquipoIncidencias.setAttribute('disabled', true);
-                  btnLocalIncidencias.setAttribute('disabled', true);
-                  equipoLocalIncidencias.setAttribute('disabled', true);
-               })
-               .catch(function (err) {
-                  fetch(APIERROR + err);
-               })
-         })
-         .catch(function (err) {
-            fetch(APIERROR + err);
-         })
-   })
+   // OBTIENE LA SECCION
+   const action = "obtenerSeccionesPorDestino";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+   await fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         seccionIncidencias.innerHTML = '<option value="0">Seleccione Sección</option>';
+         seccionIncidencias.value = 0;
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const seccion = array[x].seccion;
+               const codigo = `<option value="${idSeccion}">${seccion}</option>`;
 
+               seccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .then(() => {
+         seccionIncidencias.value = idSeccion;
+      })
+      .catch(function (err) {
+         seccionIncidencias.innerHTML = '<option value="0">Seleccione Sección</option>';
+         fetch(APIERROR + err);
+      })
+
+
+   // OBTIENE SUBSECCIONES
+   const action2 = "obtenerSubseccionPorSeccion";
+   const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${idSeccion}`;
+
+   await fetch(URL2)
+      .then(array => array.json())
+      .then(array => {
+         subseccionIncidencias.innerHTML = '<option value="0">Seleccione Subsección</option>';
+         subseccionIncidencias.value = 0;
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idSubseccion = array[x].idSubseccion;
+               const subseccion = array[x].subseccion;
+               const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+               subseccionIncidencias.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .then(() => {
+         subseccionIncidencias.value = idSubseccion;
+      })
+      .catch(function (err) {
+         subseccionIncidencias.innerHTML = '<option value="0">Seleccione Subsección</option>';
+         fetch(APIERROR + err);
+      })
 
 
    // OBTIENES USUARIOS INICIALES
-   responsablesIncidencias.innerHTML = '<option value="0">Seleccion Responsable</option>';
-   responsablesIncidencias.value = 0;
-   const action4 = "obtenerUsuarios";
-   const URL4 = `php/select_REST_planner.php?action=${action4}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
-   fetch(URL4)
+   const action5 = "obtenerUsuarios";
+   const URL5 = `php/select_REST_planner.php?action=${action5}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   await fetch(URL5)
       .then(array => array.json())
+      .then(array => {
+         responsablesIncidencias.innerHTML = '<option value="0">Seleccion Responsable</option>';
+         responsablesIncidencias.value = 0;
+         return array;
+      })
       .then(array => {
          if (array) {
             for (let x = 0; x < array.length; x++) {
@@ -11496,6 +11472,42 @@ function iniciarFormularioInicidencias() {
          }
       })
       .catch(function (err) {
+         fetch(APIERROR + err);
+      })
+
+
+   // ASIGNA EQUIPO, LOCAL O TG
+   const action3 = "obtenerEquipoPorId";
+   const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   await fetch(URL3)
+      .then(array => array.json())
+      .then(array => {
+         equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione</option>';
+         equipoLocalIncidencias.value = 0;
+
+         return array;
+      })
+      .then(array => {
+         if (array) {
+            const idEquipoX = array.idEquipo;
+            const equipo = array.equipo;
+            const codigo = `<option value="${idEquipoX}">${equipo}</option>`;
+            equipoLocalIncidencias.insertAdjacentHTML('beforeend', codigo);
+         }
+      })
+      .then(() => {
+         equipoLocalIncidencias.value = idEquipo;
+         contenedorEquipoLocalIncidencias.classList.remove('hidden');
+         seccionIncidencias.setAttribute('disabled', true);
+         subseccionIncidencias.setAttribute('disabled', true);
+         btnTGIncidencias.setAttribute('disabled', true);
+         btnEquipoIncidencias.setAttribute('disabled', true);
+         btnLocalIncidencias.setAttribute('disabled', true);
+         equipoLocalIncidencias.setAttribute('disabled', true);
+      })
+      .catch(function (err) {
+         equipoLocalIncidencias.innerHTML = '<option value="0">Seleccione</option>';
          fetch(APIERROR + err);
       })
 }
@@ -11975,7 +11987,7 @@ btnGraficasReportesDiario.addEventListener('click', () => {
          settingUpdated: function (key, oldValue, newValue) {
             switch (key) {
                case 'videoId':
-                  iframe.src = `https://www.maphg.com/beta/graficas_reportes_diario/`;
+                  iframe.src = `https://www.maphg.com/america/graficas_reportes_diario/`;
                   break;
             }
          },

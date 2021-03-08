@@ -2236,7 +2236,7 @@ function informacionEquipo(idEquipo) {
                     e_caudalAireM3HEquipo.value = array.caudal_aire_m3h;
                     e_caudalAireCFMEquipo.value = array.caudal_aire_cfm;
 
-                    QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/beta/gestion_equipos/index.php?${array.idEquipo}`);
+                    QREquipo.setAttribute("src", `https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&bgcolor=fff&color=4a5568&data=www.maphg.com/america/gestion_equipos/index.php?${array.idEquipo}`);
 
                     if (array.localEquipo == "EQUIPO") {
                         btnPreventivosEquipo.classList.remove('hidden');
@@ -2826,7 +2826,7 @@ const codigoIncidenciasEquipo = params => {
         trabajandox = '';
     }
 
-    var fOT = `<a href="https://www.maphg.com/beta/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+    var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
 
     if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
         var statusX = 'S-PENDIENTE';
@@ -3268,10 +3268,10 @@ function consultarPlanEquipo(idEquipo) {
                             consultarPlanEquipo(idEquipo);
                         }, 1100)
                     } else {
-                        contenedorPlanesEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/beta/svg/SINPREVENTIVOS.svg"></h1>';
+                        contenedorPlanesEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>';
                     }
                 } else {
-                    contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/beta/svg/SINPREVENTIVOS.svg"></h1>`;
+                    contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>`;
                 }
             }
         }
@@ -3431,10 +3431,10 @@ function consultarPlanLocal(idEquipo) {
                             consultarPlanLocal(idEquipo);
                         }, 1100)
                     } else {
-                        contenedorChecklistEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/beta/svg/SINPREVENTIVOS.svg"></h1>';
+                        contenedorChecklistEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>';
                     }
                 } else {
-                    contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/beta/svg/SINPREVENTIVOS.svg"></h1>`;
+                    contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>`;
                 }
             }
         },

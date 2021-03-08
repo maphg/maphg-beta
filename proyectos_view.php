@@ -298,7 +298,6 @@
                 </div>
 
                 <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
-
                     <div id="contenedorImagenesJP">
                         <div class="font-bold divide-y">
                             <h1 class="text-left">IMÁGENES</h1>
@@ -308,17 +307,14 @@
                     </div>
 
                     <div id="contenedorDocumentosJP">
-
                         <div class="font-bold divide-y mb-4">
                             <h1 class="text-left">DOCUMENTOS</h1>
                             <p> </p>
                         </div>
                         <div id="dataAdjuntosProyecto" class="flex flex-col overflow-y-auto scrollbar" style="max-height: 20vh;"></div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
     <!-- MODAL EDITAR INFORMACION -->

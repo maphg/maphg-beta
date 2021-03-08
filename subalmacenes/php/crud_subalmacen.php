@@ -1133,7 +1133,7 @@ if (isset($_POST['action'])) {
                 <input id=\"$idSubalmacenItemsGlobales\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"number\" name=\"cantidad\" placeholder=\"#\" 
 
                 // Evento para Calcular Cantidades.
-                onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58)validarCantidadEntradaSubalmacen($idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual);\">
+                onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58) validarCantidadEntradaSubalmacen($idSubalmacenItemsGlobales, $idSubalmacenItemsStock, $stockActual);\">
             </div>
           </div>        
         ";
@@ -1377,7 +1377,7 @@ if (isset($_POST['action'])) {
                 <input id=\"$idSubalmacenItemsGlobales\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"number\" name=\"cantidad\" placeholder=\"#\" 
 
                 // Evento para Calcular Cantidades.
-                onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58 | event.keyCode == 38 | event.keyCode == 40)validarCantidadMovimientoSubalmacen($idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual);\">
+                onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58 | event.keyCode == 38 | event.keyCode == 40)validarCantidadMovimientoSubalmacen($idSubalmacenItemsGlobales, $idSubalmacenItemsStock, $stockActual);\">
             </div>
           </div>        
         ";

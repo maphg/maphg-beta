@@ -8,7 +8,7 @@ function comprobarSession() {
 
     // Comprueba que exista la session.
     if (idUsuario == '' || idDestino == '') {
-        location.replace("https://www.maphg.com/beta/login.php");
+        location.replace("https://www.maphg.com/america/login.php");
         // location.replace("http://localhost/maphg-beta/login.php");
     }
 }

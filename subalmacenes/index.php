@@ -4,29 +4,6 @@ session_start();
 // Estas variables son Globales y nunca deben cambiar su valor, porque es la raiz de la session.
 $destinoT = $_SESSION['idDestino'];
 $usuario = $_SESSION['usuario'];
-
-if ($destinoT == "" and $usuario == "") {
-    header('Location: ../login.php');
-}
-
-// Variables Globales.
-$arrayDestino = array(1 => "RM", 7 => "CMU", 2 => "PVR", 6 => "MBJ", 5 => "PUJ", 11 => "CAP", 3 => "SDQ", 4 => "SSA", 10 => "AME");
-$idDestino = $_SESSION['idDestino'];
-
-$queryNombre = "SELECT nombre, apellido FROM t_users 
-INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-WHERE t_users.id = $usuario";
-if ($resultNombre = mysqli_query($conn_2020, $queryNombre)) {
-    if ($rowNombre = mysqli_fetch_array($resultNombre)) {
-        $nombre = $rowNombre['nombre'];
-        $apellido = $rowNombre['apellido'];
-        $nombreUsuario = $nombre . " " . $apellido;
-    }
-} else {
-    $nombreUsuario = "ND";
-}
-
-mysqli_close($conn_2020);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -43,7 +20,7 @@ mysqli_close($conn_2020);
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-gray-300" style="font-family: 'Roboto', sans-serif;">
+<body class="bg-gray-300 scrollbar h-screen" style="font-family: 'Roboto', sans-serif;">
 
     <!-- Inputs Hidden para Guardar Información Temporal -->
     <input type="hidden" id="inputIdDestinoSeleccionado" value="<?= $destinoT; ?>">
@@ -54,15 +31,18 @@ mysqli_close($conn_2020);
     <input type="hidden" id="inputResultadosXLS">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'php/navbartopJS.php';
-        include 'php/menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20"></menu-sidebar>
+
+    <!-- CONFIGURACIONES SIDEBAR -->
+    <configuracion-telegram></configuracion-telegram>
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
-    <div class="container mx-auto pt-16">
+    <div class="container mx-auto sm:pt-3">
         <div class="flex flex-col justify-evenly items-center w-full">
             <div class="container flex flex-col bg-gray-800 rounded-b-md z-10" style="border-top-left-radius: 1.3rem; border-top-right-radius: 1.3rem;">
                 <div class="flex flex-row w-full m-3 items-center justify-start relative">
@@ -73,7 +53,7 @@ mysqli_close($conn_2020);
                         <h1>Sub Almacenes & Bodegas</h1>
                     </div>
                     <div class="absolute right-0 mr-10">
-                        <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales();"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
+                        <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales(); abrirmodal('modalBusquedaGeneral')"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
                             General</button>
                         <button data-target="modalInformes" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
                     </div>
@@ -116,7 +96,7 @@ mysqli_close($conn_2020);
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalExistenciasSubalmacen')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalExistenciasSubalmacen')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -203,7 +183,7 @@ mysqli_close($conn_2020);
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -231,7 +211,7 @@ mysqli_close($conn_2020);
 
                         <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off">
 
-                        <button onclick="toggleModalTailwind('modalCarritoSalidas'); recuperarCarrito();" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
+                        <button onclick="abrirmodal('modalCarritoSalidas'); recuperarCarrito();" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
                         </button>
 
                         <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoSalidasConfirmar() ;">
@@ -289,7 +269,7 @@ mysqli_close($conn_2020);
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalCarritoSalidas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalCarritoSalidas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -409,7 +389,7 @@ mysqli_close($conn_2020);
         <div class="modal-window rounded-md pt-10" style="width: 1300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalSubalmacenEntradas');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalSubalmacenEntradas');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -438,7 +418,7 @@ mysqli_close($conn_2020);
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
                         <input id="inputPablabraBuscarEntradas" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) entradasSubalmacen();">
-                        <button data-target="modalConfirmacionEntradas" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="consultaEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
+                        <button data-target="modalConfirmacionEntradas" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="consultaEntradaCarrito(); abrirmodal('modalConfirmacionEntradas')"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
                             Entrada</button>
                         <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoEntradasConfirmar();">
                             <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
@@ -496,7 +476,7 @@ mysqli_close($conn_2020);
         <div class="modal-window rounded-md pt-10" style="width: 1300px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalMoverItems')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalMoverItems')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -574,7 +554,7 @@ mysqli_close($conn_2020);
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalConfirmarMovimiento');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalConfirmarMovimiento');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -658,7 +638,7 @@ mysqli_close($conn_2020);
         <div class="modal-window rounded-md pt-10 z-" style="width:600px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalConfirmacionEntradas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalConfirmacionEntradas')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -721,7 +701,7 @@ mysqli_close($conn_2020);
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalBusquedaGeneral')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalBusquedaGeneral')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -796,7 +776,7 @@ mysqli_close($conn_2020);
                     <!-- TITULOS -->
 
 
-                    <div id="dataTodosItems" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
+                    <div id="dataTodosItems" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 64vh;">
                     </div>
                 </div>
             </div>
@@ -810,7 +790,7 @@ mysqli_close($conn_2020);
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
-                <button onclick="toggleModalTailwind('modalAgregarItem')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                <button onclick="cerrarmodal('modalAgregarItem')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -903,7 +883,10 @@ mysqli_close($conn_2020);
     <script src="js/acordion.js" type="text/javascript"></script>
     <script src="js/subalmacenJS.js" type="text/javascript"></script>
     <script src="js/alertasSweet.js" type="text/javascript"></script>
-    <script src="js/complemento_menuJS.js" type="text/javascript"></script>
+
+    <!-- MENU JS -->
+    <script src="../js/menu_sub.js"></script>
+    <!-- MENU JS -->
     <script>
         function expandir(id) {
             let idtoggle = id + 'toggle';

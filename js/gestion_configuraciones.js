@@ -963,7 +963,7 @@ document.getElementById("btnGestionCargos").addEventListener("click", async func
 
 // OPCIÓN PARA REGRESAR A WWW.MAPHG.COM
 document.getElementById("btnSalir").addEventListener("click", function () {
-    window.location = "https://www.maphg.com/beta/index.php";
+    window.location = "https://www.maphg.com/america/index.php";
 })
 
 

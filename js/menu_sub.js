@@ -33,9 +33,8 @@ class menuSidebar extends HTMLElement {
                                     <span id="cargoUsuario" class="text-sm text-gray-600"></span>
                                 </div>
                                 <span class="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden relative">
-                                    <img id="avatarUsuario" src="../planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo"
-                                        class="h-full w-full object-cover">
-                                        <input id="subirAvatarUsuario" type="file" class="opacity-0 h-12 w-full absolute top-0" style="left:-10px;">
+                                    <img id="avatarUsuario" src="../planner/avatars/AVATAR_ID_0_0.svg" alt="user profile photo" class="h-full w-full object-cover">
+                                        <input id="subirAvatarUsuario" type="file" class="hidden md:flex md:flex-col md:items-end md:leading-tight opacity-0 h-12 w-full absolute top-0" style="left:-10px;">
                                 </span>
                                 <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"
                                     class="hidden sm:block h-6 w-6 text-gray-300">
@@ -63,7 +62,7 @@ class menuSidebar extends HTMLElement {
                         <div id="configuracionesUsuario"
                             class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-20 animated hidden">
                             <div class="py-2">
-                                <a href="#"
+                                <a id="btnAbrirNotificaciones" href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8  flex flex-none justify-center items-center "><img src="../svg/campana.svg"
                                             class="w-full" alt=""></div>
@@ -73,7 +72,7 @@ class menuSidebar extends HTMLElement {
                                         Incidencias aignadas.
                                     </p>
                                 </a>
-                                <a href="#"
+                                <a id="btnAbrirAgenda" href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
                                             src="../svg/calendario.svg" class="w-full" alt=""></div>
@@ -81,7 +80,7 @@ class menuSidebar extends HTMLElement {
                                         Agenda Personal
                                     </p>
                                 </a>
-                                <a href="#"
+                                <a id="btnAbrirFavoritos" href="#"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
                                             src="../svg/favoritos2.svg" class="w-full" alt=""></div>
@@ -89,7 +88,7 @@ class menuSidebar extends HTMLElement {
                                         Favoritos
                                     </p>
                                 </a>
-                                <a href="#" onclick="modalOpenClose('modalConfigurarTelegram')"
+                                <a id="btnAbrirTelegram" href="#" onclick="modalOpenClose('modalConfigurarTelegram')"
                                     class="flex items-center px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2">
                                     <div class="h-8 w-8 flex flex-none justify-center items-center "><img
                                             src="../svg/logo_telegram.svg" class="w-full" alt=""></div>
@@ -189,100 +188,226 @@ class menu extends HTMLElement {
     }
 }
 
-class telegram extends HTMLElement {
+
+class nofiticaciones extends HTMLElement {
     constructor() {
         super();
+        this.clases;
     }
 
+    static get observedAttributes() {
+        return ['clases'];
+    }
+
+    attributeChangedCallback(nameAtr, oldValue, newValue) {
+        this.clases = newValue;
+    }
     connectedCallback() {
         this.innerHTML = `
-            <!-- MODAL RESPONSABLE -->
-            <div id="modalConfigurarTelegram" class="modal">
-                <div class="modal-window rounded-md pt-10" style="width: 300px;">
-                    <!-- BOTON CERRARL -->
-                    <div class="absolute top-0 right-0">
-                        <button onclick="modalOpenClose('modalConfigurarTelegram')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <!-- INDICACION -->
-                    <div class="absolute top-0 left-0 flex flex-row items-center">
-                        <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                            <h1>CONFIGURAR TELEGRAM</h1>
+            <div id="contenedorNotifiaciones" class="hidden w-full absolute top-0 right-0 z-50 bg-gray-900 bg-opacity-50 animated ${this.clases}">
+                <div class="flex justify-end h-screen absolute top-0 right-0 animated">
+                    <div class="w-72 p-2 flex flex-col" style="background-color: #5B30AD;">
+                        <div class="p-2 mb-2 text-xs text-justify flex flex-col h-12 flex items-center justify-center relative overflow-hidden">
+                            <img src="../svg/noti.gif" class="w-24 absolute" alt="">
+                            <div id="btnCerrarNotificaciones" class=" absolute top-0 right-0 text-gray-400 hover:text-cyan-200">
+                                <button><i class="fal fa-times p-2 fa-lg"></i></button>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- CONTENIDO -->
-                    <div class="flex flex-col justify-center items-center flex-col w-full pb-3">
-                        <h1 class="py-2 text-blue-300 text-sm">Escanea el QR e Ingresa el Código de Acceso</h1>
-                        <div class="flex justify-center items-center w-full px-1 text-center">
-                            <img src="../svg/QR_BotMaphg.png" width="250px" alt="">
-                        </div>
-
-                        <div class="mt-5 w-full px-2 flex justify-center items-center">
-
-                            <input id="codigoTelegram" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none" type="text" placeholder="Ingrese Código Acceso" autocomplete="off" max-length="0">
-
-                            <button id="btnCodigoTelegram" class="cursor-pointer text-md  text-blue-500  bg-blue-200 h-10 ml-1 px-2 rounded-md rounded-tr-md font-normal">
-                                <i class="fas fa-check"></i> Verificar
-                            </button>
+                        <div class="flex flex-col overflow-y-auto scrollbar" style="max-height: 100%">
+                            <div id="dataNotifiaciones"></div>
                         </div>
                     </div>
                 </div>
-            </div>       
+                <div id="notificacionesBG" class="h-screen animated"></div>
+            </div>
+        `;
+    }
+}
+
+class telegram extends HTMLElement {
+    constructor() {
+        super();
+        this.clases;
+    }
+
+    static get observedAttributes() {
+        return ['clases'];
+    }
+
+    attributeChangedCallback(nameAtr, oldValue, newValue) {
+        this.clases = newValue;
+    }
+    connectedCallback() {
+        this.innerHTML = `
+            <div id="contenedorTelegram" class="hidden w-full absolute top-0 z-50 bg-gray-900 bg-opacity-50 animated ${this.clases}">
+                <div class="w-72 flex flex-col bg-white animated absolute top-0 right-0 h-screen">
+                    <div class=" w-72 p-2 flex flex-col bg-white">
+                        <div class="p-2 mb-2 text-xs text-justify flex flex-col h-12 flex items-center justify-center relative overflow-hidden">
+                            <img src="../svg/telegram.gif" class="absolute" alt="">
+                            <div id="btnCerrarTelegram" class="absolute top-0 right-0 text-gray-400 hover:text-cyan-200">
+                                <button><i class="fal fa-times p-2 fa-lg"></i></button>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer p-4">
+                            <img src="../svg/qr.svg" class="" alt="">
+                            <h1 class="font-semibold text-justify mt-2">1) Escanea el codigo QR con la cámara de tu movil</h1>
+                            <h1 class="font-semibold text-justify mt-2">2) Preciona iniciar en el BOT</h1>
+                            <h1 class="font-semibold text-justify mt-2">3) Ingresa a continuacion tu código</h1>
+                            <input id="codigoTelegram" type="text" placeholder="Ingresa tu codigo" class="p-2 mt-2 bg-blue-200 text-blue-500 rounded">
+                            <button id="btnCodigoTelegram" class="bg-blue-300 mt-2 rounded text-white py-1">Vincular</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="telegramBG" class="h-screen animated"></div>
+            </div>
+        `;
+    }
+}
+
+class agenda extends HTMLElement {
+    constructor() {
+        super();
+        this.clases;
+    }
+
+    static get observedAttributes() {
+        return ['clases'];
+    }
+
+    attributeChangedCallback(nameAtr, oldValue, newValue) {
+        this.clases = newValue;
+    }
+    connectedCallback() {
+        this.innerHTML = `
+            <div id="contenedorAgenda" class="hidden w-full absolute top-0 z-50 bg-gray-900 bg-opacity-50 animated ${this.clases}">
+                <div class="w-72 flex flex-col bg-white shadow-md animated absolute top-0 right-0 h-screen">
+                    <div class=" w-72 p-2 flex flex-col bg-white shadow-md" >
+                        <div class="p-2 mb-2 text-xs text-justify flex flex-col h-12 flex items-center justify-center relative overflow-hidden">
+                            <img src="../svg/agenda.gif" class="absolute w-20" alt="">
+                            <div id="btnCerrarAgenda" class=" absolute top-0 right-0 text-gray-400 hover:text-cyan-200">
+                                <button><i class="fal fa-times p-2 fa-lg"></i></button>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer p-2 ">
+                        <div class="bg-gray-100 p-2">
+                            <h1>Nada para hoy...</h1>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="agendaBG" class="h-screen animated"></div>
+            </div>
+        `;
+    }
+}
+
+class favoritos extends HTMLElement {
+    constructor() {
+        super();
+        this.clases;
+    }
+
+    static get observedAttributes() {
+        return ['clases'];
+    }
+
+    attributeChangedCallback(nameAtr, oldValue, newValue) {
+        this.clases = newValue;
+    }
+    connectedCallback() {
+        this.innerHTML = `
+            <div id="contenedorFavoritos" class="hidden w-full absolute top-0 z-50 bg-gray-900 bg-opacity-50 animated ${this.clases}">
+                <div class="w-72 p-2 flex flex-col bg-white shadow-md animated absolute top-0 right-0 h-screen">
+                    <div class="p-2 mb-2 text-xs text-justify flex flex-col h-12 flex items-center justify-center relative overflow-hidden">
+                        <img src="../svg/favo.gif" class="absolute" alt="">
+                        <div id="btnCerrarFavoritos" class="absolute top-0 right-0 text-gray-400 hover:text-cyan-200">
+                            <button><i class="fal fa-times p-2 fa-lg"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow p-2 rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer">
+                        <div class="flex w-full items-center">
+                            <div class="w-6 h-6 bg-red-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                <h1 class="font-bold text-red-500">I</h1>
+                            </div>
+                            <div>
+                                <p><span>"fuga en piscina principal"</span> tipo <span class="font-bold">ALARMA</span> </p>
+                                <p class="font-sans text-center">ZHP/ALBERCAS GP</p>
+                            </div>
+                        </div>
+                        <div class="w-full flex mt-1 justify-evenly">
+                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                            <button class="w-20 py-1 text-yellow-500 hover:text-gray-200 rounded"><i class="fas fa-star"></i></button>
+                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow p-2 rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer">
+                        <div class="flex w-full items-center">
+                            <div class="w-6 h-6 bg-blue-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                <h1 class="font-bold text-blue-500">MP</h1>
+                            </div>
+                            <div>
+                                <p><span>"Lavadora principal 01"</span> <span class="font-bold">OT-2136523</span> </p>
+                                <p class="font-sans text-center">ZIL/LAVADORAS</p>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex mt-1 justify-evenly">
+                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                            <button class="w-20 py-1 text-yellow-500 hover:text-gray-200 rounded"><i class="fas fa-star"></i></button>
+                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow p-2 rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer">
+                        <div class="flex w-full items-center">
+                            <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                <h1 class="font-bold text-purple-500">P</h1>
+                            </div>
+                            <div>
+                                <p><span>"Proyecto cambio de chiller"</span> <span class="font-bold">INICIAR</span> </p>
+                                <p class="font-sans text-center">ZIC/CHILLERS/PROYECTOS</p>
+                            </div>
+                        </div>
+                        <div class="w-full flex mt-1 justify-evenly">
+                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                            <button class="w-20 py-1 text-yellow-500 hover:text-gray-200 rounded"><i class="fas fa-star"></i></button>
+                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow p-2 rounded-md mb-2 text-xs text-justify flex flex-col cursor-pointer">
+                        <div class="flex w-full items-center">
+                            <div class="w-6 h-6 bg-green-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                <h1 class="font-bold text-green-500 text-xxs">DOC</h1>
+                            </div>
+                            <div>
+                                <p><span>"Ficha tecnica"</span> <span class="font-bold">PDF</span> </p>
+                                <p class="font-sans text-center">ARCHIVO ADJUNTO</p>
+                            </div>
+                        </div>
+                        <div class="w-full flex mt-1 justify-evenly">
+                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                            <button class="w-20 py-1 text-yellow-500 hover:text-gray-200 rounded"><i class="fas fa-star"></i></button>
+                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="favoritosBG" class="h-screen animated"></div>
+            </div>
         `;
     }
 }
 
 
-class telegram extends HTMLElement {
-    constructor() {
-        super();
-    }
-
-    connectedCallback() {
-        this.innerHTML = `
-            <!-- MODAL RESPONSABLE -->
-            <div id="modalConfigurarTelegram" class="modal">
-                <div class="modal-window rounded-md pt-10" style="width: 300px;">
-                    <!-- BOTON CERRARL -->
-                    <div class="absolute top-0 right-0">
-                        <button onclick="modalOpenClose('modalConfigurarTelegram')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <!-- INDICACION -->
-                    <div class="absolute top-0 left-0 flex flex-row items-center">
-                        <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
-                            <h1>CONFIGURAR TELEGRAM</h1>
-                        </div>
-                    </div>
-
-                    <!-- CONTENIDO -->
-                    <div class="flex flex-col justify-center items-center flex-col w-full pb-3">
-                        <h1 class="py-2 text-blue-300 text-sm">Escanea el QR e Ingresa el Código de Acceso</h1>
-                        <div class="flex justify-center items-center w-full px-1 text-center">
-                            <img src="../svg/QR_BotMaphg.png" width="250px" alt="">
-                        </div>
-
-                        <div class="mt-5 w-full px-2 flex justify-center items-center">
-
-                            <input id="codigoTelegram" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none" type="text" placeholder="Ingrese Código Acceso" autocomplete="off" max-length="0">
-
-                            <button id="btnCodigoTelegram" class="cursor-pointer text-md  text-blue-500  bg-blue-200 h-10 ml-1 px-2 rounded-md rounded-tr-md font-normal">
-                                <i class="fas fa-check"></i> Verificar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>       
-        `;
-    }
-}
 
 window.customElements.define("menu-sidebar", menuSidebar);
 window.customElements.define("menu-menu", menu);
 window.customElements.define("configuracion-telegram", telegram);
+window.customElements.define("menu-notificaciones", nofiticaciones);
+window.customElements.define("menu-favoritos", favoritos);
+window.customElements.define("menu-agenda", agenda);
 
 
 const btnAbrirMenu = document.querySelector('#btnAbrirMenu');
@@ -304,7 +429,24 @@ const incidenciasAsignadasUsuario = document.querySelector('#incidenciasAsignada
 const avatarMenuUsuario = document.querySelector('#avatarMenuUsuario');
 const codigoTelegram = document.querySelector('#codigoTelegram');
 const menuBG = document.querySelector('#menuBG');
+const contenedorNotifiaciones = document.querySelector('#contenedorNotifiaciones');
+const notificacionesBG = document.querySelector('#notificacionesBG');
+const btnCerrarNotificaciones = document.querySelector('#btnCerrarNotificaciones');
+const btnAbrirNotificaciones = document.querySelector('#btnAbrirNotificaciones');
+const btnAbrirAgenda = document.querySelector('#btnAbrirAgenda');
+const btnAbrirFavoritos = document.querySelector('#btnAbrirFavoritos');
+const btnAbrirConfiguracionesTelegram = document.querySelector('#btnAbrirConfiguracionesTelegram');
+const contenedorFavoritos = document.querySelector('#contenedorFavoritos');
+const btnCerrarFavoritos = document.querySelector('#btnCerrarFavoritos');
+const favoritosBG = document.querySelector('#favoritosBG');
+const telegramBG = document.querySelector('#telegramBG');
+const btnCerrarTelegram = document.querySelector('#btnCerrarTelegram');
+const contenedorTelegram = document.querySelector('#contenedorTelegram');
+const btnAbrirTelegram = document.querySelector('#btnAbrirTelegram');
+const dataNotifiaciones = document.querySelector('#dataNotifiaciones');
 
+
+// MENU
 btnCerrarMenu.addEventListener('click', () => {
     contenedorMenu.classList.remove('fadeIn');
     contenedorMenu.children[0].classList.remove('fadeInLeft');
@@ -316,11 +458,6 @@ btnCerrarMenu.addEventListener('click', () => {
     }, 1200);
 })
 
-menuBG.addEventListener('click', () => {
-    btnCerrarMenu.click();
-})
-
-
 // ABRIR MENU
 btnAbrirMenu.addEventListener('click', () => {
     contenedorMenu.classList.remove('hidden');
@@ -330,11 +467,120 @@ btnAbrirMenu.addEventListener('click', () => {
     contenedorMenu.children[0].classList.add('fadeInLeft');
 })
 
+menuBG.addEventListener('click', () => {
+    btnCerrarMenu.click();
+})
+
+
+// NOTIFICACIONES
+btnCerrarNotificaciones.addEventListener('click', () => {
+    contenedorNotifiaciones.classList.remove('fadeIn');
+    contenedorNotifiaciones.children[0].classList.remove('fadeInRight');
+    contenedorNotifiaciones.classList.add('fadeOut');
+    contenedorNotifiaciones.children[0].classList.add('fadeOutRight');
+
+    setTimeout(() => {
+        contenedorNotifiaciones.classList.add('hidden');
+    }, 1000);
+})
+
+// ABRIR NOTIFICACIONES
+btnAbrirNotificaciones.addEventListener('click', () => {
+    contenedorNotifiaciones.classList.remove('hidden');
+    contenedorNotifiaciones.classList.remove('fadeOut');
+    contenedorNotifiaciones.children[0].classList.remove('fadeOutRight');
+    contenedorNotifiaciones.classList.add('fadeIn');
+    contenedorNotifiaciones.children[0].classList.add('fadeInRight');
+    obtenerNotificaciones();
+})
+
+notificacionesBG.addEventListener('click', () => {
+    btnCerrarNotificaciones.click();
+})
+
+
+// FAVORITOS
+btnCerrarFavoritos.addEventListener('click', () => {
+    contenedorFavoritos.classList.remove('fadeIn');
+    contenedorFavoritos.children[0].classList.remove('fadeInRight');
+    contenedorFavoritos.classList.add('fadeOut');
+    contenedorFavoritos.children[0].classList.add('fadeOutRight');
+
+    setTimeout(() => {
+        contenedorFavoritos.classList.add('hidden');
+    }, 1000);
+})
+
+// ABRIR FAVORITOS
+btnAbrirFavoritos.addEventListener('click', () => {
+    contenedorFavoritos.classList.remove('hidden');
+    contenedorFavoritos.classList.remove('fadeOut');
+    contenedorFavoritos.children[0].classList.remove('fadeOutRight');
+    contenedorFavoritos.classList.add('fadeIn');
+    contenedorFavoritos.children[0].classList.add('fadeInRight');
+})
+
+favoritosBG.addEventListener('click', () => {
+    btnCerrarFavoritos.click();
+})
+
+
+// TELEGRAM
+btnCerrarTelegram.addEventListener('click', () => {
+    contenedorTelegram.classList.remove('fadeIn');
+    contenedorTelegram.children[0].classList.remove('fadeInRight');
+    contenedorTelegram.classList.add('fadeOut');
+    contenedorTelegram.children[0].classList.add('fadeOutRight');
+
+    setTimeout(() => {
+        contenedorTelegram.classList.add('hidden');
+    }, 1000);
+})
+
+// ABRIR TELEGRAM
+btnAbrirTelegram.addEventListener('click', () => {
+    contenedorTelegram.classList.remove('hidden');
+    contenedorTelegram.classList.remove('fadeOut');
+    contenedorTelegram.children[0].classList.remove('fadeOutRight');
+    contenedorTelegram.classList.add('fadeIn');
+    contenedorTelegram.children[0].classList.add('fadeInRight');
+})
+
+telegramBG.addEventListener('click', () => {
+    btnCerrarTelegram.click();
+})
+
+
+// TELEGRAM
+btnCerrarAgenda.addEventListener('click', () => {
+    contenedorAgenda.classList.remove('fadeIn');
+    contenedorAgenda.children[0].classList.remove('fadeInRight');
+    contenedorAgenda.classList.add('fadeOut');
+    contenedorAgenda.children[0].classList.add('fadeOutRight');
+
+    setTimeout(() => {
+        contenedorAgenda.classList.add('hidden');
+    }, 1000);
+})
+
+// ABRIR AGENDA
+btnAbrirAgenda.addEventListener('click', () => {
+    contenedorAgenda.classList.remove('hidden');
+    contenedorAgenda.classList.remove('fadeOut');
+    contenedorAgenda.children[0].classList.remove('fadeOutRight');
+    contenedorAgenda.classList.add('fadeIn');
+    contenedorAgenda.children[0].classList.add('fadeInRight');
+})
+
+agendaBG.addEventListener('click', () => {
+    btnCerrarAgenda.click();
+})
+
 
 // OBTIENE LAS OPCIONES DE CONFIGURACIONES DEL USUARIO
 btnConfiguracionesUsuario.addEventListener('click', () => {
     destinosUsuario.classList.add('hidden');
-
+    obtenerInformacionUsuario();
     configuracionesUsuario.classList.contains('hidden') ?
         configuracionesUsuario.classList.remove('hidden') :
         configuracionesUsuario.classList.add('hidden');
@@ -351,6 +597,7 @@ btnDestinosUsuario.addEventListener('click', () => {
 })
 
 
+// VALIDA CODIGO TELEGRAM
 btnCodigoTelegram.addEventListener('click', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -358,14 +605,14 @@ btnCodigoTelegram.addEventListener('click', () => {
     const action = "comprobarCodigoTelegram";
     const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&chatID=${codigoTelegram.value}`;
 
-    if (codigoTelegram.value.length == 9) {
+    if (codigoTelegram.value.length >= 8) {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
                 if (array == 1) {
                     alertaImg('Código Actualizado', '', 'success', 1500);
                     codigoTelegram.value = '';
-                    modalOpenClose('modalConfigurarTelegram');
+                    btnCerrarTelegram.click();
                 } else {
                     alertaImg('Escannea de Nuevo', '', 'info', 1500);
                 }
@@ -379,15 +626,8 @@ btnCodigoTelegram.addEventListener('click', () => {
     }
 })
 
-codigoTelegram.addEventListener('keyup', (event) => {
-    if ((event.key >= 0 && event.key <= 9) && (codigoTelegram.value.length <= 9)) {
-    } else {
-        alertaImg('Código Incorrecto', '', 'error', 1500);
-        codigoTelegram.value = '';
-    }
-})
 
-
+// SUBE AVATAR DEL USUARIO
 subirAvatarUsuario.addEventListener('change', () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -429,6 +669,7 @@ subirAvatarUsuario.addEventListener('change', () => {
 })
 
 
+// OBTIENE Y CREA CONTENIDO DEL MENU
 const obtenerMenu = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -512,6 +753,7 @@ const obtenerMenu = () => {
 }
 
 
+// OBTIENE LOS DESTINOS ASIGNADOS AL USUARIO
 const obtenerDestinosUsuario = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -533,11 +775,11 @@ const obtenerDestinosUsuario = () => {
                     const ubicacion = array[x].ubicacion;
                     const codigo = `
                         <a href="#" class="flex items-start px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-700 -mx-2 flex-col" onclick="actualizarDestino('${destino}', ${idDestinoX})">
-                            <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold leading-none font-bold">
-                                ${ubicacion}
+                            <p class="text-gray-600 dark:text-white text-sm mx-2 leading-none font-bold">
+                                ${destino}
                             </p>
                             <p class="text-gray-600 dark:text-white text-sm mx-2 font-semibold leading-none text-xs">
-                                ${destino}
+                                ${ubicacion}
                             </p>
                         </a>            
                     `;
@@ -552,6 +794,7 @@ const obtenerDestinosUsuario = () => {
 }
 
 
+// OBTIENE DATOS DEL USUARIO
 const obtenerInformacionUsuario = () => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
@@ -584,6 +827,8 @@ const cerrarSesion = () => {
     location.href = '../login.php';
 }
 
+
+// ESTILO PARA MENU LATERAL
 const toggleMenu = menu => {
     if (array = document.getElementsByClassName(menu)) {
         for (let x = 0; x < array.length; x++) {
@@ -600,11 +845,14 @@ const toggleMenu = menu => {
     }
 }
 
+
+// ACTUALIZA DESTINO
 const actualizarDestino = (destino, idDestino) => {
     localStorage.setItem('idDestino', idDestino);
     destinoUsuario.innerText = destino;
     destinosUsuario.classList.add('hidden');
 }
+
 
 // FUNCION EXTRA PARA LIMITAR ENLACES
 const abrirEnlace = tipoEnlace => {
@@ -617,6 +865,90 @@ const abrirEnlace = tipoEnlace => {
         .then(array => {
             if (array) {
                 window.open(array.url, "Inventarios", "witdh=900, height=800")
+            }
+        })
+        .catch(function (err) {
+            fetch(APIERROR + err);
+        })
+}
+
+
+// OBTIENE LAS NOTIFICACIONES DEL USUARIO
+const obtenerNotificaciones = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerNotificaciones";
+    const URL = `../php/menu.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            console.log(array)
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idNotificacion = array[x].idNotificacion;
+                    const notificacion = array[x].notificacion;
+                    const tipo = array[x].tipo;
+
+                    const codigo = tipo == 'INCIDENCIA' ?
+                        `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-red-500">
+                            <div class="flex w-full items-center">
+                                <div class="w-6 h-6 bg-red-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                    <h1 class="font-bold text-red-500">I</h1>
+                                </div>
+                                <p>${notificacion}</p>
+                            </div>
+                            <div class="w-full flex mt-1 justify-evenly">
+                                <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>`
+                        : tipo == 'PDA' ?
+                            `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
+                                <div class="flex w-full items-center">
+                                    <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                        <h1 class="font-bold text-purple-500 text-xxs">PDA</h1>
+                                    </div>
+                                    <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">Plan de accion</span>"Lorem ipsum dolor sit" en el proyecto <span class="font-bold">NOMBRE DEL PORYECTO</span></p>
+                                </div>
+                                <div class="w-full flex mt-1 justify-evenly">
+                                    <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                    <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                    <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                </div>
+                            </div>`
+                            : tipo == 'PROYECTO' ?
+                                `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-purple-500">
+                                    <div class="flex w-full items-center">
+                                        <div class="w-6 h-6 bg-purple-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                            <h1 class="font-bold text-purple-500">P</h1>
+                                        </div>
+                                        <p><span class="font-bold">Pedro rego</span> te asigno un <span class="font-bold">PROYECTO</span> "Lorem ipsum dolor sit" en <span class="font-bold">ZIA</span></p>
+                                    </div>
+                                    <div class="w-full flex mt-1 justify-evenly">
+                                        <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                        <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                        <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </div>`
+                                : tipo == 'MP' ?
+                                    `<div class="bg-white shadow p-2 rounded-r mb-2 text-xs text-justify flex flex-col border-l-2 border-blue-500">
+                                        <div class="flex w-full items-center">
+                                            <div class="w-6 h-6 bg-blue-200 flex-none rounded-full mr-2 flex items-center justify-center">
+                                                <h1 class="font-bold text-blue-500">MP</h1>
+                                            </div>
+                                            <p><span class="font-bold">Pedro rego</span> te asigno una <span class="font-bold">OT MP</span> numero <span class="text-red-500 font-bold uppercase text-xxs">12312</span> "Lorem ipsum dolor sit "</p>
+                                        </div>
+                                        <div class="w-full flex mt-1 justify-evenly">
+                                            <button class="w-20 py-1 text-gray-200 hover:text-blue-500 rounded"><i class="fas fa-eye"></i></button>
+                                            <button class="w-20 py-1 text-gray-200 hover:text-yellow-500 rounded"><i class="fas fa-star"></i></button>
+                                            <button class="w-20 py-1 text-gray-200 hover:text-red-500 rounded"><i class="fas fa-trash-alt"></i></button>
+                                        </div>
+                                    </div>`
+                                    : '';
+                    dataNotifiaciones.insertAdjacentHTML('beforeend', codigo);
+                }
             }
         })
         .catch(function (err) {

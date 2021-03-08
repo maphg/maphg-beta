@@ -2,25 +2,7 @@
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 // API PARA REPORTE DE ERRORES
 
-const arrayDestino = { 1: "RM", 7: "CMU", 2: "PVR", 6: "MBJ", 5: "PUJ", 11: "CAP", 3: "SDQ", 4: "SSA", 10: "AME" };
 
-
-function toggleModalTailwind(idModal) {
-  $("#" + idModal).toggleClass('open');
-}
-
-
-// Funciones Principales para el Menu, donde se selecciona el destino.
-(function () {
-  let idDestinoDefault = localStorage.getItem('idDestino');
-  $("#destinoSeleccionado").html(arrayDestino[idDestinoDefault]);
-}());
-
-function idDestinoSeleccionado(idDestinoSeleccionado) {
-  $("#inputIdDestinoSeleccionado").val(idDestinoSeleccionado);
-  $("#destinoSeleccionado").html(arrayDestino[idDestinoSeleccionado]);
-}
-// Fin de Funciones principales para seleccionar el menu.
 
 
 function consultaSubalmacen() {
@@ -77,7 +59,6 @@ function eliminarSubalmacen(idSubalmacen = 0, nombre = 'error') {
       },
       // dataType: "json",
       success: function (response) {
-        // console.log(response);
         consultaSubalmacen();
       }
     });
@@ -145,7 +126,6 @@ async function editarSubalmacen(idSubalmacen, nombre) {
         tituloSubalmacen: tituloSubalmacen
       },
       success: function (response) {
-        // console.log('--' + response + '--');
         consultaSubalmacen();
         alertaImg(response, 'text-green-300', 'success', 3000);
       }
@@ -172,7 +152,6 @@ function busquedaExisenciaSubalmacen() {
 function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
   $("#modalExistenciasSubalmacen").addClass('open');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  // console.log(idSubalmacen, idDestinoSeleccionado);
   const action = "consultaExistenciasSubalmacen";
   $.ajax({
     type: "POST",
@@ -189,7 +168,6 @@ function consultaExistenciasSubalmacen(idSubalmacen, palabraBuscar) {
       alertaImg(' Resultados Obtenidos: ' + data.totalResultados, 'text-orange-300', 'success', 3000);
       $("#nombreSubalmacen").html(data.nombreSubalmacen);
       $("#faseSubalmacen").html(data.faseSubalmacen);
-      // console.log(data);
     }
   });
 }
@@ -408,7 +386,6 @@ function carritoSalidaMotivo(paso) {
       // dataType: "json",
       success: function (data) {
         $("#carritoSalidaSeccion").html(data);
-        // console.log(data);
       }
     });
   }
@@ -428,7 +405,6 @@ function carritoSalidaMotivo(paso) {
       // dataType: "json",
       success: function (data) {
         $("#carritoSalidaSubseccion").html(data);
-        // console.log(data);
       }
     });
   }
@@ -451,7 +427,6 @@ function carritoSalidaMotivo(paso) {
       // dataType: "json",
       success: function (data) {
         $("#carritoSalidaEquipo").html(data);
-        // console.log(data);
       }
     });
   }
@@ -472,7 +447,6 @@ function carritoSalidaMotivo(paso) {
       // dataType: "json",
       success: function (data) {
         $("#carritoSalidaPendiente").html(data);
-        // console.log(data);
       }
     });
   }
@@ -494,7 +468,6 @@ function carritoSalidaMotivo(paso) {
       // dataType: "json",
       success: function (data) {
         $("#carritoSalidaPendiente").html(data);
-        // console.log(data);
       }
     });
   }
@@ -729,7 +702,7 @@ function entradasSubalmacen() {
   });
 }
 
-function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
+function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
   let cantidadEntrada = $("#" + idItemGlobal).val();
   let idSubalmacen = localStorage.getItem('idSubalmacen');
@@ -737,15 +710,13 @@ function validarCantidadEntradaSubalmacen(idItemGlobal, idStock, descripcionItem
 
   if (cantidadEntrada > 0.0) {
     capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual);
-    // console.log(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual);
   } else {
-    alertaImg('Cantidad No Valida (' + cantidadEntrada + ')' + descripcionItem, '', 'question', 3000);
+    alertaImg('Cantidad No Valida (' + cantidadEntrada + ')', '', 'question', 3000);
   }
 }
 
 
 function capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual) {
-  // console.log('Aqui');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "capturarEntradaSubalmacenStock";
   $.ajax({
@@ -767,7 +738,6 @@ function capturarEntraSubalmacenStock(idStock, idSubalmacen, idItemGlobal, canti
       } else {
         alertaImg('Intente de Nuevo', '', 'question', 3000);
       }
-      // console.log(data);
     }
   });
 }
@@ -820,7 +790,6 @@ function confirmarEntradaCarrito() {
     contador++;
     if (element > 0) {
       var index = indexCantidadInput[contador];
-      // console.log(index);
       finalizarEntradaCarrito(index, idSubalmacen, idDestinoSeleccionado);
     }
   });
@@ -839,7 +808,6 @@ function finalizarEntradaCarrito(idItemGlobal, idSubalmacen, idDestinoSelecciona
     },
     // dataType: "json",
     success: function (data) {
-      // console.log(data);
       if (data == 1) {
         alertaImg(' Entradas Finalizas', '', 'success', 3000);
         // $("#" + idItemGlobal).val(0);
@@ -932,27 +900,24 @@ function movimientoExistenciasItems() {
   });
 }
 
-function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, descripcionItem, stockActual) {
+function validarCantidadMovimientoSubalmacen(idItemGlobal, idStock, stockActual) {
   // $idSubalmacenItemsGlobales, $idSubalmacenItemsStock, '$descripcion', $stockActual
   var cantidadEntrada = $("#" + idItemGlobal).val();
-  // console.log('S;' + cantidadEntrada);
   let idSubalmacen = localStorage.getItem('idSubalmacen');
   cantidadEntrada = parseFloat(cantidadEntrada);
-  // console.log('C;' + cantidadEntrada);
 
   if (cantidadEntrada >= 0.0) {
     if (cantidadEntrada <= stockActual) {
       capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual);
     } else {
-      alertaImg('Cantidad No Valida (' + cantidadEntrada + ')' + descripcionItem, '', 'question', 3000);
+      alertaImg('Cantidad No Valida (' + cantidadEntrada + ')', '', 'question', 3000);
     }
   } else {
-    alertaImg('Cantidad No Valida (' + cantidadEntrada + ')' + descripcionItem, '', 'question', 3000);
+    alertaImg('Cantidad No Valida (' + cantidadEntrada + ')', '', 'question', 3000);
   }
 }
 
 function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, cantidadEntrada, stockActual) {
-  // console.log('Aqui');
   let idDestinoSeleccionado = localStorage.getItem('idDestino');
   const action = "capturarMovimientoSubalmacenStock";
   $.ajax({
@@ -969,13 +934,11 @@ function capturarMovimientoSubalmacenStock(idStock, idSubalmacen, idItemGlobal, 
     },
     // dataType: "json",
     success: function (data) {
-      // console.log(data);
       if (data != "error") {
         alertaImg('Stock' + data, '', 'success', 3500);
       } else {
         alertaImg('Intente de Nuevo', '', 'question', 3500);
       }
-      // console.log(data);
     }
   });
 }
@@ -995,7 +958,6 @@ function consultaMovimientoCarrito() {
     },
     dataType: "json",
     success: function (data) {
-      // console.log(data);
       if (data.dataMovimientos != "") {
 
         $("#dataMovimientosCarrito").html(data.dataMovimientos);
@@ -1036,17 +998,13 @@ function confirmarMovimientoCarrito() {
     idRegistro.pop();
     idInput.pop();
     let longitudArray = idRegistro.length;
-    // console.log(idRegistro);
-    // console.log(longitudArray);
     let contador = -1;
 
     idRegistro.forEach(element => {
       contador++;
-      // console.log(element);
       if (contador >= 0) {
         // var idRegistro_aux = idRegistro[contador];
         var idItemGlobal = idInput[contador];
-        // console.log('*: ' + element, '*: ' + idItemGlobal);
         finalizarMovimientosCarrito(element, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal);
       }
     });
@@ -1056,7 +1014,6 @@ function confirmarMovimientoCarrito() {
 }
 
 function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal) {
-  // console.log(idRegistro, idOpcionSubalmacen, idDestinoSeleccionado, idItemGlobal);
 
   const action = "finalizarMovimientoCarrito";
   $.ajax({
@@ -1071,7 +1028,6 @@ function finalizarMovimientosCarrito(idRegistro, idOpcionSubalmacen, idDestinoSe
     },
     // dataType: "json",
     success: function (data) {
-      // console.log(data);
       if (data == 2) {
 
         alertaImg('Se agrego Item con Stock', '', 'success', 3000);
@@ -1125,6 +1081,9 @@ function obtenerTodosItemsGlobales() {
     .then(array => array.json())
     .then(array => {
       contenedor.innerHTML = '';
+      return array;
+    })
+    .then(array => {
 
       if (array.length > 0) {
         for (let x = 0; x < array.length; x++) {
@@ -1179,8 +1138,8 @@ function obtenerTodosItemsGlobales() {
       }
     })
     .catch(function (err) {
-      fetch(APIERROR + err);
       contenedor.innerHTML = '';
+      fetch(APIERROR + err);
     })
 
 
@@ -1322,8 +1281,8 @@ function generarXLSItems(tipoXLS) {
   }
 }
 
-// Función por Default, para mostrar subalmacén según la session.
-consultaSubalmacen();
 
-
-document.getElementById("destinosSelecciona").addEventListener("click", consultaSubalmacen);
+window.addEventListener('load', () => {
+  consultaSubalmacen();
+  document.getElementById("destinosSelecciona").addEventListener("click", consultaSubalmacen);
+})
