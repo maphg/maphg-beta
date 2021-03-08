@@ -170,19 +170,32 @@
 
         <div class="flex flex-row justify-start items-start w-full overflow-x-auto scrollbar relative">
 
-            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 my-auto mx-2 bg-gray-200 py-8 rounded">
+            <div class="flex flex-col flex-wrap justify-center tems-center w-22rem leading-none text-bluegray-100 mr-4 mx-2 bg-gray-200 py-8 rounded">
 
-                <div class="flex flex-row justify-center items-center w-full">
+                <div class="flex flex-row text-left justify-center items-center w-full">
                     <p id="dia" class="font-semibold dia">--</p>
                 </div>
-                <div class="flex flex-row justify-center items-center w-full">
+
+                <div class="flex flex-row text-left justify-center items-center w-full">
                     <p id="mes" class="font-semibold dia">--</p>
                 </div>
-                <div class="flex flex-row justify-center items-center w-full">
-                    <p id="hora" class="font-semibold text-md"></p>
+
+                <div class="flex flex-row text-left justify-center items-center w-full">
+                    <p class="font-semibold text-md text-left w-20">
+                        <i class="fas fa-calendar-week"></i>
+                        <span><?= date('W'); ?></span>
+                    </p>
                 </div>
-                <div class="flex flex-row justify-center items-center w-full">
-                    <p class="font-semibold text-md">
+
+                <div class="flex flex-row text-left justify-center items-center w-full py-1">
+                    <p class="font-semibold text-md text-left w-20">
+                        <i class="fas fa-clock"></i>
+                        <span id="hora"></span>
+                    </p>
+                </div>
+
+                <div class="flex flex-row text-left justify-center items-center w-full">
+                    <p class="font-semibold text-md text-left w-20">
                         <i class="fas fa-map-marker-alt mt-1"></i>
                         <span id="nombreDestino"></span>
                     </p>

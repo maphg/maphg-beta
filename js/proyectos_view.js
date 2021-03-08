@@ -1222,9 +1222,7 @@ function statusPlanaccionx(status) {
 // EVENTO PARA BUSCAR EN TABLA #dataProyectos
 document.getElementById("palabraProyecto").addEventListener('keyup', function () {
     buscadorTabla('dataProyectos', 'palabraProyecto', 3);
-});
-
-obtenerProyectosGlobal('PENDIENTE');
+})
 
 
 // toggleClass Modal TailWind con la clase OPEN.
@@ -1233,3 +1231,19 @@ function toggleModalTailwind(idModal) {
         document.getElementById(idModal).classList.toggle("open");
     }
 }
+
+
+window.addEventListener('load', () => {
+    let idDestino = window.location.hash.replace('#', '');
+    console.log(idDestino);
+    if (idDestino > 0) {
+        localStorage.setItem('idDestino', idDestino);
+        obtenerProyectosGlobal('PENDIENTE');
+    } else {
+        alertaImg('URL No Valido', '', 'info', 1500);
+        
+        setTimeout(() => {
+            window.location = 'https://www.google.com';
+        }, 1500);
+    }
+})
