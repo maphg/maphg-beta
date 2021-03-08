@@ -223,7 +223,7 @@ if (isset($_POST['action'])) {
                 $_SESSION['super_admin'] = $superAdmin;
 
                 // NOTIFICACIÓN
-                $APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
+                $APIERROR = 'https://api.telegram.org/bot1554234492:AAF0PYB2DcDse14JJMYiMWoei2TyF0IQJu0/sendMessage?chat_id=989320528&text=';
                 file_get_contents($APIERROR . "Acceso: $usuario | $nombre | $destino");
 
                 $array[0] = array(

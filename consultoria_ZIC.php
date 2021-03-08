@@ -10,6 +10,8 @@
     <link rel="shortcut icon" href="svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/animate.css">
+
 </head>
 
 <body class="bg-red-400 h-screen scrollbar">

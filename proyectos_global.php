@@ -83,8 +83,7 @@
 
     <!-- MENÚ -->
     <menu-menu></menu-menu>
-    <menu-sidebar clases="shadow"></menu-sidebar>
-    <!-- MENÚ -->
+    <menu-sidebar clases="z-20 shadow"></menu-sidebar>
 
     <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
@@ -93,7 +92,6 @@
     <menu-telegram clases="h-screen"></menu-telegram>
     <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
-
 
     <div class="w-full">
 

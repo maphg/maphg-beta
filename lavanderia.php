@@ -24,7 +24,7 @@
 
     <!-- MENÚ -->
     <menu-menu></menu-menu>
-    <menu-sidebar clases="z-10 sticky top-0 shadow-sm"></menu-sidebar>
+    <menu-sidebar clases="z-20 sticky top-0 shadow-sm"></menu-sidebar>
 
     <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
@@ -198,7 +198,7 @@
             document.getElementById("pestañaCamaras").classList.remove('border-l', 'border-t', 'border-r', 'rounded-t');
             document.getElementById("pestañaPendientes").classList.add('border-l', 'border-t', 'border-r', 'rounded-t');
 
-            document.getElementById("iframPendientes").src = 'https://www.maphg.com/america/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
+            document.getElementById("iframPendientes").src = 'modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=' + idUsuario + '&idDestino=' + idDestino;
         }
 
         window.addEventListener('load', () => {
