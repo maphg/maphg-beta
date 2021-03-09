@@ -81,16 +81,15 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $unidad = $row['unidad'];
         $ubicacion = $row['ubicacion'];
 
-
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $categoria);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cod2bend);
         $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $gremio);
         $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $descripcion);
         $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $caracteristicas);
         $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $marca);
-        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $stockTeorico);
-        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $stockActual);
-        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $unidad);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $unidad);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $stockTeorico);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $stockActual);
         $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $ubicacion);
         //Inicializa variables.
 
