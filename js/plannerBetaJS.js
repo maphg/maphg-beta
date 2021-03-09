@@ -1128,7 +1128,7 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
                   <i class="fas fa-edit mr-1 text-sm"></i>Editar</button>
                   
                   <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
-                  <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                  <a href="OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                   </button>
                   `
                   : status == "PENDIENTE" && tipo == "T" ?
@@ -1137,11 +1137,11 @@ const obtenerPendientesIncidencias = tipoBusqueda => {
                      </button>
 
                      <button class="mx-1 py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-1/3 font-semibold">
-                        <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                        <a href="OT_Fallas_Tareas/#${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                      </button>`
                      :
                      `<button class="py-1 px-2 my-2 rounded-md bg-blue-200 text-blue-500 hover:shadow-sm w-full font-semibold">
-                        <a href="https://www.maphg.com/america/OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
+                        <a href="OT_Fallas_Tareas/#F${tipo + idIncidencia}" class="text-blue-500" target="_blank"><i class="fas fa-file-pdf mr-1  text-xsm"></i> PDF</a>
                      </button>                  
                   `;
 
@@ -3647,13 +3647,13 @@ function obtenerIncidenciaEquipos(idIncidencia) {
 
                   if (extension == "png" || extension == "jpg" || extension == "jpeg") {
                      codigo = `
-                     <a href="https://www.maphg.com/america/planner/tareas/adjuntos/${url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/tareas/adjuntos/${url})"></div>
+                     <a href="planner/tareas/adjuntos/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(planner/tareas/adjuntos/${url})"></div>
                      </a>
                   `;
                   } else {
                      codigo = `
-                     <a href="https://www.maphg.com/america/planner/tareas/adjuntos/${url}" target="_blank">
+                     <a href="planner/tareas/adjuntos/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -3946,13 +3946,13 @@ const obtenerIncidenciaGeneral = (idIncidencia) => {
 
                if (extension == "png" || extension == "jpg" || extension == "jpeg") {
                   codigo = `
-                     <a href="https://www.maphg.com/america/img/equipos/mpnp/${url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/img/equipos/mpnp/${url})"></div>
+                     <a href="img/equipos/mpnp/${url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(img/equipos/mpnp/${url})"></div>
                      </a>
                   `;
                } else {
                   codigo = `
-                     <a href="https://www.maphg.com/america/img/equipos/mpnp/${url}" target="_blank">
+                     <a href="img/equipos/mpnp/${url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -4270,11 +4270,11 @@ function actualizarStatusIncidencia(idIncidencia, columna, valor) {
 // ABRE OT DE INCIDENCIAS E INCICDENCIAS GENERALES
 function redireccionarOTVerEnPlanner(tipoOT, idOT) {
    if (tipoOT == "INCIDENCIA") {
-      window.open(`https://www.maphg.com/america/OT_Fallas_Tareas/#F${idOT}`, 'OT');
+      window.open(`OT_Fallas_Tareas/#F${idOT}`, 'OT');
    } else if (tipoOT == "INCIDENCIAGENERAL") {
-      window.open(`https://www.maphg.com/america/OT_Fallas_Tareas/#T${idOT}`, 'OT');
+      window.open(`OT_Fallas_Tareas/#T${idOT}`, 'OT');
    } else if (tipoOT == "PDA") {
-      window.open(`https://www.maphg.com/america/OT_proyectos/#P${idOT}`, 'OT');
+      window.open(`OT_proyectos/#P${idOT}`, 'OT');
    }
 }
 
@@ -4714,13 +4714,13 @@ function verEnPlannerPlanaccion(idPlanaccion) {
 
                if (tipo == "jpg" || tipo == "png" || tipo == "jpeg") {
                   codigo = `
-                     <a href="${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url}" target="_blank">
-                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url})"></div>
+                     <a href="${'planner/proyectos/planaccion/' + url}" target="_blank">
+                        <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(${'planner/proyectos/planaccion/' + url})"></div>
                      </a>
                   `;
                } else {
                   codigo = `
-                     <a href="${'https://www.maphg.com/america/planner/proyectos/planaccion/' + url}" target="_blank">
+                     <a href="${'planner/proyectos/planaccion/' + url}" target="_blank">
                         <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
                            <i class="fad fa-file-alt fa-3x"></i>
                            <p class="text-sm font-normal ml-2">
@@ -4879,7 +4879,7 @@ btnAgregarActividadPlanaccionX.addEventListener('click', () => {
 btnAbrirOTPlanaccion.addEventListener('click', () => {
    let idPlanaccion = localStorage.getItem('idPlanaccion');
    if (idPlanaccion > 0) {
-      window.open(`https://www.maphg.com/america/OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
+      window.open(`OT_proyectos/#P${idPlanaccion}`, 'OT PLANACCIÓN');
    } else {
       alert(`OT #${idPlanaccion} No Encontrada`, 'info', 1500);
    }
@@ -6283,7 +6283,7 @@ function obtenerImagenesEquipo(idEquipo) {
             document.getElementById("dataImagenes").innerHTML = '';
             document.getElementById("dataImagenesEquipo").innerHTML = `
                <div id="modalMedia_adjunto_img_xxx" class="relative">
-                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/equipos/equipo.png)">
+                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/equipos/equipo.png)">
                   </div>
                </div>
             `;
@@ -8055,7 +8055,7 @@ const datosFallasTareas = params => {
       '<div class="bg-yellow-300 w-6 h-6 rounded-full flex justify-center items-center text-yellow-600 mr-1"><h1>EP</h1></div>'
       : '';
 
-   var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+   var fOT = `<a href="OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
@@ -8249,7 +8249,7 @@ const codigoIncidenciasEquipo = params => {
       trabajandox = '';
    }
 
-   var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+   var fOT = `<a href="OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
    if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
       var statusX = 'S-PENDIENTE';
       var fResponsable = `onclick="obtenerUsuarios('asignarMC', ${idRegistro});"`;
@@ -11987,7 +11987,7 @@ btnGraficasReportesDiario.addEventListener('click', () => {
          settingUpdated: function (key, oldValue, newValue) {
             switch (key) {
                case 'videoId':
-                  iframe.src = `https://www.maphg.com/america/graficas_reportes_diario/`;
+                  iframe.src = `graficas_reportes_diario/`;
                   break;
             }
          },

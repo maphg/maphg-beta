@@ -222,10 +222,6 @@ if (isset($_POST['action'])) {
                 $_SESSION['idDestino'] = $idDestino;
                 $_SESSION['super_admin'] = $superAdmin;
 
-                // NOTIFICACIÓN
-                $APIERROR = 'https://api.telegram.org/bot1554234492:AAF0PYB2DcDse14JJMYiMWoei2TyF0IQJu0/sendMessage?chat_id=989320528&text=';
-                file_get_contents($APIERROR . "Acceso: $usuario | $nombre | $destino");
-
                 $array[0] = array(
                     "idUsuario" => intval($idUsuario),
                     "idDestino" => intval($idDestino),
@@ -235,6 +231,11 @@ if (isset($_POST['action'])) {
                     "superAdmin" => $superAdmin,
                     "acceso" => "ACCESO"
                 );
+
+                // NOTIFICACIÓN
+                $APIAcceso = 'https://api.telegram.org/bot1554234492:AAF0PYB2DcDse14JJMYiMWoei2TyF0IQJu0/sendMessage?chat_id=989320528&text=';
+
+                @file_get_contents($APIAcceso . "Acceso: $usuario | $nombre | $destino");
             }
         }
         echo json_encode($array);

@@ -228,7 +228,7 @@
             document.getElementById("pestañaCamaras").classList.remove('border-l', 'border-t', 'border-r', 'rounded-t');
             document.getElementById("pestañaPendientes").classList.add('border-l', 'border-t', 'border-r', 'rounded-t');
 
-            document.getElementById("iframPendientes").src = 'https://www.maphg.com/america/modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=0&idDestino=' + idDestino;
+            document.getElementById("iframPendientes").src = '../modalPendientes.php?idSeccion=11&tipoPendiente=MCS&idUsuario=0&idDestino=' + idDestino;
         }
     </script>
 

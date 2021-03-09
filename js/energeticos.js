@@ -3123,7 +3123,7 @@ function ganttS() {
 function generarOTPlanaccion(idPlanaccion) {
     alertaImg('Generando... OT #' + idPlanaccion, '', 'success', 1200);
     localStorage.setItem('URL', idPlanaccion);
-    let URL = 'https://www.maphg.com/america/OT_proyectos/';
+    let URL = '../OT_proyectos/';
     window.open(URL, "OT PROYECTO #" + idPlanaccion, "width=1300px, height=900px");
 }
 

@@ -2540,8 +2540,8 @@ const obtenerAdjuntosEquipo = idEquipo => {
                     if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                         codigo = `
                             <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
-                                <a href="https://www.maphg.com/america/planner/equipos/${url}" target="_blank">
-                                <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/equipos/${url})">
+                                <a href="../planner/equipos/${url}" target="_blank">
+                                <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
                                 </div>
                                 </a>
                                 <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
@@ -2552,7 +2552,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
                     } else {
                         codigo = `
                             <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
-                                <a href="https://www.maphg.com/america/planner/equipos/${url}" target="_blank" data-title="${url}">
+                                <a href="../planner/equipos/${url}" target="_blank" data-title="${url}">
                                 <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
                                     <i class="fad fa-file-contract fa-3x"></i>
                                     <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
@@ -2644,8 +2644,8 @@ const obtenerCotizacionesEquipo = idEquipo => {
                     if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                         codigo = `
                      <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
-                        <a href="https://www.maphg.com/america/planner/equipos/${url}" target="_blank">
-                           <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/equipos/${url})">
+                        <a href="../planner/equipos/${url}" target="_blank">
+                           <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
                            </div>
                         </a>
                         <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'COTIZACIONEQUIPO');">
@@ -2656,7 +2656,7 @@ const obtenerCotizacionesEquipo = idEquipo => {
                     } else {
                         codigo = `
                      <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
-                        <a href="https://www.maphg.com/america/planner/equipos/${url}" target="_blank" data-title="${url}">
+                        <a href="../planner/equipos/${url}" target="_blank" data-title="${url}">
                            <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
                               <i class="fad fa-file-contract fa-3x"></i>
                               <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
@@ -2826,7 +2826,7 @@ const codigoIncidenciasEquipo = params => {
         trabajandox = '';
     }
 
-    var fOT = `<a href="https://www.maphg.com/america/OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+    var fOT = `<a href="OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
 
     if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
         var statusX = 'S-PENDIENTE';
@@ -3098,7 +3098,7 @@ function obtenerImagenesEquipo(idEquipo) {
                 document.getElementById("dataImagenes").innerHTML = '';
                 document.getElementById("dataImagenesEquipo").innerHTML = `
                <div id="modalMedia_adjunto_img_xxx" class="relative">
-                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(https://www.maphg.com/america/planner/equipos/equipo.png)">
+                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/equipo.png)">
                   </div>
                </div>
             `;
@@ -3268,10 +3268,10 @@ function consultarPlanEquipo(idEquipo) {
                             consultarPlanEquipo(idEquipo);
                         }, 1100)
                     } else {
-                        contenedorPlanesEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>';
+                        contenedorPlanesEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="../svg/SINPREVENTIVOS.svg"></h1>';
                     }
                 } else {
-                    contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>`;
+                    contenedorPlanesEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="../svg/SINPREVENTIVOS.svg"></h1>`;
                 }
             }
         }
@@ -3431,10 +3431,10 @@ function consultarPlanLocal(idEquipo) {
                             consultarPlanLocal(idEquipo);
                         }, 1100)
                     } else {
-                        contenedorChecklistEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>';
+                        contenedorChecklistEquipo.innerHTML = '<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="../svg/SINPREVENTIVOS.svg"></h1>';
                     }
                 } else {
-                    contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="https://www.maphg.com/america/svg/SINPREVENTIVOS.svg"></h1>`;
+                    contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="../svg/SINPREVENTIVOS.svg"></h1>`;
                 }
             }
         },
