@@ -7049,6 +7049,7 @@ function consultaAdjuntosOT(idOT) {
    let idUsuario = localStorage.getItem('usuario');
    const action = "consultarAdjuntosOT";
    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}`;
+
    fetch(URL)
       .then(res => res.json())
       .then(array => {
@@ -7060,29 +7061,39 @@ function consultaAdjuntosOT(idOT) {
          let imagenes = '';
          let documentos = '';
 
-         for (let i = 0; i < array.length; i++) {
-            const id = array[i].id;
-            const nombre = array[i].nombre;
-            const url = array[i].url;
-            const tipo = array[i].tipo;
+         if (array) {
+            for (let x = 0; x < array.length; x++) {
+               const idAdjunto = array[x].id;
+               const url = array[x].url;
+               const tipo = array[x].tipo;
 
-            if (tipo == "imagenes") {
-               imagenes += `
-                    <a id="${id}" href="planner/mp_ot/${url}" target="_blank">
-                        <div class="m-2 cursor-pointer overflow-hidden w-20 h-20 rounded-md">
-                            <img src="planner/mp_ot/${url}" class="w-full" alt="">
+               if (tipo == "imagenes") {
+                  imagenes += `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                        <a href="planner/mp_ot/${url}" target="_blank">
+                           <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(planner/mp_ot/${url})">
+                           </div>
+                        </a>
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'PREVENTIVO');">
+                           <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
                         </div>
-                    </a>            
-                    `;
-            } else {
-               documentos += `
-                        <a id="${id}" href="planner/mp_ot/${url}" target="_blank">
-                            <div class="w-full auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
-                                <i class="fad fa-file-alt fa-2x"></i>
-                                <p class=" font-normal ml-2">${url}</p>
-                            </div>
-                        </a>                   
-                    `;
+                     </div>
+                  `;
+               } else {
+                  documentos += `
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                        <a href="planner/mp_ot/${url}" target="_blank" data-title="${url}">
+                           <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
+                              <i class="fad fa-file-contract fa-3x"></i>
+                              <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
+                           </div>
+                        </a>
+                        <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 22px; right: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'PREVENTIVO');">
+                           <i class="fas fa-trash-alt fa-2x"></i>
+                        </div>
+                     </div>
+                  `;
+               }
             }
          }
 

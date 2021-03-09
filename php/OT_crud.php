@@ -260,8 +260,12 @@ if (isset($_GET['action'])) {
                     $tipo = "documentos";
                 }
 
-                $adjuntosTemp = array("id" => $id, "nombre" => $nombre, "url" => $url, "tipo" => $tipo);
-                $array[] = $adjuntosTemp;
+                $array[] = array(
+                    "id" => $id,
+                    "nombre" => $nombre,
+                    "url" => $url,
+                    "tipo" => $tipo
+                );
             }
             echo json_encode($array);
         }
