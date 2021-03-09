@@ -2,7 +2,7 @@
 date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 
-include '../../conexion.php';
+include 'conexion.php';
 require '../../php/PHPExcel.php';
 
 $fecha = date('Y-m-d H:m:s');
@@ -49,8 +49,6 @@ $query = "SELECT
     INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
     WHERE t_subalmacenes_items_stock.activo = 1 $idDestino $idSubalmacen $stock";
 
-$result = mysqli_query($conn_2020, $query);
-
 // Titulos XLS
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
@@ -69,34 +67,36 @@ $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Ubicación');
 
 
 $fila = 2;
-while ($row = mysqli_fetch_array($result)) {
-    $idItemsResultado = $row['idItemsResultado'];
-    $categoria = $row['categoria'];
-    $cod2bend = $row['cod2bend'];
-    $gremio = $row['nombre_gremio'];
-    $descripcion = $row['descripcion'];
-    $caracteristicas = $row['caracteristicas'];
-    $marca = $row['marca'];
-    $stockTeorico = $row['stock_teorico'];
-    $stockActual = $row['stock_actual'];
-    $unidad = $row['unidad'];
-    $ubicacion = $row['ubicacion'];
+if ($result = mysqli_query($conn_2020, $query)) {
+    while ($row = mysqli_fetch_array($result)) {
+        $idItemsResultado = $row['idItemsResultado'];
+        $categoria = $row['categoria'];
+        $cod2bend = $row['cod2bend'];
+        $gremio = $row['nombre_gremio'];
+        $descripcion = $row['descripcion'];
+        $caracteristicas = $row['caracteristicas'];
+        $marca = $row['marca'];
+        $stockTeorico = $row['stock_teorico'];
+        $stockActual = $row['stock_actual'];
+        $unidad = $row['unidad'];
+        $ubicacion = $row['ubicacion'];
 
 
-    $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $categoria);
-    $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cod2bend);
-    $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $gremio);
-    $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $descripcion);
-    $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $caracteristicas);
-    $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $marca);
-    $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $stockTeorico);
-    $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $stockActual);
-    $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $unidad);
-    $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $ubicacion);
-    //Inicializa variables.
+        $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $categoria);
+        $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cod2bend);
+        $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $gremio);
+        $objPHPExcel->getActiveSheet()->setCellValue('D' . $fila, $descripcion);
+        $objPHPExcel->getActiveSheet()->setCellValue('E' . $fila, $caracteristicas);
+        $objPHPExcel->getActiveSheet()->setCellValue('F' . $fila, $marca);
+        $objPHPExcel->getActiveSheet()->setCellValue('G' . $fila, $stockTeorico);
+        $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $stockActual);
+        $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $unidad);
+        $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $ubicacion);
+        //Inicializa variables.
 
-    //Contador de Celdas
-    $fila++;
+        //Contador de Celdas
+        $fila++;
+    }
 }
 
 $fecha = date('d-m-Y H:m:s');
