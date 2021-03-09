@@ -883,7 +883,6 @@ const obtenerNotificaciones = () => {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
-            console.log(array)
             if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idNotificacion = array[x].idNotificacion;
