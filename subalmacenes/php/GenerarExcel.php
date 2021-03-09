@@ -101,7 +101,7 @@ while ($row = mysqli_fetch_array($result)) {
 
 $fecha = date('d-m-Y H:m:s');
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header('Content-Disposition: attachment;filename="Reporte_' . $fecha . '.xlsx"');
+header('Content-Disposition: attachment;filename="Reporte_Subalmacén_' . $fecha . '.xlsx"');
 header('Cache-Control: max-age=0');
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 $objWriter->save('PHP://output');
