@@ -3,7 +3,7 @@ date_default_timezone_set('America/Cancun');
 setlocale(LC_MONETARY, 'es_ES');
 
 include 'conexion.php';
-require '../php/PHPExcel/PHPExcel.php';
+require '../php/PHPExcel.php';
 
 $fecha = date('Y-m-d H:m:s');
 
