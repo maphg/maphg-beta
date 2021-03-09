@@ -1396,6 +1396,11 @@ if (isset($_GET['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
+        } elseif ($tipoAdjunto == "PREVENTIVO") {
+            $query = "UPDATE t_mp_planificacion_iniciada_adjuntos SET activo = 0 WHERE id = $idAdjunto";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
         }
         echo json_encode($resp);
     }
