@@ -500,7 +500,7 @@ function calendarioSecciones() {
    document.getElementById("mes").innerHTML = mes;
    document.getElementById("dia").innerHTML = dia;
 
-   obtenerSecciones(1001, 2);
+   // obtenerSecciones(1001, 2);
    obtenerSecciones(8, 2);
    obtenerSecciones(12, 2);
    obtenerSecciones(9, 2);
@@ -517,7 +517,7 @@ function calendarioSecciones() {
    switch (hoydia) {
       case "lunes":
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(8, 1);
          obtenerSecciones(12, 1);
          obtenerSecciones(23, 1);
@@ -525,14 +525,14 @@ function calendarioSecciones() {
 
       case "martes":
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(9, 1);
          obtenerSecciones(23, 1);
          break;
 
       case "miercoles":
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(1, 1);
          obtenerSecciones(10, 1);
          obtenerSecciones(23, 1);
@@ -540,7 +540,7 @@ function calendarioSecciones() {
 
       case "jueves":
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(6, 1);
          obtenerSecciones(5, 1);
          obtenerSecciones(23, 1);
@@ -548,7 +548,7 @@ function calendarioSecciones() {
 
       case "viernes":
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(11, 1);
          obtenerSecciones(24, 1);
          obtenerSecciones(7, 1);
@@ -557,7 +557,7 @@ function calendarioSecciones() {
 
       default:
          obtenerSecciones(19, 1)
-         obtenerSecciones(1001, 1);
+         // obtenerSecciones(1001, 1);
          obtenerSecciones(8, 1);
          obtenerSecciones(12, 1);
          obtenerSecciones(9, 1);
