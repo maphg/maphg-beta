@@ -979,7 +979,7 @@
             <!-- DESPIECE -->
             <div id="contenedorDespiedeEquipo" class="flex flex-row w-full bg-white hidden">
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
-                    <h1 class="my-2">DESPIECE EQUIPO</h1>
+                    <h1 class="my-2">Equipos Componentes</h1>
                     <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
                 </div>
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
@@ -2333,45 +2333,49 @@
                         <thead>
                             <tr class="cursor-pointer bg-white">
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Proyecto
                                 </th>
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     PDA
                                 </th>
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Responsable
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Fechas
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Cotizaciones
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Tipo
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Justificación
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                    Importe
-                                </th>
-
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
-                                    Presupuesto
-                                </th>
-
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                     Status
                                 </th>
 
-                                <th class="px-5 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Importe
+                                </th>
+
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Presupuesto
+                                </th>
+
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
+                                    Status
+                                </th>
+
+                                <th class="px-3 py-3 border-b border-gray-200 bg-gray-50 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-white">
                                 </th>
 
                             </tr>
@@ -2954,6 +2958,72 @@
     </div>
 
 
+    <!-- MODAL MEDIA -->
+    <div id="modalMediaProyectos" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 610px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalMediaProyectos')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1>COTIZACIONES ADJUNTOS</h1>
+                </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="p-2 flex flex-col justify-center items-center flex-col w-full pb-6">
+
+                <!-- Icon upload -->
+                <span id="loaderCotizacionesProyecto" class="text-center"></span>
+
+                <div class="w-full px-1 font-medium text-sm text-gray-500 overflow-y-auto scrollbar">
+
+                    <div class="bg-yellow-200 font-bold px-2 rounded-md">
+                        <h1 class="uppercase p-2">Catálogo de Conceptos</h1>
+                        <div class="mb-3 text-center">
+                            <button class="relative py-2 px-3 bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md w-48">
+                                <i class="fad fa-cloud-upload fa-lg mr-2"></i>
+                                ADJUNTAR
+
+                                <!-- INPUT -->
+                                <input id="inputCatalogoConcepto" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" multiple>
+                                <!-- INPUT -->
+
+                            </button>
+                        </div>
+                        <!-- Data para las imagenes -->
+                        <div id="dataCatalogoConcepto" class="flex flex-row flex-wrap items-center justify-center text-center"></div>
+                    </div>
+
+                    <div id="contenedorDocumentosProyecto" class="font-bold rounded-md mt-5 bg-white">
+                        <h1 class="uppercase p-2">COTIZACIONES</h1>
+                        <div class="mb-3 text-center">
+                            <button class="relative py-2 px-3 bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md w-48">
+                                <i class="fad fa-cloud-upload fa-lg mr-2"></i>ADJUNTAR
+
+                                <!-- INPUT -->
+                                <input id="inputCotizacionesProyecto" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" multiple>
+                                <!-- INPUT -->
+
+                            </button>
+                        </div>
+                        <!-- Data para las imagenes -->
+                        <div class="overflow-y-auto scrollbar" style="max-height: 50vh;">
+                            <div id="dataCotizacionesImagenes" class="flex flex-wrap justify-center text-center"></div>
+                            <div id="dataCotizacionesDocumentos" class="flex flex-col text-center mr-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODALES -->
+
+
     <!-- MODAL COMENTARIOS -->
     <div id="modalComentarios" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 600px;">
@@ -3244,7 +3314,7 @@
 
     <!-- MODAL STATUS   -->
     <div id="modalTituloEliminar" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 300px;">
+        <div class="modal-window rounded-md pt-10" style="width: 280px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalTituloEliminar')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -3258,33 +3328,61 @@
                 </div>
             </div>
             <!-- CONTENIDO -->
-
-            <div id="finalizar" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
-                <div class="">
-                    <h1>SOLUCIONAR</h1>
-                </div>
-                <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-
-            <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
-                <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="toggleModalTailwind('modalEditarTitulo');">
+            <div class="px-3">
+                <div id="btnStatusI" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
                     <div class="">
-                        <i class="fas fa-pen fa-lg"></i>
+                        <h1>INICIAR</h1>
                     </div>
-                </div>
-                <div class="hidden bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
-                    <div class="">
-                        <i class="fas fa-random fa-lg"></i>
-                    </div>
-                </div>
-                <div id="eliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
-                    <div class="">
-                        <i class="fas fa-trash fa-lg"></i>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1 class="text-lg">I</h1>
                     </div>
                 </div>
 
+                <div id="btnStatusAP" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-blue-500 bg-gray-200 hover:bg-blue-200 text-xs">
+                    <div class="">
+                        <h1>APROBADO</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <h1>AP</h1>
+                    </div>
+                </div>
+
+                <div id="btnStatusFinalizarProyecto" class="w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-green-500 bg-gray-200 hover:bg-green-200 text-xs">
+                    <div class="">
+                        <h1>SOLUCIONAR</h1>
+                    </div>
+                    <div class="absolute left-0 top-0 w-8 h-8 rounded-l-md flex items-center justify-center font-black">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+
+                <div class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                    <div class=" bg-gray-200 w-full text-center h-8 rounded-l-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200" onclick="expandir('editarTituloX');">
+                        <div class="">
+                            <i class="fas fa-pen fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class=" bg-gray-200 w-full text-center h-8 cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-random fa-lg"></i>
+                        </div>
+                    </div>
+                    <div id="btnStatusEliminar" class=" bg-gray-200 w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md text-gray-500 hover:text-indigo-400 hover:bg-indigo-200">
+                        <div class="">
+                            <i class="fas fa-trash fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editarTituloXtoggle" class="pt-2 border-t border-gray-300 w-full flex flex-row justify-center items-center text-xs">
+                    <div class=" w-full text-center h-8 rounded-r-md cursor-pointer mb-2 relative flex items-center justify-center text-gray-500 px-2">
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="off" id="inputEditarTituloX" type="text" placeholder="Nuevo Título">
+
+                        <button id="btnEditarTituloProyecto" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mx-1 px-3 py-2 rounded focus:outline-none focus:shadow-outline" type="button">
+                            <i class="fas fa-check fa-1x"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

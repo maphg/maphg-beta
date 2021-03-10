@@ -400,7 +400,7 @@ function consultaStatusOT(idOT) {
         .then(status => {
             document.getElementById("dataStatusOT").innerHTML = status;
             document.getElementById("statusOT2").setAttribute("onclick", `consultaStatusOT(${idOT}); toggleModalTailwind('modalStatus');`);
-            document.getElementById("statusMaterial").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
+            document.getElementById("btnStatusMaterial").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
             document.getElementById("statusTrabajare").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_trabajando');`);
             document.getElementById("statusElectricidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_electricidad');`);
             document.getElementById("statusAgua").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_agua');`);

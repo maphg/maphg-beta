@@ -438,7 +438,7 @@
             <!-- DESPIECE -->
             <div id="contenedorDespiedeEquipo" class="flex flex-row w-full bg-white hidden">
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">
-                    <h1 class="my-2">DESPIECE EQUIPO</h1>
+                    <h1 class="my-2">Equipos Componentes</h1>
                     <div id="dataDespieceEquipo" class="w-full flex flex-col overflow-y-auto scrollbar" style="height: 200px;"></div>
                 </div>
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 w-1/2">

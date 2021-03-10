@@ -167,6 +167,7 @@ const columnas_x = document.getElementById("columnas_x");
 const dataBuscarOT = document.getElementById("dataBuscarOT");
 const cantidadDespieceMaterialEquipo = document.getElementById("cantidadDespieceMaterialEquipo");
 const contenedorMover = document.getElementById("contenedorMover");
+const statusMaterialCod2bend = document.getElementById("statusMaterialCod2bend");
 // CONTENEDORES DIV ID
 
 // CONTENEDORES DIV CLASS
@@ -2179,13 +2180,14 @@ function obtenerMCN(idEquipo) {
 
 // Función para Obtener el Status y agregar la funcion para poder actualizarlo.
 function obtenerstatusMC(idMC) {
-   document.getElementById("modalStatus").classList.add("open");
+
    localStorage.setItem("idMC", idMC);
    let idUsuario = localStorage.getItem("usuario");
    let idDestino = localStorage.getItem("idDestino");
    const action = "obtenerStatusMC";
 
    // FUNCIÓN PARA DAR DISEÑO AL MODAL STATUS 
+   abrirmodal('modalStatus');
    estiloModalStatus(idMC, 'FALLA');
 
    $.ajax({
@@ -6749,8 +6751,10 @@ function eliminarActividadesExtra(idOT, posicionItem) {
 function actualizaStatusOT(idOT, status) {
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+
    const action = "actualizaStatusOT";
-   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&status=${status}`;
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&status=${status}&cod2bend=${inputCod2bend.value}`;
+
    fetch(URL)
       .then(res => res.json())
       .then(array => {
@@ -6884,7 +6888,7 @@ function consultaStatusOT(idOT) {
    fetch(URL)
       .then(res => res.json())
       .then(array => {
-         estiloDefectoModalStatus();
+         estiloModalStatus(idOT, 'PREVENTIVO');
          let status = `
                 <div id="statusOT2" class="bg-bluegray-900 text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 cursor-pointer hover:bg-indigo-200 hover:text-indigo-600">
                     <h1 class="font-medium text-sm"> <i class="fas fa-plus"></i></h1>
@@ -6892,7 +6896,6 @@ function consultaStatusOT(idOT) {
             `;
 
          if (array.statusTrabajare == "1") {
-            estiloStatusActivoModalStatus("statusTrabajare");
             status += `
                 <div class="bg-blue-200 text-blue-700 px-2 rounded-full flex items-center mr-2">
                 <h1 class="font-medium">Trabajando</h1>
@@ -6902,7 +6905,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusMaterial == "1") {
-            estiloStatusActivoModalStatus("statusMaterial");
             status += `
                     <div class="bg-orange-200 text-orange-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Material</h1>
@@ -6912,7 +6914,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusElectricidad == "1") {
-            estiloStatusActivoModalStatus("statusElectricidad");
             status += `
                     <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Electricidad</h1>
@@ -6922,7 +6923,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusDiesel == "1") {
-            estiloStatusActivoModalStatus("statusDiesel");
             status += `
                     <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Diesel</h1>
@@ -6932,7 +6932,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusGas == "1") {
-            estiloStatusActivoModalStatus("statusGas");
             status += `
                     <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Gas</h1>
@@ -6942,7 +6941,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusAgua == "1") {
-            estiloStatusActivoModalStatus("statusAgua");
             status += `
                     <div class="bg-yellow-200 text-yellow-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Agua</h1>
@@ -6952,7 +6950,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusCalidad == "1") {
-            estiloStatusActivoModalStatus("statusCalidad");
             status += `
                     <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Calidad</h1>
@@ -6962,7 +6959,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusCompras == "1") {
-            estiloStatusActivoModalStatus("statusCompras");
             status += `
                     <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Compras</h1>
@@ -6972,7 +6968,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusDireccion == "1") {
-            estiloStatusActivoModalStatus("statusDireccion");
             status += `
                     <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Dirección</h1>
@@ -6982,7 +6977,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusFinanzas == "1") {
-            estiloStatusActivoModalStatus("statusFinanzas");
             status += `
                     <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">Finanzas</h1>
@@ -6992,7 +6986,6 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusRRHH == "1") {
-            estiloStatusActivoModalStatus("statusRRHH");
             status += `
                     <div class="bg-teal-200 text-teal-700 px-2 rounded-full flex items-center mr-2">
                         <h1 class="font-medium">RRHH</h1>
@@ -7002,37 +6995,51 @@ function consultaStatusOT(idOT) {
          }
 
          if (array.statusCalidad == "1" || array.statusCompras == "1" || array.statusDireccion == "1" || array.statusFinanzas == "1" || array.statusRRHH == "1") {
-            estiloStatusActivoModalStatus("statusdep");
          }
 
          if (array.statusElectricidad == "1" || array.statusDiesel == "1" || array.statusGas == "1" || array.statusAgua == "1") {
-            estiloStatusActivoModalStatus("statusenergeticos");
          }
 
          return status;
       })
       .then(status => {
+         statusMaterialCod2bend.classList.add('hidden');
          document.getElementById("dataStatusOT").innerHTML = status;
-         document.getElementById("statusOT2").setAttribute("onclick", `consultaStatusOT(${idOT}); toggleModalTailwind('modalStatus');`);
-         document.getElementById("statusMaterial").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
-         document.getElementById("statusTrabajare").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_trabajando');`);
+         document.getElementById("statusOT2").
+            setAttribute("onclick", `consultaStatusOT(${idOT}); toggleModalTailwind('modalStatus');`);
+         document.getElementById("btnStatusMaterial").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_material');`);
+         document.getElementById("statusTrabajare").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_trabajando');`);
 
          // ENERGETICOS
-         document.getElementById("statusElectricidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_electricidad');`);
-         document.getElementById("statusAgua").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_agua');`);
-         document.getElementById("statusDiesel").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_diesel');`);
-         document.getElementById("statusGas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_gas');`);
-         document.getElementById("statusRRHH").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_rrhh');`);
+         document.getElementById("statusElectricidad").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_electricidad');`);
+         document.getElementById("statusAgua").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_agua');`);
+         document.getElementById("statusDiesel").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_diesel');`);
+         document.getElementById("statusGas").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'energetico_gas');`);
+         document.getElementById("statusRRHH").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_rrhh');`);
 
          // DEPARTAMENTOS
-         document.getElementById("statusDireccion").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_direccion');`);
-         document.getElementById("statusFinanzas").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_finanzas');`);
-         document.getElementById("statusCalidad").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
-         document.getElementById("statusCompras").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
+         document.getElementById("statusDireccion").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_direccion');`);
+         document.getElementById("statusFinanzas").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_finanzas');`);
+         document.getElementById("statusCalidad").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_calidad');`);
+         document.getElementById("statusCompras").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'departamento_compras');`);
 
-         document.getElementById("statusFinalizar").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
-         document.getElementById("statusEP").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_ep');`);
-         document.getElementById("btnFinalizarOT").setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("statusFinalizar").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status');`);
+         document.getElementById("statusEP").
+            setAttribute("onclick", `actualizaStatusOT(${idOT}, 'status_ep');`);
+         document.getElementById("btnFinalizarOT").
+            setAttribute("onclick", `guardarCambiosOT(); actualizaStatusOT(${idOT}, 'status');`);
 
          // BITACORA
          document.getElementById("statusGP").setAttribute("onclick", `actualizaStatusOT(${idOT}, 'bitacora_gp');`);
@@ -7084,7 +7091,7 @@ function consultaAdjuntosOT(idOT) {
                      <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                         <a href="planner/mp_ot/${url}" target="_blank" data-title="${url}">
                            <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
-                              <i class="fad fa-file-contract fa-3x"></i>
+                              <i class="fad fa-file-alt fa-3x"></i>
                               <p class="text-xxs font-normal text-indigo-500 ml-2 truncate w-20">${url}</p>
                            </div>
                         </a>
@@ -9806,8 +9813,7 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    // INCIALIZA ESTILO DE MODALSTATUS
    document.getElementById("statusenergeticostoggle").classList.add('hidden');
    document.getElementById("statusdeptoggle").classList.add('hidden');
-   document.getElementById("statusMaterialCod2bend").classList.add('hidden');
-   document.getElementById("statusMaterialCod2bend").classList.add('hidden');
+   statusMaterialCod2bend.classList.add('hidden');
    document.getElementById("statusbitacoratoggle").classList.add('hidden');
    document.getElementById("btnEditarTituloXtoggle").classList.add('hidden');
    contenedorMover.classList.add('hidden');
@@ -9829,6 +9835,26 @@ function estiloModalStatus(idRegistro, tipoRegistro) {
    let sTRSX = document.getElementById("statusTRS");
    let sZIX = document.getElementById("statusZI");
    let statusbitacoraX = document.getElementById("statusbitacora");
+
+   btnStatusUrgente.removeAttribute('onclick');
+   btnStatusMaterial.removeAttribute('onclick');
+   btnStatusTrabajare.removeAttribute('onclick');
+   btnStatusCalidad.removeAttribute('onclick');
+   btnStatusCompras.removeAttribute('onclick');
+   btnStatusDireccion.removeAttribute('onclick');
+   btnStatusFinanzas.removeAttribute('onclick');
+   btnStatusRRHH.removeAttribute('onclick');
+   btnStatusElectricidad.removeAttribute('onclick');
+   btnStatusAgua.removeAttribute('onclick');
+   btnStatusDiesel.removeAttribute('onclick');
+   btnStatusGas.removeAttribute('onclick');
+   btnStatusFinalizar.removeAttribute('onclick');
+   btnStatusActivo.removeAttribute('onclick');
+   btnEditarTitulo.removeAttribute('onclick');
+   btnStatusGP.removeAttribute('onclick');
+   btnStatusTRS.removeAttribute('onclick');
+   btnStatusZI.removeAttribute('onclick');
+   editarTitulo.removeAttribute('onclick');
 
    sMaterialX.className = "w-full text-center h-8 rounded-md cursor-pointer mb-2 relative flex items-center justify-center hover:shadow-md hover:shadow-md text-gray-500 hover:text-orange-500 bg-gray-200 hover:bg-orange-200 text-xs";
 

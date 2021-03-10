@@ -291,6 +291,7 @@ if (isset($_GET['action'])) {
                 $statusRRHH = $i['departamento_rrhh'];
                 $statusDireccion = $i['departamento_direccion'];
                 $statusCalidad = $i['departamento_calidad'];
+                $cod2bend = $i['cod2bend'];
 
                 $array['statusUrgente'] = $statusUrgente;
                 $array['statusTrabajare'] = $statusTrabajare;
@@ -304,6 +305,7 @@ if (isset($_GET['action'])) {
                 $array['statusRRHH'] = $statusRRHH;
                 $array['statusDireccion'] = $statusDireccion;
                 $array['statusCalidad'] = $statusCalidad;
+                $array['cod2bend'] = $cod2bend;
             }
             echo  json_encode($array);
         }
@@ -315,7 +317,7 @@ if (isset($_GET['action'])) {
         $array = array();
 
         if (
-            $status == "status_material" || $status == "status_trabajando" || $status == "energetico_electricidad" || $status == "energetico_agua" ||
+            $status == "status_trabajando" || $status == "energetico_electricidad" || $status == "energetico_agua" ||
             $status == "energetico_diesel" || $status == "energetico_gas" || $status == "departamento_rrhh" || $status == "departamento_direccion" ||
             $status == "departamento_finanzas" || $status == "departamento_calidad" || $status == "departamento_compras" || $status == "bitacora_gp" || $status == "bitacora_trs" || $status == "bitacora_zi"
         ) {
@@ -356,6 +358,27 @@ if (isset($_GET['action'])) {
                         $array['respuesta'] = "SOLUCIONADO";
                         $array['idOT'] = $idOT;
                     }
+                }
+            }
+        } elseif ($status == "status_material") {
+            $cod2bend = $_GET['cod2bend'];
+            $query = "SELECT status_material FROM  t_mp_planificacion_iniciada WHERE id = $idOT and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $status = 1;
+                foreach ($result as $x) {
+                    $status = $x['status_material'];
+                }
+
+                if ($status == 1) {
+                    $status = 0;
+                } else {
+                    $status = 1;
+                }
+
+                $query = "UPDATE t_mp_planificacion_iniciada SET status_material = $status, cod2bend = '$cod2bend'  
+                WHERE id = $idOT and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $array['respuesta'] = "ACTIVADO";
                 }
             }
         }

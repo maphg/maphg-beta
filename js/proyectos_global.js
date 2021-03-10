@@ -438,7 +438,7 @@ function obtenerProyectosGlobal(statusProyectos) {
 
             document.getElementById('contenedorDeProyectos').innerHTML = '';
 
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const destino = array[x].destino;
@@ -961,6 +961,7 @@ const agregarCotizacion = idProyecto => {
                 .then(array => {
                     if (array == 1) {
                         alertaImg('Adjunto Agregado', '', 'success', 1400);
+                        obtenerProyectosGlobal('PENDIENTE');
                         obtenerCotizaciones(idProyecto);
                     } else {
                         alertaImg('Intente de Nueva', '', 'info', 1400);
@@ -1082,7 +1083,7 @@ const agregarCatalogoConceptos = idProyecto => {
                 .then(array => array.json())
                 .then(array => {
                     if (array == 1) {
-                        alertaImg('Adjunto Agregado', '', 'success', 1400);
+                        alertaImg('Catálogo de Conceptos, Agregado', '', 'success', 1400);
                         obtenerCatalogoConceptos(idProyecto);
                     } else {
                         alertaImg('Intente de Nueva', '', 'info', 1400);
@@ -1091,6 +1092,7 @@ const agregarCatalogoConceptos = idProyecto => {
                 .then(() => {
                     inputCatalogoConcepto.value = '';
                     loaderCotizacionesProyecto.innerHTML = '';
+                    obtenerProyectosGlobal('PENDIENTE');
                 })
                 .catch(function (err) {
                     alertaImg('Intente de Nuevo', '', 'info', 1500);
@@ -1240,7 +1242,7 @@ function subirJustificacionProyectos(idTabla, tabla) {
 }
 
 
-// OBTENER STATUS PLANACCIÓN
+// OBTENER STATUS PROYECTO
 function statusProyecto(idProyecto) {
     document.getElementById("modalTituloEliminar").classList.add("open");
     document.getElementById("editarTituloXtoggle").classList.add("hidden");
@@ -1321,7 +1323,7 @@ function obtenerPlanaccion(idProyecto) {
             .then(array => {
                 document.getElementById("contenedorDePlanesdeaccion").innerHTML = '';
 
-                if (array.length > 0) {
+                if (array) {
                     for (let x = 0; x < array.length; x++) {
                         const id = array[x].id;
                         const destino = array[x].destino;
@@ -1652,7 +1654,7 @@ function obtenerActividadesPlanaccion(idPlanaccion) {
         .then(res => res.json())
         .then(array => {
             document.getElementById("dataActividades").innerHTML = '';
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const idActividad = array[x].id;
                     const actividad = array[x].actividad;

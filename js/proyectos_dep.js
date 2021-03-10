@@ -120,10 +120,10 @@ const datosProyectosDEP = params => {
     return `
         <tr id="${idProyecto}proyectoDEP" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-proyectos-select-DEP ${statusX}">
 
-            <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;"
+            <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;"
             ${fObtenerPlanaccion}>
-                <div class="font-semibold uppercase leading-4">
-                    <h1 id="${params.id}tituloProyectoDEP">${params.proyecto}</h1>
+                <div class="font-semibold uppercase leading-4" data-title-proyecto="${params.proyecto}">
+                    <h1 id="${params.id}tituloProyectoDEP" class="truncate w-48">${params.proyecto}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
                     <h1 class="mr-2 font-semibold">${params.destino}</h1>
@@ -303,10 +303,10 @@ const datosPlanesDEP = params => {
     return `
         <tr id="${idPlanaccion}planaccionDEP" class="hover:bg-gray-200 cursor-pointer text-xs font-normal fila-planaccion-select-DEP ${statusPlanaccion}" ${ocultarActividades}>
            
-            <td class="px-4 border-b border-gray-200 truncate py-3" style="max-width: 360px;" 
+            <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;" 
             ${fToolTip}>
-                <div class="font-semibold uppercase leading-4">
-                    <h1 id="APDEP${idPlanaccion}">${params.actividad}</h1>
+                <div class="font-semibold uppercase leading-4" data-title-proyecto="${params.actividad}">
+                    <h1 id="APDEP${idPlanaccion}" class="truncate w-48">${params.actividad}</h1>
                 </div>
                 <div class="text-gray-500 leading-3 flex">
                     <h1>Creado por: ${params.creadoPor}</h1>
@@ -518,10 +518,10 @@ const datosEtiquetados = params => {
     return `
         <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
 
-            <td class="px-4 border-b border-gray-200 py-3 truncate" style="max-width: 360px;" 
+            <td class="px-4 border-b border-gray-200 py-3" style="max-width: 360px;" 
             ${fActividades}>
-                <div class="font-semibold uppercase leading-4">
-                    ${params.descripcion}
+                <div class="font-semibold uppercase leading-4" data-title-proyecto="${params.descripcion}">
+                    <h1 class="truncate w-48">${params.descripcion}</h1>
                 </div>
                 <div class="text-gray-500 leading-none flex items-center">
                     ${valorOrigen}<h1 class="mx-2 text-bluegray-500 uppercase font-semibold">${params.equipo}</h1> <h1 class="">Creado: ${params.creadoPor}</h1> 
@@ -690,7 +690,7 @@ function obtenerProyectosDEP(idSubseccion, statusProyecto) {
         .then(array => array.json())
         .then(array => {
             document.getElementById('contenedorDeProyectosDEP').innerHTML = '';
-            if (array.length > 0) {
+            if (array) {
                 for (let x = 0; x < array.length; x++) {
                     const id = array[x].id;
                     const destino = array[x].destino;

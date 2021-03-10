@@ -38,7 +38,7 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT t_proyectos.id, t_proyectos.titulo, t_proyectos.rango_fecha, 
-        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.tipo
+        t_proyectos.responsable, t_proyectos.fecha_creacion, t_proyectos.justificacion, t_proyectos.coste, t_proyectos.presupuesto, c_destinos.destino, t_colaboradores.nombre, t_colaboradores.apellido, t_proyectos.tipo, t_proyectos.status_i, t_proyectos.status_ap
         FROM t_proyectos 
         LEFT JOIN c_destinos ON t_proyectos.id_destino = c_destinos.id
         LEFT JOIN t_users ON t_proyectos.creado_por = t_users.id
@@ -46,8 +46,7 @@ if (isset($_GET['action'])) {
         WHERE t_proyectos.id_seccion = $idSeccion and t_proyectos.id_subseccion = $idSubseccion 
         and t_proyectos.activo = 1
         $filtroDestino  $filtroStatus
-        ORDER BY t_proyectos.id DESC
-        ";
+        ORDER BY t_proyectos.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $p) {
                 $idProyecto = $p['id'];
@@ -61,6 +60,8 @@ if (isset($_GET['action'])) {
                 $coste = $p['coste'];
                 $presupuesto = $p['presupuesto'];
                 $tipo = $p['tipo'];
+                $sI = $p['status_i'];
+                $sAP = $p['status_ap'];
 
                 #Rango Fecha
                 if ($rangoFecha != "") {
@@ -148,6 +149,15 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #Adjuntos Catálogo de Conceptos
+                $query = "SELECT count(id) FROM t_proyectos_catalogo_conceptos 
+                WHERE id_proyecto = $idProyecto and status = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalAdjuntos = $totalAdjuntos + intval($x['count(id)']);
+                    }
+                }
+
                 $query = "SELECT status_urgente, status_material, status_trabajando, energetico_electricidad, energetico_agua, energetico_diesel, energetico_gas, departamento_calidad, departamento_compras, departamento_direccion, departamento_finanzas, departamento_rrhh, status_ep
                 FROM t_proyectos_planaccion 
                 WHERE id_proyecto = $idProyecto";
@@ -207,6 +217,8 @@ if (isset($_GET['action'])) {
                     "departamento" => intval($sDepartamentox),
                     "trabajando" => intval($sTrabajandox),
                     "sEP" => intval($sEPx),
+                    "sI" => intval($sI),
+                    "sAP" => intval($sAP)
                 );
             }
         }
@@ -1613,6 +1625,8 @@ if (isset($_GET['action'])) {
                         $totalAdjuntos = intval($x['count(id)']);
                     }
                 }
+
+                #Adjuntos Catálogo de Conceptos
                 $query = "SELECT count(id) FROM t_proyectos_catalogo_conceptos 
                 WHERE id_proyecto = $idProyecto and status = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {

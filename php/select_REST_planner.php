@@ -776,6 +776,27 @@ if (isset($_GET['action'])) {
                     $titulo = $x['actividad'];
                 }
             }
+        } elseif ($tipoRegistro == "PREVENTIVO") {
+            $query = "SELECT * FROM t_mp_planificacion_iniciada WHERE id = $idRegistro";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $sMaterial = $x['status_material'];
+                    $sTrabajare = $x['status_trabajando'];
+                    $sCalidad = $x['departamento_calidad'];
+                    $sCompras = $x['departamento_compras'];
+                    $sDireccion = $x['departamento_direccion'];
+                    $sFinanzas = $x['departamento_finanzas'];
+                    $sRRHH = $x['departamento_rrhh'];
+                    $sElectricidad = $x['energetico_electricidad'];
+                    $sAgua = $x['energetico_agua'];
+                    $sDiesel = $x['energetico_diesel'];
+                    $sGas = $x['energetico_gas'];
+                    $cod2bend = $x['cod2bend'];
+                    $bitacoraGP = $x['bitacora_gp'];
+                    $bitacoraTRS = $x['bitacora_trs'];
+                    $bitacoraZI = $x['bitacora_zi'];
+                }
+            }
         }
 
         if ($sMaterial != "" and $sMaterial != 0) {
