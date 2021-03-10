@@ -17,15 +17,18 @@
 
 <body class="bg-white scrollbar">
     <!-- MENÚ -->
-    <div class="w-full absolute top-0">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 mb-6 shadow"></menu-sidebar>
+
+    <!-- CONFIGURACIONES SIDEBAR -->
+    <configuracion-telegram></configuracion-telegram>
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
-    <div class="container-fluid mx-auto pt-16 bg-red-100">
+    <div class="container-fluid mx-auto bg-red-100">
         <div class="flex flex-col">
 
             <div id="contenedorPowerbi" class="">
@@ -224,7 +227,6 @@
 
             </div>
         </div>
-
     </div>
 </body>
 
@@ -243,7 +245,7 @@
 <!-- JS MODULO -->
 
 <!-- COMPLEMENTO MENU -->
-<script src="js/complemento_menuJS.js"></script>
+<script src="js/menu.js"></script>
 <!-- COMPLEMENTO MENU -->
 
 </html>

@@ -260,11 +260,6 @@ function powerbi() {
 // EVENTOS
 document.getElementById("opcionServicios").addEventListener('click', obtenerServicios);
 document.getElementById("opcionMateriales").addEventListener('click', obtenerMateriales);
-document.getElementById("sidedestino").addEventListener('click', () => {
-    powerbi();
-    document.getElementById("materiales").classList.add("hidden");
-    document.getElementById("servicios").classList.add("hidden");
-});
 
 
 // EVENTOS PARA EXPORTAR
@@ -284,4 +279,10 @@ document.getElementById("btnExportarMateriales").addEventListener("click", () =>
 
 window.onload = function () {
     powerbi();
+
+    document.getElementById("destinosSelecciona").addEventListener('click', () => {
+        powerbi();
+        document.getElementById("materiales").classList.add("hidden");
+        document.getElementById("servicios").classList.add("hidden");
+    })
 }
