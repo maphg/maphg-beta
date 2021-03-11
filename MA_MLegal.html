@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/alertify.min.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/modales.css">
 </head>
 
 <body class="bg-white mx-auto p-2 h-screen w-full relative">
@@ -29,15 +30,8 @@
     <!-- MENÚ -->
 
     <h1 class="w-full text-center semibold text-red-400 py-2 text-3xl">Mantenimiento Legal</h1>
-    <div class="px-5 flex items-center justify-center">
-        <div id="spreadsheet" class="flex-none"></div>
-    </div>
-
-    <div class="w-full p-5 flex items-center justify-center">
-        <button class="btn btn--primary bg-blue-300 hover:bg-blue-200 mx-4" onclick="actualizar()">Sincronizar</button>
-    </div>
-    <div class="absolute bottom-0 hidden">
-        <p><b>Nota: </b> Los cambios de las Celdas se Guardan en Automatico</p>
+    <div id="spreadsheet" class="px-5 flex flex-col items-center justify-center overflow-x-auto scrollbar"
+        style="max-width: 99%;">
     </div>
 
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
@@ -48,11 +42,6 @@
 
     <script type="text/javascript">
         const spreadsheet = document.getElementById('spreadsheet');
-
-        var changed = function (instance, cell, x, y, value) {
-            var cellName = jexcel.getColumnNameFromId([x, y]);
-            celdas(cellName);
-        }
 
         const tabla = () => {
             let idDestino = localStorage.getItem('idDestino');
@@ -65,93 +54,129 @@
             fetch(URL)
                 .then(array => array.json())
                 .then(array => {
-                    alertaImg('Sincronizando Excel', '', 'success', 1500);
                     spreadsheet.innerHTML = '';
 
                     return array;
                 })
                 .then(array => {
-                    // var data = localStorage.getItem('data');
-                    let data = [];
-                    if (!array.excel) {
-                        data = [
-                            ['Área', 'Técnicos del Hotel', 'Compañías Externas', 'Frecuencia', 'Norma'],
-                            ['Enfriadoras', '', '', '', ''],
-                            ['Calderas', '', '', '', ''],
-                            ['Ascensores', '', '', '', ''],
-                            ['Tratamiento Agua', '', '', '', ''],
-                            ['Pozos', '', '', '', ''],
-                            ['Baja Tensión', '', '', '', ''],
-                            ['Centros de MT', '', '', '', ''],
-                            ['Protecciones, Pararrayos y Puestas a Tierra', '', '', '', ''],
-                            ['Instalación Gasoil/Gas', '', '', '', ''],
-                            ['Grupo Electrógeno', '', '', '', ''],
-                            ['Sistema CI', '', '', '', '']
-                        ];
-                    } else {
-                        data = JSON.parse(array.excel);
-                    }
-                    jspreadsheet(spreadsheet, {
-                        data: data,
-                        columns: [{
-                                type: 'text',
-                                width: '310'
-                            },
-                            {
-                                type: 'text',
-                                width: '140'
-                            },
-                            {
-                                type: 'text',
-                                width: '140'
-                            },
-                            {
-                                type: 'text',
-                                width: '140'
-                            },
-                            {
-                                type: 'text',
-                                width: '140'
+                    if (array) {
+                        for (let x = 0; x < array.length; x++) {
+                            const idDestinoX = array[x].idDestino;
+                            var data = JSON.parse(array[x].excel);
+                            const codigo = `<div id="spreadsheet_${idDestinoX}"></div>`;
+                            spreadsheet.insertAdjacentHTML('beforeend', codigo);
+
+                            if (!data.length) {
+                                data = [
+                                    ['Área1', 'Técnicos del Hotel', 'Compañías Externas', 'Frecuencia',
+                                        'Norma'
+                                    ],
+                                    ['Enfriadoras', '', '', '', ''],
+                                    ['Calderas', '', '', '', ''],
+                                    ['Ascensores', '', '', '', ''],
+                                    ['Tratamiento Agua', '', '', '', ''],
+                                    ['Pozos', '', '', '', ''],
+                                    ['Baja Tensión', '', '', '', ''],
+                                    ['Centros de MT', '', '', '', ''],
+                                    ['Protecciones, Pararrayos y Puestas a Tierra', '', '', '', ''],
+                                    ['Instalación Gasoil/Gas', '', '', '', ''],
+                                    ['Grupo Electrógeno', '', '', '', ''],
+                                    ['Sistema CI', '', '', '', '']
+                                ];
                             }
-                        ],
-                        nestedHeaders: [{
-                            title: 'Riviera Maya',
-                            colspan: '5'
-                        }, ],
-                        style: {
-                            A1: 'background-color: #A5A5A5;',
-                            B1: 'background-color: #FFE699;',
-                            C1: 'background-color: #F8CBAD;',
-                            D1: 'background-color: #A9D08E;',
-                            E1: 'background-color: #A9D08E;',
-                            A2: 'text-align: right;',
-                            A3: 'text-align: right;',
-                            A4: 'text-align: right;',
-                            A5: 'text-align: right;',
-                            A6: 'text-align: right;',
-                            A7: 'text-align: right;',
-                            A8: 'text-align: right;',
-                            A9: 'text-align: right;',
-                            A10: 'text-align: right;',
-                            A11: 'text-align: right;',
-                            A12: 'text-align: right;',
-                        },
-                        onchange: changed
-                    });
+
+                            if (!array[x].destino) {
+                                destino = 'ND';
+                            } else {
+                                destino = array[x].destino;
+                            }
+
+                            jspreadsheet(document.getElementById(`spreadsheet_${idDestinoX}`), {
+                                data: data,
+                                columns: [{
+                                        type: 'text',
+                                        width: '310'
+                                    },
+                                    {
+                                        type: 'text',
+                                        width: '140'
+                                    },
+                                    {
+                                        type: 'text',
+                                        width: '140'
+                                    },
+                                    {
+                                        type: 'text',
+                                        width: '140'
+                                    },
+                                    {
+                                        type: 'text',
+                                        width: '140'
+                                    }
+                                ],
+                                nestedHeaders: [{
+                                    title: destino,
+                                    colspan: '5'
+                                }, ],
+                                style: {
+                                    A1: 'background-color: #A5A5A5;',
+                                    B1: 'background-color: #FFE699;',
+                                    C1: 'background-color: #F8CBAD;',
+                                    D1: 'background-color: #A9D08E;',
+                                    E1: 'background-color: #A9D08E;',
+                                    A2: 'text-align: right;',
+                                    A3: 'text-align: right;',
+                                    A4: 'text-align: right;',
+                                    A5: 'text-align: right;',
+                                    A6: 'text-align: right;',
+                                    A7: 'text-align: right;',
+                                    A8: 'text-align: right;',
+                                    A9: 'text-align: right;',
+                                    A10: 'text-align: right;',
+                                    A11: 'text-align: right;',
+                                    A12: 'text-align: right;',
+                                },
+                                onchange: function (instance, cell, x, y, value) {
+
+                                    var cellName = jexcel.getColumnNameFromId([x, y]);
+                                    if (cellName != "A1" && cellName != "A2" && cellName != "A3" &&
+                                        cellName !=
+                                        "A4" &&
+                                        cellName !=
+                                        "A5" && cellName != "A6" && cellName != "A7" && cellName !=
+                                        "A8" &&
+                                        cellName != "A9" &&
+                                        cellName !=
+                                        "A10" && cellName != "A11" && cellName != "A12" &&
+                                        cellName != "B1" &&
+                                        cellName !=
+                                        "C1" &&
+                                        cellName !=
+                                        "D1" && cellName != "E1") {
+                                        celdas(cellName, idDestinoX);
+                                    } else {
+                                        alertaImg('Celdas Bloqueadas', '', 'error', 1500);
+                                        tabla();
+                                    }
+                                }
+                            });
+                        }
+                    }
+
                 })
-                .catch(function (err) {})
+                .catch(function (err) {});
         }
 
-        const celdas = cellName => {
-            let idDestino = localStorage.getItem('idDestino');
+        const celdas = (cellName, idDestinoX) => {
             let idUsuario = localStorage.getItem('usuario');
 
             const action = "actualizarMLegal";
             const URL =
-                `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+                `php/select_REST_planner.php?action=${action}&idDestino=${idDestinoX}&idUsuario=${idUsuario}`;
 
             const arrayX = [];
-            if (rows = document.getElementsByClassName('jexcel')[0].rows) {
+            if (rows = document.getElementById("spreadsheet_" + idDestinoX).getElementsByClassName('jexcel')[0]
+                .rows) {
                 for (let y = 2; y < rows.length; y++) {
                     const arrayY = [];
                     if (celda = rows[y].cells) {

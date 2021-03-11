@@ -4774,18 +4774,26 @@ if (isset($_GET['action'])) {
     if ($action == "obtenerMLegal") {
         $array = array();
 
-        $query = "SELECT t_mantenimiento_legal.excel, c_destinos.destino 
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and t_mantenimiento_legal.id_destino = $idDestino";
+        }
+
+        $query = "SELECT t_mantenimiento_legal.excel, c_destinos.id, c_destinos.ubicacion 
         FROM t_mantenimiento_legal
         INNER JOIN c_destinos ON t_mantenimiento_legal.id_destino = c_destinos.id
-        WHERE t_mantenimiento_legal.id_destino = $idDestino and t_mantenimiento_legal.activo = 1";
+        WHERE t_mantenimiento_legal.activo = 1 $filtroDestino ORDER BY t_mantenimiento_legal.id_destino ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $excel = $x['excel'];
-                $destino = $x['destino'];
+                $idDestinoX = $x['id'];
+                $destino = $x['ubicacion'];
 
-                $array = array(
+                $array[] = array(
                     "excel" => $excel,
-                    "destino" => $destino
+                    "destino" => $destino,
+                    "idDestino" => intval($idDestinoX)
                 );
             }
         }
