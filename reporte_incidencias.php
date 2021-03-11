@@ -11,9 +11,21 @@
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel="stylesheet" href="css/animate.css">
 </head>
 
 <body style="background-color: #EEF0FC;" class="scrollbar">
+    <!-- MENÚ -->
+    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
+    <menu-menu></menu-menu>
+
+    <!-- CONFIGURACIONES SIDEBAR -->
+    <configuracion-telegram></configuracion-telegram>
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
+    <!-- MENÚ -->
 
     <div class="w-full h-screen flex sm:flex-col md:flex-row md:items-start md:justify-start p-8 sm:justify-start sm:items-center">
         <div class="flex-none bg-white md:w-80 sm:w-full h-auto rounded-xl shadow-lg flex flex-col justify-start items-center p-8 z-40 mb-4">
@@ -200,7 +212,6 @@
 
             </div>
         </div>
-
     </div>
 
     <!-- AM4CORE -->
@@ -221,6 +232,10 @@
     <!-- SCRIPT SEGURIDAD -->
     <script src="js/seguridad_session.js"></script>
     <!-- SCRIPT SEGURIDAD -->
+
+    <!-- MENU JS -->
+    <script src="js/menu.js"></script>
+    <!-- MENU JS -->
 
 </body>
 

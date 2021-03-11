@@ -5839,7 +5839,7 @@ function consultaEDMC(statusConsulta) {
     });
 }
 
-// Funcion para eliminar estatus Departamento o Energetico en Mantenimineto Correctivo o Tareas Generales.
+// Funcion para eliminar estatus Departamento o Energetico en Mantenimiento Correctivo o Tareas Generales.
 function eliminarED(tabla, columna, idMC) {
     var action = "eliminarED";
     var idMC = $("#idMC").val();

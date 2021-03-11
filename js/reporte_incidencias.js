@@ -316,6 +316,10 @@ const contadorArray = array => {
         for (const index in repetidos) {
             if (element = document.querySelector('#cantidad_incidencias_' + index)) {
                 element.innerHTML = repetidos[index];
+                console.log(index, repetidos[index])
+                if (repetidos[index] > 0 && (columna = document.querySelector('#columna_x_' + index))) {
+                    columna.classList.remove('hidden');
+                }
             }
         }
     } else {
@@ -608,7 +612,7 @@ const crearContenedoresSecciones = () => {
                                                             : 'gray';
 
                     const codigo = `  
-                        <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
+                        <div id="columna_x_${idSeccion}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1 hidden">      
                             <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
                                 <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
                                     <h1 id="cantidad_incidencias_${idSeccion}">0</h1>
@@ -663,7 +667,7 @@ const crearContenedoresSubsecciones = idSeccion => {
                                                                 : 'gray';
 
                         const codigo = `  
-                        <div class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">      
+                        <div id="columna_x_${idSubseccion}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1 hidden">
                             <div class="w-40 flex text-xxs rounded-full bg-${estilo}-100 pr-2 items-center">
                                 <div class="w-6 h-6 rounded-full bg-${estilo}-300 text-${estilo}-500 font-bold flex items-center justify-center mr-2">
                                     <h1 id="cantidad_incidencias_${idSubseccion}">0</h1>

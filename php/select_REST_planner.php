@@ -4770,5 +4770,54 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
+    if ($action == "obtenerMLegal") {
+        $array = array();
+
+        $query = "SELECT t_mantenimiento_legal.excel, c_destinos.destino 
+        FROM t_mantenimiento_legal
+        INNER JOIN c_destinos ON t_mantenimiento_legal.id_destino = c_destinos.id
+        WHERE t_mantenimiento_legal.id_destino = $idDestino and t_mantenimiento_legal.activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $excel = $x['excel'];
+                $destino = $x['destino'];
+
+                $array = array(
+                    "excel" => $excel,
+                    "destino" => $destino
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "actualizarMLegal") {
+        $excel = $_POST['excel'];
+        $resp = "ERROR";
+
+        $idExcel = 0;
+        $query = "SELECT id FROM t_mantenimiento_legal WHERE id_destino = $idDestino and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idExcel = $x['id'];
+            }
+        }
+
+        if ($idExcel > 0) {
+            $query = "UPDATE t_mantenimiento_legal SET excel = '$excel', ultima_modificacion = '$fechaActual'
+            WHERE id = $idExcel";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "ACTUALIZADO";
+            }
+        } else {
+            $query = "INSERT INTO t_mantenimiento_legal(id_destino, excel, ultima_modificacion) VALUES($idDestino, '$excel', '$fechaActual')";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = "AGREGADO";
+            }
+        }
+        echo json_encode($resp);
+    }
+
     // CIERRE FINAL
 }
