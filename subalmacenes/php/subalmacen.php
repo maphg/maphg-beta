@@ -75,44 +75,19 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTIENE OPCIONES PARA AGREGAR UN ITEM GLOBAL POR DESTINO
     if ($action == "consultarOpcionesItem") {
         $array = array();
 
-        $query = "SELECT id, marca FROM c_marcas WHERE status = 'A'";
+        $query = "SELECT id, seccion FROM c_secciones WHERE status = 'A' and mp = 'SI'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idMarca = $x['id'];
-                $marca = $x['marca'];
+                $idSeccion = $x['id'];
+                $seccion = $x['seccion'];
 
-                $array['marcas'][] = array(
-                    "idMarca" => intval($idMarca),
-                    "marca" => $marca
-                );
-            }
-        }
-
-        $query = "SELECT id, nombre_gremio FROM bitacora_gremio";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $idGremio = $x['id'];
-                $gremio = $x['nombre_gremio'];
-
-                $array['gremios'][] = array(
-                    "idGremio" => intval($idGremio),
-                    "gremio" => $gremio
-                );
-            }
-        }
-
-        $query = "SELECT id, unidad FROM c_unidades_materiales";
-        if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-                $idUnidad = $x['id'];
-                $unidad = $x['unidad'];
-
-                $array['unidades'][] = array(
-                    "idUnidad" => intval($idUnidad),
-                    "unidad" => $unidad
+                $array['secciones'][] = array(
+                    "idSeccion" => intval($idSeccion),
+                    "seccion" => $seccion
                 );
             }
         }
@@ -326,7 +301,7 @@ if (isset($_GET['action'])) {
             $filtroPalabraBuscar = "";
         }
 
-        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, marca, modelo, caracteristicas, subfamilia  
+        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia  
         FROM t_subalmacenes_items_globales 
         WHERE id_destino = $idDestino and activo = 1 $filtroPalabraBuscar";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -338,6 +313,7 @@ if (isset($_GET['action'])) {
                 $idSeccion = $x['id_seccion'];
                 $area = $x['area'];
                 $categoria = $x['categoria'];
+                $stockTeoricoX = $x['stock_teorico'];
                 $marca = $x['marca'];
                 $modelo = $x['modelo'];
                 $caracteristicas = $x['caracteristicas'];
@@ -368,7 +344,7 @@ if (isset($_GET['action'])) {
                 }
 
                 if ($idItemStock == 0) {
-                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, 0, '$fechaActual', '$fechaActual', 1)";
+                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $resp = 1;
                     }
@@ -645,7 +621,7 @@ if (isset($_GET['action'])) {
             }
         }
 
-        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, marca, modelo, caracteristicas, subfamilia  
+        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, stock_teorico, marca, modelo, caracteristicas, subfamilia  
         FROM t_subalmacenes_items_globales 
         WHERE id_destino = $idDestino and activo = 1 $filtroPalabraBuscar";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -657,6 +633,7 @@ if (isset($_GET['action'])) {
                 $idSeccion = $x['id_seccion'];
                 $area = $x['area'];
                 $categoria = $x['categoria'];
+                $stockTeoricoX = $x['stock_teorico'];
                 $marca = $x['marca'];
                 $modelo = $x['modelo'];
                 $caracteristicas = $x['caracteristicas'];
@@ -687,7 +664,7 @@ if (isset($_GET['action'])) {
                 }
 
                 if ($idItemStock == 0) {
-                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, 0, '$fechaActual', '$fechaActual', 1)";
+                    $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, $stockTeoricoX, '$fechaActual', '$fechaActual', 1)";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         $resp = 1;
                     }
@@ -733,7 +710,7 @@ if (isset($_GET['action'])) {
                 );
             }
         }
-        echo json_encode($array);
+        echo json_encode($resp);
     }
 
 
@@ -953,6 +930,102 @@ if (isset($_GET['action'])) {
             if ($result = mysqli_query($conn_2020, $query)) {
                 $resp = 1;
             }
+        }
+        echo json_encode($resp);
+    }
+
+
+    // AGREGA ITEM GLOBAL POR DESTINO
+    if ($action == "agregarItem") {
+        $cod2bend = $_POST['cod2bendItem'];
+        $idSeccion = $_POST['seccionItem'];
+        $descripcionCod2bend = $_POST['descripcionCod2bendItem'];
+        $SST = $_POST['SSTItem'];
+        $area = $_POST['areaItem'];
+        $categoria = $_POST['categoriaItem'];
+        $stockTeorico = $_POST['stockTeoricoItem'];
+        $marca = $_POST['marcaItem'];
+        $subfamilia = $_POST['subfamiliaItem'];
+        $modelo = $_POST['modeloItem'];
+        $caracteristicas = $_POST['caracteristicasItem'];
+        $resp = 0;
+
+        $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, subfamilia, modelo, caracteristicas, fecha_registro, activo) VALUES($idDestino, $idSeccion, '$cod2bend', '$descripcionCod2bend', '$SST', '$area', '$categoria', '$stockTeorico', '$marca', '$subfamilia', '$modelo', '$caracteristicas', '$fechaActual', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTIENE INFORMACIÓN DEL ITEM SELECCIONADO
+    if ($action == "obtenerItem") {
+        $idItem = $_GET['idItem'];
+
+        $query = "SELECT id_seccion, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, area, categoria, stock_teorico, marca, subfamilia, modelo, caracteristicas
+        FROM t_subalmacenes_items_globales WHERE id = $idItem";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $cod2bend = $x['cod2bend'];
+                $idSeccion = $x['id_seccion'];
+                $descripcionCod2bend = $x['descripcion_cod2bend'];
+                $SST = $x['descripcion_servicio_tecnico'];
+                $area = $x['area'];
+                $categoria = $x['categoria'];
+                $stockTeorico = $x['stock_teorico'];
+                $marca = $x['marca'];
+                $subfamilia = $x['subfamilia'];
+                $modelo = $x['modelo'];
+                $caracteristicas = $x['caracteristicas'];
+
+                $array['cod2bend'] = $cod2bend;
+                $array['idSeccion'] = $idSeccion;
+                $array['descripcionCod2bend'] = $descripcionCod2bend;
+                $array['SST'] = $SST;
+                $array['area'] = $area;
+                $array['categoria'] = $categoria;
+                $array['stockTeorico'] = $stockTeorico;
+                $array['marca'] = $marca;
+                $array['subfamilia'] = $subfamilia;
+                $array['modelo'] = $modelo;
+                $array['caracteristicas'] = $caracteristicas;
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // ACTUALIZA ITEM GLOBAL SELECCIONADO
+    if ($action == "actualizarItem") {
+        $idItem = $_POST['idItem'];
+        $cod2bend = $_POST['cod2bendItem'];
+        $idSeccion = $_POST['seccionItem'];
+        $descripcionCod2bend = $_POST['descripcionCod2bendItem'];
+        $SST = $_POST['SSTItem'];
+        $area = $_POST['areaItem'];
+        $categoria = $_POST['categoriaItem'];
+        $stockTeorico = $_POST['stockTeoricoItem'];
+        $marca = $_POST['marcaItem'];
+        $subfamilia = $_POST['subfamiliaItem'];
+        $modelo = $_POST['modeloItem'];
+        $caracteristicas = $_POST['caracteristicasItem'];
+        $resp = 0;
+
+        $query = "UPDATE  t_subalmacenes_items_globales SET 
+        id_seccion = $idSeccion, 
+        cod2bend = '$cod2bend', 
+        descripcion_cod2bend = '$descripcionCod2bend',
+        descripcion_servicio_tecnico = '$SST',
+        area = '$area',
+        categoria = '$categoria',
+        stock_teorico = '$stockTeorico',
+        marca = '$marca',
+        subfamilia = '$subfamilia',
+        modelo = '$modelo',
+        caracteristicas = '$caracteristicas' 
+        WHERE id = $idItem";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
         }
         echo json_encode($resp);
     }

@@ -197,8 +197,11 @@ $usuario = $_SESSION['usuario'];
                                                 </th>
 
                                                 <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
-                                                    SUBALMACÉN
-                                                    BODEGA
+                                                    SUBALMACÉN BODEGA
+                                                </th>
+
+                                                <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-8">
+                                                    
                                                 </th>
 
                                             </tr>
@@ -864,7 +867,7 @@ $usuario = $_SESSION['usuario'];
 
     <!-- MODAL CONFIRMAR ENTRADA -->
     <div id="modalAgregarItem" class="modal">
-        <div class="modal-window rounded-md" style="width:450px;">
+        <div class="modal-window rounded-md" style="width:400px;">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -883,62 +886,74 @@ $usuario = $_SESSION['usuario'];
             <!-- CONTENIDO -->
             <div class="py-2 flex justify-center items-center flex-col w-full">
                 <div class="mt-10 sm:mt-0 w-full">
-                    <div class="py-5 bg-white px-5">
-                        <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-6">
-                                <label class="block text-sm font-medium text-gray-700">Descripción</label>
-                                <input id="descripcionItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                            </div>
-
-                            <div class="col-span-6">
-                                <label class="block text-sm font-medium text-gray-700">Características</label>
-                                <input id="caracteristicasItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                    <div class="pt-5 bg-white px-5">
+                        <div class="grid grid-cols-6 gap-2">
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="text-xs font-semibold text-gray-700">COD2BEND</label>
+                                <input id="cod2bendItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">COD2BEND</label>
-                                <input id="cod2bendItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                            </div>
-
-                            <div class="col-span-6 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Categoria</label>
-                                <input id="categoriaItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                                <label class="text-xs font-semibold text-gray-700">SECCIÓN</label>
+                                <select id="seccionItem" class="w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-xs"></select>
                             </div>
 
                             <div class="col-span-6">
-                                <label class="block text-sm font-medium text-gray-700">
-                                    Marca / Proveedor
-                                </label>
-                                <select id="marcaItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                <label class="text-xs font-semibold text-gray-700">DESCRIPCIÓN COD2BEND</label>
+                                <input id="descripcionCod2bendItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div class="col-span-6">
+                                <label class="text-xs font-semibold text-gray-700">DESCRIPCIÓN SERVICIOS TECNICOS (SST)</label>
+                                <input id="SSTItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div class="col-span-6">
+                                <label class="text-xs font-semibold text-gray-700">ÁREA</label>
+                                <input id="areaItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div class="col-span-6">
+                                <label class="text-xs font-semibold text-gray-700">CATEGORÍA</label>
+                                <input id="categoriaItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-2">
+                                <label class="text-xs font-semibold text-gray-700">STOCK TEÓRICO</label>
+                                <input id="stockTeoricoItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <label class="text-xs font-semibold text-gray-700">MARCA</label>
+                                <input id="marcaItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Gremio</label>
-                                <select id="gremioItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                <label class="text-xs font-semibold text-gray-700">SUBFAMILIA</label>
+                                <select id="subfamiliaItem" class="w-full py-1 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-xs">
+                                    <option value="0">SELECCIONE</option>
+                                    <option value="CONSUMIBLE">CONSUMIBLE</option>
+                                    <option value="HERRAMIENTAS">HERRAMIENTAS</option>
+                                    <option value="DESPIECE">DESPIECE</option>
+                                </select>
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Unidad de Medida</label>
-                                <select id="unidadItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                                <label class="text-xs font-semibold text-gray-700">MODELO</label>
+                                <input id="modeloItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
-                            <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                                <label for="state" class="block text-sm font-medium text-gray-700">Stock Teorico</label>
-                                <input id="stockTeoricoItems" type="number" min="1" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
-                            </div>
-
-                            <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">
-                                    Stock Actual</label>
-                                <input id="stockActualItems" type="number" min="1" autocomplete="off" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                            <div class="col-span-6">
+                                <label class="text-xs font-semibold text-gray-700">CARACTERÍSTICAS</label>
+                                <input id="caracteristicasItem" type="text" autocomplete="off" class="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:text-xs border border-blue-300 rounded-md py-1">
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="px-4 py-3 bg-gray-50 sm:px-6 text-center">
-                        <button id="btnAgregarItems" type="submit" class="inline-flex justify-center py-2 px-4 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Agregar
+                    <div class="px-4 mt-4 bg-gray-50 sm:px-6 text-center">
+                        <button id="btnAgregarItems" type="submit" class="inline-flex justify-center py-2 px-4 border-transparent shadow-sm text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            AGREGAR ITEM
                         </button>
                     </div>
                 </div>
@@ -947,15 +962,15 @@ $usuario = $_SESSION['usuario'];
     </div>
 
 
-    <!-- MODALES ------------------------------------------------------------------- -->
 
+    <!-- SCRIPTS JS -->
     <script src="js/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="../js/alertify.min.js" type="text/javascript"></script>
     <script src="../js/modales.js" type="text/javascript"></script>
-    <!-- <script src="js/acordion.js" type="text/javascript"></script> -->
     <script src="js/subalmacenJS.js" type="text/javascript"></script>
     <script src="../js/alertasSweet.js" type="text/javascript"></script>
     <script src="../js/sorttable.js"></script>
+    <!-- SCRIPTS JS -->
 
     <!-- MENU JS -->
     <script src="../js/menu_sub.js"></script>

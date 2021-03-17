@@ -6,17 +6,19 @@ const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJ
 const inputPablabraBuscarEntradas = document.getElementById("inputPablabraBuscarEntradas");
 const inputPalabraBuscarSalida = document.getElementById("inputPalabraBuscarSalida");
 const inputPalabraExistencias = document.getElementById("inputPalabraExistencias");
-const descripcionItems = document.getElementById("descripcionItems");
-const caracteristicasItems = document.getElementById("caracteristicasItems");
-const cod2bendItems = document.getElementById("cod2bendItems");
-const categoriaItems = document.getElementById("categoriaItems");
-const marcaItems = document.getElementById("marcaItems");
-const gremioItems = document.getElementById("gremioItems");
-const unidadItems = document.getElementById("unidadItems");
-const stockTeoricoItems = document.getElementById("stockTeoricoItems");
-const stockActualItems = document.getElementById("stockActualItems");
 const motivoSalidaCarrito = document.getElementById("motivoSalidaCarrito");
 const OTSalida = document.getElementById("OTSalida");
+const cod2bendItem = document.getElementById("cod2bendItem");
+const seccionItem = document.getElementById("seccionItem");
+const descripcionCod2bendItem = document.getElementById("descripcionCod2bendItem");
+const SSTItem = document.getElementById("SSTItem");
+const areaItem = document.getElementById("areaItem");
+const categoriaItem = document.getElementById("categoriaItem");
+const stockTeoricoItem = document.getElementById("stockTeoricoItem");
+const marcaItem = document.getElementById("marcaItem");
+const subfamiliaItem = document.getElementById("subfamiliaItem");
+const modeloItem = document.getElementById("modeloItem");
+const caracteristicasItem = document.getElementById("caracteristicasItem");
 // INPUTS
 
 // CONTENEDORES DATA
@@ -39,6 +41,7 @@ const btnModalAgregarItem = document.getElementById("btnModalAgregarItem");
 const btnRestablecerSalidas = document.getElementById("btnRestablecerSalidas");
 const btnConsultaSalidaCarrito = document.getElementById("btnConsultaSalidaCarrito");
 const btnConfirmarSalidaCarrito = document.getElementById("btnConfirmarSalidaCarrito");
+const btnAgregarItems = document.getElementById("btnAgregarItems");
 // BTN
 
 
@@ -566,113 +569,6 @@ function obtenerTodosItemsGlobales() {
 }
 
 
-// FUNCION PARA OBTENER LAS OPCIONES DE LOS ITEMS
-function modalAgregarItem(idSubalmacen) {
-  document.getElementById("modalAgregarItem").classList.add('open');
-  localStorage.setItem("idSubalmacen", idSubalmacen);
-  let idDestino = localStorage.getItem('idDestino');
-  let idUsuario = localStorage.getItem('usuario');
-  const action = "consultarOpcionesItem";
-  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
-
-  document.getElementById("btnAgregarItems").
-    setAttribute('onclick', 'agregarItems(' + idSubalmacen + ');');
-
-  let contenedorMarca = document.getElementById("marcaItems");
-  let contenedorGremio = document.getElementById("gremioItems");
-  let contenedorUnidad = document.getElementById("unidadItems");
-
-  fetch(URL)
-    .then(array => array.json())
-    .then(array => {
-
-      contenedorMarca.innerHTML = '';
-      contenedorGremio.innerHTML = '';
-      contenedorUnidad.innerHTML = '';
-
-      if (array.marcas.length > 0) {
-        for (let x = 0; x < array.marcas.length; x++) {
-          const idMarca = array.marcas[x].idMarca;
-          const marca = array.marcas[x].marca;
-          const codigo = `<option value="${marca}">${marca}</option>`;
-          contenedorMarca.insertAdjacentHTML('beforeend', codigo);
-        }
-      }
-
-      if (array.gremios.length > 0) {
-        for (let x = 0; x < array.gremios.length; x++) {
-          const idGremio = array.gremios[x].idGremio;
-          const gremio = array.gremios[x].gremio;
-          const codigo = `<option value="${idGremio}">${gremio}</option>`;
-          contenedorGremio.insertAdjacentHTML('beforeend', codigo);
-        }
-      }
-
-      if (array.unidades.length > 0) {
-        for (let x = 0; x < array.unidades.length; x++) {
-          const idUnidad = array.unidades[x].idUnidad;
-          const unidad = array.unidades[x].unidad;
-          const codigo = `<option value="${unidad}">${unidad}</option>`;
-          contenedorUnidad.insertAdjacentHTML('beforeend', codigo);
-        }
-      }
-
-    })
-    .catch(function (err) {
-      contenedorMarca.innerHTML = '';
-      contenedorGremio.innerHTML = '';
-      contenedorUnidad.innerHTML = '';
-
-      fetch(APIERROR + err + ` modalAgregarItem(${idSubalmacen})`);
-    })
-}
-
-
-// FUNCION PARA AGREGAR ITEMS
-function agregarItems(idSubalmacen) {
-  let idDestino = localStorage.getItem('idDestino');
-  let idUsuario = localStorage.getItem('usuario');
-  let marca = document.getElementById("marcaItems").value;
-  let gremio = document.getElementById("gremioItems").value;
-  let unidad = document.getElementById("unidadItems").value;
-  let descripcion = document.getElementById("descripcionItems").value;
-  let caracteristicas = document.getElementById("caracteristicasItems").value;
-  let cod2bend = document.getElementById("cod2bendItems").value;
-  let categoria = document.getElementById("categoriaItems").value;
-  let stockTeorico = document.getElementById("stockTeoricoItems").value;
-  let stockActual = document.getElementById("stockActualItems").value;
-
-  const action = "agregarItems";
-  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}&marca=${marca}&gremio=${gremio}&unidad=${unidad}&descripcion=${descripcion}&caracteristicas=${caracteristicas}&cod2bend=${cod2bend}&categoria=${categoria}&stockTeorico=${stockTeorico}&stockActual=${stockActual}`;
-
-  if (
-    marca != "" && gremio != "" && unidad != "" && descripcion != "" && caracteristicas != "" && cod2bend != "" && categoria != "" && stockTeorico != "" && stockActual != ""
-  ) {
-    fetch(URL)
-      .then(array => array.json())
-      .then(array => {
-        if (array == 1) {
-          document.getElementById("modalAgregarItem").classList.remove('open');
-          alertaImg('Item Agregado', '', 'success', 1200);
-
-          document.getElementById("descripcionItems").value = '';
-          document.getElementById("caracteristicasItems").value = '';
-          document.getElementById("cod2bendItems").value = '';
-          document.getElementById("categoriaItems").value = '';
-          document.getElementById("stockTeoricoItems").value = '';
-          document.getElementById("stockActualItems").value = '';
-        } else {
-          alertaImg('Intente de Nuevo', '', 'info', 1200);
-        }
-      })
-      .catch(function (err) {
-        fetch(APIERROR + err + `modalAgregarItem(${idSubalmacen})`);
-      })
-  } else {
-    alertaImg('Datos Incorrectos', '', 'info', 1200);
-  }
-}
-
 
 function generarXLSItems(tipoXLS) {
   // event.preventDefault();
@@ -882,8 +778,6 @@ btnConsultaEntradaCarrito.addEventListener('click', () => {
   const action = "consultaEntradaCarrito";
   const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}`;
 
-  console.log(URL)
-
   fetch(URL)
     .then(array => array.json())
     .then(array => {
@@ -998,6 +892,10 @@ const consultaExistenciasSubalmacen = idSubalmacen => {
   fetch(URL)
     .then(array => array.json())
     .then(array => {
+      dataSubalmacenExistencias.innerHTML = '';
+      return array;
+    })
+    .then(array => {
       if (array) {
         for (let x = 0; x < array.length; x++) {
           const idItemGlobal = array[x].idItemGlobal;
@@ -1020,6 +918,7 @@ const consultaExistenciasSubalmacen = idSubalmacen => {
           const estilo = porcentaje <= 20 ? 'text-red-500 bg-red-200'
             : stockActual >= stockTeorico ? 'text-yellow-700 bg-yellow-200'
               : 'text-bluegray-500 bg-bluegray-50';
+          const fItem = `onclick="obtenerItem(${idItemGlobal})"`;
 
           const codigo = `
             <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal ${estilo}">
@@ -1088,6 +987,10 @@ const consultaExistenciasSubalmacen = idSubalmacen => {
                 data-title-items="${subalmacen}">
                     <p class="truncate whitespace-no-wrap">${subalmacen}</p>
                 </td> 
+
+                <td class="px-2 border-b border-gray-200 text-center py-1 font-bold w-8">
+                    <i class="fas fa-edit hover:text-blue-500 text-blue-700 fa-lg" ${fItem}></i>
+                </td> 
             </tr>    
           `;
           dataSubalmacenExistencias.insertAdjacentHTML('beforeend', codigo);
@@ -1095,15 +998,10 @@ const consultaExistenciasSubalmacen = idSubalmacen => {
       }
     })
     .catch(function (err) {
+      dataSubalmacenExistencias.innerHTML = '';
       fetch(APIERROR + err);
     })
 }
-
-
-//INICIA FORMULARIO PARA AGREGAR ITEMS 
-btnModalAgregarItem.addEventListener('click', () => {
-  abrirmodal('modalAgregarItem');
-})
 
 
 // OBTIENE ITEMS CON EXISTENCIAS PARA LAS SALIDAS
@@ -1231,7 +1129,6 @@ const salidasSubalmacen = idSubalmacen => {
     .catch(function (err) {
       dataSalidasSubalmacen.innerHTML = '';
       // fetch(APIERROR + err);
-      console.log(err);
     })
 }
 
@@ -1320,7 +1217,7 @@ btnConsultaSalidaCarrito.addEventListener('click', () => {
 
   const action = "consultaSalidaCarrito";
   const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}`;
-  console.log(URL);
+
   fetch(URL)
     .then(array => array.json())
     .then(array => {
@@ -1376,7 +1273,6 @@ btnConfirmarSalidaCarrito.addEventListener('click', () => {
     fetch(URL)
       .then(array => array.json())
       .then(array => {
-        console.log(array);
         if (array == 1) {
           alertaImg('Carrito Finalizado con Exito', '', 'success', 1500);
           salidasSubalmacen(idSubalmacen);
@@ -1394,6 +1290,8 @@ btnConfirmarSalidaCarrito.addEventListener('click', () => {
     () => { alertaImg('Proceso Cancelado', '', 'error', 1500) });
 })
 
+
+// VALIDA EL MOTIVO DE SALIDA
 motivoSalidaCarrito.addEventListener('change', () => {
   const msj = motivoSalidaCarrito.value == "INCIDENCIA" ? 'Ingrese Numero OT'
     : motivoSalidaCarrito.value == "INCIDENCIAGENERAL" ? 'Ingrese Numero OT'
@@ -1411,21 +1309,216 @@ motivoSalidaCarrito.addEventListener('change', () => {
 })
 
 
-const agrgarItem = () => {
-  descripcionItems.value = '';
-  caracteristicasItems.value = '';
-  cod2bendItems.value = '';
-  categoriaItems.value = '';
-  marcaItems.value = '';
-  gremioItems.value = '';
-  unidadItems.value = '';
-  stockTeoricoItems.value = '';
-  stockActualItems.value = '';
+
+// INICIA PARAMETROS PARA AGREGAR ITEM
+const iniciarFomularioItem = () => {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+
+  const action = "consultarOpcionesItem";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
+
+  fetch(URL)
+    .then(array => array.json())
+    .then(array => {
+      seccionItem.innerHTML = '<option value="0">SELECCIONE</option>';
+      return array;
+    })
+    .then(array => {
+      if (secciones = array.secciones) {
+        for (let x = 0; x < secciones.length; x++) {
+          const idSeccion = secciones[x].idSeccion;
+          const seccion = secciones[x].seccion;
+          const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+          seccionItem.insertAdjacentHTML('beforeend', codigo);
+        }
+      }
+    })
+    .catch(function (err) {
+      seccionItem.innerHTML = '';
+      fetch(APIERROR + err);
+    })
+}
+
+
+//INICIA FORMULARIO PARA AGREGAR ITEMS 
+btnModalAgregarItem.addEventListener('click', () => {
+  abrirmodal('modalAgregarItem');
+  btnAgregarItems.setAttribute('onclick', 'agregarItem()');
+  btnAgregarItems.innerText = 'Agregar Item';
+  cod2bendItem.value = '';
+  seccionItem.value = 0;
+  descripcionCod2bendItem.value = '';
+  SSTItem.value = '';
+  areaItem.value = '';
+  categoriaItem.value = '';
+  stockTeoricoItem.value = '';
+  marcaItem.value = '';
+  subfamiliaItem.value = 0;
+  modeloItem.value = '';
+  caracteristicasItem.value = '';
+})
+
+
+// AGREGA ITEM GLOBAL POR DESTINO
+const agregarItem = () => {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
+
+  const data = new FormData();
+  data.append("cod2bendItem", cod2bendItem.value)
+  data.append("seccionItem", seccionItem.value)
+  data.append("descripcionCod2bendItem", descripcionCod2bendItem.value)
+  data.append("SSTItem", SSTItem.value)
+  data.append("areaItem", areaItem.value)
+  data.append("categoriaItem", categoriaItem.value)
+  data.append("stockTeoricoItem", stockTeoricoItem.value)
+  data.append("marcaItem", marcaItem.value)
+  data.append("subfamiliaItem", subfamiliaItem.value)
+  data.append("modeloItem", modeloItem.value)
+  data.append("caracteristicasItem", caracteristicasItem.value)
+
+  const action = "agregarItem";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
+
+  fetch(URL, {
+    method: "POST",
+    body: data
+  })
+    .then(array => array.json())
+    .then(array => {
+      if (array == 1) {
+        alertaImg('Item Agregado', '', 'success', 1500);
+        consultaExistenciasSubalmacen(idSubalmacen);
+        cod2bendItem.value = '';
+        seccionItem.value = '';
+        descripcionCod2bendItem.value = '';
+        SSTItem.value = '';
+        areaItem.value = '';
+        categoriaItem.value = '';
+        stockTeoricoItem.value = '';
+        marcaItem.value = '';
+        subfamiliaItem.value = '';
+        modeloItem.value = '';
+        caracteristicasItem.value = '';
+        cerrarmodal('modalAgregarItem');
+      } else {
+        alertaImg('Intente de Nuevo', '', 'info', 1500);
+      }
+    })
+    .catch(function (err) {
+      cod2bendItem.value = '';
+      seccionItem.value = '';
+      descripcionCod2bendItem.value = '';
+      SSTItem.value = '';
+      areaItem.value = '';
+      categoriaItem.value = '';
+      stockTeoricoItem.value = '';
+      marcaItem.value = '';
+      subfamiliaItem.value = '';
+      modeloItem.value = '';
+      caracteristicasItem.value = '';
+      cerrarmodal('modalAgregarItem');
+      fetch(APIERROR + err);
+    })
+}
+
+
+// OBTIENE INFORMACIÓN DE ITEM SELECCIONADO
+const obtenerItem = idItem => {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+
+  abrirmodal('modalAgregarItem');
+  btnAgregarItems.setAttribute('onclick', `actualizarItem(${idItem})`);
+  btnAgregarItems.innerText = 'Actualizar Item';
+
+  const action = "obtenerItem";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idItem=${idItem}`;
+
+  fetch(URL)
+    .then(array => array.json())
+    .then(array => {
+      if (array) {
+        cod2bendItem.value = array.cod2bend;
+        seccionItem.value = array.idSeccion;
+        descripcionCod2bendItem.value = array.descripcionCod2bend;
+        SSTItem.value = array.SST;
+        areaItem.value = array.area;
+        categoriaItem.value = array.categoria;
+        stockTeoricoItem.value = array.stockTeorico;
+        marcaItem.value = array.marca;
+        subfamiliaItem.value = array.subfamilia;
+        modeloItem.value = array.modelo;
+        caracteristicasItem.value = array.caracteristicas;
+      }
+    })
+    .catch(function (err) {
+      cerrarmodal('modalAgregarItem');
+      fetch(APIERROR + err);
+    })
+}
+
+
+// ACTUALIZA ITEM GLOBAL
+const actualizarItem = idItem => {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
+
+  const data = new FormData();
+  data.append("idItem", idItem)
+  data.append("cod2bendItem", cod2bendItem.value)
+  data.append("seccionItem", seccionItem.value)
+  data.append("descripcionCod2bendItem", descripcionCod2bendItem.value)
+  data.append("SSTItem", SSTItem.value)
+  data.append("areaItem", areaItem.value)
+  data.append("categoriaItem", categoriaItem.value)
+  data.append("stockTeoricoItem", stockTeoricoItem.value)
+  data.append("marcaItem", marcaItem.value)
+  data.append("subfamiliaItem", subfamiliaItem.value)
+  data.append("modeloItem", modeloItem.value)
+  data.append("caracteristicasItem", caracteristicasItem.value)
+
+  const action = "actualizarItem";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}`;
+
+  fetch(URL, {
+    method: "POST",
+    body: data
+  })
+    .then(array => array.json())
+    .then(array => {
+      if (array == 1) {
+        alertaImg('Item Actualizado', '', 'success', 1500);
+        consultaExistenciasSubalmacen(idSubalmacen);
+        cerrarmodal('modalAgregarItem');
+      } else {
+        alertaImg('Intente de Nuevo', '', 'info', 1500);
+      }
+    })
+    .catch(function (err) {
+      cod2bendItem.value = '';
+      seccionItem.value = '';
+      descripcionCod2bendItem.value = '';
+      SSTItem.value = '';
+      areaItem.value = '';
+      categoriaItem.value = '';
+      stockTeoricoItem.value = '';
+      marcaItem.value = '';
+      subfamiliaItem.value = '';
+      modeloItem.value = '';
+      caracteristicasItem.value = '';
+      cerrarmodal('modalAgregarItem');
+      fetch(APIERROR + err);
+    })
 }
 
 
 // LOAD DEL NAVEGADOR
 window.addEventListener('load', () => {
   consultaSubalmacen();
+  iniciarFomularioItem();
   document.getElementById("destinosSelecciona").addEventListener("click", consultaSubalmacen);
 })
