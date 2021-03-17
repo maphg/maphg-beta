@@ -766,7 +766,7 @@ const salidasSubalmacen = idSubalmacen => {
 
                 <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-16" data-title-items="Ingrese Cantidad">
                     <p class="whitespace-no-wrap">
-                      <input id="item_entrada_${idItemGlobal}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 rounded-md text-sm focus:outline-none w-full" type="number" placeholder="#" min="0" value="${stockCantidadSalida}" ${fAgregarSalida}>
+                      <input id="item_salida_${idItemGlobal}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 rounded-md text-sm focus:outline-none w-full" type="number" placeholder="#" min="0" value="${stockCantidadSalida}" ${fAgregarSalida}>
                     </p>
                 </td>
                 
@@ -789,7 +789,7 @@ const agregarSalida = (idItemGlobal, idSubalmacen) => {
   let idDestino = localStorage.getItem('idDestino');
   let idUsuario = localStorage.getItem('usuario');
 
-  if (input = document.getElementById("item_entrada_" + idItemGlobal)) {
+  if (input = document.getElementById("item_salida_" + idItemGlobal)) {
     if (input.value >= 0 && input.value != 'e') {
 
       const action = "agregarSalida";
