@@ -392,9 +392,9 @@ $usuario = $_SESSION['usuario'];
 
                             <!-- TIPO DE SALIDA -->
                             <select id="motivoSalidaCarrito" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">Seleccione el Tipo de Salida</option>
+                                <option value="0">Seleccione el Tipo de Salida</option>
                                 <option value="INCIDENCIA">INCIDENCIA </option>
-                                <option value="INCIDENCIAGENERAL">INCIDENCIA GENERALE</option>
+                                <option value="INCIDENCIAGENERAL">INCIDENCIA GENERAL</option>
                                 <option value="PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
                                 <option value="GIFT">AVERIA DE GIFT</option>
                                 <option value="OTRO">OTRO</option>

@@ -927,7 +927,7 @@ btnConfirmarSalidaCarrito.addEventListener('click', () => {
         if (array == 1) {
           alertaImg('Carrito Finalizado con Exito', '', 'success', 1500);
           salidasSubalmacen(idSubalmacen);
-          cerrarmodal('modalConfirmacionSalidas');
+          cerrarmodal('modalCarritoSalidas');
         } else if (array == 2) {
           alertaImg('Numero OT, NO Existe', '', 'info', 1500);
         } else {

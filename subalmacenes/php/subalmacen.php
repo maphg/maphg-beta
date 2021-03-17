@@ -828,13 +828,13 @@ if (isset($_GET['action'])) {
         if ($stockActual >= $cantidad) {
             if ($idRegistro > 0 and $cantidad >= 0) {
                 $query = "UPDATE t_subalmacenes_items_stock_salidas SET stock_salida = $cantidad, stock_actual = $stockActual, stock_teorico = $stockTeorico, status = 'ESPERA', fecha_movimiento = '$fechaActual' 
-            WHERE id = $idRegistro";
+                WHERE id = $idRegistro";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $resp = "ACTUALIZADO";
                 }
             } elseif ($idRegistro == 0 and $cantidad > 0) {
-                $query = "INSERT INTO t_subalmacenes_items_stock_salidas(id_usuario, id_subalmacen, id_destino, id_item_global, stock_salida, stock_actual, status, fecha_movimiento, fecha_creacion) 
-            VALUES($idUsuario, $idSubalmacen, $idDestino, $idItemGlobal, $cantidad, $stockActual, 'ESPERA', '$fechaActual', '$fechaActual')";
+                $query = "INSERT INTO t_subalmacenes_items_stock_salidas(id_usuario, id_subalmacen, id_destino, id_item_global, stock_salida, stock_actual, stock_teorico, status, fecha_movimiento, fecha_creacion) 
+                VALUES($idUsuario, $idSubalmacen, $idDestino, $idItemGlobal, $cantidad, $stockActual, $stockTeorico, 'ESPERA', '$fechaActual', '$fechaActual')";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     $resp = "AGREGADO";
                 }
@@ -909,21 +909,24 @@ if (isset($_GET['action'])) {
         $idX = 0;
         $resp = 0;
         if ($tipoSalida == "INCIDENCIA") {
-            $query = "SELECT id FROM t_mc WHERE activo = 1 and id = $OTSalida";
+            $query = "SELECT id FROM t_mc WHERE activo = 1 and id = $OTSalida and id_destino = $idDestino";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idX = $x['id'];
                 }
             }
         } elseif ($tipoSalida == "INCIDENCIAGENERAL") {
-            $query = "SELECT id FROM t_mp_np WHERE activo = 1 and id = $OTSalida";
+            $query = "SELECT id FROM t_mp_np WHERE activo = 1 and id = $OTSalida and id_destino = $idDestino";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idX = $x['id'];
                 }
             }
         } elseif ($tipoSalida == "PREVENTIVO") {
-            $query = "SELECT id FROM t_mp_planificacion_iniciada WHERE activo = 1 and id = $OTSalida";
+            $query = "SELECT t_mp_planificacion_iniciada.id 
+            FROM t_mp_planificacion_iniciada
+            INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
+            WHERE t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.id = $OTSalida and t_equipos_america.id_destino = $idDestino";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {
                     $idX = $x['id'];
@@ -934,7 +937,7 @@ if (isset($_GET['action'])) {
 
 
         if ($tipoSalida == "INCIDENCIA" || $tipoSalida == "INCIDENCIAGENERAL" || $tipoSalida == "PREVENTIVO") {
-            if ($idX > 0) {
+            if ($idX == $OTSalida) {
                 $query = "UPDATE t_subalmacenes_items_stock
                 INNER JOIN t_subalmacenes_items_stock_salidas ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes_items_stock_salidas.id_subalmacen and t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_stock_salidas.id_item_global
                 SET t_subalmacenes_items_stock.stock_anterior = t_subalmacenes_items_stock.stock_actual,
