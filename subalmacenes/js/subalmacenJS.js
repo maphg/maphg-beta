@@ -509,8 +509,6 @@ const obtenerTodosItemsGlobales = () => {
   const action = "consultaTodosItems";
   const URL = `php/subalmacen.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraBuscar=${palabraBuscar}`;
 
-  console.log(URL);
-
   fetch(URL)
     .then(array => array.json())
     .then(array => {
