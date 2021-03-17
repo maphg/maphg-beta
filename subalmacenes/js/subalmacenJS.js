@@ -27,6 +27,7 @@ const dataCarritoEntradas = document.getElementById("dataCarritoEntradas");
 const dataCarritoSalidas = document.getElementById("dataCarritoSalidas");
 const dataSubalmacenExistencias = document.getElementById("dataSubalmacenExistencias");
 const dataSalidasSubalmacen = document.getElementById("dataSalidasSubalmacen");
+const dataTodosItems = document.getElementById("dataTodosItems");
 // CONTENEDORES DATA
 
 // CONTENEDORES DIV
@@ -42,6 +43,7 @@ const btnRestablecerSalidas = document.getElementById("btnRestablecerSalidas");
 const btnConsultaSalidaCarrito = document.getElementById("btnConsultaSalidaCarrito");
 const btnConfirmarSalidaCarrito = document.getElementById("btnConfirmarSalidaCarrito");
 const btnAgregarItems = document.getElementById("btnAgregarItems");
+const btnBusquedaGeneral = document.getElementById("btnBusquedaGeneral");
 // BTN
 
 
@@ -491,77 +493,123 @@ function activarBtnFinalizarMovimiento() {
 }
 
 
+btnBusquedaGeneral.addEventListener('click', () => {
+  obtenerTodosItemsGlobales();
+  abrirmodal('modalBusquedaGeneral');
+});
+
+
 // Funciones para mostrar todo los Items.
-function obtenerTodosItemsGlobales() {
+const obtenerTodosItemsGlobales = () => {
   let idDestino = localStorage.getItem('idDestino');
   let idUsuario = localStorage.getItem('usuario');
   let palabraBuscar = document.getElementById("inputPalabraBuscarTodo").value;
-  let contenedor = document.getElementById('dataTodosItems');
+
 
   const action = "consultaTodosItems";
   const URL = `php/subalmacen.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&palabraBuscar=${palabraBuscar}`;
+
+  console.log(URL);
+
   fetch(URL)
     .then(array => array.json())
     .then(array => {
-      contenedor.innerHTML = '';
+      dataTodosItems.innerHTML = '';
       return array;
     })
     .then(array => {
-
-      if (array.length > 0) {
+      if (array.length) {
         for (let x = 0; x < array.length; x++) {
-          const estilo = array[x].estilo;
-          const categoria = array[x].categoria;
           const cod2bend = array[x].cod2bend;
-          const gremio = array[x].gremio;
-          const descripcion = array[x].descripcion;
-          const caracteristicas = array[x].caracteristicas;
-          const marca = array[x].marca;
+          const descripcionCod2bend = array[x].descripcionCod2bend;
+          const servicioTecnico = array[x].servicioTecnico;
+          const seccion = array[x].seccion;
+          const area = array[x].area;
+          const categoria = array[x].categoria;
           const stockTeorico = array[x].stockTeorico;
           const stockActual = array[x].stockActual;
-          const unidad = array[x].unidad;
-          const ubicacion = array[x].ubicacion;
+          const marca = array[x].marca;
+          const modelo = array[x].modelo;
+          const caracteristicas = array[x].caracteristicas;
+          const subfamilia = array[x].subfamilia;
+          const subalmacen = array[x].subalmacen;
 
           const codigo = `
-            <div class="mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 rounded hover:bg-indigo-100 cursor-pointer text-center ${estilo}">
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${categoria}</h1>
-                </div>
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${cod2bend}</h1>
-                </div>
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${gremio}</h1>
-                </div>
-                <div class="w-64 flex h-full items-center justify-center truncate">
-                    <h1>${descripcion}</h1>
-                </div>
-                <div class="w-64 flex h-full items-center justify-center truncate">
-                    <h1>${caracteristicas}</h1>
-                </div>
-                <div class="w-64 flex h-full items-center justify-center truncate">
-                    <h1>${marca}</h1>
-                </div>
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${stockTeorico}</h1>
-                </div>
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${stockActual}</h1>
-                </div>
-                <div class="w-32 flex h-full items-center justify-center truncate">
-                    <h1>${unidad}</h1>
-                </div>
-                <div class="w-64 flex h-full items-center justify-center truncate">
-                    <h1>${ubicacion}</h1>
-                </div>
-            </div>         
+            <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24" 
+                data-title-items="${cod2bend}">
+                    <p class="truncate whitespace-no-wrap">${cod2bend}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24" 
+                data-title-items="${descripcionCod2bend}">
+                    <p class="truncate whitespace-no-wrap">${descripcionCod2bend}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${servicioTecnico}">
+                    <p class="truncate whitespace-no-wrap">${servicioTecnico}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${seccion}">
+                    <p class="truncate whitespace-no-wrap">${seccion}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${area}">
+                    <p class="truncate whitespace-no-wrap">${area}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${categoria}">
+                    <p class="truncate whitespace-no-wrap">${categoria}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12"
+                data-title-items="${stockTeorico}">
+                    <p class="truncate whitespace-no-wrap">${stockTeorico}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-12"
+                data-title-items="${stockActual}">
+                    <p class="truncate whitespace-no-wrap">${stockActual}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${marca}">
+                    <p class="truncate whitespace-no-wrap">${marca}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${modelo}">
+                    <p class="truncate whitespace-no-wrap">${modelo}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-32"
+                data-title-items="${caracteristicas}">
+                    <p class="truncate whitespace-no-wrap">${caracteristicas}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${subfamilia}">
+                    <p class="truncate whitespace-no-wrap">${subfamilia}</p>
+                </td>
+
+                <td class="px-1 border-b border-gray-200 text-center py-1 font-bold w-24"
+                data-title-items="${subalmacen}">
+                    <p class="truncate whitespace-no-wrap">${subalmacen}</p>
+                </td>
+                
+            </tr>    
           `;
-          contenedor.insertAdjacentHTML('beforeend', codigo);
+          dataTodosItems.insertAdjacentHTML('beforeend', codigo);
         }
       }
     })
     .catch(function (err) {
-      contenedor.innerHTML = '';
+      dataTodosItems.innerHTML = '';
       fetch(APIERROR + err);
     })
 
@@ -571,30 +619,26 @@ function obtenerTodosItemsGlobales() {
 
 
 function generarXLSItems(tipoXLS) {
-  // event.preventDefault();
 
-  // Aquí se almacena el ID de los Items con Busqueda.
-  // let idItems = $("#inputResultadosXLS").val();
-  // let idInput = idItems.split(';');
-  // idInput.pop();
-
-  let idDestinoSeleccionado = localStorage.getItem('idDestino');
-  let idSubalmacenSeleccionado = localStorage.getItem('idSubalmacen');
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+  let idSubalmacen = localStorage.getItem('idSubalmacen');
   let page = "";
 
-  if (tipoXLS == "generalPorDestino") {
-    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado;
-    window.location = page;
-  } else if (tipoXLS == "generarStock0") {
-    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&stock=0';
-    window.location = page;
-  } else if (tipoXLS == "generalPorSubalmacen") {
-    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&idSubalmacen=' + idSubalmacenSeleccionado;
-    window.location = page;
-  } else if (tipoXLS == "generalPorSubalmacenStock0") {
-    page = 'php/GenerarExcel.php?idDestino=' + idDestinoSeleccionado + '&idSubalmacen=' + idSubalmacenSeleccionado + '&stock=0';
-    window.location = page;
+  if (tipoXLS == "destino0") {
+    page =
+      `php/GenerarExcel.php?action=generarExcel&idDestino=${idDestino}&idUsuario=${idUsuario}&idSubalmacen=0&stock=0`;
+  } else if (tipoXLS == "destino1") {
+    page =
+      `php/GenerarExcel.php?action=generarExcel&idDestino=${idDestino}&idUsuario=${idUsuario}&idSubalmacen=0&stock=1`;
+  } else if (tipoXLS == "subalmacen0") {
+    page =
+      `php/GenerarExcel.php?action=generarExcel&idDestino=${idDestino}&idUsuario=${idUsuario}&idSubalmacen=${idSubalmacen}&stock=0`;
+  } else if (tipoXLS == "subalmacen1") {
+    page =
+      `php/GenerarExcel.php?action=generarExcel&idDestino=${idDestino}&idUsuario=${idUsuario}&idSubalmacen=${idSubalmacen}&stock=1`;
   }
+  window.location = page;
 }
 
 

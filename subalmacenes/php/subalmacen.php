@@ -14,60 +14,78 @@ if (isset($_GET['action'])) {
     if ($action == "consultaTodosItems") {
         $palabraBuscar = $_GET['palabraBuscar'];
 
-        if ($palabraBuscar != "") {
-            $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
-            OR bitacora_gremio.nombre_gremio LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
+        if ($palabraBuscar == "") {
+            $filtroPalabraBuscar = "";
         } else {
-            $palabraBuscar = "";
+            $filtroPalabraBuscar = "and (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
         }
 
-        $query = "SELECT
+        $query = "SELECT t_subalmacenes_items_stock.id, t_subalmacenes_items_stock.id_subalmacen, t_subalmacenes_items_stock.stock_actual, t_subalmacenes_items_stock.stock_teorico, t_subalmacenes_items_stock.id_item_global,
+        t_subalmacenes_items_globales.cod2bend, 
+        t_subalmacenes_items_globales.descripcion_cod2bend,
+        t_subalmacenes_items_globales.descripcion_servicio_tecnico,
+        t_subalmacenes_items_globales.id_seccion,
+        t_subalmacenes_items_globales.area,
         t_subalmacenes_items_globales.categoria,
-        t_subalmacenes_items_globales.cod2bend,
-        t_subalmacenes_items_globales.descripcion,
-        t_subalmacenes_items_globales.caracteristicas,
         t_subalmacenes_items_globales.marca,
-        t_subalmacenes_items_globales.unidad,
-        t_subalmacenes_items_stock.id 'idItemsResultado',
-        t_subalmacenes_items_stock.stock_teorico,
-        t_subalmacenes_items_stock.stock_actual,
-        bitacora_gremio.nombre_gremio,
-        t_subalmacenes.nombre 'ubicacion'
+        t_subalmacenes_items_globales.modelo,
+        t_subalmacenes_items_globales.caracteristicas,
+        t_subalmacenes_items_globales.subfamilia
         FROM t_subalmacenes_items_stock
-        INNER JOIN t_subalmacenes ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes.id
-        INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
-        INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
-        WHERE t_subalmacenes_items_stock.id_destino IN($filtroDestino) $palabraBuscar";
+        INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id 
+        WHERE t_subalmacenes_items_stock.id_destino = $idDestino and t_subalmacenes_items_stock.activo = 1 $filtroPalabraBuscar";
         if ($result = mysqli_query($conn_2020, $query)) {
-            while ($row = mysqli_fetch_array($result)) {
-                $idItemsResultado = $row['idItemsResultado'];
-                $categoria = $row['categoria'];
-                $cod2bend = $row['cod2bend'];
-                $gremio = $row['nombre_gremio'];
-                $descripcion = $row['descripcion'];
-                $caracteristicas = $row['caracteristicas'];
-                $marca = $row['marca'];
-                $stockTeorico = $row['stock_teorico'];
-                $stockActual = $row['stock_actual'];
-                $unidad = $row['unidad'];
-                $ubicacion = $row['ubicacion'];
+            foreach ($result as $x) {
+                $idSubalmacen = $x['id_subalmacen'];
+                $idItemStock = $x['id'];
+                $idItemGlobal = $x['id_item_global'];
+                $stockTeorico = $x['stock_teorico'];
+                $cod2bend = $x['cod2bend'];
+                $descripcionCod2bend = $x['descripcion_cod2bend'];
+                $servicioTecnico = $x['descripcion_servicio_tecnico'];
+                $idSeccion = $x['id_seccion'];
+                $area = $x['area'];
+                $categoria = $x['categoria'];
+                $marca = $x['marca'];
+                $modelo = $x['modelo'];
+                $caracteristicas = $x['caracteristicas'];
+                $subfamilia = $x['subfamilia'];
+                $stockActual = $x['stock_actual'];
+                $stockTeorico = $x['stock_teorico'];
+
+                #SECCION
+                $seccion = "ND";
+                $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $seccion = $x['seccion'];
+                    }
+                }
+
+
+                #SUBALMACEN
+                $subalmacen = "NA";
+                $query = "SELECT nombre FROM t_subalmacenes WHERE id = $idSubalmacen";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $subalmacen = $x['nombre'];
+                    }
+                }
 
                 $array[] = array(
-                    "estilo" => $colorstilo,
-                    "categoria" => $categoria,
                     "cod2bend" => $cod2bend,
-                    "gremio" => $gremio,
-                    "descripcion" => $descripcion,
-                    "caracteristicas" => $caracteristicas,
-                    "marca" => $marca,
+                    "descripcionCod2bend" => $descripcionCod2bend,
+                    "servicioTecnico" => $servicioTecnico,
+                    "seccion" => $seccion,
+                    "area" => $area,
+                    "categoria" => $categoria,
                     "stockTeorico" => $stockTeorico,
                     "stockActual" => $stockActual,
-                    "unidad" => $unidad,
-                    "ubicacion" => $ubicacion
+                    "marca" => $marca,
+                    "modelo" => $modelo,
+                    "caracteristicas" => $caracteristicas,
+                    "subfamilia" => $subfamilia,
+                    "subalmacen" => $subalmacen
                 );
             }
         }

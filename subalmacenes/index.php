@@ -54,9 +54,9 @@ $usuario = $_SESSION['usuario'];
                         <h1>Sub Almacenes & Bodegas</h1>
                     </div>
                     <div class="absolute right-0 mr-10">
-                        <button data-target="modalBusquedaGeneral" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="obtenerTodosItemsGlobales(); abrirmodal('modalBusquedaGeneral')"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda
-                            General</button>
-                        <button data-target="modalInformes" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
+                        <button id="btnBusquedaGeneral" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-search fa-lg mr-2"></i>Búsqueda General</button>
+
+                        <button class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-chart-line fa-lg mr-2"></i>Informes</button>
                     </div>
                 </div>
 
@@ -131,8 +131,8 @@ $usuario = $_SESSION['usuario'];
                         <div id="exportarexis" onclick="expandir(this.id)" class="relative">
                             <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
                             <div id="exportarexistoggle" class="absolute mt-2 hidden p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col z-20">
-                                <a onclick="generarXLSItems('generalPorSubalmacen');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md mb-1 text-gray-900">Exportar Todo</a>
-                                <a onclick="generarXLSItems('generalPorSubalmacenStock0');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md text-gray-900">Exportar stock 0</a>
+                                <a onclick="generarXLSItems('subalmacen1');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md mb-1 text-gray-900">Exportar Todo</a>
+                                <a onclick="generarXLSItems('subalmacen0');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md text-gray-900">Exportar stock 0</a>
                             </div>
                         </div>
 
@@ -201,7 +201,7 @@ $usuario = $_SESSION['usuario'];
                                                 </th>
 
                                                 <th class="px-2 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-8">
-                                                    
+
                                                 </th>
 
                                             </tr>
@@ -804,61 +804,93 @@ $usuario = $_SESSION['usuario'];
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                <div class="mt-2 w-full flex flex-col justify-center items-center">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
                         <input id="inputPalabraBuscarTodo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) obtenerTodosItemsGlobales();" autocomplete="off">
                         <div id="generalExistencia" onclick="expandir(this.id);" class="relative">
                             <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
-                            <div id="generalExistenciatoggle" class="absolute hidden mt-2 p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
-                                <a href="#" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md mb-1" onclick="generarXLSItems('generalPorDestino');">
+                            <div id="generalExistenciatoggle" class="absolute hidden mt-2 p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col z-20">
+                                <a href="#" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md mb-1" onclick="generarXLSItems('destino1');">
                                     Exportar Todo
                                 </a>
-                                <a href="#" onclick="generarXLSItems('generarStock0');" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md">
+                                <a href="#" onclick="generarXLSItems('destino0');" class="text-gray-900 w-full p-2 hover:bg-gray-400 rounded-md">
                                     Exportar Stock 0
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 text-center px-2">
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CATEGORÍA</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>COD2BEND</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>GREMIO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>CARACTERISTICAS</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>MARCA/PROVEEDOR</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK TEÓRICO</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK ACTUAL</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>U DE M</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>UBICACIÓN</h1>
+
+                    <div class="w-full">
+                        <div class="flex flex-col container mx-auto scrollbar">
+                            <div class="py-2 overflow-x-auto relative scrollbar">
+                                <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
+                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                        <thead>
+                                            <tr class="cursor-pointer bg-bluegray-50">
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CO2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. COD2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. SERV. TEC.
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SECCIÓN
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    ÁREA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CATEGORÍA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK TEÓRICO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK REAL
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MARCA
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MODELO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
+                                                    CARACTERISTICAS
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBFAMILIA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBALMACÉN BODEGA
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <!-- DATA -->
+                                        <tbody id="dataTodosItems" class="bg-white divide-y divide-gray-200">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <!-- TITULOS -->
 
-
-                    <div id="dataTodosItems" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 64vh;">
-                    </div>
                 </div>
             </div>
         </div>
