@@ -22,15 +22,6 @@ $usuario = $_SESSION['usuario'];
 </head>
 
 <body class="bg-gray-300 h-screen scrollbar" style="font-family: 'Roboto', sans-serif;">
-
-    <!-- Inputs Hidden para Guardar Información Temporal -->
-    <input type="hidden" id="inputIdDestinoSeleccionado" value="<?= $destinoT; ?>">
-    <input type="hidden" id="inputIdSubalmacenSeleccionado">
-    <input type="hidden" id="inputIndexEntradaCarrito">
-    <input type="hidden" id="inputIndexMovimientosCarrito">
-    <input type="hidden" id="inputID">
-    <input type="hidden" id="inputResultadosXLS">
-
     <!-- MENÚ -->
     <menu-menu></menu-menu>
     <menu-sidebar clases="z-20"></menu-sidebar>
