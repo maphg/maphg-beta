@@ -451,7 +451,7 @@ if (isset($_POST['action'])) {
             AND (
             t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
             OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
+            OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' 
             OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
             OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%'
             )
@@ -465,7 +465,7 @@ if (isset($_POST['action'])) {
         c_destinos.destino, t_subalmacenes.nombre, t_subalmacenes.fase,
         t_subalmacenes_items_stock.stock_actual, t_subalmacenes_items_stock.stock_teorico, t_subalmacenes_items_globales.unidad,
         t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
-        t_subalmacenes_items_globales.descripcion, t_subalmacenes_items_globales.caracteristicas, 
+        t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, 
         t_subalmacenes_items_globales.marca,
         t_subalmacenes_items_stock.id 'idItem',
         bitacora_gremio.nombre_gremio
@@ -484,7 +484,7 @@ if (isset($_POST['action'])) {
                 $categoria = $i['categoria'];
                 $cod2bend = $i['cod2bend'];
                 $gremio = $i['nombre_gremio'];
-                $descripcion = $i['descripcion'];
+                $descripcion = $i['descripcion_cod2bend'];
                 $caracteristicas = $i['caracteristicas'];
                 $marca = $i['marca'];
                 $stockTeorico = $i['stock_teorico'];
@@ -591,7 +591,7 @@ if (isset($_POST['action'])) {
         $data = array();
         $idPlanMP = $_POST['idPlanMP'];
         $dataMateriales = "";
-        $query = "SELECT t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion,
+        $query = "SELECT t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion_cod2bend,
         t_subalmacenes_items_globales.cod2bend
         FROM t_mp_planes_materiales 
         INNER JOIN t_subalmacenes_items_globales ON t_mp_planes_materiales.id_item_global = t_subalmacenes_items_globales.id
@@ -601,7 +601,7 @@ if (isset($_POST['action'])) {
             foreach ($result as $value) {
                 $cantidadMaterial = $value['cantidad_material'];
                 $cod2bendMaterial = $value['cod2bend'];
-                $descripcionMaterial = $value['descripcion'];
+                $descripcionMaterial = $value['descripcion_cod2bend'];
 
                 if ($cod2bendMaterial == "") {
                     $cod2bendMaterial = "S/C";

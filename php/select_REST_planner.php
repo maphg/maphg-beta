@@ -961,7 +961,17 @@ if (isset($_GET['action'])) {
 
         #PLANES DE ACCION
         $array['planaccion'] = array();
-        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos.titulo
+        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos.titulo,t_proyectos_planaccion.status_material, 
+        t_proyectos_planaccion.status_trabajando, 
+        t_proyectos_planaccion.departamento_calidad, 
+        t_proyectos_planaccion.departamento_compras, 
+        t_proyectos_planaccion.departamento_direccion, 
+        t_proyectos_planaccion.departamento_finanzas,
+        t_proyectos_planaccion.departamento_rrhh, 
+        t_proyectos_planaccion.energetico_electricidad, 
+        t_proyectos_planaccion.energetico_agua, 
+        t_proyectos_planaccion.energetico_diesel, 
+        t_proyectos_planaccion.energetico_gas
         FROM t_proyectos_planaccion 
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.responsable = $idUsuario and t_proyectos_planaccion.activo = 1 and t_proyectos.activo = 1 and (t_proyectos_planaccion.status='N' or t_proyectos_planaccion.status='PENDIENTE' or t_proyectos_planaccion.status='P' or t_proyectos_planaccion.status='PROCESO') $filtroDestinoPlanaccion";
@@ -970,19 +980,47 @@ if (isset($_GET['action'])) {
                 $idPlanaccion = $x['id'];
                 $actividad = $x['actividad'];
                 $proyecto = $x['titulo'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajando'];
+                $sDepartamento =
+                    intval($x['departamento_calidad']) +
+                    intval($x['departamento_compras']) +
+                    intval($x['departamento_direccion']) +
+                    intval($x['departamento_finanzas']) +
+                    intval($x['departamento_rrhh']);
+                $sEnergetico =
+                    intval($x['energetico_electricidad']) +
+                    intval($x['energetico_agua']) +
+                    intval($x['energetico_diesel']) +
+                    intval($x['energetico_gas']);
 
                 $array['planaccion'][] = array(
                     "idPlanaccion" => intval($idPlanaccion),
                     "tipoPendiente" => "PLANACCION",
                     "proyecto" => $proyecto,
-                    "actividad" => $actividad
+                    "actividad" => $actividad,
+                    "sMaterial" => intval($sMaterial),
+                    "sTrabajando" => intval($sTrabajando),
+                    "sDepartamento" => intval($sDepartamento),
+                    "sEnergetico" => intval($sEnergetico)
                 );
             }
         }
 
         #INCIDENCIAS
         $array['incidencias'] = array();
-        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_equipos_america.equipo 
+        $query = "SELECT t_mc.id, t_mc.actividad, t_mc.tipo_incidencia, t_equipos_america.equipo,
+        t_mc.status_material, 
+        t_mc.status_trabajare, 
+        t_mc.departamento_calidad, 
+        t_mc.departamento_compras, 
+        t_mc.departamento_direccion, 
+        t_mc.departamento_finanzas,
+        t_mc.departamento_rrhh, 
+        t_mc.energetico_electricidad, 
+        t_mc.energetico_agua, 
+        t_mc.energetico_diesel, 
+        t_mc.energetico_gas
         FROM  t_mc
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
         WHERE t_mc.responsable = $idUsuario and (t_mc.status = 'P' or t_mc.status = 'N' or t_mc.status = 'PENDIENTE') and t_mc.activo = 1 $filtroDestinoInicidencias";
@@ -992,19 +1030,47 @@ if (isset($_GET['action'])) {
                 $actividad = $x['actividad'];
                 $equipo = $x['equipo'];
                 $tipoIncidencia = $x['tipo_incidencia'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajare'];
+                $sDepartamento =
+                    intval($x['departamento_calidad']) +
+                    intval($x['departamento_compras']) +
+                    intval($x['departamento_direccion']) +
+                    intval($x['departamento_finanzas']) +
+                    intval($x['departamento_rrhh']);
+                $sEnergetico =
+                    intval($x['energetico_electricidad']) +
+                    intval($x['energetico_agua']) +
+                    intval($x['energetico_diesel']) +
+                    intval($x['energetico_gas']);
 
                 $array['incidencias'][] = array(
                     "idIncidencia" => intval($idIncidencia),
                     "actividad" => $actividad,
                     "equipo" => $equipo,
-                    "tipoIncidencia" => $tipoIncidencia
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "sMaterial" => intval($sMaterial),
+                    "sTrabajando" => intval($sTrabajando),
+                    "sDepartamento" => intval($sDepartamento),
+                    "sEnergetico" => intval($sEnergetico)
                 );
             }
         }
 
         #INCIDENCIAS
         $array['incidenciasG'] = array();
-        $query = "SELECT id, titulo, tipo_incidencia
+        $query = "SELECT id, titulo, tipo_incidencia,
+        status_material, 
+        status_trabajando, 
+        departamento_calidad, 
+        departamento_compras, 
+        departamento_direccion, 
+        departamento_finanzas,
+        departamento_rrhh, 
+        energetico_electricidad, 
+        energetico_agua, 
+        energetico_diesel, 
+        energetico_gas
         FROM t_mp_np      
         WHERE responsable = $idUsuario and (status = 'P' or status = 'N' or status = 'PENDIENTE') and activo = 1 $filtroDestinoInicidenciasG";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -1012,11 +1078,28 @@ if (isset($_GET['action'])) {
                 $idIncidencia = $x['id'];
                 $actividad = $x['titulo'];
                 $tipoIncidencia = $x['tipo_incidencia'];
+                $sMaterial = $x['status_material'];
+                $sTrabajando = $x['status_trabajando'];
+                $sDepartamento =
+                    intval($x['departamento_calidad']) +
+                    intval($x['departamento_compras']) +
+                    intval($x['departamento_direccion']) +
+                    intval($x['departamento_finanzas']) +
+                    intval($x['departamento_rrhh']);
+                $sEnergetico =
+                    intval($x['energetico_electricidad']) +
+                    intval($x['energetico_agua']) +
+                    intval($x['energetico_diesel']) +
+                    intval($x['energetico_gas']);
 
                 $array['incidenciasG'][] = array(
                     "idIncidencia" => intval($idIncidencia),
                     "actividad" => $actividad,
-                    "tipoIncidencia" => $tipoIncidencia
+                    "tipoIncidencia" => $tipoIncidencia,
+                    "sMaterial" => intval($sMaterial),
+                    "sTrabajando" => intval($sTrabajando),
+                    "sDepartamento" => intval($sDepartamento),
+                    "sEnergetico" => intval($sEnergetico)
                 );
             }
         }

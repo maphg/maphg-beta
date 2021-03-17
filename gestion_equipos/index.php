@@ -165,6 +165,9 @@
                             <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
                                 Resumen MP
                             </th>
+                            <th class="px-4 py-3 border-b border-gray-200 bg-bluegray-900 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider sticky top-0 z-10">
+                                Resumen Incidencias
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="contenedorDeEquipos" class="bg-white divide-y divide-gray-200">

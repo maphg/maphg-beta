@@ -11,16 +11,17 @@ $usuario = $_SESSION['usuario'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sub Almacenes</title>
+    <title>MAPHG SubAlmacenes</title>
     <link rel="shortcut icon" href="../svg/logo6.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/tailwindproduccion.css">
     <link rel="stylesheet" href="../css/modales.css">
     <link rel="stylesheet" href="../css/fontawesome/css/all.css">
     <link rel="stylesheet" href="../css/animate.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/alertify.min.css">
 </head>
 
-<body class="bg-gray-300 scrollbar h-screen" style="font-family: 'Roboto', sans-serif;">
+<body class="bg-gray-300 h-screen scrollbar" style="font-family: 'Roboto', sans-serif;">
 
     <!-- Inputs Hidden para Guardar Información Temporal -->
     <input type="hidden" id="inputIdDestinoSeleccionado" value="<?= $destinoT; ?>">
@@ -90,6 +91,8 @@ $usuario = $_SESSION['usuario'];
     </div>
 
     <!-- MODALES ------------------------------------------------------------------- -->
+
+
     <!-- MODAL EXISTENCIAS -->
     <div id="modalExistenciasSubalmacen" class="modal">
         <div class="modal-window rounded-md relative" style="width: 1300px;">
@@ -118,59 +121,98 @@ $usuario = $_SESSION['usuario'];
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-2">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPalabraBuscarSubalmacen" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) busquedaExisenciaSubalmacen();" autocomplete="off" pattern="[A-Za-z0-9]{1,15}">
+                        <input id="inputPalabraExistencias" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar material" autocomplete="off">
+
                         <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-history mr-2 ga-lg"></i>Históricos</button>
+
                         <div id="exportarexis" onclick="expandir(this.id)" class="relative">
                             <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
-                            <div id="exportarexistoggle" class="absolute mt-2 hidden p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
+                            <div id="exportarexistoggle" class="absolute mt-2 hidden p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col z-20">
                                 <a onclick="generarXLSItems('generalPorSubalmacen');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md mb-1 text-gray-900">Exportar Todo</a>
                                 <a onclick="generarXLSItems('generalPorSubalmacenStock0');" href="#" class="w-full p-2 hover:bg-gray-200 rounded-md text-gray-900">Exportar stock 0</a>
                             </div>
                         </div>
+
                         <button onclick="movimientoExistenciasItems();" data-target="modalMoverItems" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-random fa-lg mr-2"></i>Traspasos</button>
 
+                        <button id="btnModalAgregarItem" class="button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-plus fa-lg mr-2"></i>Agregar Item</button>
                     </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CATEGORÍA</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>COD2BEND</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>GREMIO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>CARACTERISTICAS</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>MARCA/PROVEEDOR</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK TEÓRICO</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK ACTUAL</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>U DE M</h1>
-                        </div>
-                    </div>
-                    <!-- TITULOS -->
 
-                    <!-- Contenido -->
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 60vh;">
-                        <div id="dataExistenciasSubalmacen"></div>
+                    <div class="w-full">
+                        <div class="flex flex-col container mx-auto scrollbar">
+                            <div class="py-2 overflow-x-auto relative scrollbar">
+                                <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
+                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                        <thead>
+                                            <tr class="cursor-pointer bg-bluegray-50">
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CO2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. COD2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. SERV. TEC.
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SECCIÓN
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    ÁREA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CATEGORÍA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK TEÓRICO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK REAL
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MARCA
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MODELO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
+                                                    CARACTERISTICAS
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBFAMILIA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
+                                                    SUBALMACÉN
+                                                    BODEGA
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <!-- DATA -->
+                                        <tbody id="dataSubalmacenExistencias" class="bg-white divide-y divide-gray-200">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Fin Contenido -->
+
                 </div>
             </div>
         </div>
@@ -202,67 +244,102 @@ $usuario = $_SESSION['usuario'];
                 </div>
             </div>
 
-            <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full pt-10">
                 <!-- Contenedor TABLA -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                <div class="mt-2 w-full flex flex-col justify-center items-center px-2">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
 
-                        <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off">
+                        <input id="inputPalabraBuscarSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar material" autocomplete="off">
 
-                        <button onclick="abrirmodal('modalCarritoSalidas'); recuperarCarrito();" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
+                        <button id="btnConsultaSalidaCarrito" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
                         </button>
 
-                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoSalidasConfirmar() ;">
+                        <button id="btnRestablecerSalidas" class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md">
                             <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
                         </button>
-
-                    </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CATEGORÍA</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>COD2BEND</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>GREMIO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>CARACTERISTICAS</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>MARCA/PROVEEDOR</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK TEÓRICO</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK ACTUAL</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>U DE M</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CANTIDAD</h1>
-                        </div>
-                    </div>
-                    <!-- TITULOS -->
-
-                    <!-- Contenido -->
-                    <div id="dataSalidasSubalmacen" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                     </div>
 
+                    <!-- CONTENIDO -->
+                    <div class="w-full">
+                        <div class="flex flex-col container mx-auto scrollbar">
+                            <div class="py-2 overflow-x-auto relative scrollbar">
+                                <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
+                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                        <thead>
+                                            <tr class="cursor-pointer bg-bluegray-50">
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CO2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. COD2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. SERV. TEC.
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SECCIÓN
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    ÁREA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CATEGORÍA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK TEÓRICO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK REAL
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MARCA
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MODELO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
+                                                    CARACTERISTICAS
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBFAMILIA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBALMACÉN
+                                                    BODEGA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-16">
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <!-- DATA -->
+                                        <tbody id="dataSalidasSubalmacen" class="bg-white divide-y divide-gray-200">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- MODAL JUSTIFICACION DE SALIDAS -->
     <div id="modalCarritoSalidas" class="modal">
@@ -310,83 +387,49 @@ $usuario = $_SESSION['usuario'];
                     <!-- TITULOS -->
 
 
-                    <div id="dataCarritoSalidas" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
+                    <div id="dataCarritoSalidas" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 30vh;">
                     </div>
 
                     <div id="justifiacionSalidaCarrito" class="flex flex-col justify-center items-center w-full">
                         <div class="mb-3 w-full flex flex-row items-center justify-center">
                             <h1 class="text-lg font-light">Los materiales se emplearan en:</h1>
                         </div>
-                        <div class="flex flex-row justify-center items-center w-full">
-                            <div class="relative w-full">
+                        <div class="flex flex-col justify-center items-center w-full py-1">
 
-                                <!-- TIPO DE SALIDA -->
-                                <div class="relative">
-                                    <select id="carritoSalidaMotivo" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                        <option value="">Seleccione el Tipo de Salida</option>
-                                        <option value="FALLA">FALLAS (Equipos)</option>
-                                        <option value="TAREA">TAREAS (Equipos)</option>
-                                        <option value="TG">TAREAS GENERALES</option>
-                                        <option value="MP">MANTENIMIENTO PREVENTIVO</option>
-                                        <option value="GIFT">AVERIA DE GIFT</option>
-                                        <option value="OTRO">OTRO</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                        </svg>
-                                    </div>
+                            <!-- TIPO DE SALIDA -->
+                            <select id="motivoSalidaCarrito" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                <option value="">Seleccione el Tipo de Salida</option>
+                                <option value="INCIDENCIA">INCIDENCIA </option>
+                                <option value="INCIDENCIAGENERAL">INCIDENCIA GENERALE</option>
+                                <option value="PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
+                                <option value="GIFT">AVERIA DE GIFT</option>
+                                <option value="OTRO">OTRO</option>
+                            </select>
+
+                            <!-- NUMERO OT -->
+                            <div id="contendorOTSalida" class="hidden w-full mt-2">
+                                <div class=" w-full mt-2">
+                                    <label>Numero OT:</label>
+                                    <input id="OTSalida" type="text" class="block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" autocomplete="off" placeholder="">
                                 </div>
 
-                                <!-- NUMERO OT -->
-                                <input id="OTSalida" type="text" class="my-2 block appearance-none w-full bg-gray-200 border border-gray-200 font-bold text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" autocomplete="off" placeholder="OT(Numero OT), GIF(Numero GIFT) U OTRO(Descripción)">
-
-                                <div id="carritoSalidaSeccion"></div>
-                                <div id="carritoSalidaSubseccion"></div>
-                                <div id="carritoSalidaEquipo"></div>
-                                <div id="carritoSalidaTG"></div>
-                                <div id="carritoSalidaPendiente"></div>
-
-                                <div id="opcionSalidaOtro" class="hidden">
-                                    <div class="flex flex-wrap -mx-3 mb-6">
-                                        <div class="w-full px-3">
-                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                                Motivo
-                                            </label>
-                                            <input id="inputJustificacionOtro" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" placeholder="Descripción del Motivo" autocomplete="off">
-                                        </div>
-                                    </div>
+                                <div class="flex justify-center my-2">
+                                    <button id="btnConfirmarSalidaCarrito" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md">
+                                        <i class="fas fa-check fa-lg mr-2"></i>Confirmar Salida
+                                    </button>
                                 </div>
-
-                                <div id="opcionSalidaGift" class="hidden">
-                                    <div class="flex flex-wrap -mx-3 mb-6">
-                                        <div class="w-full px-3">
-                                            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                                                GIFT
-                                            </label>
-                                            <input id="giftSalida" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="number" placeholder="Digite el Número de GIFT" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
-                        <div class="mt-2 mb-3">
-                            <button id="confirmarSalidaCarrito" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
-                                Salida Carrito
-                                <i id="spinnerConfirmarSalida" class="invisible text-3xl fas fa-spinner fa-spin absolute" style="margin-top:-24px;"></i>
-                            </button>
-                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
+
     <!-- MODAL ENTRADAS -->
     <div id="modalSubalmacenEntradas" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1300px;">
+        <div class="modal-window rounded-md pt-10" style="width: 1320px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalSubalmacenEntradas');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -414,56 +457,93 @@ $usuario = $_SESSION['usuario'];
             <!-- CONTENIDO -->
             <div class="p-2 flex justify-center items-center flex-col w-full">
                 <!-- Contenedor TABLA -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
+                <div class="mt-2 w-full flex flex-col justify-center items-center">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPablabraBuscarEntradas" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) entradasSubalmacen();">
-                        <button data-target="modalConfirmacionEntradas" data-toggle="modal" class=" button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="consultaEntradaCarrito(); abrirmodal('modalConfirmacionEntradas')"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
-                            Entrada</button>
-                        <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="restablecerCarritoEntradasConfirmar();">
-                            <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
+                        <input id="inputPablabraBuscarEntradas" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar Material" autocomplete="off">
+
+                        <button id="btnConsultaEntradaCarrito" class="button bg-indigo-300 text-indigo-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md">
+                            <i class="fas fa-check fa-lg mr-2"></i>Confirmar Entrada
                         </button>
 
+                        <button id="btnRestablecerEntradas" class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md">
+                            <i class="fas fa-redo mr-2 ga-lg"></i>Restablecer
+                        </button>
                     </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CATEGORÍA</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>COD2BEND</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>GREMIO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>CARACTERISTICAS</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>MARCA/PROVEEDOR</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK TEÓRICO</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK ACTUAL</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>U DE M</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CANTIDAD</h1>
-                        </div>
-                    </div>
-                    <!-- TITULOS -->
 
+                    <div class="w-full">
+                        <div class="flex flex-col container mx-auto scrollbar">
+                            <div class="py-2 overflow-x-auto relative scrollbar">
+                                <div class="align-middle inline-block w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 relative scrollbar" style="height: 70vh;">
+                                    <table class="w-full boder border-gray-200 divide-y divide-gray-200 table table-fixed sortable">
+                                        <thead>
+                                            <tr class="cursor-pointer bg-bluegray-50">
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CO2BEND
+                                                </th>
 
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
-                        <div id="dataSubalmacenEntradas"></div>
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. COD2BEND
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    DESC. SERV. TEC.
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SECCIÓN
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    ÁREA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    CATEGORÍA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK TEÓRICO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-12">
+                                                    STOCK REAL
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MARCA
+                                                </th>
+
+                                                <th class=" px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    MODELO
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-32">
+                                                    CARACTERISTICAS
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBFAMILIA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-24">
+                                                    SUBALMACÉN
+                                                    BODEGA
+                                                </th>
+
+                                                <th class="px-1 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-16">
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <!-- DATA -->
+                                        <tbody id="dataSubalmacenEntradas" class="bg-white divide-y divide-gray-200">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -500,7 +580,7 @@ $usuario = $_SESSION['usuario'];
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputBuscarMovimientos" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) movimientoExistenciasItems();">
+                        <input id="inputBuscarMovimientos" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar material" autocomplete="off" onkeyup="if(event.keyCode == 13) movimientoExistenciasItems();">
                         <button onclick="consultaMovimientoCarrito();" data-target="modalConfirmarMovimiento" data-toggle="modal" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-check fa-lg mr-2"></i>Confirmar Movimiento</button>
                         <button class=" button bg-orange-300 text-orange-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-redo mr-2 ga-lg"></i>Restablecer</button>
 
@@ -642,14 +722,12 @@ $usuario = $_SESSION['usuario'];
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
-
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-tl-md rounded-br-md">
                     <h1>ENTRADA DE MATERIAL</h1>
                 </div>
-
-
             </div>
 
             <!-- CONTENIDO -->
@@ -661,13 +739,14 @@ $usuario = $_SESSION['usuario'];
                         <h1 class="text-lg font-light">Revise su solicitud y confirme</h1>
                     </div>
                     <!-- BUSCADOR -->
+
                     <!-- TITULOS -->
                     <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
                         <div class="w-32 flex h-full items-center justify-center">
                             <h1>CANTIDAD</h1>
                         </div>
                         <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
+                            <h1>DESCRIPCIÓN</h1>
                         </div>
                         <div class="w-64 flex h-full items-center justify-center">
                             <h1>CARACTERISTICAS</h1>
@@ -678,15 +757,14 @@ $usuario = $_SESSION['usuario'];
                     </div>
                     <!-- TITULOS -->
 
-
-                    <div class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 20vh;">
+                    <div class="w-full border py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 30vh;">
                         <div id="dataCarritoEntradas"></div>
                     </div>
-                    <div class="flex flex-col justify-center items-center w-full">
 
+                    <div class="flex flex-col justify-center items-center w-full">
                         <div class="mt-2">
-                            <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md" onclick="confirmarEntradaCarrito();"><i class="fas fa-check fa-lg mr-2"></i>Confirmar
-                                Entrada</button>
+                            <button id="btnConfirmarEntrada" class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md">
+                                <i class="fas fa-check fa-lg mr-2"></i>Confirmar Entrada</button>
                         </div>
                     </div>
                 </div>
@@ -726,7 +804,7 @@ $usuario = $_SESSION['usuario'];
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-10">
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-                        <input id="inputPalabraBuscarTodo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) obtenerTodosItemsGlobales();" autocomplete="off">
+                        <input id="inputPalabraBuscarTodo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar material" onkeyup="if(event.keyCode == 13) obtenerTodosItemsGlobales();" autocomplete="off">
                         <div id="generalExistencia" onclick="expandir(this.id);" class="relative">
                             <button class=" button bg-green-300 text-green-700 py-2 px-4 rounded-md ml-2 font-medium text-xs hover:shadow-md"><i class="fas fa-file-excel fa-lg mr-2"></i>Exportar listado</button>
                             <div id="generalExistenciatoggle" class="absolute hidden mt-2 p-2 bg-white shadow-md border border-gray-200 w-full rounded-md divide-y divide-y-gray-200 text-xs font-medium text-center flex flex-col">
@@ -786,7 +864,7 @@ $usuario = $_SESSION['usuario'];
 
     <!-- MODAL CONFIRMAR ENTRADA -->
     <div id="modalAgregarItem" class="modal">
-        <div class="modal-window rounded-md" style="width:600px;">
+        <div class="modal-window rounded-md" style="width:450px;">
 
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
@@ -797,75 +875,71 @@ $usuario = $_SESSION['usuario'];
 
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
-
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-tl-md rounded-br-md">
                     <h1>Agregar Item</h1>
                 </div>
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
-                <div class="mt-10 sm:mt-0">
-                    <div class="shadow overflow-hidden sm:rounded-md">
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <div class="grid grid-cols-6 gap-6">
-
-                                <div class="col-span-6">
-                                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
-                                    <input id="descripcionItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                                </div>
-
-                                <div class="col-span-6">
-                                    <label class="block text-sm font-medium text-gray-700">Características</label>
-                                    <input id="caracteristicasItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700">COD2BEND</label>
-                                    <input id="cod2bendItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700">Categoria</label>
-                                    <input id="categoriaItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
-                                </div>
-
-                                <div class="col-span-6">
-                                    <label class="block text-sm font-medium text-gray-700">
-                                        Marca / Proveedor
-                                    </label>
-                                    <select id="marcaItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700">Gremio</label>
-                                    <select id="gremioItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700">Unidad de Medida</label>
-                                    <select id="unidadItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                                    <label for="state" class="block text-sm font-medium text-gray-700">Stock Teorico</label>
-                                    <input id="stockTeoricoItems" type="number" min="1" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
-                                </div>
-
-                                <div class="col-span-6 sm:col-span-3 lg:col-span-3">
-                                    <label class="block text-sm font-medium text-gray-700">
-                                        Stock Actual</label>
-                                    <input id="stockActualItems" type="number" min="1" autocomplete="off" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
-                                </div>
-
+            <div class="py-2 flex justify-center items-center flex-col w-full">
+                <div class="mt-10 sm:mt-0 w-full">
+                    <div class="py-5 bg-white px-5">
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6">
+                                <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                                <input id="descripcionItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
                             </div>
-                        </div>
 
-                        <div class="px-4 py-3 bg-gray-50 sm:px-6 text-center">
-                            <button id="btnAgregarItems" type="submit" class="inline-flex justify-center py-2 px-4 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Guardar
-                            </button>
+                            <div class="col-span-6">
+                                <label class="block text-sm font-medium text-gray-700">Características</label>
+                                <input id="caracteristicasItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">COD2BEND</label>
+                                <input id="cod2bendItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">Categoria</label>
+                                <input id="categoriaItems" type="text" autocomplete="off" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-blue-300 rounded-md">
+                            </div>
+
+                            <div class="col-span-6">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Marca / Proveedor
+                                </label>
+                                <select id="marcaItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">Gremio</label>
+                                <select id="gremioItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">Unidad de Medida</label>
+                                <select id="unidadItems" class="mt-1 block w-full py-2 px-3 border border-blue-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></select>
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                                <label for="state" class="block text-sm font-medium text-gray-700">Stock Teorico</label>
+                                <input id="stockTeoricoItems" type="number" min="1" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-3 lg:col-span-3">
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Stock Actual</label>
+                                <input id="stockActualItems" type="number" min="1" autocomplete="off" class="mt-1 block w-full shadow-sm sm:text-sm border border-blue-400 rounded-md">
+                            </div>
+
                         </div>
+                    </div>
+
+                    <div class="px-4 py-3 bg-gray-50 sm:px-6 text-center">
+                        <button id="btnAgregarItems" type="submit" class="inline-flex justify-center py-2 px-4 border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Agregar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -875,18 +949,18 @@ $usuario = $_SESSION['usuario'];
 
     <!-- MODALES ------------------------------------------------------------------- -->
 
-
-
     <script src="js/jquery-3.3.1.js" type="text/javascript"></script>
-    <script src="js/sweetalert2@9.js" type="text/javascript"></script>
+    <script src="../js/alertify.min.js" type="text/javascript"></script>
     <script src="../js/modales.js" type="text/javascript"></script>
-    <script src="js/acordion.js" type="text/javascript"></script>
+    <!-- <script src="js/acordion.js" type="text/javascript"></script> -->
     <script src="js/subalmacenJS.js" type="text/javascript"></script>
-    <script src="js/alertasSweet.js" type="text/javascript"></script>
+    <script src="../js/alertasSweet.js" type="text/javascript"></script>
+    <script src="../js/sorttable.js"></script>
 
     <!-- MENU JS -->
     <script src="../js/menu_sub.js"></script>
     <!-- MENU JS -->
+
     <script>
         function expandir(id) {
             let idtoggle = id + 'toggle';

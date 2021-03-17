@@ -161,12 +161,8 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataGP .= "
-              <div class=\"w-1/3  bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
               <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\"
-              onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              onclick=\"entradasSubalmacen($idSubalmacen);\">
                 <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -174,13 +170,13 @@ if (isset($_POST['action'])) {
 
           if ($salidasPermiso == 1) {
             $dataGP .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
             </div>";
           }
 
           $dataGP .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
                 </div>
@@ -200,12 +196,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataGP .= "
-
-              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
-              <div class=\"hidden w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <div class=\"hidden w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen);\">
                 <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -213,14 +204,14 @@ if (isset($_POST['action'])) {
 
           if ($salidasPermiso == 1) {
             $dataGP .= "
-             <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+             <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen);\">
               <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
               </div>
             ";
           }
 
           $dataGP .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
             </div>
@@ -242,11 +233,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataTRS .= "        
-              <div class=\"w-1/3  bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
             </div>
             ";
@@ -255,14 +242,14 @@ if (isset($_POST['action'])) {
           if ($salidasPermiso == 1) {
 
             $dataTRS .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
             </div>
             ";
           }
 
           $dataTRS .= " 
-          <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+          <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
             </div>
@@ -282,11 +269,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataTRS .= "
-              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
-              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"entradasSubalmacen($idSubalmacen);\">
                 <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -294,14 +277,14 @@ if (isset($_POST['action'])) {
 
           if ($salidasPermiso == 1) {
             $dataTRS .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
             </div>
             ";
           }
 
           $dataTRS .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
             </div>
@@ -323,11 +306,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataZI .= "
-              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
-              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"entradasSubalmacen($idSubalmacen);\">
                 <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -335,14 +314,14 @@ if (isset($_POST['action'])) {
 
           if ($salidasPermiso == 1) {
             $dataZI .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700\" onclick=\"salidasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
             </div>
             ";
           }
 
           $dataZI .= "
-            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-900 text-gray-100 py-1 hover:bg-gray-700 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
             </div>
@@ -362,11 +341,7 @@ if (isset($_POST['action'])) {
 
           if ($entradasPermiso == 1) {
             $dataZI .= "
-              <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-l-md\" onclick=\"modalAgregarItem($idSubalmacen);\">
-                <h1><i class=\"fad fa-plus-circle mx-1\"></i>Agregar Item</h1>
-              </div>
-
-              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"entradasSubalmacen($idSubalmacen,'');\">
+              <div class=\"invisible w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"entradasSubalmacen($idSubalmacen);\">
                 <h1><i class=\"fad fa-arrow-to-right mr-2\"></i>Entradas</h1>
               </div>
             ";
@@ -374,14 +349,14 @@ if (isset($_POST['action'])) {
 
           if ($salidasPermiso == 1) {
             $dataZI .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200\" onclick=\"salidasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-arrow-from-left fa-rotate-180 mr-2\"></i>Salidas</h1>
             </div>
             ";
           }
 
           $dataZI .= "
-            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen, '');\">
+            <div class=\"w-1/3 bg-gray-400 text-gray-900 py-1 hover:bg-gray-200 rounded-r-md\" onclick=\"consultaExistenciasSubalmacen($idSubalmacen);\">
             <h1><i class=\"fad fa-list-ul mr-2\"></i>Existencias</h1>
             </div>
             </div>
@@ -445,124 +420,6 @@ if (isset($_POST['action'])) {
   }
 
 
-  if ($action == "consultaExistenciasSubalmacen") {
-    $idSubalmacen = $_POST['idSubalmacen'];
-    $arrayExistenciaSubalmacen = array();
-    $dataExistenciaSubalmacen = "";
-    $palabraBuscar = $_POST['palabraBuscar'];
-    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
-    $contador = 0;
-    $totalResultados = 0;
-
-    if ($palabraBuscar != "") {
-      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
-      OR bitacora_gremio.nombre_gremio LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
-    } else {
-      $palabraBuscar = "";
-    }
-
-    $query_subalmacen = "
-      SELECT nombre, fase FROM t_subalmacenes 
-      WHERE id = $idSubalmacen 
-    ";
-    $result_subalmacen = mysqli_query($conn_2020, $query_subalmacen);
-    if ($row_subalmacen = mysqli_fetch_array($result_subalmacen)) {
-      $nombre = $row_subalmacen['nombre'];
-      $fase = $row_subalmacen['fase'];
-
-      $arrayExistenciaSubalmacen['nombreSubalmacen'] = $nombre;
-      $arrayExistenciaSubalmacen['faseSubalmacen'] = $fase;
-    }
-
-    $query = "SELECT
-    t_subalmacenes_items_globales.id,
-    t_subalmacenes_items_globales.categoria,
-    t_subalmacenes_items_globales.cod2bend,
-    t_subalmacenes_items_globales.tipo_material,
-    t_subalmacenes_items_globales.descripcion,
-    t_subalmacenes_items_globales.caracteristicas,
-    t_subalmacenes_items_globales.marca,
-    t_subalmacenes_items_globales.unidad,
-    t_subalmacenes_items_stock.stock_teorico,
-    t_subalmacenes_items_stock.stock_actual,
-    bitacora_gremio.nombre_gremio
-    FROM t_subalmacenes_items_stock 
-    INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global =  t_subalmacenes_items_globales.id
-    INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio =  bitacora_gremio.id
-    WHERE t_subalmacenes_items_stock.id_subalmacen = $idSubalmacen 
-    -- AND t_subalmacenes_items_stock.id_destino = $idDestinoSeleccionado 
-    $palabraBuscar";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      while ($row = mysqli_fetch_array($result)) {
-        $contador++;
-        $idItem = $row['id'];
-        $categoria = $row['categoria'];
-        $cod2bend = $row['cod2bend'];
-        $gremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
-        $caracteristicas = $row['caracteristicas'];
-        $marca = $row['marca'];
-        $cantidadActual = floatval($row['stock_actual']);
-        $cantidadTeorico = floatval($row['stock_teorico']);
-        $unidad = $row['unidad'];
-
-        $porcentaje = (100 / ($cantidadTeorico + .01)) * $cantidadActual;
-        if ($porcentaje <= 20) {
-          $colorstilo = "text-red-500 bg-red-200";
-        } elseif ($cantidadActual >= $cantidadTeorico) {
-          $colorstilo = "text-yellow-700 bg-yellow-200";
-        } else {
-          $colorstilo = "text-bluegray-500 bg-bluegray-50";
-        }
-
-        $dataExistenciaSubalmacen .= "
-                <div
-                    class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 rounded hover:bg-indigo-100 cursor-pointer $colorstilo\">
-                    <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                        <h1>$categoria</h1>
-                    </div>
-                    <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                        <h1>$cod2bend</h1>
-                    </div>
-                    <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                        <h1>$gremio</h1>
-                    </div>
-                    <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                        <h1>$descripcion</h1>
-                    </div>
-                    <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                        <h1>$caracteristicas</h1>
-                    </div>
-                    <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                        <h1>$marca</h1>
-                    </div>
-                    <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                        <h1>$cantidadTeorico</h1>
-                    </div>
-                    <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                        <h1>$cantidadActual</h1>
-                    </div>
-                    <div class=\"w-32 flex h-full items-center justify-center\">
-                        <h1>$unidad</h1>
-                    </div>
-                </div>            
-            ";
-      }
-      if ($totalResultados = mysqli_num_rows($result)) {
-        $arrayExistenciaSubalmacen['totalResultados'] = $totalResultados;
-      } else {
-        $arrayExistenciaSubalmacen['totalResultados'] = 0;
-      }
-      $arrayExistenciaSubalmacen['dataExistenciaSubalmacen'] = $dataExistenciaSubalmacen;
-    }
-
-    echo json_encode($arrayExistenciaSubalmacen);
-  }
-
 
   if ($action == "consultaSalidaSubalmacen") {
 
@@ -577,7 +434,7 @@ if (isset($_POST['action'])) {
       $palabraBuscar = "AND (
         t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
         OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-        OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
+        OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' 
         OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
         OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
     } else {
@@ -602,7 +459,7 @@ if (isset($_POST['action'])) {
     t_subalmacenes_items_globales.categoria,  
     t_subalmacenes_items_globales.cod2bend,  
     bitacora_gremio.nombre_gremio,  
-    t_subalmacenes_items_globales.descripcion,  
+    t_subalmacenes_items_globales.descripcion_cod2bend,  
     t_subalmacenes_items_globales.caracteristicas,  
     t_subalmacenes_items_globales.marca,  
     t_subalmacenes_items_stock.stock_teorico,
@@ -627,7 +484,7 @@ if (isset($_POST['action'])) {
         $categoria = $row['categoria'];
         $cod2bend = $row['cod2bend'];
         $gremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
+        $descripcion = $row['descripcion_cod2bend'];
         $caracteristicas = $row['caracteristicas'];
         $marca = $row['marca'];
         $cantidadTeorico = $row['stock_teorico'];
@@ -733,7 +590,7 @@ if (isset($_POST['action'])) {
     t_subalmacenes_items_stock_salidas.id 'idRegistroSalida',
     t_subalmacenes_items_globales.id 'id_item_global',
     t_subalmacenes_items_stock_salidas.stock_salida,
-    t_subalmacenes_items_globales.descripcion,
+    t_subalmacenes_items_globales.descripcion_cod2bend,
     t_subalmacenes_items_globales.caracteristicas,
     t_subalmacenes_items_globales.precio
     FROM t_subalmacenes_items_stock_salidas 
@@ -750,7 +607,7 @@ if (isset($_POST['action'])) {
         $idRegistroSalida = $row['idRegistroSalida'];
         $idItemGlobal = $row['id_item_global'];
         $cantidad = $row['stock_salida'];
-        $descripcion = $row['descripcion'];
+        $descripcion = $row['descripcion_cod2bend'];
         $caracteristicas = $row['caracteristicas'];
         $precio = $row['precio'];
 
@@ -1060,7 +917,7 @@ if (isset($_POST['action'])) {
     $dataSubalmacenEntradas = "";
 
     if ($palabraBuscar != "Vacio") {
-      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
+      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
     } else {
       $palabraBuscar = "";
     }
@@ -1072,7 +929,7 @@ if (isset($_POST['action'])) {
     t_subalmacenes_items_globales.categoria,  
     t_subalmacenes_items_globales.cod2bend,  
     bitacora_gremio.nombre_gremio,  
-    t_subalmacenes_items_globales.descripcion,  
+    t_subalmacenes_items_globales.descripcion_cod2bend,  
     t_subalmacenes_items_globales.caracteristicas,  
     t_subalmacenes_items_globales.marca,  
     t_subalmacenes_items_stock.stock_teorico,
@@ -1093,7 +950,7 @@ if (isset($_POST['action'])) {
         $categoria = $row['categoria'];
         $cod2bend = $row['cod2bend'];
         $nombreGremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
+        $descripcion = $row['descripcion_cod2bend'];
         $caracteristicas = $row['caracteristicas'];
         $marca = $row['marca'];
         $stockTeorico = $row['stock_teorico'];
@@ -1153,19 +1010,19 @@ if (isset($_POST['action'])) {
     $stockActual = $_POST['stockActual'];
     $fechaMovimiento = date('Y-m-d H:m:s');
 
-    $query = "SELECT id FROM t_subalmacenes_items_stock_reporte 
+    $query = "SELECT id FROM t_subalmacenes_items_stock_entradas 
     WHERE id_t_subalmacenes_items_stock = $idStock AND id_usuario = $idUsuario AND id_subalmacen = $idSubalmacen AND id_destino = $idDestinoSeleccionado AND id_item_global = $idItemGlobal AND status = 'ESPERA' AND activo = 1";
     if ($result = mysqli_query($conn_2020, $query)) {
       if (mysqli_num_rows($result) >= 1) {
         if ($row = mysqli_fetch_array($result)) {
           $id = $row['id'];
-          $query = "UPDATE t_subalmacenes_items_stock_reporte SET stock_entrada = $stockEntrada, stock_actual = $stockActual, fecha_movimiento = '$fechaMovimiento' WHERE id = $id";
+          $query = "UPDATE t_subalmacenes_items_stock_entradas SET stock_entrada = $stockEntrada, stock_actual = $stockActual, fecha_movimiento = '$fechaMovimiento' WHERE id = $id";
           if ($result = mysqli_query($conn_2020, $query)) {
             echo 1;
           }
         }
       } else {
-        $query = "INSERT INTO t_subalmacenes_items_stock_reporte(id_t_subalmacenes_items_stock, id_usuario, id_subalmacen, id_destino, id_item_global, stock_entrada, stock_actual, fecha_movimiento) 
+        $query = "INSERT INTO t_subalmacenes_items_stock_entradas(id_t_subalmacenes_items_stock, id_usuario, id_subalmacen, id_destino, id_item_global, stock_entrada, stock_actual, fecha_movimiento) 
         VALUES($idStock, $idUsuario, $idSubalmacen, $idDestinoSeleccionado, $idItemGlobal, $stockEntrada, $stockActual, '$fechaMovimiento')";
         if ($result = mysqli_query($conn_2020, $query)) {
           echo 1;
@@ -1177,71 +1034,12 @@ if (isset($_POST['action'])) {
   }
 
 
-  if ($action == "consultaEntradaCarrito") {
-    $arrayCarritoEntradas = array();
-    $dataCarritoEntradas = "";
-    $indexCantidadInput = "";
-    $valueCantidadInput = "";
-    $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
-    $idSubalmacen = $_POST['idSubalmacen'];
-
-    $query = "SELECT 
-    t_subalmacenes_items_globales.id,
-    t_subalmacenes_items_stock_reporte.stock_entrada,
-    t_subalmacenes_items_globales.descripcion,
-    t_subalmacenes_items_globales.caracteristicas,
-    t_subalmacenes_items_globales.precio
-    FROM t_subalmacenes_items_stock_reporte 
-    INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock_reporte.id_item_global = t_subalmacenes_items_globales.id
-    WHERE t_subalmacenes_items_stock_reporte.id_usuario = $idUsuario 
-    AND t_subalmacenes_items_stock_reporte.id_subalmacen = $idSubalmacen 
-    AND t_subalmacenes_items_stock_reporte.id_destino = $idDestinoSeleccionado 
-    AND t_subalmacenes_items_stock_reporte.status = 'ESPERA' 
-    AND t_subalmacenes_items_stock_reporte.activo = 1
-    AND t_subalmacenes_items_stock_reporte.stock_entrada > 0.00000000000001";
-
-    if ($result = mysqli_query($conn_2020, $query)) {
-      while ($row = mysqli_fetch_array($result)) {
-        $idItemGlobal = $row['id'];
-        $stockEntrada = $row['stock_entrada'] + 0.0;
-        $descripcion = $row['descripcion'];
-        $caracteristicas = $row['caracteristicas'];
-        $coste = $row['precio'];
-
-
-        $dataCarritoEntradas .= "
-          <div class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-bluegray-50 rounded hover:bg-indigo-100 cursor-pointer\">
-              <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                  <h1>$stockEntrada</h1>
-              </div>
-              <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                  <h1>$descripcion</h1>
-              </div>
-              <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                  <h1>$caracteristicas</h1>
-              </div>
-              <div class=\"w-32 flex h-full items-center justify-center\">
-                  <h1>$coste</h1>
-              </div>
-          </div>
-        ";
-
-        $indexCantidadInput .= $idItemGlobal . ";";
-        $valueCantidadInput .= $stockEntrada . ";";
-      }
-      $arrayCarritoEntradas['dataCarritoEntradas'] = $dataCarritoEntradas;
-      $arrayCarritoEntradas['indexCantidadInput'] = $indexCantidadInput;
-      $arrayCarritoEntradas['valueCantidadInput'] = "$valueCantidadInput";
-    }
-    echo json_encode($arrayCarritoEntradas);
-  }
-
   if ($action == "finalizarEntradaCarrito") {
     $idItemGlobal = $_POST['idItemGlobal'];
     $idSubalmacen = $_POST['idSubalmacen'];
     $idDestino = $_POST['idDestinoSeleccionado'];
 
-    $query = "SELECT id, stock_entrada FROM t_subalmacenes_items_stock_reporte 
+    $query = "SELECT id, stock_entrada FROM t_subalmacenes_items_stock_entradas 
     WHERE id_usuario = $idUsuario AND id_subalmacen = $idSubalmacen AND id_destino = $idDestino AND 
     id_item_global AND status = 'ESPERA' 
     AND activo = 1";
@@ -1261,7 +1059,7 @@ if (isset($_POST['action'])) {
             $query_sumar_stock = "UPDATE t_subalmacenes_items_stock 
             SET stock_actual = $nuevoStock, stock_anterior = $stockActual_2 WHERE id = $id_t_subalmacenes_items_stock";
             if ($result_sumar_stock = mysqli_query($conn_2020, $query_sumar_stock)) {
-              $query_finalizar_reporte = "UPDATE t_subalmacenes_items_stock_reporte SET status = 'FINALIZADO' WHERE id = $idStockEntrada";
+              $query_finalizar_reporte = "UPDATE t_subalmacenes_items_stock_entradas SET status = 'FINALIZADO' WHERE id = $idStockEntrada";
               if (mysqli_query($conn_2020, $query_finalizar_reporte)) {
                 echo 1;
               } else {
@@ -1279,7 +1077,7 @@ if (isset($_POST['action'])) {
   if ($action == "restablecerCarritoEntradas") {
     $idDestinoSeleccionado = $_POST['idDestinoSeleccionado'];
     $idSubalmacen = $_POST['idSubalmacen'];
-    $query = "UPDATE t_subalmacenes_items_stock_reporte SET status = 'CANCELADO' WHERE id_usuario = $idUsuario 
+    $query = "UPDATE t_subalmacenes_items_stock_entradas SET status = 'CANCELADO' WHERE id_usuario = $idUsuario 
       AND id_subalmacen = $idSubalmacen 
       AND id_destino = $idDestinoSeleccionado
       AND status = 'ESPERA'
@@ -1302,7 +1100,7 @@ if (isset($_POST['action'])) {
     $dataSubalmacenMovimientos = "";
 
     if ($palabraBuscar != "") {
-      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
+      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
     } else {
       $palabraBuscar = "";
     }
@@ -1314,7 +1112,7 @@ if (isset($_POST['action'])) {
     t_subalmacenes_items_globales.categoria,  
     t_subalmacenes_items_globales.cod2bend,  
     bitacora_gremio.nombre_gremio,  
-    t_subalmacenes_items_globales.descripcion,  
+    t_subalmacenes_items_globales.descripcion_cod2bend,  
     t_subalmacenes_items_globales.caracteristicas,  
     t_subalmacenes_items_globales.marca,  
     t_subalmacenes_items_stock.stock_teorico,
@@ -1337,7 +1135,7 @@ if (isset($_POST['action'])) {
         $categoria = $row['categoria'];
         $cod2bend = $row['cod2bend'];
         $nombreGremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
+        $descripcion = $row['descripcion_cod2bend'];
         $caracteristicas = $row['caracteristicas'];
         $marca = $row['marca'];
         $stockTeorico = $row['stock_teorico'];
@@ -1439,7 +1237,7 @@ if (isset($_POST['action'])) {
     t_subalmacenes_items_stock_transferencias.id 'IDREGISTRO',  
     t_subalmacenes_items_globales.id 'IDITEMGLOBAL',
     t_subalmacenes_items_stock_transferencias.stock_salida_envia,  
-    t_subalmacenes_items_globales.descripcion,  
+    t_subalmacenes_items_globales.descripcion_cod2bend,  
     t_subalmacenes_items_globales.caracteristicas,  
     t_subalmacenes_items_globales.precio
     FROM t_subalmacenes_items_stock_transferencias
@@ -1457,7 +1255,7 @@ if (isset($_POST['action'])) {
         $IDREGISTRO = $row['IDREGISTRO'];
         $IDITEMGLOBAL = $row['IDITEMGLOBAL'];
         $cantidad = $row['stock_salida_envia'];
-        $descripcion = $row['descripcion'];
+        $descripcion = $row['descripcion_cod2bend'];
         $caracteristicas = $row['caracteristicas'];
         $precio = $row['precio'];
 
@@ -1589,335 +1387,7 @@ if (isset($_POST['action'])) {
     }
   }
 } elseif (isset($_GET['action'])) {
-  // Variables Globales.
-  $idDestino = $_GET['idDestino'];
-  $idUsuario = $_GET['idUsuario'];
-  $fechaActual = date('Y-m-d H:m:s');
-  $action = $_GET['action'];
 
-  if ($action == "consultaTodosItems") {
-    $array = array();
-    $idDestino = $_GET['idDestino'];
-    $palabraBuscar = $_GET['palabraBuscar'];
-    $dataTodo = "";
-    $ItemsResultado = "";
-
-    if ($idDestino == 10) {
-      $filtroDestino = "1, 7, 2, 6, 5, 11, 3, 4, 10";
-    } else {
-      $filtroDestino = $idDestino;
-    }
-
-    if ($palabraBuscar != "") {
-      $palabraBuscar = "AND (t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.descripcion LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
-      OR bitacora_gremio.nombre_gremio LIKE '%$palabraBuscar%' 
-      OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%')";
-    } else {
-      $palabraBuscar = "";
-    }
-
-
-    $query = "SELECT
-    t_subalmacenes_items_globales.categoria,
-    t_subalmacenes_items_globales.cod2bend,
-    t_subalmacenes_items_globales.descripcion,
-    t_subalmacenes_items_globales.caracteristicas,
-    t_subalmacenes_items_globales.marca,
-    t_subalmacenes_items_globales.unidad,
-    t_subalmacenes_items_stock.id 'idItemsResultado',
-    t_subalmacenes_items_stock.stock_teorico,
-    t_subalmacenes_items_stock.stock_actual,
-    bitacora_gremio.nombre_gremio,
-    t_subalmacenes.nombre 'ubicacion'
-    FROM t_subalmacenes_items_stock
-    INNER JOIN t_subalmacenes ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes.id
-    INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
-    INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
-    WHERE t_subalmacenes_items_stock.id_destino IN($filtroDestino) $palabraBuscar";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      while ($row = mysqli_fetch_array($result)) {
-        $idItemsResultado = $row['idItemsResultado'];
-        $categoria = $row['categoria'];
-        $cod2bend = $row['cod2bend'];
-        $gremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
-        $caracteristicas = $row['caracteristicas'];
-        $marca = $row['marca'];
-        $stockTeorico = $row['stock_teorico'];
-        $stockActual = $row['stock_actual'];
-        $unidad = $row['unidad'];
-        $ubicacion = $row['ubicacion'];
-
-        $ItemsResultado .= $idItemsResultado . ";";
-
-        if ($stockActual < 1) {
-          $colorstilo = "text-red-500 bg-red-200";
-        } elseif ($stockActual >= $stockTeorico) {
-          $colorstilo = "text-yellow-700 bg-yellow-200";
-        } else {
-          $colorstilo = "text-bluegray-500 bg-bluegray-50";
-        }
-
-        $array[] = array(
-          "estilo" => $colorstilo,
-          "categoria" => $categoria,
-          "cod2bend" => $cod2bend,
-          "gremio" => $gremio,
-          "descripcion" => $descripcion,
-          "caracteristicas" => $caracteristicas,
-          "marca" => $marca,
-          "stockTeorico" => $stockTeorico,
-          "stockActual" => $stockActual,
-          "unidad" => $unidad,
-          "ubicacion" => $ubicacion
-        );
-      }
-    }
-    echo json_encode($array);
-  }
-
-
-  if ($action == "consultarOpcionesItem") {
-    $array = array();
-
-    $query = "SELECT id, marca FROM c_marcas WHERE status = 'A'";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      foreach ($result as $x) {
-        $idMarca = $x['id'];
-        $marca = $x['marca'];
-
-        $array['marcas'][] = array(
-          "idMarca" => intval($idMarca),
-          "marca" => $marca
-        );
-      }
-    }
-
-    $query = "SELECT id, nombre_gremio FROM bitacora_gremio";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      foreach ($result as $x) {
-        $idGremio = $x['id'];
-        $gremio = $x['nombre_gremio'];
-
-        $array['gremios'][] = array(
-          "idGremio" => intval($idGremio),
-          "gremio" => $gremio
-        );
-      }
-    }
-
-    $query = "SELECT id, unidad FROM c_unidades_materiales";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      foreach ($result as $x) {
-        $idUnidad = $x['id'];
-        $unidad = $x['unidad'];
-
-        $array['unidades'][] = array(
-          "idUnidad" => intval($idUnidad),
-          "unidad" => $unidad
-        );
-      }
-    }
-    echo json_encode($array);
-  }
-
-  if ($action == "agregarItems") {
-    $idDestino = $_GET['idDestino'];
-    $idUsuario = $_GET['idUsuario'];
-    $idSubalmacen = $_GET['idSubalmacen'];
-    $marca = $_GET['marca'];
-    $gremio = $_GET['gremio'];
-    $unidad = $_GET['unidad'];
-    $descripcion = $_GET['descripcion'];
-    $caracteristicas = $_GET['caracteristicas'];
-    $cod2bend = $_GET['cod2bend'];
-    $categoria = $_GET['categoria'];
-    $stockTeorico = $_GET['stockTeorico'];
-    $stockActual = $_GET['stockActual'];
-    $fechaActual = date('Y-m-d H:m:s');
-    $resp = 0;
-    $idItem = 0;
-
-    $query = "SELECT max(id) 'id' FROM t_subalmacenes_items_globales";
-    if ($result = mysqli_query($conn_2020, $query)) {
-      foreach ($result as $x) {
-        $idItem = intval($x['id']) + 1;
-      }
-    }
-
-    if ($idItem > 0) {
-      $query = "INSERT INTO t_subalmacenes_items_globales(id_destino, id_gremio, cod2bend, descripcion, marca, caracteristicas, unidad, fecha_registro, categoria, activo) VALUES($idDestino, $gremio, '$cod2bend', '$descripcion', '$marca', '$caracteristicas', '$unidad', '$fechaActual', '$categoria', 1)";
-      if ($result = mysqli_query($conn_2020, $query)) {
-
-        $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItem, '$stockActual', '$stockTeorico', '$fechaActual', '$fechaActual', 1)";
-        if ($result = mysqli_query($conn_2020, $query)) {
-          $resp = 1;
-        }
-      }
-    }
-    echo json_encode($resp);
-  }
-
-
-  if ($action == "finalizarCarrito") {
-    $idDestino = $_GET["idDestino"];
-    $idUsuario = $_GET["idUsuario"];
-    $idSubalmacen = $_GET["idSubalmacen"];
-    $tipoSalida = $_GET["tipoSalida"];
-    $OT = $_GET["OT"];
-    $array = array();
-    $resp = 0;
-
-    // VARIABLES PARA EL TIPO DE SALIDAS
-    $idEquipo = 0;
-    $idMCE = 0;
-    $idMCTG = 0;
-    $idMP = 0;
-    $motivo = 0;
-    $gift = 0;
-    $existe = "NO";
-
-
-    if ($tipoSalida == "FALLA") {
-      $OT = preg_replace('([^0-9])', '', $OT);
-      $query = "SELECT t_mc.id 'idFalla', t_equipos_america.id 'idEquipo' 
-      FROM t_mc
-      INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id 
-      WHERE t_mc.id = $OT and t_mc.id_destino = $idDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $x) {
-          $idMCE = $x['idFalla'];
-          $idEquipo = $x['idEquipo'];
-          $existe = "SI";
-        }
-      }
-    } elseif ($tipoSalida == "TAREA") {
-      $OT = preg_replace('([^0-9])', '', $OT);
-      $query = "SELECT t_mp_np.id 'idTarea', t_equipos_america.id 'idEquipo' 
-      FROM t_mp_np
-      INNER JOIN t_equipos_america ON t_mp_np.id_equipo = t_equipos_america.id 
-      WHERE t_mp_np.id = $OT and t_mp_np.id_destino = $idDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $x) {
-          $idMCTG = $x['idTarea'];
-          $idEquipo = $x['idEquipo'];
-          $existe = "SI";
-        }
-      }
-    } elseif ($tipoSalida == "TG") {
-      $OT = preg_replace('([^0-9])', '', $OT);
-      $query = "SELECT id 'idTarea' 
-      FROM t_mp_np
-      WHERE id = $OT and id_destino = $idDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $x) {
-          $idMCTG = $x['idTarea'];
-          $existe = "SI";
-        }
-      }
-    } elseif ($tipoSalida == "MP") {
-      $OT = preg_replace('([^0-9])', '', $OT);
-      $query = "SELECT t_mp_planificacion_iniciada.id 'idMP', t_equipos_america.id 'idEquipo' 
-      FROM t_mp_planificacion_iniciada
-      INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id 
-      WHERE t_mp_planificacion_iniciada.id = $OT and t_equipos_america.id_destino = $idDestino";
-      if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $x) {
-          $idMP = $x['idMP'];
-          $idEquipo = $x['idEquipo'];
-          $existe = "SI";
-        }
-      }
-    } elseif ($tipoSalida == "GIFT") {
-      $existe = "SI";
-      $gift = $OT;
-    } elseif ($tipoSalida == "OTRO") {
-      $existe = "SI";
-      $motivo = $OT;
-    }
-
-    if ($existe === "SI") {
-      $query = "SELECT id, id_usuario, id_subalmacen, id_destino, id_item_global, stock_salida 
-      FROM t_subalmacenes_items_stock_salidas 
-      WHERE id_usuario = $idUsuario and id_destino = $idDestino and id_subalmacen = $idSubalmacen and status = 'ESPERA'";
-      if ($result = mysqli_query($conn_2020, $query)) {
-        foreach ($result as $x) {
-
-          // VALORES DE CARRITO
-          $idRegistro = $x["id"];
-          $idUsuarioX = $x["id_usuario"];
-          $idSubalmacenX = $x["id_subalmacen"];
-          $idDestinoX = $x["id_destino"];
-          $idItem = $x["id_item_global"];
-          $stockSalida = $x["stock_salida"];
-
-          // VALORES INICIALES
-          $idStock = 0;
-          $stockActual = 0;
-
-          // CONSULTA PARA RECURSOS DEL CARRITO
-          $query = "SELECT id, stock_actual, stock_teorico FROM t_subalmacenes_items_stock WHERE id_subalmacen = $idSubalmacenX and id_destino = $idDestinoX and id_item_global = $idItem LIMIT 1";
-          if ($result = mysqli_query($conn_2020, $query)) {
-            foreach ($result as $x) {
-              $idStock = $x['id'];
-              $stockActual = $x['stock_actual'];
-              $stockTeorico = $x['stock_teorico'];
-            }
-          }
-
-          // VALORES FINALES
-          $nuevaCantidad = $stockActual - $stockSalida;
-
-          if ($nuevaCantidad >= 0) {
-            // PROCESO PARA FINALIZAR CARRITO
-            $query = "UPDATE t_subalmacenes_items_stock SET 
-            stock_actual = $nuevaCantidad, 
-            stock_anterior = $stockActual,
-            fecha_movimiento = '$fechaActual'
-            WHERE id = $idStock";
-            if ($result = mysqli_query($conn_2020, $query)) {
-
-              // MARCA COMO FINALIZADOS LOS REGISTROS
-              $query = "UPDATE t_subalmacenes_items_stock_salidas SET
-             tipo_salida = '$tipoSalida',
-             id_equipo = $idEquipo,
-             id_MCE = $idMCE, 
-             id_MCTG = $idMCTG, 
-             id_MP = $idMP, 
-             motivo = '$motivo',
-             gift = '$gift',
-            status = 'FINALIZADO',  
-            fecha_movimiento = '$fechaActual'
-            WHERE id = $idRegistro";
-              if ($result = mysqli_query($conn_2020, $query)) {
-                $resp = 1;
-              }
-            }
-          }
-
-          // $array[] = array(
-          //   "idRegistro" => $idRegistro,
-          //   "idStock" => $idStock,
-          //   "idUsuario" => $idUsuarioX,
-          //   "idSubalmacen" => $idSubalmacenX,
-          //   "idDestino" => $idDestinoX,
-          //   "idItem" => $idItem,
-          //   "stockSalida" => $stockSalida,
-          //   "stockActual" => $stockActual,
-          //   "NuevaCantidad" => $nuevaCantidad,
-          //   "idMCE" => $idMCE,
-          //   "existe" => $existe,
-          //   "OT" => $OT,
-          //   "resp" => $resp
-          // );
-        }
-      }
-    }
-    echo json_encode($resp);
-  }
 
 
   mysqli_close($conn_2020);

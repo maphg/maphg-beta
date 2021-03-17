@@ -29,26 +29,6 @@ if (isset($_GET['stock'])) {
 }
 
 
-
-//Correctivos Generales.
-$query = "SELECT
-    t_subalmacenes_items_globales.categoria,
-    t_subalmacenes_items_globales.cod2bend,
-    t_subalmacenes_items_globales.descripcion,
-    t_subalmacenes_items_globales.caracteristicas,
-    t_subalmacenes_items_globales.marca,
-    t_subalmacenes_items_globales.unidad,
-    t_subalmacenes_items_stock.id 'idItemsResultado',
-    t_subalmacenes_items_stock.stock_teorico,
-    t_subalmacenes_items_stock.stock_actual,
-    bitacora_gremio.nombre_gremio,
-    t_subalmacenes.nombre 'ubicacion'
-    FROM t_subalmacenes_items_stock
-    INNER JOIN t_subalmacenes ON t_subalmacenes_items_stock.id_subalmacen = t_subalmacenes.id
-    INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
-    INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
-    WHERE t_subalmacenes_items_stock.activo = 1 $idDestino $idSubalmacen $stock";
-
 // Titulos XLS
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
@@ -67,19 +47,113 @@ $objPHPExcel->getActiveSheet()->setCellValue('J1', 'Ubicación');
 
 
 $fila = 2;
-if ($result = mysqli_query($conn_2020, $query)) {
-    while ($row = mysqli_fetch_array($result)) {
-        $idItemsResultado = $row['idItemsResultado'];
-        $categoria = $row['categoria'];
-        $cod2bend = $row['cod2bend'];
-        $gremio = $row['nombre_gremio'];
-        $descripcion = $row['descripcion'];
-        $caracteristicas = $row['caracteristicas'];
-        $marca = $row['marca'];
-        $stockTeorico = $row['stock_teorico'];
-        $stockActual = $row['stock_actual'];
-        $unidad = $row['unidad'];
-        $ubicacion = $row['ubicacion'];
+// OBTIENE TODOS LOS ITEMS DISPONIBLES PARA EL DESTINO
+    $idSubalmacen = $_GET['idSubalmacen'];
+    $stock = $_GET['stock'];
+
+
+    $query = "SELECT t_subalmacenes.nombre, c_fases.fase 
+    FROM t_subalmacenes 
+    INNER JOIN c_fases ON t_subalmacenes.id_fase = c_fases.id
+    WHERE t_subalmacenes.id = $idSubalmacen";
+    if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+            $subalmacen = $x['nombre'];
+            $fase = $x['fase'];
+
+            $array['subalmacen'] = array(
+                "subalmacen" => $subalmacen,
+                "fase" => $fase
+            );
+        }
+    }
+
+    $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, id_seccion, area, categoria, marca, modelo, caracteristicas, subfamilia  
+    FROM t_subalmacenes_items_globales 
+    WHERE id_destino = $idDestino and activo = 1";
+    if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+            $idItemGlobal = $x['id'];
+            $cod2bend = $x['cod2bend'];
+            $descripcionCod2bend = $x['descripcion_cod2bend'];
+            $servicioTecnico = $x['descripcion_servicio_tecnico'];
+            $idSeccion = $x['id_seccion'];
+            $area = $x['area'];
+            $categoria = $x['categoria'];
+            $marca = $x['marca'];
+            $modelo = $x['modelo'];
+            $caracteristicas = $x['caracteristicas'];
+            $subfamilia = $x['subfamilia'];
+
+            #SECCION
+            $seccion = "ND";
+            $query = "SELECT seccion FROM c_secciones WHERE id = $idSeccion";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $seccion = $x['seccion'];
+                }
+            }
+
+            #STOCK
+            $idItemStock = 0;
+            $stockActual = 0;
+            $stockTeorico = 0;
+            $query = "SELECT id, stock_actual, stock_teorico 
+                FROM t_subalmacenes_items_stock 
+                WHERE id_item_global = $idItemGlobal and id_destino = $idDestino and id_subalmacen = $idSubalmacen and activo = 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idItemStock = $x['id'];
+                    $stockActual = $x['stock_actual'];
+                    $stockTeorico = $x['stock_teorico'];
+                }
+            }
+
+            if ($idItemStock == 0) {
+                $query = "INSERT INTO t_subalmacenes_items_stock(id_subalmacen, id_destino, id_item_global, stock_actual, stock_anterior, stock_teorico, fecha_movimiento, fecha_creacion, activo) VALUES($idSubalmacen, $idDestino, $idItemGlobal, 0, 0, 0, '$fechaActual', '$fechaActual', 1)";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    $resp = 1;
+                }
+            }
+
+            #SUBALMACEN
+            $subalmacen = "";
+            $query = "SELECT nombre FROM t_subalmacenes WHERE id = $idSubalmacen";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $subalmacen = $x['nombre'];
+                }
+            }
+
+            $stockCantidad = "";
+            $query = "SELECT stock_entrada
+                FROM t_subalmacenes_items_stock_entradas 
+                WHERE id_usuario = $idUsuario and id_subalmacen = $idSubalmacen and id_destino = $idDestino and id_item_global = $idItemGlobal and status = 'ESPERA' and activo = 1 LIMIT 1";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $stockCantidad = $x['stock_entrada'];
+                }
+            }
+
+            $array['items'][] = array(
+                "idItemGlobal" => intval($idItemGlobal),
+                "idSubalmacen" => intval($idSubalmacen),
+                "cod2bend" => $cod2bend,
+                "descripcionCod2bend" => $descripcionCod2bend,
+                "servicioTecnico" => $servicioTecnico,
+                "seccion" => $seccion,
+                "area" => $area,
+                "categoria" => $categoria,
+                "stockTeorico" => $stockTeorico,
+                "stockActual" => $stockActual,
+                "marca" => $marca,
+                "modelo" => $modelo,
+                "caracteristicas" => $caracteristicas,
+                "subfamilia" => $subfamilia,
+                "subalmacen" => $subalmacen,
+                "stockCantidad" => $stockCantidad,
+                "resp" => $resp
+            );
 
         $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $categoria);
         $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $cod2bend);
@@ -91,10 +165,13 @@ if ($result = mysqli_query($conn_2020, $query)) {
         $objPHPExcel->getActiveSheet()->setCellValue('H' . $fila, $stockTeorico);
         $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $stockActual);
         $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $ubicacion);
-        //Inicializa variables.
-
-        //Contador de Celdas
         $fila++;
+        }
+    }
+
+
+
+
     }
 }
 

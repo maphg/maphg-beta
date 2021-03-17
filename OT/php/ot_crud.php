@@ -211,7 +211,7 @@ if (isset($_POST['action'])) {
                 }
             }
 
-            $query = "SELECT t_mp_planes_materiales.id, t_mp_planes_materiales.id_item_global, t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion
+            $query = "SELECT t_mp_planes_materiales.id, t_mp_planes_materiales.id_item_global, t_mp_planes_materiales.cantidad_material, t_subalmacenes_items_globales.descripcion_cod2bend
             FROM t_mp_planes_materiales 
             INNER JOIN t_subalmacenes_items_globales ON t_mp_planes_materiales.id_item_global = t_subalmacenes_items_globales.id
             WHERE t_mp_planes_materiales.id_plan = $idPlan and t_mp_planes_materiales.status = 'ACTIVO' and t_mp_planes_materiales.activo = 1";
@@ -219,7 +219,7 @@ if (isset($_POST['action'])) {
                 foreach ($result as $i) {
                     $id = $i['id_item_global'];
                     $cantidad = $i['cantidad_material'];
-                    $material = $i['descripcion'];
+                    $material = $i['descripcion_cod2bend'];
 
 
                     $materiales .= "

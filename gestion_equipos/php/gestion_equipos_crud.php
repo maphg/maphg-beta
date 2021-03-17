@@ -67,15 +67,14 @@ if (isset($_GET['action'])) {
         c_secciones.seccion, c_subsecciones.grupo, c_tipos.id 'id_tipo', c_tipos.tipo, c_marcas.marca, c_ubicaciones.ubicacion, 
         c_destinos.destino
         FROM t_equipos_america
-        LEFT JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
-        LEFT JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
+        INNER JOIN c_secciones ON t_equipos_america.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_equipos_america.id_subseccion = c_subsecciones.id
         LEFT JOIN c_tipos ON t_equipos_america.id_tipo = c_tipos.id
         LEFT JOIN c_marcas ON t_equipos_america.id_marca = c_marcas.id
         LEFT JOIN c_ubicaciones ON t_equipos_america.id_ubicacion = c_ubicaciones.id
-        LEFT JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
+        INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
         WHERE t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER')
         $filtroDestino $filtroSeccion  $filtroSubseccion $filtroTipo $filtroStatus $filtroPalabra";
-
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idEquipo = $i['id'];
@@ -214,6 +213,22 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                #INCIDENCIAS
+                $incidenciasPendientes = 0;
+                $incidenciasSolucionadas = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo = $idEquipo and status IN('PENDIENTE', 'P', 'N')";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $incidenciasPendientes = $x['total'];
+                    }
+                }
+                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo = $idEquipo and status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $incidenciasSolucionadas = $x['total'];
+                    }
+                }
+
                 $arrayTemp = array(
                     "idEquipo" => intval($idEquipo),
                     "destino" => "$destino",
@@ -232,7 +247,9 @@ if (isset($_GET['action'])) {
                     "proceso" => $contadorProceso,
                     "solucionado" => $contadorSolucionado,
                     "planificado" => $contadorPlanificado,
-                    "semanaActual" => $semanaActual
+                    "semanaActual" => $semanaActual,
+                    "incidenciasPendientes" => intval($incidenciasPendientes),
+                    "incidenciasSolucionadas" => intval($incidenciasSolucionadas)
                 );
 
                 $array[] = $arrayTemp;

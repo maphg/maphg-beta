@@ -82,6 +82,10 @@ const btnStatusZI = document.getElementById("statusZI");
 const editarTitulo = document.getElementById("editarTitulo");
 // BOTONES PARA EL MODAL STATUS
 
+// CONTENEDORES DIV
+const contenedorDeEquipos = document.getElementById("contenedorDeEquipos");
+// CONTENEDORES DIV
+
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
@@ -152,6 +156,15 @@ const datosPlanes = params => {
         var solucionado = "";
     }
 
+    const IncidenciaP = params.incidenciasPendientes > 0 ?
+        `<span class="px-2 font-bold rounded-full bg-red-200 text-red-500">
+            ${params.incidenciasPendientes}
+        </span>` : '';
+    const IncidenciaS = params.incidenciasSolucionadas > 0 ?
+        `<span class="px-2 font-bold rounded-full bg-green-200 text-green-500 mx-2">
+            ${params.incidenciasSolucionadas}
+        </span>` : '';
+
     var result = `
             <tr id="equipo_${idEquipo}" class="hover:bg-fondos-4 cursor-pointer text-xs" 
             onclick="informacionEquipo(${idEquipo}); abrirmodal('modalMPEquipo')">
@@ -215,6 +228,13 @@ const datosPlanes = params => {
                 <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
                     <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">                   
                         ${planificado + proceso + solucionado} 
+                    </span>
+                </td>
+
+                <td class="px-4 py-4 whitespace-no-wrap border-b border-gray-200">
+                    <span class="px-2 inline-flex  leading-5 font-bold rounded-full uppercase">                   
+                        ${IncidenciaP}
+                        ${IncidenciaS}
                     </span>
                 </td>
 
@@ -736,7 +756,7 @@ function consultaEquiposLocales() {
     const URL = `php/gestion_equipos_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&filtroDestino=${filtroDestino}&filtroSeccion=${filtroSeccion}&filtroSubseccion=${filtroSubseccion}&filtroTipo=${filtroTipo}&filtroStatus=${filtroStatus}&filtroSemana=${filtroSemana}&filtroPalabra=${filtroPalabra}`;
 
     // limpia el contendor, para nuevo resultado
-    document.getElementById('contenedorDeEquipos').innerHTML = '';
+    contenedorDeEquipos.innerHTML = '';
     load.innerHTML = '<i class="fa fa-spinner fa-pulse fa-sm fa-fw"></i>';
 
     fetch(URL)
@@ -762,10 +782,11 @@ function consultaEquiposLocales() {
                         proximoMP: array[x].proximoMP,
                         proceso: array[x].proceso,
                         solucionado: array[x].solucionado,
-                        planificado: array[x].planificado
+                        planificado: array[x].planificado,
+                        incidenciasPendientes: array[x].incidenciasPendientes,
+                        incidenciasSolucionadas: array[x].incidenciasSolucionadas
                     });
-                    document.getElementById("contenedorDeEquipos")
-                        .insertAdjacentHTML('beforeend', equiposX);
+                    contenedorDeEquipos.insertAdjacentHTML('beforeend', equiposX);
                 }
             } else {
                 alertaImg('Equipos Obtenidos: 0', '', 'info', 3000)
@@ -799,7 +820,7 @@ function consultaEquiposLocales() {
         .catch(function (err) {
             fetch(APIERROR + err + ' consultaEquiposLocales()');
             load.innerHTML = '';
-            document.getElementById('contenedorDeEquipos').innerHTML = '';
+            contenedorDeEquipos.innerHTML = '';
         })
 }
 
@@ -1620,7 +1641,6 @@ function informacionEquipoxx(idEquipo) {
 
     const URL = `../php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
     let promesa = new Promise((resolve, reject) => {
-        console.log(1);
         fetch(URL)
             .then(array => array.json())
             .then(array => {
@@ -1704,7 +1724,6 @@ function informacionEquipoxx(idEquipo) {
     promesa.then((resolve, reject) => {
 
         const URL2 = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
-        console.log(2);
 
         fetch(URL2)
             .then(array => array.json())
@@ -1752,7 +1771,6 @@ function informacionEquipoxx(idEquipo) {
                 }
             })
             .then(() => {
-                console.log(3);
                 cancelarInformacionEquipo(idEquipo);
             })
             .catch(function (err) {
@@ -2102,7 +2120,6 @@ function informacionEquipo(idEquipo) {
 
     const URL = `../php/select_REST_planner.php?action=obtenerSeccionesSubseccionPorDestino&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
     let promesa = new Promise((resolve, reject) => {
-        console.log(1);
         fetch(URL)
             .then(array => array.json())
             .then(array => {
@@ -2190,7 +2207,6 @@ function informacionEquipo(idEquipo) {
     promesa.then((resolve, reject) => {
 
         const URL2 = `../php/select_REST_planner.php?action=obtenerEquipoPorId&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
-        console.log(2);
 
         fetch(URL2)
             .then(array => array.json())
@@ -2251,7 +2267,6 @@ function informacionEquipo(idEquipo) {
                         btnBitacorasEquipo.classList.add('hidden');
                         obtenerIncidenciasEquipo(idEquipo);
                     }
-                    console.log(3);
                 }
             })
             .catch(function (err) {
@@ -3437,9 +3452,6 @@ function consultarPlanLocal(idEquipo) {
                     contenedorChecklistEquipo.innerHTML = `<h1 class="w-full text-center text-gray-500 uppercase font-bold"><img src="../svg/SINPREVENTIVOS.svg"></h1>`;
                 }
             }
-        },
-        error: function (err) {
-            console.log(err)
         }
     });
 }
