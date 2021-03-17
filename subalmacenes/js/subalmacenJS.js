@@ -86,7 +86,6 @@ const subalmacenSeleccionado = idSubalmacen => {
   fetch(URL)
     .then(array => array.json())
     .then(array => {
-      console.log(array)
       if (array) {
         subalmacenEntradasFase.innerText = array.fase;
         subalmacenEntradasTitulo.innerText = array.subalmacen;
