@@ -98,10 +98,10 @@ $usuario = $_SESSION['usuario'];
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
-                    <h1 id="faseSubalmacen" class="font-medium text-base text-gray-300 px-1"></h1>
+                    <h1 id="subalmacenExistenciasFase" class="font-medium text-base text-gray-300 px-1"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
-                    <h1 id="nombreSubalmacen"></h1>
+                    <h1 id="subalmacenExistenciasTitulo"></h1>
                 </div>
 
                 <div class="font-bold bg-red-200 text-red-500 text-xs py-1 px-2 rounded-r-md">
@@ -227,10 +227,10 @@ $usuario = $_SESSION['usuario'];
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 ml-4 flex flex-row items-center">
                 <div class="flex justify-center items-center bg-gray-900 rounded-b-md w-auto h-10 shadow-xs">
-                    <h1 id="faseSalidaSubalmacen" class="font-medium text-base text-gray-300 px-1">--</h1>
+                    <h1 id="subalmacenSalidasFase" class="font-medium text-base text-gray-300 px-1"></h1>
                 </div>
                 <div class="ml-4 font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-l-md">
-                    <h1 id="nombreSalidaSubalmacen">--</h1>
+                    <h1 id="subalmacenSalidasTitulo"></h1>
                 </div>
 
                 <div class="font-bold bg-yellow-300 text-yellow-600 text-xs py-1 px-2 rounded-r-md">

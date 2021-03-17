@@ -11,6 +11,26 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $array = array();
 
+    // OBTIENE EL SUBALMACEN SELECCIONADO
+    if ($action == "subalmacenSeleccionado") {
+        $idSubalmacen = $_GET['idSubalmacen'];
+
+        $query = "SELECT nombre, fase, tipo FROM t_subalmacenes WHERE id = $idSubalmacen";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $subalmacen = $x['nombre'];
+                $fase = $x['fase'];
+                $tipo = $x['tipo'];
+
+                $array['subalmacen'] = $subalmacen;
+                $array['fase'] = $fase;
+                $array['tipo'] = $tipo;
+            }
+        }
+        echo json_encode($array);
+    }
+
+    // OBTIENE TODOS LOS STOCK POR DESTINO
     if ($action == "consultaTodosItems") {
         $palabraBuscar = $_GET['palabraBuscar'];
 
@@ -113,6 +133,7 @@ if (isset($_GET['action'])) {
     }
 
 
+    // AGREGAR ITEMS
     if ($action == "agregarItems") {
         $idSubalmacen = $_GET['idSubalmacen'];
         $marca = $_GET['marca'];

@@ -32,6 +32,12 @@ const dataTodosItems = document.getElementById("dataTodosItems");
 
 // CONTENEDORES DIV
 const contendorOTSalida = document.getElementById("contendorOTSalida");
+const subalmacenEntradasFase = document.getElementById("subalmacenEntradasFase");
+const subalmacenEntradasTitulo = document.getElementById("subalmacenEntradasTitulo");
+const subalmacenSalidasFase = document.getElementById("subalmacenSalidasFase");
+const subalmacenSalidasTitulo = document.getElementById("subalmacenSalidasTitulo");
+const subalmacenExistenciasTitulo = document.getElementById("subalmacenExistenciasTitulo");
+const subalmacenExistenciasFase = document.getElementById("subalmacenExistenciasFase");
 // CONTENEDORES DIV
 
 // BTN
@@ -70,6 +76,30 @@ function consultaSubalmacen() {
 }
 
 
+const subalmacenSeleccionado = idSubalmacen => {
+  let idDestino = localStorage.getItem('idDestino');
+  let idUsuario = localStorage.getItem('usuario');
+
+  const action = "subalmacenSeleccionado";
+  const URL = `php/subalmacen.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idSubalmacen=${idSubalmacen}`;
+
+  fetch(URL)
+    .then(array => array.json())
+    .then(array => {
+      console.log(array)
+      if (array) {
+        subalmacenEntradasFase.innerText = array.fase;
+        subalmacenEntradasTitulo.innerText = array.subalmacen;
+        subalmacenSalidasFase.innerText = array.fase;
+        subalmacenSalidasTitulo.innerText = array.subalmacen;
+        subalmacenExistenciasFase.innerText = array.fase;
+        subalmacenExistenciasTitulo.innerText = array.subalmacen;
+      }
+    })
+    .catch(function (err) {
+      fetch(APIERROR + err);
+    })
+}
 
 
 

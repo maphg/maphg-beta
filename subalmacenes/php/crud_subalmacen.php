@@ -57,7 +57,7 @@ if (isset($_POST['action'])) {
           if ($tipo == "SUBALMACEN") {
             $dataGP .= "
             <!-- SUBALMACEN -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
@@ -92,7 +92,7 @@ if (isset($_POST['action'])) {
           } elseif ($tipo == "BODEGA") {
             $dataGP .= "
             <!-- BODEGA -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
@@ -129,7 +129,7 @@ if (isset($_POST['action'])) {
           if ($tipo == "SUBALMACEN") {
             $dataTRS .= "
             <!-- SUBALMACEN -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
@@ -165,7 +165,7 @@ if (isset($_POST['action'])) {
           } elseif ($tipo == "BODEGA") {
             $dataTRS .= "
             <!-- BODEGA -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
@@ -202,7 +202,7 @@ if (isset($_POST['action'])) {
           if ($tipo == "SUBALMACEN") {
             $dataZI .= "
             <!-- SUBALMACEN -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
@@ -237,7 +237,7 @@ if (isset($_POST['action'])) {
           } elseif ($tipo == "BODEGA") {
             $dataZI .= "
             <!-- BODEGA -->
-            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); idSubalmacenSeleccionado($idSubalmacen, '$fase', '$nombre');\"
+            <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
             class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
