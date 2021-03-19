@@ -6,6 +6,7 @@ const contenedorOpciones = document.querySelector('#contenedorOpciones');
 const btnOpcion = document.querySelector('#btnOpcion');
 const inputNombre = document.querySelector('#inputNombre');
 const inputCargo = document.querySelector('#inputCargo');
+const inputAvatar = document.querySelector('#inputAvatar');
 const dataOrganigrama = document.querySelector('#dataOrganigrama');
 const destino = document.querySelector('#destino');
 
@@ -17,6 +18,7 @@ const opciones = idItem => {
     Popper.createPopper(popcorn, tooltip);
     btnActualizar.setAttribute('onclick', `opcion('actualizar',${idItem})`)
     btnAgregar.setAttribute('onclick', `opcion('agregar',${idItem})`)
+    contenedorOpciones.classList.add('hidden');
 }
 
 
@@ -30,10 +32,13 @@ const cerrarOpciones = () => {
 // OPCIONES
 const opcion = (opcion, idItem) => {
     if (opcion === "actualizar") {
+        obtenerItem(idItem);
         btnOpcion.innerText = 'Actualizar';
         btnOpcion.setAttribute('onclick', `actualizarItem(${idItem})`);
         contenedorOpciones.classList.remove('hidden');
     } else if (opcion === "agregar") {
+        inputNombre.value = '';
+        inputCargo.value = '';
         btnOpcion.setAttribute('onclick', `agregarItem(${idItem})`);
         btnOpcion.innerText = 'Agregar';
         contenedorOpciones.classList.remove('hidden');
@@ -72,14 +77,37 @@ const actualizarItem = idItem => {
     let idUsuario = localStorage.getItem('usuario');
 
     const action = "actualizarItem";
-    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
 
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+
         })
         .catch(function (err) {
             fetch(APIERROR + err);
+        })
+}
+
+
+// ACTUALIZAR ITEM
+const obtenerItem = idItem => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerItem";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            if (array) {
+                inputNombre.value = array.nombre;
+                inputCargo.value = array.cargo;
+                inputAvatar.setAttribute("src", arra.avatar);
+            }
+        })
+        .catch(function (err) {
         })
 }
 
@@ -147,15 +175,14 @@ const obtenerOrganigrama = () => {
                         if (item = document.querySelector('#nivel_' + idPadre)) {
                             item.insertAdjacentHTML('beforeend', `
                                 <li class="relative p-6 flex-none">
-                                    <div class="border-t-2 absolute h-8 border-gray-400 top-0" 
-                                    style="left: 0px; right: 0px;">
+                                    <div class="border-t-2 absolute h-8 border-gray-400 top-0 rediseño_${idPadre}">
                                     </div>
                                     <div class="relative flex justify-center">
                                         <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0"></div>
                                         <div class="text-center">
                                             <div class="flex flex-col justify-center items-center">
                                                 <div class="w-16">
-                                                    <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md" alt="Shi Ten"
+                                                    <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md cursor-pointer"
                                                         src="https://randomuser.me/api/portraits/men/43.jpg" onclick="opciones(${idItem})">
                                                 </div>
                                                 <div class="text-gray-600">
@@ -172,6 +199,7 @@ const obtenerOrganigrama = () => {
                                 </li>
                             `)
                         }
+                        rediseño(idPadre);
                     }
                 }
             }
@@ -180,6 +208,23 @@ const obtenerOrganigrama = () => {
             fetch(APIERROR + err);
         })
 }
+
+const rediseño = idPadre => {
+    if (itemClass = document.getElementsByClassName("rediseño_" + idPadre)) {
+        if (itemClass.length >= 2) {
+            for (let x = 0; x < itemClass.length; x++) {
+                if (x == 0) {
+                    itemClass[x].setAttribute('style', 'left: 50%; right: 0%;');
+                } else if ((x + 1) == itemClass.length) {
+                    itemClass[x].setAttribute('style', 'left: 0%; right: 50%;');
+                }else{
+                    itemClass[x].setAttribute('style', 'left: 0%; right: 0%;');
+                }
+            }
+        }
+    }
+}
+
 
 const obtenerDestino = () => {
     let idDestino = localStorage.getItem('idDestino');

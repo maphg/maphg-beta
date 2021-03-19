@@ -5001,5 +5001,29 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTENER ARRAY DE ORGANIGRAMA
+    if ($action == "obtenerItem") {
+        $idItem = $_GET['idItem'];
+
+        $query = "SELECT id, nombre, cargo, avatar_url 
+        FROM t_organigrama 
+        WHERE id = $idItem";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x["id"];
+                $nombre = $x["nombre"];
+                $cargo = $x["cargo"];
+                $avatar = $x["avatar_url"];
+
+                $array["idItem"] = intval($idItem);
+                $array["nombre"] = $nombre;
+                $array["cargo"] = $cargo;
+                $array["avatar"] = $avatar;
+            }
+        }
+        echo json_encode($array);
+    }
+
+
     // CIERRE FINAL
 }
