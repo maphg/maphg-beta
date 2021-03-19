@@ -31,14 +31,15 @@ const cerrarOpciones = () => {
 
 // OPCIONES
 const opcion = (opcion, idItem) => {
+    inputNombre.value = '';
+    inputCargo.value = '';
+    inputAvatar.value = '';
     if (opcion === "actualizar") {
         obtenerItem(idItem);
         btnOpcion.innerText = 'Actualizar';
         btnOpcion.setAttribute('onclick', `actualizarItem(${idItem})`);
         contenedorOpciones.classList.remove('hidden');
     } else if (opcion === "agregar") {
-        inputNombre.value = '';
-        inputCargo.value = '';
         btnOpcion.setAttribute('onclick', `agregarItem(${idItem})`);
         btnOpcion.innerText = 'Agregar';
         contenedorOpciones.classList.remove('hidden');
