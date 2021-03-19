@@ -5004,6 +5004,19 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
+
+    // ELIMINA ITEM
+    if ($action == "eliminarItem") {
+        $idItem = $_GET['idItem'];
+        $resp = 0;
+
+        $query = "UPDATE t_organigrama SET activo = 0 WHERE id = $idItem";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
     // OBTENER ARRAY DE ORGANIGRAMA
     if ($action == "obtenerOrganigrama") {
 

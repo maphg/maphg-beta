@@ -4,6 +4,7 @@ const btnActualizar = document.querySelector('#btnActualizar');
 const btnAgregar = document.querySelector('#btnAgregar');
 const contenedorOpciones = document.querySelector('#contenedorOpciones');
 const btnOpcion = document.querySelector('#btnOpcion');
+const btnEliminar = document.querySelector('#btnEliminar');
 const inputNombre = document.querySelector('#inputNombre');
 const inputCargo = document.querySelector('#inputCargo');
 const inputAvatar = document.querySelector('#inputAvatar');
@@ -16,8 +17,9 @@ const opciones = idItem => {
     const popcorn = document.querySelector('#item_organigrama_' + idItem);
     contenedorTooltip.classList.toggle('hidden');
     Popper.createPopper(popcorn, tooltip);
-    btnActualizar.setAttribute('onclick', `opcion('actualizar',${idItem})`)
-    btnAgregar.setAttribute('onclick', `opcion('agregar',${idItem})`)
+    btnActualizar.setAttribute('onclick', `opcion('actualizar',${idItem})`);
+    btnAgregar.setAttribute('onclick', `opcion('agregar',${idItem})`);
+    btnEliminar.setAttribute('onclick', `eliminarItem(${idItem})`);
     contenedorOpciones.classList.add('hidden');
 }
 
@@ -120,6 +122,36 @@ const actualizarItem = idItem => {
     } else {
         alertaImg('Agrega la Información Requerida', '', 'info', 1500);
     }
+}
+
+
+// ELIMINAR ITEM
+const eliminarItem = idItem => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "eliminarItem";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
+
+    alertify.confirm('¿Desea Eliminar el Item?', () => {
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                console.log(array)
+                if (array == 1) {
+                    alertaImg('Item Eliminado', '', 'success', 1500);
+                    obtenerOrganigrama();
+                    contenedorTooltip.classList.add('hidden');
+                    contenedorOpciones.classList.add('hidden');
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+            })
+    }, () => {
+        alertaImg('Proceso Cancelado', '', 'error', 1500);
+    });
 }
 
 
