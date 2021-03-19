@@ -79,7 +79,6 @@ const agregarItem = idItem => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
             })
     } else {
         alertaImg('Agrega la Información Requerida', '', 'info', 1500);
@@ -117,7 +116,6 @@ const actualizarItem = idItem => {
                 }
             })
             .catch(function (err) {
-                console.log(err);
             })
     } else {
         alertaImg('Agrega la Información Requerida', '', 'info', 1500);
@@ -137,7 +135,6 @@ const eliminarItem = idItem => {
         fetch(URL)
             .then(array => array.json())
             .then(array => {
-                console.log(array)
                 if (array == 1) {
                     alertaImg('Item Eliminado', '', 'success', 1500);
                     obtenerOrganigrama();
@@ -269,7 +266,6 @@ const obtenerOrganigrama = () => {
             }
         })
         .catch(function (err) {
-            console.log(err);
         })
 }
 
