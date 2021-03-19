@@ -55,6 +55,8 @@ const agregarItem = idItem => {
             if (array == 1) {
                 alertaImg('Agregado', '', 'success', 1500);
                 obtenerOrganigrama();
+                contenedorTooltip.classList.add('hidden');
+                contenedorOpciones.classList.add('hidden');
             } else {
                 alertaImg('Intente de Nuevo', '', 'info', 1500);
             }
