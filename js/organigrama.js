@@ -14,7 +14,7 @@ const destino = document.querySelector('#destino');
 // MUESTRA TOOLTIP DE OPCIONES
 const opciones = idItem => {
     const popcorn = document.querySelector('#item_organigrama_' + idItem);
-    contenedorTooltip.classList.remove('hidden');
+    contenedorTooltip.classList.toggle('hidden');
     Popper.createPopper(popcorn, tooltip);
     btnActualizar.setAttribute('onclick', `opcion('actualizar',${idItem})`)
     btnAgregar.setAttribute('onclick', `opcion('agregar',${idItem})`)
@@ -51,23 +51,36 @@ const agregarItem = idItem => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
-    const action = "agregarItemOrganigrama";
-    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}&nombre=${inputNombre.value}&cargo=${inputCargo.value}`;
+    const data = new FormData();
+    data.append('file', inputAvatar.files[0]);
+    data.append('nombre', inputNombre.value);
+    data.append('cargo', inputCargo.value);
 
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-            if (array == 1) {
-                alertaImg('Agregado', '', 'success', 1500);
-                obtenerOrganigrama();
-                contenedorTooltip.classList.add('hidden');
-                contenedorOpciones.classList.add('hidden');
-            } else {
-                alertaImg('Intente de Nuevo', '', 'info', 1500);
-            }
+    const action = "agregarItemOrganigrama";
+    const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
+
+    if (inputAvatar.files[0] && inputNombre.value.length && inputCargo.value.length) {
+        fetch(URL, {
+            method: "POST",
+            body: data
         })
-        .catch(function (err) {
-        })
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Item Agregado al Organigrama', '', 'success', 1500);
+                    obtenerOrganigrama();
+                    contenedorTooltip.classList.add('hidden');
+                    contenedorOpciones.classList.add('hidden');
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+    } else {
+        alertaImg('Agrega la Información Requerida', '', 'info', 1500);
+    }
 }
 
 
@@ -76,17 +89,36 @@ const actualizarItem = idItem => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
 
+    const data = new FormData();
+    data.append('file', inputAvatar.files[0]);
+    data.append('nombre', inputNombre.value);
+    data.append('cargo', inputCargo.value);
+
     const action = "actualizarItem";
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
 
-    fetch(URL)
-        .then(array => array.json())
-        .then(array => {
-
+    if (inputNombre.value.length && inputCargo.value.length) {
+        fetch(URL, {
+            method: "POST",
+            body: data
         })
-        .catch(function (err) {
-            fetch(APIERROR + err);
-        })
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Item Actualizado', '', 'success', 1500);
+                    obtenerOrganigrama();
+                    contenedorTooltip.classList.add('hidden');
+                    contenedorOpciones.classList.add('hidden');
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+    } else {
+        alertaImg('Agrega la Información Requerida', '', 'info', 1500);
+    }
 }
 
 
@@ -182,7 +214,7 @@ const obtenerOrganigrama = () => {
                                             <div class="flex flex-col justify-center items-center">
                                                 <div class="w-16">
                                                     <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md cursor-pointer"
-                                                        src="https://randomuser.me/api/portraits/men/43.jpg" onclick="opciones(${idItem})">
+                                                        src="./planner/avatars/${avatar}" onclick="opciones(${idItem})">
                                                 </div>
                                                 <div class="text-gray-600">
                                                     <p>${nombre}</p>
@@ -207,6 +239,7 @@ const obtenerOrganigrama = () => {
             console.log(err);
         })
 }
+
 
 const rediseño = idPadre => {
     if (itemClass = document.getElementsByClassName("rediseño_" + idPadre)) {

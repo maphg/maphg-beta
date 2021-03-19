@@ -4934,11 +4934,26 @@ if (isset($_GET['action'])) {
     // AGREGA ITEM AL ORGANIGRAMA
     if ($action == "agregarItemOrganigrama") {
         $idItem = $_GET['idItem'];
-        $nombre = $_GET['nombre'];
-        $cargo = $_GET['cargo'];
+        $nombre = $_POST['nombre'];
+        $cargo = $_POST['cargo'];
         $resp = 0;
-
         $nivel = 0;
+        $url = "";
+
+        if ($_FILES["file"] != "") {
+            $rutaTemporal = $_FILES["file"]["tmp_name"];
+            $nombreTemporal = $_FILES["file"]["name"];
+            $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+            $nombreFile = str_replace("." . $extension, '', $nombreTemporal);
+            $nombreFile = str_replace(" ", '', $nombreFile);
+            $nombreFile = preg_replace('([^A-Za-z0-9.-_])', '', $nombreFile);
+            $url = "AVATAR_ORGANIGRAMA_$idDestino" . rand(1, 900) . ".$extension";
+
+            if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $url)) {
+                $resp = 1;
+            }
+        }
+
         $query = "SELECT nivel FROM t_organigrama WHERE id = $idItem";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -4947,13 +4962,47 @@ if (isset($_GET['action'])) {
         }
 
         $query = "INSERT INTO t_organigrama(id_destino, id_padre, nivel, nombre, cargo, avatar_url, activo) 
-        VALUES ($idDestino, $idItem, $nivel, '$nombre', '$cargo', '', 1)";
+        VALUES ($idDestino, $idItem, $nivel, '$nombre', '$cargo', '$url', 1)";
         if ($result = mysqli_query($conn_2020, $query)) {
             $resp = 1;
         }
         echo json_encode($resp);
     }
 
+
+    // ACTUALIZA ITEM AL ORGANIGRAMA
+    if ($action == "actualizarItem") {
+        $idItem = $_GET['idItem'];
+        $nombre = $_POST['nombre'];
+        $cargo = $_POST['cargo'];
+        $resp = 0;
+        $nivel = 0;
+
+        if (isset($_FILES["file"])) {
+            $rutaTemporal = $_FILES["file"]["tmp_name"];
+            $nombreTemporal = $_FILES["file"]["name"];
+            $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
+            $nombreFile = str_replace("." . $extension, '', $nombreTemporal);
+            $nombreFile = str_replace(" ", '', $nombreFile);
+            $nombreFile = preg_replace('([^A-Za-z0-9.-_])', '', $nombreFile);
+            $url = "AVATAR_ORGANIGRAMA_$idDestino" . rand(1, 900) . ".$extension";
+
+            if (move_uploaded_file($rutaTemporal, "../planner/avatars/" . $url)) {
+                $resp = 1;
+            }
+            $query = "UPDATE t_organigrama SET nombre = '$nombre', cargo = '$cargo', avatar_url = '$url' 
+            WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        } else {
+            $query = "UPDATE t_organigrama SET nombre = '$nombre', cargo = '$cargo' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $resp = 1;
+            }
+        }
+        echo json_encode($resp);
+    }
 
     // OBTENER ARRAY DE ORGANIGRAMA
     if ($action == "obtenerOrganigrama") {
@@ -4969,6 +5018,10 @@ if (isset($_GET['action'])) {
                 $nombre = $x["nombre"];
                 $cargo = $x["cargo"];
                 $avatar = $x["avatar_url"];
+
+                if ($avatar === "") {
+                    $avatar = "AVATAR_ID_0_0.svg";
+                }
 
                 $hijos = 0;
                 $nivelPadre = 0;
