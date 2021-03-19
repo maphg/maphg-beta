@@ -205,7 +205,7 @@ const obtenerOrganigrama = () => {
                             <div class="flex flex-col justify-center items-center">
                                 <div class="w-16">
                                     <img id="item_organigrama_${idItem}" class="block rounded-full m-auto shadow-md"
-                                        src="${avatar}" onclick="opciones(${idItem})">
+                                        src="./planner/avatars/${avatar}" onclick="opciones(${idItem})">
                                 </div>
                                 <div class="text-gray-600">
                                     <p>${nombre}</p>
