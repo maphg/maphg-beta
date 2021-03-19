@@ -152,13 +152,12 @@ const obtenerOrganigrama = () => {
                                     </div>
                                 </div>
                             </div>
-                            `;
+                        `;
                         dataOrganigrama.insertAdjacentHTML('beforeend', codigo);
 
                         if (hijos >= 1) {
                             dataOrganigrama.insertAdjacentHTML('beforeend',
-                                `
-                                <ul id="nivel_${idItem}" class="flex flex-row mt-10 justify-center">
+                                `<ul id="nivel_${idItem}" class="flex flex-row mt-10 justify-center relative">
                                     <div class="-mt-10 border-l-2 absolute h-10 border-gray-400"></div>
                                 </ul>`);
                         }
