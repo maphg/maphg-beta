@@ -215,10 +215,13 @@ const rediseño = idPadre => {
             for (let x = 0; x < itemClass.length; x++) {
                 if (x == 0) {
                     itemClass[x].setAttribute('style', 'left: 50%; right: 0%;');
+                    itemClass[x].classList.add('animated', 'fadeIn');
                 } else if ((x + 1) == itemClass.length) {
                     itemClass[x].setAttribute('style', 'left: 0%; right: 50%;');
-                }else{
+                    itemClass[x].classList.add('animated', 'fadeIn');
+                } else {
                     itemClass[x].setAttribute('style', 'left: 0%; right: 0%;');
+                    itemClass[x].classList.add('animated', 'fadeIn');
                 }
             }
         }
