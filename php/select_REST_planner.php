@@ -15,6 +15,7 @@ if (isset($_GET['action'])) {
     $fechaActual = date('Y-m-d H:m:s');
     $añoActual = date('Y');
     $semanaActual = date('W');
+    $array = array();
 
     $ruta_t_mc_adjuntos = "../planner/tareas/adjuntos/";
     $adjuntos_ruta_t_mp_np = "../img/equipos/mpnp/";
@@ -73,6 +74,24 @@ if (isset($_GET['action'])) {
         if ($token != "" and $chatId != "" and $msg != "") {
             file_get_contents($APITelegram);
         }
+    }
+
+
+    // OBTENER DESTINO POR ID
+    if ($action == "obtenerDestino") {
+        $query = "SELECT id, destino, ubicacion FROM c_destinos WHERE id = $idDestino";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestino = $x['id'];
+                $destino = $x['destino'];
+                $ubicacion = $x['ubicacion'];
+
+                $array['idDestino'] = intval($idDestino);
+                $array['destino'] = $destino;
+                $array['ubicacion'] = $ubicacion;
+            }
+        }
+        echo json_encode($array);
     }
 
 
@@ -1285,6 +1304,7 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($array);
     }
+
 
     // OBTIENE PROYECTOS POR SECCION, SUBSECCION Y DESTINO
     if ($action == "obtenerProyectosPorSeccionSubseccion") {
@@ -4909,6 +4929,77 @@ if (isset($_GET['action'])) {
         }
         echo json_encode($resp);
     }
+
+
+    // AGREGA ITEM AL ORGANIGRAMA
+    if ($action == "agregarItemOrganigrama") {
+        $idItem = $_GET['idItem'];
+        $nombre = $_GET['nombre'];
+        $cargo = $_GET['cargo'];
+        $resp = 0;
+
+        $nivel = 0;
+        $query = "SELECT nivel FROM t_organigrama WHERE id = $idItem";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $nivel = intval($x['nivel']) + 1;
+            }
+        }
+
+        $query = "INSERT INTO t_organigrama(id_destino, id_padre, nivel, nombre, cargo, avatar_url, activo) 
+        VALUES ($idDestino, $idItem, $nivel, '$nombre', '$cargo', '', 1)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    // OBTENER ARRAY DE ORGANIGRAMA
+    if ($action == "obtenerOrganigrama") {
+
+        $query = "SELECT id, id_padre, nivel, nombre, cargo, avatar_url 
+        FROM t_organigrama 
+        WHERE id_destino = $idDestino and activo = 1 ORDER BY nivel ASC";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idItem = $x["id"];
+                $idPadre = $x["id_padre"];
+                $nivel = $x["nivel"];
+                $nombre = $x["nombre"];
+                $cargo = $x["cargo"];
+                $avatar = $x["avatar_url"];
+
+                $hijos = 0;
+                $nivelPadre = 0;
+                $query = "SELECT count(id) 'total' FROM t_organigrama WHERE id_padre = $idItem and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $hijos = $x['total'];
+                    }
+                }
+                $query = "SELECT nivel FROM t_organigrama WHERE id = $idPadre and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $nivelPadre = $x['nivel'];
+                    }
+                }
+
+                $array[] = array(
+                    "idItem" => intval($idItem),
+                    "idPadre" => intval($idPadre),
+                    "nivel" => intval($nivel),
+                    "nivelPadre" => intval($nivelPadre),
+                    "hijos" => intval($hijos),
+                    "nombre" => $nombre,
+                    "cargo" => $cargo,
+                    "avatar" => $avatar
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
 
     // CIERRE FINAL
 }

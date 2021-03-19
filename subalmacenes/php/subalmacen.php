@@ -934,8 +934,6 @@ if (isset($_GET['action'])) {
             }
         }
 
-
-
         if ($tipoSalida == "INCIDENCIA" || $tipoSalida == "INCIDENCIAGENERAL" || $tipoSalida == "PREVENTIVO") {
             if ($idX == $OTSalida) {
                 $query = "UPDATE t_subalmacenes_items_stock

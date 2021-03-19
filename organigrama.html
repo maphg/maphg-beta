@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MAPHG Organigrama</title>
+    <link rel="shortcut icon" href="svg/favicon.ico" type="image/x-icon">
+    <link href="css/tailwindproduccion_2021.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/modales.css">
+    <link rel="stylesheet" href="css/alertify.min.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
+</head>
+
+<style>
+    #tooltip {
+        font-weight: bold;
+        padding: 5px 10px;
+        font-size: 13px;
+        border-radius: 5px;
+    }
+
+    #arrow,
+    #arrow::before {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: inherit;
+    }
+
+    #arrow {
+        visibility: hidden;
+    }
+
+    #arrow::before {
+        visibility: visible;
+        content: '';
+        transform: rotate(45deg);
+    }
+
+    #tooltip[data-popper-placement^='top']>#arrow {
+        bottom: -4px;
+    }
+
+    #tooltip[data-popper-placement^='bottom']>#arrow {
+        top: -4px;
+    }
+
+    #tooltip[data-popper-placement^='left']>#arrow {
+        right: -4px;
+    }
+
+    #tooltip[data-popper-placement^='right']>#arrow {
+        left: -4px;
+    }
+</style>
+
+<body class="h-screen overflow-auto flex items-start justify-start md:justify-center scrollbar"
+    style="background: #edf2f7;">
+    <div class="flex flex-col justify-center items-center">
+
+        <div class="container mx-auto text-center">
+            <div class="flex w-full  justify-center items-center mb-4">
+                <div>
+                    <h1 class="text-3xl uppercase text-gray-700">Organigrama</h1>
+                </div>
+                <div class="flex items-center justify-center px-1 rounded bg-gray-400 text-gray-700 ml-2">
+                    <h1 id="destino" class="text-lg font-semibold"></h1>
+                </div>
+            </div>
+
+            <div class="items-center justify-center flex">
+                <div id="dataOrganigrama" class="text-center">
+                    <div class="flex flex-col justify-center items-center">
+                        <div class="w-16">
+                            <img id="item_1" class="block rounded-full m-auto shadow-md" alt="Duc Sun"
+                                src="https://randomuser.me/api/portraits/men/12.jpg" onclick="opciones(1)">
+                        </div>
+                        <div class="text-gray-600">
+                            <p>Duc Sun</p>
+                            <div class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                <p>Director de mantenimiento</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="flex flex-row mt-10 justify-center">
+                        <div class="-mt-10 border-l-2 absolute h-10 border-gray-400"></div>
+                        <li class="relative p-6 flex-none">
+                            <div class="border-t-2 absolute h-8 border-gray-400 top-0" style="left: 50%; right: 0px;">
+                            </div>
+                            <div class="relative flex justify-center">
+                                <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0"></div>
+                                <div class="text-center">
+                                    <div id="item_2" class="flex flex-col justify-center items-center">
+                                        <div class="w-16">
+                                            <img class="block rounded-full m-auto shadow-md" alt="Leo Six"
+                                                src="https://randomuser.me/api/portraits/men/83.jpg" />
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <p>Leo Six</p>
+                                            <div
+                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                <p>Gerente GP</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="flex flex-row mt-10 justify-center">
+                                        <div class="-mt-10 border-l-2 absolute h-10 border-gray-400"></div>
+                                        <li class="relative p-6 flex-none">
+                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                style="left: 50%; right: 50%;"></div>
+                                            <div class="relative flex justify-center">
+                                                <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                </div>
+                                                <div class="text-center">
+                                                    <div class="flex flex-col justify-center items-center">
+                                                        <div class="w-16">
+                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                alt="Tab Han"
+                                                                src="https://randomuser.me/api/portraits/men/46.jpg" />
+                                                        </div>
+                                                        <div class="text-gray-600">
+                                                            <p>Tab Han</p>
+                                                            <div
+                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                <p>Sub gerente GP</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="flex flex-row mt-10 justify-center">
+                                                        <div class="-mt-10 border-l-2 absolute h-10 border-gray-400">
+                                                        </div>
+                                                        <li class="relative p-6 flex-none">
+                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                style="left: 50%; right: 0px;"></div>
+                                                            <div class="relative flex justify-center">
+                                                                <div
+                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <div
+                                                                        class="flex flex-col justify-center items-center">
+                                                                        <div class="w-16">
+                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                alt="Daniel Zhou"
+                                                                                src="https://randomuser.me/api/portraits/men/76.jpg" />
+                                                                        </div>
+                                                                        <div class="text-gray-600">
+                                                                            <p>Daniel Zhou</p>
+                                                                            <div
+                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                <p>Supervisor de pintura</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="flex flex-row mt-10 justify-center">
+                                                                        <div
+                                                                            class="-mt-10 border-l-2 absolute h-10 border-gray-400">
+                                                                        </div>
+                                                                        <li class="relative p-6 flex-none">
+                                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                                style="left: 50%; right: 0px;">
+                                                                            </div>
+                                                                            <div class="relative flex justify-center">
+                                                                                <div
+                                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <div
+                                                                                        class="flex flex-col justify-center items-center">
+                                                                                        <div class="w-16">
+                                                                                            <img id="item_4"
+                                                                                                class="block rounded-full m-auto shadow-md"
+                                                                                                alt="Patrick Wang"
+                                                                                                src="https://randomuser.me/api/portraits/men/55.jpg"/
+                                                                                                onclick="opciones(4)">
+                                                                                        </div>
+                                                                                        <div class="text-gray-600">
+                                                                                            <p>Patrick Wang</p>
+                                                                                            <div
+                                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                                <p>Pintor B</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="relative p-6 flex-none">
+                                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                                style="left: 0px; right: 50%;">
+                                                                            </div>
+                                                                            <div class="relative flex justify-center">
+                                                                                <div
+                                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <div
+                                                                                        class="flex flex-col justify-center items-center">
+                                                                                        <div class="w-16">
+                                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                                alt="Jonsen Li"
+                                                                                                src="https://randomuser.me/api/portraits/men/41.jpg" />
+                                                                                        </div>
+                                                                                        <div class="text-gray-600">
+                                                                                            <p>Jonsen Li</p>
+                                                                                            <div
+                                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                                <p>Pintor A</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="relative p-6 flex-none">
+                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                style="left: 0px; right: 0px;"></div>
+                                                            <div class="relative flex justify-center">
+                                                                <div
+                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <div
+                                                                        class="flex flex-col justify-center items-center">
+                                                                        <div class="w-16">
+                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                alt="Derek Hu"
+                                                                                src="https://randomuser.me/api/portraits/men/44.jpg" />
+                                                                        </div>
+                                                                        <div class="text-gray-600">
+                                                                            <p>Derek Hu</p>
+                                                                            <div
+                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                <p>Supervisor areas</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="flex flex-row mt-10 justify-center">
+                                                                        <div
+                                                                            class="-mt-10 border-l-2 absolute h-10 border-gray-400">
+                                                                        </div>
+
+
+                                                                        <li class="relative p-6 flex-none">
+                                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                                style="left: 50%; right: 50%;">
+                                                                            </div>
+                                                                            <div class="relative flex justify-center">
+                                                                                <div
+                                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <div
+                                                                                        class="flex flex-col justify-center items-center">
+                                                                                        <div class="w-16">
+                                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                                alt="Alfie Zu"
+                                                                                                src="https://randomuser.me/api/portraits/men/25.jpg" />
+                                                                                        </div>
+                                                                                        <div class="text-gray-600">
+                                                                                            <p>Alfie Zu</p>
+                                                                                            <div
+                                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                                <p>Tecnico Poli</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="relative p-6 flex-none">
+                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                style="left: 0px; right: 0px;"></div>
+                                                            <div class="relative flex justify-center">
+                                                                <div
+                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <div
+                                                                        class="flex flex-col justify-center items-center">
+                                                                        <div class="w-16">
+                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                alt="Derek Hu"
+                                                                                src="https://randomuser.me/api/portraits/men/44.jpg" />
+                                                                        </div>
+                                                                        <div class="text-gray-600">
+                                                                            <p>Derek Hu</p>
+                                                                            <div
+                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                <p>Supervisor Habitaciones</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <ul class="flex flex-row mt-10 justify-center">
+                                                                        <div
+                                                                            class="-mt-10 border-l-2 absolute h-10 border-gray-400">
+                                                                        </div>
+
+
+                                                                        <li class="relative p-6 flex-none">
+                                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                                style="left: 50%; right: 50%;">
+                                                                            </div>
+                                                                            <div class="relative flex justify-center">
+                                                                                <div
+                                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <div
+                                                                                        class="flex flex-col justify-center items-center ">
+                                                                                        <div class="w-16">
+                                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                                alt="Alfie Zu"
+                                                                                                src="https://randomuser.me/api/portraits/men/25.jpg" />
+                                                                                        </div>
+                                                                                        <div class="text-gray-600 ">
+                                                                                            <p>Alfie Zu</p>
+                                                                                            <div
+                                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400 ">
+                                                                                                <p>Tecnico Habitaciones
+                                                                                                    1</p>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li class="relative p-6 flex-none">
+                                                            <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                style="left: 0px; right: 50%;"></div>
+                                                            <div class="relative flex justify-center">
+                                                                <div
+                                                                    class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                </div>
+                                                                <div class="text-center">
+                                                                    <div
+                                                                        class="flex flex-col justify-center items-center">
+                                                                        <div class="w-16">
+                                                                            <img class="block rounded-full m-auto shadow-md"
+                                                                                alt="Lennis Chan"
+                                                                                src="https://randomuser.me/api/portraits/men/30.jpg" />
+                                                                        </div>
+                                                                        <div class="text-gray-600">
+                                                                            <p>Lennis Chan</p>
+                                                                            <div
+                                                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                <p>Supervisor albercas</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <ul class="flex flex-row mt-10 justify-center">
+                                                                <div
+                                                                    class="-mt-10 border-l-2 absolute h-10 border-gray-400">
+                                                                </div>
+                                                                <li class="relative p-6 flex-none">
+                                                                    <div class="border-t-2 absolute h-8 border-gray-400 top-0"
+                                                                        style="left: 50%; right: 50%;"></div>
+                                                                    <div class="relative flex justify-center">
+                                                                        <div
+                                                                            class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0">
+                                                                        </div>
+                                                                        <div class="text-center">
+                                                                            <div
+                                                                                class="flex flex-col justify-center items-center">
+                                                                                <div class="w-16">
+                                                                                    <img class="block rounded-full m-auto shadow-md"
+                                                                                        alt="Peter Ming"
+                                                                                        src="https://randomuser.me/api/portraits/men/90.jpg" />
+                                                                                </div>
+                                                                                <div class="text-gray-600">
+                                                                                    <p>Peter Ming</p>
+                                                                                    <div
+                                                                                        class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                                                        <p>Alberquero 1</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="relative p-6 flex-none">
+                            <div class="border-t-2 absolute h-8 border-gray-400 top-0" style="left: 0px; right: 0px;">
+                            </div>
+                            <div class="relative flex justify-center">
+                                <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0"></div>
+                                <div class="text-center">
+                                    <div class="flex flex-col justify-center items-center">
+                                        <div class="w-16">
+                                            <img class="block rounded-full m-auto shadow-md" alt="Shi Ten"
+                                                src="https://randomuser.me/api/portraits/men/43.jpg" />
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <p>Shi Ten</p>
+                                            <div
+                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                <p>Gerente TRS</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="relative p-6 flex-none">
+                            <div class="border-t-2 absolute h-8 border-gray-400 top-0" style="left: 0px; right: 50%;">
+                            </div>
+                            <div class="relative flex justify-center">
+                                <div class="-mt-6 border-l-2 absolute h-6 border-gray-400 top-0"></div>
+                                <div class="text-center">
+                                    <div class="flex flex-col justify-center items-center">
+                                        <div class="w-16">
+                                            <img class="block rounded-full m-auto shadow-md" alt="Shawn Mong"
+                                                src="https://randomuser.me/api/portraits/men/97.jpg" />
+                                        </div>
+                                        <div class="text-gray-600">
+                                            <p>Shawn Mong</p>
+                                            <div
+                                                class="bg-gray-800 text-xs font-semibold uppercase px-2 py-1 rounded text-gray-400">
+                                                <p>Gerente ZI</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOOLTIP -->
+    <div id="contenedorTooltip" class="hidden w-full h-screen absolute">
+        <div id="tooltip" role="tooltip" class="z-20 w-48 bg-white">
+            <div id="arrow" data-popper-arrow></div>
+            <div class="flex flex-row justify-center items-center w-full py-2">
+                <div id="btnActualizar"
+                    class="hover:text-gray-600 text-gray-400 mx-3 px-2 pt-2 cursor-pointer border-b hover:border-gray-500 font-bold">
+                    Actualizar
+                </div>
+
+                <div id="btnAgregar"
+                    class="hover:text-gray-600 text-gray-400 mx-3 px-2 pt-2 cursor-pointer border-b hover:border-gray-500 font-bold">
+                    Agregar
+                </div>
+            </div>
+            <div id="contenedorOpciones" class="grid grid-cols-6 gap-2 w-full hidden">
+                <div class="col-span-6">
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input id="inputNombre" type="text" autocomplete="off"
+                        class="mt-1 px-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border border-gray-400 rounded-md">
+                </div>
+
+                <div class="col-span-6">
+                    <label class="block text-sm font-medium text-gray-700">Cargo</label>
+                    <input id="inputCargo" type="text" autocomplete="off" class="mt-1 px-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+                        border border-gray-400 rounded-md">
+                </div>
+
+                <div class="col-span-6">
+                    <label class="block text-sm font-medium text-gray-700">
+                        Foto
+                    </label>
+                    <div class="mt-1 flex items-center">
+                        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                            <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z">
+                                </path>
+                            </svg>
+                        </span>
+                        <button type="button"
+                            class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 relative">
+                            adjuntar 📎
+                        </button>
+                        <input type="file" class="absolute right-0 z-20 w-32 opacity-0">
+                    </div>
+                </div>
+                <div class="col-span-6 text-center">
+                    <button id="btnOpcion" type="button"
+                        class="bg-gray-200 my-3 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 font-bold relative w-24">
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-screen absolute z-10" onclick="cerrarOpciones();"></div>
+    </div>
+    <!-- TOOLTIP -->
+
+    <script src="./js/popper.min.js"></script>
+    <script src="js/alertify.min.js" type="text/javascript"></script>
+    <script src="js/alertasSweet.js" type="text/javascript"></script>
+    <script src="./js/organigrama.js" type="text/javascript"></script>
+</body>
+
+</html>
