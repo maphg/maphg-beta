@@ -205,7 +205,7 @@ const obtenerOrganigrama = () => {
             }
         })
         .catch(function (err) {
-            fetch(APIERROR + err);
+            console.log(err);
         })
 }
 
