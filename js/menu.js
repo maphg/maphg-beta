@@ -110,7 +110,7 @@ class menuSidebar extends HTMLElement {
                     </div>
 
                     <!-- Dropdown Destinos -->
-                    <div id="destinosUsuario" class="relative mt-80 animated hidden">
+                    <div id="destinosUsuario" class="relative animated hidden">
                         <!-- Dropdown menu -->
                         <div id="destinosSelecciona" class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-20">
                             <div id="dataDestinosUsuario" class="py-2"></div>

@@ -1,5 +1,4 @@
 'use strict';
-const destinosSelecciona = document.getElementById('destinosSelecciona');
 const contenedorDeItems = document.getElementById('contenedorDeItems');
 const palabraItems = document.getElementById('palabraItems');
 const btnExportarItems = document.getElementById('btnExportarItems');
@@ -116,7 +115,6 @@ const consultarStock = () => {
         })
         .catch(function (err) {
             contenedorDeItems.innerHTML = '';
-            console.log(err);
         })
 }
 
@@ -124,8 +122,6 @@ palabraItems.addEventListener('keyup', () => {
     buscadorTabla('dataItems', 'palabraItems', 1);
 })
 
-
-destinosSelecciona.addEventListener('click', consultarStock);
 
 btnExportarItems.addEventListener('click', () => {
     let idDestino = localStorage.getItem('idDestino');
@@ -135,4 +131,7 @@ btnExportarItems.addEventListener('click', () => {
 })
 
 // INICIALIZA LA FUNCIÓN PRINCIPAL
-window.onload(consultarStock());
+window.addEventListener('load', () => {
+    consultarStock()
+    document.getElementById("destinosSelecciona").addEventListener('click', consultarStock);
+});

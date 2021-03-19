@@ -47,18 +47,20 @@
 <body style="font-family: 'Source Sans Pro', sans-serif;" class="scrollbar">
 
     <!-- MENÚ -->
-    <div class="w-full absolute top-0 relative">
-        <?php
-        include 'navbartopJS.php';
-        include 'menuJS.php';
-        ?>
-    </div>
+    <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 mb-6 shadow-sm"></menu-sidebar>
+
+    <!-- CONFIGURACIONES SIDEBAR -->
+    <configuracion-telegram></configuracion-telegram>
+    <menu-notificaciones clases="h-screen"></menu-notificaciones>
+    <menu-favoritos clases="h-screen"></menu-favoritos>
+    <menu-telegram clases="h-screen"></menu-telegram>
+    <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
+    <div class="w-full h-screen bg-white">
 
-    <div class="w-full h-screen bg-white" style="height: calc(100% - 20px);">
-
-        <div class="flex justify-center items-center relative py-8">
+        <div class="flex justify-center items-center relative pb-8">
             <div class="font-semibold text-xl ml-3 leading-none text-bluegray-600 mr-8">
                 <h1>ITEMS
                     <span id="loadProyectos" class="text-center ml-4 text-2xl"></span>
@@ -167,13 +169,13 @@
     </div>
 
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-    <script src="js/complemento_menuJS.js"></script>
     <script src="js/funciones_tablas.js"></script>
     <script src="js/sorttable.js"></script>
     <script src="js/seguridad_session.js"></script>
     <script src="js/alertasSweet.js"></script>
     <script src="js/alertify.min.js"></script>
     <script src="js/stock.js"></script>
+    <script src="js/menu.js" type="text/javascript"></script>
 </body>
 
 </html>

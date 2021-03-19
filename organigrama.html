@@ -61,8 +61,8 @@
 <body class="h-screen scrollbar" style="background: #edf2f7;">
 
     <!-- MENÚ -->
-    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
     <menu-menu></menu-menu>
+    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
 
     <!-- CONFIGURACIONES SIDEBAR -->
     <configuracion-telegram></configuracion-telegram>
@@ -72,21 +72,23 @@
     <menu-agenda clases="h-screen"></menu-agenda>
     <!-- MENÚ -->
 
-    <div class="flex items-start justify-start md:justify-center overflow-auto scrollbar">
-        <div class="flex flex-col justify-center items-center">
+    <div class="absolute top-0">
+        <div class="flex items-start justify-start md:justify-center overflow-auto scrollbar">
+            <div class="flex flex-col justify-center items-center">
 
-            <div class="container mx-auto text-center">
-                <div class="flex w-full  justify-center items-center mb-4">
-                    <div>
-                        <h1 class="text-3xl uppercase text-gray-700">Organigrama</h1>
+                <div class="container mx-auto text-center">
+                    <div class="flex w-full  justify-center items-center mb-4">
+                        <div>
+                            <h1 class="text-3xl uppercase text-gray-700">Organigrama</h1>
+                        </div>
+                        <div class="flex items-center justify-center px-1 rounded bg-gray-400 text-gray-700 ml-2">
+                            <h1 id="destino" class="text-lg font-semibold"></h1>
+                        </div>
                     </div>
-                    <div class="flex items-center justify-center px-1 rounded bg-gray-400 text-gray-700 ml-2">
-                        <h1 id="destino" class="text-lg font-semibold"></h1>
-                    </div>
-                </div>
 
-                <div class="items-center justify-center flex">
-                    <div id="dataOrganigrama" class="text-center"></div>
+                    <div class="items-center justify-center flex">
+                        <div id="dataOrganigrama" class="text-center"></div>
+                    </div>
                 </div>
             </div>
         </div>
