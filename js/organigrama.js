@@ -62,7 +62,7 @@ const agregarItem = idItem => {
     const action = "agregarItemOrganigrama";
     const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idItem=${idItem}`;
 
-    if (inputAvatar.files[0] && inputNombre.value.length && inputCargo.value.length) {
+    if (inputNombre.value.length && inputCargo.value.length) {
         fetch(URL, {
             method: "POST",
             body: data

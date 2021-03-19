@@ -4940,7 +4940,7 @@ if (isset($_GET['action'])) {
         $nivel = 0;
         $url = "";
 
-        if ($_FILES["file"] != "") {
+        if (isset($_FILES["file"])) {
             $rutaTemporal = $_FILES["file"]["tmp_name"];
             $nombreTemporal = $_FILES["file"]["name"];
             $extension = pathinfo($nombreTemporal, PATHINFO_EXTENSION);
