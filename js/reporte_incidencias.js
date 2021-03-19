@@ -6,6 +6,7 @@ const filtroSubseccion = document.getElementById("filtroSubseccion");
 const filtroTipo = document.getElementById("filtroTipo");
 const filtroTipoIncidencia = document.getElementById("filtroTipoIncidencia");
 const filtroStatus = document.getElementById("filtroStatus");
+const filtroStatusIncidencia = document.getElementById("filtroStatusIncidencia");
 const filtroFecha = document.getElementById("filtroFecha");
 const filtroFechaInicio = document.getElementById("filtroFechaInicio");
 const filtroFechaFin = document.getElementById("filtroFechaFin");
@@ -60,6 +61,7 @@ const obtenerReporte = columna => {
     data.append('filtroTipo', filtroTipo.value);
     data.append('filtroTipoIncidencia', filtroTipoIncidencia.value);
     data.append('filtroStatus', filtroStatus.value);
+    data.append('filtroStatusIncidencia', filtroStatusIncidencia.value);
     data.append('filtroFecha', filtroFecha.value);
     data.append('filtroFechaInicio', filtroFechaInicio.value);
     data.append('filtroFechaFin', filtroFechaFin.value);
@@ -230,7 +232,7 @@ const obtenerReporte = columna => {
                     toggleClassX('titulo_incidencia_${x}', 'truncate'); toggleClassX('titulo_incidencia_${x}', 'mb-1'); toggleClassX('titulo_incidencia_${x}', 'text-justify');"`;
 
                     const codigo = `
-                        <div class="w-full flex flex-col h-auto my-3 rounded cursor-pointer ring ring-${color}-200 bg-${color}-100" 
+                        <div class="w-full flex flex-col h-auto my-3 rounded cursor-pointer relative ring ring-${color}-200 bg-${color}-100" 
                         ${fExpandir}>
                             <!-- PARTE VISIBLE -->
                             <div class="w-full p-1 flex flex-none flex-col">
@@ -316,7 +318,6 @@ const contadorArray = array => {
         for (const index in repetidos) {
             if (element = document.querySelector('#cantidad_incidencias_' + index)) {
                 element.innerHTML = repetidos[index];
-                console.log(index, repetidos[index])
                 if (repetidos[index] > 0 && (columna = document.querySelector('#columna_x_' + index))) {
                     columna.classList.remove('hidden');
                 }
@@ -708,7 +709,7 @@ btnExportarExcel.addEventListener('click', () => {
 
     const filtroPalabraX = filtroPalabra.value.replace(/|=| |-|^|`|'|"|&/gi, '');
 
-    const URL = `php/exportar_excel_GET.php?action=reporteIncidencia&idDestino=${idDestino}&idUsuario=${idUsuario}&filtroPalabra=${filtroPalabraX}&filtroResponsable=${filtroResponsable.value}&filtroSeccion=${filtroSeccion.value}&filtroSubseccion=${filtroSubseccion.value}&filtroTipo=${filtroTipo.value}&filtroTipoIncidencia=${filtroTipoIncidencia.value}&filtroStatus=${filtroStatus.value}&filtroFecha=${filtroFecha.value}&filtroFechaInicio=${filtroFechaInicio.value}&filtroFechaFin=${filtroFechaFin.value}`;
+    const URL = `php/exportar_excel_GET.php?action=reporteIncidencia&idDestino=${idDestino}&idUsuario=${idUsuario}&filtroPalabra=${filtroPalabraX}&filtroResponsable=${filtroResponsable.value}&filtroSeccion=${filtroSeccion.value}&filtroSubseccion=${filtroSubseccion.value}&filtroTipo=${filtroTipo.value}&filtroTipoIncidencia=${filtroTipoIncidencia.value}&filtroStatus=${filtroStatus.value}&filtroStatusIncidencia=${filtroStatusIncidencia.value}&filtroFecha=${filtroFecha.value}&filtroFechaInicio=${filtroFechaInicio.value}&filtroFechaFin=${filtroFechaFin.value}`;
     // location.href = URL;
     window.open(URL);
 })

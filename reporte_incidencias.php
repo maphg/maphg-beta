@@ -122,6 +122,19 @@
 
             <div class="w-full mb-3">
                 <label class="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2" for="grid-state">
+                    Status Incidencias
+                </label>
+                <div class="relative">
+                    <select id="filtroStatusIncidencia" class="focus:outline-none focus:ring p-2 w-full rounded-md mb-2 ring-lime-200 text-xs uppercase text-gray-500" style="background-color: #F4F5F7;">
+                        <option value="TODOS">TODOS</option>
+                        <option value="PENDIENTE">PENDIENTE</option>
+                        <option value="SOLUCIONADO">SOLUCIONADO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="w-full mb-3">
+                <label class="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2" for="grid-state">
                     Fecha
                 </label>
                 <div class="relative">

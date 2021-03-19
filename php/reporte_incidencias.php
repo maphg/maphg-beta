@@ -26,6 +26,7 @@ if (isset($_GET['action'])) {
         $filtroTipo = $_POST['filtroTipo'];
         $filtroTipoIncidencia = $_POST['filtroTipoIncidencia'];
         $filtroStatus = $_POST['filtroStatus'];
+        $filtroStatusIncidencia = $_POST['filtroStatusIncidencia'];
         $filtroFecha = $_POST['filtroFecha'];
         $array = array();
 
@@ -235,6 +236,24 @@ if (isset($_GET['action'])) {
             }
         }
 
+        #FILTRO PARA STATUS (PENDIENTE, SOLUCIONADO)
+        if ($filtroStatusIncidencia == "TODOS") {
+            $filtroStatusIncidenciaIncidencias = "";
+            $filtroStatusIncidencia_General = "";
+            $filtroStatusIncidencia_Preventivo = "";
+            $filtroStatusIncidencia_Proyecto = "";
+        } elseif ($filtroStatusIncidencia == "PENDIENTE") {
+            $filtroStatusIncidenciaIncidencias = "and t_mc.status IN('PENDIENTE', 'N', 'P')";
+            $filtroStatusIncidencia_General = "and t_mp_np.status IN('PENDIENTE', 'N', 'P')";
+            $filtroStatusIncidencia_Preventivo = "and t_mp_planificacion_iniciada.status IN('PENDIENTE', 'N', 'P')";
+            $filtroStatusIncidencia_Proyecto = "t_proyectos_planaccion.status IN('PENDIENTE', 'N', 'P')";
+        } elseif ($filtroStatusIncidencia == "SOLUCIONADO") {
+            $filtroStatusIncidenciaIncidencias = "and t_mc.status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
+            $filtroStatusIncidencia_General = "and t_mp_np.status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
+            $filtroStatusIncidencia_Preventivo = "and t_mp_planificacion_iniciada.status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
+            $filtroStatusIncidencia_Proyecto = "t_proyectos_planaccion.status IN('SOLUCIONADO', 'F', 'FINALIZADO')";
+        }
+
         #FILTRO FECHA
         if ($filtroFecha == "TODOS") {
             $filtroFechaIncidencias = "";
@@ -315,7 +334,7 @@ if (isset($_GET['action'])) {
         t_mc.id_seccion,
         t_mc.id_subseccion
         FROM t_mc
-        WHERE activo = 1 and id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias
+        WHERE activo = 1 and id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -421,7 +440,7 @@ if (isset($_GET['action'])) {
         t_mp_np.id_subseccion
         FROM t_mp_np
         WHERE activo = 1 and id_equipo = 0
-        $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General ORDER BY t_mp_np.id ASC";
+        $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General $filtroStatusIncidencia_General ORDER BY t_mp_np.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -525,7 +544,7 @@ if (isset($_GET['action'])) {
         FROM t_mp_planificacion_iniciada
         INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
         WHERE t_mp_planificacion_iniciada.activo = 1
-        $filtroDestino_Preventivo $filtroPalabra_Preventivo $filtroResponsable_Preventivo $filtroSeccion_Preventivo $filtroSubseccion_Preventivo $filtroTipoIncidencia_Preventivo $filtroTipo_Preventivo $filtroStatus_Preventivo $filtroFecha_Preventivo ORDER BY t_mp_planificacion_iniciada.id ASC";
+        $filtroDestino_Preventivo $filtroPalabra_Preventivo $filtroResponsable_Preventivo $filtroSeccion_Preventivo $filtroSubseccion_Preventivo $filtroTipoIncidencia_Preventivo $filtroTipo_Preventivo $filtroStatus_Preventivo $filtroFecha_Preventivo $filtroStatusIncidencia_Preventivo ORDER BY t_mp_planificacion_iniciada.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
@@ -612,7 +631,7 @@ if (isset($_GET['action'])) {
         FROM t_proyectos_planaccion
         INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
         WHERE t_proyectos_planaccion.activo = 1
-        $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
+        $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto $filtroStatusIncidencia_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $idItem = $x['id'];
