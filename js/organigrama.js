@@ -249,4 +249,11 @@ const obtenerDestino = () => {
 
 
 // INICIA FUNCIÓN PRINCIPAL
-window.addEventListener('load', () => { obtenerOrganigrama(); obtenerDestino(); });
+window.addEventListener('load', () => {
+    obtenerOrganigrama();
+    obtenerDestino();
+    document.getElementById("destinosSelecciona").addEventListener('click', () => {
+        obtenerOrganigrama();
+        obtenerDestino();
+    })
+});
