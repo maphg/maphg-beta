@@ -3085,7 +3085,7 @@ function opcionesJerarquiaEquipo(idEquipo) {
 function obtenerImagenesEquipo(idEquipo) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tabla = "t_proyectos_planaccion_adjuntos_1";
+    let tabla = "t_equipos_america_adjuntos_1";
     let idTabla = idEquipo;
 
     inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
