@@ -249,23 +249,23 @@
 
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="first_name" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                <input autocomplete="off" type="text" id="nombreUsuario" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input autocomplete="off" type="text" id="nombreUsuarioGU" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="last_name" class="block text-sm font-medium text-gray-700">Apellidos</label>
-                                <input autocomplete="off" type="text" id="apellidoUsuario" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input autocomplete="off" type="text" id="apellidoUsuarioGU" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="correoUsuario" class="block text-sm font-medium text-gray-700">Correo</label>
-                                <input autocomplete="off" type="email" id="correoUsuario" name="correoUsuario" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input autocomplete="off" type="email" id="correoUsuarioGU" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                                 <div id="labelCorreoUsuario"></div>
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
                                 <label for="telefono" class="block text-sm font-medium text-gray-700">Telefono</label>
-                                <input autocomplete="off" type="text" id="telefonoUsuario" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input autocomplete="off" type="text" id="telefonoUsuarioGU" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                             </div>
                         </div>
 
@@ -446,13 +446,13 @@
                     <div class="flex flex-row items-center justify-center w-full">
                         <div class="col-span-7 sm:col-span-7 lg:col-span-7 mx-5 my-2">
                             <label for="postal_code" class="block text-sm font-medium text-gray-700">Usuario</label>
-                            <input id="usuarioUsuario" autocomplete="off" type="text" id="postal_code" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            <input id="usuarioUsuarioGU" autocomplete="off" type="text" id="postal_code" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                         </div>
 
                         <div class="col-span-7 sm:col-span-7 lg:col-span-7 mx-5 my-2">
                             <label for="postal_code" class="block text-sm font-medium text-gray-700">Contraseña</label>
                             <div class="flex flex-row">
-                                <input id="contraseñaUsuario" type="password" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-auto sm:text-sm border-gray-300 rounded-md">
+                                <input id="contraseñaUsuarioGU" type="password" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-auto sm:text-sm border-gray-300 rounded-md">
                                 <i id="contraseñaEyes" class="fa far fa-eye-slash p-2 mx-2 mt-1"></i>
                             </div>
                         </div>

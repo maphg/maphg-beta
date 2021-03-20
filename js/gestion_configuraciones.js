@@ -305,12 +305,12 @@ function obtenerUsuariosX(configuracionIdUsuario) {
     // ELEMENTOS
 
     // INPUTS
-    let nombreX = document.getElementById('nombreUsuario');
-    let apellidoX = document.getElementById('apellidoUsuario');
-    let correoX = document.getElementById('correoUsuario');
-    let telefonoX = document.getElementById('telefonoUsuario');
-    let usuarioX = document.getElementById('usuarioUsuario');
-    let contraseñaX = document.getElementById('contraseñaUsuario');
+    let nombreX = document.getElementById('nombreUsuarioGU');
+    let apellidoX = document.getElementById('apellidoUsuarioGU');
+    let correoX = document.getElementById('correoUsuarioGU');
+    let telefonoX = document.getElementById('telefonoUsuarioGU');
+    let usuarioX = document.getElementById('usuarioUsuarioGU');
+    let contraseñaX = document.getElementById('contraseñaUsuarioGU');
     // INPUTS
 
     // SETATRIBUT
@@ -592,12 +592,12 @@ function actualizarUsuario(configuracionIdUsuario) {
     let modal = document.getElementById('modalEditarUsuario');
 
     // INPUTS
-    let nombre = document.getElementById('nombreUsuario').value;
-    let apellido = document.getElementById('apellidoUsuario').value;
-    let correo = document.getElementById('correoUsuario').value;
-    let telefono = document.getElementById('telefonoUsuario').value;
-    let usuario = document.getElementById('usuarioUsuario').value;
-    let contraseña = document.getElementById('contraseñaUsuario').value;
+    let nombre = document.getElementById('nombreUsuarioGU').value;
+    let apellido = document.getElementById('apellidoUsuarioGU').value;
+    let correo = document.getElementById('correoUsuarioGU').value;
+    let telefono = document.getElementById('telefonoUsuarioGU').value;
+    let usuario = document.getElementById('usuarioUsuarioGU').value;
+    let contraseña = document.getElementById('contraseñaUsuarioGU').value;
     // INPUTS
 
     const action = "actualizarUsuario";
@@ -792,8 +792,8 @@ document.getElementById('checkNotificaciones').addEventListener('click', functio
 
 
 // COMPROBACIÓN DE CORREO
-document.getElementById("correoUsuario").addEventListener('keyup', function () {
-    let valor = document.getElementById("correoUsuario").value;
+document.getElementById("correoUsuarioGU").addEventListener('keyup', function () {
+    let valor = document.getElementById("correoUsuarioGU").value;
     let label = document.getElementById("labelCorreoUsuario");
     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (regex.test(valor)) {
@@ -898,12 +898,12 @@ document.getElementById("btnNuevoUsuario").addEventListener('click', function ()
     abrirmodal('modalEditarUsuario');
 
     // INPUTS
-    document.getElementById('nombreUsuario').value = '';
-    document.getElementById('apellidoUsuario').value = '';
-    document.getElementById('correoUsuario').value = '';
-    document.getElementById('telefonoUsuario').value = '';
-    document.getElementById('usuarioUsuario').value = '';
-    document.getElementById('contraseñaUsuario').value = '';
+    document.getElementById('nombreUsuarioGU').value = '';
+    document.getElementById('apellidoUsuarioGU').value = '';
+    document.getElementById('correoUsuarioGU').value = '';
+    document.getElementById('telefonoUsuarioGU').value = '';
+    document.getElementById('usuarioUsuarioGU').value = '';
+    document.getElementById('contraseñaUsuarioGU').value = '';
     // INPUTS
 
     document.getElementById("btnGuardarUsuario").
