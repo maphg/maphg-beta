@@ -2556,7 +2556,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
                         codigo = `
                             <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                                 <a href="../planner/equipos/${url}" target="_blank">
-                                <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
+                                <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../../planner/equipos/${url})">
                                 </div>
                                 </a>
                                 <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idAdjunto}, 'ADJUNTOSEQUIPO');">
