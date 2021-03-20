@@ -107,13 +107,15 @@
         </div>
 
         <div class="flex flex-col pl-4 w-1/6">
-            <h1 class="self-start mb-2">Status</h1>
+            <h1 class="self-start mb-2">Estado</h1>
             <div class="relative">
                 <select id="filtroStatus" class="w-full border border-gray-200 text-gray-700 rounded-lg leading-tight focus:outline-none hover:bg-gray-200 focus:border-gray-500 mx-2 bg-white">
-                    <option value="">Status</option>
+                    <option value="">Seleccione</option>
                     <option value="OPERATIVO">OPERATIVO</option>
                     <option value="BAJA">BAJA</option>
                     <option value="TALLER">TALLER</option>
+                    <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
+                    <option value="OPERAMAL">OPERA MAL</option>
                 </select>
             </div>
         </div>
@@ -201,10 +203,12 @@
                             <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg text-green-500"></i>
 
                             <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
+                                <option value="">Seleccione</option>
                                 <option value="OPERATIVO">OPERATIVO</option>
                                 <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
                                 <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
+                                <option value="OPERAMAL">OPERA MAL</option>
                             </select>
 
                         </div>
@@ -247,14 +251,14 @@
                 <div class="bg-cover bg-center w-24 h-24 rounded-lg cursor-pointer flex-none mr-2 hover:shadow-lg">
                     <img id="QREquipo">
                 </div>
-                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center overflow-hidden"></div>
+                <div id="dataImagenesEquipo" class="w-full h-auto flex items-center overflow-x-auto overflow-y-hidden scrollbar"></div>
             </div>
 
             <!-- OPCIONES SUPERIORES -->
             <div class="w-full py-2 border-t my-1">
                 <div class="flex justify-center items-center text-xs">
                     <button id="btnInformacionEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Información</button>
-                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Despiece</button>
+                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Componentes</button>
                     <button id="btnDocumentosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Adjuntos</button>
                     <button id="btnCotizacionesEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Cotizaciones</button>
                 </div>

@@ -84,6 +84,7 @@ const editarTitulo = document.getElementById("editarTitulo");
 
 // CONTENEDORES DIV
 const contenedorDeEquipos = document.getElementById("contenedorDeEquipos");
+const dataImagenesEquipo = document.getElementById("dataImagenesEquipo");
 // CONTENEDORES DIV
 
 // API PARA REPORTE DE ERRORES
@@ -3082,51 +3083,44 @@ function opcionesJerarquiaEquipo(idEquipo) {
 
 
 // Obtiene Images de los Equipos
-function obtenerImagenesEquipo(idEquipo) {
-    let idUsuario = localStorage.getItem("usuario");
-    let idDestino = localStorage.getItem("idDestino");
-    let tabla = "t_equipos_america_adjuntos_1";
-    let idTabla = idEquipo;
+const obtenerImagenesEquipo = idEquipo => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
 
-    inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
+    const action = "obtenerImagenesEquipo";
+    const URL = `../php/equipos_locales.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}`;
 
-    const action = "obtenerAdjuntos";
-    $.ajax({
-        type: "POST",
-        url: "../php/plannerCrudPHP.php",
-        data: {
-            action: action,
-            idUsuario: idUsuario,
-            idDestino: idDestino,
-            tabla: tabla,
-            idTabla: idTabla
-        },
-        dataType: "JSON",
-        success: function (data) {
-            if (data.imagen != "") {
-                document.getElementById("dataImagenes").innerHTML = data.imagen;
-                document.getElementById("dataImagenesEquipo").innerHTML = data.imagen;
-                document.getElementById("contenedorImagenes").classList.remove('hidden');
-                document.getElementById("dataImagenes").classList.remove("justify-center");
-            } else {
-                document.getElementById("contenedorImagenes").classList.add('hidden');
-                document.getElementById("dataImagenes").innerHTML = '';
-                document.getElementById("dataImagenesEquipo").innerHTML = `
-               <div id="modalMedia_adjunto_img_xxx" class="relative">
-                  <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/equipo.png)">
-                  </div>
-               </div>
-            `;
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            dataImagenesEquipo.innerHTML = '';
+            return array;
+        })
+        .then(array => {
+            if (array) {
+                for (let x = 0; x < array.length; x++) {
+                    const idImagen = array[x].idImagen;
+                    const url = array[x].url;
+                    const tipo = array[x].tipo;
+                    const codigo = tipo == "PNG" || tipo == "png" || tipo == "jpeg" || tipo == "JPEG" || tipo == "gif" || tipo == "GIF" || tipo == "JPG" || tipo == "jpg"?
+                        `<div id="modalMedia_adjunto_img_${idImagen}" class="relative">
+                                <a href="../planner/equipos/${url}" target="_blank">
+                                    <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
+                                    </div>
+                                </a>
+                                <div class="w-full absolute text-transparent hover:text-red-700 text-center" style="bottom: 12px; left: 0px;" onclick="eliminarAdjunto(${idImagen}, 'equipo');">
+                                    <i class="fas fa-trash-alt fa-2x" data-title="Clic para Eliminar"></i>
+                                </div>
+                            </div>`
+                        : ``;
+                    dataImagenesEquipo.insertAdjacentHTML('beforeend', codigo);
+                }
             }
-
-            if (data.documento != "") {
-                document.getElementById("dataAdjuntos").innerHTML = data.documento;
-                document.getElementById("dataAdjuntos").classList.remove("justify-center");
-            } else {
-                document.getElementById("contenedorDocumentos").classList.add('hidden');
-            }
-        },
-    });
+        })
+        .catch(function (err) {
+            dataImagenesEquipo.innerHTML = '';
+            fetch(APIERROR + err);
+        })
 }
 
 

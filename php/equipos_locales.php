@@ -53,7 +53,7 @@ if (isset($_GET['action'])) {
         t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia, c_destinos.destino
         FROM t_equipos_america
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER') and t_equipos_america.jerarquia = 'PRINCIPAL' 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERADESERVICIO', 'OPERAMAL') and t_equipos_america.jerarquia = 'PRINCIPAL' 
         $filtroPalabra $filtroDestinoEquipo $filtroPagina";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
@@ -336,7 +336,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia, c_destinos.destino
         FROM t_equipos_america
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_equipos_america.id_equipo_principal = $idEquipo and t_equipos_america.jerarquia = 'SECUNDARIO' and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER')";
+        WHERE t_equipos_america.id_equipo_principal = $idEquipo and t_equipos_america.jerarquia = 'SECUNDARIO' and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERADESERVICIO', 'OPERAMAL')";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
@@ -904,7 +904,33 @@ if (isset($_GET['action'])) {
         echo json_encode($resp);
     }
 
-    #SUBIR COTIZACIONES DE EQUIPOS
+    #SUBIR IMEGENES DE EQUIPOS
+    if ($action == "obtenerImagenesEquipo") {
+        $idEquipo = $_GET['idEquipo'];
+        $array = array();
+
+        $query = "SELECT id, url_adjunto, fecha 
+        FROM t_equipos_america_adjuntos
+        WHERE id_equipo = $idEquipo and activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idImagen = $x['id'];
+                $url = $x['url_adjunto'];
+                $fecha = $x['fecha'];
+                $tipo = pathinfo($url, PATHINFO_EXTENSION);
+
+                $array[] = array(
+                    "idImagen" => intval($idImagen),
+                    "url" => $url,
+                    "fecha" => $fecha,
+                    "tipo" => $tipo
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    #SUBIR IMEGENES DE EQUIPOS
     if ($action == "subirImagenEquipo") {
         $idEquipo = $_GET['idEquipo'];
         $resp = 0;
