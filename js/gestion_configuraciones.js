@@ -320,7 +320,7 @@ function obtenerUsuariosX(configuracionIdUsuario) {
 
     // OCULTA CONTRASEÑA
     contraseñaX.setAttribute("type", "password");
-    document.getElementById("contraseñaEyes").className = "fa far fa-eye-slash p-2 mx-2";
+    document.getElementById("contraseñaEyesGU").className = "fa far fa-eye-slash p-2 mx-2";
     // OCULTA CONTRASEÑA
 
     // CHECK
@@ -759,10 +759,10 @@ function actualizarCargo(idCargo) {
 
 
 // FUNCIÓN PARA MOSTRAR CONTRASEÑA
-document.getElementById('contraseñaEyes').addEventListener('click', function () {
-    if (document.getElementById("contraseñaUsuario")) {
-        let contraseña = document.getElementById("contraseñaUsuario");
-        let icon = document.getElementById("contraseñaEyes");
+document.getElementById('contraseñaEyesGU').addEventListener('click', function () {
+    if (document.getElementById("contraseñaUsuarioGU")) {
+        let contraseña = document.getElementById("contraseñaUsuarioGU");
+        let icon = document.getElementById("contraseñaEyesGU");
 
         if (contraseña.getAttribute("type") == "text") {
             contraseña.setAttribute("type", "password");

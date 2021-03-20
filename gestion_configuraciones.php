@@ -453,7 +453,7 @@
                             <label for="postal_code" class="block text-sm font-medium text-gray-700">Contraseña</label>
                             <div class="flex flex-row">
                                 <input id="contraseñaUsuarioGU" type="password" class="border border-blue-200 p-1 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-auto sm:text-sm border-gray-300 rounded-md">
-                                <i id="contraseñaEyes" class="fa far fa-eye-slash p-2 mx-2 mt-1"></i>
+                                <i id="contraseñaEyesGU" class="fa far fa-eye-slash p-2 mx-2 mt-1"></i>
                             </div>
                         </div>
 
