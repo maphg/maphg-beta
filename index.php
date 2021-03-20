@@ -739,10 +739,12 @@
                             <i id="iconEstadoEquipo" class="fad fa-circle my-1 mr-1 fa-lg text-green-500"></i>
 
                             <select id="estadoEquipo" class="text-xs font-bold bg-green-200 text-green-500 select-sinarrow">
+                                <option value="">Seleccione</option>
                                 <option value="OPERATIVO">OPERATIVO</option>
                                 <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
                                 <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
+                                <option value="OPERAMAL">OPERA MAL</option>
                             </select>
 
                         </div>
@@ -792,7 +794,7 @@
             <div class="w-full py-2 border-t my-1">
                 <div class="flex justify-center items-center text-xs">
                     <button id="btnInformacionEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Información</button>
-                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Despiece</button>
+                    <button id="btnDespieceEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Componentes</button>
                     <button id="btnDocumentosEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Adjuntos</button>
                     <button id="btnCotizacionesEquipo" class="bg-gray-200 text-gray-500 w-20 h-6 rounded mr-2 hover:bg-purple-200 hover:text-purple-500">Cotizaciones</button>
                 </div>
