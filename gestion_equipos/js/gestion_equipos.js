@@ -2554,7 +2554,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
                     let codigo = '';
                     if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                         codigo = `
-                            <div 01 id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                            <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                                 <a href="../planner/equipos/${url}" target="_blank">
                                 <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
                                 </div>
@@ -2566,7 +2566,7 @@ const obtenerAdjuntosEquipo = idEquipo => {
                         `;
                     } else {
                         codigo = `
-                            <div 02 id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                            <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                                 <a href="../planner/equipos/${url}" target="_blank" data-title="${url}">
                                 <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
                                     <i class="fad fa-file-contract fa-3x"></i>
@@ -2658,7 +2658,7 @@ const obtenerCotizacionesEquipo = idEquipo => {
 
                     if (tipo == "png" || tipo == "gif" || tipo == "jpeg" || tipo == "jpg") {
                         codigo = `
-                     <div 03 id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                         <a href="../planner/equipos/${url}" target="_blank">
                            <div class="bg-local bg-cover bg-center w-20 h-20 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
                            </div>
@@ -2670,7 +2670,7 @@ const obtenerCotizacionesEquipo = idEquipo => {
                   `;
                     } else {
                         codigo = `
-                     <div 04 id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
+                     <div id="modalMedia_adjunto_img_${idAdjunto}" class="relative px-1 h-20">
                         <a href="../planner/equipos/${url}" target="_blank" data-title="${url}">
                            <div class="rounded-md cursor-pointer flex flex-col justify-center text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2 w-20 h-20">
                               <i class="fad fa-file-contract fa-3x"></i>
@@ -3085,7 +3085,7 @@ function opcionesJerarquiaEquipo(idEquipo) {
 function obtenerImagenesEquipo(idEquipo) {
     let idUsuario = localStorage.getItem("usuario");
     let idDestino = localStorage.getItem("idDestino");
-    let tabla = "t_equipos_america_adjuntos";
+    let tabla = "t_proyectos_planaccion_adjuntos_1";
     let idTabla = idEquipo;
 
     inputAdjuntos.setAttribute("onchange", "subirImagenGeneral(" + idEquipo + ',"t_equipos_america_adjuntos")');
