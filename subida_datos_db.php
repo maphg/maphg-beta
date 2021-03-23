@@ -554,21 +554,21 @@
                 document.getElementById("columna30").value = "";
 
             } else if (tabla == "t_pedidos_sin_orden_compra") {
-                document.getElementById("columna1").value = 'departamento';
-                document.getElementById("columna2").value = 'id_destino';
-                document.getElementById("columna3").value = 'ceco';
-                document.getElementById("columna4").value = 'solicitud_pedido';
+                document.getElementById("columna1").value = 'id_destino';
+                document.getElementById("columna2").value = 'denominacion_ceco';
+                document.getElementById("columna3").value = 'solicitud_pedido';
+                document.getElementById("columna4").value = 'fecha_solicitud';
                 document.getElementById("columna5").value = 'material';
-                document.getElementById("columna6").value = 'text_breve	';
+                document.getElementById("columna6").value = 'descripcion_material	';
                 document.getElementById("columna7").value = 'cantidad_solicitada';
                 document.getElementById("columna8").value = 'unidad_medida';
-                document.getElementById("columna9").value = 'grupo_articulo';
-                document.getElementById("columna10").value = 'centro';
-                document.getElementById("columna11").value = 'grupo_compras';
-                document.getElementById("columna12").value = 'organizacion_compras';
-                document.getElementById("columna13").value = 'fecha_solicitud';
-                document.getElementById("columna14").value = 'seccion';
-                document.getElementById("columna15").value = 'solicitud_borrada';
+                document.getElementById("columna9").value = 'grupo_compras';
+                document.getElementById("columna10").value = 'id_seccion';
+                document.getElementById("columna11").value = 'solicitud_borrada';
+                document.getElementById("columna12").value = 'fecha_modificado';
+                document.getElementById("columna13").value = '';
+                document.getElementById("columna14").value = '';
+                document.getElementById("columna15").value = '';
                 document.getElementById("columna16").value = '';
                 document.getElementById("columna17").value = '';
                 document.getElementById("columna18").value = '';
