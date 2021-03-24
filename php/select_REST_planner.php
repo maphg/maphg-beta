@@ -2278,6 +2278,24 @@ if (isset($_GET['action'])) {
         $idMax = 0;
 
         if ($idEquipo > 0) {
+
+            #ACTUALIZA EL STATUS DEL EQUIPO
+            // Emergecia es Fuera de servicio
+            // Urgencia, alarma y alerta es TALLER
+            // Seguimiento es Operativo
+
+            $statusEquipo = "";
+            if ($tipo == "EMERGENCIA") {
+                $statusEquipo = "FUERASERVICIO";
+            } elseif ($tipo == "URGENCIA" || $tipo == "ALARMA" || $tipo == "ALERTA") {
+                $statusEquipo = "TALLER";
+            } else {
+                $statusEquipo = "OPERATIVO";
+            }
+
+            $query = "UPDATE t_equipos_america SET status = '$statusEquipo' WHERE id = $idEquipo";
+            $result = mysqli_query($conn_2020, $query) ?: '';
+
             $query = "SELECT max(id) 'id' FROM t_mc";
             if ($result = mysqli_query($conn_2020, $query)) {
                 foreach ($result as $x) {

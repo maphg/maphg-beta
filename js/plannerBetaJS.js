@@ -9011,6 +9011,10 @@ const dataEquiposAmerica = params => {
       valorstatusEquipo = '<div class="text-red-400 bg-red-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Baja</h1></div>';
    } else if (statusEquipo == 'TALLER') {
       valorstatusEquipo = '<div class="text-orange-400 bg-orange-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Taller</h1></div>';
+   } else if (statusEquipo == 'FUERASERVICIO') {
+      valorstatusEquipo = '<div class="text-red-400 bg-red-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">Fuera de Servicio</h1></div>';
+   } else if (statusEquipo == 'OPERAMAL') {
+      valorstatusEquipo = '<div class="text-yellow-400 bg-yellow-200 px-1 rounded-full font-semibold mr-1 py-1 flex items-center"><h1 class="">OPERA MAL</h1></div>';
    }
 
    if (idEquipo > 0) {

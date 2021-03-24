@@ -743,7 +743,7 @@
                                 <option value="OPERATIVO">OPERATIVO</option>
                                 <option value="BAJA">BAJA</option>
                                 <option value="TALLER">TALLER</option>
-                                <option value="FUERADESERVICIO">FUERA DE SERVICIO</option>
+                                <option value="FUERASERVICIO">FUERA DE SERVICIO</option>
                                 <option value="OPERAMAL">OPERA MAL</option>
                             </select>
 

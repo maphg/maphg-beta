@@ -53,7 +53,7 @@ if (isset($_GET['action'])) {
         t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia, c_destinos.destino
         FROM t_equipos_america
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERADESERVICIO', 'OPERAMAL') and t_equipos_america.jerarquia = 'PRINCIPAL' 
+        WHERE t_equipos_america.id_subseccion = $idSubseccion and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and t_equipos_america.jerarquia = 'PRINCIPAL' 
         $filtroPalabra $filtroDestinoEquipo $filtroPagina";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
@@ -278,7 +278,8 @@ if (isset($_GET['action'])) {
 
                 #DESPIECE 
                 $totalDespiece = 0;
-                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and status = 'OPERATIVO' and activo = 1";
+                $query = "SELECT count(id) FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and 
+                status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $totalDespiece = $x['count(id)'];
@@ -336,7 +337,7 @@ if (isset($_GET['action'])) {
         $query = "SELECT t_equipos_america.id, t_equipos_america.equipo, t_equipos_america.local_equipo, t_equipos_america.status, t_equipos_america.jerarquia, c_destinos.destino
         FROM t_equipos_america
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_equipos_america.id_equipo_principal = $idEquipo and t_equipos_america.jerarquia = 'SECUNDARIO' and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERADESERVICIO', 'OPERAMAL')";
+        WHERE t_equipos_america.id_equipo_principal = $idEquipo and t_equipos_america.jerarquia = 'SECUNDARIO' and t_equipos_america.activo = 1 and t_equipos_america.status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL')";
         if ($resultEquipo = mysqli_query($conn_2020, $query)) {
             foreach ($resultEquipo as $x) {
                 $idEquipo = $x['id'];
@@ -797,7 +798,8 @@ if (isset($_GET['action'])) {
         $totalEquipos = 0;
         $query = "SELECT count(id)
         FROM t_equipos_america
-        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and activo = 1 and status IN('OPERATIVO', 'TALLER') and jerarquia = 'PRINCIPAL' $filtroPalabra $filtroDestino";
+        WHERE id_seccion = $idSeccion and id_subseccion = $idSubseccion and activo = 1 and 
+        status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') and jerarquia = 'PRINCIPAL' $filtroPalabra $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
                 $totalEquipos = $x['count(id)'];
@@ -1126,7 +1128,7 @@ if (isset($_GET['action'])) {
 
         $query = "SELECT id, equipo, jerarquia, id_equipo_principal 
         FROM t_equipos_america
-        WHERE activo = 1 and (id = $idEquipo OR id_equipo_principal = $idEquipo) and status IN('OPERATIVO', 'TALLER')";
+        WHERE activo = 1 and (id = $idEquipo OR id_equipo_principal = $idEquipo) and status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL')";
 
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
@@ -1144,7 +1146,7 @@ if (isset($_GET['action'])) {
                 if ($jerarquia == "SECUNDARIO") {
                     $query = "SELECT id, equipo, jerarquia 
                     FROM t_equipos_america 
-                    WHERE activo = 1 and id = $idPrincipal and status IN('OPERATIVO', 'TALLER') LIMIT 1";
+                    WHERE activo = 1 and id = $idPrincipal and status IN('OPERATIVO', 'TALLER', 'FUERASERVICIO', 'OPERAMAL') LIMIT 1";
                     if ($result = mysqli_query($conn_2020, $query)) {
                         foreach ($result as $i) {
                             $id = $i['id'];
