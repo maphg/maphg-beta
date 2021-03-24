@@ -899,7 +899,7 @@
             <!-- MARCA Y UBICACION -->
             <div class="absolute top-0 left-0 flex flex-row items-center">
                 <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-tl-md rounded-br-md">
-                    <h1>Agregar Equipo / Local</h1>
+                    <h1>Agregar Equipo / Local <i class="fas fa-plus-circle"></i></h1>
                 </div>
             </div>
 
