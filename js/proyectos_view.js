@@ -1113,7 +1113,7 @@ function obtenerDatoProyectos(idProyecto, columna) {
 
     if (columna == "justificacion") {
         justificacionAdjuntosProyectos(idProyecto);
-        document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFIACIÓN";
+        document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFICACIÓN";
     }
 
     const action = "obtenerDatoProyectos";

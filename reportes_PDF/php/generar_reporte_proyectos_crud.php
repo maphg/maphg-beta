@@ -45,7 +45,7 @@ if (isset($_GET['action'])) {
                 $subseccion = $i['grupo'];
                 $responsable = $i['nombre'] . " " . $i['apellido'];
                 $coste = $i['coste'];
-                $justifiacion = $i['justificacion'];
+                $justificacion = $i['justificacion'];
                 $status = $i['status'];
                 $tipo = $i['tipo'];
                 $rangoFecha = $i['rango_fecha'];

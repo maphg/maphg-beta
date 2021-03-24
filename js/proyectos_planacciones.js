@@ -697,7 +697,7 @@ function actualizarProyectos(valor, columna, idProyecto) {
                 obtenerProyectos(idSeccion, "PENDIENTE");
                 document.getElementById("modalActualizarProyecto")
                     .classList.remove("open");
-                alertaImg("Justifiación Actualizado", "", "success", 2000);
+                alertaImg("Justificación Actualizado", "", "success", 2000);
             } else if (data == 3) {
                 obtenerProyectos(idSeccion, "PENDIENTE");
                 document.getElementById("modalActualizarProyecto")
@@ -768,7 +768,7 @@ function obtenerDatoProyectos(idProyecto, columna) {
     if (columna == "justificacion") {
         justificacionAdjuntosProyectos(idProyecto);
         document.getElementById("modalActualizarProyecto").classList.add("open");
-        document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFIACIÓN";
+        document.getElementById("tituloActualizarProyecto").innerHTML = "JUSTIFICACIÓN";
 
         document.getElementById("justificacionProyectoDiv").classList.remove("hidden");
 

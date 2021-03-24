@@ -1039,7 +1039,7 @@
                     } else if (data == 2) {
                         obtenerProyectosP('PROYECTO');
                         document.getElementById("modalActualizarProyecto").classList.remove('open');
-                        alertaImg('Justifiacion Actualizado', '', 'success', 2000);
+                        alertaImg('Justificacion Actualizado', '', 'success', 2000);
                     } else if (data == 3) {
                         obtenerProyectosP('PROYECTO');
                         document.getElementById("modalActualizarProyecto").classList.remove('open');
@@ -1099,7 +1099,7 @@
                 justificacionAdjuntosProyectos(idProyecto);
                 document.getElementById("modalActualizarProyecto").classList.add("open");
                 document.getElementById("tituloActualizarProyecto").innerHTML =
-                    "JUSTIFIACIÓN";
+                    "JUSTIFICACIÓN";
 
                 document
                     .getElementById("justificacionProyectoDiv")

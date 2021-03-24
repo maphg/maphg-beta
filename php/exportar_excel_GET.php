@@ -723,7 +723,7 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('I1', 'AÑO');
         $objPHPExcel->getActiveSheet()->setCellValue('J1', 'COTIZACIONES');
         $objPHPExcel->getActiveSheet()->setCellValue('K1', 'TIPO');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'JUSTIFIACIÓN');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'JUSTIFICACIÓN');
         $objPHPExcel->getActiveSheet()->setCellValue('M1', 'COMENTARIOS');
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COSTE');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'STATUS');
