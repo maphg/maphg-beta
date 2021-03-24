@@ -3097,7 +3097,7 @@ const obtenerImagenesEquipo = idEquipo => {
             return array;
         })
         .then(array => {
-            if (array) {
+            if (array.length) {
                 for (let x = 0; x < array.length; x++) {
                     const idImagen = array[x].idImagen;
                     const url = array[x].url;
@@ -3115,6 +3115,11 @@ const obtenerImagenesEquipo = idEquipo => {
                         : ``;
                     dataImagenesEquipo.insertAdjacentHTML('beforeend', codigo);
                 }
+            } else {
+                dataImagenesEquipo.innerHTML = `<a href="#">
+                        <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/equipo.png)">
+                        </div>
+                    </a>`;
             }
         })
         .catch(function (err) {
