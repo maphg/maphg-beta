@@ -1210,7 +1210,7 @@ function modalAgregarEquipo() {
             contenedorEquipoLocal.innerHTML = '';
 
             // DESTINOS
-            if (array.destinos.length > 0) {
+            if (array.destinos.length) {
                 for (let x = 0; x < array.destinos.length; x++) {
                     const idDestinoX = array.destinos[x].idDestino;
                     const destino = array.destinos[x].destino;
@@ -1220,7 +1220,7 @@ function modalAgregarEquipo() {
             }
 
             // SECCIONES
-            if (array.secciones.length > 0) {
+            if (array.secciones.length) {
                 for (let x = 0; x < array.secciones.length; x++) {
                     const idSeccion = array.secciones[x].idSeccion;
                     const seccion = array.secciones[x].seccion;
@@ -1230,7 +1230,7 @@ function modalAgregarEquipo() {
             }
 
             // SUBSECCIONES
-            if (array.subsecciones.length > 0) {
+            if (array.subsecciones.length) {
                 for (let x = 0; x < array.subsecciones.length; x++) {
                     const idSubseccion = array.subsecciones[x].idSubseccion;
                     const subseccion = array.subsecciones[x].subseccion;
@@ -1240,7 +1240,7 @@ function modalAgregarEquipo() {
             }
 
             // TIPOS
-            if (array.tipos.length > 0) {
+            if (array.tipos.length) {
                 for (let x = 0; x < array.tipos.length; x++) {
                     const idTipo = array.tipos[x].idTipo;
                     const tipo = array.tipos[x].tipo;
@@ -1250,7 +1250,7 @@ function modalAgregarEquipo() {
             }
 
             // MARCAS
-            if (array.marcas.length > 0) {
+            if (array.marcas.length) {
                 for (let x = 0; x < array.marcas.length; x++) {
                     const idMarca = array.marcas[x].idMarca;
                     const marca = array.marcas[x].marca;
@@ -1260,7 +1260,7 @@ function modalAgregarEquipo() {
             }
 
             // LOCAL O EQUIPO
-            if (array.tipoEquipo.length > 0) {
+            if (array.tipoEquipo.length) {
                 for (let x = 0; x < array.tipoEquipo.length; x++) {
                     const idTipoEquipo = array.tipoEquipo[x].idTipoEquipo;
                     const tipo = array.tipoEquipo[x].tipo;
@@ -3102,7 +3102,7 @@ const obtenerImagenesEquipo = idEquipo => {
                     const idImagen = array[x].idImagen;
                     const url = array[x].url;
                     const tipo = array[x].tipo;
-                    const codigo = tipo == "PNG" || tipo == "png" || tipo == "jpeg" || tipo == "JPEG" || tipo == "gif" || tipo == "GIF" || tipo == "JPG" || tipo == "jpg"?
+                    const codigo = tipo == "PNG" || tipo == "png" || tipo == "jpeg" || tipo == "JPEG" || tipo == "gif" || tipo == "GIF" || tipo == "JPG" || tipo == "jpg" ?
                         `<div id="modalMedia_adjunto_img_${idImagen}" class="relative">
                                 <a href="../planner/equipos/${url}" target="_blank">
                                     <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 p-2 cursor-pointer" style="background-image: url(../planner/equipos/${url})">
