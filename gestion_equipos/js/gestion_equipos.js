@@ -1210,7 +1210,7 @@ function modalAgregarEquipo() {
             contenedorEquipoLocal.innerHTML = '';
 
             // DESTINOS
-            if (array.destinos.length) {
+            if (array.destinos) {
                 for (let x = 0; x < array.destinos.length; x++) {
                     const idDestinoX = array.destinos[x].idDestino;
                     const destino = array.destinos[x].destino;
@@ -1220,7 +1220,7 @@ function modalAgregarEquipo() {
             }
 
             // SECCIONES
-            if (array.secciones.length) {
+            if (array.secciones) {
                 for (let x = 0; x < array.secciones.length; x++) {
                     const idSeccion = array.secciones[x].idSeccion;
                     const seccion = array.secciones[x].seccion;
@@ -1230,7 +1230,7 @@ function modalAgregarEquipo() {
             }
 
             // SUBSECCIONES
-            if (array.subsecciones.length) {
+            if (array.subsecciones) {
                 for (let x = 0; x < array.subsecciones.length; x++) {
                     const idSubseccion = array.subsecciones[x].idSubseccion;
                     const subseccion = array.subsecciones[x].subseccion;
@@ -1240,7 +1240,7 @@ function modalAgregarEquipo() {
             }
 
             // TIPOS
-            if (array.tipos.length) {
+            if (array.tipos) {
                 for (let x = 0; x < array.tipos.length; x++) {
                     const idTipo = array.tipos[x].idTipo;
                     const tipo = array.tipos[x].tipo;
@@ -1250,7 +1250,7 @@ function modalAgregarEquipo() {
             }
 
             // MARCAS
-            if (array.marcas.length) {
+            if (array.marcas) {
                 for (let x = 0; x < array.marcas.length; x++) {
                     const idMarca = array.marcas[x].idMarca;
                     const marca = array.marcas[x].marca;
@@ -1260,7 +1260,7 @@ function modalAgregarEquipo() {
             }
 
             // LOCAL O EQUIPO
-            if (array.tipoEquipo.length) {
+            if (array.tipoEquipo) {
                 for (let x = 0; x < array.tipoEquipo.length; x++) {
                     const idTipoEquipo = array.tipoEquipo[x].idTipoEquipo;
                     const tipo = array.tipoEquipo[x].tipo;
