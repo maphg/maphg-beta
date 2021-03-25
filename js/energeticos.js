@@ -207,7 +207,7 @@ const obtenerEnlaces = () => {
                 }
 
                 for (let x = 0; x < array.length; x++) {
-                    const idDestinoX = array[x].idDestino;
+                    const idDestinoX = array[x].idDestinoX;
                     const url = array[x].url;
 
                     const sizeW = array.length > 1 ? '400px;' : '800px;';
