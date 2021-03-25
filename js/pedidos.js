@@ -46,7 +46,6 @@ const btnExportarEntregas = document.querySelector('#btnExportarEntregas');
 
 // LODAD
 const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
-
 const loadCompras = document.querySelector('#loadCompras');
 const loadEntregas = document.querySelector('#loadEntregas');
 // LODAD
