@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/tailwindproduccion.css">
     <link rel="stylesheet" href="css/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/alertify.min.css">
-    <link rel="stylesheet" href="css/fontawesome/css/">
     <link rel="stylesheet" href="css/modales.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
