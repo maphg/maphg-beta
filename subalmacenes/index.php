@@ -1,10 +1,3 @@
-<?php
-include '../php/conexion.php';
-session_start();
-// Estas variables son Globales y nunca deben cambiar su valor, porque es la raiz de la session.
-$destinoT = $_SESSION['idDestino'];
-$usuario = $_SESSION['usuario'];
-?>
 <!DOCTYPE html>
 <html lang="es">
 

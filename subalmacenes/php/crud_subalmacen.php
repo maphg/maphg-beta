@@ -42,7 +42,7 @@ if (isset($_POST['action'])) {
       $filtroDestino = "AND id_destino = $idDestino AND id IN($subalmacenesAcceso)";
     }
 
-    $query = "SELECT id, id_destino, id_fase, nombre, fase, tipo 
+    $query = "SELECT id, id_destino, id_fase, nombre, fase, tipo, responsable 
     FROM t_subalmacenes 
     WHERE activo = 1 $filtroDestino ORDER BY tipo DESC";
     if ($result = mysqli_query($conn_2020, $query)) {
@@ -52,15 +52,17 @@ if (isset($_POST['action'])) {
         $nombre = $row['nombre'];
         $fase = $row['fase'];
         $tipo = $row['tipo'];
+        $responsable = $row['responsable'];
         $idDiv = $idSubalmacen . 'sub';
         if ($fase == "GP") {
           if ($tipo == "SUBALMACEN") {
             $dataGP .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
-            <div>
-            <h1 class=\"truncate\">$nombre</h1>
+            class=\"p-1 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+              <div>
+              <h1 class=\"truncate\">$nombre</h1>
+              <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
           ";
@@ -93,9 +95,10 @@ if (isset($_POST['action'])) {
             $dataGP .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            class=\"p-1 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
+            <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
           ";
@@ -130,9 +133,10 @@ if (isset($_POST['action'])) {
             $dataTRS .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+            class=\"p-1 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
+            <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"" . $idSubalmacen . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
           ";
@@ -166,9 +170,10 @@ if (isset($_POST['action'])) {
             $dataTRS .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            class=\"p-1 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
+            <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
             ";
@@ -203,9 +208,10 @@ if (isset($_POST['action'])) {
             $dataZI .= "
             <!-- SUBALMACEN -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
+            class=\"p-1 m-1 bg-gray-800 text-gray-300 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-red-500 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
+            <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
           ";
@@ -238,9 +244,10 @@ if (isset($_POST['action'])) {
             $dataZI .= "
             <!-- BODEGA -->
             <div id=\"$idDiv\" onclick=\"expandir('$idDiv'); subalmacenSeleccionado($idSubalmacen);\"
-            class=\"p-3 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
+            class=\"p-1 m-1 bg-gray-300 text-gray-900 rounded-lg cursor-pointer w-full font-medium text-sm text-center flex-flex-col border-l-4 border-orange-300 hover:shadow-md animated fadeInUp\">
             <div>
             <h1 class=\"truncate\">$nombre</h1>
+            <h1 class=\"truncate text-xxs uppercase\">$responsable</h1>
             </div>
             <div id=\"$idSubalmacen" . "subtoggle\" class=\"hidden flex flex-row w-full mt-2 text-xs\">
           ";
