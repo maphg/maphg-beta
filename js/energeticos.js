@@ -197,6 +197,7 @@ const obtenerEnlaces = () => {
             return array;
         })
         .then(array => {
+            console.log(array);
             if (array) {
                 if (array.length > 1) {
                     dataPowerbin.classList.remove('grid-rows-1', 'grid-cols-1');
