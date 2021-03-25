@@ -1,5 +1,6 @@
 const dataCompras = document.querySelector('#dataCompras');
 const tableCompras = document.querySelector('#tableCompras');
+
 // OPTIONS
 const cecoCompras = document.querySelector('#cecoCompras');
 const solicitudCompras = document.querySelector('#solicitudCompras');
