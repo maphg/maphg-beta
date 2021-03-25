@@ -213,7 +213,7 @@ const obtenerEnlaces = () => {
                     const sizeW = array.length > 1 ? '400px;' : '800px;';
                     const sizeH = array.length > 1 ? '350px;' : '700px;';
                     const iconSize = array.length > 1 ?
-                        `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" onclick="url('url_${idDestinoX}');"></i>` : '';
+                        `<i class="fas fa-arrows-alt absolute top-0 right-0 fa-lg py-2 cursor-pointer" onclick="url('${url}');"></i>` : '';
 
                     const codigo = `
                     <div class="py-1 mx-auto relative text-transparent hover:text-gray-500">
@@ -233,7 +233,7 @@ const obtenerEnlaces = () => {
 
 
 // OBTIENE ENLACE PARA RENDERIZAR EN VENTANA MODAL
-function url(idUrl) {
+function url(urlX) {
     alertify.powerbi || alertify.dialog('powerbi', function () {
         var iframe;
         return {
@@ -305,10 +305,8 @@ function url(idUrl) {
             }
         };
     });
-
-    let x = document.getElementById(idUrl).getAttribute('src');
     //show the dialog
-    alertify.powerbi(x).set({
+    alertify.powerbi(urlX).set({
         frameless: false
     });
 }
