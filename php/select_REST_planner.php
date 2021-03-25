@@ -5109,5 +5109,51 @@ if (isset($_GET['action'])) {
     }
 
 
+    // REPORTE INCIDENCIAS, PREVENTIVOS Y PDA POR DESTINO
+    if ($action == "reporteSemanal") {
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaFin = $_GET['fechaFin'];
+        $array['Fecha'] = $fechaInicio . " - " . $fechaFin;
+        
+        $query = "SELECT id, destino FROM c_destinos";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestino = $x['id'];
+                $destino = $x['destino'];
+
+                #HISTORICO
+                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino";
+                $total = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total = $x['total'];
+                        $array['Incidencias Historico'][$destino] = $total;
+                    }
+                }
+
+                #SOLUCIONADO ESTA SEMANA
+                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                $total = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total = $x['total'];
+                        $array['Incidencias Pendiente Semanal'][$destino] = $total;
+                    }
+                }
+
+                #PENDIENTE ESTA SEMANA
+                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('SOLUCIONADO', 'F', 'FINALIZADO') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                $total = 0;
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total = $x['total'];
+                        $array['Incidencias Solucionado Semanal'][$destino] = $total;
+                    }
+                }
+            }
+        }
+        echo json_encode($array);
+    }
+
     // CIERRE FINAL
 }
