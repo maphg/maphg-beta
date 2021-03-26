@@ -5122,13 +5122,12 @@ if (isset($_GET['action'])) {
                 $destino = $x['destino'];
 
                 #HISTORICO
+                $total = 0;
                 $query = "SELECT count(id) 'total' FROM t_mc 
                 WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino";
-                $total = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $total = $x['total'];
-                        $array['Incidencias Historico'][$destino] = $total;
                     }
                 }
                 $query = "SELECT count(id) 'total' FROM t_mp_np 
@@ -5138,7 +5137,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Incidencias Historico'][$destino] = $total;
+                $array['INCIDENCIAS HISTORICO'][$destino] = $total;
 
 
                 #SOLUCIONADO ESTA SEMANA
@@ -5157,7 +5156,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Incidencias Pendiente Semanal'][$destino] = $total;
+                $array['INCIDENCIAS PENDIENTE SEMANAL'][$destino] = $total;
 
 
                 #PENDIENTE ESTA SEMANA
@@ -5176,7 +5175,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Incidencias Solucionado Semanal'][$destino] = $total;
+                $array['INCIDENCIAS SOLUCIONADO SEMANAL'][$destino] = $total;
 
 
                 #PREVENTIVOS HISTORICO
@@ -5190,7 +5189,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Preventivos Historico'][$destino] = $total;
+                $array['PREVENTIVOS HISTORICO'][$destino] = $total;
 
                 #SOLUCIONADOS ESTA SEMANA
                 $total = 0;
@@ -5203,7 +5202,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Preventivos Pendientes Semanal'][$destino] = $total;
+                $array['PREVENTIVOS PENDIENTES SEMANAL'][$destino] = $total;
 
                 #SOLUCIONADOS ESTA SEMANA
                 $total = 0;
@@ -5216,7 +5215,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['Preventivos Solucionado Semanal'][$destino] = $total;
+                $array['PREVENTIVOS SOLUCIONADOS SEMANAL'][$destino] = $total;
 
 
                 #PDA HISTORICO
@@ -5231,7 +5230,7 @@ if (isset($_GET['action'])) {
                         $total += $x['total'];
                     }
                 }
-                $array['PDA Historico'][$destino] = $total;
+                $array['PDA HISTORICO'][$destino] = $total;
 
                 #PDA SOLUCIONADO SEMANAL
                 $total = 0;
