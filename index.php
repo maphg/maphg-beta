@@ -760,9 +760,9 @@
                             <h2 id="jerarquiaEquipo2"></h2>
                         </div>
 
-                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4 hidden">
-                            <i class="mr-1 text-blue-400">BITÁCORAS:</i>
-                            <select id="idFaseEquipo" class="text-xs font-bold">
+                        <div class="flex items-center px-1 text-xs text-blue-300 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
+                            <i class="mr-1 text-blue-400">FASE:</i>
+                            <select id="idFaseEquipo" class="text-lg font-bold text-blue-400 bg-blue-100">
                                 <option value="1">GP</option>
                                 <option value="2">TRS</option>
                                 <option value="3">ZI</option>
@@ -814,7 +814,7 @@
                 <div class="flex flex-row w-full">
                     <div class="flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 w-full">
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
@@ -849,7 +849,7 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6 bg-white">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
@@ -880,7 +880,7 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
                                 <input id="cantidadEquipo" type="text" placeholder="0" class="font-semibold bg-white" autocomplete="off">
@@ -902,7 +902,29 @@
                             </div>
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Fecha de Instalación</h1>
+                                <input id="fechaInstalacionEquipo" type="date" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Fecha de Compra</h1>
+                                <input id="fechaCompraEquipo" type="date" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Años de Garantía</h1>
+                                <input id="añoGarantiaEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Años de Vida Util</h1>
+                                <input id="añoVidaUtilEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
+                            </div>
+                        </div>
+
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
@@ -924,9 +946,14 @@
                                 <input type="text" value="-" id="frecuenciaEquipo" class="font-semibold bg-white" autocomplete="off">
                             </div>
 
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAPACIDAD</h1>
+                                <input type="text" id="capacidadEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
@@ -945,7 +972,7 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
@@ -4064,7 +4091,7 @@
 
     <!-- MODAL SALIDAS Subalmacenes-->
     <div id="modalOpcionesMaterialesEquipo" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1250px;">
+        <div class="modal-window rounded-md pt-10" style="width: 950px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalOpcionesMaterialesEquipo');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -4082,46 +4109,42 @@
             <div class="p-2 flex justify-center items-center flex-col w-full">
                 <!-- Contenedor TABLA -->
                 <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-
                         <input id="inputDespieceMaterialesEquipo" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" placeholder="Buscar Material por Descripción" autocomplete="off">
-
                     </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
+
                     <div class="w-full flex flex-col overflow-y-auto scrollbar" style="min-height: 50vh; max-height: 70vh;">
                         <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200">
                             <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
                                 <thead>
-                                    <tr class="cursor-pointer bg-white">
-                                        <td class="px-2 py-1  border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 w-8">
-                                            <h1>DESTINO</h1>
-                                        </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>CATEGORÍA</h1>
-                                        </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                    <tr class="cursor-pointer">
+                                        <td class="px-2 py-1  border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12">
                                             <h1>COD2BEND</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>GREMIO</h1>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>DESCRIPCIÓN COD2BEND</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>DESCRIPCION</h1>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>DESCRIPCIÓN SSTT</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
                                             <h1>CARACTERISTICAS</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>MARCA/PROVEEDOR</h1>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>MARCA</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>U DE M</h1>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>MODELO</h1>
                                         </td>
-                                        <td class="px-2 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
-                                            <h1>CANTIDAD</h1>
-                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12"></td>
                                     </tr>
                                 </thead>
 

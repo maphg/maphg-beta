@@ -441,107 +441,52 @@ if (isset($_POST['action'])) {
 
     if ($action == "consultaItemsSubalmacen") {
         $idPlanMP = $_POST['idPlanMP'];
-        $data = array();
-        $dataMateriales = "";
         $palabraBuscar = $_POST['palabraBuscar'];
+        $array = array();
 
         if ($palabraBuscar != "") {
-            $palabraBuscar =
-                "
-            AND (
-            t_subalmacenes_items_globales.categoria LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.cod2bend LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.descripcion_cod2bend LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.caracteristicas LIKE '%$palabraBuscar%' 
-            OR t_subalmacenes_items_globales.marca LIKE '%$palabraBuscar%'
-            )
-            ";
+            $palabraBuscar = " and (categoria LIKE '%$palabraBuscar%' OR cod2bend LIKE '%$palabraBuscar%' OR descripcion_cod2bend LIKE '%$palabraBuscar%' OR caracteristicas LIKE '%$palabraBuscar%' OR marca LIKE '%$palabraBuscar%')";
         } else {
             $palabraBuscar = "";
         }
 
-
-        $query = "SELECT 
-        c_destinos.destino, t_subalmacenes.nombre, t_subalmacenes.fase,
-        t_subalmacenes_items_stock.stock_actual, t_subalmacenes_items_stock.stock_teorico, t_subalmacenes_items_globales.unidad,
-        t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
-        t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, 
-        t_subalmacenes_items_globales.marca,
-        t_subalmacenes_items_stock.id 'idItem'
-        FROM t_subalmacenes
-        INNER JOIN c_destinos ON t_subalmacenes.id_destino = c_destinos.id
-        INNER JOIN t_subalmacenes_items_stock ON t_subalmacenes.id = t_subalmacenes_items_stock.id_subalmacen
-        INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
-        WHERE  t_subalmacenes.activo = 1 AND t_subalmacenes.id_destino = $idDestino $palabraBuscar";
-
+        $query = "SELECT id, cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, caracteristicas, marca, modelo
+        FROM t_subalmacenes_items_globales
+        WHERE  activo = 1 and id_destino = $idDestino $palabraBuscar";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
-                $idItem = $i['idItem'];
-                $destino = $i['destino'];
-                $nombre = $i['nombre'];
-                $categoria = $i['categoria'];
+                $idItem = $i['id'];
                 $cod2bend = $i['cod2bend'];
-                $gremio = "";
                 $descripcion = $i['descripcion_cod2bend'];
+                $sstt = $i['descripcion_servicio_tecnico'];
                 $caracteristicas = $i['caracteristicas'];
                 $marca = $i['marca'];
-                $stockTeorico = $i['stock_teorico'];
-                $stockActual = $i['stock_actual'];
-                $unidad = $i['unidad'];
-                $valor = "";
-                $query = "SELECT cantidad_material FROM t_mp_planes_materiales WHERE id_plan = $idPlanMP AND id_item_global= $idItem AND status = 'ACTIVO'";
+                $modelo = $i['modelo'];
+                $cantidad = 0;
+
+                $query = "SELECT cantidad_material FROM t_mp_planes_materiales 
+                WHERE id_plan = $idPlanMP and id_item_global = $idItem and status = 'ACTIVO'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $i) {
-                        $valor = $i['cantidad_material'];
+                        $cantidad = $i['cantidad_material'];
                     }
                 }
 
-                $dataMateriales .= "
-                    <div class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-bluegray-50 rounded hover:bg-indigo-100 cursor-pointer\">
-                        <div class=\"w-12 flex h-full items-center justify-center truncate\">
-                            <h1>$destino</h1>
-                        </div>
-                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                            <h1>$nombre</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                            <h1>$categoria</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                            <h1>$cod2bend</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                            <h1>$gremio</h1>
-                        </div>
-                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                            <h1>$descripcion</h1>
-                        </div>
-                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                            <h1>$caracteristicas</h1>
-                        </div>
-                        <div class=\"w-64 flex h-full items-center justify-center truncate\">
-                            <h1>$marca</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                            <h1>$stockTeorico</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center truncate\">
-                            <h1>$stockActual</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center\">
-                            <h1>$unidad</h1>
-                        </div>
-                        <div class=\"w-32 flex h-full items-center justify-center\">
-                        
-                        <input id=\"$idItem\" class=\"border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 px-2 rounded-r-md text-sm focus:outline-none w-full\" type=\"text\" placeholder=\"Cantidad\" min=\"0\" value=\"$valor\"
-                        onkeyup=\"if(event.keyCode == 48 | event.keyCode == 49 | event.keyCode == 50 | event.keyCode == 51 | event.keyCode == 52 | event.keyCode == 53 | event.keyCode == 54 | event.keyCode == 55 | event.keyCode == 56 | event.keyCode == 57 | event.keyCode == 58) agregarMaterialesPlanMP($idItem);\" autocomplete=\"off\">
-                        </div>
-                    </div>
-                ";
+                $array[] = array(
+                    "idItem" => $idItem,
+                    "cod2bend" => $cod2bend,
+                    "descripcion" => $descripcion,
+                    "sstt" => $sstt,
+                    "caracteristicas" => $caracteristicas,
+                    "marca" => $marca,
+                    "modelo" => $modelo,
+                    "cantidad" => $cantidad
+                );
+
+
             }
-            $data['dataMateriales'] = $dataMateriales;
         }
-        echo json_encode($data);
+        echo json_encode($array);
     }
 
 

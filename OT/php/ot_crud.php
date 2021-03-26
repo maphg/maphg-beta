@@ -221,7 +221,6 @@ if (isset($_POST['action'])) {
                     $cantidad = $i['cantidad_material'];
                     $material = $i['descripcion_cod2bend'];
 
-
                     $materiales .= "
                         <div class=\"flex flex-row justify-start items-center uppercase w-full mb-2 border-b p-1 cursor-pointer\">
                             <div class=\"mr-2 flex items-center justify-center leading-none\">

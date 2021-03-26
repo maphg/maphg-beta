@@ -1172,41 +1172,36 @@ if (isset($_GET['action'])) {
         $tipoAsignacion = $_GET['tipoAsignacion'];
         $array = array();
 
-        $query = "SELECT 
-        t_subalmacenes_items_globales.id 'idItem', t_subalmacenes_items_globales.unidad, 
-        t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
-        t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, t_subalmacenes_items_globales.marca, c_destinos.destino
-        FROM t_equipos_america
-        INNER JOIN t_subalmacenes_items_globales ON t_equipos_america.id_destino = t_subalmacenes_items_globales.id_destino
-        INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        WHERE t_subalmacenes_items_globales.activo = 1 and t_equipos_america.id = $idEquipo";
+        $query = "SELECT id , cod2bend, descripcion_cod2bend, descripcion_servicio_tecnico, caracteristicas, marca, modelo
+        FROM t_subalmacenes_items_globales
+        WHERE activo = 1 and id_destino = $idDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idItem = $x['idItem'];
-                $destino = $x['destino'];
-                $categoria = $x['categoria'];
+                $idItem = $x['id'];
                 $cod2bend = $x['cod2bend'];
                 $descripcion = $x['descripcion_cod2bend'];
+                $sstt = $x['descripcion_servicio_tecnico'];
                 $caracteristicas = $x['caracteristicas'];
                 $marca = $x['marca'];
-                $unidad = $x['unidad'];
-
+                $modelo = $x['modelo'];
                 $cantidad = 0;
-                $query = "SELECT cantidad FROM t_equipos_materiales WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
+
+                $query = "SELECT cantidad FROM t_equipos_materiales 
+                WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $cantidad = $x['cantidad'];
                     }
                 }
+
                 $array[] = array(
-                    "idItem" => intval($idItem),
-                    "destino" => $destino,
-                    "categoria" => $categoria,
+                    "idItem" => $idItem,
                     "cod2bend" => $cod2bend,
                     "descripcion" => $descripcion,
+                    "sstt" => $sstt,
                     "caracteristicas" => $caracteristicas,
                     "marca" => $marca,
-                    "unidad" => $unidad,
+                    "modelo" => $modelo,
                     "cantidad" => $cantidad
                 );
             }

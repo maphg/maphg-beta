@@ -498,6 +498,8 @@ function consultarMaterialesSubalmacen() {
     let palabraBuscar = document.getElementById("inputPalabraBuscarSubalmacenSalida").value;
     let idPlanMP = localStorage.getItem('idPlanMP');
 
+    document.getElementById("dataSalidasSubalmacen").innerHTML = '';
+
     const action = "consultaItemsSubalmacen";
     $.ajax({
         type: "POST",
@@ -510,8 +512,63 @@ function consultarMaterialesSubalmacen() {
             idPlanMP: idPlanMP
         },
         dataType: "JSON",
-        success: function (data) {
-            document.getElementById("dataSalidasSubalmacen").innerHTML = data.dataMateriales;
+        success: function (array) {
+            if (array.length) {
+                for (let x = 0; x < array.length; x++) {
+                    const idItem = array[x].idItem;
+                    const cod2bend = array[x].cod2bend;
+                    const descripcion = array[x].descripcion;
+                    const sstt = array[x].sstt;
+                    const caracteristicas = array[x].caracteristicas;
+                    const marca = array[x].marca;
+                    const modelo = array[x].modelo;
+                    const cantidad = array[x].cantidad;
+                    const fAgregarMaterial = `onchange="agregarMaterialesPlanMP(${idItem})"`;
+
+                    const codigo = `
+                        <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto"
+                            data-title-items="${cod2bend}">
+                                <p class="truncate whitespace-no-wrap">${cod2bend}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto" 
+                            data-title-items="${descripcion}">
+                                <p class="truncate whitespace-no-wrap">${descripcion}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto" 
+                            data-title-items="${caracteristicas}">
+                                <p class="truncate whitespace-no-wrap">${caracteristicas}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto"
+                            data-title-items="${sstt}">
+                                <p class="truncate whitespace-no-wrap">${sstt}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto"
+                            data-title-items="${marca}">
+                                <p class="truncate whitespace-no-wrap">${marca}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto"
+                            data-title-items="${modelo}">
+                                <p class="truncate whitespace-no-wrap">${modelo}</p>
+                            </td>
+
+                            <td class="px-1 border-b border-gray-200 text-center py-1 w-auto" data-title-items="Ingrese Cantidad">
+                                <p class="whitespace-no-wrap">
+                                    <input id="item_global_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 rounded-md text-sm focus:outline-none w-full" type="number" placeholder="#" min="0" value="${cantidad}"
+                                    ${fAgregarMaterial}>
+                                </p>
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById("dataSalidasSubalmacen").insertAdjacentHTML('beforeend', codigo);
+                }
+            }
         }
     });
 }
@@ -519,36 +576,44 @@ function consultarMaterialesSubalmacen() {
 
 // Agrega o Actualiza los Materiales para Cada Plan MP.
 function agregarMaterialesPlanMP(idMaterial) {
-    let idDestino = document.getElementById("dataOptionDestinosMP").value;
+    let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');
     let idPlanMP = localStorage.getItem("idPlanMP");
-    let cantidadMaterial = document.getElementById(idMaterial).value;
-    const action = "agregarMaterialesPlanMP";
-    $.ajax({
-        type: "POST",
-        url: "php/planes_mantenimiento_crud.php",
-        data: {
-            action: action,
-            idDestino: idDestino,
-            idUsuario: idUsuario,
-            idPlanMP: idPlanMP,
-            idMaterial: idMaterial,
-            cantidadMaterial: cantidadMaterial
-        },
-        // dataType: "JSON",
-        success: function (data) {
-            if (data == 1) {
-                obtenerMaterialPlanMP();
-                alertaImg('Material Agregado', '', 'success', 2000);
-            } else if (data == 2) {
-                obtenerMaterialPlanMP();
-                alertaImg('Cantidad, Material Actualizado', '', 'success', 2000);
-            } else {
-                obtenerMaterialPlanMP();
-                alertaImg('Intente de Nuevo', '', 'question', 2500);
-            }
+
+    if (document.getElementById('item_global_' + idMaterial)) {
+        let cantidadMaterial = document.getElementById('item_global_' + idMaterial).value;
+        if (cantidadMaterial >= 0) {
+            const action = "agregarMaterialesPlanMP";
+
+            $.ajax({
+                type: "POST",
+                url: "php/planes_mantenimiento_crud.php",
+                data: {
+                    action: action,
+                    idDestino: idDestino,
+                    idUsuario: idUsuario,
+                    idPlanMP: idPlanMP,
+                    idMaterial: idMaterial,
+                    cantidadMaterial: cantidadMaterial
+                },
+                // dataType: "JSON",
+                success: function (data) {
+                    if (data == 1) {
+                        alertaImg('Material Agregado al Plan', '', 'success', 2000);
+                    } else if (data == 2) {
+                        alertaImg('Cantidad de Material Actualizado', '', 'success', 2000);
+                    } else {
+                        alertaImg('Intente de Nuevo', '', 'question', 2500);
+                    }
+                    obtenerMaterialPlanMP();
+                }
+            });
+        } else {
+            alertaImg('Cantidad NO Valida', '', 'info', 2000);
         }
-    });
+    } else {
+        alertaImg('Intente de Nuevo', '', 'info', 2000);
+    }
 }
 
 

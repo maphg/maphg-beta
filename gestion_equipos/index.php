@@ -185,7 +185,7 @@
 
     <!-- MODAL EQUIPO PARA LOS MP-->
     <div id="modalMPEquipo" class="modal relative">
-        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg" style="width: 1000px;">
+        <div class="modal-window flex shadow-lg flex-col justify-center items-center text-bluegray-800 pt-10 rounded-lg" style="width: 1050px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="cerrarmodal('modalMPEquipo')" class="cursor-pointer text-md  text-red-500 bg-red-200 px-2 rounded-bl-lg rounded-tr-lg font-normal shadow-md">
@@ -224,9 +224,9 @@
                             <h2 id="jerarquiaEquipo2"></h2>
                         </div>
 
-                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4 hidden">
-                            <i class="mr-1 text-blue-400">BITÁCORAS:</i>
-                            <select id="idFaseEquipo" class="text-xs font-bold">
+                        <div class="flex items-center text-xs text-blue-300 px-1 bg-blue-100 rounded-full w-auto cursor-pointer mr-4">
+                            <i class="mr-1 text-blue-400">FASE:</i>
+                            <select id="idFaseEquipo" class="text-lg font-bold text-blue-400 bg-blue-100">
                                 <option value="1">GP</option>
                                 <option value="2">TRS</option>
                                 <option value="3">ZI</option>
@@ -275,10 +275,9 @@
                     <button id="btnCancelarEquipo" class="text-xxs px-2 bg-red-300 text-red-700 ml-3 rounded font-semibold hover:shadow">Cancelar <i class="fas fa-times-circle ml-1"></i></button>
                 </div>
 
-                <div class="flex flex-row w-full">
-                    <div class="flex-none h-auto px-4 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 w-full">
-
-                        <div class="flex-none w-1/6">
+                <div class="flex flex-row justify-center items-center w-full">
+                    <div class="h-auto px-2 overflow-x-auto scrollbar flex flex-no-wrap justify-start items-start text-xxs pt-2 w-full mx-auto">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">SECCIÓN</h1>
@@ -313,7 +312,7 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6 bg-white">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">MARCA</h1>
@@ -344,7 +343,29 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Fecha de Instalación</h1>
+                                <input id="fechaInstalacionEquipo" type="date" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Fecha de Compra</h1>
+                                <input id="fechaCompraEquipo" type="date" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Años de Garantía</h1>
+                                <input id="añoGarantiaEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
+                            </div>
+
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">Años de Vida Util</h1>
+                                <input id="añoVidaUtilEquipo" type="number" min="0" step="1" value="0" class="font-semibold bg-white">
+                            </div>
+                        </div>
+
+                        <div class="flex-none w-2/12">
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">Cantidad</h1>
                                 <input id="cantidadEquipo" type="text" placeholder="0" class="font-semibold bg-white" autocomplete="off">
@@ -366,7 +387,7 @@
                             </div>
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">POT ELEC. (HP)</h1>
@@ -388,9 +409,14 @@
                                 <input type="text" value="-" id="frecuenciaEquipo" class="font-semibold bg-white" autocomplete="off">
                             </div>
 
+                            <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
+                                <h1 class="font-bold text-bluegray-900 uppercase">CAPACIDAD</h1>
+                                <input type="text" id="capacidadEquipo" class="font-semibold bg-white" autocomplete="off">
+                            </div>
+
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">CAUDAL AGUA (M3/H)</h1>
@@ -409,7 +435,7 @@
 
                         </div>
 
-                        <div class="flex-none w-1/6">
+                        <div class="flex-none w-2/12">
 
                             <div class="flex flex-col justify-center items-start uppercase leading-tight mb-4">
                                 <h1 class="font-bold text-bluegray-900 uppercase">POT ENERGÉTICA FRIO(KW)</h1>
@@ -438,7 +464,6 @@
 
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -488,7 +513,6 @@
 
             <!-- ADJUNTOS (COTIZACIONES Y MANUALES)-->
             <div id="contenedorAdjuntosEquipo" class="w-full bg-white hidden">
-
                 <div class="flex-none flex flex-col items-start justify-start border-l text-xs uppercase font-bold px-2 overflow-y-auto scrollbar" style="height: 201px;">
 
                     <div class="w-full flex flex-row items-center justify-center my-1">

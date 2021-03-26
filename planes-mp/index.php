@@ -460,7 +460,7 @@
 
     <!-- MODAL SALIDAS Subalmacenes-->
     <div id="modalSalidasSubalmacen" class="modal">
-        <div class="modal-window rounded-md pt-10" style="width: 1550px;">
+        <div class="modal-window rounded-md pt-10" style="width: 950px;">
             <!-- BOTON CERRARL -->
             <div class="absolute top-0 right-0">
                 <button onclick="toggleModalTailwind('modalSalidasSubalmacen');" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
@@ -475,61 +475,53 @@
             </div>
 
             <!-- CONTENIDO -->
-            <div class="p-2 flex justify-center items-center flex-col w-full">
+            <div class="flex justify-center items-center flex-col w-full">
                 <!-- Contenedor TABLA -->
-                <div class="mt-2 w-full flex flex-col justify-center items-center px-5">
+                <div class="mt-2  w-full flex flex-col justify-center items-center px-5">
+
                     <!-- BUSCADOR -->
                     <div class="mb-3 w-full flex flex-row items-center justify-center">
-
                         <input id="inputPalabraBuscarSubalmacenSalida" class="border border-gray-200 shadow-md bg-white h-10 px-2 rounded-md text-sm focus:outline-none w-1/2" type="search" name="search" placeholder="Buscar Material" autocomplete="off" onkeydown=" if(event.keyCode == 13) consultarMaterialesSubalmacen();">
-
-                    </div>
-                    <!-- BUSCADOR -->
-                    <!-- TITULOS -->
-                    <div class="mt-2 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500">
-                        <div class="w-12 flex h-full items-center justify-center">
-                            <h1>DESTINO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>NOMBRE</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CATEGORÍA</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>COD2BEND</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>GREMIO</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>DESCRIPCION</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>CARACTERISTICAS</h1>
-                        </div>
-                        <div class="w-64 flex h-full items-center justify-center">
-                            <h1>MARCA/PROVEEDOR</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK TEÓRICO</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>STOCK ACTUAL</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>U DE M</h1>
-                        </div>
-                        <div class="w-32 flex h-full items-center justify-center">
-                            <h1>CANTIDAD</h1>
-                        </div>
-                    </div>
-                    <!-- TITULOS -->
-
-                    <!-- Contenido -->
-                    <div id="dataSalidasSubalmacen" class="border w-full py-1 px-2 scrollbar overflow-y-auto rounded-md mb-4" style="height: 70vh;">
                     </div>
 
+                    <div class="w-full flex flex-col overflow-y-auto scrollbar" style="min-height: 50vh; max-height: 70vh;">
+                        <div class="align-middle inline-block min-w-full shadow-md border rounded border-b border-gray-200">
+                            <table class="min-w-full divide-y divide-gray-200 table-fixed border rounded sortable">
+                                <thead>
+                                    <tr class="cursor-pointer">
+                                        <td class="px-2 py-1  border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12">
+                                            <h1>COD2BEND</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>DESCRIPCIÓN COD2BEND</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>DESCRIPCIÓN SSTT</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>CARACTERISTICAS</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>MARCA</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-24">
+                                            <h1>MODELO</h1>
+                                        </td>
+
+                                        <td class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase sticky top-0 w-12"></td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dataSalidasSubalmacen" class="bg-white divide-y divide-gray-200">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

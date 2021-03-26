@@ -1,6 +1,11 @@
 'use strict';
 
 // INPUTS POR ID
+const e_capacidadEquipo = document.getElementById("capacidadEquipo");
+const e_fechaInstalacionEquipo = document.getElementById("fechaInstalacionEquipo");
+const e_fechaCompraEquipo = document.getElementById("fechaCompraEquipo");
+const e_añoGarantiaEquipo = document.getElementById("añoGarantiaEquipo");
+const e_añoVidaUtilEquipo = document.getElementById("añoVidaUtilEquipo");
 const e_estadoEquipo = document.getElementById("estadoEquipo");
 const e_tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
 const e_idFaseEquipo = document.getElementById("idFaseEquipo");
@@ -827,45 +832,6 @@ function consultaEquiposLocales() {
 
 
 // ********** FUNCIONES PARA MODAL DE EQUIPOS **********
-// Función para los inptus de modalMPEquipos
-function toggleDisabledEditarEquipo(estadoInputs) {
-    let idEquipo = localStorage.getItem('idEquipo');
-
-    const arrayBtnEquipo =
-        [
-            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos'
-        ]
-
-    arrayBtnEquipo.forEach(element => {
-        if (estadoInputs == 1) {
-            document.getElementById(element).removeAttribute('disabled');
-        } else {
-            document.getElementById(element).setAttribute('disabled', false);
-        }
-    });
-
-    btnEditarEquipo.setAttribute('onclick', 'toggleDisabledEditarEquipo(1)');
-    btnCancelarEquipo.
-        setAttribute('onclick', `toggleDisabledEditarEquipo(2); cancelarInformacionEquipo(${idEquipo})`);
-    btnGuardarEquipo.setAttribute('onclick', `actualizarEquipo(${idEquipo})`);
-
-    if (estadoInputs == 1) {
-        alertaImg('Editar Equipo, Habilitado', '', 'info', 1500);
-        btnEditarEquipo.classList.add('hidden');
-        btnGuardarEquipo.classList.remove('hidden');
-        btnCancelarEquipo.classList.remove('hidden');
-    } else if (estadoInputs == 0) {
-        btnEditarEquipo.classList.remove('hidden');
-        btnGuardarEquipo.classList.add('hidden');
-        btnCancelarEquipo.classList.add('hidden');
-    } else if (estadoInputs == 2) {
-        alertaImg('Restaurando Datos...', '', 'info', 1500);
-        btnEditarEquipo.classList.remove('hidden');
-        btnGuardarEquipo.classList.add('hidden');
-        btnCancelarEquipo.classList.add('hidden');
-    }
-}
-
 
 // Muestra el Menú de los Planes
 function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
@@ -1741,6 +1707,12 @@ function informacionEquipoxx(idEquipo) {
                     e_jerarquiaEquipo.value = array.jerarquia;
                     e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
+                    e_fechaInstalacionEquipo.value = array.fechaInstalacion;
+                    e_fechaCompraEquipo.value = array.fechaCompra;
+                    e_añoGarantiaEquipo.value = array.añoGarantia;
+                    e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+
+
                     e_marcaEquipo.value = array.idMarca;
                     e_modeloEquipo.value = array.modelo;
                     e_serieEquipo.value = array.serie;
@@ -1756,6 +1728,7 @@ function informacionEquipoxx(idEquipo) {
                     e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
                     e_voltajeEquipo.value = array.voltaje_v;
                     e_frecuenciaEquipo.value = array.frecuencia_hz;
+                    e_capacidadEquipo.value = array.capacidad;
 
                     e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
                     e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
@@ -1776,6 +1749,16 @@ function informacionEquipoxx(idEquipo) {
             })
             .catch(function (err) {
                 fetch(APIERROR + err);
+                e_capacidadEquipo.value = '';
+                e_fechaInstalacionEquipo.value = '';
+                e_fechaCompraEquipo.value = '';
+                e_añoGarantiaEquipo.value = '';
+                e_añoVidaUtilEquipo.value = '';
+                e_capacidadEquipo.value = '';
+                e_fechaInstalacionEquipo.value = '';
+                e_fechaCompraEquipo.value = '';
+                e_añoGarantiaEquipo.value = '';
+                e_añoVidaUtilEquipo.value = '';
                 e_nombreEquipo.value = '';
                 e_estadoEquipo.value = '';
                 e_tipoLocalEquipo.value = '';
@@ -1871,8 +1854,7 @@ function toggleDisabledEditarEquipo(estadoInputs) {
     let idEquipo = localStorage.getItem('idEquipo');
 
     const arrayBtnEquipo =
-        [
-            'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos'
+        ['capacidadEquipo', 'fechaInstalacionEquipo', 'fechaCompraEquipo', 'añoGarantiaEquipo', 'añoVidaUtilEquipo', 'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos', 'cantidadEquipo'
         ]
 
     arrayBtnEquipo.forEach(element => {
@@ -1915,6 +1897,11 @@ function cancelarInformacionEquipo(idEquipo) {
     fetch(URL)
         .then(array => array.json())
         .then(array => {
+            e_capacidadEquipo.value = '';
+            e_fechaInstalacionEquipo.value = '';
+            e_fechaCompraEquipo.value = '';
+            e_añoGarantiaEquipo.value = '';
+            e_añoVidaUtilEquipo.value = '';
             e_nombreEquipo.value = '';
             e_estadoEquipo.value = '';
             e_tipoLocalEquipo.value = '';
@@ -1961,6 +1948,11 @@ function cancelarInformacionEquipo(idEquipo) {
                 e_jerarquiaEquipo.value = array.jerarquia;
                 e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
+                e_fechaInstalacionEquipo.value = array.fechaInstalacion;
+                e_fechaCompraEquipo.value = array.fechaCompra;
+                e_añoGarantiaEquipo.value = array.añoGarantia;
+                e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+
                 e_marcaEquipo.value = array.idMarca;
                 e_modeloEquipo.value = array.modelo;
                 e_serieEquipo.value = array.serie;
@@ -1976,6 +1968,7 @@ function cancelarInformacionEquipo(idEquipo) {
                 e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
                 e_voltajeEquipo.value = array.voltaje_v;
                 e_frecuenciaEquipo.value = array.frecuencia_hz;
+                e_capacidadEquipo.value = array.capacidad;
 
                 e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
                 e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
@@ -1993,6 +1986,11 @@ function cancelarInformacionEquipo(idEquipo) {
         })
         .catch(function (err) {
             fetch(APIERROR + err);
+            e_capacidadEquipo.value = '';
+            e_fechaInstalacionEquipo.value = '';
+            e_fechaCompraEquipo.value = '';
+            e_añoGarantiaEquipo.value = '';
+            e_añoVidaUtilEquipo.value = '';
             e_nombreEquipo.value = '';
             e_estadoEquipo.value = '';
             e_tipoLocalEquipo.value = '';
@@ -2037,6 +2035,11 @@ function actualizarEquipo(idEquipo) {
 
     const data = new FormData()
     data.append('idEquipo', idEquipo);
+    data.append('capacidad', e_capacidadEquipo.value);
+    data.append('fechaInstalacion', e_fechaInstalacionEquipo.value);
+    data.append('fechaCompra', e_fechaCompraEquipo.value);
+    data.append('añoGarantia', e_añoGarantiaEquipo.value);
+    data.append('añoVidaUtil', e_añoVidaUtilEquipo.value);
     data.append('equipo', e_nombreEquipo.value);
     data.append('status', e_estadoEquipo.value);
     data.append('localEquipo', e_tipoLocalEquipo.value);
@@ -2224,6 +2227,11 @@ function informacionEquipo(idEquipo) {
                     e_jerarquiaEquipo.value = array.jerarquia;
                     e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
+                    e_fechaInstalacionEquipo.value = array.fechaInstalacion;
+                    e_fechaCompraEquipo.value = array.fechaCompra;
+                    e_añoGarantiaEquipo.value = array.añoGarantia;
+                    e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+
                     e_marcaEquipo.value = array.idMarca;
                     e_modeloEquipo.value = array.modelo;
                     e_serieEquipo.value = array.serie;
@@ -2234,6 +2242,7 @@ function informacionEquipo(idEquipo) {
                     e_largoEquipo.value = array.largo_cm;
                     e_anchoEquipo.value = array.ancho_cm;
                     e_altoEquipo.value = array.alto_cm;
+                    e_capacidadEquipo.value = array.capacidad;
 
                     e_potenciaElectricaHPEquipo.value = array.potencia_electrica_hp;
                     e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
@@ -2302,6 +2311,11 @@ function informacionEquipo(idEquipo) {
                 e_potenciaEnergeticaCalorKCALEquipo.value = '';
                 e_caudalAireM3HEquipo.value = '';
                 e_caudalAireCFMEquipo.value = '';
+                e_fechaInstalacionEquipo.value = '';
+                e_fechaCompraEquipo.value = '';
+                e_añoGarantiaEquipo.value = '';
+                e_añoVidaUtilEquipo.value = '';
+                e_capacidadEquipo.value = '';
             })
     })
     promesa.catch((err) => {
@@ -2842,7 +2856,7 @@ const codigoIncidenciasEquipo = params => {
         trabajandox = '';
     }
 
-    var fOT = `<a href="OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
+    var fOT = `<a href="../OT_Fallas_Tareas/#${params.ot}" class="text-black" target="_blank">${params.ot}</a>`;
 
     if (params.status == "PENDIENTE" && params.tipo == "FALLA") {
         var statusX = 'S-PENDIENTE';

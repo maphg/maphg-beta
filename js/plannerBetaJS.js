@@ -225,6 +225,11 @@ const btnStatusEP = document.getElementById("statusEP");
 
 
 // ELEMENTOS PARA MODAL INFORMACION DE EQUIPO
+const e_capacidadEquipo = document.getElementById("capacidadEquipo");
+const e_fechaInstalacionEquipo = document.getElementById("fechaInstalacionEquipo");
+const e_fechaCompraEquipo = document.getElementById("fechaCompraEquipo");
+const e_añoGarantiaEquipo = document.getElementById("añoGarantiaEquipo");
+const e_añoVidaUtilEquipo = document.getElementById("añoVidaUtilEquipo");
 const e_estadoEquipo = document.getElementById("estadoEquipo");
 const e_tipoLocalEquipo = document.getElementById("tipoLocalEquipo");
 const e_idFaseEquipo = document.getElementById("idFaseEquipo");
@@ -5237,9 +5242,7 @@ function toggleDisabledEditarEquipo(estadoInputs) {
    let idEquipo = localStorage.getItem('idEquipo');
 
    const arrayBtnEquipo =
-      [
-         'estadoEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos'
-      ]
+      ['capacidadEquipo', 'fechaInstalacionEquipo', 'fechaCompraEquipo', 'añoGarantiaEquipo', 'añoVidaUtilEquipo', 'nombreEquipo', 'seccionEquipo', 'subseccionEquipo', 'tipoEquipo', 'jerarquiaEquipo', 'marcaEquipo', 'modeloEquipo', 'serieEquipo', 'codigoFabricanteEquipo', 'codigoInternoComprasEquipo', 'largoEquipo', 'anchoEquipo', 'altoEquipo', 'potenciaElectricaHPEquipo', 'potenciaElectricaKWEquipo', 'voltajeEquipo', 'frecuenciaEquipo', 'caudalAguaM3HEquipo', 'caudalAguaGPHEquipo', 'cargaMCAEquipo', 'PotenciaEnergeticaFrioKWEquipo', 'potenciaEnergeticaFrioTREquipo', 'potenciaEnergeticaCalorKCALEquipo', 'caudalAireM3HEquipo', 'caudalAireCFMEquipo', 'estadoEquipo', 'idFaseEquipo', 'tipoLocalEquipo', 'dataOpcionesEquipos']
 
    arrayBtnEquipo.forEach(element => {
       if (estadoInputs == 1) {
@@ -5281,6 +5284,11 @@ function cancelarInformacionEquipo(idEquipo) {
    fetch(URL)
       .then(array => array.json())
       .then(array => {
+         e_capacidadEquipo.value = '';
+         e_fechaInstalacionEquipo.value = '';
+         e_fechaCompraEquipo.value = '';
+         e_añoGarantiaEquipo.value = '';
+         e_añoVidaUtilEquipo.value = '';
          e_nombreEquipo.value = '';
          e_estadoEquipo.value = '';
          e_tipoLocalEquipo.value = '';
@@ -5327,6 +5335,11 @@ function cancelarInformacionEquipo(idEquipo) {
             e_jerarquiaEquipo.value = array.jerarquia;
             e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
+            e_fechaInstalacionEquipo.value = array.fechaInstalacion;
+            e_fechaCompraEquipo.value = array.fechaCompra;
+            e_añoGarantiaEquipo.value = array.añoGarantia;
+            e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+
             e_marcaEquipo.value = array.idMarca;
             e_modeloEquipo.value = array.modelo;
             e_serieEquipo.value = array.serie;
@@ -5342,6 +5355,7 @@ function cancelarInformacionEquipo(idEquipo) {
             e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
             e_voltajeEquipo.value = array.voltaje_v;
             e_frecuenciaEquipo.value = array.frecuencia_hz;
+            e_capacidadEquipo.value = array.capacidad;
 
             e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
             e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
@@ -5359,6 +5373,11 @@ function cancelarInformacionEquipo(idEquipo) {
       })
       .catch(function (err) {
          fetch(APIERROR + err);
+         e_fechaInstalacionEquipo.value = '';
+         e_fechaCompraEquipo.value = '';
+         e_añoGarantiaEquipo.value = '';
+         e_añoVidaUtilEquipo.value = '';
+         e_capacidadEquipo.value = '';
          e_nombreEquipo.value = '';
          e_estadoEquipo.value = '';
          e_tipoLocalEquipo.value = '';
@@ -5403,6 +5422,11 @@ function actualizarEquipo(idEquipo) {
 
    const data = new FormData()
    data.append('idEquipo', idEquipo);
+   data.append('fechaInstalacion', e_fechaInstalacionEquipo.value);
+   data.append('fechaCompra', e_fechaCompraEquipo.value);
+   data.append('añoGarantia', e_añoGarantiaEquipo.value);
+   data.append('añoVidaUtil', e_añoVidaUtilEquipo.value);
+   data.append('capacidad', e_capacidadEquipo.value);
    data.append('equipo', e_nombreEquipo.value);
    data.append('status', e_estadoEquipo.value);
    data.append('localEquipo', e_tipoLocalEquipo.value);
@@ -5589,6 +5613,11 @@ function informacionEquipo(idEquipo) {
                e_jerarquiaEquipo.value = array.jerarquia;
                e_dataOpcionesEquipos.value = array.idEquipoPrincipal;
 
+               e_fechaInstalacionEquipo.value = array.fechaInstalacion;
+               e_fechaCompraEquipo.value = array.fechaCompra;
+               e_añoGarantiaEquipo.value = array.añoGarantia;
+               e_añoVidaUtilEquipo.value = array.añoVidaUtil;
+
                e_marcaEquipo.value = array.idMarca;
                e_modeloEquipo.value = array.modelo;
                e_serieEquipo.value = array.serie;
@@ -5604,6 +5633,7 @@ function informacionEquipo(idEquipo) {
                e_potenciaElectricaKWEquipo.value = array.potencia_electrica_kw;
                e_voltajeEquipo.value = array.voltaje_v;
                e_frecuenciaEquipo.value = array.frecuencia_hz;
+               e_capacidadEquipo.value = array.capacidad;
 
                e_caudalAguaM3HEquipo.value = array.caudal_agua_m3h;
                e_caudalAguaGPHEquipo.value = array.caudal_agua_gph;
@@ -5638,6 +5668,11 @@ function informacionEquipo(idEquipo) {
          .catch(function (err) {
             fetch(APIERROR + err);
             e_nombreEquipo.value = '';
+            e_capacidadEquipo.value = '';
+            e_fechaInstalacionEquipo.value = '';
+            e_fechaCompraEquipo.value = '';
+            e_añoGarantiaEquipo.value = '';
+            e_añoVidaUtilEquipo.value = '';
             e_estadoEquipo.value = '';
             e_tipoLocalEquipo.value = '';
             e_idFaseEquipo.value = '';
@@ -5693,52 +5728,43 @@ const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
          if (array) {
             for (let x = 0; x < array.length; x++) {
                const idItem = array[x].idItem;
-               const destino = array[x].destino;
-               const categoria = array[x].categoria;
                const cod2bend = array[x].cod2bend;
                const descripcion = array[x].descripcion;
+               const sstt = array[x].sstt;
                const caracteristicas = array[x].caracteristicas;
                const marca = array[x].marca;
-               const unidad = array[x].unidad;
+               const modelo = array[x].modelo;
                const cantidad = array[x].cantidad;
 
                const codigo = `
                   <tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal">
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-8">
-                           <h1 class="truncate">${destino}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${cod2bend}">
+                           <h1 class="truncate w-auto">${cod2bend}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${categoria}">
-                           <h1 class="truncate w-12">${categoria}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${descripcion}">
+                           <h1 class="truncate w-auto">${descripcion}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${cod2bend}">
-                           <h1 class="truncate w-12">${cod2bend}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${sstt}">
+                           <h1 class="truncate w-auto">${sstt}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16" data-title-material="">
-                           <h1 class="truncate w-16"></h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${caracteristicas}">
+                           <h1 class="truncate w-auto">${caracteristicas}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-40" data-title-material="${descripcion}">
-                           <h1 class="truncate w-40">${descripcion}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${marca}">
+                           <h1 class="truncate w-auto">${marca}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-24" data-title-material="${caracteristicas}">
-                           <h1 class="truncate w-24">${caracteristicas}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-auto" data-title-material="${modelo}">
+                           <h1 class="truncate w-auto">${modelo}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12" data-title-material="${marca}">
-                           <h1 class="truncate w-12">${marca}</h1>
-                     </td>
-
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-10" data-title-material="${unidad}">
-                           <h1 class="truncate w-10">${unidad}</h1>
-                     </td>
-
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16">
-                        <div class="w-16">
-                           <input id="item_material_equipo_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 w-16 rounded-md text-sm focus:outline-none" type="text" placeholder="Cantidad" min="1" value="${cantidad}" autocomplete="off" onkeyup="asignarMaterialEquipo(${idItem},${idEquipo}, '${tipoAsignacion}')">
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-12">
+                        <div class="w-12">
+                           <input id="item_material_equipo_${idItem}" class="border border-gray-200 bg-indigo-200 text-indigo-600 font-semibold text-center h-8 w-12 rounded-md text-sm focus:outline-none" type="text" placeholder="Cantidad" min="0" value="${cantidad}" autocomplete="off" onchange="asignarMaterialEquipo(${idItem}, ${idEquipo}, '${tipoAsignacion}')">
                         </div>
                      </td>
                   </tr>               

@@ -2123,9 +2123,13 @@ if (isset($_GET['action'])) {
                 $caudal_aire_cfm = $x['caudal_aire_cfm'];
                 $coste = $x['coste'];
                 $id_fases = $x['id_fases'];
+                $capacidad = $x['capacidad'];
+                $fechaInstalacion = $x['fecha_instalacion'];
+                $fechaCompra = $x['fecha_compra'];
+                $añoGarantia = $x['años_garantia'];
+                $añoVidaUtil = $x['años_vida_util'];
                 $status = $x['status'];
                 $activo = $x['activo'];
-
 
                 $array = array(
                     "idEquipo" => intval($id),
@@ -2170,6 +2174,11 @@ if (isset($_GET['action'])) {
                     "caudal_aire_cfm" => $caudal_aire_cfm,
                     "coste" => $coste,
                     "idFases" => $id_fases,
+                    "capacidad" => $capacidad,
+                    "fechaInstalacion" => $fechaInstalacion,
+                    "fechaCompra" => $fechaCompra,
+                    "añoGarantia" => $añoGarantia,
+                    "añoVidaUtil" => $añoVidaUtil,
                     "status" => $status,
                     "activo" => intval($activo)
                 );
@@ -2212,6 +2221,11 @@ if (isset($_GET['action'])) {
         $potencia_energetica_calor_kcal = $_POST['potencia_energetica_calor_kcal'];
         $caudal_aire_m3h = $_POST['caudal_aire_m3h'];
         $caudal_aire_cfm = $_POST['caudal_aire_cfm'];
+        $capacidad = $_POST['capacidad'];
+        $fechaInstalacion = $_POST['fechaInstalacion'];
+        $fechaCompra = $_POST['fechaCompra'];
+        $añoGarantia = $_POST['añoGarantia'];
+        $añoVidaUtil = $_POST['añoVidaUtil'];
 
         $resp = 0;
 
@@ -2224,39 +2238,44 @@ if (isset($_GET['action'])) {
         }
 
         $query = "UPDATE t_equipos_america SET 
-                id_equipo_principal = '$idEquipoPrincipal',
-                equipo = '$equipo',
-                cantidad = '$cantidad',
-                serie = '$serie',
-                id_seccion = '$idSeccion',
-                id_subseccion = '$idSubseccion',
-                id_tipo = '$idTipo',
-                local_equipo = '$localEquipo',
-                jerarquia = '$jerarquia',
-                id_marca = '$idMarca',
-                modelo = '$modelo',
-                numero_serie = '$serie',
-                codigo_fabricante = '$codigoFabricante',
-                codigo_interno_compras = '$codigoInternoCompras',
-                largo_cm = '$largo_cm',
-                ancho_cm = '$ancho_cm',
-                alto_cm = '$alto_cm',
-                potencia_electrica_hp = '$potencia_electrica_hp',
-                potencia_electrica_kw = '$potencia_electrica_kw',
-                voltaje_v = '$voltaje_v',
-                frecuencia_hz = '$frecuencia_hz',
-                caudal_agua_m3h = '$caudal_agua_m3h',
-                caudal_agua_gph = '$caudal_agua_gph',
-                carga_mca = '$carga_mca',
-                potencia_energetica_frio_kw = '$potencia_energetica_frio_kw',
-                potencia_energetica_frio_tr = '$potencia_energetica_frio_tr',
-                potencia_energetica_calor_kcal = '$potencia_energetica_calor_kcal',
-                caudal_aire_m3h = '$caudal_aire_m3h',
-                caudal_aire_cfm = '$caudal_aire_cfm',
-                id_fases = '$idFases',
-                status = '$status'
-        WHERE id = $idEquipo";
-
+            id_equipo_principal = '$idEquipoPrincipal',
+            equipo = '$equipo',
+            cantidad = '$cantidad',
+            serie = '$serie',
+            id_seccion = '$idSeccion',
+            id_subseccion = '$idSubseccion',
+            id_tipo = '$idTipo',
+            local_equipo = '$localEquipo',
+            jerarquia = '$jerarquia',
+            id_marca = '$idMarca',
+            modelo = '$modelo',
+            numero_serie = '$serie',
+            codigo_fabricante = '$codigoFabricante',
+            codigo_interno_compras = '$codigoInternoCompras',
+            largo_cm = '$largo_cm',
+            ancho_cm = '$ancho_cm',
+            alto_cm = '$alto_cm',
+            potencia_electrica_hp = '$potencia_electrica_hp',
+            potencia_electrica_kw = '$potencia_electrica_kw',
+            voltaje_v = '$voltaje_v',
+            frecuencia_hz = '$frecuencia_hz',
+            caudal_agua_m3h = '$caudal_agua_m3h',
+            caudal_agua_gph = '$caudal_agua_gph',
+            carga_mca = '$carga_mca',
+            potencia_energetica_frio_kw = '$potencia_energetica_frio_kw',
+            potencia_energetica_frio_tr = '$potencia_energetica_frio_tr',
+            potencia_energetica_calor_kcal = '$potencia_energetica_calor_kcal',
+            caudal_aire_m3h = '$caudal_aire_m3h',
+            caudal_aire_cfm = '$caudal_aire_cfm',
+            capacidad = '$capacidad',
+            fecha_instalacion = '$fechaInstalacion',
+            fecha_compra = '$fechaCompra',
+            años_garantia = '$añoGarantia',
+            años_vida_util = '$añoVidaUtil',
+            id_fases = '$idFases',
+            status = '$status',
+            fecha_modificado = '$fechaActual'
+            WHERE id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {
             $resp = 1;
         }
