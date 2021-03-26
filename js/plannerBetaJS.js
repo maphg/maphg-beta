@@ -5696,7 +5696,6 @@ const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
                const destino = array[x].destino;
                const categoria = array[x].categoria;
                const cod2bend = array[x].cod2bend;
-               const gremio = array[x].gremio;
                const descripcion = array[x].descripcion;
                const caracteristicas = array[x].caracteristicas;
                const marca = array[x].marca;
@@ -5717,8 +5716,8 @@ const obtenerOpcionesMaterialesEquipo = (idEquipo, tipoAsignacion) => {
                            <h1 class="truncate w-12">${cod2bend}</h1>
                      </td>
 
-                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16" data-title-material="${gremio}">
-                           <h1 class="truncate w-16">${gremio}</h1>
+                     <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-16" data-title-material="">
+                           <h1 class="truncate w-16"></h1>
                      </td>
 
                      <td class="border-b border-gray-200 uppercase text-center px-2 py-1 w-40" data-title-material="${descripcion}">

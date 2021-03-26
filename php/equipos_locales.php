@@ -1175,11 +1175,10 @@ if (isset($_GET['action'])) {
         $query = "SELECT 
         t_subalmacenes_items_globales.id 'idItem', t_subalmacenes_items_globales.unidad, 
         t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
-        t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, t_subalmacenes_items_globales.marca, c_destinos.destino, bitacora_gremio.nombre_gremio
+        t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, t_subalmacenes_items_globales.marca, c_destinos.destino
         FROM t_equipos_america
         INNER JOIN t_subalmacenes_items_globales ON t_equipos_america.id_destino = t_subalmacenes_items_globales.id_destino
         INNER JOIN c_destinos ON t_equipos_america.id_destino = c_destinos.id
-        INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
         WHERE t_subalmacenes_items_globales.activo = 1 and t_equipos_america.id = $idEquipo";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -1191,7 +1190,6 @@ if (isset($_GET['action'])) {
                 $caracteristicas = $x['caracteristicas'];
                 $marca = $x['marca'];
                 $unidad = $x['unidad'];
-                $gremio = $x['nombre_gremio'];
 
                 $cantidad = 0;
                 $query = "SELECT cantidad FROM t_equipos_materiales WHERE id_equipo = $idEquipo and id_item_global = $idItem and tipo_asignacion = '$tipoAsignacion' and activo = 1";
@@ -1205,7 +1203,6 @@ if (isset($_GET['action'])) {
                     "destino" => $destino,
                     "categoria" => $categoria,
                     "cod2bend" => $cod2bend,
-                    "gremio" => $gremio,
                     "descripcion" => $descripcion,
                     "caracteristicas" => $caracteristicas,
                     "marca" => $marca,
