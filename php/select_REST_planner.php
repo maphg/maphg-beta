@@ -5114,7 +5114,7 @@ if (isset($_GET['action'])) {
         $fechaInicio = $_GET['fechaInicio'];
         $fechaFin = $_GET['fechaFin'];
         $array['Fecha'] = $fechaInicio . " - " . $fechaFin;
-        
+
         $query = "SELECT id, destino FROM c_destinos";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -5122,7 +5122,8 @@ if (isset($_GET['action'])) {
                 $destino = $x['destino'];
 
                 #HISTORICO
-                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino";
+                $query = "SELECT count(id) 'total' FROM t_mc 
+                WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino";
                 $total = 0;
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
@@ -5130,26 +5131,135 @@ if (isset($_GET['action'])) {
                         $array['Incidencias Historico'][$destino] = $total;
                     }
                 }
+                $query = "SELECT count(id) 'total' FROM t_mp_np 
+                WHERE activo = 1 and id_equipo = 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Incidencias Historico'][$destino] = $total;
+
 
                 #SOLUCIONADO ESTA SEMANA
-                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
                 $total = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc 
+                WHERE activo = 1 and id_equipo > 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $total = $x['total'];
-                        $array['Incidencias Pendiente Semanal'][$destino] = $total;
                     }
                 }
+                $query = "SELECT count(id) 'total' FROM t_mp_np 
+                WHERE activo = 1 and id_equipo = 0 and status IN('PENDIENTE', 'N', 'P') and id_destino = $idDestino and fecha BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Incidencias Pendiente Semanal'][$destino] = $total;
+
 
                 #PENDIENTE ESTA SEMANA
-                $query = "SELECT count(id) 'total' FROM t_mc WHERE activo = 1 and id_equipo > 0 and status IN('SOLUCIONADO', 'F', 'FINALIZADO') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
                 $total = 0;
+                $query = "SELECT count(id) 'total' FROM t_mc 
+                WHERE activo = 1 and id_equipo > 0 and status IN('SOLUCIONADO', 'F', 'FINALIZADO') and id_destino = $idDestino and fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $total = $x['total'];
-                        $array['Incidencias Solucionado Semanal'][$destino] = $total;
                     }
                 }
+                $query = "SELECT count(id) 'total' FROM t_mp_np 
+                WHERE activo = 1 and id_equipo = 0 and status IN('SOLUCIONADO', 'F', 'FINALIZADO') and id_destino = $idDestino and fecha BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Incidencias Solucionado Semanal'][$destino] = $total;
+
+
+                #PREVENTIVOS HISTORICO
+                $total = 0;
+                $query = "SELECT count(mp.id) 'total' 
+                FROM t_mp_planificacion_iniciada AS mp 
+                INNER JOIN t_equipos_america ON mp.id_equipo = t_equipos_america.id
+                WHERE mp.activo = 1 and mp.status = 'PROCESO' and t_equipos_america.id_destino = $idDestino";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Preventivos Historico'][$destino] = $total;
+
+                #SOLUCIONADOS ESTA SEMANA
+                $total = 0;
+                $query = "SELECT count(mp.id) 'total' 
+                FROM t_mp_planificacion_iniciada AS mp 
+                INNER JOIN t_equipos_america ON mp.id_equipo = t_equipos_america.id
+                WHERE mp.activo = 1 and mp.status = 'PROCESO' and t_equipos_america.id_destino = $idDestino and mp.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Preventivos Pendientes Semanal'][$destino] = $total;
+
+                #SOLUCIONADOS ESTA SEMANA
+                $total = 0;
+                $query = "SELECT count(mp.id) 'total' 
+                FROM t_mp_planificacion_iniciada AS mp 
+                INNER JOIN t_equipos_america ON mp.id_equipo = t_equipos_america.id
+                WHERE mp.activo = 1 and mp.status = 'SOLUCIONADO' and t_equipos_america.id_destino = $idDestino and mp.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['Preventivos Solucionado Semanal'][$destino] = $total;
+
+
+                #PDA HISTORICO
+                $total = 0;
+                $query = "SELECT count(pda.id) 'total' 
+                FROM t_proyectos_planaccion AS pda 
+                INNER JOIN t_proyectos ON pda.id_proyecto = t_proyectos.id
+                WHERE t_proyectos.activo = 1 and pda.activo = 1 and t_proyectos.status IN('PENDIENTE', 'N') and 
+                pda.status IN('PENDIENTE', 'N') and t_proyectos.id_destino = $idDestino";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['PDA Historico'][$destino] = $total;
+
+                #PDA SOLUCIONADO SEMANAL
+                $total = 0;
+                $query = "SELECT count(pda.id) 'total' 
+                FROM t_proyectos_planaccion AS pda 
+                INNER JOIN t_proyectos ON pda.id_proyecto = t_proyectos.id
+                WHERE t_proyectos.activo = 1 and pda.activo = 1 and t_proyectos.status IN('PENDIENTE', 'N') and 
+                pda.status IN('PENDIENTE', 'N') and t_proyectos.id_destino = $idDestino and pda.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['PDA PENDIENTE SEMANAL'][$destino] = $total;
+
+                #PDA SOLUCIONADO SEMANAL
+                $total = 0;
+                $query = "SELECT count(pda.id) 'total' 
+                FROM t_proyectos_planaccion AS pda 
+                INNER JOIN t_proyectos ON pda.id_proyecto = t_proyectos.id
+                WHERE t_proyectos.activo = 1 and pda.activo = 1 and t_proyectos.status IN('SOLUCIONADO', 'F') and 
+                pda.status IN('PENDIENTE', 'N') and t_proyectos.id_destino = $idDestino and pda.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total += $x['total'];
+                    }
+                }
+                $array['PDA SOLUCIONADO SEMANAL'][$destino] = $total;
             }
         }
         echo json_encode($array);
