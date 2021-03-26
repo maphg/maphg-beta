@@ -467,13 +467,11 @@ if (isset($_POST['action'])) {
         t_subalmacenes_items_globales.categoria, t_subalmacenes_items_globales.cod2bend, 
         t_subalmacenes_items_globales.descripcion_cod2bend, t_subalmacenes_items_globales.caracteristicas, 
         t_subalmacenes_items_globales.marca,
-        t_subalmacenes_items_stock.id 'idItem',
-        bitacora_gremio.nombre_gremio
+        t_subalmacenes_items_stock.id 'idItem'
         FROM t_subalmacenes
         INNER JOIN c_destinos ON t_subalmacenes.id_destino = c_destinos.id
         INNER JOIN t_subalmacenes_items_stock ON t_subalmacenes.id = t_subalmacenes_items_stock.id_subalmacen
         INNER JOIN t_subalmacenes_items_globales ON t_subalmacenes_items_stock.id_item_global = t_subalmacenes_items_globales.id
-        INNER JOIN bitacora_gremio ON t_subalmacenes_items_globales.id_gremio = bitacora_gremio.id
         WHERE  t_subalmacenes.activo = 1 AND t_subalmacenes.id_destino = $idDestino $palabraBuscar";
 
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -483,7 +481,7 @@ if (isset($_POST['action'])) {
                 $nombre = $i['nombre'];
                 $categoria = $i['categoria'];
                 $cod2bend = $i['cod2bend'];
-                $gremio = $i['nombre_gremio'];
+                $gremio = "";
                 $descripcion = $i['descripcion_cod2bend'];
                 $caracteristicas = $i['caracteristicas'];
                 $marca = $i['marca'];
@@ -497,7 +495,6 @@ if (isset($_POST['action'])) {
                         $valor = $i['cantidad_material'];
                     }
                 }
-
 
                 $dataMateriales .= "
                     <div class=\"mt-1 w-full flex flex-row justify-center items-center font-bold text-xs h-8 text-bluegray-500 bg-bluegray-50 rounded hover:bg-indigo-100 cursor-pointer\">
