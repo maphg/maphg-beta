@@ -5252,7 +5252,7 @@ if (isset($_GET['action'])) {
                 FROM t_proyectos_planaccion AS pda 
                 INNER JOIN t_proyectos ON pda.id_proyecto = t_proyectos.id
                 WHERE t_proyectos.activo = 1 and pda.activo = 1 and t_proyectos.status IN('SOLUCIONADO', 'F') and 
-                pda.status IN('PENDIENTE', 'N') and t_proyectos.id_destino = $idDestino and pda.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
+                pda.status IN('SOLUCIONADO', 'F') and t_proyectos.id_destino = $idDestino and pda.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin'";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $total += $x['total'];
