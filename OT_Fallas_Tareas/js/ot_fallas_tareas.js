@@ -1,6 +1,8 @@
 // API PARA REPORTE DE ERRORES
 const APIERROR = 'https://api.telegram.org/bot1396322757:AAF5C0bcZxR8_mEEtm3BFEJGhgHvLcE3X_E/sendMessage?chat_id=989320528&text=Error: ';
 
+const asignadoA = document.querySelector('#asignadoA');
+const mediaOT = document.querySelector('#mediaOT');
 
 function validarOT() {
     let URL = window.location.hash;
@@ -28,8 +30,14 @@ function generarOT(idOT, tipo) {
 
     const action = "generarOT";
     const URL = `php/ot_fallas_tareas.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&tipo=${tipo}`;
+
     fetch(URL)
         .then((array) => array.json())
+        .then(array => {
+            asignadoA.innerHTML = 'NOMBRE Y FIRMA';
+            mediaOT.innerHTML = '';
+            return array;
+        })
         .then(array => {
             if (array) {
                 let tipo = '';
@@ -65,6 +73,20 @@ function generarOT(idOT, tipo) {
 
                 document.getElementById("statusOT").innerHTML = array.datos.status;
                 document.getElementById("statusOT").classList.add('bg-red');
+
+                asignadoA.innerHTML = array.datos.responsable;
+
+                if (array.datos.adjuntos) {
+                    for (let x = 0; x < array.datos.adjuntos.length; x++) {
+                        const idAdjunto = array.datos.adjuntos[x].idAdjunto;
+                        const url = array.datos.adjuntos[x].url;
+                        const tipo = array.datos.adjuntos[x].tipo;
+                        const codigo = `<img src="${url}" class="w-32 h-32 p-1">`;
+                        if (tipo == "png" || tipo == "jpeg" || tipo == "gif" || tipo == "jpg") {
+                            mediaOT.insertAdjacentHTML('beforeend', codigo);
+                        }
+                    }
+                }
 
                 if (array.actividades) {
                     for (let x = 0; x < array.actividades.length; x++) {
@@ -102,6 +124,8 @@ function generarOT(idOT, tipo) {
 
         })
         .catch(function (err) {
+            mediaOT.innerHTML = '';
+            asignadoA.innerHTML = 'NOMBRE Y FIRMA';
             alertaImg('No se Encontro OT #' + idOT, '', 'success', 1500);
             fetch(APIERROR + err + ` generarOT(${idOT}, ${tipo})`);
         })
