@@ -7287,6 +7287,7 @@ function obtenerOTDigital(idEquipo, semanaX, idPlan) {
    fetch(URL)
       .then(res => res.json())
       .then(array => {
+         console.log(array);
          let idOT = array[0].OT;
          document.getElementById("numeroOT").innerHTML = idOT;
          localStorage.setItem('idOT', idOT);
@@ -7304,7 +7305,6 @@ function obtenerOTDigital(idEquipo, semanaX, idPlan) {
          document.getElementById("semanaOT").innerHTML = array[0].semana;
          document.getElementById("comentarioOT").value = array[0].comentario;
          document.getElementById("tipoOT").innerHTML = array[0].tipoPlan;
-
 
          // Actividades OT
          var actividades = '';
