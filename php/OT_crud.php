@@ -78,16 +78,17 @@ if (isset($_GET['action'])) {
         $actividades = array();
         $adjuntos = array();
 
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.id_responsables, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.semana, t_mp_planificacion_iniciada.comentario, t_mp_planes_mantenimiento.id 'id_plan', t_mp_planes_mantenimiento.tipo_plan, t_mp_planificacion_iniciada.actividades_extra
-        FROM t_mp_planificacion_iniciada 
-        INNER JOIN t_mp_planes_mantenimiento ON t_mp_planificacion_iniciada.id_plan = t_mp_planes_mantenimiento.id
-        WHERE t_mp_planificacion_iniciada.id_plan = $idPlan and t_mp_planificacion_iniciada.id_equipo = $idEquipo and t_mp_planificacion_iniciada.semana = $semanaX and t_mp_planificacion_iniciada.activo = 1 and t_mp_planificacion_iniciada.año = $añoActual and t_mp_planificacion_iniciada.status IN('SOLUCIONADO', 'PROCESO')";
+        $query = "SELECT mp.id, mp.id_responsables, mp.status, mp.semana, mp.comentario, t_mp_planes_mantenimiento.id 'id_plan', t_mp_planes_mantenimiento.tipo_plan, mp.actividades_extra, mp.fecha_programada
+        FROM t_mp_planificacion_iniciada as mp
+        INNER JOIN t_mp_planes_mantenimiento ON mp.id_plan = t_mp_planes_mantenimiento.id
+        WHERE mp.id_plan = $idPlan and mp.id_equipo = $idEquipo and mp.semana = $semanaX and mp.activo = 1 and mp.año = $añoActual and mp.status IN('SOLUCIONADO', 'PROCESO')";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $i) {
                 $idOT = $i['id'];
                 $idPlan = $i['id_plan'];
                 $statusOT = $i['status'];
                 $semana = $i['semana'];
+                $fechaProgramada = $i['fecha_programada'];
                 $comentario = $i['comentario'];
                 $tipoPlan = $i['tipo_plan'];
                 $idResponsables = $i['id_responsables'];
@@ -157,6 +158,7 @@ if (isset($_GET['action'])) {
                     "OT" => "$idOT",
                     "statusOT" => "$statusOT",
                     "semana" => "Semana $semana",
+                    "fechaProgramada" => $fechaProgramada,
                     "observacion" => "$idOT",
                     "comentario" => "$comentario",
                     "tipoPlan" => "OT $tipoPlan",
@@ -693,5 +695,20 @@ if (isset($_GET['action'])) {
             }
             echo json_encode($array);
         }
+    }
+
+
+    #ACTUALIZA FECHA EN OT
+    if ($action == "actualizarFechaOT") {
+        $idOT = $_GET['idOT'];
+        $fecha = $_GET['fecha'];
+        $resp = 0;
+
+        $query = "UPDATE t_mp_planificacion_iniciada SET fecha_programada = '$fecha' 
+        WHERE id = $idOT";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
     }
 }

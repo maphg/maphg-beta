@@ -110,6 +110,7 @@ const selectMoverSeccion = document.getElementById("selectMoverSeccion");
 const selectMoverSubseccion = document.getElementById("selectMoverSubseccion");
 const selectMoverEquipo = document.getElementById("selectMoverEquipo");
 const selectMoverProyecto = document.getElementById("selectMoverProyecto");
+const fechaOT = document.getElementById("fechaOT");
 
 // ELEMENTOS <INPUTS> ID
 
@@ -7282,15 +7283,29 @@ function obtenerOTDigital(idEquipo, semanaX, idPlan) {
    document.getElementById("tooltipMP").classList.add('hidden');
    let idDestino = localStorage.getItem('idDestino');
    let idUsuario = localStorage.getItem('usuario');
+
    const action = "obtenerOTDigital";
    const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idEquipo=${idEquipo}&semanaX=${semanaX}&idPlan=${idPlan}`;
+
    fetch(URL)
       .then(res => res.json())
       .then(array => {
-         console.log(array);
+         fechaOT.value = '';
+         document.getElementById("actividadesOT").innerHTML = '';
+         document.getElementById("semanaOT").innerHTML = '';
+         document.getElementById("comentarioOT").value = '';
+         document.getElementById("inputActividadesExtra").value = '';
+         document.getElementById("tipoOT").innerHTML = '';
+         return array;
+      })
+      .then(array => {
          let idOT = array[0].OT;
          document.getElementById("numeroOT").innerHTML = idOT;
          localStorage.setItem('idOT', idOT);
+
+         fechaOT.setAttribute('onchange', `actualizarFechaOT(${array[0].OT})`)
+
+         fechaOT.value = array[0].fechaProgramada;
 
          // Status de la OT
          document.getElementById("statusOT").innerHTML = array[0].statusOT;
@@ -7385,7 +7400,43 @@ function obtenerOTDigital(idEquipo, semanaX, idPlan) {
          // Funciones Complementarias Secunadarias
          consultarActividadRealizadaOT(idOT);
          consultaResponsablesOT(idOT);
-      });
+      })
+      .catch(err => {
+         localStorage.setItem('idOT', 0);
+         fechaOT.value = '';
+         document.getElementById("actividadesOT").innerHTML = '';
+         document.getElementById("semanaOT").innerHTML = '';
+         document.getElementById("comentarioOT").value = '';
+         document.getElementById("inputActividadesExtra").value = '';
+         document.getElementById("tipoOT").innerHTML = '';
+         fechaOT.removeAttribute('onchange');
+      })
+}
+
+
+const actualizarFechaOT = idOT => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "actualizarFechaOT";
+   const URL = `php/OT_crud.php?action=${action}&idUsuario=${idUsuario}&idDestino=${idDestino}&idOT=${idOT}&fecha=${fechaOT.value}`;
+
+   if (fechaOT.value.replace('^\d{ 4}([\-/.])(0?[1-9]|1[1-2])\1(3[01]|[12][0-9]|0?[1-9])$')) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            if (array == 1) {
+               alertaImg('Fecha de OT, Actualizada', '', 'success', 1500);
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Fecha NO Valida', '', 'info', 1500);
+   }
 }
 
 // Indicador de Semana actual para los MP
