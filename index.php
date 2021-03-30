@@ -2791,14 +2791,23 @@
             <div class="p-2 flex justify-center items-center flex-col w-full">
                 <!-- Contenedor de los equipos y locales(Tabla) -->
 
-                <div class="flex items-center justify-center w-full">
+                <div class="flex items-center justify-center w-full pt-1">
                     <div class="w-full flex">
-                        <div class="w-1/2 text-sm px-2 flex flex-col">
-                            <h1 class="mb-1">Fecha</h1>
-                            <div class="flex flex-wrap w-full justify-start items-center">
+                        <div class="w-1/2 text-sm px-2 flex flex-row">
+                            <div>
+                                <h1 class="mb-1">Fecha</h1>
+                                <div class="flex flex-wrap w-full justify-start items-center">
 
-                                <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
-                                    <h1 id="semanaOT">Semana 8</h1>
+                                    <div class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
+                                        <h1 id="semanaOT">Semana 8</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ml-10">
+                                <h1 class="mb-1">Programar para:</h1>
+                                <div class="flex flex-wrap w-full justify-start items-center">
+                                    <input type="date" id="fechaOT" class="bg-purple-200 text-purple-700 px-2 rounded-full flex items-center mr-2">
                                 </div>
                             </div>
                         </div>
