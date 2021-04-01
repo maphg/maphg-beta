@@ -129,8 +129,9 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
-                $array[$idDestino][$seccion]['detalle'] = array(
+                $array[$idDestino][$idSeccion]['detalle'] = array(
                     "destino" => $destino,
+                    "seccion" => $seccion,
                     "totalIncidencias" => intval($totalIncidencias),
                     "totalIncidenciasPendientes" => intval($pendientes),
                     "totalIncidenciasSolucionados" => intval($solucionados),
