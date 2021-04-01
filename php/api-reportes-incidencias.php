@@ -59,7 +59,7 @@ if (isset($_GET['action'])) {
                 #INCIDENCIA EQUIPOS
                 $query = "SELECT id, actividad, fecha_creacion, fecha_realizado, status FROM t_mc
                 WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
-                (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin'))";
+                (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin')) and id_equipo > 0";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
                         $totalIncidencias++;
@@ -125,9 +125,188 @@ if (isset($_GET['action'])) {
                 #INCIDENCIA GENERAL
                 $query = "SELECT id, titulo, fecha, fecha_finalizado, status 
                 FROM t_mp_np
-                WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
-                (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin'))";
+                WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha BETWEEN '$fechaInicio' and '$fechaFin') OR 
+                (fecha_finalizado BETWEEN '$fechaInicio' and '$fechaFin')) and id_equipo = 0";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalIncidencias++;
+                        $idActividad = $x['id'];
+                        $actividad = $x['titulo'];
+                        $fechaCreacion = (new DateTime($x['fecha']))->format('Y-m-d H:m:s');
+                        $fechaRealizado = $x['fecha_finalizado'];
+                        $status = $x['status'];
+                        $tiempoPendiente = 0;
+                        $tiempoSolucionado = 0;
 
+                        #OBTIENE TIEMPOS EN HORAS
+                        $horasCreacion = strtotime($fechaCreacion);
+                        $horasSolucionado = strtotime($fechaRealizado);
+                        $horasActual = strtotime($fechaActual);
+
+                        $query = "SELECT count(id) 'total' FROM comentarios_mp_np 
+                        WHERE id_mp_np = $idActividad and activo = 1";
+                        if ($result = mysqli_query($conn_2020, $query)) {
+                            foreach ($result as $x) {
+                                $totalComentarios += intval($x['total']);
+                            }
+                        }
+
+                        if ($status == "PENDIENTE" || $status == "N") {
+                            $pendientes++;
+
+                            if ($horasActual > 0 && $horasCreacion > 0) {
+                                $tiempoPendiente = ($horasActual - $horasCreacion) / 3600;
+                                $horasPentientesGlobal += $tiempoPendiente;
+                            }
+
+
+                            $resultado['PENDIENTE'][] = array(
+                                "idOT" => intval($idActividad),
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaFinalizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
+                                "status" => "PENDIENTE"
+                            );
+                        } else {
+                            $solucionados++;
+
+                            if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                $tiempoSolucionado = ($horasSolucionado - $horasCreacion) / 3600;
+                                $horasSolucionadosGlobal += $tiempoSolucionado;
+                            }
+
+                            $resultado['SOLUCIONADO'][] = array(
+                                "idOT" => intval($idActividad),
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaFinalizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
+                                "status" => "SOLUCIONADO"
+                            );
+                        }
+                    }
+                }
+
+
+                #PREVENTIVOS
+                $query = "SELECT mp.id, mp.fecha_creacion, mp.fecha_finalizado, mp.status 
+                FROM t_mp_planificacion_iniciada AS mp
+                INNER JOIN t_equipos_america AS e ON mp.id_equipo = e.id
+                WHERE e.id_destino = $idDestino and e.id_seccion = $idSeccion and e.activo = 1 and mp.activo = 1 and
+                ((mp.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
+                (mp.fecha_finalizado BETWEEN '$fechaInicio' and '$fechaFin'))";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalIncidencias++;
+                        $idOT = $x['id'];
+                        $actividad = "PREVENTIVO";
+                        $fechaCreacion = $x['fecha_creacion'];
+                        $fechaRealizado = $x['fecha_finalizado'];
+                        $status = $x['status'];
+                        $tiempoPendiente = 0;
+                        $tiempoSolucionado = 0;
+
+                        #OBTIENE TIEMPOS EN HORAS
+                        $horasCreacion = strtotime($fechaCreacion);
+                        $horasSolucionado = strtotime($fechaRealizado);
+                        $horasActual = strtotime($fechaActual);
+
+                        if ($status == "PROCESO") {
+                            $pendientes++;
+
+                            if ($horasActual > 0 && $horasCreacion > 0) {
+                                $tiempoPendiente = ($horasActual - $horasCreacion) / 3600;
+                                $horasPentientesGlobal += $tiempoPendiente;
+                            }
+
+                            $resultado['PENDIENTE'][] = array(
+                                "idOT" => $idOT,
+                                "actividadidOT" => $actividad,
+                                "fechaCreacionidOT" => $fechaCreacion,
+                                "fechaRealizadoidOT" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
+                                "status" => "PENDIENTE"
+                            );
+                        } else {
+                            $solucionados++;
+
+                            if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                $tiempoSolucionado = ($horasSolucionado - $horasCreacion) / 3600;
+                                $horasSolucionadosGlobal += $tiempoSolucionado;
+                            }
+
+                            $resultado['SOLUCIONADO'][] = array(
+                                "idOT" => $idOT,
+                                "actividadidOT" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaRealizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
+                                "status" => "SOLUCIONADO"
+                            );
+                        }
+                    }
+                }
+
+
+                #PDA
+                $query = "SELECT pda.id, pda.actividad, pda.fecha_creacion, pda.fecha_realizado, pda.status 
+                FROM t_proyectos AS p
+                INNER JOIN t_proyectos_planaccion AS pda ON pda.id_proyecto = p.id
+                WHERE p.id_destino = $idDestino and p.id_seccion = $idSeccion and p.activo = 1 and pda.activo = 1 and
+                ((pda.fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
+                (pda.fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin'))";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $totalIncidencias++;
+                        $idOT = $x['id'];
+                        $actividad = $x['actividad'];
+                        $fechaCreacion = $x['fecha_creacion'];
+                        $fechaRealizado = $x['fecha_realizado'];
+                        $status = $x['status'];
+                        $tiempoPendiente = 0;
+                        $tiempoSolucionado = 0;
+
+                        #OBTIENE TIEMPOS EN HORAS
+                        $horasCreacion = strtotime($fechaCreacion);
+                        $horasSolucionado = strtotime($fechaRealizado);
+                        $horasActual = strtotime($fechaActual);
+
+                        if ($status == "PENDIENTE" || $status == "N") {
+                            $pendientes++;
+
+                            if ($horasActual > 0 && $horasCreacion > 0) {
+                                $tiempoPendiente = ($horasActual - $horasCreacion) / 3600;
+                                $horasPentientesGlobal += $tiempoPendiente;
+                            }
+
+                            $resultado['PENDIENTE'][] = array(
+                                "idOT" => $idOT,
+                                "actividadidOT" => $actividad,
+                                "fechaCreacionidOT" => $fechaCreacion,
+                                "fechaRealizadoidOT" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
+                                "status" => "PENDIENTE"
+                            );
+                        } else {
+                            $solucionados++;
+
+                            if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                $tiempoSolucionado = ($horasSolucionado - $horasCreacion) / 3600;
+                                $horasSolucionadosGlobal += $tiempoSolucionado;
+                            }
+
+                            $resultado['SOLUCIONADO'][] = array(
+                                "idOT" => $idOT,
+                                "actividadidOT" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaRealizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
+                                "status" => "SOLUCIONADO"
+                            );
+                        }
+                    }
+                }
 
 
                 #MEDIA DE PENDIENTES POR HORAS
