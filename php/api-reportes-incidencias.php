@@ -129,17 +129,17 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
-                    $array[$idDestino][$seccion]['detalle'] = array(
-                        "destino" => $destino,
-                        "seccion" => $seccion,
-                        "totalIncidencias" => intval($totalIncidencias),
-                        "totalIncidenciasPendientes" => intval($pendientes),
-                        "totalIncidenciasSolucionados" => intval($solucionados),
-                        "mediaPendientes" => number_format($mediaPendientes, 2, '.', '') . " Hora(s)",
-                        "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', '') . " Hora(s)",
-                        "totalComentarios" => $totalComentarios,
-                        "resumen" => $resultado
-                    );
+                $array[$idDestino][$idSeccion] = array(
+                    "destino" => $destino,
+                    "seccion" => $seccion,
+                    "totalIncidencias" => intval($totalIncidencias),
+                    "totalIncidenciasPendientes" => intval($pendientes),
+                    "totalIncidenciasSolucionados" => intval($solucionados),
+                    "mediaPendientes" => number_format($mediaPendientes, 2, '.', '') . " Hora(s)",
+                    "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', '') . " Hora(s)",
+                    "totalComentarios" => $totalComentarios,
+                    "resumen" => $resultado
+                );
             }
         }
         echo json_encode($array);
