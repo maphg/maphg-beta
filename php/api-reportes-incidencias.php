@@ -140,7 +140,7 @@ if (isset($_GET['action'])) {
                     "totalComentarios" => $totalComentarios,
                     "resumen" => $resultado
                 );
-                $array[$idDestino][$seccion]['resumen'] = $resultado;
+                $array[$idDestino][$idSeccion]['resumen'] = $resultado;
             }
         }
         echo json_encode($array);
