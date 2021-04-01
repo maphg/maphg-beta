@@ -5,7 +5,7 @@ setlocale(LC_MONETARY, 'es_ES');
 
 // Modulo para importar la Conxión a la DB.
 include 'conexion.php';
-header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Origin: *");
 if (isset($_GET['action'])) {
 
     //Variables Globales
@@ -56,7 +56,9 @@ if (isset($_GET['action'])) {
                 $horasSolucionadosGlobal = 0;
                 $resultado = array();
 
-                $query = "SELECT id, actividad, fecha_creacion, fecha_realizado, status FROM t_mc WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
+                #INCIDENCIA EQUIPOS
+                $query = "SELECT id, actividad, fecha_creacion, fecha_realizado, status FROM t_mc
+                WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
                 (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin'))";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
@@ -96,7 +98,7 @@ if (isset($_GET['action'])) {
                                 "incidencia" => $actividad,
                                 "fechaCreacion" => $fechaCreacion,
                                 "fechaFinalizado" => $fechaRealizado,
-                                "tiempo" => number_format($tiempoPendiente, 2, '.', '') . " Hora(s)",
+                                "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
                                 "status" => "PENDIENTE"
                             );
                         } else {
@@ -112,12 +114,21 @@ if (isset($_GET['action'])) {
                                 "incidencia" => $actividad,
                                 "fechaCreacion" => $fechaCreacion,
                                 "fechaFinalizado" => $fechaRealizado,
-                                "tiempo" => number_format($tiempoSolucionado, 2, '.', '') . " Hora(s)",
+                                "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
                                 "status" => "SOLUCIONADO"
                             );
                         }
                     }
                 }
+
+
+                #INCIDENCIA GENERAL
+                $query = "SELECT id, titulo, fecha, fecha_finalizado, status 
+                FROM t_mp_np
+                WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
+                (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin'))";
+
+
 
                 #MEDIA DE PENDIENTES POR HORAS
                 if ($horasPentientesGlobal > 0 && $pendientes > 0) {
@@ -129,14 +140,14 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
-                $array[$destino][$seccion] = array(
+                $array['destinos'][$destino]['secciones'][$seccion] = array(
                     "destino" => $destino,
                     "seccion" => $seccion,
                     "totalIncidencias" => intval($totalIncidencias),
                     "totalIncidenciasPendientes" => intval($pendientes),
                     "totalIncidenciasSolucionados" => intval($solucionados),
-                    "mediaPendientes" => number_format($mediaPendientes, 2, '.', '') . " Hora(s)",
-                    "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', '') . " Hora(s)",
+                    "mediaPendientes" => number_format($mediaPendientes, 2, '.', ''),
+                    "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', ''),
                     "totalComentarios" => $totalComentarios,
                     "resumen" => $resultado
                 );
