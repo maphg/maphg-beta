@@ -92,13 +92,12 @@ if (isset($_GET['action'])) {
 
 
                             $resultado['PENDIENTE'][] = array(
-                                "OT Incidencia" => intval($idActividad),
-                                "Incidencia" => $actividad,
-                                "Fecha Creacion" => $fechaCreacion,
-                                "Fecha Actual" => $fechaActual,
-                                "Fecha Finalizado" => $fechaRealizado,
-                                "Tiempo Pendiente" => number_format($tiempoPendiente, 2, '.', '') . " Hora(s)",
-                                "Status" => "PENDIENTE"
+                                "idOT" => intval($idActividad),
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaFinalizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoPendiente, 2, '.', '') . " Hora(s)",
+                                "status" => "PENDIENTE"
                             );
                         } else {
                             $solucionados++;
@@ -109,12 +108,12 @@ if (isset($_GET['action'])) {
                             }
 
                             $resultado['SOLUCIONADO'][] = array(
-                                "OT Incidencia" => intval($idActividad),
-                                "Incidencia" => $actividad,
-                                "Fecha Creacion" => $fechaCreacion,
-                                "Fecha Finalizado" => $fechaRealizado,
-                                "Tiempo Solucionado" => number_format($tiempoSolucionado, 2, '.', '') . " Hora(s)",
-                                "Status" => "SOLUCIONADO"
+                                "idOT" => intval($idActividad),
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaFinalizado" => $fechaRealizado,
+                                "tiempo" => number_format($tiempoSolucionado, 2, '.', '') . " Hora(s)",
+                                "status" => "SOLUCIONADO"
                             );
                         }
                     }
@@ -129,14 +128,15 @@ if (isset($_GET['action'])) {
                 if ($horasSolucionadosGlobal > 0 && $solucionados > 0) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
-                $array[$destino][$seccion][] = array(
-                    "TOTAL INCIDENCIAS" => intval($totalIncidencias),
-                    "TOTAL INCIDENCIAS PENDIENTES" => intval($pendientes),
-                    "TOTAL INCIDENCIAS SOLUCIONADOS" => intval($solucionados),
-                    "MEDIA TIEMPO PENDIENTES" => number_format($mediaPendientes, 2, '.', '') . " Hora(s)",
-                    "MEDIA TIEMPO SOLUCIONADOS" => number_format($mediaSolucionados, 2, '.', '') . " Hora(s)",
-                    "TOTAL COMENTARIOS" => $totalComentarios,
-                    "RESUMEN: " => $resultado
+                $array[$idDestino][$seccion][] = array(
+                    "destino" => $destino,
+                    "totalIncidencias" => intval($totalIncidencias),
+                    "totalIncidenciasPendientes" => intval($pendientes),
+                    "totalIncidenciasSolucionados" => intval($solucionados),
+                    "mediaPendientes" => number_format($mediaPendientes, 2, '.', '') . " Hora(s)",
+                    "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', '') . " Hora(s)",
+                    "totalComentarios" => $totalComentarios,
+                    "resumen" => $resultado
                 );
             }
         }
