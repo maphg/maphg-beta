@@ -128,7 +128,8 @@ if (isset($_GET['action'])) {
                 if ($horasSolucionadosGlobal > 0 && $solucionados > 0) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
-                $array[$idDestino][$seccion][] = array(
+
+                $array[$idDestino][$seccion]['detalle'] = array(
                     "destino" => $destino,
                     "totalIncidencias" => intval($totalIncidencias),
                     "totalIncidenciasPendientes" => intval($pendientes),
@@ -138,6 +139,7 @@ if (isset($_GET['action'])) {
                     "totalComentarios" => $totalComentarios,
                     "resumen" => $resultado
                 );
+                $array[$idDestino][$seccion]['resumen'] = $resultado;
             }
         }
         echo json_encode($array);
