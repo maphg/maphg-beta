@@ -27,9 +27,6 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and c_destinos.id = $idDestino";
         }
 
-        #PERIODO
-        // $array['PERIODO'] = $fechaInicio . " - " . $fechaFin;
-
         $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_secciones.id 'idSeccion', c_secciones.seccion
         FROM c_destinos
         INNER JOIN c_rel_destino_seccion ON c_destinos.id = c_rel_destino_seccion.id_destino
@@ -55,6 +52,7 @@ if (isset($_GET['action'])) {
                 $horasPentientesGlobal = 0;
                 $horasSolucionadosGlobal = 0;
                 $resultado = array();
+
 
                 #INCIDENCIA EQUIPOS
                 $query = "SELECT id, actividad, fecha_creacion, fecha_realizado, status FROM t_mc
@@ -222,9 +220,9 @@ if (isset($_GET['action'])) {
 
                             $resultado['PENDIENTE'][] = array(
                                 "idOT" => $idOT,
-                                "actividadidOT" => $actividad,
-                                "fechaCreacionidOT" => $fechaCreacion,
-                                "fechaRealizadoidOT" => $fechaRealizado,
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaRealizado" => $fechaRealizado,
                                 "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
                                 "status" => "PENDIENTE"
                             );
@@ -238,7 +236,7 @@ if (isset($_GET['action'])) {
 
                             $resultado['SOLUCIONADO'][] = array(
                                 "idOT" => $idOT,
-                                "actividadidOT" => $actividad,
+                                "incidencia" => $actividad,
                                 "fechaCreacion" => $fechaCreacion,
                                 "fechaRealizado" => $fechaRealizado,
                                 "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
@@ -282,9 +280,9 @@ if (isset($_GET['action'])) {
 
                             $resultado['PENDIENTE'][] = array(
                                 "idOT" => $idOT,
-                                "actividadidOT" => $actividad,
-                                "fechaCreacionidOT" => $fechaCreacion,
-                                "fechaRealizadoidOT" => $fechaRealizado,
+                                "incidencia" => $actividad,
+                                "fechaCreacion" => $fechaCreacion,
+                                "fechaRealizado" => $fechaRealizado,
                                 "tiempo" => number_format($tiempoPendiente, 2, '.', ''),
                                 "status" => "PENDIENTE"
                             );
@@ -298,7 +296,7 @@ if (isset($_GET['action'])) {
 
                             $resultado['SOLUCIONADO'][] = array(
                                 "idOT" => $idOT,
-                                "actividadidOT" => $actividad,
+                                "incidencia" => $actividad,
                                 "fechaCreacion" => $fechaCreacion,
                                 "fechaRealizado" => $fechaRealizado,
                                 "tiempo" => number_format($tiempoSolucionado, 2, '.', ''),
@@ -319,17 +317,18 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
-                $array['destinos'][$destino]['secciones'][$seccion] = array(
-                    "destino" => $destino,
-                    "seccion" => $seccion,
-                    "totalIncidencias" => intval($totalIncidencias),
-                    "totalIncidenciasPendientes" => intval($pendientes),
-                    "totalIncidenciasSolucionados" => intval($solucionados),
-                    "mediaPendientes" => number_format($mediaPendientes, 2, '.', ''),
-                    "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', ''),
-                    "totalComentarios" => $totalComentarios,
-                    "resumen" => $resultado
-                );
+                $array['destino'][$destino]['seccion'][$seccion] =
+                    array(
+                        "destino" => $destino,
+                        "seccion" => $seccion,
+                        "totalIncidencias" => intval($totalIncidencias),
+                        "totalIncidenciasPendientes" => intval($pendientes),
+                        "totalIncidenciasSolucionados" => intval($solucionados),
+                        "mediaPendientes" => number_format($mediaPendientes, 2, '.', ''),
+                        "mediaSolucionados" => number_format($mediaSolucionados, 2, '.', ''),
+                        "totalComentarios" => $totalComentarios,
+                        "resumen" => $resultado
+                    );
             }
         }
         echo json_encode($array);
