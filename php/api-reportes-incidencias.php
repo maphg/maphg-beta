@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and c_destinos.id = $idDestino";
         }
 
-        $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_secciones.id 'idSeccion', c_secciones.seccion
+        $query = "SELECT c_destinos.id 'idDestino', c_destinos.destino, c_destinos.ubicacion, c_secciones.id 'idSeccion', c_secciones.seccion
         FROM c_destinos
         INNER JOIN c_rel_destino_seccion ON c_destinos.id = c_rel_destino_seccion.id_destino
         INNER JOIN c_secciones ON c_rel_destino_seccion.id_seccion = c_secciones.id
@@ -36,6 +36,7 @@ if (isset($_GET['action'])) {
             foreach ($result as $x) {
                 $idDestino = $x['idDestino'];
                 $destino = $x['destino'];
+                $ubicacion = $x['ubicacion'];
                 $idSeccion = $x['idSeccion'];
                 $seccion = $x['seccion'];
 
@@ -320,6 +321,7 @@ if (isset($_GET['action'])) {
                 $array[$destino][$seccion] =
                     array(
                         "destino" => $destino,
+                        "ubicacion" => $ubicacion,
                         "seccion" => $seccion,
                         "totalIncidencias" => intval($totalIncidencias),
                         "totalIncidenciasPendientes" => intval($pendientes),
