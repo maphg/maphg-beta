@@ -318,7 +318,6 @@ if (isset($_GET['action'])) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
-                $array[$destino]['ubicacion'] = $ubicacion;
                 $array[$destino][$seccion] =
                     array(
                         "destino" => $destino,
