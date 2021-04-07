@@ -1271,7 +1271,7 @@ if (isset($_GET['action'])) {
         if ($idDestino == 10) {
             $filtroDestino = "";
         } else {
-            $filtroDestino = "and t_users.id_destino IN($idDestino)";
+            $filtroDestino = "and t_users.id_destino IN($idDestino, 10)";
         }
 
         if ($palabraUsuario != "") {
