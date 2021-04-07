@@ -636,14 +636,27 @@
 
                     <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
 
-                    <h1 id="VerOTMP" class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
+                    <div id="contenedorFechaProgramadaOT" class="contextmenu-item">
+                        <label for="fechaProgramadaOT" class="mr-2">Programar Para:</label>
+                        <input id="fechaProgramadaOT" type="date" class="w-32 mr-2 text-white px-2 border-sm-b border-white shadow" style="background-color: #454A4A;">
+                    </div>
 
-                    <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
+                    <h1 id="VerOTMP" class="contextmenu-item">
+                        <i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT
+                    </h1>
 
-                    <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar
-                        OT</h1>
+                    <h1 id="generarOTMP" class="contextmenu-item">
+                        <i class="fas fa-file mr-2 text-amber-400"></i>Generar OT
+                    </h1>
 
-                    <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
+                    <h1 id="solucionarOTMP" class="contextmenu-item">
+                        <i class="fas fa-check mr-2 text-green-500"></i>Solucionar
+                        OT
+                    </h1>
+
+                    <h1 id="cancelarOTMP" class="contextmenu-item">
+                        <i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT
+                    </h1>
 
                 </div>
                 <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
@@ -827,50 +840,6 @@
         </div>
     </div>
     <!-- MODALES -->
-
-
-    <!-- MENÚ OPCIONES MP -->
-    <div id="tooltipMP" role="tooltip" class="flex flex-col items-center justify-center mx-auto contextmenu-menu hidden" style="z-index:100">
-        <div class=" text-sm leading-none w-full  mx-auto contextmenu-menu" style="background: #414646; z-index:90;">
-
-            <h1 class="mr-1 text-right absolute right-0" style="color: #ffff;" onclick="cerrarTooltip('tooltipMP')">
-                <i class="fas fa-times fa-lg"></i>
-            </h1>
-
-            <h1 class="my-2" style="color: #a9aaaa; background-color: #454A4A;">Programación <span id="semanaProgramacionMP"></span></h1>
-
-            <h1 id="programarMPIndividual" class="contextmenu-item"><i class="fas fa-long-arrow-down mr-2 text-blue-400"></i>Programar (Individual)</h1>
-
-            <h1 id="programarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-random mr-2 text-blue-400"></i>Reprogramar desde aquí</h1>
-
-            <h1 id="opcionMPPersonalizado" class="contextmenu-item" onclick="expandir(this.id)">
-                <i class="fas fa-random mr-2 text-blue-400"></i>Program. Personalizada
-            </h1>
-
-            <div id="opcionMPPersonalizadotoggle" class="flex flex-row items-center justify-center mb-3 hidden">
-                <input id="numeroSemanasPersonalizadasMP" class="w-1/4 text-center shadow appearance-none border border-red-500 rounded w-full py-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="number" min="1" max="52" pattern="[0-9]" autocomplete="off">
-                <button id="programarMPPersonalizado" class="w-3/4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 ml-1 rounded">Programar</button>
-            </div>
-
-            <h1 id="eliminarMPIndividual" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar (individual)</h1>
-
-            <h1 id="eliminarMPDesdeAqui" class="contextmenu-item"><i class="fas fa-trash-alt mr-2 text-red-500"></i>Eliminar desde aquí</h1>
-
-            <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
-
-            <h1 id="VerOTMP" class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
-
-            <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
-
-            <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar
-                OT</h1>
-
-            <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
-
-        </div>
-        <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
-    </div>
-    <!-- MENÚ OPCIONES MP -->
 
 
     <!-- MODAL RESPONSABLE -->

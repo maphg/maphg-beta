@@ -31,7 +31,7 @@ const cerrarSessionX = () => {
             }
         })
         .catch(() => {
-            location.href = 'www.google.com';
+            location.href = 'https://www.maphg.com/';
         })
 
     fetch('../login.php')
@@ -41,7 +41,7 @@ const cerrarSessionX = () => {
             }
         })
         .catch(() => {
-            location.href = 'www.google.com';
+            location.href = 'https://www.maphg.com/';
         })
 }
 seguridad_session();

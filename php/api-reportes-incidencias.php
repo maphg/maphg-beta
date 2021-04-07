@@ -54,7 +54,6 @@ if (isset($_GET['action'])) {
                 $horasSolucionadosGlobal = 0;
                 $resultado = array();
 
-
                 #INCIDENCIA EQUIPOS
                 $query = "SELECT id, actividad, fecha_creacion, fecha_realizado, status FROM t_mc
                 WHERE id_destino = $idDestino and id_seccion = $idSeccion and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR 
@@ -90,7 +89,6 @@ if (isset($_GET['action'])) {
                                 $tiempoPendiente = ($horasActual - $horasCreacion) / 3600;
                                 $horasPentientesGlobal += $tiempoPendiente;
                             }
-
 
                             $resultado['PENDIENTE'][] = array(
                                 "idOT" => intval($idActividad),
@@ -313,11 +311,13 @@ if (isset($_GET['action'])) {
                     $mediaPendientes = $horasPentientesGlobal / $pendientes;
                 }
 
+
                 #MEDIA DE SOLUCIONADOS POR HORAS_SOLUCIONADO
                 if ($horasSolucionadosGlobal > 0 && $solucionados > 0) {
                     $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
                 }
 
+                
                 $array[$destino][$seccion] =
                     array(
                         "destino" => $destino,

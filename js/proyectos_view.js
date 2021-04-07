@@ -1235,7 +1235,6 @@ function toggleModalTailwind(idModal) {
 
 window.addEventListener('load', () => {
     let idDestino = window.location.hash.replace('#', '');
-    console.log(idDestino);
     if (idDestino > 0) {
         localStorage.setItem('idDestino', idDestino);
         obtenerProyectosGlobal('PENDIENTE');
@@ -1243,7 +1242,7 @@ window.addEventListener('load', () => {
         alertaImg('URL No Valido', '', 'info', 1500);
         
         setTimeout(() => {
-            window.location = 'https://www.google.com';
+            window.location = 'https://www.maphg.com';
         }, 1500);
     }
 })
