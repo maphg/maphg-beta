@@ -2556,7 +2556,7 @@ if (isset($_GET['action'])) {
                 $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
-                        $empresas = $x['empresa'];
+                        $empresa = $x['empresa'];
                     }
                 }
 
