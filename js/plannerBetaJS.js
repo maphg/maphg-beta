@@ -8363,6 +8363,10 @@ const datosFallasTareas = params => {
          <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
             <h1>${estiloTipoIncidencia}</h1>
          </td>
+
+         <td class="px-2 whitespace-no-wrap border-b border-gray-200 text-center py-3">
+            <h1>${params.empresa}</h1>
+         </td>
       </tr>
    `;
 }
@@ -8632,6 +8636,7 @@ function obtenerFallas(idEquipo = 0) {
                   const tipo = array[x].tipo;
                   const tipoIncidencia = array[x].tipoIncidencia;
                   const sEP = array[x].sEP;
+                  const empresa = array[x].empresa;
 
                   const data = datosFallasTareas({
                      id: id,
@@ -8651,7 +8656,8 @@ function obtenerFallas(idEquipo = 0) {
                      departamentos: departamentos,
                      tipo: tipo,
                      tipoIncidencia: tipoIncidencia,
-                     sEP: sEP
+                     sEP: sEP,
+                     empresa: empresa
                   });
                   document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);
                }
@@ -8821,6 +8827,7 @@ function obtenerTareas(idEquipo = 0) {
                const tipo = array[x].tipo;
                const tipoIncidencia = array[x].tipoIncidencia;
                const sEP = array[x].sEP;
+               const empresa = array[x].empresa;
 
                const data = datosFallasTareas({
                   id: id,
@@ -8840,7 +8847,8 @@ function obtenerTareas(idEquipo = 0) {
                   departamentos: departamentos,
                   tipo: tipo,
                   tipoIncidencia: tipoIncidencia,
-                  sEP: sEP
+                  sEP: sEP,
+                  empresa: empresa,
                });
 
                document.getElementById("dataPendientesX").insertAdjacentHTML('beforeend', data);

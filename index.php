@@ -1517,6 +1517,10 @@
                                         Tipo
                                     </th>
 
+                                    <th class="px-4 py-1 border-b border-gray-200 bg-white text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                                        EMPRESA
+                                    </th>
+
                                 </tr>
                             </thead>
 

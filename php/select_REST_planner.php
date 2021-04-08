@@ -165,7 +165,8 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_direccion,
         t_mp_np.departamento_finanzas,
         t_mp_np.departamento_rrhh,
-        t_mp_np.status_ep
+        t_mp_np.status_ep,
+        t_mp_np.responsable_empresa
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -187,6 +188,7 @@ if (isset($_GET['action'])) {
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
+                $idEmpresa = $x['responsable_empresa'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -279,6 +281,15 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
+                #EMPRESA
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
                 $array[] = array(
                     "id" => $idTarea,
                     "ot" => "T$idTarea",
@@ -297,7 +308,8 @@ if (isset($_GET['action'])) {
                     "departamentos" => $departamentos,
                     "trabajando" => $trabajando,
                     "tipo" => "TAREA",
-                    "sEP" => intval($sEP)
+                    "sEP" => intval($sEP),
+                    "empresa" => $empresa
                 );
             }
         }
@@ -324,7 +336,8 @@ if (isset($_GET['action'])) {
         t_mc.departamento_direccion,
         t_mc.departamento_finanzas,
         t_mc.departamento_rrhh,
-        t_mc.status_ep
+        t_mc.status_ep,
+        t_mc.responsable_empresa
         FROM t_mc 
         LEFT JOIN t_users ON t_mc.creado_por = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -345,6 +358,7 @@ if (isset($_GET['action'])) {
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
                 $sEP = $x['status_ep'];
+                $idEmpresa = $x['responsable_empresa'];
 
                 #RESPONSABLE
                 $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
@@ -438,6 +452,14 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
                 $arrayTemp = array(
                     "id" => $idFalla,
                     "ot" => "F$idFalla",
@@ -456,7 +478,8 @@ if (isset($_GET['action'])) {
                     "departamentos" => $departamentos,
                     "trabajando" => $trabajando,
                     "tipo" => "FALLA",
-                    "sEP" => intval($sEP)
+                    "sEP" => intval($sEP),
+                    "empresa" => $empresa
                 );
 
                 $array[] = $arrayTemp;
