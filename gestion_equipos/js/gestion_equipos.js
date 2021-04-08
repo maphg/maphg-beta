@@ -885,17 +885,21 @@ function cerrarTooltip(id) {
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {
     document.getElementById("VerOTMP").classList.add('hidden');
+    document.getElementById("contenedorFechaProgramadaOT").classList.add('hidden');
     document.getElementById("generarOTMP").classList.add('hidden');
     document.getElementById("solucionarOTMP").classList.add('hidden');
     document.getElementById("cancelarOTMP").classList.add('hidden');
     if (x == "PROCESO") {
         document.getElementById("VerOTMP").classList.remove('hidden');
+        document.getElementById("contenedorFechaProgramadaOT").classList.add('hidden');
         document.getElementById("solucionarOTMP").classList.remove('hidden');
         document.getElementById("cancelarOTMP").classList.remove('hidden');
     } else if (x == "0") {
         document.getElementById("generarOTMP").classList.remove('hidden');
-    } else if (x == "SOLUCIONADO")
+    } else if (x == "SOLUCIONADO") {
         document.getElementById("VerOTMP").classList.remove('hidden');
+        document.getElementById("contenedorFechaProgramadaOT").classList.add('hidden');
+    }
 }
 
 
@@ -1535,12 +1539,12 @@ function indicadorSemanaActual(semana) {
     if (semana < 10) {
         codigo = `
             0${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -10px;"></i>
         `;
     } else {
         codigo = `
             ${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -10px;"></i>
         `;
     }
 
@@ -3164,7 +3168,7 @@ function consultarPlanEquipo(idEquipo) {
         dataType: "JSON",
         success: function (data) {
             if (data.planes) {
-                if (data.planes.length > 0) {
+                if (data.planes.length) {
                     for (let index = 0; index < data.planes.length; index++) {
 
                         const planesX = datosPlanEquipo({

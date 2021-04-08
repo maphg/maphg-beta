@@ -13,6 +13,7 @@ if (isset($_POST['action'])) {
     $idDestino = $_POST['idDestino'];
     $fechaActual = date("Y-m-d H:m:s");
     $semanaActual = date('W');
+    $añoActual = date("Y");
 
 
     // FUNCION PARA NOTIFICACIONES TELEGRAM
@@ -9935,7 +9936,6 @@ if (isset($_POST['action'])) {
                 INNER JOIN t_mp_planeacion_proceso ON t_mp_planeacion_semana.id_equipo = t_mp_planeacion_proceso.id_equipo and t_mp_planeacion_semana.id_plan = t_mp_planeacion_proceso.id_plan
                 WHERE t_mp_planeacion_semana.id_plan = $idPlan and t_mp_planeacion_semana.id_equipo = $idEquipo and t_mp_planeacion_proceso.año = '$año'";
                 if ($resultPlaneacion = mysqli_query($conn_2020, $queryPlaneacion)) {
-
                     if (mysqli_num_rows($resultPlaneacion) > 0) {
                         foreach ($resultPlaneacion as $key => $i) {
                             $idSemana = $i['semana'];
@@ -10046,6 +10046,7 @@ if (isset($_POST['action'])) {
                             $semana_proceso_51 = $i['proceso_51'];
                             $semana_proceso_52 = $i['proceso_52'];
 
+
                             // Contador de MP
                             $proceso = 0;
                             $solucionado = 0;
@@ -10075,7 +10076,30 @@ if (isset($_POST['action'])) {
                                 }
                             }
 
-                            $arrayTemp =
+                            #BUSCA ID DE SEMANA
+                            $arrayX = array();
+                            $query = "SELECT id, semana, año, fecha_creacion, status 
+                            FROM t_mp_planificacion_iniciada
+                            WHERE id_equipo = $idEquipo and activo = 1 and status IN('PROCESO', 'SOLUCIONADO') and id_plan = $idPlan and año = '$año'";
+                            if ($result = mysqli_query($conn_2020, $query)) {
+                                foreach ($result as $x) {
+                                    $idOT_x = $x['id'];
+                                    $samanaX_x = $x['semana'];
+                                    $año_x = $x['año'];
+                                    $fechaCreado_x = $x['fecha_creacion'];
+                                    $status_x = $x['status'];
+
+                                    $arrayX[$samanaX_x] = array(
+                                        "idOT" => intval($idOT_x),
+                                        "samanaX" => intval($samanaX_x),
+                                        "año" => $año_x,
+                                        "fechaCreado" => $fechaCreado_x,
+                                        "status" => $status_x
+                                    );
+                                }
+                            }
+
+                            $array['planes'][] =
                                 array(
                                     "proceso" => $proceso,
                                     "solucionado" => $solucionado,
@@ -10086,6 +10110,7 @@ if (isset($_POST['action'])) {
                                     "idPlan" => $idPlan,
                                     "periodicidad" => $periodicidad,
                                     "tipoPlan" => $tipoPlan,
+                                    "ids" => $arrayX,
                                     "semana_1" => $semana_planificacion_1,
                                     "semana_2" => $semana_planificacion_2,
                                     "semana_3" => $semana_planificacion_3,
@@ -10192,10 +10217,7 @@ if (isset($_POST['action'])) {
                                     "proceso_52" => $semana_proceso_52,
                                     "semanaActual" => $semanaActual
                                 );
-
-                            $data[] = $arrayTemp;
                         }
-                        $array['planes'] = $data;
                     } else {
                         $array['creado'] = "NO";
 
@@ -11062,6 +11084,44 @@ if (isset($_POST['action'])) {
             }
         }
         echo json_encode($rangoFecha);
+    }
+
+
+    // ACTUALIZA FECHA PROGRAMADA
+    if ($action == "programarFechaMP") {
+        $idEquipo = $_POST['idEquipo'];
+        $semana = $_POST['semana'];
+        $idPlan = $_POST['idPlan'];
+        $fecha = $_POST['fecha'];
+        $resp = 0;
+
+        $query = "UPDATE t_mp_planificacion_iniciada SET fecha_programada = '$fecha' 
+        WHERE id_equipo = $idEquipo and semana = $semana and id_plan = $idPlan and activo = 1 and status = 'PROCESO' and año = '$añoActual'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            $resp = 1;
+        }
+        echo json_encode($resp);
+    }
+
+
+    if ($action == "obtenerDatosOT") {
+        $idEquipo = $_POST['idEquipo'];
+        $semana = $_POST['semana'];
+        $idPlan = $_POST['idPlan'];
+        $array = array();
+
+        $query = "SELECT id, fecha_programada FROM t_mp_planificacion_iniciada 
+        WHERE id_equipo = $idEquipo and semana = $semana and id_plan = $idPlan and activo = 1 and status = 'PROCESO' and año = '$añoActual'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idOT = $x['id'];
+                $fechaProgramada = $x['fecha_programada'];
+
+                $array['idOT'] = intval($idOT);
+                $array['fechaProgramada'] = $fechaProgramada;
+            }
+        }
+        echo json_encode($array);
     }
 
 

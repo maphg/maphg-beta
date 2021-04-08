@@ -13,7 +13,17 @@ const loaderMAPHG75 = '<div class="w-full p-12 flex items-center justify-center"
 const loaderMAPHG40 = '<div class="w-full p-1 flex items-center justify-center"><img src="svg/lineal_animated_loop.svg" width="30px" height="30px"></div>';
 
 // ELEMENTOS BUTTOM ID
+const btnEmergenciaEntregas = document.getElementById("btnEmergenciaEntregas");
+const btnUrgenciaEntregas = document.getElementById("btnUrgenciaEntregas");
+const btnAlarmaEntregas = document.getElementById("btnAlarmaEntregas");
+const btnAlertaEntregas = document.getElementById("btnAlertaEntregas");
+const btnSeguimientoEntregas = document.getElementById("btnSeguimientoEntregas");
+const btnCrearEntregas = document.getElementById("btnCrearEntregas");
+const btnTGEntregas = document.getElementById("btnTGEntregas");
+const btnEquipoEntregas = document.getElementById("btnEquipoEntregas");
+const btnLocalEntregas = document.getElementById("btnLocalEntregas");
 const btnModalAgregarIncidencias = document.getElementById("btnModalAgregarIncidencias");
+const btnModalAgregarIncidenciasEntrega = document.getElementById("btnModalAgregarIncidenciasEntrega");
 const btnTGIncidencias = document.getElementById("btnTGIncidencias");
 const btnEquipoIncidencias = document.getElementById("btnEquipoIncidencias");
 const btnLocalIncidencias = document.getElementById("btnLocalIncidencias");
@@ -78,6 +88,10 @@ const btnMover = document.getElementById("btnMover");
 // ELEMENTOS BUTTOM ID
 
 // ELEMENTOS <INPUTS> ID
+const inputAdjuntosEntregas = document.getElementById("inputAdjuntosEntregas");
+const descripcionEntregas = document.getElementById("descripcionEntregas");
+const comentarioEntregas = document.getElementById("comentarioEntregas");
+const equipoLocalEntregas = document.getElementById("equipoLocalEntregas");
 const nuevoTituloIncidencia = document.getElementById("nuevoTituloIncidencia");
 const seccionIncidencias = document.getElementById("seccionIncidencias");
 const subseccionIncidencias = document.getElementById("subseccionIncidencias");
@@ -111,10 +125,17 @@ const selectMoverSubseccion = document.getElementById("selectMoverSubseccion");
 const selectMoverEquipo = document.getElementById("selectMoverEquipo");
 const selectMoverProyecto = document.getElementById("selectMoverProyecto");
 const fechaOT = document.getElementById("fechaOT");
+const fechaProgramadaOT = document.getElementById("fechaProgramadaOT");
+const seccionEntregas = document.getElementById("seccionEntregas");
+const responsablesEntregas = document.getElementById("responsablesEntregas");
+const responsablesEjecucionEntregas = document.getElementById("responsablesEjecucionEntregas");
+
 
 // ELEMENTOS <INPUTS> ID
 
 // CONTENEDORES DIV ID
+const contenedorEquipoLocalEntregas = document.getElementById("contenedorEquipoLocalEntregas");
+const cantidadAdjuntosEntregas = document.getElementById("cantidadAdjuntosEntregas");
 const contenedorEquipoLocalIncidencias = document.
    getElementById("contenedorEquipoLocalIncidencias");
 const nombreSubseccionEnergeticos = document.getElementById("nombreSubseccionEnergeticos");
@@ -6349,7 +6370,7 @@ function consultarPlanEquipo(idEquipo) {
       dataType: "JSON",
       success: function (data) {
          if (data.planes) {
-            if (data.planes.length > 0) {
+            if (data.planes.length) {
                for (let index = 0; index < data.planes.length; index++) {
 
                   const planesX = datosPlanEquipo({
@@ -7194,9 +7215,10 @@ function consultarActividades(idOT) {
 
 // Muestra el Menú de los Planes
 function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
 
    document.getElementById("tooltipMP").classList.remove('hidden');
-
    document.getElementById('semanaProgramacionMP').innerHTML = '(Semana ' + semanaX + ')';
 
    // Propiedades para el tooltip
@@ -7232,6 +7254,68 @@ function opcionesMenuMP(id, idSemana, idProceso, idEquipo, idPlan, semanaX) {
 
    document.getElementById("cancelarOTMP").
       setAttribute('onclick', `programarMP(${idSemana}, ${idProceso}, ${idEquipo}, ${semanaX}, ${idPlan}, "CANCELAROT")`);
+
+   fechaProgramadaOT.setAttribute('onchange', `programarFechaMP(${idEquipo}, ${semanaX}, ${idPlan})`);
+
+   const action = "obtenerDatosOT";
+   const URL = `php/plannerCrudPHP.php`;
+
+   const data = new FormData();
+   data.append('action', action);
+   data.append('idDestino', idDestino);
+   data.append('idUsuario', idUsuario);
+   data.append('idEquipo', idEquipo);
+   data.append('semana', semanaX);
+   data.append('idPlan', idPlan);
+
+   fetch(URL, {
+      method: 'POST',
+      body: data,
+   })
+      .then(array => array.json())
+      .then(array => {
+         fechaProgramadaOT.value = array.fechaProgramada;
+      })
+      .catch(function (err) {
+         fechaProgramadaOT.value = '';
+         fetch(APIERROR + err);
+      })
+
+
+}
+
+const programarFechaMP = (idEquipo, semana, idPlan) => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "programarFechaMP";
+   const URL = `php/plannerCrudPHP.php`;
+
+   const data = new FormData();
+   data.append('action', action);
+   data.append('idDestino', idDestino);
+   data.append('idUsuario', idUsuario);
+   data.append('idEquipo', idEquipo);
+   data.append('semana', semana);
+   data.append('idPlan', idPlan);
+   data.append('fecha', fechaProgramadaOT.value);
+
+
+   fetch(URL, {
+      method: 'POST',
+      body: data,
+   })
+      .then(array => array.json())
+      .then(array => {
+         if (array == 1) {
+            alertaImg('Fecha de Programación, Actualizada', '', 'success', 1500);
+         } else {
+            alertaImg('Intente de Nuevo', '', 'info', 1500);
+         }
+      })
+      .catch(function (err) {
+         fetch(APIERROR + err);
+      })
 }
 
 
@@ -7447,12 +7531,12 @@ function indicadorSemanaActual(semana) {
    if (semana < 10) {
       codigo = `
             0${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -10px;"></i>
         `;
    } else {
       codigo = `
             ${semana}
-            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -12px;"></i>
+            <i class="animated infinite heartBeat text-red-400 fas fa-circle absolute" style="left: 1px; bottom: -10px;"></i>
         `;
    }
 
@@ -7748,17 +7832,22 @@ function VerOTMPSolucionado(idEquipo, semanaX, idPlan) {
 // Habilita los Botones del Menu
 function botonesMenuMP(x) {
    document.getElementById("VerOTMP").classList.add('hidden');
+   document.getElementById("contenedorFechaProgramadaOT").classList.add('hidden');
    document.getElementById("generarOTMP").classList.add('hidden');
    document.getElementById("solucionarOTMP").classList.add('hidden');
    document.getElementById("cancelarOTMP").classList.add('hidden');
+
    if (x == "PROCESO") {
       document.getElementById("VerOTMP").classList.remove('hidden');
+      document.getElementById("contenedorFechaProgramadaOT").classList.remove('hidden');
       document.getElementById("solucionarOTMP").classList.remove('hidden');
       document.getElementById("cancelarOTMP").classList.remove('hidden');
    } else if (x == "0") {
       document.getElementById("generarOTMP").classList.remove('hidden');
-   } else if (x == "SOLUCIONADO")
+   } else if (x == "SOLUCIONADO") {
       document.getElementById("VerOTMP").classList.remove('hidden');
+      document.getElementById("contenedorFechaProgramadaOT").classList.add('hidden');
+   }
 }
 
 
@@ -9864,6 +9953,9 @@ function reporteFallas(idEquipo) {
 
    const action = "reporteFallas";
    const URL = `php/exportar_excel_GET.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idEquipo=${idEquipo}`;
+
+   console.log(URL);
+
    window.location = URL;
    setTimeout(() => {
       alertaImg('Generando Reporte...', '', 'success', 1500);
@@ -12464,3 +12556,371 @@ inputNumeroOT.addEventListener('keyup', event => {
       alertaImg('Ingrese más Datos', '', 'info', 1500);
    }
 })
+
+
+
+// OPCIONES INICIALES PARA AGREGAR INCIDENCIAS ENTREGAS
+btnModalAgregarIncidenciasEntrega.addEventListener('click', async () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   abrirmodal('modalAgregarIncidenciasEntrega');
+   btnTGEntregas.setAttribute('onclick', "obtenerEquiposEntregas('TG'); tipoAsignacionEntregas('TG')");
+   btnEquipoEntregas.setAttribute('onclick', "obtenerEquiposEntregas('EQUIPO'); tipoAsignacionEntregas('EQUIPO')");
+   btnLocalEntregas.setAttribute('onclick', "obtenerEquiposEntregas('LOCAL'); tipoAsignacionEntregas('LOCAL')");
+   btnCrearEntregas.setAttribute('onclick', "crearEntregas()");
+   tipoAsignacionEntregas('');
+
+   btnEmergenciaEntregas.setAttribute('onclick', "tipoIncidenciaEntregas('EMERGENCIA')");
+   btnUrgenciaEntregas.setAttribute('onclick', "tipoIncidenciaEntregas('URGENCIA')");
+   btnAlarmaEntregas.setAttribute('onclick', "tipoIncidenciaEntregas('ALARMA')");
+   btnAlertaEntregas.setAttribute('onclick', "tipoIncidenciaEntregas('ALERTA')");
+   btnSeguimientoEntregas.setAttribute('onclick', "tipoIncidenciaEntregas('SEGUIMIENTO')");
+   tipoIncidenciaEntregas('');
+
+   cantidadAdjuntosEntregas.innerHTML = '';
+   descripcionEntregas.value = '';
+   comentarioEntregas.value = '';
+   inputAdjuntosEntregas.value = '';
+
+   // SECCIONES
+   const action = "obtenerSeccionesPorDestino";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         seccionEntregas.innerHTML = '<option value="0">Seleccione</option>';
+         seccionEntregas.setAttribute('onchange', 'obtenerSubseccionesEntregas()');
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const idSeccion = array[x].idSeccion;
+               const seccion = array[x].seccion;
+               const codigo = `<option value="${idSeccion}">${seccion}</option>`;
+               seccionEntregas.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         equipoLocalEntregas.innerHTML = '<option value="">Seleccione</option>';
+         seccionEntregas.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+
+
+   // RESPONSABLES
+   const action2 = "obtenerUsuarios";
+   const URL2 = `php/select_REST_planner.php?action=${action2}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL2)
+      .then(array => array.json())
+      .then(array => {
+         responsablesEntregas.innerHTML = '<option value="0">Seleccione Responsable</option>';
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const idUsuarioX = array[x].idUsuario;
+               const nombre = array[x].nombre;
+               const apellido = array[x].apellido;
+               const codigo = `<option value="${idUsuarioX}">${nombre + ' ' + apellido}</option>`;
+               responsablesEntregas.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         responsablesEntregas.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+
+
+   // RESPONSABLES EJECUCION
+   const action3 = "empresasResponsabes";
+   const URL3 = `php/select_REST_planner.php?action=${action3}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   fetch(URL3)
+      .then(array => array.json())
+      .then(array => {
+         responsablesEjecucionEntregas.innerHTML = '<option value="0">Seleccione Empresa</option>';
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const idEmpresa = array[x].idEmpresa;
+               const empresa = array[x].empresa;
+               const codigo = `<option value="${idEmpresa}">${empresa}</option>`;
+               responsablesEjecucionEntregas.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         responsablesEjecucionEntregas.innerHTML = '';
+         fetch(APIERROR + err);
+      })
+})
+
+
+// OBTIENE SUBSECCIONES SEGÚN DESTINO Y SECCIÓN
+const obtenerSubseccionesEntregas = () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "obtenerSubseccionPorSeccion";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idSeccion=${seccionEntregas.value}`;
+
+   tipoAsignacionEntregas('');
+
+   if (seccionEntregas.value > 0) {
+      fetch(URL)
+         .then(array => array.json())
+         .then(array => {
+            subseccionEntregas.innerHTML = '';
+            return array;
+         })
+         .then(array => {
+            if (array.length) {
+               for (let x = 0; x < array.length; x++) {
+                  const idSubseccion = array[x].idSubseccion;
+                  const subseccion = array[x].subseccion;
+                  const codigo = `<option value="${idSubseccion}">${subseccion}</option>`;
+                  subseccionEntregas.insertAdjacentHTML('beforeend', codigo);
+               }
+            }
+         })
+         .catch(function (err) {
+            subseccionEntregas.innerHTML = '';
+            fetch(APIERROR + err);
+         })
+   } else {
+      subseccionEntregas.innerHTML = '';
+      alertaImg('Intente de Nuevo', '', 'info', 1500);
+   }
+}
+
+
+// INICIALIZA EL SELECT PARA OPCION DE EQUIPOS Y LOCALES
+subseccionEntregas.addEventListener('change', () => {
+   tipoAsignacionEntregas('');
+})
+
+
+// OBTIENE EQUIPOS Y LOCALES
+const obtenerEquiposEntregas = tipo => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "obtenerEquipoLocal";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipo=${tipo}&idSeccion=${seccionEntregas.value}&idSubseccion=${subseccionEntregas.value}`;
+
+   if (tipo == "TG") {
+      equipoLocalEntregas.innerHTML = '<option value="0">INCIDENCIA GENERAL</option>';
+      return
+   }
+
+   fetch(URL)
+      .then(array => array.json())
+      .then(array => {
+         equipoLocalEntregas.innerHTML = '<option value="">Seleccione</option>';
+         return array;
+      })
+      .then(array => {
+         if (array.length) {
+            for (let x = 0; x < array.length; x++) {
+               const idEquipo = array[x].idEquipo;
+               const equipo = array[x].equipo;
+               const codigo = `<option value="${idEquipo}">${equipo}</option>`;
+               equipoLocalEntregas.insertAdjacentHTML('beforeend', codigo);
+            }
+         }
+      })
+      .catch(function (err) {
+         equipoLocalEntregas.innerHTML = '<option value="">Seleccione</option>';
+         fetch(APIERROR + err);
+      })
+}
+
+
+// ADJUNTOS PARA ENTREGAS
+inputAdjuntosEntregas.addEventListener('change', () => {
+   cantidadAdjuntosEntregas.innerHTML = inputAdjuntosEntregas.files.length;
+})
+
+
+// DISEÑO DE BOTONES INCIDENCIAS ENTREGAS PROYECTO(TG, EQUIPO, LOCAL)
+const tipoAsignacionEntregas = tipo => {
+   btnTGEntregas.classList.remove('bg-blue-600', 'text-white');
+   btnEquipoEntregas.classList.remove('bg-blue-600', 'text-white');
+   btnLocalEntregas.classList.remove('bg-blue-600', 'text-white');
+   btnTGEntregas.classList.add('text-blue-500');
+   btnEquipoEntregas.classList.add('text-blue-500');
+   btnLocalEntregas.classList.add('text-blue-500');
+   contenedorEquipoLocalEntregas.classList.add('hidden');
+   equipoLocalEntregas.value = '';
+
+   if (tipo == "TG") {
+      btnTGEntregas.classList.add('bg-blue-600', 'text-white');
+      btnTGEntregas.classList.remove('text-blue-500');
+      contenedorEquipoLocalEntregas.classList.remove('hidden');
+      return
+   }
+
+   if (tipo == "EQUIPO") {
+      btnEquipoEntregas.classList.add('bg-blue-600', 'text-white');
+      btnEquipoEntregas.classList.remove('text-blue-500');
+      contenedorEquipoLocalEntregas.classList.remove('hidden');
+      return
+   }
+
+   if (tipo == "LOCAL") {
+      btnLocalEntregas.classList.add('bg-blue-600', 'text-white');
+      btnLocalEntregas.classList.remove('text-blue-500');
+      contenedorEquipoLocalEntregas.classList.remove('hidden');
+      return
+   }
+}
+
+
+// DISEÑO DE BOTONES TIPO INCIDENCIAS ENTREGAS PROYECTO(EMERGENCIA, URGENCIA, ALARMA, ALERTA, SEGUIMIENTO)
+const tipoIncidenciaEntregas = tipo => {
+   btnEmergenciaEntregas.classList.remove('bg-red-600', 'text-white', 'tipo-entregas-select');
+   btnUrgenciaEntregas.classList.remove('bg-orange-600', 'text-white', 'tipo-entregas-select');
+   btnAlarmaEntregas.classList.remove('bg-yellow-600', 'text-white', 'tipo-entregas-select');
+   btnAlertaEntregas.classList.remove('bg-blue-600', 'text-white', 'tipo-entregas-select');
+   btnSeguimientoEntregas.classList.remove('bg-teal-600', 'text-white', 'tipo-entregas-select');
+
+   if (tipo == "EMERGENCIA") {
+      btnEmergenciaEntregas.classList.add('tipo-entregas-select', 'bg-red-600', 'text-white');
+      btnEmergenciaEntregas.classList.remove('text-red-500');
+      return
+   }
+
+   if (tipo == "URGENCIA") {
+      btnUrgenciaEntregas.classList.add('tipo-entregas-select', 'bg-orange-600', 'text-white');
+      btnUrgenciaEntregas.classList.remove('text-orange-500');
+      return
+   }
+
+   if (tipo == "ALARMA") {
+      btnAlarmaEntregas.classList.add('tipo-entregas-select', 'bg-yellow-600', 'text-white');
+      btnAlarmaEntregas.classList.remove('text-yellow-500');
+      return
+   }
+
+   if (tipo == "ALERTA") {
+      btnAlertaEntregas.classList.add('tipo-entregas-select', 'bg-blue-600', 'text-white');
+      btnAlertaEntregas.classList.remove('text-blue-500');
+      return
+   }
+
+   if (tipo == "SEGUIMIENTO") {
+      btnSeguimientoEntregas.classList.add('tipo-entregas-select', 'bg-teal-600', 'text-white');
+      btnSeguimientoEntregas.classList.remove('text-teal-500');
+      return
+   }
+}
+
+
+// CREA LA INCIDENCIA DE ENTREGAS
+const crearEntregas = () => {
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const tipoIncidencia = btnEmergenciaEntregas.classList.contains('tipo-entregas-select') ? 'EMERGENCIA' :
+      btnUrgenciaEntregas.classList.contains('tipo-entregas-select') ? 'URGENCIA' :
+         btnAlarmaEntregas.classList.contains('tipo-entregas-select') ? 'ALARMA' :
+            btnAlertaEntregas.classList.contains('tipo-entregas-select') ? 'ALERTA' :
+               btnSeguimientoEntregas.classList.contains('tipo-entregas-select') ? 'SEGUIMIENTO' :
+                  '';
+
+
+   const data = new FormData();
+   data.append('idSeccion', seccionEntregas.value);
+   data.append('idSubseccion', subseccionEntregas.value);
+   data.append('idEquipo', equipoLocalEntregas.value);
+   data.append('descripcion', descripcionEntregas.value);
+   data.append('comentario', comentarioEntregas.value);
+   data.append('tipoIncidencia', tipoIncidencia);
+   data.append('idResponsable', responsablesEntregas.value);
+   data.append('idResponsableEjecucion', responsablesEjecucionEntregas.value);
+
+   const action = "crearEntregas";
+   const URL = `php/select_REST_planner.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+   if (seccionEntregas.value > 0 &&
+      subseccionEntregas.value > 0 &&
+      equipoLocalEntregas.value != "" &&
+      responsablesEntregas.value > 0 &&
+      tipoIncidencia != "" &&
+      descripcionEntregas.value.length > 0
+   ) {
+
+      fetch(URL, {
+         method: 'POST',
+         body: data
+      })
+         .then(array => array.json())
+         .then(array => {
+            console.log(array)
+            if (array.resp == 1) {
+               alertaImg(`Incidencia Entregas de Proyecto, Agregada`, '', 'success', 1500);
+               cerrarmodal('modalAgregarIncidenciasEntrega');
+               if (inputAdjuntosEntregas.files.length && array.idIncidencia) {
+                  agregarAdjuntosEntregas(array.idIncidencia, array.tipoIncidencia);
+               }
+            } else {
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+            }
+         })
+         .catch(function (err) {
+            fetch(APIERROR + err);
+         })
+   } else {
+      alertaImg('Acomplete la Información Requerida', '', 'info', 1500);
+   }
+}
+
+
+// AGREGA LOS ADJUNTOS DE INCIDENCIAS DE LAS ENTREGAS DE PROYECTO
+const agregarAdjuntosEntregas = (idIncidencia, tipoIncidencia) => {
+   console.log(idIncidencia, tipoIncidencia);
+   let idDestino = localStorage.getItem('idDestino');
+   let idUsuario = localStorage.getItem('usuario');
+
+   const action = "agregarAdjuntosEntregas";
+   const URL = `php/adjuntos.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&idIncidencia=${idIncidencia}&tipoIncidencia=${tipoIncidencia}`;
+
+   // VARIABLES DEL ADJUNTO
+   const formData = new FormData()
+
+   if (inputAdjuntosEntregas.files) {
+      for (let x = 0; x < inputAdjuntosEntregas.files.length; x++) {
+         formData.append('file', inputAdjuntosEntregas.files[x]);
+
+         fetch(URL, {
+            method: "POST",
+            body: formData
+         })
+            .then(array => array.json())
+            .then(array => {
+               if (array == 1) {
+                  alertaImg('Adjunto Agregado', '', 'success', 1500);
+               } else {
+                  alertaImg('Intente de Nuevo', '', 'info', 1500);
+               }
+            })
+            .then(() => {
+               inputAdjuntosEntregas.value = '';
+            })
+            .catch(function (err) {
+               fetch(APIERROR + err + ` agregarAdjuntosEntregas(${idIncidencia}, ${tipoIncidencia})`)
+               alertaImg('Intente de Nuevo', '', 'info', 1500);
+               inputAdjuntosEntregas.value = '';
+            })
+      }
+   }
+}

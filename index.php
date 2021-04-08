@@ -147,7 +147,8 @@
     <div class="absolute bottom-0 right-0 flex flex-row items-end" style="z-index: 100;">
 
         <div id="btnFlotanteOpciones" class="flex flex-col-reverse items-end font-medium mb-4 animated hidden">
-            <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencia</button>
+            <button id="btnModalAgregarIncidencias" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencias Operación</button>
+            <button id="btnModalAgregarIncidenciasEntrega" class="py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Incidencias Entrega Proyecto</button>
             <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Proyecto</button>
             <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">Checklist</button>
             <button class="hidden py-1 hover:bg-red-500 font-semibold text-red-500 hover:text-white px-2 mb-2 rounded border-red-500 border-2">MP</button>
@@ -1175,17 +1176,27 @@
 
                     <h1 class="my-2" style="color: #a9aaaa;">Ordenes de Trabajo</h1>
 
+                    <div id="contenedorFechaProgramadaOT" class="contextmenu-item">
+                        <label for="fechaProgramadaOT" class="mr-2">Programar Para:</label>
+                        <input id="fechaProgramadaOT" type="date" class="w-32 mr-2 text-white px-2 border-sm-b border-white shadow" style="background-color: #454A4A;">
+                    </div>
+
                     <h1 id="VerOTMP" class="contextmenu-item"><i class="fas fa-eye mr-2 text-teal-500"></i>Ver OT</h1>
 
-                    <h1 id="generarOTMP" class="contextmenu-item"><i class="fas fa-file mr-2 text-amber-400"></i>Generar OT</h1>
+                    <h1 id="generarOTMP" class="contextmenu-item">
+                        <i class="fas fa-file mr-2 text-amber-400"></i>Generar OT
+                    </h1>
 
-                    <h1 id="solucionarOTMP" class="contextmenu-item"><i class="fas fa-check mr-2 text-green-500"></i>Solucionar
-                        OT</h1>
+                    <h1 id="solucionarOTMP" class="contextmenu-item">
+                        <i class="fas fa-check mr-2 text-green-500"></i>Solucionar OT
+                    </h1>
 
-                    <h1 id="cancelarOTMP" class="contextmenu-item"><i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT</h1>
+                    <h1 id="cancelarOTMP" class="contextmenu-item">
+                        <i class="fas fa-ban mr-2 text-red-500"></i>Cancelar OT
+                    </h1>
 
                 </div>
-                <i class="fas fa-sort-down w-full text-center fa-4x " style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
+                <i class="fas fa-sort-down w-full text-center fa-4x" style="color: #414646; margin-top: -29px; margin-bottom: -12.5px; z-index:85;"></i>
             </div>
             <!-- MENÚ OPCIONES MP -->
 
@@ -3865,6 +3876,170 @@
 
 
     <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+    <div id="modalAgregarIncidenciasEntrega" class="modal">
+        <div class="modal-window rounded-md pt-10" style="width: 800px;">
+            <!-- BOTON CERRARL -->
+            <div class="absolute top-0 right-0">
+                <button onclick="cerrarmodal('modalAgregarIncidenciasEntrega')" class="cursor-pointer text-md  text-red-500  bg-red-200 px-2 rounded-bl-md rounded-tr-md font-normal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- INDICACION -->
+            <div class="absolute top-0 left-0 flex flex-row items-center">
+                <div class="font-bold bg-indigo-200 text-indigo-500 text-xs py-1 px-2 rounded-br-md rounded-tl-md">
+                    <h1></h1>
+                    <h1>
+                        <i class="fas fa-plus mr-2"></i>
+                        INCIDENCIAS
+                    </h1>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="px-8 py-2 flex flex-col justify-center items-center w-full font-bold text-sm leading-none">
+                <div class="flex w-full items-center justify-center">
+                    <div class="w-1/2 flex flex-col pr-4">
+                        <h1 class="self-start mb-2">Sección:</h1>
+                        <div class="relative">
+                            <select id="seccionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 flex flex-col pl-4">
+                        <h1 class="self-start mb-2">Subseccion:</h1>
+                        <div class="relative">
+                            <select id="subseccionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="mb-2 self-start">Equipo/Local afectado:</h1>
+                <div class="flex flex-row cursor-pointer justify-start items-start">
+
+                    <button id="btnTGEntregas" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Tarea General
+                    </button>
+
+                    <button id="btnEquipoEntregas" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Equipo
+                    </button>
+
+                    <button id="btnLocalEntregas" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline">
+                        Local
+                    </button>
+                </div>
+
+                <div id="contenedorEquipoLocalEntregas" class="relative w-1/2 hidden">
+                    <select id="equipoLocalEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <h1 class="self-start mb-2">Descripción:</h1>
+                <input id="descripcionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Descripción (Max: 60 Caracteres)" maxlength="60" autocomplete="off">
+
+                <div class="flex w-full items-left justify-left">
+                    <div class="w-1/2 flex flex-col mr-4">
+                        <h1 class="self-start mb-2">Responsable Seguimiento:</h1>
+                        <div class="relative">
+                            <select id="responsablesEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-1/2 flex flex-col ml-4">
+                        <h1 class="self-start mb-2">Responsable Ejecución:</h1>
+                        <div class="relative">
+                            <select id="responsablesEjecucionEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4">
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 mb-3 text-gray-700">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-24 flex flex-col ml-4">
+                        <h1 class="self-start mb-2">Adjuntar: </h1>
+                        <div class="relative">
+                            <button class="relative py-3 px-4 bg-teal-200 text-teal-500 font-bold text-sm rounded-md hover:shadow-md cursor-pointer">
+                                <i class="fad fa-cloud-upload fa-lg mx-1"></i>
+                                <span id="cantidadAdjuntosEntregas" class="text-blue-600 font-bold">
+                                </span></span>
+                                <input id="inputAdjuntosEntregas" type="file" class="absolute opacity-0 item-center mx-0 my-0 justify-center w-full" style="top:1px; left:5px;" multiple="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Clasifique la incidencia:</h1>
+                    <div class="bg-white  py-4 my-3 w-full mx-auto flex items-center">
+                        <div class="w-full text-center">
+
+                            <button id="btnEmergenciaEntregas" type="button" class="border border-red-500 text-red-500 rounded-md px-4 py-2 m-2 transition duration-500 hover:text-white hover:bg-red-600 focus:outline-none focus:shadow-outline" data-title-info="Requiere Actuación INMEDIATA">
+                                Emergencia
+                            </button>
+
+                            <button id="btnUrgenciaEntregas" type="button" class="border border-orange-500 text-orange-500 rounded-md px-4 py-2 m-2 transition duration-500 hover:text-white hover:bg-orange-600 focus:outline-none focus:shadow-outline" data-title-info="Requiere Actuación RÁPIDA(No Inmediata)">
+                                Urgencia
+                            </button>
+
+                            <button id="btnAlarmaEntregas" type="button" class="border border-yellow-500 text-yellow-500 rounded-md px-4 py-2 m-2 transition duration-500 hover:text-white hover:bg-yellow-600 focus:outline-none focus:shadow-outline" data-title-info="Requiere Actuación en Pocos Días(El Fallo no es inminente)">
+                                Alarma
+                            </button>
+
+                            <button id="btnAlertaEntregas" type="button" class="border border-blue-500 text-blue-500 rounded-md px-4 py-2 m-2 transition duration-500 hover:text-white hover:bg-blue-600 focus:outline-none focus:shadow-outline" data-title-info="Requiere Actuación en Pocas Semanas o Meses. Además, requiere de Seguimiento de la situación por si se detecta algún cambio que obligue a modificar la PRIORIDAD">
+                                Alerta
+                            </button>
+
+                            <button id="btnSeguimientoEntregas" type="button" class="border border-teal-500 text-teal-500 rounded-md px-4 py-2 m-2 transition duration-500 hover:text-white hover:bg-teal-600 focus:outline-none focus:shadow-outline" data-title-info="NO Requiere de Intervención pero requiere EVALUACIÓN PERIÓDICA para ver si la Situcación ha Cambiado">
+                                Seguimiento
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex w-full flex-col">
+                    <h1 class="self-start mb-2">Comentario:</h1>
+                    <input id="comentarioEntregas" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mb-4" type="text" placeholder="Añadir comentario" autocomplete="off">
+                </div>
+                <button id="btnCrearEntregas" class="bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-8 rounded mb-2">
+                    <i class="fas fa-check"></i>
+                    Crear
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+
+
+    <!-- MODAL PARA AGREGAR INCIDENCIAS -->
     <div id="modalAgregarIncidencias" class="modal">
         <div class="modal-window rounded-md pt-10" style="width: 800px;">
             <!-- BOTON CERRARL -->
@@ -4004,6 +4179,7 @@
         </div>
     </div>
     <!-- MODAL PARA AGREGAR INCIDENCIAS -->
+
 
 
     <!-- MODAL AGREGAR ENERGETICO   -->
@@ -4319,19 +4495,14 @@
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="js/modales.js"></script>
     <script src="js/acordion.js"></script>
-    <!-- <script src="js/sweetalert2@9.js"></script> -->
     <script src="js/alertasSweet.js"></script>
-    <script src="js/plannerBetaJS.js"></script>
-    <!-- <script src="js/jPages.js"></script> -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/sorttable.js"></script>
     <!-- Librerias JS -->
 
-    <!-- JS para los planes de los equipos -->
-    <script src="js/planes_equipo.js" type="text/javascript"></script>
-    <!-- JS para los planes de los equipos -->
-
+    <!-- Librerias JS -->
+    <script src="js/plannerBetaJS.js"></script>
     <!-- Librerias JS -->
 
     <!-- DEPENDENCIAS DE LOS GRAFICOS am4core -->
@@ -4357,6 +4528,10 @@
     <!-- COMPONENTE MENU -->
     <script src="js/menu.js"></script>
     <!-- COMPONENTE MENU -->
+
+    <!-- JS para los planes de los equipos -->
+    <script src="js/planes_equipo.js" type="text/javascript"></script>
+    <!-- JS para los planes de los equipos -->
 </body>
 
 </html>

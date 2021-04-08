@@ -5293,5 +5293,95 @@ if (isset($_GET['action'])) {
         echo json_encode($array);
     }
 
+    #OBTIENE LAS EMPRESAS RESPONSABLES
+    if ($action == "empresasResponsabes") {
+
+        $query = "SELECT id, empresa, descripcion FROM t_empresas_responsables WHERE activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEmpresa = $x['id'];
+                $empresa = $x['empresa'];
+                $descripcion = $x['descripcion'];
+
+                $array[] =
+                    array(
+                        "idEmpresa" => intval($idEmpresa),
+                        "empresa" => $empresa,
+                        "descripcion" => $descripcion
+                    );
+            }
+        }
+        echo json_encode($array);
+    }
+
+    if ($action == "crearEntregas") {
+        $idEquipo = $_POST['idEquipo'];
+        $idSeccion = $_POST['idSeccion'];
+        $idSubseccion = $_POST['idSubseccion'];
+        $descripcion = $_POST['descripcion'];
+        $comentario = $_POST['comentario'];
+        $tipoIncidencia = $_POST['tipoIncidencia'];
+        $idResponsable = $_POST['idResponsable'];
+        $idResponsableEjecucion = $_POST['idResponsableEjecucion'];
+
+        $idMax = 0;
+        $array['resp'] = 0;
+        $array['idIncidencia'] = 0;
+        $resp = 0;
+
+        #BUSCA EL PROXIMO ID
+        if ($idEquipo == 0) {
+            $query = "SELECT max(id) 'id' FROM t_mp_np";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idMax = intval($x['id']) + 1;
+                }
+            }
+        } elseif ($idEquipo > 0) {
+            $query = "SELECT max(id) 'id' FROM t_mc";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $idMax = intval($x['id']) + 1;
+                }
+            }
+        }
+
+
+        #CREA LA INCIDENCIA
+        if ($idEquipo == 0) {
+            $query = "INSERT INTO t_mp_np(id, id_equipo, id_usuario, id_destino, id_seccion, id_subseccion, tipo_incidencia, titulo, responsable, responsable_empresa, fecha, status, status_ep, activo) VALUES($idMax, 0, $idUsuario, $idDestino, $idSeccion, $idSubseccion, '$tipoIncidencia', '$descripcion', $idResponsable, $idResponsableEjecucion, '$fechaActual', 'PENDIENTE', 1, 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['resp'] = 1;
+                $array['idIncidencia'] = $idMax;
+                $array['tipoIncidencia'] = "INCIDENCIAGENERAL";
+                $resp = 1;
+            }
+        } elseif ($idEquipo > 0) {
+            $query = "INSERT INTO t_mc(id, id_equipo, actividad, tipo_incidencia, status, creado_por, responsable,responsable_empresa, fecha_inicio, fecha_creacion, ultima_modificacion, id_destino, id_seccion, id_subseccion, status_ep, activo) VALUES($idMax, $idEquipo, '$descripcion', '$tipoIncidencia', 'PENDIENTE', $idUsuario, $idResponsable, $idResponsableEjecucion, '$fechaActual', '$fechaActual', '$fechaActual', $idDestino, $idSeccion, $idSubseccion, 1, 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['resp'] = 1;
+                $array['idIncidencia'] = $idMax;
+                $array['tipoIncidencia'] = "INCIDENCIA";
+                $resp = 1;
+            }
+        }
+
+
+        #AGREGA EL COMENTARIO
+        if ($idEquipo == 0 && $resp == 1) {
+            $query = "INSERT INTO comentarios_mp_np(id_mp_np, id_usuario, comentario, fecha, activo) VALUES($idMax, $idUsuario, '$comentario', '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['resp'] = 1;
+            }
+        } elseif ($idEquipo > 0 && $resp == 1) {
+            $query = "INSERT INTO t_mc_comentarios(id_mc, comentario, id_usuario, fecha, activo) VALUES($idMax, '$comentario', $idUsuario, '$fechaActual', 1)";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                $array['resp'] = 1;
+            }
+        }
+
+        echo json_encode($array);
+    }
+
     // CIERRE FINAL
 }

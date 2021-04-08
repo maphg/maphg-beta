@@ -285,12 +285,9 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('M1', 'OT');
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COMENTARIOS');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ADJUNTOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'STATUS EP');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'EMPRESA RESPONSABLE EJECUCIÓN');
 
-        if ($idDestino == 10) {
-            $filtroDestino == "";
-        } else {
-            $filtroDestino == "and id_destino = $idDestino";
-        }
         $query = "SELECT t_mc.id, t_mc.actividad, t_mc.status, t_mc.responsable, t_colaboradores.nombre, t_mc.fecha_creacion, t_mc.rango_fecha, t_colaboradores.apellido,
             t_mc.status_urgente,
             t_mc.status_material,
@@ -303,11 +300,13 @@ if (isset($_GET['action'])) {
             t_mc.departamento_compras,
             t_mc.departamento_direccion,
             t_mc.departamento_finanzas,
-            t_mc.departamento_rrhh
+            t_mc.departamento_rrhh,
+            t_mc.status_ep,
+            t_mc.responsable_empresa
             FROM t_mc 
             LEFT JOIN t_users ON t_mc.creado_por = t_users.id
             LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-            WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1 $filtroDestino
+            WHERE t_mc.id_equipo = $idEquipo and t_mc.activo = 1
             ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -323,6 +322,8 @@ if (isset($_GET['action'])) {
                 $sTrabajando = intval($x['status_trabajare']);
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
+                $idEmpresa = $x['responsable_empresa'];
                 $fila++;
 
                 #RESPONSABLE
@@ -416,6 +417,22 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
+                #STATUS EP
+                if ($sEP == 1) {
+                    $sEP = "SI";
+                } else {
+                    $sEP = "";
+                }
+
+                #EMPRESA RESPONSABLE
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $actividad);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $creadoPor);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $totalActividades);
@@ -427,10 +444,12 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $energeticos);
                 $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $departamentos);
                 $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $trabajando);
-                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, "FALLA");
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, "INCIDENCIAS");
                 $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, "F" . $idFalla);
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalComentarios);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $sEP);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $empresa);
             }
         }
 
@@ -532,6 +551,8 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('M1', 'OT');
         $objPHPExcel->getActiveSheet()->setCellValue('N1', 'COMENTARIOS');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', 'ADJUTNOS');
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', 'STATUS EP');
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', 'EMPRESA RESPONSABLE EJECUCIÓN');
 
         if ($idDestino == 10) {
             $filtroDestino = "";
@@ -560,7 +581,9 @@ if (isset($_GET['action'])) {
         t_mp_np.departamento_compras,
         t_mp_np.departamento_direccion,
         t_mp_np.departamento_finanzas,
-        t_mp_np.departamento_rrhh
+        t_mp_np.departamento_rrhh, 
+        t_mp_np.status_ep,
+        t_mp_np.responsable_empresa
         FROM t_mp_np
         LEFT JOIN t_users ON t_mp_np.id_usuario = t_users.id
         LEFT JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
@@ -580,6 +603,8 @@ if (isset($_GET['action'])) {
                 $sTrabajando = intval($x['status_trabajando']);
                 $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
                 $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
+                $sEP = $x['status_ep'];
+                $idEmpresa = $x['responsable_empresa'];
                 $fila++;
 
                 #RESPONSABLE
@@ -673,6 +698,22 @@ if (isset($_GET['action'])) {
                     $departamentos = 0;
                 }
 
+                if ($sEP == 1) {
+                    $sEP = "SI";
+                } else {
+                    $sEP = "";
+                }
+
+
+                #EMPRESA RESPONSABLE
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
                 $objPHPExcel->getActiveSheet()->setCellValue('A' . $fila, $actividad);
                 $objPHPExcel->getActiveSheet()->setCellValue('B' . $fila, $creadoPor);
                 $objPHPExcel->getActiveSheet()->setCellValue('C' . $fila, $totalActividades);
@@ -688,6 +729,8 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, "T" . $idTarea);
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, $totalComentarios);
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, $totalAdjuntos);
+                $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, $sEP);
+                $objPHPExcel->getActiveSheet()->setCellValue('Q' . $fila, $empresa);
             }
         }
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
