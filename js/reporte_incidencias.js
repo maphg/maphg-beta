@@ -710,7 +710,7 @@ btnExportarExcel.addEventListener('click', () => {
     const filtroPalabraX = filtroPalabra.value.replace(/|=| |-|^|`|'|"|&/gi, '');
 
     const URL = `php/exportar_excel_GET.php?action=reporteIncidencia&idDestino=${idDestino}&idUsuario=${idUsuario}&filtroPalabra=${filtroPalabraX}&filtroResponsable=${filtroResponsable.value}&filtroSeccion=${filtroSeccion.value}&filtroSubseccion=${filtroSubseccion.value}&filtroTipo=${filtroTipo.value}&filtroTipoIncidencia=${filtroTipoIncidencia.value}&filtroStatus=${filtroStatus.value}&filtroStatusIncidencia=${filtroStatusIncidencia.value}&filtroFecha=${filtroFecha.value}&filtroFechaInicio=${filtroFechaInicio.value}&filtroFechaFin=${filtroFechaFin.value}`;
-    // location.href = URL;
+
     window.open(URL);
 })
 

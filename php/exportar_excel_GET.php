@@ -2168,10 +2168,10 @@ if (isset($_GET['action'])) {
         $objPHPExcel->getActiveSheet()->setCellValue('G1', 'EQUIPO / LOCAL');
         $objPHPExcel->getActiveSheet()->setCellValue('H1', 'STATUS');
         $objPHPExcel->getActiveSheet()->setCellValue('I1', 'ULTIMO COMENTARIO');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', '');
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', '');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', '');
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', '');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', 'FECHA CREADO');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', 'FECHA FINALIZADO');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', 'STATUS EP');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', 'EMPRESA RESPONSABLE EJECUCIÓN');
         $objPHPExcel->getActiveSheet()->setCellValue('N1', '');
         $objPHPExcel->getActiveSheet()->setCellValue('O1', '');
         $objPHPExcel->getActiveSheet()->setCellValue('P1', '');
@@ -2428,7 +2428,7 @@ if (isset($_GET['action'])) {
         t_mc.id_seccion,
         t_mc.id_subseccion,
         c_destinos.destino, c_secciones.seccion, c_subsecciones.grupo, t_equipos_america.equipo, 
-        t_mc.fecha_creacion, t_mc.fecha_realizado
+        t_mc.fecha_creacion, t_mc.fecha_realizado, t_mc.status_ep, t_mc.responsable_empresa
         FROM t_mc
         INNER JOIN c_destinos ON t_mc.id_destino = c_destinos.id
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
@@ -2458,6 +2458,8 @@ if (isset($_GET['action'])) {
                 $equipo = $x['equipo'];
                 $fechaCreacion = $x['fecha_creacion'];
                 $fechaFinalizado = $x['fecha_realizado'];
+                $sEP = $x['status_ep'];
+                $idEmpresa = $x['responsable_empresa'];
                 $fila++;
 
                 #STATUS
@@ -2543,6 +2545,21 @@ if (isset($_GET['action'])) {
                     }
                 }
 
+                if ($sEP == 1) {
+                    $sEP = "SI";
+                } else {
+                    $sEP = "";
+                }
+
+                #EMPRESA RESPONSABLE
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresas = $x['empresa'];
+                    }
+                }
+
                 if ($guardar == "SI") {
                     $array[] = array(
                         "idItem" => intval($idItem),
@@ -2576,8 +2593,8 @@ if (isset($_GET['action'])) {
                 $objPHPExcel->getActiveSheet()->setCellValue('I' . $fila, $comentario);
                 $objPHPExcel->getActiveSheet()->setCellValue('J' . $fila, $fechaCreacion);
                 $objPHPExcel->getActiveSheet()->setCellValue('K' . $fila, $fechaFinalizado);
-                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, '');
-                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, '');
+                $objPHPExcel->getActiveSheet()->setCellValue('L' . $fila, $sEP);
+                $objPHPExcel->getActiveSheet()->setCellValue('M' . $fila, $empresa);
                 $objPHPExcel->getActiveSheet()->setCellValue('N' . $fila, '');
                 $objPHPExcel->getActiveSheet()->setCellValue('O' . $fila, '');
                 $objPHPExcel->getActiveSheet()->setCellValue('P' . $fila, '');
