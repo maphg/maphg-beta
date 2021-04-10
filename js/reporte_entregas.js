@@ -230,7 +230,7 @@ const obtenerReporte = columna => {
                         <!-- PARTE VISIBLE -->
                         <div class="w-full p-1 flex flex-none flex-col">
                             <h1 id="titulo_incidencia_${idItem}" class="font-semibold lowercase mb-1 text-justify truncate">
-                            ${x + ' - ' + titulo}</h1>
+                            ${titulo}</h1>
                             <div class="flex justify-between">
                             <div class="flex bg-white shadow py-1 px-2 rounded-full items-center text-bluegray-700">
                                 <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="" />
