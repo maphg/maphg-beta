@@ -602,5 +602,6 @@ if (isset($_GET['action'])) {
                 }
             }
         }
+        echo json_encode($resp);
     }
 }
