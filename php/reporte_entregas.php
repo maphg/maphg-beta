@@ -16,13 +16,16 @@ if (isset($_GET['action'])) {
     $idDestino = $_GET['idDestino'];
     $fechaActual = date('Y-m-d H:m:s');
     $añoActual = date('Y');
+    $array = array();
 
+    // OBTINE RESULTADOS DE LAS INCIDENCIAS POR LOS FILTROS
     if ($action == "obtenerReporte") {
 
         $filtroPalabra = $_POST['filtroPalabra'];
         $filtroResponsable = $_POST['filtroResponsable'];
         $filtroSeccion = $_POST['filtroSeccion'];
         $filtroSubseccion = $_POST['filtroSubseccion'];
+        $filtroEquipos = $_POST['filtroEquipos'];
         $filtroTipo = $_POST['filtroTipo'];
         $filtroTipoIncidencia = $_POST['filtroTipoIncidencia'];
         $filtroStatus = $_POST['filtroStatus'];
@@ -93,6 +96,19 @@ if (isset($_GET['action'])) {
             $filtroSubseccion_General = "and t_mp_np.id_subseccion = $filtroSubseccion";
             $filtroSubseccion_Preventivo = "and t_equipos_america.id_subseccion = $filtroSubseccion";
             $filtroSubseccion_Proyecto = "and t_proyectos.id_subseccion = $filtroSubseccion";
+        }
+
+
+        if ($filtroEquipos > 0) {
+            $filtroEquiposIncidencias = "and t_equipos_america.id_equipo_principal = $filtroEquipos";
+            $filtroEquipos_General = "and t_mp_np.id_equipo = 0";
+            $filtroEquipos_Preventivo = "and t_equipos_america.id_equipo = $filtroEquipos";
+            $filtroEquipos_Proyecto = "and t_proyectos.id_subseccion = 0";
+        } else {
+            $filtroEquiposIncidencias = "";
+            $filtroEquipos_General = "";
+            $filtroEquipos_Preventivo = "";
+            $filtroEquipos_Proyecto = "";
         }
 
         #FILTRO TIPO INCIDENCIA (EMERGENCIA, URGENCIA, ALARMA, ALERTA, SEGUIMIENTO)
@@ -313,7 +329,12 @@ if (isset($_GET['action'])) {
         }
 
         #INCIDENCIAS
-        $query = "SELECT id, actividad, status, rango_fecha, tipo_incidencia,
+        $query = "SELECT 
+        t_mc.id, 
+        t_mc.actividad, 
+        t_mc.status, 
+        t_mc.rango_fecha, 
+        t_mc.tipo_incidencia,
         t_mc.creado_por,
         t_mc.status_material,
         t_mc.status_trabajare,
@@ -328,9 +349,18 @@ if (isset($_GET['action'])) {
         t_mc.departamento_rrhh,
         t_mc.status_ep,
         t_mc.id_seccion,
-        t_mc.id_subseccion
+        t_mc.id_subseccion,
+        t_mc.id_equipo,
+        c_secciones.seccion,
+        c_subsecciones.grupo, 
+        t_equipos_america.equipo,
+        t_equipos_america.id 'idEquipo',
+        t_equipos_america.id_equipo_principal
         FROM t_mc
-        WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias
+        INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
+        INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
+        INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
+        WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias $filtroEquiposIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -347,6 +377,23 @@ if (isset($_GET['action'])) {
                 $sEP = $x['status_ep'];
                 $idSeccion = $x['id_seccion'];
                 $idSubseccion = $x['id_subseccion'];
+                $idEquipo = $x['id_equipo'];
+                $seccion = $x['seccion'];
+                $subseccion = $x['grupo'];
+                $equipoSecundario = $x['equipo'];
+                $idEquipoSecundario = $x['id_equipo_principal'];
+                $idEquipo = $x['idEquipo'];
+
+                #EQUIPO PRINCIPAL
+                $equipoPrincial = "";
+                $idEquipoPrincipal = 0;
+                $query = "SELECT id, equipo FROM t_equipos_america WHERE id = $idEquipoSecundario";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $equipoPrincial = $x['equipo'];
+                        $idEquipoPrincipal = $x['id'];
+                    }
+                }
 
                 #STATUS
                 if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
@@ -412,303 +459,110 @@ if (isset($_GET['action'])) {
                     "ComentarioDe" => $ComentarioDe,
                     "idSeccion" => intval($idSeccion),
                     "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "totalAdjuntos" => intval($totalAdjuntos),
+                    "equipoPrincial" => $equipoPrincial,
+                    "equipoSecundario" => $equipoSecundario,
+                    "seccion" => $seccion,
+                    "subseccion" => $subseccion,
+                    "idEquipo" => $idEquipo,
+                    "idEquipoSecundario" => intval($idEquipoSecundario),
+                    "idEquipoPrincipal" => intval($idEquipoPrincipal)
                 );
             }
         }
+        echo json_encode($array);
+    }
 
-        #GENERAL
-        $query = "SELECT id, titulo, status, rango_fecha, tipo_incidencia,
-        t_mp_np.id_usuario,
-        t_mp_np.status_material,
-        t_mp_np.status_trabajando,
-        t_mp_np.energetico_electricidad,
-        t_mp_np.energetico_agua,
-        t_mp_np.energetico_diesel,
-        t_mp_np.energetico_gas,
-        t_mp_np.departamento_calidad,
-        t_mp_np.departamento_compras,
-        t_mp_np.departamento_direccion,
-        t_mp_np.departamento_finanzas,
-        t_mp_np.departamento_rrhh,
-        t_mp_np.status_ep,
-        t_mp_np.id_seccion,
-        t_mp_np.id_subseccion
-        FROM t_mp_np
-        WHERE activo = 1 and id_equipo = 0
-        $filtroDestino_General $filtroPalabra_General $filtroResponsable_General $filtroSeccion_General $filtroSubseccion_General $filtroTipoIncidencia_General $filtroTipo_General $filtroStatus_General $filtroFecha_General $filtroStatusIncidencia_General ORDER BY t_mp_np.id ASC";
+    // OBTIENE OPCIONES DE EQUIPOS
+    if ($action == "obtenerOpcionEquipos") {
+        $filtroSeccion = $_GET['filtroSeccion'];
+        $filtroSubseccion = $_GET['filtroSubseccion'];
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, equipo
+        FROM t_equipos_america 
+        WHERE id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and activo = 1 $filtroDestino and status !='BAJA' and jerarquia = 'PRINCIPAL'";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idItem = $x['id'];
-                $idCreadoPor = $x['id_usuario'];
-                $titulo = $x['titulo'];
-                $status = $x['status'];
-                $rangoFecha = $x['rango_fecha'];
-                $tipoIncidencia = $x['tipo_incidencia'];
-                $sMaterial = intval($x['status_material']);
-                $sTrabajando = intval($x['status_trabajando']);
-                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
-                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
-                $sEP = $x['status_ep'];
-                $idSeccion = $x['id_seccion'];
-                $idSubseccion = $x['id_subseccion'];
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
 
-                #STATUS
-                if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
-                    $status = "SOLUCIONADO";
+                $total = 0;
+                $query = "SELECT count(id) 'total' FROM t_equipos_america WHERE id_equipo_principal = $idEquipo and activo = 1";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $total = $x['total'];
+                    }
+                }
+                if ($total > 0) {
+                    $total = " ($total)";
                 } else {
-                    $status = "PENDIENTE";
-                }
-
-                #CREADO POR
-                $creadoPor = "";
-                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
-                FROM t_users
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_users.id = $idCreadoPor";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
-                    }
-                }
-
-                #ULTIMO COMENTARIO
-                $comentario = "";
-                $fecha = "";
-                $ComentarioDe = "";
-                $query = "SELECT comentarios_mp_np.comentario, comentarios_mp_np.fecha, t_colaboradores.nombre, t_colaboradores.apellido
-                FROM comentarios_mp_np 
-                INNER JOIN t_users ON comentarios_mp_np.id_usuario = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE comentarios_mp_np.id_mp_np = $idItem and  comentarios_mp_np.activo = 1
-                ORDER BY id_mp_np.id DESC";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $comentario = $x['comentario'];
-                        $fecha = $x['fecha'];
-                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
-                    }
-                }
-
-                #DOCUMENTOS
-                $totalAdjuntos = 0;
-                $query = "SELECT count(id) 'total' FROM adjuntos_mp_np 
-                WHERE id_mp_np = $idItem and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $totalAdjuntos = $x['total'];
-                    }
+                    $total = "";
                 }
 
                 $array[] = array(
-                    "idItem" => intval($idItem),
-                    "titulo" => $titulo,
-                    "creadoPor" => $creadoPor,
-                    "status" => $status,
-                    "tipo" => "GENERAL",
-                    "tipoIncidencia" => $tipoIncidencia,
-                    "sMaterial" => $sMaterial,
-                    "sTrabajando" => $sTrabajando,
-                    "sEnergetico" => $sEnergetico,
-                    "sDepartamento" => $sDepartamento,
-                    "sEP" => $sEP,
-                    "comentario" => $comentario,
-                    "comentarioFecha" => $fecha,
-                    "ComentarioDe" => $ComentarioDe,
-                    "idSeccion" => intval($idSeccion),
-                    "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "idEquipo" => $idEquipo,
+                    "equipo" => $equipo . $total
                 );
             }
         }
+        echo json_encode($array);
+    }
 
+    // OBTIENE LOS EQUIPOS PRINCIPALES
+    if ($action == "obtenerEquiposPrincipales") {
+        $filtroSeccion = $_GET['filtroSeccion'];
+        $filtroSubseccion = $_GET['filtroSubseccion'];
 
-        #PREVENTIVOS
-        $query = "SELECT t_mp_planificacion_iniciada.id, t_mp_planificacion_iniciada.status, t_mp_planificacion_iniciada.fecha_finalizado, t_mp_planificacion_iniciada.comentario, t_mp_planificacion_iniciada.rango_fecha, t_mp_planificacion_iniciada.creado_por, t_equipos_america.id_seccion, t_equipos_america.id_subseccion,
-        t_mp_planificacion_iniciada.status_material,
-        t_mp_planificacion_iniciada.status_trabajando,
-        t_mp_planificacion_iniciada.energetico_electricidad,
-        t_mp_planificacion_iniciada.energetico_agua,
-        t_mp_planificacion_iniciada.energetico_diesel,
-        t_mp_planificacion_iniciada.energetico_gas,
-        t_mp_planificacion_iniciada.departamento_calidad,
-        t_mp_planificacion_iniciada.departamento_compras,
-        t_mp_planificacion_iniciada.departamento_direccion,
-        t_mp_planificacion_iniciada.departamento_finanzas,
-        t_mp_planificacion_iniciada.departamento_rrhh,
-        t_mp_planificacion_iniciada.status_ep
-        FROM t_mp_planificacion_iniciada
-        INNER JOIN t_equipos_america ON t_mp_planificacion_iniciada.id_equipo = t_equipos_america.id
-        WHERE t_mp_planificacion_iniciada.activo = 1
-        $filtroDestino_Preventivo $filtroPalabra_Preventivo $filtroResponsable_Preventivo $filtroSeccion_Preventivo $filtroSubseccion_Preventivo $filtroTipoIncidencia_Preventivo $filtroTipo_Preventivo $filtroStatus_Preventivo $filtroFecha_Preventivo $filtroStatusIncidencia_Preventivo ORDER BY t_mp_planificacion_iniciada.id ASC";
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, equipo FROM t_equipos_america
+        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and jerarquia = 'PRINCIPAL' and status !='BAJA' $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idItem = $x['id'];
-                $idCreadoPor = $x['creado_por'];
-                $titulo = "PREVENTIVO OT: # $idItem";
-                $status = $x['status'];
-                $sMaterial = intval($x['status_material']);
-                $sTrabajando = intval($x['status_trabajando']);
-                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
-                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
-                $sEP = $x['status_ep'];
-                $rangoFecha = $x['rango_fecha'];
-                $comentario = $x['comentario'];
-                $idSeccion = $x['id_seccion'];
-                $idSubseccion = $x['id_subseccion'];
-                $fecha = $x['fecha_finalizado'];
-
-                #STATUS
-                if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
-                    $status = "SOLUCIONADO";
-                } else {
-                    $status = "PENDIENTE";
-                }
-
-                #CREADO POR
-                $creadoPor = "";
-                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
-                FROM t_users
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_users.id = $idCreadoPor";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
-                    }
-                }
-
-                #DOCUMENTOS
-                $totalAdjuntos = 0;
-                $query = "SELECT count(id) 'total' FROM t_proyectos_planaccion_adjuntos 
-                WHERE id_planificacion_iniciada = $idItem and activo = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $totalAdjuntos = $x['total'];
-                    }
-                }
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
 
                 $array[] = array(
-                    "idItem" => intval($idItem),
-                    "titulo" => $titulo,
-                    "creadoPor" => $creadoPor,
-                    "status" => $status,
-                    "tipo" => "PREVENTIVO",
-                    "tipoIncidencia" => "PREVENTIVO",
-                    "sMaterial" => $sMaterial,
-                    "sTrabajando" => $sTrabajando,
-                    "sEnergetico" => $sEnergetico,
-                    "sDepartamento" => $sDepartamento,
-                    "sEP" => $sEP,
-                    "comentario" => $comentario,
-                    "comentarioFecha" => $fecha,
-                    "ComentarioDe" => "",
-                    "idSeccion" => intval($idSeccion),
-                    "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "idEquipo" => $idEquipo,
+                    "equipo" => $equipo
                 );
             }
         }
+        echo json_encode($array);
+    }
 
-        #PROYECTOS PLANACCIONES
-        $query = "SELECT t_proyectos_planaccion.id, t_proyectos_planaccion.actividad, t_proyectos_planaccion.status, t_proyectos_planaccion.rango_fecha, t_proyectos_planaccion.creado_por, t_proyectos.id_seccion, 
-        t_proyectos.id_subseccion,
-        t_proyectos_planaccion.status_material,
-        t_proyectos_planaccion.status_trabajando,
-        t_proyectos_planaccion.energetico_electricidad,
-        t_proyectos_planaccion.energetico_agua,
-        t_proyectos_planaccion.energetico_diesel,
-        t_proyectos_planaccion.energetico_gas,
-        t_proyectos_planaccion.departamento_calidad,
-        t_proyectos_planaccion.departamento_compras,
-        t_proyectos_planaccion.departamento_direccion,
-        t_proyectos_planaccion.departamento_finanzas,
-        t_proyectos_planaccion.departamento_rrhh,
-        t_proyectos_planaccion.status_ep
-        FROM t_proyectos_planaccion
-        INNER JOIN t_proyectos ON t_proyectos_planaccion.id_proyecto = t_proyectos.id
-        WHERE t_proyectos_planaccion.activo = 1
-        $filtroDestino_Proyecto $filtroPalabra_Proyecto $filtroResponsable_Proyecto $filtroSeccion_Proyecto $filtroSubseccion_Proyecto $filtroTipoIncidencia_Proyecto $filtroTipo_Proyecto $filtroStatus_Proyecto $filtroFecha_Proyecto $filtroStatusIncidencia_Proyecto ORDER BY t_proyectos_planaccion.id ASC";
+    // OBTIENE LOS EQUIPOS SECUNDARIOS
+    if ($action == "obtenerEquiposSecundarios") {
+        $filtroEquipos = $_GET['filtroEquipos'];
+        $filtroSeccion = $_GET['filtroSeccion'];
+        $filtroSubseccion = $_GET['filtroSubseccion'];
+
+        if ($idDestino == 10) {
+            $filtroDestino = "";
+        } else {
+            $filtroDestino = "and id_destino = $idDestino";
+        }
+
+        $query = "SELECT id, equipo FROM t_equipos_america
+        WHERE activo = 1 and id_seccion = $filtroSeccion and id_subseccion = $filtroSubseccion and id_equipo_principal = $filtroEquipos and jerarquia = 'SECUNDARIO' and status !='BAJA' $filtroDestino";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
-                $idItem = $x['id'];
-                $titulo = $x['actividad'];
-                $status = $x['status'];
-                $rangoFecha = $x['rango_fecha'];
-                $idCreadoPor = $x['creado_por'];
-                $idSeccion = $x['id_seccion'];
-                $idSubseccion = $x['id_subseccion'];
-                $sMaterial = intval($x['status_material']);
-                $sTrabajando = intval($x['status_trabajando']);
-                $sEnergetico = intval($x['energetico_electricidad']) + intval($x['energetico_agua']) + intval($x['energetico_diesel']) + intval($x['energetico_gas']);
-                $sDepartamento = intval($x['departamento_calidad']) + intval($x['departamento_compras']) + intval($x['departamento_direccion']) + intval($x['departamento_finanzas']) + intval($x['departamento_rrhh']);
-                $sEP = $x['status_ep'];
-
-                #STATUS
-                if ($status == "SOLUCIONADO" || $status == "F" || $status == "FINALIZADO") {
-                    $status = "SOLUCIONADO";
-                } else {
-                    $status = "PENDIENTE";
-                }
-
-                #CREADO POR
-                $creadoPor = "";
-                $query = "SELECT t_colaboradores.nombre, t_colaboradores.apellido 
-                FROM t_users
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_users.id = $idCreadoPor";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $creadoPor = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
-                    }
-                }
-
-                #ULTIMO COMENTARIO
-                $comentario = "";
-                $fecha = "";
-                $ComentarioDe = "";
-                $query = "SELECT t_proyectos_planaccion_comentarios.comentario, t_proyectos_planaccion_comentarios.fecha, t_colaboradores.nombre, t_colaboradores.apellido
-                FROM t_proyectos_planaccion_comentarios 
-                INNER JOIN t_users ON t_proyectos_planaccion_comentarios.usuario = t_users.id
-                INNER JOIN t_colaboradores ON t_users.id_colaborador = t_colaboradores.id
-                WHERE t_proyectos_planaccion_comentarios.id_actividad = $idItem and  
-                t_proyectos_planaccion_comentarios.activo = 1 
-                ORDER BY t_proyectos_planaccion_comentarios.id_actividad DESC";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $comentario = $x['comentario'];
-                        $fecha = $x['fecha'];
-                        $ComentarioDe = strtok($x['nombre'], ' ') . " " . strtok($x['apellido'], ' ');
-                    }
-                }
-
-                #DOCUMENTOS
-                $totalAdjuntos = 0;
-                $query = "SELECT count(id) 'total' FROM t_proyectos_planaccion_adjuntos 
-                WHERE id_actividad = $idItem and status = 1";
-                if ($result = mysqli_query($conn_2020, $query)) {
-                    foreach ($result as $x) {
-                        $totalAdjuntos = $x['total'];
-                    }
-                }
+                $idEquipo = $x['id'];
+                $equipo = $x['equipo'];
 
                 $array[] = array(
-                    "idItem" => intval($idItem),
-                    "titulo" => $titulo,
-                    "creadoPor" => $creadoPor,
-                    "status" => $status,
-                    "tipo" => "PROYECTO",
-                    "tipoIncidencia" => "PROYECTO",
-                    "sMaterial" => $sMaterial,
-                    "sTrabajando" => $sTrabajando,
-                    "sEnergetico" => $sEnergetico,
-                    "sDepartamento" => $sDepartamento,
-                    "sEP" => $sEP,
-                    "comentario" => $comentario,
-                    "comentarioFecha" => $fecha,
-                    "ComentarioDe" => $ComentarioDe,
-                    "idSeccion" => intval($idSeccion),
-                    "idSubseccion" => intval($idSubseccion),
-                    "totalAdjuntos" => intval($totalAdjuntos)
+                    "idEquipo" => $idEquipo,
+                    "equipo" => $equipo
                 );
             }
         }

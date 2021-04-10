@@ -568,8 +568,8 @@ btnColumnaSubsecciones.addEventListener('click', async () => {
     contenedorSubsecciones.classList.remove('hidden');
     btnFiltroPalabra.setAttribute('onclick', `obtenerReporte('SUBSECCION')`);
 
-    await obtenerReporte('SUBSECCION')
-    await crearContenedoresSubsecciones(filtroSeccion.value)
+    await obtenerReporte('SUBSECCION');
+    await crearContenedoresSubsecciones(filtroSeccion.value);
 })
 
 
