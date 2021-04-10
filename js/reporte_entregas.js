@@ -72,6 +72,7 @@ const obtenerReporte = columna => {
         .then(array => array.json())
         .then(array => {
             if (array) {
+                console.log(array.length);
                 // CONTADORES
                 let contadorEmergencia = 0;
                 let contadorUrgencia = 0;
@@ -107,6 +108,7 @@ const obtenerReporte = columna => {
                     const subseccion = array[x].subseccion;
                     const idEquipo = array[x].idEquipo;
                     const idEquipoPrincipal = array[x].idEquipoPrincipal;
+                    const idEquipoSecundario = array[x].idEquipoSecundario;
 
                     // OPCION DE STATUS
                     const fStatus = status == 'SOLUCIONADO' ?
@@ -209,7 +211,11 @@ const obtenerReporte = columna => {
                             contadorArray(arrayItems);
                         }
                     } else if (columna == "ACTIVOSPRINCIPALES") {
-                        arrayItems.push(idEquipo);
+                        if (idEquipoPrincipal > 0) {
+                            arrayItems.push(idEquipoPrincipal);
+                        } else {
+                            arrayItems.push(idEquipo);
+                        }
                         if ((x + 1) == array.length) {
                             contadorArray(arrayItems);
                         }
@@ -225,7 +231,7 @@ const obtenerReporte = columna => {
                         <!-- PARTE VISIBLE -->
                         <div class="w-full p-1 flex flex-none flex-col">
                             <h1 id="titulo_incidencia_${idItem}" class="font-semibold lowercase mb-1 text-justify truncate">
-                            ${titulo}</h1>
+                            ${x + ' - ' + titulo}</h1>
                             <div class="flex justify-between">
                             <div class="flex bg-white shadow py-1 px-2 rounded-full items-center text-bluegray-700">
                                 <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="" />
@@ -281,21 +287,17 @@ const obtenerReporte = columna => {
                             contenedorX.insertAdjacentHTML('beforeend', codigo)
                         }
                     } else if (columna == "ACTIVOSPRINCIPALES") {
-                        if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
-                            contenedorX.classList.remove('hidden');
+                        if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipoPrincipal)) {
                             contenedorX.insertAdjacentHTML('beforeend', codigo)
-                            return
                         }
 
-                        if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipoPrincipal)) {
-                            contenedorX.classList.remove('hidden');
-                            contenedorX.insertAdjacentHTML('beforeend', codigo)
-                            return
+                        if (contenedorY = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
+                            contenedorY.insertAdjacentHTML('beforeend', codigo)
                         }
+
                     } else if (columna == "ACTIVOSSECUNDARIOS") {
-                        if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
-                            contenedorX.classList.remove('hidden');
-                            contenedorX.insertAdjacentHTML('beforeend', codigo)
+                        if (contenedorZ = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
+                            contenedorZ.insertAdjacentHTML('beforeend', codigo)
                         }
                     }
                 }
@@ -838,7 +840,7 @@ const crearContenedores = tipoContenedor => {
                             const idEquipo = array[x].idEquipo;
                             const equipo = array[x].equipo;
                             const codigo = `  
-                                <div id="columna_x_${idEquipo}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1 hidden">
+                                <div id="columna_x_${idEquipo}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">
                                     <div class="w-auto flex text-xxs rounded-full bg-white pr-2 items-center">
                                         <div class="w-6 h-6 rounded-full bg-gray-900 font-bold flex items-center justify-center mr-2 flex-none">
                                             <h1 id="cantidad_incidencias_${idEquipo}" class="text-white w-auto">0</h1>

@@ -100,7 +100,7 @@ if (isset($_GET['action'])) {
 
 
         if ($filtroEquipos > 0) {
-            $filtroEquiposIncidencias = "and t_equipos_america.id_equipo_principal = $filtroEquipos and t_equipos_america.jerarquia = 'SECUNDARIO'";
+            $filtroEquiposIncidencias = "and t_equipos_america.id_equipo_principal = $filtroEquipos";
             $filtroEquipos_General = "and t_mp_np.id_equipo = 0";
             $filtroEquipos_Preventivo = "and t_equipos_america.id_equipo = $filtroEquipos";
             $filtroEquipos_Proyecto = "and t_proyectos.id_subseccion = 0";
