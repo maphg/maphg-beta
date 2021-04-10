@@ -100,7 +100,7 @@ if (isset($_GET['action'])) {
 
 
         if ($filtroEquipos > 0) {
-            $filtroEquiposIncidencias = "and t_equipos_america.id_equipo_principal = $filtroEquipos";
+            $filtroEquiposIncidencias = "and t_equipos_america.id_equipo_principal = $filtroEquipos and t_equipos_america.jerarquia = 'SECUNDARIO'";
             $filtroEquipos_General = "and t_mp_np.id_equipo = 0";
             $filtroEquipos_Preventivo = "and t_equipos_america.id_equipo = $filtroEquipos";
             $filtroEquipos_Proyecto = "and t_proyectos.id_subseccion = 0";
@@ -567,5 +567,40 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($array);
+    }
+
+
+    if ($action == "cambiarStatus") {
+        $tipo = $_GET['tipo'];
+        $idItem = $_GET['idItem'];
+        $resp = 0;
+
+        if ($tipo == "INCIDENCIA") {
+            // OBTIENE STATUS ACTUAL
+            $status = "PENDIENTE";
+            $query = "SELECT status FROM t_mc WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                foreach ($result as $x) {
+                    $status = $x['status'];
+                }
+            }
+
+            //TOGGLE DE STATUS 
+            if ($status == "SOLUCIONADO") {
+                $status = "PENDIENTE";
+            } else {
+                $status = "SOLUCIONADO";
+            }
+
+            // APLICA STATUS TOGGLE
+            $query = "UPDATE t_mc SET status = '$status' WHERE id = $idItem";
+            if ($result = mysqli_query($conn_2020, $query)) {
+                if ($status == "SOLUCIONADO") {
+                    $resp = 1;
+                } else {
+                    $resp = 2;
+                }
+            }
+        }
     }
 }

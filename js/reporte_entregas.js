@@ -35,7 +35,8 @@ const chartdiv2 = document.getElementById("chartdiv2");
 
 // TOGGLE PARA CUALQUIER CLASE
 const toggleClassX = (idElemento, claseX) => {
-    if (document.getElementById(idElemento).classList.toggle(claseX)) {
+    if (x = document.getElementById(idElemento)) {
+        x.classList.toggle(claseX);
     }
 }
 
@@ -106,20 +107,31 @@ const obtenerReporte = columna => {
                     const subseccion = array[x].subseccion;
                     const idEquipo = array[x].idEquipo;
                     const idEquipoPrincipal = array[x].idEquipoPrincipal;
-                    const idEquipoSecundario = array[x].idEquipoSecundario;
+
+                    // OPCION DE STATUS
+                    const fStatus = status == 'SOLUCIONADO' ?
+                        `onclick="cambiarStatus('INCIDENCIA',${idItem})"`
+                        : `onclick="cambiarStatus('INCIDENCIA',${idItem})"`;
 
                     // HTML PARA COMENTARIO (COMENTARIO, CREADO POR, FECHA)
                     const dataComentario = comentario.length > 0 ?
                         `
                             <h1 class="text-center mb-2 font-semibold">Ultimo Mensaje</h1>
-                            <p class="text-justify">${comentario}</p>
+                            <div class="rounded w-full p-2 bg-green-200">
+                                <p class="text-justify">${comentario}</p>
+                            </div>
                             <div class="flex py-1 px-2 rounded-full items-center text-bluegray-700 justify-center text-xxs">
-                            <h1 class="mr-1">Por: </h1>
-                            <h1 class="font-bold mr-2">${ComentarioDe}</h1>
-                            <h1 class="">${comentarioFecha}</h1>
+                                <h1 class="mr-1">Por: </h1>
+                                <h1 class="font-bold mr-2">${ComentarioDe}</h1>
+                                <h1 class="">${comentarioFecha}</h1>
                             </div>
                         `
-                        : '<h1 class="text-xxs text-center font-semibold">Sin Comentarios</h1>'
+                        : `
+                        <div class="rounded w-full p-2 bg-green-200">
+                            <h1 class="text-xxs text-center font-semibold">Sin Comentarios</h1>
+                        </div>
+                        `
+
 
                     tipoIncidencia == "EMERGENCIA" ? contadorEmergencia++
                         : tipoIncidencia == "URGENCIA" ? contadorUrgencia++
@@ -169,8 +181,11 @@ const obtenerReporte = columna => {
                             </div>`
                         : '';
 
-                    const fExpandir = `onclick="toggleClassX('mostrar_mas_${x}', 'hidden'); 
-                    toggleClassX('titulo_incidencia_${x}', 'truncate'); toggleClassX('titulo_incidencia_${x}', 'mb-1'); toggleClassX('titulo_incidencia_${x}', 'text-justify');"`;
+                    const fExpandir = `onclick="toggleClassX('mostrar_mas_${idItem}', 'hidden'); 
+                    toggleClassX('titulo_incidencia_${idItem}', 'truncate'); toggleClassX('titulo_incidencia_${idItem}', 'mb-1'); toggleClassX('titulo_incidencia_${idItem}', 'text-justify');"`;
+
+                    const colorStatus = status == "SOLUCIONADO" ? 'orange' : 'green';
+                    const textoStatus = status == "SOLUCIONADO" ? 'CAMBIAR COMO PENDIENTE' : 'SOLUCIONAR';
 
                     // CONTADOR DE PENDIENTES
                     if (columna == "COLUMNA") {
@@ -206,7 +221,7 @@ const obtenerReporte = columna => {
                     }
 
                     const codigo = `
-                        <div class="w-6/6 flex flex-col h-auto mx-2 my-3 rounded cursor-pointer relative ring ring-green-200 bg-green-100" ${fExpandir}>
+                        <div class="w-6/6 flex flex-col h-auto mx-2 my-3 rounded cursor-pointer relative ring ring-${color}-200 bg-green-100" ${fExpandir}>
                         <!-- PARTE VISIBLE -->
                         <div class="w-full p-1 flex flex-none flex-col">
                             <h1 id="titulo_incidencia_${idItem}" class="font-semibold lowercase mb-1 text-justify truncate">
@@ -234,11 +249,9 @@ const obtenerReporte = columna => {
                         <!-- PARTE VISIBLE -->
                         <!-- PARTE TOOGLEABLE -->
                         <div id="mostrar_mas_${idItem}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
-                            <div class="rounded w-full p-2 bg-green-200">
-                            <h1 class="text-xxs text-center font-semibold">Sin Comentarios</h1>
-                            </div>
+                            ${dataComentario}
                             <div class="flex px-2 mt-2 w-full">
-                            <button class="py-2 px-2 rounded-l w-full bg-green-300 text-green-500 hover:bg-green-400 hover:text-green-200">Solucionar</button>
+                            <button class="py-2 px-2 rounded-l w-full bg-${colorStatus}-300 text-${colorStatus}-500 hover:bg-${colorStatus}-400 hover:text-${colorStatus}-200" ${fStatus}>${textoStatus}</button>
                             </div>
                         </div>
                         <!-- PARTE TOOGLEABLE -->
@@ -271,6 +284,13 @@ const obtenerReporte = columna => {
                         if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
                             contenedorX.classList.remove('hidden');
                             contenedorX.insertAdjacentHTML('beforeend', codigo)
+                            return
+                        }
+
+                        if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipoPrincipal)) {
+                            contenedorX.classList.remove('hidden');
+                            contenedorX.insertAdjacentHTML('beforeend', codigo)
+                            return
                         }
                     } else if (columna == "ACTIVOSSECUNDARIOS") {
                         if (contenedorX = document.getElementById("dataPendientesSubseccion_" + idEquipo)) {
@@ -291,6 +311,37 @@ const obtenerReporte = columna => {
             loader.innerHTML = '';
             contenedor.innerHTML = '';
         })
+}
+
+
+// OPCIÓN DE STATUS
+const cambiarStatus = (tipo, idItem) => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "cambiarStatus";
+    const URL = `php/reporte_entregas.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&tipo=${tipo}&idItem=${idItem}`;
+
+    alertify.confirm('MAPHG', '¿Desea Aplicar la Acción?', () => {
+
+        fetch(URL)
+            .then(array => array.json())
+            .then(array => {
+                if (array == 1) {
+                    alertaImg('Incidencia Solucionada', '', 'success', 1500);
+                    btnFiltroPalabra.click();
+                } else if (array == 2) {
+                    alertaImg('Incidencia Restaurada', '', 'success', 1500);
+                    btnFiltroPalabra.click();
+                } else {
+                    alertaImg('Intente de Nuevo', '', 'info', 1500);
+                }
+            })
+            .catch(function (err) {
+                alertaImg('Intente de Nuevo', '', 'info', 1500);
+            })
+    }
+        , () => { alertaImg('Operación Cancelada', '', 'error', 1500) });
 }
 
 
@@ -616,7 +667,6 @@ btnExportarExcel.addEventListener('click', () => {
 })
 
 
-
 // CREA LOS CONTENEDORES DE RESULTADOS
 const crearContenedores = tipoContenedor => {
     let idDestino = localStorage.getItem('idDestino');
@@ -879,5 +929,7 @@ window.addEventListener('load', () => {
     document.getElementById('destinosSelecciona').addEventListener('click', () => {
         obtenerUsuarios();
         obtenerSeccionesPorDestino();
+        opcionBotones('');
+        contenedor.innerHTML = '';
     })
 })
