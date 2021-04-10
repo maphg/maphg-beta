@@ -593,7 +593,8 @@ if (isset($_GET['action'])) {
             }
 
             // APLICA STATUS TOGGLE
-            $query = "UPDATE t_mc SET status = '$status' WHERE id = $idItem";
+            $query = "UPDATE t_mc SET status = '$status', ultima_modificacion = '$fechaActual', fecha_realizado = '$fechaActual', realizado_por = $idUsuario
+            WHERE id = $idItem";
             if ($result = mysqli_query($conn_2020, $query)) {
                 if ($status == "SOLUCIONADO") {
                     $resp = 1;
