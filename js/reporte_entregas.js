@@ -72,7 +72,6 @@ const obtenerReporte = columna => {
         .then(array => array.json())
         .then(array => {
             if (array) {
-                console.log(array.length);
                 // CONTADORES
                 let contadorEmergencia = 0;
                 let contadorUrgencia = 0;
@@ -840,7 +839,7 @@ const crearContenedores = tipoContenedor => {
                             const idEquipo = array[x].idEquipo;
                             const equipo = array[x].equipo;
                             const codigo = `  
-                                <div id="columna_x_${idEquipo}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1">
+                                <div id="columna_x_${idEquipo}" class="flex-none md:w-80 sm:w-full rounded flex flex-col justify-start p-4 z-40 md:mr-8 sm:mb-8 md:mb-0 px-1 hidden">
                                     <div class="w-auto flex text-xxs rounded-full bg-white pr-2 items-center">
                                         <div class="w-6 h-6 rounded-full bg-gray-900 font-bold flex items-center justify-center mr-2 flex-none">
                                             <h1 id="cantidad_incidencias_${idEquipo}" class="text-white w-auto">0</h1>
