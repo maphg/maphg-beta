@@ -228,24 +228,22 @@ const obtenerReporte = columna => {
                         }
                     }
 
-
+                    // ADJUNTOS DE LAS INCIDENCIAS
                     const adjuntosX = (adjuntos) => {
                         let codigo = '';
                         if (adjuntos.length) {
-                            codigo = '<h1 class="text-center mb-2 font-semibold">Adjuntos</h1>';
                             for (let x = 0; x < adjuntos.length; x++) {
                                 const url = adjuntos[x].url;
                                 const tipo = adjuntos[x].tipo;
                                 if (tipo == "jpeg" || tipo == "jpg" || tipo == "png") {
                                     codigo += `<a href="planner/tareas/adjuntos/${url}" target="_blank" data-title="Clic para Abrir" draggable="false">
-                                    <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(planner/tareas/adjuntos/${url})">
+                                    <div class="bg-local bg-cover bg-center w-14 h-14 rounded-md border-2 mx-1 my-2 cursor-pointer" style="background-image: url(planner/tareas/adjuntos/${url})">
                                     </div>
                                 </a>`;
                                 } else {
                                     codigo += `<a href="planner/tareas/adjuntos/${url}" target="_blank">
-                                        <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
-                                            <i class="fad fa-file-alt fa-3x"></i>
-                                            <p class="text-sm font-normal ml-2">${url}
+                                        <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mx-1 my-2  w-14 h-14">
+                                            <i class="fad fa-file-alt fa-4x"></i>
                                             </p>
                                         </div>
                                     </a>`
@@ -290,7 +288,7 @@ const obtenerReporte = columna => {
                         <!-- PARTE VISIBLE -->
                         <!-- PARTE TOOGLEABLE -->
                         <div id="mostrar_mas_${idItem}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
-                        <div class="py-2 flex flex-col justify-center items-center">${adjuntosX(adjuntos)}</div>
+                        <div class="py-2 flex flex-row justify-center items-center">${adjuntosX(adjuntos)}</div>
                             ${dataComentario}
                             <div class="flex px-2 mt-2 w-full">
                             <button class="py-2 px-2 rounded-l w-full bg-${colorStatus}-300 text-${colorStatus}-500 hover:bg-${colorStatus}-400 hover:text-${colorStatus}-200" ${fStatus}>${textoStatus}</button>
