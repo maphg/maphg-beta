@@ -36,10 +36,21 @@
 
             <div class="w-full mb-3">
                 <label class="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2" for="grid-state">
-                    Responsable
+                    Responsable Seguimiento
                 </label>
                 <div class="relative">
                     <select id="filtroResponsable" class="focus:outline-none focus:ring p-2 w-full rounded-md mb-2 ring-lime-200 scrollbar text-xs uppercase text-gray-500" style="background-color: #F4F5F7;">
+                        <option value="0">TODOS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="w-full mb-3">
+                <label class="block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2" for="grid-state">
+                    Responsable Ejecución
+                </label>
+                <div class="relative">
+                    <select id="filtroResponsableEjecucion" class="focus:outline-none focus:ring p-2 w-full rounded-md mb-2 ring-lime-200 scrollbar text-xs uppercase text-gray-500" style="background-color: #F4F5F7;">
                         <option value="0">TODOS</option>
                     </select>
                 </div>

@@ -51,6 +51,7 @@ const obtenerReporte = columna => {
     const data = new FormData();
     data.append('filtroPalabra', filtroPalabra.value);
     data.append('filtroResponsable', filtroResponsable.value);
+    data.append('filtroResponsableEjecucion', filtroResponsableEjecucion.value);
     data.append('filtroSeccion', filtroSeccion.value);
     data.append('filtroSubseccion', filtroSubseccion.value);
     data.append('filtroEquipos', filtroEquipos.value);
@@ -71,7 +72,7 @@ const obtenerReporte = columna => {
     })
         .then(array => array.json())
         .then(array => {
-            if (array) {
+            if (array.length) {
                 // CONTADORES
                 let contadorEmergencia = 0;
                 let contadorUrgencia = 0;
@@ -99,6 +100,7 @@ const obtenerReporte = columna => {
                     const comentarioFecha = array[x].comentarioFecha;
                     const ComentarioDe = array[x].ComentarioDe;
                     const totalAdjuntos = array[x].totalAdjuntos;
+                    const adjuntos = array[x].adjuntos;
                     const idSeccion = array[x].idSeccion;
                     const idSubseccion = array[x].idSubseccion;
                     const equipoPrincial = array[x].equipoPrincial;
@@ -108,6 +110,7 @@ const obtenerReporte = columna => {
                     const idEquipo = array[x].idEquipo;
                     const idEquipoPrincipal = array[x].idEquipoPrincipal;
                     const idEquipoSecundario = array[x].idEquipoSecundario;
+                    const empresa = array[x].empresa;
 
                     // OPCION DE STATUS
                     const fStatus = status == 'SOLUCIONADO' ?
@@ -225,6 +228,38 @@ const obtenerReporte = columna => {
                         }
                     }
 
+
+                    const adjuntosX = (adjuntos) => {
+                        let codigo = '';
+                        if (adjuntos.length) {
+                            codigo = '<h1 class="text-center mb-2 font-semibold">Adjuntos</h1>';
+                            for (let x = 0; x < adjuntos.length; x++) {
+                                const url = adjuntos[x].url;
+                                const tipo = adjuntos[x].tipo;
+                                if (tipo == "jpeg" || tipo == "jpg" || tipo == "png") {
+                                    codigo += `<a href="planner/tareas/adjuntos/${url}" target="_blank" data-title="Clic para Abrir" draggable="false">
+                                    <div class="bg-local bg-cover bg-center w-32 h-32 rounded-md border-2 m-2 cursor-pointer" style="background-image: url(planner/tareas/adjuntos/${url})">
+                                    </div>
+                                </a>`;
+                                } else {
+                                    codigo += `<a href="planner/tareas/adjuntos/${url}" target="_blank">
+                                        <div class="auto rounded-md cursor-pointer flex flex-row justify-start text-left items-center text-gray-500 hover:bg-indigo-200 hover:text-indigo-500 hover:shadow-sm mb-2 p-2">
+                                            <i class="fad fa-file-alt fa-3x"></i>
+                                            <p class="text-sm font-normal ml-2">${url}
+                                            </p>
+                                        </div>
+                                    </a>`
+                                }
+                            }
+                        }
+                        return codigo;
+                    }
+                    // EMPRESA RESPONSABLE
+                    const empresaX = empresa.length > 0 ?
+                        `<div class="flex bg-white shadow py-1 px-2 rounded-full items-center text-bluegray-700">
+                            <p class="text-xs font-bold mx-1">${empresa}</p>
+                        </div>` : '';
+
                     const codigo = `
                         <div class="w-6/6 flex flex-col h-auto mx-2 my-3 rounded cursor-pointer relative ring ring-${color}-200 bg-green-100" ${fExpandir}>
                         <!-- PARTE VISIBLE -->
@@ -236,6 +271,7 @@ const obtenerReporte = columna => {
                                 <img src="https://ui-avatars.com/api/?format=svg&amp;rounded=true&amp;size=300&amp;background=2d3748&amp;color=edf2f7&amp;name=${creadoPor}" width="20" height="20" alt="" />
                                 <p class="text-xs font-bold mx-1">${creadoPor}</p>
                             </div>
+                            ${empresaX}
                             <div class="flex justify-around items-center">
                                 ${sEPX}
                             </div>
@@ -254,6 +290,7 @@ const obtenerReporte = columna => {
                         <!-- PARTE VISIBLE -->
                         <!-- PARTE TOOGLEABLE -->
                         <div id="mostrar_mas_${idItem}" class="flex flex-col items-center justify-start p-2 text-xs w-full hidden">
+                        <div class="py-2 flex flex-col justify-center items-center">${adjuntosX(adjuntos)}</div>
                             ${dataComentario}
                             <div class="flex px-2 mt-2 w-full">
                             <button class="py-2 px-2 rounded-l w-full bg-${colorStatus}-300 text-${colorStatus}-500 hover:bg-${colorStatus}-400 hover:text-${colorStatus}-200" ${fStatus}>${textoStatus}</button>
@@ -493,6 +530,36 @@ const obtenerUsuarios = () => {
         .catch(function (err) {
             filtroResponsable.innerHTML = '<option value="0">Todos</option>';
             // rerporteEror(err, '');
+        })
+}
+
+
+// OBTIENE LOS RESPONSABLES DE EJECUCIÓN
+const obtenerResponsablesEjecucion = () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "obtenerResponsablesEjecucion";
+    const URL = `php/reporte_entregas.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    fetch(URL)
+        .then(array => array.json())
+        .then(array => {
+            filtroResponsableEjecucion.innerHTML = '<option value="0">Todos</option>';
+            return array;
+        })
+        .then(array => {
+            if (array.length) {
+                for (let x = 0; x < array.length; x++) {
+                    const idEmpresa = array[x].idEmpresa;
+                    const empresa = array[x].empresa;
+                    const codigo = `<option value="${idEmpresa}">${empresa}</option>`;
+                    filtroResponsableEjecucion.insertAdjacentHTML('beforeend', codigo);
+                }
+            }
+        })
+        .catch(function (err) {
+            filtroResponsableEjecucion.innerHTML = '<option value="0">Todos</option>';
         })
 }
 
@@ -920,6 +987,7 @@ const crearContenedores = tipoContenedor => {
 window.addEventListener('load', () => {
     obtenerUsuarios();
     obtenerSeccionesPorDestino();
+    obtenerResponsablesEjecucion();
 
     btnColumnaPendientesSolucionados.setAttribute('onclick', "crearContenedores('COLUMNA')");
     btnColumnaSecciones.setAttribute('onclick', "crearContenedores('SECCIONES')");

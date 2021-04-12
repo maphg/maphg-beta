@@ -23,6 +23,7 @@ if (isset($_GET['action'])) {
 
         $filtroPalabra = $_POST['filtroPalabra'];
         $filtroResponsable = $_POST['filtroResponsable'];
+        $filtroResponsableEjecucion = $_POST['filtroResponsableEjecucion'];
         $filtroSeccion = $_POST['filtroSeccion'];
         $filtroSubseccion = $_POST['filtroSubseccion'];
         $filtroEquipos = $_POST['filtroEquipos'];
@@ -70,6 +71,12 @@ if (isset($_GET['action'])) {
             $filtroResponsable_General = "and t_mp_np.responsable IN($filtroResponsable)";
             $filtroResponsable_Preventivo = "and t_mp_planificacion_iniciada.id_responsables IN($filtroResponsable)";
             $filtroResponsable_Proyecto = "and t_proyectos_planaccion.responsable IN($filtroResponsable)";
+        }
+
+        if ($filtroResponsableEjecucion > 0) {
+            $filtroResponsableEjecucionIncidencia = "and t_mc.responsable_empresa = $filtroResponsableEjecucion";
+        } else {
+            $filtroResponsableEjecucionIncidencia = "";
         }
 
         #FILTRO SECCION
@@ -351,6 +358,7 @@ if (isset($_GET['action'])) {
         t_mc.id_seccion,
         t_mc.id_subseccion,
         t_mc.id_equipo,
+        t_mc.responsable_empresa,
         c_secciones.seccion,
         c_subsecciones.grupo, 
         t_equipos_america.equipo,
@@ -360,7 +368,7 @@ if (isset($_GET['action'])) {
         INNER JOIN c_secciones ON t_mc.id_seccion = c_secciones.id
         INNER JOIN c_subsecciones ON t_mc.id_subseccion = c_subsecciones.id
         INNER JOIN t_equipos_america ON t_mc.id_equipo = t_equipos_america.id
-        WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias $filtroEquiposIncidencias
+        WHERE t_mc.activo = 1 and t_mc.id_equipo > 0 $filtroDestino $filtroPalabraIncidencias $filtroResponsableIncidencias $filtroResponsableEjecucionIncidencia $filtroSeccionIncidencias $filtroSubseccionIncidencias $filtroTipoIncidenciaIncidencias $filtroTipoIncidencias $filtroStatusIncidencias $filtroFechaIncidencias $filtroStatusIncidenciaIncidencias $filtroEquiposIncidencias
         ORDER BY t_mc.id DESC";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
@@ -383,6 +391,7 @@ if (isset($_GET['action'])) {
                 $equipoSecundario = $x['equipo'];
                 $idEquipoSecundario = $x['id_equipo_principal'];
                 $idEquipo = $x['idEquipo'];
+                $idEmpresa = $x['responsable_empresa'];
 
                 #EQUIPO PRINCIPAL
                 $equipoPrincial = "";
@@ -434,13 +443,31 @@ if (isset($_GET['action'])) {
 
                 #DOCUMENTOS
                 $totalAdjuntos = 0;
-                $query = "SELECT count(id) 'total' FROM t_mc_adjuntos 
+                $adjuntos = array();
+                $query = "SELECT id, url_adjunto FROM t_mc_adjuntos 
                 WHERE id_mc = $idItem and activo = 1";
                 if ($result = mysqli_query($conn_2020, $query)) {
                     foreach ($result as $x) {
-                        $totalAdjuntos = $x['total'];
+                        $totalAdjuntos++;
+                        $urlAdjunto = $x['url_adjunto'];
+                        $tipo = pathinfo($urlAdjunto, PATHINFO_EXTENSION);
+
+                        $adjuntos[] = array(
+                            "url" => $urlAdjunto,
+                            "tipo" => $tipo
+                        );
                     }
                 }
+
+                #EMPRESA RESPONSABLE
+                $empresa = "";
+                $query = "SELECT empresa FROM t_empresas_responsables WHERE id = $idEmpresa";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $empresa = $x['empresa'];
+                    }
+                }
+
 
                 $array[] = array(
                     "idItem" => intval($idItem),
@@ -460,13 +487,15 @@ if (isset($_GET['action'])) {
                     "idSeccion" => intval($idSeccion),
                     "idSubseccion" => intval($idSubseccion),
                     "totalAdjuntos" => intval($totalAdjuntos),
+                    "adjuntos" => $adjuntos,
                     "equipoPrincial" => $equipoPrincial,
                     "equipoSecundario" => $equipoSecundario,
                     "seccion" => $seccion,
                     "subseccion" => $subseccion,
                     "idEquipo" => $idEquipo,
                     "idEquipoSecundario" => intval($idEquipoSecundario),
-                    "idEquipoPrincipal" => intval($idEquipoPrincipal)
+                    "idEquipoPrincipal" => intval($idEquipoPrincipal),
+                    "empresa" => $empresa
                 );
             }
         }
@@ -570,6 +599,26 @@ if (isset($_GET['action'])) {
     }
 
 
+    // OBTIENES LAS EMPRESA RESPONSABLES DE EJECUCION
+    if ($action == "obtenerResponsablesEjecucion") {
+
+        $query = "SELECT id, empresa FROM t_empresas_responsables WHERE activo = 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idEmpresa = $x["id"];
+                $empresa = $x["empresa"];
+
+                $array[] = array(
+                    "idEmpresa" => $idEmpresa,
+                    "empresa" => $empresa
+                );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    // CAMBIE EL STATUS DE LA INCIDENCIA
     if ($action == "cambiarStatus") {
         $tipo = $_GET['tipo'];
         $idItem = $_GET['idItem'];
