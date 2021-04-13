@@ -18,6 +18,14 @@ if (isset($_GET['action'])) {
     $añoActual = date('Y');
     $array = array();
 
+    $permiso = 0;
+    $query = "SELECT id_permiso FROM t_users WHERE id = $idUsuario";
+    if ($result = mysqli_query($conn_2020, $query)) {
+        foreach ($result as $x) {
+            $permiso = $x['id_permiso'];
+        }
+    }
+
     // OBTINE RESULTADOS DE LAS INCIDENCIAS POR LOS FILTROS
     if ($action == "obtenerReporte") {
 
@@ -644,7 +652,7 @@ if (isset($_GET['action'])) {
             // APLICA STATUS TOGGLE
             $query = "UPDATE t_mc SET status = '$status', ultima_modificacion = '$fechaActual', fecha_realizado = '$fechaActual', realizado_por = $idUsuario
             WHERE id = $idItem";
-            if ($result = mysqli_query($conn_2020, $query)) {
+            if ($result = mysqli_query($conn_2020, $query) && $permiso != 4) {
                 if ($status == "SOLUCIONADO") {
                     $resp = 1;
                 } else {
@@ -653,5 +661,46 @@ if (isset($_GET['action'])) {
             }
         }
         echo json_encode($resp);
+    }
+
+
+    // VALIDACIÓN DE USUARIO
+    if ($action == "comprobarIdentidad") {
+        $idUsuarioX = 0;
+        $resp = 0;
+
+        $query = "SELECT id FROM t_users WHERE id = $idUsuario and activo IN(1, 2)";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuarioX = $x['id'];
+            }
+        }
+
+        if ($idUsuarioX > 0) {
+            $resp = 1;
+        }
+
+        echo json_encode($resp);
+    }
+
+
+    // INICIAR SESIÓN
+    if ($action == "iniciarSession") {
+        $usuario = $_POST['usuario'];
+        $contraseña = $_POST['contraseña'];
+
+        $query = "SELECT id, id_destino FROM t_users 
+        WHERE username = '$usuario' and password = '$contraseña' and activo IN(1, 2) and status = 'A' LIMIT 1";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idUsuario = $x['id'];
+                $idDestino = $x['id_destino'];
+
+                $array['idUsuario'] = intval($idUsuario);
+                $array['idDestino'] = intval($idDestino);
+                $array['resp'] = 1;
+            }
+        }
+        echo json_encode($array);
     }
 }

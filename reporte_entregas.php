@@ -14,19 +14,21 @@
     <link rel="stylesheet" href="css/animate.css">
 </head>
 
-<body style="background-color: #EEF0FC;" class="scrollbar">
+<body style="background-color: #EEF0FC;" class="scrollbar relative">
     <!-- MENÚ -->
-    <menu-sidebar clases="z-20 mb-6"></menu-sidebar>
-    <menu-menu></menu-menu>
+    <!-- <menu-sidebar clases="z-20 mb-6"></menu-sidebar> -->
+    <!-- <menu-menu></menu-menu> -->
 
     <!-- CONFIGURACIONES SIDEBAR -->
-    <configuracion-telegram></configuracion-telegram>
+    <!-- <configuracion-telegram></configuracion-telegram>
     <menu-notificaciones clases="h-screen"></menu-notificaciones>
     <menu-favoritos clases="h-screen"></menu-favoritos>
     <menu-telegram clases="h-screen"></menu-telegram>
-    <menu-agenda clases="h-screen"></menu-agenda>
+    <menu-agenda clases="h-screen"></menu-agenda> -->
     <!-- MENÚ -->
 
+
+    <!-- CONTENEDOR -->
     <div class="w-full h-screen flex sm:flex-col md:flex-row md:items-start md:justify-start px-8 sm:justify-start sm:items-center">
         <div class="flex-none bg-white md:w-80 sm:w-full h-auto rounded-xl shadow-lg flex flex-col justify-start items-center p-8 z-40 mb-4">
             <div class="flex">
@@ -187,6 +189,37 @@
             </div>
         </div>
     </div>
+    <!-- CONTENEDOR -->
+
+
+    <!-- MODAL LOGIN -->
+    <div id="modalSession" class="w-full h-screen modal open flex flex-row justify-center items-center" style="z-index:100;">
+        <!-- CONTENIDO -->
+        <div class="w-full h-screen bg-red-50 flex justify-center items-center">
+            <div class="w-80 h-132 rounded-3xl shadow-lg flex flex-col justify-center p-4 z-40 bg-white overflow-hidden opacity-100">
+                <div class="w-full flex justify-center items-center">
+                    <img class="w-32" src="svg/lineal_animated.svg" srcset="svg/lineal_animated.svg" alt="">
+                </div>
+                <div class="justify-evenl">
+                    <input id="inputusuario" type="text" placeholder="Usuario" class="focus:outline-none focus:ring p-2 w-full rounded-md mb-2 ring-bluegray-300" style="background-color: #F4F5F7;">
+                    <div class="flex flex-row items-center">
+                        <input id="inputcontraseña" type="password" placeholder="Contraseña" class="focus:outline-none focus:ring p-2 w-full rounded-md mb-2 ring-bluegray-300" style="background-color: #F4F5F7;">
+                        <i id="icono" class="fas fa-eye-slash"></i>
+                    </div>
+                    <button id="btnIniciarSession" class="focus:outline-none focus:ring bg-gray-600 text-gray-50 p-2 w-full rounded-md mb-2 cursor-pointer ring-lime-300">Entrar</button>
+                    <div class="text-xs w-full text-center text-gray-400 hover:text-blue-300">
+                        <a href="#">Olvidé mi contraseña</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL LOGIN -->
+
+    <div id="cerrarSession" class="w-24 text-center absolute top-0 right-0 cursor-pointer p-2 text-red-400">
+        <p class="text-xs">Cerrar sesión</p> <i class="fas fa-sign-out fa-lg"></i>
+    </div>
+
 
     <!-- AM4CORE -->
     <script src="js/am4core_core.js" type="text/javascript"></script>
@@ -204,11 +237,11 @@
     <!-- JS -->
 
     <!-- SCRIPT SEGURIDAD -->
-    <script src="js/seguridad_session.js" type="text/javascript"></script>
+    <!-- <script src="js/seguridad_session.js" type="text/javascript"></script> -->
     <!-- SCRIPT SEGURIDAD -->
 
     <!-- MENU JS -->
-    <script src="js/menu.js" type="text/javascript"></script>
+    <!-- <script src="js/menu.js" type="text/javascript"></script> -->
     <!-- MENU JS -->
 
 </body>

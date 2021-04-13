@@ -110,40 +110,40 @@
                                 <tbody id="dataCompras" class="bg-white divide-y divide-gray-200"></tbody>
                                 <footer>
                                     <tr class="cursor-pointer bg-bluegray-50">
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full flex flex-col items-center justify-center">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full flex flex-col items-center justify-center">
                                             <select id="cecoCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="solicitudCompras" class="w-full"></select>
 
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="fechaCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="materialCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="materialDescipcionCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="cantidadCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="unidadCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="grupoCompras" class="w-full"></select>
                                         </th>
 
-                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                        <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                             <select id="seccionCompras" class="w-full"></select>
                                         </th>
 
@@ -248,59 +248,59 @@
 
                             <footer>
                                 <tr class="cursor-pointer bg-bluegray-50">
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full flex flex-col items-center justify-center">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full flex flex-col items-center justify-center">
                                         <select id="cecoEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="solicitudEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="fechaEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="documentoEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="fechaEntregEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="fechaDocEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-1 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="proveedorEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="materialEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="descripcionMaterialEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="cantidadEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="porEntregarEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="tipoEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="valorEntregas" class="w-full"></select>
                                     </th>
 
-                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0 z-10 w-full">
+                                    <th class="px-2 py-1 border-b border-gray-200 bg-gray-200 text-center text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky bottom-0 z-10 w-full">
                                         <select id="seccionEntregas" class="w-full"></select>
                                     </th>
                                 </tr>

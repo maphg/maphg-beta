@@ -26,12 +26,18 @@ const btnColumnaActivosSecundarios = document.getElementById("btnColumnaActivosS
 const contenedorRangoFecha = document.getElementById("contenedorRangoFecha");
 const loader = document.getElementById("loader");
 const contenedor = document.getElementById("contenedor");
+const modalSession = document.getElementById("modalSession");
+const cerrarSession = document.getElementById("cerrarSession");
 // CONTENEDORES DIV
 
 // GRAFICA
 const chartdiv2 = document.getElementById("chartdiv2");
 // GRAFICA
 
+
+const inputusuario = document.getElementById("inputusuario");
+const inputcontraseña = document.getElementById("inputcontraseña");
+const btnIniciarSession = document.getElementById("btnIniciarSession");
 
 // TOGGLE PARA CUALQUIER CLASE
 const toggleClassX = (idElemento, claseX) => {
@@ -981,22 +987,104 @@ const crearContenedores = tipoContenedor => {
 }
 
 
+const comprobarIdentidad = async () => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "comprobarIdentidad";
+    const URL = `php/reporte_entregas.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    try {
+        const resp = await fetch(URL);
+        const array = await resp.json();
+
+        if (array == 1) {
+            modalSession.classList.remove('open');
+        } else {
+            localStorage.clear();
+            modalSession.classList.add('open');
+
+        }
+    } catch (error) {
+        localStorage.clear();
+    }
+}
+
+
+
+btnIniciarSession.addEventListener('click', () => {
+    const data = new FormData();
+    data.append('usuario', inputusuario.value);
+    data.append('contraseña', inputcontraseña.value);
+
+    const action = "iniciarSession";
+    const URL = `php/reporte_entregas.php?action=${action}&idDestino=0&idUsuario=0`;
+
+    fetch(URL, {
+        method: 'POST',
+        body: data
+    })
+        .then(array => array.json())
+        .then(array => {
+            if (array.resp == 1) {
+                localStorage.setItem('usuario', array.idUsuario);
+                localStorage.setItem('idDestino', array.idDestino);
+                datosIniciales();
+                alertaImg('Acceso Permitido', '', 'success', 1500);
+            } else {
+                alertaImg('No Existe el Usuario', '', 'error', 1500);
+            }
+        })
+        .catch(function (err) {
+            alertaImg('Acceso Denegado!', '', 'error', 1500);
+            comprobarIdentidad();
+        })
+})
+
+
+const datosIniciales = async () => {
+
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+
+    const action = "comprobarIdentidad";
+    const URL = `php/reporte_entregas.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`;
+
+    try {
+        const resp = await fetch(URL);
+        const array = await resp.json();
+
+        if (array == 1) {
+            modalSession.classList.remove('open');
+            obtenerUsuarios();
+            obtenerSeccionesPorDestino();
+            obtenerResponsablesEjecucion();
+
+            btnColumnaPendientesSolucionados.setAttribute('onclick', "crearContenedores('COLUMNA')");
+            btnColumnaSecciones.setAttribute('onclick', "crearContenedores('SECCIONES')");
+            btnColumnaSubsecciones.setAttribute('onclick', "crearContenedores('SUBSECCIONES')");
+            btnColumnaActivosPrincipales.setAttribute('onclick', "crearContenedores('ACTIVOSPRINCIPALES')");
+            btnColumnaActivosSecundarios.setAttribute('onclick', "crearContenedores('ACTIVOSSECUNDARIOS')");
+        }
+    } catch (error) {
+        localStorage.clear();
+        comprobarIdentidad();
+    }
+}
+
+
+cerrarSession.addEventListener("click", () => {
+    localStorage.clear();
+    comprobarIdentidad();
+})
+
+
 // INICIA FILTROS DEPUES DE CARGAR
 window.addEventListener('load', () => {
-    obtenerUsuarios();
-    obtenerSeccionesPorDestino();
-    obtenerResponsablesEjecucion();
+    comprobarIdentidad();
+    datosIniciales();
 
-    btnColumnaPendientesSolucionados.setAttribute('onclick', "crearContenedores('COLUMNA')");
-    btnColumnaSecciones.setAttribute('onclick', "crearContenedores('SECCIONES')");
-    btnColumnaSubsecciones.setAttribute('onclick', "crearContenedores('SUBSECCIONES')");
-    btnColumnaActivosPrincipales.setAttribute('onclick', "crearContenedores('ACTIVOSPRINCIPALES')");
-    btnColumnaActivosSecundarios.setAttribute('onclick', "crearContenedores('ACTIVOSSECUNDARIOS')");
-
-    document.getElementById('destinosSelecciona').addEventListener('click', () => {
-        obtenerUsuarios();
-        obtenerSeccionesPorDestino();
-        opcionBotones('');
-        contenedor.innerHTML = '';
-    })
+    setInterval(() => {
+        comprobarIdentidad();
+    }, 5000);
 })

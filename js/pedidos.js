@@ -166,7 +166,7 @@ const obtenerPedidosSinOrden = () => {
                     const codigo =
                         `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
 
-                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                            <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${ceco}</p>
                             </td>
 
@@ -182,7 +182,7 @@ const obtenerPedidosSinOrden = () => {
                                 <p class="truncate whitespace-no-wrap">${material}</p>
                             </td>
 
-                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                            <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${descripcionMaterial}</p>
                             </td>
 
@@ -397,7 +397,7 @@ const obtenerPedidosEntregar = status => {
                     const codigo =
                         `<tr class="hover:bg-gray-200 cursor-pointer text-xs font-normal text-bluegray-800">
 
-                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                            <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${ceco}</p>
                             </td>
 
@@ -421,7 +421,7 @@ const obtenerPedidosEntregar = status => {
                                 <p class="truncate whitespace-no-wrap">${fechaDocumento}</p>
                             </td>
 
-                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                            <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${proveedor}</p>
                             </td>
 
@@ -429,7 +429,7 @@ const obtenerPedidosEntregar = status => {
                                 <p class="truncate whitespace-no-wrap">${material}</p>
                             </td>
 
-                            <td class="px-2 border-b border-gray-200 text-center py-2 font-semibold w-auto">
+                            <td class="px-2 border-b border-gray-200 text-left py-2 font-semibold w-auto">
                                 <p class="truncate whitespace-no-wrap">${descripcionMaterial}</p>
                             </td>
 

@@ -22,9 +22,8 @@ if (isset($_GET['action'])) {
             $filtroDestino = "and pedidos.id_destino = $idDestino";
         }
 
-        $query = "SELECT pedidos.id, pedidos.denominacion_ceco, pedidos.solicitud_pedido, pedidos.fecha_solicitud, pedidos.material, pedidos.descripcion_material, pedidos.cantidad_solicitada, pedidos.unidad_medida, pedidos.grupo_compras, pedidos.solicitud_borrada, pedidos.fecha_modificado, c_secciones.seccion
+        $query = "SELECT pedidos.id, pedidos.denominacion_ceco, pedidos.solicitud_pedido, pedidos.fecha_solicitud, pedidos.material, pedidos.descripcion_material, pedidos.cantidad_solicitada, pedidos.unidad_medida, pedidos.grupo_compras, pedidos.seccion, pedidos.solicitud_borrada, pedidos.fecha_modificado
         FROM t_pedidos_sin_orden_compra AS pedidos
-        LEFT JOIN c_secciones ON pedidos.id_seccion = c_secciones.id
         WHERE pedidos.activo = 1 $filtroDestino 
         ORDER BY pedidos.fecha_modificado ASC";
         if ($result = mysqli_query($conn_2020, $query)) {
@@ -83,9 +82,8 @@ if (isset($_GET['action'])) {
         }
 
         $query = "SELECT entregar.id, entregar.nombre_ceco, entregar.solicitud_pedido, entregar.fecha_solicitud, entregar.documento_compras, entregar.fecha_entrega, entregar.fecha_documento, entregar.proveedor, 
-        entregar.material, entregar.descripcion_material, entregar.cantidad_solicitud, entregar.cantidad_por_entregar, entregar.tipo, entregar.valor_usd, c_secciones.seccion, entregar.fecha_modificado
+        entregar.material, entregar.descripcion_material, entregar.cantidad_solicitud, entregar.cantidad_por_entregar, entregar.tipo, entregar.valor_usd, entregar.seccion, entregar.fecha_modificado
         FROM t_pedidos_por_entregar AS entregar
-        LEFT JOIN c_secciones ON entregar.id_seccion = c_secciones.id
         WHERE entregar.activo = 1 $filtroDestino $filtroStatus";
         if ($result = mysqli_query($conn_2020, $query)) {
             foreach ($result as $x) {
