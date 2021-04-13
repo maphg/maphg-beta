@@ -13,10 +13,9 @@ if (isset($_GET['action'])) {
     $fechaActual = date('Y-m-d H:m:s');
     $añoActual = date('Y');
     $semanaActual = date('W');
+    $fila = 1;
 
     if ($action == "obtenerPedidosSinOrden") {
-        $fila = 2;
-
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("Reporte")->setDescription("Reporte");
         $objPHPExcel->setActiveSheetIndex(0);
@@ -58,6 +57,8 @@ if (isset($_GET['action'])) {
                 $seccion = $x['seccion'];
                 $solicitudBorrada = $x['solicitud_borrada'];
                 $fechaModificacion = $x['fecha_modificado'];
+                $fila++;
+
 
                 if ($seccion == "") {
                     $seccion = "-";
