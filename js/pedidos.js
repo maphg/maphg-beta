@@ -68,6 +68,7 @@ btnEntregasNo.addEventListener('click', () => {
     btnCompras.classList.remove('text-gray-700', 'border-gray-900');
     btnEntregasNo.classList.add('text-gray-700', 'border-gray-900');
     btnEntragasSi.classList.remove('text-gray-700', 'border-gray-900');
+    btnExportarEntregas.setAttribute('onclick', "exportarEntregas('PENDIENTE')");
 })
 
 btnEntragasSi.addEventListener('click', () => {
@@ -77,6 +78,7 @@ btnEntragasSi.addEventListener('click', () => {
     btnCompras.classList.remove('text-gray-700', 'border-gray-900');
     btnEntregasNo.classList.remove('text-gray-700', 'border-gray-900');
     btnEntragasSi.classList.add('text-gray-700', 'border-gray-900');
+    btnExportarEntregas.setAttribute('onclick', "exportarEntregas('ENTREGADO')");
 })
 
 
@@ -89,6 +91,16 @@ btnExportarCompras.addEventListener('click', () => {
     window.open(`php/pedidosExcel.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}`);
 })
 
+// EXPORTAR
+const exportarEntregas = status => {
+    let idDestino = localStorage.getItem('idDestino');
+    let idUsuario = localStorage.getItem('usuario');
+    const action = "obtenerPedidosEntregar";
+
+    window.open(`php/pedidosExcel.php?action=${action}&idDestino=${idDestino}&idUsuario=${idUsuario}&status=${status}`);
+}
+
+// EXPORTAR
 const exportarPedidos = status => {
     let idDestino = localStorage.getItem('idDestino');
     let idUsuario = localStorage.getItem('usuario');

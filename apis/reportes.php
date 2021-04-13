@@ -398,8 +398,8 @@ if (isset($_GET['action'])) {
                             }
 
                             #CREADAS
-                            $graficaSecciones['CREADAS'][$fechaZ] = $totalInicio;
-                            $graficaSecciones['PROCESO'][$fechaZ] = $totalInicio;
+                            $graficaSecciones['CREADAS'][$fechaZ] = $totalPendientes;
+                            $graficaSecciones['PROCESO'][$fechaZ] = $totalSolucionados;
                             $graficaSecciones['SOLUCIONADOS'][$fechaZ] = $totalInicio;
 
                             $tiempoInicio += 86400;
