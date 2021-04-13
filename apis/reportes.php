@@ -407,14 +407,19 @@ if (isset($_GET['action'])) {
 
                         $graficaSecciones[$idSeccion] =
                             array(
-                                ["name" => "CREADAS",
-                                "data" =>  $graficaSecciones['CREADAS']],
-                                ["name" => "PROCESO",
-                                "data" =>  $graficaSecciones['PROCESO']],
-                                ["name" => "SOLUCIONADOS",
-                                "data" =>  $graficaSecciones['SOLUCIONADOS']]
+                                [
+                                    "name" => "CREADAS",
+                                    "data" =>  $graficaSecciones['CREADAS']
+                                ],
+                                [
+                                    "name" => "PROCESO",
+                                    "data" =>  $graficaSecciones['PROCESO']
+                                ],
+                                [
+                                    "name" => "SOLUCIONADOS",
+                                    "data" =>  $graficaSecciones['SOLUCIONADOS']
+                                ]
                             );
-                       
                     }
                 }
 
@@ -451,6 +456,106 @@ if (isset($_GET['action'])) {
                     ],
                     "graficaSecciones" => $graficaSecciones
                 );
+            }
+        }
+        echo json_encode($array);
+    }
+
+
+    #RANKIN DE TIEMPOS
+    if ($action == "ranking") {
+        $fechaInicio = $_GET['fechaInicio'];
+        $fechaFin = $_GET['fechaFin'];
+
+        $query = "SELECT id, destino FROM c_destinos WHERE status = 'A'";
+        if ($result = mysqli_query($conn_2020, $query)) {
+            foreach ($result as $x) {
+                $idDestinoX = $x['id'];
+                $destino = $x['destino'];
+
+                $totalIncidencias = 0;
+                $fechaCreacion = 0;
+                $fechaRealizado = 0;
+                $creados = 0;
+                $solucionados = 0;
+                $mediaSolucionados = 0;
+                $horasSolucionadosGlobal = 0;
+                $totalIncidencias = 0;
+
+                #INCIDENCIA EQUIPOS
+                $query = "SELECT fecha_creacion, fecha_realizado, status 
+                FROM t_mc
+                WHERE id_destino = $idDestinoX and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha_creacion BETWEEN '$fechaInicio' and '$fechaFin') OR
+                (fecha_realizado BETWEEN '$fechaInicio' and '$fechaFin')) and id_equipo > 0";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $fechaCreacion = $x['fecha_creacion'];
+                        $fechaRealizado = $x['fecha_realizado'];
+                        $status = $x['status'];
+                        $tiempoSolucionado = 0;
+                        $totalIncidencias++;
+                        $idDestinoX;
+
+                        #OBTIENE TIEMPOS EN HORAS
+                        $horasCreacion = strtotime($fechaCreacion);
+                        $horasSolucionado = strtotime($fechaRealizado);
+
+                        if ($status == "PENDIENTE" || $status == "N") {
+                            $creados++;
+                        } else {
+                            if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                $tiempoSolucionado = ($horasSolucionado - $horasCreacion) / 3600;
+                                $horasSolucionadosGlobal += $tiempoSolucionado;
+                            }
+                            $solucionados++;
+                        }
+                    }
+                }
+
+                #INCIDENCIA GENERALES
+                $query = "SELECT fecha, fecha_finalizado, status 
+                FROM t_mp_np
+                WHERE id_destino = $idDestinoX and activo = 1 and status IN('PENDIENTE', 'N', 'SOLUCIONADO', 'F') and ((fecha BETWEEN '$fechaInicio' and '$fechaFin') OR
+                (fecha_finalizado BETWEEN '$fechaInicio' and '$fechaFin')) and id_equipo = 0";
+                if ($result = mysqli_query($conn_2020, $query)) {
+                    foreach ($result as $x) {
+                        $fechaCreacion = $x['fecha'];
+                        $fechaRealizado = $x['fecha_finalizado'];
+                        $status = $x['status'];
+                        $tiempoSolucionado = 0;
+                        $totalIncidencias++;
+                        $idDestinoX;
+
+                        #OBTIENE TIEMPOS EN HORAS
+                        $horasCreacion = strtotime($fechaCreacion);
+                        $horasSolucionado = strtotime($fechaRealizado);
+
+                        if ($status == "PENDIENTE" || $status == "N") {
+                            $creados++;
+                        } else {
+                            if ($horasCreacion > 0 && $horasSolucionado > 0) {
+                                $tiempoSolucionado = ($horasSolucionado - $horasCreacion) / 3600;
+                                $horasSolucionadosGlobal += $tiempoSolucionado;
+                            }
+                            $solucionados++;
+                        }
+                    }
+                }
+
+                #ALMACENA RESULTADOS DE RANKING
+                if ($horasSolucionadosGlobal > 0 && $solucionados > 0) {
+                    $mediaSolucionados = $horasSolucionadosGlobal / $solucionados;
+                }
+
+                $array[$idDestinoX] =
+                    array(
+                        "idDestino" => intval($idDestinoX),
+                        "destino" => $destino,
+                        "totalIncidencias" => intval($totalIncidencias),
+                        "creados" => intval($creados),
+                        "solucionados" => intval($solucionados),
+                        "mediaSolucionados" => intval($mediaSolucionados)
+                    );
             }
         }
         echo json_encode($array);
