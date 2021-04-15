@@ -138,15 +138,15 @@ if (isset($_GET['action'])) {
         arsort($array['mediaSolucionados']);
 
         foreach ($array['creados'] as $key => $value) {
-            $array['creadosX'][] = [$key => $value];
+            $array['creadosX'][] = ["destino" => $key, "valor" => $value];
         }
 
         foreach ($array['solucionados'] as $key => $value) {
-            $array['solucionadosX'][] = [$key => $value];
+            $array['solucionadosX'][] = ["destino" => $key, "valor" => $value];
         }
 
         foreach ($array['mediaSolucionados'] as $key => $value) {
-            $array['mediaSolucionadosX'][] = [$key => $value];
+            $array['mediaSolucionadosX'][] = ["destino" => $key, "valor" => $value];
         }
 
         unset($array['creados']);
