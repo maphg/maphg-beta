@@ -128,26 +128,31 @@ if (isset($_GET['action'])) {
                 //         "mediaSolucionados" => intval($mediaSolucionados)
                 //     );
 
-                $array['creados'][$destino] =
-                    array(
-                        "creados" => intval($creados)
-                    );
-
-                $array['solucionados'][$destino] =
-                    array(
-                        "solucionados" => intval($solucionados)
-                    );
-
-                $array['mediaSolucionados'][$destino] =
-                    array(
-                        "mediaSolucionados" => intval($mediaSolucionados)
-                    );
-
-                arsort($array['creados']);
-                arsort($array['solucionados']);
-                arsort($array['mediaSolucionados']);
+                $array['creados'][$destino] =  intval($creados);
+                $array['solucionados'][$destino] = intval($solucionados);
+                $array['mediaSolucionados'][$destino] = intval($mediaSolucionados);
             }
         }
+        arsort($array['creados']);
+        arsort($array['solucionados']);
+        arsort($array['mediaSolucionados']);
+
+        foreach ($array['creados'] as $key => $value) {
+            $array['creadosX'][] = [$key => $value];
+        }
+
+        foreach ($array['solucionados'] as $key => $value) {
+            $array['solucionadosX'][] = [$key => $value];
+        }
+
+        foreach ($array['mediaSolucionados'] as $key => $value) {
+            $array['mediaSolucionadosX'][] = [$key => $value];
+        }
+
+        unset($array['creados']);
+        unset($array['solucionados']);
+        unset($array['mediaSolucionados']);
+
         echo json_encode($array);
     }
 
