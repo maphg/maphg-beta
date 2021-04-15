@@ -1,13 +1,27 @@
 'use strict'
 
+// OBTIENE PLANIFICACION DE MANTENIMIENTO A EQUIPOS
 const datosPlanEquipo = params => {
+
+    const fLegal =
+        params.grado == 'MANTENIMIENTO LEGAL' ?
+            `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-purple-200 text-purple-500 uppercase"><i class="fas fa-star text-yellow-500 mr-1 py-1 fa-lg"></i> MANTENIMIENTO LEGAL</span>` :
+            params.grado == 'MAYOR' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-red-200 text-red-500 uppercase"> MAYOR </span>` :
+                params.grado == 'MENOR' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-orange-200 text-orange-500 uppercase">MENOR</span>` :
+                    params.grado == 'OVERHAUL' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-bluegray-200 text-bluegray-900 uppercase">OVERHAUL</span>` :
+                        params.grado == 'N/A' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-gray-200 text-bluegray-800 uppercase">N/A</span>` :
+                            '';
+
+    const fBordeLegal = params.grado == 'MANTENIMIENTO LEGAL' ? 'border-2 border-purple-500' : 'border border-gray-300';
+
     return `
-        <div class="flex-none flex flex-row w-100 justify-evenly items-center flex-wrap cursor-pointer rounded-lg p-2 mr-6 border border-gray-300 my-1">
+        <div class="flex-none flex flex-row w-100 justify-evenly items-center flex-wrap cursor-pointer rounded-lg p-2 mr-6 my-1 ${fBordeLegal}">
 
             <div class="w-full text-center font-semibold text-xs uppercase flex flex-row items-center justify-between leading-none mb-2"> 
 
                 <div class="flex flex-col items-start">
-                    <h1 class="text-lg">ID: ${params.idPlan}</h1>
+                    <h1 class="text-xs">ID: ${params.idPlan}</h1>
+                    <h1 class="text-lg my-2">${fLegal}</h1>
                     <h1 class="text-lg">${params.periodicidad}</h1>
                     <h1 class="text-xs px-1 inline-flex leading-snug font-bold rounded-sm bg-red-200 text-red-500 uppercase">${params.tipoPlan}</h1>
                 </div>
@@ -243,14 +257,27 @@ const datosPlanEquipo = params => {
 }
 
 
+// OBTIENE PLANIFICACION DE MANTENIMIENTO A LOCALES
 const datosPlanLocal = params => {
+    const fLegal =
+        params.grado == 'MANTENIMIENTO LEGAL' ?
+            `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-purple-200 text-purple-500 uppercase"><i class="fas fa-star text-yellow-500 mr-1 py-1 fa-lg"></i> MANTENIMIENTO LEGAL</span>` :
+            params.grado == 'MAYOR' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-red-200 text-red-500 uppercase"> MAYOR </span>` :
+                params.grado == 'MENOR' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-orange-200 text-orange-500 uppercase">MENOR</span>` :
+                    params.grado == 'OVERHAUL' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-bluegray-200 text-bluegray-900 uppercase">OVERHAUL</span>` :
+                        params.grado == 'N/A' ? `<span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-gray-200 text-bluegray-800 uppercase">N/A</span>` :
+                            '';
+
+    const fBordeLegal = params.grado == 'MANTENIMIENTO LEGAL' ? 'border-2 border-purple-500' : 'border border-gray-300';
+
     return `
-        <div class="flex-none flex flex-row w-100 justify-evenly items-center flex-wrap cursor-pointer rounded-lg p-2 mr-6 border border-gray-300 my-1">
+        <div class="flex-none flex flex-row w-100 justify-evenly items-center flex-wrap cursor-pointer rounded-lg p-2 mr-6 my-1 ${fBordeLegal}">
 
             <div class="w-full text-center font-semibold text-xs uppercase flex flex-row items-center justify-between leading-none mb-2"> 
 
                 <div class="flex flex-col items-start">
-                    <h1 class="text-lg">ID: ${params.idPlan}</h1>
+                    <h1 class="text-xs">ID: ${params.idPlan}</h1>
+                    <h1 class="text-lg my-2">${fLegal}</h1>
                     <h1 class="text-lg">${params.periodicidad}</h1>
                     <h1 class="text-xs px-1 inline-flex leading-snug font-bold rounded-sm bg-red-200 text-red-500 uppercase">${params.tipoPlan}</h1>
                 </div>
@@ -484,7 +511,6 @@ const datosPlanLocal = params => {
         </div>
     `
 }
-
 
 
 // Oculta tooltip de las semanas

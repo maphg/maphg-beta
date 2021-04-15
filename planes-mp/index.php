@@ -41,6 +41,8 @@
 
     </div>
 
+
+    <!-- CABECERA PARA FILTROS SELECT -->
     <div class="flex flex-row container mx-auto pb-2 hidden">
         <div class="flex flex-col pl-4 w-1/6">
             <h1 class="self-start mb-2">Marcas</h1>
@@ -83,7 +85,10 @@
             </div>
         </div>
     </div>
+    <!-- CABECERA PARA FILTROS SELECT -->
 
+
+    <!-- TABLA CONTENEDOR DE PLANES -->
     <div class="flex flex-col container mx-auto scrollbar">
         <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 scrollbar">
             <div class="align-middle inline-block min-w-full shadow-md overflow-auto sm:rounded-lg border-b border-gray-200 scrollbar" style="max-height: 70vh;">
@@ -99,7 +104,7 @@
                             <th class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Marca
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
+                            <th class="w-56 px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
                                 Tipo equipo/local
                             </th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-white text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider sticky top-0">
@@ -120,9 +125,11 @@
             </div>
         </div>
     </div>
-    <!-- Fin Principal -->
+    <!-- TABLA CONTENEDOR DE PLANES -->
 
-    <!-- Modals -->
+
+
+    <!-- ********** MODALES ********** -->
 
     <!-- MODAL DETALLES DEL PLAN -->
     <div id="modalDetallesPlanMP" class="modal">
@@ -224,10 +231,11 @@
                         </label>
                         <div class="relative">
                             <select id="dataOpcionGradoPlanMP" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option>MENOR</option>
-                                <option>MAYOR</option>
-                                <option>OVERHAUL</option>
-                                <option>N/A</option>
+                                <option value="MANTENIMIENTO LEGAL">MANTENIMIENTO LEGAL</option>
+                                <option value="MENOR">MENOR</option>
+                                <option value="MAYOR">MAYOR</option>
+                                <option value="OVERHAUL">OVERHAUL</option>
+                                <option value="N/A">N/A</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -315,6 +323,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL DETALLES DEL PLAN -->
 
 
     <!-- MODAL AGREGAR ACTIVIDAD-->
@@ -456,6 +465,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL AGREGAR ACTIVIDAD-->
 
 
     <!-- MODAL SALIDAS Subalmacenes-->
@@ -526,6 +536,7 @@
             </div>
         </div>
     </div>
+    <!-- MODAL SALIDAS Subalmacenes-->
 
     <!-- Modals -->
 

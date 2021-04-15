@@ -1,13 +1,12 @@
 'use strict'
 
-const $tablaPlanesDeMantto = document.getElementById('contenedorDePlanes');
 const datosPlanes = params => {
     var marca = params.marca;
     var plan = params.tipoPlan;
     var grado = params.grado;
-    var claseMarca = ';'
-    var clasePlan = ';'
-    var claseGrado = ';'
+    var claseMarca = '';
+    var clasePlan = '';
+    var claseGrado = '';
 
     switch (marca) {
         case 'GP':
@@ -41,6 +40,9 @@ const datosPlanes = params => {
     }
 
     switch (grado) {
+        case 'MANTENIMIENTO LEGAL':
+            claseGrado = 'bg-purple-200 text-purple-500';
+            break;
         case 'MENOR':
             claseGrado = 'bg-orange-200 text-orange-500';
             break;
@@ -53,7 +55,8 @@ const datosPlanes = params => {
         default:
             claseGrado = 'bg-gray-200 text-bluegray-800';
     }
-    return `
+
+    const codigo = `
         <tr class="animate__pulse hover:bg-fondos-4 cursor-pointer" onclick="obtenerDetallesPlanMP(${params.idPlanMP})">
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm text-gray-500 leading-5 uppercase font-semibold">
                 ${params.idPlanMP}
@@ -66,8 +69,9 @@ const datosPlanes = params => {
                     ${params.marca}
                 </span>
             </td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 uppercase font-semibold">
-                ${params.tipoEquipo}
+            <td class="w-64 px-6 py-4 border-b border-gray-200 text-sm leading-5 uppercase font-semibold" 
+            title="${params.tipoEquipo}">
+                <p class="w-64 truncate">${params.tipoEquipo}</p>
             </td>
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <span class="px-2 inline-flex text-xs leading-5 font-bold rounded-full ${clasePlan} uppercase">
@@ -84,6 +88,7 @@ const datosPlanes = params => {
             </td>
         </tr>
     `;
+    document.getElementById('contenedorDePlanes').insertAdjacentHTML('beforeend', codigo);
 };
 
 
@@ -118,7 +123,7 @@ function obtenerPlanesMP() {
         success: function (data) {
             document.getElementById('contenedorDePlanes').innerHTML = '';
             data.forEach(element => {
-                $tablaPlanesDeMantto.innerHTML += datosPlanes(element);
+                datosPlanes(element);
             });
         }
     });
@@ -644,6 +649,7 @@ document.getElementById("buscarPlanMP").
     addEventListener("keyup", function () {
         buscadorEquipo('tablaGestionPlanes', 'buscarPlanMP', 3);
     });
+
 
 window.addEventListener('load', () => {
     obtenerPlanesMP();
